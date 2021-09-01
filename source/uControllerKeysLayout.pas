@@ -15,8 +15,7 @@ type
     procedure FormShow(Sender: TObject);
     procedure FormKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
-    procedure ControllerImageMouseDown(Sender: TObject;
-      Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+    procedure ControllerImageClick(Sender: TObject);
   private
     { Private declarations }
     procedure LoadCtrlImg;
@@ -43,32 +42,32 @@ begin
   case FormControllerKeysLayout.Tag of
     0:
       begin
-        ImageFile:= 'DevastatorII.jpg';
+        ImageFile:= 'Devastator2.png';
         FormControllerKeysLayout.Caption:= FormControllerKeysLayout.Caption+' [Devastator II]';
       end;
     1:
       begin
-        ImageFile:= 'HotRodSE.jpg';
+        ImageFile:= 'HotRodSE.png';
         FormControllerKeysLayout.Caption:= FormControllerKeysLayout.Caption+' [Hot Rod SE]';
       end;
     2:
       begin
-        ImageFile:= 'SlikStik.jpg';
+        ImageFile:= 'SlikStik.png';
         FormControllerKeysLayout.Caption:= FormControllerKeysLayout.Caption+' [SlikStik]';
       end;
     3:
       begin
-        ImageFile:= 'X-Arcade.jpg';
+        ImageFile:= 'X-Arcade.png';
         FormControllerKeysLayout.Caption:= FormControllerKeysLayout.Caption+' [X-Arcade]';
       end;
     else
       begin
-        ImageFile:= 'X-Arcade.jpg';
+        ImageFile:= 'X-Arcade.png';
         FormControllerKeysLayout.Caption:= FormControllerKeysLayout.Caption+' [X-Arcade]';
       end;
   end;
-  case FileExists(FormMain.GetFolderFull(35)+ImageFile) of
-    True : ControllerImage.Bitmap.LoadFromFile(FormMain.GetFolderFull(35)+ImageFile);
+  case FileExists(FormMain.GetFolderFull(35)+'\browse_controls\'+ImageFile) of
+    True : ControllerImage.Bitmap.LoadFromFile(FormMain.GetFolderFull(35)+'\browse_controls\'+ImageFile);
     False: ControllerImage.Bitmap:= nil;
   end;
 end;
@@ -118,19 +117,15 @@ procedure TFormControllerKeysLayout.FormKeyDown(Sender: TObject;
   var Key: Word; Shift: TShiftState);
 begin
   case Key of
-    VK_LEFT: SelectPrevLayout;
+    VK_LEFT:  SelectPrevLayout;
     VK_RIGHT: SelectNextLayout;
   end;
 end;
 
 
-procedure TFormControllerKeysLayout.ControllerImageMouseDown(
-  Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+procedure TFormControllerKeysLayout.ControllerImageClick(Sender: TObject);
 begin
-  case Button of
-    mbLeft : SelectNextLayout;
-    mbRight: SelectPrevLayout;
-  end;
+  SelectPrevLayout;
 end;
 
 end.

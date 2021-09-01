@@ -164,13 +164,14 @@ object FormArcadeMAMu_IconsManager: TFormArcadeMAMu_IconsManager
       TabOrder = 0
       View = elsTile
       CustomCheckRadioEnabled = False
+      CustomEnableIconHD = False
       OnItemCompare = NotUsedIconsListItemCompare
       OnItemFreeing = NotUsedIconsListItemFreeing
       OnItemPaintText = NotUsedIconsListItemPaintText
       OnItemSelectionChanged = NotUsedIconsListItemSelectionChanged
       OnKeyAction = NotUsedIconsListKeyAction
     end
-    object NotUsedIconHistory: TRichEditURL
+    object NotUsedIconHistory: TTntRichEdit
       Left = 0
       Top = 349
       Width = 305
@@ -185,7 +186,6 @@ object FormArcadeMAMu_IconsManager: TFormArcadeMAMu_IconsManager
       Font.Name = 'Consolas'
       Font.Style = []
       ParentFont = False
-      ReadOnly = True
       ScrollBars = ssBoth
       TabOrder = 1
       WantReturns = False
@@ -209,7 +209,7 @@ object FormArcadeMAMu_IconsManager: TFormArcadeMAMu_IconsManager
       object LabelFileHistory: TShadowLabel
         Left = 2
         Top = 4
-        Width = 62
+        Width = 60
         Height = 16
         Caption = 'File History'
         ShadowColor = clGray
@@ -229,6 +229,11 @@ object FormArcadeMAMu_IconsManager: TFormArcadeMAMu_IconsManager
         Caption = 'Clear'
         Flat = True
         OnClick = ButtonClearHistoryNotUsedClick
+        FontColorDisabled = clBtnShadow
+        FontShadowColorDisabled = clBtnHighlight
+        GradientColorTop_Disabled = clSilver
+        GradientColorBottom_Disabled = clMedGray
+        FrameColor_Disabled = clGray
       end
       object ButtonNotUsedDeleteFiles: TSpeedButtonEx
         Left = 170
@@ -244,6 +249,11 @@ object FormArcadeMAMu_IconsManager: TFormArcadeMAMu_IconsManager
         Font.Style = [fsBold]
         ParentFont = False
         OnClick = ButtonNotUsedDeleteFilesClick
+        FontColorDisabled = clBtnShadow
+        FontShadowColorDisabled = clBtnHighlight
+        GradientColorTop_Disabled = clSilver
+        GradientColorBottom_Disabled = clMedGray
+        FrameColor_Disabled = clGray
       end
     end
     object PanelRenameFile: TPanelEx
@@ -273,7 +283,7 @@ object FormArcadeMAMu_IconsManager: TFormArcadeMAMu_IconsManager
       object RenameFileTitleLabel: TShadowLabel
         Left = 47
         Top = 4
-        Width = 92
+        Width = 90
         Height = 17
         Caption = 'Rename File'
         Font.Charset = ANSI_CHARSET
@@ -432,6 +442,7 @@ object FormArcadeMAMu_IconsManager: TFormArcadeMAMu_IconsManager
     TabOrder = 1
     View = elsReport
     CustomCheckRadioEnabled = False
+    CustomEnableIconHD = False
     OnColumnClick = MissingIconsListColumnClick
     OnColumnSizeChanged = MissingIconsListColumnSizeChanged
     OnColumnSizeChanging = MissingIconsListColumnSizeChanging
@@ -518,11 +529,16 @@ object FormArcadeMAMu_IconsManager: TFormArcadeMAMu_IconsManager
         ParentShowHint = False
         ShowHint = True
         OnClick = OptionsMissingGameIconsButtonClick
+        FontColorDisabled = clBtnShadow
+        FontShadowColorDisabled = clBtnHighlight
+        GradientColorTop_Disabled = clSilver
+        GradientColorBottom_Disabled = clMedGray
+        FrameColor_Disabled = clGray
       end
       object LabelTotalItemsNotUsed: TShadowLabel
         Left = 469
         Top = 29
-        Width = 83
+        Width = 81
         Height = 16
         Caption = 'Not Used Icons'
         ShowAccelChar = False
@@ -538,7 +554,7 @@ object FormArcadeMAMu_IconsManager: TFormArcadeMAMu_IconsManager
       object LabelTotalItemsMissing: TShadowLabel
         Left = 2
         Top = 29
-        Width = 109
+        Width = 107
         Height = 16
         Caption = 'Missing Game Icons'
         ShowAccelChar = False

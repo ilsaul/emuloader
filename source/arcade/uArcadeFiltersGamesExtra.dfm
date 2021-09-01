@@ -5,7 +5,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
   BorderIcons = []
   BorderStyle = bsToolWindow
   Caption = 'Miscellaneous Filters'
-  ClientHeight = 412
+  ClientHeight = 411
   ClientWidth = 621
   Color = clWhite
   DefaultMonitor = dmMainForm
@@ -17,15 +17,15 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
   KeyPreview = True
   OldCreateOrder = False
   Scaled = False
-  OnActivate = FormActivate
   OnCloseQuery = FormCloseQuery
   OnKeyPress = FormKeyPress
+  OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 15
   object LabelControlType: TShadowLabel
     Left = 418
     Top = 56
-    Width = 109
+    Width = 107
     Height = 16
     Caption = 'MAME Control Type'
     ShowAccelChar = False
@@ -40,7 +40,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
   object LabelInterfaceType: TShadowLabel
     Left = 213
     Top = 56
-    Width = 132
+    Width = 130
     Height = 16
     Caption = 'Interface Type (Controls)'
     ShowAccelChar = False
@@ -55,7 +55,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
   object LabelAudioType: TShadowLabel
     Left = 8
     Top = 56
-    Width = 62
+    Width = 60
     Height = 16
     Caption = 'Audio Type'
     ShowAccelChar = False
@@ -70,7 +70,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
   object LabelGamesROMs: TShadowLabel
     Left = 418
     Top = 8
-    Width = 69
+    Width = 67
     Height = 16
     Caption = 'Game ROMs'
     ShowAccelChar = False
@@ -85,7 +85,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
   object LabelDeviceROMs: TShadowLabel
     Left = 213
     Top = 8
-    Width = 73
+    Width = 71
     Height = 16
     Caption = 'Device ROMs'
     ShowAccelChar = False
@@ -100,7 +100,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
   object LabelBios: TShadowLabel
     Left = 8
     Top = 8
-    Width = 63
+    Width = 61
     Height = 16
     Caption = 'BIOS ROMs'
     ShowAccelChar = False
@@ -115,7 +115,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
   object LabelSTVMultiSlot: TShadowLabel
     Left = 24
     Top = 199
-    Width = 110
+    Width = 108
     Height = 19
     Caption = 'Multi-slot machines'
     Font.Charset = ANSI_CHARSET
@@ -136,7 +136,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
   object LabelNeoGeoMVS: TShadowLabel
     Left = 24
     Top = 167
-    Width = 110
+    Width = 108
     Height = 19
     Caption = 'Multi-slot machines'
     Font.Charset = ANSI_CHARSET
@@ -157,7 +157,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
   object LabelScreenOrientation: TShadowLabel
     Left = 8
     Top = 104
-    Width = 101
+    Width = 99
     Height = 16
     Caption = 'Screen Orientation'
     ShowAccelChar = False
@@ -172,7 +172,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
   object LabelSaveState: TShadowLabel
     Left = 213
     Top = 104
-    Width = 56
+    Width = 54
     Height = 16
     Caption = 'Save State'
     ShowAccelChar = False
@@ -187,7 +187,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
   object LabelSpecialList: TShadowLabel
     Left = 418
     Top = 104
-    Width = 61
+    Width = 59
     Height = 16
     Caption = 'Special List'
     ShowAccelChar = False
@@ -200,9 +200,9 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
     Transparent = True
   end
   object LabelHideMAMESoftlist_vgmplay: TShadowLabel
-    Left = 434
-    Top = 167
-    Width = 162
+    Left = 24
+    Top = 231
+    Width = 160
     Height = 19
     Caption = 'MAME Software List: vgmplay'
     Font.Charset = ANSI_CHARSET
@@ -220,9 +220,39 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
     Frames = []
     Transparent = True
   end
+  object LabelCocktail: TShadowLabel
+    Left = 213
+    Top = 152
+    Width = 44
+    Height = 16
+    Caption = 'Cocktail'
+    ShowAccelChar = False
+    ShadowColor = clGray
+    ShadowEnabled = False
+    EllipsType = etNone
+    ColorFrame = clBlack
+    ColorInnerFrame = clBlack
+    Frames = []
+    Transparent = True
+  end
+  object LabelArtworkRequired: TShadowLabel
+    Left = 418
+    Top = 152
+    Width = 138
+    Height = 16
+    Caption = 'External Artwork Required'
+    ShowAccelChar = False
+    ShadowColor = clGray
+    ShadowEnabled = False
+    EllipsType = etNone
+    ColorFrame = clBlack
+    ColorInnerFrame = clBlack
+    Frames = []
+    Transparent = True
+  end
   object FilterGamesMainCPU: TAdvOfficeCheckBoxEx
     Left = 8
-    Top = 304
+    Top = 336
     Width = 144
     Height = 20
     Hint = 'Enable it so you can filter MAME games by main CPU'
@@ -234,10 +264,13 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
     ShadowColor = clSilver
     Themed = True
     CustomIconsEnabled = False
+    CustomEnableIconHD = False
+    CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+    CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
   end
   object PanelBottom: TPanelEx
     Left = 0
-    Top = 371
+    Top = 370
     Width = 621
     Height = 41
     Align = alBottom
@@ -251,7 +284,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
     ParentBackground = False
     Style = vgSimple
     object ButtonOk: TBitBtnEx
-      Left = 426
+      Left = 427
       Top = 8
       Width = 89
       Height = 25
@@ -354,6 +387,9 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
     ShadowColor = clSilver
     Themed = True
     CustomIconsEnabled = False
+    CustomEnableIconHD = False
+    CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+    CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
   end
   object DeviceROMs: TComboBox2Ex
     Left = 213
@@ -401,10 +437,13 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
     ShadowColor = clSilver
     Themed = True
     CustomIconsEnabled = False
+    CustomEnableIconHD = False
+    CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+    CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
   end
   object HideGamesWithCHDFiles: TAdvOfficeCheckBoxEx
     Left = 8
-    Top = 224
+    Top = 256
     Width = 171
     Height = 20
     Hint = 
@@ -418,6 +457,9 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
     ShadowColor = clSilver
     Themed = True
     CustomIconsEnabled = False
+    CustomEnableIconHD = False
+    CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+    CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
   end
   object NeoGeoMVS: TAdvOfficeCheckBoxEx
     Left = 8
@@ -435,6 +477,9 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
     ShadowColor = clSilver
     Themed = True
     CustomIconsEnabled = False
+    CustomEnableIconHD = False
+    CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+    CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
   end
   object STVMultiSlot: TAdvOfficeCheckBoxEx
     Left = 8
@@ -452,6 +497,9 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
     ShadowColor = clSilver
     Themed = True
     CustomIconsEnabled = False
+    CustomEnableIconHD = False
+    CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+    CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
   end
   object ControlType_New: TComboBox2Ex
     Left = 418
@@ -460,6 +508,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
     Height = 23
     Style = csDropDownList
     Ctl3D = True
+    DropDownCount = 40
     ItemHeight = 15
     ItemIndex = 0
     ParentCtl3D = False
@@ -488,7 +537,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
   end
   object ShowMergedSetsOnly: TAdvOfficeCheckBoxEx
     Left = 8
-    Top = 264
+    Top = 296
     Width = 147
     Height = 20
     Hint = 
@@ -502,10 +551,13 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
     ShadowColor = clSilver
     Themed = True
     CustomIconsEnabled = False
+    CustomEnableIconHD = False
+    CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+    CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
   end
   object HideNoDumpROMsGames: TAdvOfficeCheckBoxEx
     Left = 8
-    Top = 244
+    Top = 276
     Width = 152
     Height = 20
     Hint = 
@@ -519,6 +571,9 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
     ShadowColor = clSilver
     Themed = True
     CustomIconsEnabled = False
+    CustomEnableIconHD = False
+    CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+    CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
   end
   object SaveState: TComboBox2Ex
     Left = 213
@@ -540,10 +595,11 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
   end
   object CategoryFiltersGroupBox: TAdvGroupBoxEx
     Left = 213
-    Top = 187
+    Top = 200
     Width = 400
     Height = 152
     CheckBox.CustomIconsEnabled = False
+    CheckBox.CustomEnableIconHD = False
     RoundEdges = True
     Caption = 'Category (uncheck to hide)         '
     Ctl3D = True
@@ -551,7 +607,7 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
     object LabelCategoryFiltersGroupBoxHint: TShadowLabel
       Left = 199
       Top = 0
-      Width = 178
+      Width = 176
       Height = 17
       Caption = ' catver.ini or category.ini required '
       Font.Charset = ANSI_CHARSET
@@ -603,6 +659,9 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
       State = cbChecked
       Themed = True
       CustomIconsEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
     object CategoryFruitMachines: TAdvOfficeCheckBoxEx
       Tag = 1
@@ -620,6 +679,9 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
       State = cbChecked
       Themed = True
       CustomIconsEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
     object CategoryRhythm: TAdvOfficeCheckBoxEx
       Tag = 1
@@ -637,13 +699,16 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
       State = cbChecked
       Themed = True
       CustomIconsEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
     object CategoryMature: TAdvOfficeCheckBoxEx
       Tag = 1
       Left = 122
       Top = 28
       Width = 62
-      Height = 21
+      Height = 20
       Hint = 'Mature / Adult'
       Checked = True
       ShowHint = True
@@ -655,6 +720,9 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
       State = cbChecked
       Themed = True
       CustomIconsEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
     object CategoryMahjong: TAdvOfficeCheckBoxEx
       Tag = 1
@@ -672,6 +740,9 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
       State = cbChecked
       Themed = True
       CustomIconsEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
     object CategoryTabletop: TAdvOfficeCheckBoxEx
       Tag = 1
@@ -689,6 +760,9 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
       State = cbChecked
       Themed = True
       CustomIconsEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
     object CategoryPinMAME: TAdvOfficeCheckBoxEx
       Tag = 1
@@ -706,6 +780,9 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
       State = cbChecked
       Themed = True
       CustomIconsEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
     object CategoryQuiz: TAdvOfficeCheckBoxEx
       Tag = 1
@@ -723,6 +800,9 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
       State = cbChecked
       Themed = True
       CustomIconsEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
     object CategoryUtilities: TAdvOfficeCheckBoxEx
       Tag = 1
@@ -740,6 +820,9 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
       State = cbChecked
       Themed = True
       CustomIconsEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
     object CategoryCalculator: TAdvOfficeCheckBoxEx
       Tag = 1
@@ -757,6 +840,9 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
       State = cbChecked
       Themed = True
       CustomIconsEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
     object CategoryEducational: TAdvOfficeCheckBoxEx
       Tag = 1
@@ -774,6 +860,9 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
       State = cbChecked
       Themed = True
       CustomIconsEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
     object CategoryElectronic: TAdvOfficeCheckBoxEx
       Tag = 1
@@ -791,6 +880,9 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
       State = cbChecked
       Themed = True
       CustomIconsEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
     object CategoryPrinters: TAdvOfficeCheckBoxEx
       Tag = 1
@@ -808,6 +900,9 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
       State = cbChecked
       Themed = True
       CustomIconsEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
     object CategoryPhones: TAdvOfficeCheckBoxEx
       Tag = 1
@@ -825,6 +920,9 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
       State = cbChecked
       Themed = True
       CustomIconsEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
     object CategoryMAMEConsoleMachines: TAdvOfficeCheckBoxEx
       Tag = 1
@@ -842,6 +940,9 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
       State = cbChecked
       Themed = True
       CustomIconsEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
     object CategoryMAMEComputerMachines: TAdvOfficeCheckBoxEx
       Tag = 1
@@ -859,6 +960,9 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
       State = cbChecked
       Themed = True
       CustomIconsEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
     object CategoryMAMEHandheldMachines: TAdvOfficeCheckBoxEx
       Tag = 1
@@ -876,6 +980,9 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
       State = cbChecked
       Themed = True
       CustomIconsEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
     object CategoryMusic: TAdvOfficeCheckBoxEx
       Tag = 1
@@ -893,6 +1000,9 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
       State = cbChecked
       Themed = True
       CustomIconsEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
     object CategoryBoardGame: TAdvOfficeCheckBoxEx
       Tag = 1
@@ -910,6 +1020,9 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
       State = cbChecked
       Themed = True
       CustomIconsEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
     object CategorySlotMachines: TAdvOfficeCheckBoxEx
       Tag = 1
@@ -928,11 +1041,14 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
       State = cbChecked
       Themed = True
       CustomIconsEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
   end
   object ShowOnlySetsCRC32Collision: TAdvOfficeCheckBoxEx
     Left = 8
-    Top = 284
+    Top = 316
     Width = 191
     Height = 20
     Hint = 'Check it to hide all sets that do not have CRC32 collisions'
@@ -944,10 +1060,13 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
     ShadowColor = clSilver
     Themed = True
     CustomIconsEnabled = False
+    CustomEnableIconHD = False
+    CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+    CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
   end
   object HideMAMESoftlist_vgmplay: TAdvOfficeCheckBoxEx
-    Left = 418
-    Top = 152
+    Left = 8
+    Top = 216
     Width = 180
     Height = 18
     ShowHint = True
@@ -959,6 +1078,9 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
     ShadowColor = clSilver
     Themed = True
     CustomIconsEnabled = False
+    CustomEnableIconHD = False
+    CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+    CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
   end
   object SpecialList: TComboBox2Ex
     Left = 418
@@ -976,5 +1098,39 @@ object FormArcadeFiltersExtra: TFormArcadeFiltersExtra
       'List Both'
       'Show Special List Games Only'
       'Hide Special List Games')
+  end
+  object Cocktail: TComboBox2Ex
+    Left = 213
+    Top = 169
+    Width = 195
+    Height = 23
+    Style = csDropDownList
+    Ctl3D = True
+    ItemHeight = 15
+    ItemIndex = 0
+    ParentCtl3D = False
+    TabOrder = 21
+    Text = 'List Both'
+    Items.Strings = (
+      'List Both'
+      'Games With Cocktail Mode'
+      'Games With No Cocktail Mode')
+  end
+  object ArtworkRequired: TComboBox2Ex
+    Left = 418
+    Top = 169
+    Width = 195
+    Height = 23
+    Style = csDropDownList
+    Ctl3D = True
+    ItemHeight = 15
+    ItemIndex = 0
+    ParentCtl3D = False
+    TabOrder = 22
+    Text = 'List Both'
+    Items.Strings = (
+      'List Both'
+      'Games That Require Artwork'
+      'No Artwork Required')
   end
 end

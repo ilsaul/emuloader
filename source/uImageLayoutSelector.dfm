@@ -38,12 +38,10 @@ object FormImageLayoutSelector: TFormImageLayoutSelector
     ParentBackground = False
     Style = vgSimple
     object LabelLayoutTitle: TShadowLabel
-      Left = 48
-      Top = 0
-      Width = 300
+      Left = 12
+      Top = 12
+      Width = 133
       Height = 19
-      Alignment = taCenter
-      AutoSize = False
       Caption = 'IMAGE LAYOUT [INDEX]'
       Color = 16448250
       Font.Charset = ANSI_CHARSET
@@ -61,7 +59,6 @@ object FormImageLayoutSelector: TFormImageLayoutSelector
       ColorInnerFrame = clBlack
       Frames = []
       Transparent = True
-      Layout = tlCenter
     end
     object ButtonOk: TBitBtnEx
       Left = 401
@@ -163,6 +160,7 @@ object FormImageLayoutSelector: TFormImageLayoutSelector
     TabOrder = 1
     View = elsTile
     CustomCheckRadioEnabled = False
+    CustomEnableIconHD = False
     OnDblClick = LayoutsListViewDblClick
     OnItemSelectionChanged = LayoutsListViewItemSelectionChanged
     OnKeyAction = LayoutsListViewKeyAction

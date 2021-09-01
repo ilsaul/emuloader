@@ -5,8 +5,8 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
   Caption = 'Emulator Settings'
-  ClientHeight = 581
-  ClientWidth = 619
+  ClientHeight = 634
+  ClientWidth = 636
   Color = clBtnFace
   DefaultMonitor = dmMainForm
   Font.Charset = ANSI_CHARSET
@@ -24,27 +24,10 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 15
-  object FolderROMsLabel: TShadowLabel
-    Left = 8
-    Top = 87
-    Width = 504
-    Height = 16
-    Caption = 
-      'ROMs Folders [10 max]... Optional. If no folders are defined, "e' +
-      'mu_dir\ROMs" is used by default'
-    ShowAccelChar = False
-    ShadowColor = clGray
-    ShadowEnabled = False
-    EllipsType = etNone
-    ColorFrame = clBlack
-    ColorInnerFrame = clBlack
-    Frames = []
-    Transparent = True
-  end
   object LabelReadFileIni: TShadowLabel
     Left = 104
-    Top = 554
-    Width = 314
+    Top = 606
+    Width = 328
     Height = 16
     AutoSize = False
     Caption = 'LabelReadFileIni'
@@ -66,8 +49,9 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
   object TopBar: TPanelEx
     Left = 0
     Top = 0
-    Width = 644
+    Width = 636
     Height = 80
+    Align = alTop
     Color1 = clMoneyGreen
     Color2 = 15856113
     Color3 = 1117964
@@ -80,7 +64,7 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
     object LabelGameTitle: TShadowLabel
       Left = 106
       Top = 1
-      Width = 506
+      Width = 514
       Height = 33
       AutoSize = False
       Caption = 
@@ -106,7 +90,7 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
     object LabelEmulatorVersion: TShadowLabel
       Left = 106
       Top = 44
-      Width = 390
+      Width = 400
       Height = 27
       AutoSize = False
       Caption = 
@@ -144,7 +128,7 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
       Transparent = True
     end
     object LabelGameStatus: TShadowLabel
-      Left = 505
+      Left = 509
       Top = 45
       Width = 110
       Height = 29
@@ -169,166 +153,251 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
       WordWrap = True
     end
   end
-  object FolderROMs: TEasyListview
-    Tag = 1
+  object ButtonReadFile: TBitBtnEx
     Left = 8
-    Top = 104
-    Width = 559
-    Height = 208
-    BackGround.Enabled = True
-    CellSizes.Report.Height = 20
-    Color = clWhite
-    EditManager.Font.Charset = ANSI_CHARSET
-    EditManager.Font.Color = clBlack
-    EditManager.Font.Height = -12
-    EditManager.Font.Name = 'Segoe UI'
-    EditManager.Font.Style = []
-    UseDockManager = False
-    HintType = ehtToolTip
-    Header.Columns.Items = {
-      0600000002000000110000005445617379436F6C756D6E53746F726564FFFECE
-      00060000008008000101000100000000000001F1010000FFFFFF1F0001000000
-      010000000600000046006F006C00640065007200000000000000000000000000
-      110000005445617379436F6C756D6E53746F726564FFFECE0006000000800800
-      01010001010000000000013C000000FFFFFF1F00010000000100000006000000
-      530074006100740075007300000000000000000000000000}
-    Header.Draggable = False
-    Header.Height = 23
-    IncrementalSearch.Enabled = True
-    IncrementalSearch.ResetTime = 1000
-    IncrementalSearch.StartType = eissFocusedNode
-    PaintInfoGroup.Expandable = False
-    PaintInfoGroup.MarginBottom.CaptionIndent = 4
-    PaintInfoItem.Border = 1
-    PaintInfoItem.BorderColor = 16370824
-    PaintInfoItem.CaptionIndent = 2
-    PaintInfoItem.CheckType = ectBox
-    PaintInfoItem.ShowBorder = False
+    Top = 601
+    Width = 89
+    Height = 25
+    Hint = 'Read "emulator.ini"'
+    Caption = 'Reload Settings'
     ParentShowHint = False
-    ShowHint = False
-    Selection.BlendColorSelRect = 10902593
-    Selection.BlendIcon = False
-    Selection.BorderColor = 10902593
-    Selection.BorderColorSelRect = 10902593
-    Selection.Color = 10902593
-    Selection.FullCellPaint = True
-    Selection.FullItemPaint = True
-    Selection.FullRowSelect = True
-    Selection.GradientColorBottom = 16506264
-    Selection.GradientColorTop = 15582647
-    Selection.InactiveBorderColor = 10902593
-    Selection.InactiveColor = 15582647
-    Selection.InactiveTextColor = clBtnShadow
-    Selection.MouseButton = [cmbLeft, cmbRight]
-    Selection.MultiSelect = True
-    Selection.RoundRectRadius = 2
-    Selection.TextColor = clBlack
-    Selection.UseFocusRect = False
+    ShowHint = True
     TabOrder = 1
-    View = elsReport
-    CustomCheckRadioEnabled = False
-    OnItemCheckChange = FolderROMsItemCheckChange
-    OnItemEdited = FolderROMsItemEdited
-    OnItemEditEnd = FolderROMsItemEditEnd
-    OnItemPaintText = FolderROMsItemPaintText
-    OnItemSelectionChanged = FolderROMsItemSelectionChanged
-    OnKeyAction = FolderROMsKeyAction
+    OnClick = ButtonReadFileClick
   end
-  object FolderROMsButtonUp: TBitBtnEx
-    Tag = 1
-    Left = 569
-    Top = 241
-    Width = 43
-    Height = 21
-    Hint = 'Move selected folder up'
-    Caption = 'Up'
-    ParentShowHint = False
-    ShowHint = True
+  object ButtonOk: TBitBtnEx
+    Left = 440
+    Top = 601
+    Width = 89
+    Height = 25
+    Hint = 'Close and update settings'
+    Caption = 'Ok'
+    ModalResult = 1
     TabOrder = 2
-    TabStop = False
-    OnClick = FolderROMsButtonUpClick
   end
-  object FolderROMsButtonDown: TBitBtnEx
-    Left = 569
-    Top = 262
-    Width = 43
-    Height = 21
-    Hint = 'Move selected folder down'
-    Caption = 'Down'
-    ParentShowHint = False
-    ShowHint = True
+  object ButtonCancel: TBitBtnEx
+    Left = 538
+    Top = 601
+    Width = 89
+    Height = 25
+    Hint = 'Close without updating'
+    Caption = 'Cancel'
+    ModalResult = 2
     TabOrder = 3
-    TabStop = False
-    OnClick = FolderROMsButtonUpClick
   end
-  object FolderROMsButtonSelect: TBitBtnEx
-    Left = 569
-    Top = 103
-    Width = 43
-    Height = 21
-    Hint = 'Click here to add folders'
-    Caption = 'Add'
-    ParentShowHint = False
-    ShowHint = True
-    TabOrder = 4
-    OnClick = FolderROMsButtonSelectClick
-  end
-  object FolderROMsButtonEdit: TBitBtnEx
-    Left = 569
-    Top = 124
-    Width = 43
-    Height = 21
-    Hint = 'Click here to edit the selected folder [F2]'
-    Caption = 'Edit'
-    TabOrder = 6
-    OnClick = FolderROMsButtonEditClick
-  end
-  object FolderROMsButtonDelete: TBitBtnEx
-    Left = 569
-    Top = 145
-    Width = 43
-    Height = 21
-    Hint = 'Click here to delete selected folders [DEL]'
-    Caption = 'Delete'
-    TabOrder = 7
-    OnClick = FolderROMsButtonDeleteClick
-  end
-  object FolderROMsButtonClear: TBitBtnEx
-    Left = 569
-    Top = 166
-    Width = 43
-    Height = 21
-    Hint = 'Click here to clear folders list'
-    Caption = 'Clear'
-    ParentShowHint = False
-    ShowHint = True
-    TabOrder = 8
-    OnClick = FolderROMsButtonClearClick
-  end
-  object FolderROMsButtonSetActiveInactive: TBitBtnEx
-    Left = 569
-    Top = 291
-    Width = 43
-    Height = 21
-    Hint = 'Click here to toggle selected folder active/inactive'
-    Caption = 'Enable'
-    TabOrder = 5
-    OnClick = FolderROMsButtonSetActiveInactiveClick
-  end
-  object VideoGroupBox: TAdvGroupBoxEx
+  object FolderROMsGroupBox: TPanelEx
     Left = 8
-    Top = 318
-    Width = 601
+    Top = 92
+    Width = 620
+    Height = 247
+    Color1 = 15856113
+    Color2 = clSilver
+    Color3 = clYellow
+    Color4 = clTeal
+    ColorFrame = clSilver
+    ColorInnerFrame = clGreen
+    EnableCustomBorder = ecbSingle
+    Frames = []
+    ParentBackground = False
+    Style = vgSolid
+    object FolderROMsGroupBoxLabel: TShadowLabel
+      Left = 0
+      Top = 0
+      Width = 618
+      Height = 18
+      Align = alTop
+      AutoSize = False
+      Caption = 
+        'ROMs Folders [10 max]... Optional. If no folders are defined, "e' +
+        'mu_dir\ROMs" is used by default'
+      CaptionIndent = 3
+      Color = clCream
+      ParentColor = False
+      ShowAccelChar = False
+      ShadowColor = clGray
+      ShadowEnabled = False
+      EllipsType = etNone
+      ColorFrame = 15132390
+      ColorInnerFrame = clBlack
+      Frames = [lfrLeft, lfrRight, lfrBottom]
+      Transparent = False
+    end
+    object FolderROMs: TEasyListview
+      Tag = 1
+      Left = 8
+      Top = 26
+      Width = 556
+      Height = 211
+      BackGround.Enabled = True
+      CellSizes.Report.Height = 20
+      Color = clWhite
+      EditManager.Font.Charset = ANSI_CHARSET
+      EditManager.Font.Color = clBlack
+      EditManager.Font.Height = -12
+      EditManager.Font.Name = 'Segoe UI'
+      EditManager.Font.Style = []
+      UseDockManager = False
+      HintType = ehtToolTip
+      Header.Columns.Items = {
+        0600000002000000110000005445617379436F6C756D6E53746F726564FFFECE
+        00060000008008000101000100000000000001EA010000FFFFFF1F0001000000
+        010000000600000046006F006C00640065007200000000000000000000000000
+        110000005445617379436F6C756D6E53746F726564FFFECE0006000000800800
+        01010001010000000000013C000000FFFFFF1F00010000000100000006000000
+        530074006100740075007300000000000000000000000000}
+      Header.Draggable = False
+      Header.Height = 23
+      IncrementalSearch.Enabled = True
+      IncrementalSearch.ResetTime = 1000
+      IncrementalSearch.StartType = eissFocusedNode
+      PaintInfoGroup.Expandable = False
+      PaintInfoGroup.MarginBottom.CaptionIndent = 4
+      PaintInfoItem.BorderColor = 16370824
+      PaintInfoItem.CheckType = ectBox
+      PaintInfoItem.ShowBorder = False
+      ParentShowHint = False
+      ShowHint = False
+      Selection.BlendColorSelRect = 10902593
+      Selection.BlendIcon = False
+      Selection.BorderColor = 10902593
+      Selection.BorderColorSelRect = 10902593
+      Selection.Color = 10902593
+      Selection.FullCellPaint = True
+      Selection.FullItemPaint = True
+      Selection.FullRowSelect = True
+      Selection.GradientColorBottom = 16506264
+      Selection.GradientColorTop = 15582647
+      Selection.InactiveBorderColor = 10902593
+      Selection.InactiveColor = 15582647
+      Selection.InactiveTextColor = clBtnShadow
+      Selection.MouseButton = [cmbLeft, cmbRight]
+      Selection.MultiSelect = True
+      Selection.RoundRectRadius = 2
+      Selection.TextColor = clBlack
+      Selection.UseFocusRect = False
+      TabOrder = 0
+      View = elsReport
+      CustomCheckRadioEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
+      OnItemCheckChange = FolderROMsItemCheckChange
+      OnItemEdited = FolderROMsItemEdited
+      OnItemEditEnd = FolderROMsItemEditEnd
+      OnItemPaintText = FolderROMsItemPaintText
+      OnKeyAction = FolderROMsKeyAction
+    end
+    object FolderROMsButtonUp: TBitBtnEx
+      Tag = 1
+      Left = 567
+      Top = 26
+      Width = 43
+      Height = 21
+      Hint = 'Move selected folder up'
+      Caption = 'Up'
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 1
+      TabStop = False
+      OnClick = FolderROMsButtonUpClick
+    end
+    object FolderROMsButtonDown: TBitBtnEx
+      Left = 567
+      Top = 49
+      Width = 43
+      Height = 21
+      Hint = 'Move selected folder down'
+      Caption = 'Down'
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 2
+      TabStop = False
+      OnClick = FolderROMsButtonUpClick
+    end
+    object FolderROMsButtonSelect: TBitBtnEx
+      Left = 567
+      Top = 147
+      Width = 43
+      Height = 21
+      Hint = 'Click here to add folders'
+      Caption = 'Add'
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 3
+      OnClick = FolderROMsButtonSelectClick
+    end
+    object FolderROMsButtonEdit: TBitBtnEx
+      Left = 567
+      Top = 170
+      Width = 43
+      Height = 21
+      Hint = 'Click here to edit the selected folder [F2]'
+      Caption = 'Edit'
+      TabOrder = 4
+      OnClick = FolderROMsButtonEditClick
+    end
+    object FolderROMsButtonDelete: TBitBtnEx
+      Left = 567
+      Top = 193
+      Width = 43
+      Height = 21
+      Hint = 'Click here to delete selected folders [DEL]'
+      Caption = 'Delete'
+      TabOrder = 5
+      OnClick = FolderROMsButtonDeleteClick
+    end
+    object FolderROMsButtonClear: TBitBtnEx
+      Left = 567
+      Top = 216
+      Width = 43
+      Height = 21
+      Hint = 'Click here to clear folders list'
+      Caption = 'Clear'
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 6
+      OnClick = FolderROMsButtonClearClick
+    end
+  end
+  object VideoGroupBox: TPanelEx
+    Left = 8
+    Top = 355
+    Width = 620
     Height = 130
-    CheckBox.CustomIconsEnabled = False
-    RoundEdges = True
-    Caption = 'Video'
-    Ctl3D = True
-    TabOrder = 9
+    Color1 = 15856113
+    Color2 = clSilver
+    Color3 = clYellow
+    Color4 = clTeal
+    ColorFrame = clSilver
+    ColorInnerFrame = clGreen
+    EnableCustomBorder = ecbSingle
+    Frames = []
+    ParentBackground = False
+    Style = vgSolid
+    object VideoGroupBoxLabel: TShadowLabel
+      Left = 0
+      Top = 0
+      Width = 618
+      Height = 18
+      Align = alTop
+      AutoSize = False
+      Caption = 'Video'
+      CaptionIndent = 3
+      Color = clCream
+      ParentColor = False
+      ShowAccelChar = False
+      ShadowColor = clGray
+      ShadowEnabled = False
+      EllipsType = etNone
+      ColorFrame = 15132390
+      ColorInnerFrame = clBlack
+      Frames = [lfrLeft, lfrRight, lfrBottom]
+      Transparent = False
+    end
     object FullScreenResolutionLabel: TShadowLabel
       Left = 8
       Top = 20
-      Width = 119
+      Width = 117
       Height = 16
       Caption = 'Full Screen Resolution'
       ShowAccelChar = False
@@ -340,9 +409,9 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
       Frames = []
     end
     object WidescreenWindowLabel: TShadowLabel
-      Left = 284
+      Left = 192
       Top = 20
-      Width = 69
+      Width = 67
       Height = 16
       Caption = 'Aspect Ratio'
       ShowAccelChar = False
@@ -354,9 +423,9 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
       Frames = []
     end
     object FrameskipLabel: TShadowLabel
-      Left = 176
+      Left = 316
       Top = 20
-      Width = 57
+      Width = 55
       Height = 16
       Caption = 'Frameskip'
       ShowAccelChar = False
@@ -369,9 +438,9 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
       Transparent = True
     end
     object ForceManagedTexturesLabel: TShadowLabel
-      Left = 392
+      Left = 445
       Top = 20
-      Width = 88
+      Width = 85
       Height = 16
       Caption = 'Textures Format'
       ShowAccelChar = False
@@ -388,6 +457,7 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
       Width = 160
       Height = 23
       Style = csDropDownList
+      DropDownCount = 30
       ItemHeight = 15
       TabOrder = 0
     end
@@ -403,9 +473,12 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
       ReturnIsTab = False
       Themed = True
       CustomIconsEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
     object ForceSync: TAdvOfficeCheckBoxEx
-      Left = 176
+      Left = 190
       Top = 66
       Width = 93
       Height = 20
@@ -416,9 +489,12 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
       ReturnIsTab = False
       Themed = True
       CustomIconsEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
     object WidescreenWindow: TComboBox2Ex
-      Left = 284
+      Left = 192
       Top = 36
       Width = 100
       Height = 23
@@ -434,12 +510,13 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
         '16:10')
     end
     object Frameskip: TComboBox2Ex
-      Left = 176
+      Left = 316
       Top = 36
-      Width = 100
+      Width = 106
       Height = 23
       Hint = 'Set frameskip to fixed value'
       Style = csDropDownList
+      DropDownCount = 20
       ItemHeight = 15
       ItemIndex = 0
       TabOrder = 4
@@ -458,9 +535,9 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
         '9')
     end
     object ForceManagedTextures: TComboBox2Ex
-      Left = 392
+      Left = 445
       Top = 36
-      Width = 160
+      Width = 165
       Height = 23
       Hint = 
         'Leave it on dynamic. Set to managed textures if the emulator cra' +
@@ -489,9 +566,12 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
       ReturnIsTab = False
       Themed = True
       CustomIconsEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
     object Wireframe: TAdvOfficeCheckBoxEx
-      Left = 424
+      Left = 466
       Top = 106
       Width = 149
       Height = 20
@@ -502,9 +582,12 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
       ReturnIsTab = False
       Themed = True
       CustomIconsEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
     object FakeGouraud: TAdvOfficeCheckBoxEx
-      Left = 176
+      Left = 190
       Top = 86
       Width = 97
       Height = 20
@@ -517,9 +600,12 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
       ReturnIsTab = False
       Themed = True
       CustomIconsEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
     object BilinearFiltering: TAdvOfficeCheckBoxEx
-      Left = 424
+      Left = 466
       Top = 66
       Width = 113
       Height = 20
@@ -532,9 +618,12 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
       State = cbChecked
       Themed = True
       CustomIconsEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
     object FilterTilemaps: TAdvOfficeCheckBoxEx
-      Left = 176
+      Left = 190
       Top = 106
       Width = 100
       Height = 20
@@ -547,9 +636,12 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
       ReturnIsTab = False
       Themed = True
       CustomIconsEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
     object TrilinearFiltering: TAdvOfficeCheckBoxEx
-      Left = 424
+      Left = 466
       Top = 86
       Width = 110
       Height = 20
@@ -562,9 +654,12 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
       ReturnIsTab = False
       Themed = True
       CustomIconsEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
     object AutoMipMap: TAdvOfficeCheckBoxEx
-      Left = 280
+      Left = 308
       Top = 66
       Width = 125
       Height = 20
@@ -575,9 +670,12 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
       ReturnIsTab = False
       Themed = True
       CustomIconsEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
     object MeshTransparency: TAdvOfficeCheckBoxEx
-      Left = 280
+      Left = 308
       Top = 86
       Width = 125
       Height = 20
@@ -590,9 +688,12 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
       ReturnIsTab = False
       Themed = True
       CustomIconsEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
     object Crosshair: TAdvOfficeCheckBoxEx
-      Left = 280
+      Left = 308
       Top = 106
       Width = 135
       Height = 20
@@ -605,6 +706,9 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
       State = cbChecked
       Themed = True
       CustomIconsEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
     object FSAA: TAdvOfficeCheckBoxEx
       Left = 8
@@ -618,34 +722,48 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
       ReturnIsTab = False
       Themed = True
       CustomIconsEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
   end
-  object EnableSound: TAdvOfficeCheckBoxEx
-    Left = 520
-    Top = 488
-    Width = 94
-    Height = 20
-    Checked = True
-    TabOrder = 10
-    Alignment = taLeftJustify
-    Caption = 'Enable Sound'
-    ReturnIsTab = False
-    State = cbChecked
-    Themed = True
-    CustomIconsEnabled = False
-  end
-  object InputGroupBox: TAdvGroupBoxEx
+  object InputGroupBox: TPanelEx
     Left = 8
-    Top = 456
-    Width = 493
-    Height = 78
-    CheckBox.CustomIconsEnabled = False
-    RoundEdges = True
-    Caption = 'Input'
-    Ctl3D = True
-    TabOrder = 11
+    Top = 501
+    Width = 498
+    Height = 80
+    Color1 = 15856113
+    Color2 = clSilver
+    Color3 = clYellow
+    Color4 = clTeal
+    ColorFrame = clSilver
+    ColorInnerFrame = clGreen
+    EnableCustomBorder = ecbSingle
+    Frames = []
+    ParentBackground = False
+    Style = vgSolid
+    object InputGroupBoxLabel: TShadowLabel
+      Left = 0
+      Top = 0
+      Width = 496
+      Height = 18
+      Align = alTop
+      AutoSize = False
+      Caption = 'Input'
+      CaptionIndent = 3
+      Color = clCream
+      ParentColor = False
+      ShowAccelChar = False
+      ShadowColor = clGray
+      ShadowEnabled = False
+      EllipsType = etNone
+      ColorFrame = 15132390
+      ColorInnerFrame = clBlack
+      Frames = [lfrLeft, lfrRight, lfrBottom]
+      Transparent = False
+    end
     object ReturnToNeutral: TAdvOfficeCheckBoxEx
-      Left = 280
+      Left = 283
       Top = 15
       Width = 152
       Height = 20
@@ -658,17 +776,23 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
       ReturnIsTab = False
       Themed = True
       CustomIconsEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
     object UseRawInput: TAdvGroupBoxEx
-      Left = 9
+      Left = 8
       Top = 20
-      Width = 265
+      Width = 267
       Height = 49
       CheckBox.Hint = 
         'Read mouse through raw input, allowing 2 mice to be used (useful' +
         ' for shooting games)'
       CheckBox.Visible = True
       CheckBox.CustomIconsEnabled = False
+      CheckBox.CustomEnableIconHD = False
+      CheckBox.CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CheckBox.CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
       RoundEdges = True
       Caption = 'Use Raw Input (2 Mouses Support)'
       Ctl3D = True
@@ -676,7 +800,7 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
       object RawDevicePlayer1Label: TShadowLabel
         Left = 8
         Top = 24
-        Width = 44
+        Width = 42
         Height = 16
         Caption = 'Player 1'
         ShowAccelChar = False
@@ -690,7 +814,7 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
       object RawDevicePlayer2Label: TShadowLabel
         Left = 140
         Top = 24
-        Width = 44
+        Width = 42
         Height = 16
         Caption = 'Player 2'
         ShowAccelChar = False
@@ -704,7 +828,7 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
       object RawDevicePlayer1: TComboBox2Ex
         Left = 52
         Top = 20
-        Width = 75
+        Width = 77
         Height = 23
         Style = csDropDownList
         ItemHeight = 15
@@ -720,7 +844,7 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
       object RawDevicePlayer2: TComboBox2Ex
         Left = 184
         Top = 20
-        Width = 75
+        Width = 77
         Height = 23
         Style = csDropDownList
         ItemHeight = 15
@@ -735,7 +859,7 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
       end
     end
     object ForceFeedbackEnable: TAdvOfficeCheckBoxEx
-      Left = 280
+      Left = 283
       Top = 55
       Width = 140
       Height = 20
@@ -746,9 +870,12 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
       ReturnIsTab = False
       Themed = True
       CustomIconsEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
     object XInput: TAdvOfficeCheckBoxEx
-      Left = 280
+      Left = 283
       Top = 35
       Width = 211
       Height = 20
@@ -761,38 +888,62 @@ object FormSEGAModel2EmulatorSettings: TFormSEGAModel2EmulatorSettings
       ReturnIsTab = False
       Themed = True
       CustomIconsEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
   end
-  object ButtonReadFile: TBitBtnEx
-    Left = 8
-    Top = 549
-    Width = 89
-    Height = 25
-    Hint = 'Read "emulator.ini"'
-    Caption = 'Reload Settings'
-    ParentShowHint = False
-    ShowHint = True
-    TabOrder = 12
-    OnClick = ButtonReadFileClick
-  end
-  object ButtonOk: TBitBtnEx
-    Left = 425
-    Top = 549
-    Width = 89
-    Height = 25
-    Hint = 'Close and update settings'
-    Caption = 'Ok'
-    ModalResult = 1
-    TabOrder = 13
-  end
-  object ButtonCancel: TBitBtnEx
-    Left = 523
-    Top = 549
-    Width = 89
-    Height = 25
-    Hint = 'Close without updating'
-    Caption = 'Cancel'
-    ModalResult = 2
-    TabOrder = 14
+  object AudioGroupBox: TPanelEx
+    Left = 522
+    Top = 501
+    Width = 106
+    Height = 46
+    Color1 = 15856113
+    Color2 = clSilver
+    Color3 = clYellow
+    Color4 = clTeal
+    ColorFrame = clSilver
+    ColorInnerFrame = clGreen
+    EnableCustomBorder = ecbSingle
+    Frames = []
+    ParentBackground = False
+    Style = vgSolid
+    object AudioGroupBoxLabel: TShadowLabel
+      Left = 0
+      Top = 0
+      Width = 104
+      Height = 18
+      Align = alTop
+      AutoSize = False
+      Caption = 'Audio'
+      CaptionIndent = 3
+      Color = clCream
+      ParentColor = False
+      ShowAccelChar = False
+      ShadowColor = clGray
+      ShadowEnabled = False
+      EllipsType = etNone
+      ColorFrame = 15132390
+      ColorInnerFrame = clBlack
+      Frames = [lfrLeft, lfrRight, lfrBottom]
+      Transparent = False
+    end
+    object EnableSound: TAdvOfficeCheckBoxEx
+      Left = 8
+      Top = 20
+      Width = 94
+      Height = 20
+      Checked = True
+      TabOrder = 0
+      Alignment = taLeftJustify
+      Caption = 'Enable Sound'
+      ReturnIsTab = False
+      State = cbChecked
+      Themed = True
+      CustomIconsEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
+    end
   end
 end

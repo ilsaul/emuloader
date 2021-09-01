@@ -77,6 +77,9 @@ object FormToolBarEditor: TFormToolBarEditor
     TabOrder = 0
     View = elsTile
     CustomCheckRadioEnabled = False
+    CustomEnableIconHD = False
+    CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+    CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     OnItemCheckChange = ToolBarListViewItemCheckChange
     OnItemPaintText = ToolBarListViewItemPaintText
   end
@@ -99,7 +102,7 @@ object FormToolBarEditor: TFormToolBarEditor
       Tag = 1
       Left = 192
       Top = 5
-      Width = 68
+      Width = 66
       Height = 16
       Caption = 'Set Icon Size'
       ShowAccelChar = False
@@ -114,7 +117,7 @@ object FormToolBarEditor: TFormToolBarEditor
     object LabelIconSizeValue: TShadowLabel
       Left = 268
       Top = 22
-      Width = 72
+      Width = 71
       Height = 16
       Caption = 'Large (48x48)'
       ShowAccelChar = False
@@ -183,6 +186,9 @@ object FormToolBarEditor: TFormToolBarEditor
       ShadowColor = clSkyBlue
       Themed = True
       CustomIconsEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
     object ShowHideToolBar: TAdvOfficeCheckBoxEx
       Left = 8
@@ -200,6 +206,9 @@ object FormToolBarEditor: TFormToolBarEditor
       State = cbChecked
       Themed = True
       CustomIconsEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
     object ButtonDefault: TBitBtnEx
       Left = 684
@@ -214,7 +223,7 @@ object FormToolBarEditor: TFormToolBarEditor
       OnClick = ButtonDefaultClick
     end
     object ButtonClose: TBitBtnEx
-      Left = 824
+      Left = 823
       Top = 16
       Width = 89
       Height = 25

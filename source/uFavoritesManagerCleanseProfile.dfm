@@ -21,11 +21,11 @@ object FormFavoritesManagerCleanseProfile: TFormFavoritesManagerCleanseProfile
   object LabelTopMessage: TShadowLabel
     Left = 12
     Top = 8
-    Width = 426
+    Width = 392
     Height = 16
     Caption = 
-      'Invalid entries compared to current games list. Remove entries y' +
-      'ou wish to keep.'
+      'Invalid entries from current games list. Remove the ones you wis' +
+      'h to keep.'
     ShowAccelChar = False
     ShadowColor = clGray
     ShadowEnabled = False
@@ -36,9 +36,9 @@ object FormFavoritesManagerCleanseProfile: TFormFavoritesManagerCleanseProfile
     Transparent = True
   end
   object LabelTotal: TShadowLabel
-    Left = 579
+    Left = 586
     Top = 8
-    Width = 125
+    Width = 121
     Height = 16
     Alignment = taRightJustify
     Caption = 'Total: 000000 of 000000'
@@ -100,7 +100,7 @@ object FormFavoritesManagerCleanseProfile: TFormFavoritesManagerCleanseProfile
     IncrementalSearch.Enabled = True
     IncrementalSearch.ResetTime = 1000
     IncrementalSearch.StartType = eissFocusedNode
-    ImagesSmall = IL_Systems
+    ImagesSmall = FormMain.IL_StandardIconsLarge
     PaintInfoColumn.CaptionIndent = 0
     PaintInfoGroup.BandBlended = False
     PaintInfoGroup.BandEnabled = False
@@ -136,13 +136,14 @@ object FormFavoritesManagerCleanseProfile: TFormFavoritesManagerCleanseProfile
     TabOrder = 0
     View = elsReport
     CustomCheckRadioEnabled = False
+    CustomEnableIconHD = False
     OnColumnClick = FavoritesCleanseListColumnClick
     OnItemCompare = FavoritesCleanseListItemCompare
     OnKeyAction = FavoritesCleanseListKeyAction
   end
   object PanelBottom: TPanelEx
     Left = 0
-    Top = 601
+    Top = 600
     Width = 714
     Height = 41
     Align = alBottom
@@ -182,9 +183,5 @@ object FormFavoritesManagerCleanseProfile: TFormFavoritesManagerCleanseProfile
       TabOrder = 2
       OnClick = ButtonRemoveSelectedClick
     end
-  end
-  object IL_Systems: TImageList
-    Left = 88
-    Top = 184
   end
 end

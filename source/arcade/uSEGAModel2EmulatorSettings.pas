@@ -19,35 +19,30 @@ type
     SystemIcon: TImage;
     GameIcon: TImage;
     LabelGameStatus: TShadowLabel;
-    FolderROMsLabel: TShadowLabel;
+    ButtonReadFile: TBitBtnEx;
+    LabelReadFileIni: TShadowLabel;
+    ButtonOk: TBitBtnEx;
+    ButtonCancel: TBitBtnEx;
+    FolderROMsGroupBox: TPanelEx;
+    FolderROMsGroupBoxLabel: TShadowLabel;
     FolderROMs: TEasyListview;
     FolderROMsButtonUp: TBitBtnEx;
     FolderROMsButtonDown: TBitBtnEx;
     FolderROMsButtonSelect: TBitBtnEx;
-    FolderROMsButtonSetActiveInactive: TBitBtnEx;
     FolderROMsButtonEdit: TBitBtnEx;
     FolderROMsButtonDelete: TBitBtnEx;
     FolderROMsButtonClear: TBitBtnEx;
-    VideoGroupBox: TAdvGroupBoxEx;
+    VideoGroupBox: TPanelEx;
+    VideoGroupBoxLabel: TShadowLabel;
     FullScreenResolutionLabel: TShadowLabel;
     WidescreenWindowLabel: TShadowLabel;
+    FrameskipLabel: TShadowLabel;
+    ForceManagedTexturesLabel: TShadowLabel;
     FullScreenResolution: TComboBox2Ex;
     AutoSwitchFullScreen: TAdvOfficeCheckBoxEx;
     ForceSync: TAdvOfficeCheckBoxEx;
     WidescreenWindow: TComboBox2Ex;
     Frameskip: TComboBox2Ex;
-    FrameskipLabel: TShadowLabel;
-    EnableSound: TAdvOfficeCheckBoxEx;
-    InputGroupBox: TAdvGroupBoxEx;
-    ReturnToNeutral: TAdvOfficeCheckBoxEx;
-    UseRawInput: TAdvGroupBoxEx;
-    RawDevicePlayer1Label: TShadowLabel;
-    RawDevicePlayer2Label: TShadowLabel;
-    RawDevicePlayer1: TComboBox2Ex;
-    RawDevicePlayer2: TComboBox2Ex;
-    ForceFeedbackEnable: TAdvOfficeCheckBoxEx;
-    XInput: TAdvOfficeCheckBoxEx;
-    ForceManagedTexturesLabel: TShadowLabel;
     ForceManagedTextures: TComboBox2Ex;
     SoftwareVertexProcessing: TAdvOfficeCheckBoxEx;
     Wireframe: TAdvOfficeCheckBoxEx;
@@ -58,25 +53,31 @@ type
     AutoMipMap: TAdvOfficeCheckBoxEx;
     MeshTransparency: TAdvOfficeCheckBoxEx;
     Crosshair: TAdvOfficeCheckBoxEx;
-    ButtonReadFile: TBitBtnEx;
-    LabelReadFileIni: TShadowLabel;
-    ButtonOk: TBitBtnEx;
-    ButtonCancel: TBitBtnEx;
     FSAA: TAdvOfficeCheckBoxEx;
+    InputGroupBox: TPanelEx;
+    InputGroupBoxLabel: TShadowLabel;
+    ReturnToNeutral: TAdvOfficeCheckBoxEx;
+    UseRawInput: TAdvGroupBoxEx;
+    RawDevicePlayer1Label: TShadowLabel;
+    RawDevicePlayer2Label: TShadowLabel;
+    RawDevicePlayer1: TComboBox2Ex;
+    RawDevicePlayer2: TComboBox2Ex;
+    ForceFeedbackEnable: TAdvOfficeCheckBoxEx;
+    XInput: TAdvOfficeCheckBoxEx;
+    AudioGroupBox: TPanelEx;
+    AudioGroupBoxLabel: TShadowLabel;
+    EnableSound: TAdvOfficeCheckBoxEx;
     procedure FormShow(Sender: TObject);
     procedure ButtonReadFileClick(Sender: TObject);
     procedure FolderROMsButtonSelectClick(Sender: TObject);
     procedure FolderROMsButtonEditClick(Sender: TObject);
     procedure FolderROMsButtonDeleteClick(Sender: TObject);
     procedure FolderROMsButtonClearClick(Sender: TObject);
-    procedure FolderROMsButtonSetActiveInactiveClick(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure FolderROMsItemPaintText(Sender: TCustomEasyListview;
       Item: TEasyItem; Position: Integer; ACanvas: TCanvas);
     procedure FolderROMsKeyAction(Sender: TCustomEasyListview;
       var CharCode: Word; var Shift: TShiftState; var DoDefault: Boolean);
-    procedure FolderROMsItemSelectionChanged(
-      Sender: TCustomEasyListview; Item: TEasyItem);
     procedure FormKeyPress(Sender: TObject; var Key: Char);
     procedure FolderROMsItemEdited(Sender: TCustomEasyListview;
       Item: TEasyItem; var NewValue: Variant; var Accept: Boolean);
@@ -88,6 +89,7 @@ type
   private
     { Private declarations }
     customResolution: String;
+    procedure Resize4K;
     //procedure PopulateScreenResolution;
   public
     { Public declarations }
@@ -109,6 +111,112 @@ implementation
 uses uMain, uCommon;
 
 {$R *.dfm}
+
+procedure TFormSEGAModel2EmulatorSettings.Resize4K;
+var
+  iTopValue: Integer;
+
+  function GetTopPos(iPos: Integer): Integer;
+  begin
+    if iPos = -1 then
+       Result:= iTopValue
+    else
+       Result:= iPos;
+  end;
+
+  function MoveCheckBox(iCheckBox: TAdvOfficeCheckBoxEx; iTop: Integer = -1; iLeft: Integer = 10;  iWidth: Integer = 287): Boolean;
+  begin
+    Result:= True;
+    iTopValue:= GetTopPos(iTop);
+    FormMain.Set4KCheckBoxSpecs(iCheckBox, iLeft, iTopValue, iWidth, 36, 16);
+    iTopValue:= iTopValue+47;
+  end;
+
+  function MoveComboBox(iComboBox: TComboBox2Ex; iLabelTitle: TShadowLabel; iTop: Integer = -1; iLeft: Integer = 10; iWidth: Integer = 287): Boolean;
+  begin
+    Result:= True;
+    iTopValue:= GetTopPos(iTop);
+    if iLabelTitle <> nil then
+       FormMain.Set4KLabelSpecs(iLabelTitle, iLeft, iTopValue, -1, -1, 16);
+    FormMain.Set4KComboBoxSpecs(iComboBox, iLeft, iTopValue+36, iWidth, 16);
+    iTopValue:= iTopValue+82;
+  end;
+
+begin
+  if not Is4KMode then
+     Exit;
+
+  with FormSEGAModel2EmulatorSettings do
+  begin
+    ClientWidth:=  1377;
+    ClientHeight:= 1096;
+    Font.Size:= 16;
+
+    FormMain.Set4KEmuGameTopPanel(TopBar, SystemIcon, GameIcon, LabelGameTitle, 1210, LabelEmulatorVersion, 930, LabelGameStatus, 1155);
+
+    // ROMs Folders
+    FormMain.Set4KBoxLabel(FolderROMsGroupBox, FolderROMsGroupBoxLabel, 16, 160, 388, 1345);
+    FormMain.Set4KListViewSpecs(FolderROMs, 10, 45, 1243, 331, 16);
+    FormMain.Set4KListViewCheckBoxHDSpecs(FolderROMs);
+    FolderROMs.CellSizes.Report.Height:= 32;
+    FormMain.Set4KListViewColumnSizeSpecs(FolderROMs, 0, 1117);
+    FormMain.Set4KListViewColumnSizeSpecs(FolderROMs, 1, 120);
+
+    FormMain.Set4KButtonSpecs(FolderROMsButtonUp    , FolderROMsGroupBox.Width-12-70, 45,                     70, 36, 16);
+    FormMain.Set4KButtonSpecs(FolderROMsButtonDown  , FolderROMsButtonUp.Left, FolderROMsButtonUp.Top+41,     70, 36, 16);
+    FormMain.Set4KButtonSpecs(FolderROMsButtonSelect, FolderROMsButtonUp.Left, 217,                           70, 36, 16);
+    FormMain.Set4KButtonSpecs(FolderROMsButtonEdit  , FolderROMsButtonUp.Left, FolderROMsButtonSelect.Top+41, 70, 36, 16);
+    FormMain.Set4KButtonSpecs(FolderROMsButtonDelete, FolderROMsButtonUp.Left, FolderROMsButtonEdit.Top+41,   70, 36, 16);
+    FormMain.Set4KButtonSpecs(FolderROMsButtonClear , FolderROMsButtonUp.Left, FolderROMsButtonDelete.Top+41, 70, 36, 16);
+
+    // Video Options
+    FormMain.Set4KBoxLabel(VideoGroupBox,VideoGroupBoxLabel, 16, 573, 263, 1345);
+    MoveComboBox(FullScreenResolution, FullScreenResolutionLabel, 45);
+    MoveComboBox(WidescreenWindow    , WidescreenWindowLabel    , 45,  354);
+    MoveComboBox(Frameskip           , FrameskipLabel           , 45,  700);
+    MoveComboBox(ForceManagedTextures, ForceManagedTexturesLabel, 45, 1046);
+
+    MoveCheckBox(AutoSwitchFullScreen);
+    MoveCheckBox(FSAA);
+    MoveCheckBox(SoftwareVertexProcessing);
+
+    MoveCheckBox(ForceSync     , AutoSwitchFullScreen.Top, 354);
+    MoveCheckBox(FakeGouraud   , -1, 354);
+    MoveCheckBox(FilterTilemaps, -1, 354);
+
+    MoveCheckBox(AutoMipMap      , AutoSwitchFullScreen.Top, 700);
+    MoveCheckBox(MeshTransparency, -1, 700);
+    MoveCheckBox(Crosshair       , -1, 700);
+
+    MoveCheckBox(BilinearFiltering , AutoSwitchFullScreen.Top, 1046);
+    MoveCheckBox(TrilinearFiltering, -1, 1046);
+    MoveCheckBox(Wireframe         , -1, 1046);
+
+    // Audio Options
+    FormMain.Set4KBoxLabel(AudioGroupBox, AudioGroupBoxLabel, 1187, 860, 86, 174);
+    MoveCheckBox(EnableSound, 44, 10, 160);
+
+    // Input Options
+    FormMain.Set4KBoxLabel(InputGroupBox, InputGroupBoxLabel, 16, 860, 150, 1146);
+    FormMain.Set4KGroupBoxSpecs(UseRawInput, 10, 46, 474, 92, 16);
+
+    FormMain.Set4KLabelSpecs(RawDevicePlayer1Label, 10, 47, -1, -1, 16);
+    FormMain.Set4KComboBoxSpecs(RawDevicePlayer1,   89, 45, 120, 16);
+
+    FormMain.Set4KLabelSpecs(RawDevicePlayer2Label, 264, 47, -1, -1, 16);
+    FormMain.Set4KComboBoxSpecs(RawDevicePlayer2,   343, 45, 120, 16);
+
+    MoveCheckBox(ReturnToNeutral, 44, 569, 265);
+    MoveCheckBox(XInput,          -1, 569, 370);
+    MoveCheckBox(ForceFeedbackEnable, 44, 896, 243);
+
+    FormMain.Set4KButtonSpecs(ButtonReadFile, 16, ClientHeight-16-45, 168, 45, 16);
+    FormMain.Set4KButtonSpecs(ButtonCancel, ClientWidth-16-168,   ButtonReadFile.Top, 168, 45, 16);
+    FormMain.Set4KButtonSpecs(ButtonOk, ButtonCancel.Left-10-168, ButtonReadFile.Top, 168, 45, 16);
+    FormMain.Set4KLabelSpecs(LabelReadFileIni, 200, 1042, (ButtonOk.Left-16)-200, 31, 16);
+  end;
+
+end;
 
 procedure TFormSEGAModel2EmulatorSettings.ReadEmulatorIniFile(const IniFile: String);
 var
@@ -562,43 +670,71 @@ end;}
 procedure TFormSEGAModel2EmulatorSettings.FormShow(Sender: TObject);
 var
   Loop: Integer;
+  iStr: String;
 begin
+  Resize4K;
   FormMain.ELV_ResetNormalColors(FolderROMs);
   if IsNightMode then
   begin
+    //FormMain.SetWin10DarkScrollBar(FullScreenResolution);
     for Loop:= 0 to FormSEGAModel2EmulatorSettings.ComponentCount-1 do
-       begin
-         if FormSEGAModel2EmulatorSettings.Components[Loop] is TBitBtnEx then
-            FormMain.SetButtonExColors(TBitBtnEx(FormSEGAModel2EmulatorSettings.Components[Loop]))
-         else
-         if FormSEGAModel2EmulatorSettings.Components[Loop] is TAdvGroupBoxEx then
-            begin
-              SetGroupBoxBorderStyle(TAdvGroupBoxEx(FormSEGAModel2EmulatorSettings.Components[Loop]));
-              SetGroupBoxColors(TAdvGroupBoxEx(FormSEGAModel2EmulatorSettings.Components[Loop]),
-                                clrBorderGroupBoxGrayBk, clrInnerBorderGroupBoxGrayBk,
-                                item_caption_active_color[1], item_caption_active_shadow_color[1], -1, clrMedDarkGray, False);
-              FormMain.SetGroupBoxExCustomIcon(TAdvGroupBoxEx(FormSEGAModel2EmulatorSettings.Components[Loop]));
-            end
-         else
-         if FormSEGAModel2EmulatorSettings.Components[Loop] is TComboBox2Ex then
-            SetComboBox2ExColors(TComboBox2Ex(FormSEGAModel2EmulatorSettings.Components[Loop]), True)
-         else
-         if FormSEGAModel2EmulatorSettings.Components[Loop] is TAdvOfficeCheckBoxEx then
-            begin
-              SetCheckBoxColors(TAdvOfficeCheckBoxEx(FormSEGAModel2EmulatorSettings.Components[Loop]), item_caption_active_color[1], item_caption_active_shadow_color[1]);
-              TAdvOfficeCheckBoxEx(FormSEGAModel2EmulatorSettings.Components[Loop]).DisabledFontColor:= clGray;
-              TAdvOfficeCheckBoxEx(FormSEGAModel2EmulatorSettings.Components[Loop]).DisabledFontShadowColor:= clrMedDarkGray;
-              FormMain.SetCheckBoxExCustomIcon(TAdvOfficeCheckBoxEx(FormSEGAModel2EmulatorSettings.Components[Loop]));
-            end;
-         if FormSEGAModel2EmulatorSettings.Components[Loop] is TShadowLabel then
-            SetLabelColors(TShadowLabel(FormSEGAModel2EmulatorSettings.Components[Loop]), item_caption_active_color[1], item_caption_active_shadow_color[1]);
-       end;
+    begin
+      if FormSEGAModel2EmulatorSettings.Components[Loop] is TPanelEx then
+      begin
+        iStr:= TPanelEx(FormSEGAModel2EmulatorSettings.Components[Loop]).Name;
+        if PosEx('GroupBox', iStr) <> 0 then
+           begin
+             SetPanelColors(TPanelEx(FormSEGAModel2EmulatorSettings.Components[Loop]), clrMedDarkGray, -1, True);
+             SetPanelBorderColors(TPanelEx(FormSEGAModel2EmulatorSettings.Components[Loop]), clrLightGrayFrame, clrBorderGroupBoxGrayBk);
+           end;
+      end
+      else
+      if FormSEGAModel2EmulatorSettings.Components[Loop] is TBitBtnEx then
+         FormMain.SetButtonExColors(TBitBtnEx(FormSEGAModel2EmulatorSettings.Components[Loop]))
+      else
+      if FormSEGAModel2EmulatorSettings.Components[Loop] is TAdvGroupBoxEx then
+         begin
+           SetGroupBoxBorderStyle(TAdvGroupBoxEx(FormSEGAModel2EmulatorSettings.Components[Loop]));
+           SetGroupBoxColors(TAdvGroupBoxEx(FormSEGAModel2EmulatorSettings.Components[Loop]),
+                             clrBorderGroupBoxGrayBk, clrInnerBorderGroupBoxGrayBk,
+                             item_caption_active_color[1], item_caption_active_shadow_color[1], -1, clrMedDarkGray, False);
+           FormMain.SetGroupBoxExCustomIcon(TAdvGroupBoxEx(FormSEGAModel2EmulatorSettings.Components[Loop]));
+         end
+      else
+      if FormSEGAModel2EmulatorSettings.Components[Loop] is TComboBox2Ex then
+         SetComboBox2ExColors(TComboBox2Ex(FormSEGAModel2EmulatorSettings.Components[Loop]), True)
+      else
+      if FormSEGAModel2EmulatorSettings.Components[Loop] is TAdvOfficeCheckBoxEx then
+         begin
+           SetCheckBoxColors(TAdvOfficeCheckBoxEx(FormSEGAModel2EmulatorSettings.Components[Loop]), item_caption_active_color[1], item_caption_active_shadow_color[1]);
+           TAdvOfficeCheckBoxEx(FormSEGAModel2EmulatorSettings.Components[Loop]).DisabledFontColor:= clGray;
+           TAdvOfficeCheckBoxEx(FormSEGAModel2EmulatorSettings.Components[Loop]).DisabledFontShadowColor:= clrMedDarkGray;
+           FormMain.SetCheckBoxExCustomIcon(TAdvOfficeCheckBoxEx(FormSEGAModel2EmulatorSettings.Components[Loop]));
+         end
+      else
+      if FormSEGAModel2EmulatorSettings.Components[Loop] is TShadowLabel then
+         begin
+           iStr:= TPanelEx(FormSEGAModel2EmulatorSettings.Components[Loop]).Name;
+           if PosEx('GroupBoxLabel', iStr) <> 0 then
+           begin
+             SetLabelBkFrameColors(TShadowLabel(FormSEGAModel2EmulatorSettings.Components[Loop]), clrBorderGroupBoxGrayBk, $00404040, clBlack);
+             SetLabelColors(TShadowLabel(FormSEGAModel2EmulatorSettings.Components[Loop]), clCream);
+           end
+           else
+           begin
+             SetLabelColors(TShadowLabel(FormSEGAModel2EmulatorSettings.Components[Loop]), item_caption_active_color[1], item_caption_active_shadow_color[1]);
+             if not TShadowLabel(FormSEGAModel2EmulatorSettings.Components[Loop]).Transparent then
+                    TShadowLabel(FormSEGAModel2EmulatorSettings.Components[Loop]).Color:= clrMedDarkGray;
+           end;
+         end;
+    end;
     SetFormColors(FormSEGAModel2EmulatorSettings, nil, nil, LabelGameTitle, LabelEmulatorVersion, LabelGameStatus, -1, IsNightMode);
     SetColorEmulatorTopBar(TopBar, idSEGAModel2, True);
     FormMain.SetEasyListViewColors(FolderROMs, FormSEGAModel2EmulatorSettings.Color, clWhite, -1, clGray);
     FormMain.ELV_SetCheckRadioCustomIcon(FolderROMs);
     FormMain.ELV_SetEditBkColor(FolderROMs);
     FormMain.ELV_SetRibbonNightColors(0, FolderROMs, True);
+    FormMain.SetWin10DarkScrollBar(FullScreenResolution);
     FormMain.SetWin10DarkScrollBar(FolderROMs);
   end;
   LabelGameTitle.Caption:= FormMain.GetArcadeGameSysTitle(Tag = 1, idSegaModel2, emuVersionStr);
@@ -614,8 +750,7 @@ begin
   //FolderROMs.Header.Columns[0].Width:= FolderROMs.Header.Columns[0].Width-GetSystemMetrics(SM_CXVSCROLL);
   if Tag = 0 then
      begin
-       //FormMain.IL_ArcadeSystem_ExtraLarge.GetIcon(idSegaModel2, SystemIcon.Picture.Icon);
-       FormMain.LoadIconIntoImage(FormMain.GetArcadeSystemIconFileName(idSegaModel2), SystemIcon);
+       FormMain.LoadSystemIcon(idSegaModel2, SystemIcon, False);
        FormMain.LoadMessageIcon(GameIcon, 'info.ico');
        LabelGameStatus.Visible:= False;
        LabelReadFileIni.Visible:= False;
@@ -640,7 +775,7 @@ begin
   if FolderROMs.Groups.Count < 10 then
      FormMain.DialogSelectMultiFolders(FolderROMs)
   else
-     GenerateMessage('Info', 'Folders limit reached.', '    SEGA Model 2 emulator support a '+
+     FormMain.ShowMessageBox('Info', 'Folders limit reached.', '    SEGA Model 2 emulator support a '+
                      'maximum of 10 ROMs folders. Please remove some before adding more folders.', 2);
 end;
 
@@ -662,18 +797,6 @@ begin
   FormMain.ClearListView(FolderROMs);
 end;
 
-procedure TFormSEGAModel2EmulatorSettings.FolderROMsButtonSetActiveInactiveClick(
-  Sender: TObject);
-var
-  Item: TEasyItem;
-begin
-  if FolderROMs.Selection.Count <> 1 then
-     Exit;
-  Item:= FolderROMs.Selection.First;
-  Item.Checked:= not Item.Checked;
-  FolderROMs.SetFocus;
-end;
-
 procedure TFormSEGAModel2EmulatorSettings.FormCloseQuery(Sender: TObject;
   var CanClose: Boolean);
 begin
@@ -688,7 +811,7 @@ begin
             end;
           //WriteEmulatorIniFile(ReadFileIni.Caption);
           end;
-       SetCurrentDir(FormMain.FrontendPath);
+       SetCurrentDir(FrontendPath);
      end;
 end;
 
@@ -709,21 +832,6 @@ begin
     VK_DELETE: FolderROMsButtonDelete.Click;
     VK_F2: FolderROMsButtonEdit.Click;
   end;
-end;
-
-procedure TFormSEGAModel2EmulatorSettings.FolderROMsItemSelectionChanged(
-  Sender: TCustomEasyListview; Item: TEasyItem);
-begin
-  if not Item.Selected then
-     Exit;
-  FolderROMsButtonSetActiveInactive.Enabled:= FolderROMs.Selection.Count = 1;
-  if FolderROMsButtonSetActiveInactive.Enabled then
-     begin
-       case SameText(Item.Captions[1], 'Active') of
-         True : FolderROMsButtonSetActiveInactive.Caption:= 'Disable';
-         False: FolderROMsButtonSetActiveInactive.Caption:= 'Enable';
-       end;
-     end;
 end;
 
 procedure TFormSEGAModel2EmulatorSettings.FormKeyPress(Sender: TObject;
@@ -763,17 +871,9 @@ procedure TFormSEGAModel2EmulatorSettings.FolderROMsItemCheckChange(
   Sender: TCustomEasyListview; Item: TEasyItem);
 begin
   if Item.Checked then
-     begin
-       Item.Captions[1]:= 'Active';
-       if Item.Selected then
-          FolderROMsButtonSetActiveInactive.Caption:= 'Disable';
-     end
+     Item.Captions[1]:= 'Active'
   else
-     begin
-       Item.Captions[1]:= 'Inactive';
-       if Item.Selected then
-          FolderROMsButtonSetActiveInactive.Caption:= 'Enable';
-     end;
+     Item.Captions[1]:= 'Inactive';
 end;
 
 end.

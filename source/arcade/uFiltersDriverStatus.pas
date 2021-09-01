@@ -5,7 +5,7 @@ interface
 uses
   Windows, SysUtils, Classes, Graphics, Controls, Forms,
   StdCtrls, Buttons, PanelEx, AdvGroupBox, AdvOfficeButtons,
-  ExtCtrls, ShadowLabel, ButtonsEx, ColorBoxEx;
+  ExtCtrls, ShadowLabel, ButtonsEx, ColorBoxEx, ImgList;
 
 type
   TFormArcadeFiltersDriverStatus = class(TForm)
@@ -37,6 +37,8 @@ var
   FormArcadeFiltersDriverStatus: TFormArcadeFiltersDriverStatus;
 
 implementation
+
+uses uMain;
 
 {$R *.dfm}
 

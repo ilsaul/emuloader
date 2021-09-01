@@ -4,7 +4,7 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
   ActiveControl = Systems
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
-  Caption = 'Console/Computer Emulators Setup'
+  Caption = 'Console/Computer/Handheld Emulators Setup'
   ClientHeight = 714
   ClientWidth = 1206
   Color = clBlue
@@ -82,6 +82,7 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
     Selection.UseFocusRect = False
     TabOrder = 1
     CustomCheckRadioEnabled = False
+    CustomEnableIconHD = False
     OnItemImageDraw = SystemsItemImageDraw
     OnItemImageGetSize = SystemsItemImageGetSize
     OnItemImageDrawIsCustom = SystemsItemImageDrawIsCustom
@@ -114,7 +115,7 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
     object LabelEmulatorFile: TShadowLabel
       Left = 56
       Top = 135
-      Width = 222
+      Width = 220
       Height = 16
       Hint = 'Emulator %d Executable (.exe; .bat; .cmd)'
       Caption = 'Emulator 1 Executable (.exe; .bat; .cmd)'
@@ -138,7 +139,7 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
     object LabelEmuTitle: TShadowLabel
       Left = 14
       Top = 178
-      Width = 28
+      Width = 26
       Height = 16
       Caption = 'Title'
       Font.Charset = ANSI_CHARSET
@@ -161,7 +162,7 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
     object LabelEmuCartridgeParameter: TShadowLabel
       Left = 32
       Top = 204
-      Width = 299
+      Width = 297
       Height = 16
       Caption = 'Cartridge Parameter ("%s" tag required for filename)'
       Font.Charset = ANSI_CHARSET
@@ -184,7 +185,7 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
     object LabelEmuDiscImageParameter: TShadowLabel
       Left = 32
       Top = 273
-      Width = 308
+      Width = 306
       Height = 16
       Caption = 'Disc Image Parameter ("%s" tag required for filename)'
       Font.Charset = ANSI_CHARSET
@@ -207,7 +208,7 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
     object LabelEmuBootDiscParameter: TShadowLabel
       Left = 32
       Top = 342
-      Width = 278
+      Width = 276
       Height = 16
       Caption = 'Boot Disc Parameter (load disc from virtual drive)'
       Font.Charset = ANSI_CHARSET
@@ -228,9 +229,9 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
       Transparent = True
     end
     object LabelDaemonToolsFile: TShadowLabel
-      Left = 52
+      Left = 56
       Top = 6
-      Width = 138
+      Width = 136
       Height = 16
       Caption = 'Virtual Drive Executable'
       Font.Charset = ANSI_CHARSET
@@ -253,7 +254,7 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
     object LabelDaemonToolsMount: TShadowLabel
       Left = 16
       Top = 52
-      Width = 191
+      Width = 189
       Height = 16
       Caption = 'Mount Parameter ("%s" required)'
       Font.Charset = ANSI_CHARSET
@@ -276,7 +277,7 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
     object LabelDaemonToolsUnmount: TShadowLabel
       Left = 222
       Top = 52
-      Width = 118
+      Width = 116
       Height = 16
       Caption = 'Unmount Parameter'
       Font.Charset = ANSI_CHARSET
@@ -299,7 +300,7 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
     object LabelEmuFloppyDiskParameter: TShadowLabel
       Left = 32
       Top = 411
-      Width = 310
+      Width = 308
       Height = 16
       Caption = 'Floppy Disk Parameter ("%s" tag required for filename)'
       Font.Charset = ANSI_CHARSET
@@ -322,7 +323,7 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
     object LabelEmuCassetteTapeParameter: TShadowLabel
       Left = 32
       Top = 480
-      Width = 323
+      Width = 321
       Height = 16
       Caption = 'Cassette Tape Parameter ("%s" tag required for filename)'
       Font.Charset = ANSI_CHARSET
@@ -345,7 +346,7 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
     object LabelEmuCartridgeParameter1: TShadowLabel
       Left = 12
       Top = 224
-      Width = 40
+      Width = 38
       Height = 14
       Caption = 'Param1'
       Font.Charset = ANSI_CHARSET
@@ -366,7 +367,7 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
     object LabelEmuCartridgeParameter2: TShadowLabel
       Left = 12
       Top = 247
-      Width = 40
+      Width = 38
       Height = 14
       Caption = 'Param2'
       Font.Charset = ANSI_CHARSET
@@ -387,7 +388,7 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
     object LabelEmuDiscImageParameter1: TShadowLabel
       Left = 12
       Top = 293
-      Width = 40
+      Width = 38
       Height = 14
       Caption = 'Param1'
       Font.Charset = ANSI_CHARSET
@@ -408,7 +409,7 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
     object LabelEmuDiscImageParameter2: TShadowLabel
       Left = 12
       Top = 316
-      Width = 40
+      Width = 38
       Height = 14
       Caption = 'Param2'
       Font.Charset = ANSI_CHARSET
@@ -429,7 +430,7 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
     object LabelEmuBootDiscParameter1: TShadowLabel
       Left = 12
       Top = 362
-      Width = 40
+      Width = 38
       Height = 14
       Caption = 'Param1'
       Font.Charset = ANSI_CHARSET
@@ -450,7 +451,7 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
     object LabelEmuBootDiscParameter2: TShadowLabel
       Left = 12
       Top = 385
-      Width = 40
+      Width = 38
       Height = 14
       Caption = 'Param2'
       Font.Charset = ANSI_CHARSET
@@ -471,7 +472,7 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
     object LabelEmuFloppyDiskParameter1: TShadowLabel
       Left = 12
       Top = 431
-      Width = 40
+      Width = 38
       Height = 14
       Caption = 'Param1'
       Font.Charset = ANSI_CHARSET
@@ -492,7 +493,7 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
     object LabelEmuFloppyDiskParameter2: TShadowLabel
       Left = 12
       Top = 454
-      Width = 40
+      Width = 38
       Height = 14
       Caption = 'Param2'
       Font.Charset = ANSI_CHARSET
@@ -513,7 +514,7 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
     object LabelEmuCassetteTapeParameter1: TShadowLabel
       Left = 12
       Top = 500
-      Width = 40
+      Width = 38
       Height = 14
       Caption = 'Param1'
       Font.Charset = ANSI_CHARSET
@@ -534,7 +535,7 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
     object LabelEmuCassetteTapeParameter2: TShadowLabel
       Left = 12
       Top = 523
-      Width = 40
+      Width = 38
       Height = 14
       Caption = 'Param2'
       Font.Charset = ANSI_CHARSET
@@ -679,7 +680,7 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
     object Emulator1PageButton: TSpeedButtonEx
       Tag = 1
       Left = 12
-      Top = 102
+      Top = 101
       Width = 90
       Height = 25
       GroupIndex = 1
@@ -692,11 +693,16 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
       Font.Style = []
       ParentFont = False
       OnClick = Emulator1PageButtonClick
+      FontColorDisabled = clBtnShadow
+      FontShadowColorDisabled = clBtnHighlight
+      GradientColorTop_Disabled = clSilver
+      GradientColorBottom_Disabled = clMedGray
+      FrameColor_Disabled = clGray
     end
     object Emulator2PageButton: TSpeedButtonEx
       Tag = 2
       Left = 101
-      Top = 105
+      Top = 104
       Width = 90
       Height = 22
       GroupIndex = 1
@@ -708,11 +714,16 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
       Font.Style = []
       ParentFont = False
       OnClick = Emulator1PageButtonClick
+      FontColorDisabled = clBtnShadow
+      FontShadowColorDisabled = clBtnHighlight
+      GradientColorTop_Disabled = clSilver
+      GradientColorBottom_Disabled = clMedGray
+      FrameColor_Disabled = clGray
     end
     object Emulator3PageButton: TSpeedButtonEx
       Tag = 3
       Left = 190
-      Top = 105
+      Top = 104
       Width = 90
       Height = 22
       GroupIndex = 1
@@ -724,11 +735,16 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
       Font.Style = []
       ParentFont = False
       OnClick = Emulator1PageButtonClick
+      FontColorDisabled = clBtnShadow
+      FontShadowColorDisabled = clBtnHighlight
+      GradientColorTop_Disabled = clSilver
+      GradientColorBottom_Disabled = clMedGray
+      FrameColor_Disabled = clGray
     end
     object Emulator4PageButton: TSpeedButtonEx
       Tag = 4
       Left = 279
-      Top = 105
+      Top = 104
       Width = 90
       Height = 22
       GroupIndex = 1
@@ -740,6 +756,11 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
       Font.Style = []
       ParentFont = False
       OnClick = Emulator1PageButtonClick
+      FontColorDisabled = clBtnShadow
+      FontShadowColorDisabled = clBtnHighlight
+      GradientColorTop_Disabled = clSilver
+      GradientColorBottom_Disabled = clMedGray
+      FrameColor_Disabled = clGray
     end
     object PageButtonsBottomLine: TBevelEx
       Left = 2
@@ -753,7 +774,7 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
     object LabelEmuHardDiskDriveParameter: TShadowLabel
       Left = 32
       Top = 549
-      Width = 335
+      Width = 333
       Height = 16
       Caption = 'Hard Disk Drive Parameter ("%s" tag required for filename)'
       Font.Charset = ANSI_CHARSET
@@ -776,7 +797,7 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
     object LabelEmuHardDiskDriveParameter1: TShadowLabel
       Left = 12
       Top = 569
-      Width = 40
+      Width = 38
       Height = 14
       Caption = 'Param1'
       Font.Charset = ANSI_CHARSET
@@ -797,7 +818,7 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
     object LabelEmuHardDiskDriveParameter2: TShadowLabel
       Left = 12
       Top = 592
-      Width = 40
+      Width = 38
       Height = 14
       Caption = 'Param2'
       Font.Charset = ANSI_CHARSET
@@ -835,10 +856,28 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
       OnMouseDown = IconCartridgeResetMouseDown
       OnMouseUp = IconCartridgeResetMouseUp
     end
+    object VirtualDriveFileNotFoundIcon: TImage
+      Left = 326
+      Top = 6
+      Width = 16
+      Height = 16
+      Hint = 'Warning: file not found!'
+      Transparent = True
+      Visible = False
+    end
+    object EmuFileNotFoundIcon: TImage
+      Left = 348
+      Top = 135
+      Width = 16
+      Height = 16
+      Hint = 'Warning: file not found!'
+      Transparent = True
+      Visible = False
+    end
     object EmulatorFile: TEditEx
       Left = 52
       Top = 152
-      Width = 315
+      Width = 313
       Height = 21
       Hint = '1'
       AutoSize = False
@@ -874,7 +913,7 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
       OnClick = ButtonClearEmulatorClick
     end
     object ButtonDaemonToolsHelp: TBitBtnEx
-      Left = 395
+      Left = 394
       Top = 23
       Width = 21
       Height = 21
@@ -890,9 +929,9 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
     end
     object DaemonToolsFile: TEditEx
       Tag = 1
-      Left = 48
+      Left = 52
       Top = 23
-      Width = 297
+      Width = 290
       Height = 21
       Hint = '1'
       AutoSize = False
@@ -912,7 +951,7 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
       OnChange = DaemonToolsFileChange
     end
     object ButtonSelectDaemonTools: TBitBtnEx
-      Left = 347
+      Left = 345
       Top = 23
       Width = 47
       Height = 21
@@ -960,7 +999,7 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
       OnChange = DaemonToolsUnmountChange
     end
     object ButtonSelectEmulator: TBitBtnEx
-      Left = 369
+      Left = 368
       Top = 152
       Width = 47
       Height = 21
@@ -1184,7 +1223,7 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
       ParentBackground = False
       Style = vgSimple
       object ButtonInstructions: TBitBtnEx
-        Left = 161
+        Left = 164
         Top = 8
         Width = 47
         Height = 25
@@ -1193,7 +1232,7 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
         OnClick = ButtonInstructionsClick
       end
       object ButtonOk: TBitBtnEx
-        Left = 222
+        Left = 225
         Top = 8
         Width = 89
         Height = 25
@@ -1203,7 +1242,7 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
         TabOrder = 1
       end
       object ButtonCancel: TBitBtnEx
-        Left = 328
+        Left = 329
         Top = 8
         Width = 89
         Height = 25
@@ -1260,16 +1299,6 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
       OnChange = EmuHardDiskDriveParameter2Change
     end
   end
-  object BitBtn1: TBitBtnEx
-    Left = 40
-    Top = 296
-    Width = 75
-    Height = 25
-    Caption = 'view mode'
-    TabOrder = 2
-    Visible = False
-    OnClick = BitBtn1Click
-  end
   object PanelSystemTitle: TPanelEx
     Left = 470
     Top = 614
@@ -1286,9 +1315,9 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
     Style = vgSolid
     object LabelSystemTitle: TShadowLabel
       Left = 10
-      Top = 46
-      Width = 292
-      Height = 16
+      Top = 56
+      Width = 290
+      Height = 19
       Alignment = taCenter
       AutoSize = False
       Caption = 'ATARI 5200 SUPERSYSTEM'
@@ -1308,18 +1337,15 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
       ColorInnerFrame = clBlack
       Frames = []
       Transparent = True
-      Layout = tlCenter
     end
     object LabelSystemType: TShadowLabel
-      Left = 103
-      Top = 24
-      Width = 105
-      Height = 16
-      Alignment = taCenter
+      Left = 134
+      Top = 23
+      Width = 65
+      Height = 19
       AutoSize = False
-      Caption = 'ARCADE'
+      Caption = 'HANDHELD'
       Color = 16448250
-      Constraints.MaxHeight = 16
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlue
       Font.Height = -12
@@ -1335,7 +1361,13 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
       ColorInnerFrame = clBlack
       Frames = []
       Transparent = True
-      Layout = tlCenter
+    end
+    object IconSystemType: TImage
+      Left = 112
+      Top = 24
+      Width = 16
+      Height = 16
+      Transparent = True
     end
   end
   object IL_EmulatorIcon: TImageList

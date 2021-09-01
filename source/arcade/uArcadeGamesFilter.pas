@@ -11,17 +11,17 @@ uses
 type
   TFormArcadeGamesFilter = class(TForm)
     IL_MainFiltersMAME: TImageList;
-    PanelFilters: TPanelEx;
     FiltersListView: TEasyListview;
     PanelBottom: TPanelEx;
+    LabelToolBarIconSize: TShadowLabel;
+    LabelIconSizeValue: TShadowLabel;
+    IconSizeExtraLarge: TSpeedButtonEx;
+    IconSizeLarge: TSpeedButtonEx;
+    IconSizeSmall: TSpeedButtonEx;
     ButtonGoToCurrentFilter: TBitBtnEx;
     ButtonOk: TBitBtnEx;
     ButtonCancel: TBitBtnEx;
-    LabelToolBarIconSize: TShadowLabel;
-    LabelIconSizeValue: TShadowLabel;
-    IconSizeExtraLarge: TSpeedButton;
-    IconSizeLarge: TSpeedButton;
-    IconSizeSmall: TSpeedButton;
+    IconSize4KUltraHD: TSpeedButtonEx;
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure FormKeyPress(Sender: TObject; var Key: Char);
     procedure FormShow(Sender: TObject);
@@ -41,6 +41,7 @@ type
     function  FiltersIniFound: Boolean;
     function  MountFiltersList: Boolean;
     procedure ChangeIconSize;
+    procedure Resize4K;
   public
     { Public declarations }
     SelNodeName: String;
@@ -55,6 +56,42 @@ uses uMain, uCommon;
 
 {$R *.dfm}
 
+procedure TFormArcadeGamesFilter.Resize4K;
+begin
+  if not Is4KMode then
+     Exit;
+
+  with FormArcadeGamesFilter do
+  begin
+    FiltersListView.CellSizes.Tile.Width:= 380;
+    FiltersListView.CellSizes.Tile.Height:= 78;
+    FiltersListView.GroupFont.Size:= 14;
+
+    //FiltersListView.Font.Name:= FormMain.Get4KFont;
+    FiltersListView.Font.Size:= 16;
+    FiltersListView.PaintInfoGroup.MarginTop.Size:= 60;
+
+    ClientWidth:= (FiltersListView.CellSizes.Tile.Width*3)+1+(FiltersListView.BorderWidth*2)+GetSystemMetrics(SM_CXVSCROLL); // why +1 ?
+    ClientHeight:= 900;
+    
+    Font.Size:= 16;
+
+    PanelBottom.Height:= 71;
+    FormMain.Set4KButtonSpecs(ButtonGoToCurrentFilter, 10, 16, 168, 45, 16);
+    FormMain.Set4KButtonsOkCancelPanel(PanelBottom, ButtonOk, ButtonCancel, False);
+
+    FormMain.Set4KLabelSpecs(LabelToolBarIconSize, 188, 23, -1, -1, 16);
+    FormMain.Set4KButtonSpecs(IconSize4KUltraHD,  LabelToolBarIconSize.Left+LabelToolBarIconSize.Width+8, 21, 36, 36, 16);
+    FormMain.Set4KButtonSpecs(IconSizeExtraLarge, IconSize4KUltraHD.Left+IconSize4KUltraHD.Width+2,   IconSize4KUltraHD.Top, 36, 36, 16);
+    FormMain.Set4KButtonSpecs(IconSizeLarge,      IconSizeExtraLarge.Left+IconSizeExtraLarge.Width+2, IconSize4KUltraHD.Top, 36, 36, 16);
+    FormMain.Set4KButtonSpecs(IconSizeSmall,      IconSizeLarge.Left+IconSizeLarge.Width+2,           IconSize4KUltraHD.Top, 36, 36, 16);
+    FormMain.Set4KLabelSpecs(LabelIconSizeValue,  IconSizeSmall.Left+IconSizeSmall.Width+5, IconSize4KUltraHD.Top+2, -1, -1, 16);
+
+    IconSizeLarge.Enabled:= False;
+    IconSizeSmall.Enabled:= False;
+  end;
+end;
+
 procedure TFormArcadeGamesFilter.ChangeIconSize;
 var
   iValue: Integer;
@@ -64,9 +101,10 @@ begin
   ReloadIcons:= False;
   iValue:= 48;
   case LabelToolBarIconSize.Tag of
-    0: iValue:= 68; // extra large icon
-    1: iValue:= 48; // large icon
-    2: iValue:= 30; // small icon
+    0: iValue:= 128; // 4K UltraHD icon
+    1: iValue:= 68;  // extra large icon
+    2: iValue:= 48;  // large icon
+    3: iValue:= 30;  // small icon
   end;
   if IL_MainFiltersMAME.Width <> iValue then
      begin
@@ -78,55 +116,67 @@ begin
        ReloadIcons:= True;
      end;
 
-  if LabelToolBarIconSize.Tag = 2 then
-     FiltersListView.Font.Size:= 8
-  else
-     FiltersListView.Font.Size:= 9;
-  case LabelToolBarIconSize.Tag of
-    0: // extra large icon
-      begin
-        if FormArcadeGamesFilter.Height <> 600 then
-           FormArcadeGamesFilter.Height:= 600;
+  if not Is4KMode then
+     begin
+       if LabelToolBarIconSize.Tag = 3 then
+          FiltersListView.Font.Size:= 8 // small icon (30x24)
+       else
+          FiltersListView.Font.Size:= 9;
+     end;
 
-        if FiltersListView.CellSizes.Tile.Width <> 214 then
-           FiltersListView.CellSizes.Tile.Width:= 214;
-        if FiltersListView.CellSizes.Tile.Height <> 78 then
-           FiltersListView.CellSizes.Tile.Height:= 78;
+  case LabelToolBarIconSize.Tag of
+    0: // 4K UltraHD icon
+      begin
+        if FiltersListView.CellSizes.Tile.Height <> 138 then
+           FiltersListView.CellSizes.Tile.Height:=  138;
       end;
-    1: // large icon
+    1: // extra large icon
+      begin
+        if not Is4KMode then
+        begin
+          if FormArcadeGamesFilter.Height <> 600 then
+             FormArcadeGamesFilter.Height:=  600;
+
+          if FiltersListView.CellSizes.Tile.Width <> 214 then
+             FiltersListView.CellSizes.Tile.Width:=  214;
+        end;
+        if FiltersListView.CellSizes.Tile.Height <> 78 then
+           FiltersListView.CellSizes.Tile.Height:=  78;
+      end;
+    2: // large icon
       begin
         if FormArcadeGamesFilter.Height <> 516 then
-           FormArcadeGamesFilter.Height:= 516;
+           FormArcadeGamesFilter.Height:=  516;
 
         if FiltersListView.CellSizes.Tile.Width <> 194 then
-           FiltersListView.CellSizes.Tile.Width:= 194;
+           FiltersListView.CellSizes.Tile.Width:=  194;
         if FiltersListView.CellSizes.Tile.Height <> 58 then
-           FiltersListView.CellSizes.Tile.Height:= 58;
+           FiltersListView.CellSizes.Tile.Height:=  58;
       end;
-    2: // small icon
+    3: // small icon
       begin
         if FormArcadeGamesFilter.Height <> 516 then
-           FormArcadeGamesFilter.Height:= 516;
+           FormArcadeGamesFilter.Height:=  516;
 
         if FiltersListView.CellSizes.Tile.Width <> 172 then
-           FiltersListView.CellSizes.Tile.Width:= 184;
+           FiltersListView.CellSizes.Tile.Width:=  184;
         if FiltersListView.CellSizes.Tile.Height <> 34 then
-           FiltersListView.CellSizes.Tile.Height:= 34;
+           FiltersListView.CellSizes.Tile.Height:=  34;
       end;
   end;
 
-  FiltersListView.Height:= PanelFilters.ClientHeight-PanelBottom.Height;
+  if not Is4KMode then
+     begin
+       iValue:= (FiltersListView.CellSizes.Tile.Width*3)+1+(FiltersListView.BorderWidth*2)+GetSystemMetrics(SM_CXVSCROLL); // why +1 ?
+       if FormArcadeGamesFilter.ClientWidth <> iValue then
+          FormArcadeGamesFilter.ClientWidth:=  iValue;
+     end;
 
-  iValue:= (FiltersListView.CellSizes.Tile.Width*3)+2+GetSystemMetrics(SM_CXVSCROLL); // +4 is the border
-
-  if FiltersListView.Width <> iValue then
-     FiltersListView.Width:= iValue;
-
-  if FormArcadeGamesFilter.ClientWidth <> iValue+4 then
-     FormArcadeGamesFilter.ClientWidth:= iValue+4; // +4 is the border of the PanelEx under the EasyListView
-
-  ButtonCancel.Left:= PanelBottom.Width-ButtonCancel.Width-8;
-  ButtonOk.Left:= ButtonCancel.Left-ButtonOk.Width-8;
+  if not Is4KMode then
+     begin
+       ButtonCancel.Left:= PanelBottom.Width-ButtonCancel.Width-8;
+       ButtonOk.Left:= ButtonCancel.Left-ButtonOk.Width-8;
+     end;
 
   if FormMain.CheckTotal(FiltersListView) and ReloadIcons then
   begin
@@ -138,6 +188,7 @@ begin
       for iValue:=0 to IconIndexList.Count-1 do
           FormMain.AddDefaultIcons(IconIndexList[iValue], iconFolder, IL_MainFiltersMAME, Ord(iValue <> 1));
       FiltersListView.EndUpdate;
+      FormMain.ShowIconErrorMessage;
     end;
     if FormMain.CheckSelected(FiltersListView) then
        FiltersListView.Selection.First.MakeVisible(emvAuto);
@@ -175,7 +226,6 @@ var
   end;
 
 begin
-  Application.ProcessMessages;
   Result:= FiltersIniFound;
   case Result of
     True:
@@ -191,25 +241,25 @@ begin
       end;
     False:
       begin
-        FormMain.InitMessageBox;// CallMessageBox;
+        FormMain.InitMessageBox;
         FormMain.AddMsgText('    File ');
         FormMain.AddMsgText(FormMain.GetFolderFull(43)+'mame_filters.ini', MsgTxtColors.colorFileName, [fsBold]);
         FormMain.AddMsgText(' was not found. The filters list cannot be loaded.'+#13#10+'Aborting...');
-        GenerateMessage('Arcade Games Filters', 'File access failed.', '', 2, False, 1);
+        FormMain.ShowMessageBox('Arcade Games Filters', 'File access failed.', '', 2, False, 1);
         Exit;
       end;
   end;
 
   if (not Assigned(mainSectionList)) or (mainSectionList.Count = 0) then
      begin
-       FormMain.InitMessageBox;// CallMessageBox;
+       FormMain.InitMessageBox;
        FormMain.AddMsgText('    The ');
        FormMain.AddMsgText('[main]', MsgTxtColors.colorExitCode, [fsBold]);
        FormMain.AddMsgText(' section is empty or was not be found. This section is required for the filters to work correctly.'+
                            #13#10+'File ');
        FormMain.AddMsgText(FormMain.GetFolderFull(43)+'mame_filters.ini', MsgTxtColors.colorFileName, [fsBold]);
        FormMain.AddMsgText(' is not valid. Aborting...');
-       GenerateMessage('Games Filters', 'Failed to read filters list.', '', 2, False, 1);
+       FormMain.ShowMessageBox('Games Filters', 'Failed to read filters list.', '', 2, False, 1);
        Result:= False;
        FreeAndNil(filters_file);
        FreeAndNil(mainSectionList);
@@ -217,7 +267,7 @@ begin
      end;
 
   iconFolder:= FormMain.GetFolderFull(32)+'arcade_filters\';
-  FormMain.AddDefaultIcons('no_icon.ico', iconFolder, IL_MainFiltersMAME, 1, True);
+  FormMain.AddDefaultIcons('no_icon.ico', iconFolder, IL_MainFiltersMAME, 1);//, True); ForceLightMode setting ?
 
   IconIndexList.BeginUpdate;
   IconIndexList.Add('no_icon.ico');
@@ -275,7 +325,7 @@ begin
             end
          else
             begin
-              FormMain.InitMessageBox;// CallMessageBox;
+              FormMain.InitMessageBox;
               FormMain.AddMsgText('Section ');
               FormMain.AddMsgText('['+mainSectionList.Names[Loop]+']', MsgTxtColors.colorExitCode, [fsBold]);
               FormMain.AddMsgText(' but there is nothing in it. No sub-filters will be added for ');
@@ -283,9 +333,10 @@ begin
               FormMain.AddMsgText('. Either remove this section or replace the file ');
               FormMain.AddMsgText(FormMain.GetFolderFull(43)+'mame_filters.ini', MsgTxtColors.colorFileName, [fsBold]);
               FormMain.AddMsgText(' with a proper copy.');
-              GenerateMessage('Arcade Games Filters', 'A main filter was found with empty sub-filters.', '', 2);
+              FormMain.ShowMessageBox('Arcade Games Filters', 'A main filter was found with empty sub-filters.', '', 2);
             end;
         end;
+    Application.ProcessMessages;
   end;
   IconIndexList.EndUpdate;
   FormMain.ELV_RemoveDefaultGroup(FiltersListView);
@@ -358,27 +409,32 @@ begin
   if IsNightMode then
      begin
        FormArcadeGamesFilter.Color:= menu_background_color[1];
-       PanelFilters.Color1:= menu_background_color[1];
        SetBottomPanelColors(PanelBottom);
        SetLabelColors(LabelToolBarIconSize, item_caption_active_color[1], item_caption_active_shadow_color[1]);
-       SetLabelColors(LabelIconSizeValue, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetLabelColors(LabelIconSizeValue,   item_caption_active_color[1], item_caption_active_shadow_color[1]);
 
        FormMain.SetEasyListViewColors(FiltersListView, menu_background_color[1], item_caption_active_color[1], item_caption_active_color[1]);
        FormMain.SetWin10DarkScrollBar(FiltersListView);
 
+       IconSize4KUltraHD.Font.Color:=  item_caption_active_color[1];
        IconSizeExtraLarge.Font.Color:= item_caption_active_color[1];
-       IconSizeLarge.Font.Color:= item_caption_active_color[1];
-       IconSizeSmall.Font.Color:= item_caption_active_color[1];
+       IconSizeLarge.Font.Color:=      item_caption_active_color[1];
+       IconSizeSmall.Font.Color:=      item_caption_active_color[1];
 
        FormMain.SetButtonExColors(ButtonOk);
        FormMain.SetButtonExColors(ButtonCancel);
        FormMain.SetButtonExColors(ButtonGoToCurrentFilter);
+
+       FormMain.SetButtonExColors(IconSize4KUltraHD);
+       FormMain.SetButtonExColors(IconSizeExtraLarge);
+       FormMain.SetButtonExColors(IconSizeLarge);
+       FormMain.SetButtonExColors(IconSizeSmall);
      end;
 
   case FiltersIniFound of
     True:
       begin
-        //Screen.Cursor:= crHourGlass;
+        Resize4K;
         if FormMain.MenuArcadeBrowseGames.Tag <> 0 then
            FiltersListView.IncrementalSearch.Enabled:= False;
         FormMain.ELV_ResetNormalColors(FiltersListView);
@@ -386,17 +442,40 @@ begin
            FormMain.ELV_SetNightModeColors(FiltersListView);
 
         LabelToolBarIconSize.Tag:= FormMain.ButtonArcadeGamesFilters.Tag;
-        case LabelToolBarIconSize.Tag of
-          0:
-            begin
-              IconSizeExtraLarge.Down:= True;
-              IconSizeExtraLarge.Click;
-            end;
-          2:
+        if Is4KMode then
            begin
-             IconSizeSmall.Down:= True;
-             IconSizeSmall.Click;
-           end;
+             case LabelToolBarIconSize.Tag of
+               0: // 128x128
+                 begin
+                   IconSize4KUltraHD.Down:= True;
+                   IconSize4KUltraHD.Click;
+                 end;
+               1: // 68x68
+                 begin
+                   IconSizeExtraLarge.Down:= True;
+                   IconSizeExtraLarge.Click;
+                 end
+             end;
+           end
+        else
+        begin
+          case LabelToolBarIconSize.Tag of
+            0: // 128x128
+              begin
+                IconSize4KUltraHD.Down:= True;
+                IconSize4KUltraHD.Click;
+              end;
+            1: // 68x68
+              begin
+                IconSizeExtraLarge.Down:= True;
+                IconSizeExtraLarge.Click;
+              end;
+            3: // 30x24
+             begin
+               IconSizeSmall.Down:= True;
+               IconSizeSmall.Click;
+             end;
+          end;
         end;
         ChangeIconSize;
         IconIndexList:= TStringList.Create;
@@ -408,13 +487,11 @@ begin
             end;
           False:
             begin
-              //Screen.Cursor:= crDefault;
               FormMain.HideFilterMsgBox;
               ButtonCancel.Click;
               PostMessage(Handle, wm_Close, 0, 0);
             end;
         end;
-        //Screen.Cursor:= crDefault;
       end;
     False:
       begin
@@ -582,15 +659,17 @@ end;
 
 procedure TFormArcadeGamesFilter.IconSizeLargeClick(Sender: TObject);
 begin
-  if (TSpeedButton(Sender).Tag = LabelToolBarIconSize.Tag) and (FormArcadeGamesFilter.Tag = 1) then
+  if (TSpeedButtonEx(Sender).Tag = LabelToolBarIconSize.Tag) and (FormArcadeGamesFilter.Tag = 1) then
      Exit;
 
   LabelToolBarIconSize.Tag:= TSpeedButton(Sender).Tag;
-  case TSpeedButton(Sender).Tag of
-    0: LabelIconSizeValue.Caption:= 'Extra Large (68x68)';
-    1: LabelIconSizeValue.Caption:= 'Large (48x48)';
-    2: LabelIconSizeValue.Caption:= 'Small (30x24)';
+  case TSpeedButtonEx(Sender).Tag of
+    0: LabelIconSizeValue.Caption:= '> 4K UltraHD (128x128)';
+    1: LabelIconSizeValue.Caption:= '> Extra Large (68x68)';
+    2: LabelIconSizeValue.Caption:= '> Large (48x48)';
+    3: LabelIconSizeValue.Caption:= '> Small (30x24)';
   end;
+
   if FormArcadeGamesFilter.Tag = 1 then // to prevent setting from executing if screen settings are being loaded!
      ChangeIconSize;
 end;

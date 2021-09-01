@@ -108,6 +108,8 @@ object FormArcadeROMsFolders: TFormArcadeROMsFolders
       Selection.UseFocusRect = False
       TabOrder = 0
       CustomCheckRadioEnabled = False
+      CustomEnableIconHD = False
+      OnItemPaintText = SystemSelectorItemPaintText
       OnItemSelectionChanged = SystemSelectorItemSelectionChanged
     end
   end
@@ -127,7 +129,7 @@ object FormArcadeROMsFolders: TFormArcadeROMsFolders
     ParentBackground = False
     Style = vgSimple
     object ButtonCancel: TBitBtnEx
-      Left = 544
+      Left = 543
       Top = 8
       Width = 89
       Height = 25
@@ -148,6 +150,9 @@ object FormArcadeROMsFolders: TFormArcadeROMsFolders
       ReturnIsTab = False
       Themed = True
       CustomIconsEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
   end
   object PanelFoldersList: TPanelEx

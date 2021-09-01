@@ -290,7 +290,7 @@ end;
 function TMissingImageInfo.GetImageIndexes(Column: Integer): TCommonImageIndexInteger;
 begin
   case Column of
-    0: Result:= FormMain.GetMAMEImageIndex(eROMIdentification, eSoftwareName);
+    0: Result:= FormMain.GetMAMEImageIndex(eROMIdentification, eSoftwareName, eGameStatus);
   else
        Result:= -1;
   end;
@@ -353,7 +353,7 @@ begin
      Exit;
   ImageCategorySelectLabel.Tag:= selCat;
   ImageCategorySelectLabel.Caption:= GetImageCategoryTitle(ImageCategorySelectLabel.Tag);
-  FormMain.LoadIconIntoImage(ImageCategoryArray[ImageCategorySelectLabel.Tag, 0], ImageCategoryIcon, 2);
+  FormMain.AddDefaultIcons(ImageCategoryArray[ImageCategorySelectLabel.Tag, 0], '', nil, 2, ImageCategoryIcon);
 end;
 
 procedure TFormImagesManager.ReadIniFile;
@@ -434,7 +434,7 @@ begin
   if Result then
      Exit;
 
-  if GenerateMessage('Error', FormMain.GetArcadeEmulatorDescription(idMAME),
+  if FormMain.ShowMessageBox('Error', FormMain.GetArcadeEmulatorDescription(idMAME),
                      'No folder is selected for '+ImageCategorySelectLabel.Caption+'. Would you like to select one now ?', 1) = mrYes then
      begin
        FormMain.MenuImageCategorySettings.Click;
@@ -699,7 +699,7 @@ begin
     False:
       begin
         FormMain.ClearListView(MissingImagesList);
-        GenerateMessage(FormImagesManager.Caption, FormMain.GetArcadeEmulatorDescription(idMAME),
+        FormMain.ShowMessageBox(FormImagesManager.Caption, FormMain.GetArcadeEmulatorDescription(idMAME),
                            '    Scan complete, but it seems that all games have images. If you want to more scan options, '+
                            'open the popup menu (mouse right-click).', 2);
       end;
@@ -734,9 +734,9 @@ begin
        FormImageFoundMissingGame.BorderStyle:= bsSizeToolWin;
        FormImageFoundMissingGame.BorderIcons:= [biSystemMenu];
        FormImageFoundMissingGame.Scaled:= False;
-       FormImageFoundMissingGame.Width:= 320;
+       FormImageFoundMissingGame.Width:=  320;
        FormImageFoundMissingGame.Height:= 240;
-       FormImageFoundMissingGame.Font.Name:= 'Segoe UI';
+       FormImageFoundMissingGame.Font.Name:= FormMain.Get4KFont;
        FormImageFoundMissingGame.Font.Size:= 9;
        FormImageFoundMissingGame.Font.Color:= clBlack;
        FormImageFoundMissingGame.Tag:= 1; // always adjust window to image size... no stretch
@@ -765,7 +765,7 @@ procedure TFormImagesManager.FreeImagePanelForm;
   var
     sIni: TMemIniFile;
   begin
-    if FormMain.CheckReadOnly(FormMain.GetFrontendExtraIniFile) then
+    if CheckReadOnly(FormMain.GetFrontendExtraIniFile) then
        Exit;
 
     sIni:= TMemIniFile.Create(FormMain.GetFrontendExtraIniFile);
@@ -810,8 +810,6 @@ var
     if not Result then
        Exit;
 
-    if FormMain.TempGameVars.eName =  '1on1gov' then
-       beep;
     Result:= FormMain.IsROM_Miss(FormMain.TempGameVars.eROMIdentification) and (not FormMain.IsROM_HaveMissROMs(FormMain.TempGameVars.eGameSetStatus));
     if not Result then
        Exit;
@@ -969,7 +967,7 @@ begin
       begin
         FormMain.ClearListView(MissingImagesList);
         FreeImagePanelForm;
-        GenerateMessage(FormImagesManager.Caption, FormMain.GetArcadeEmulatorDescription(idMAME),
+        FormMain.ShowMessageBox(FormImagesManager.Caption, FormMain.GetArcadeEmulatorDescription(idMAME),
                            '    Scan complete, but no images were found for missing games. If you want to more scan options, '+
                            'open the popup menu (mouse right-click).', 2);
       end;
@@ -994,7 +992,7 @@ end;}
 // not used images functions
 function TFormImagesManager.RenameImageFile(OldName, NewName, FilePath: String): Boolean;
 begin
-  FormMain.InitMessageBox; //CallMessageBox;
+  FormMain.InitMessageBox;
   FormMain.AddMsgText('    Rename file'+#13#10+'From ');
   FormMain.AddMsgText(FilePath+OldName, MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(#13#10+'To      ');
@@ -1007,7 +1005,7 @@ begin
        FormMain.AddMsgText(' already exists. Both .ico and .txt history will be overwritten.');
      end;
   FormMain.AddMsgText(#13#10+#13#10+'Are you sure you want to continue ?');
-  Result:= GenerateMessage('Rename File', 'A filename is about to be changed.', '', 1, False, 2) = mrYes;
+  Result:= FormMain.ShowMessageBox('Rename File', 'A filename is about to be changed.', '', 1, False, 2) = mrYes;
 
   if not Result then
      Exit;
@@ -1015,7 +1013,7 @@ begin
   Result:= RenameFile(FilePath+OldName, FilePath+NewName);
   Sleep(50);
   if not Result then
-     GenerateMessage('Error', 'Failed to rename file.',
+     FormMain.ShowMessageBox('Error', 'Failed to rename file.',
                      '    The file could not be renamed. Make sure the file is not being used by '+
                      'another application and is not locked by Windows.', 2, False, 1);
 end;
@@ -1073,7 +1071,6 @@ var
     Result:= True;
     //strName:= el_GamesList.Names[FileIndex];
     //strSoftwareName:= el_GamesList.ValueFromIndex[FileIndex];
-    //if iGameName = 'chiller1' then beep; // for debug only, do not uncomment (June 09, 2020)
     for imgCatLoop:=1 to MaxImagePerCategory do
     begin
       iImageName:= FormMain.GetImageName(iGameName, imgCatLoop, 0);//, strSoftwareName)
@@ -1303,21 +1300,21 @@ begin
            end
         else
            begin
-             GenerateMessage(FormImagesManager.Caption, FormMain.GetArcadeEmulatorDescription(idMAME),
+             FormMain.ShowMessageBox(FormImagesManager.Caption, FormMain.GetArcadeEmulatorDescription(idMAME),
                              'Scanning complete but nothing was found.', 2);
            end;
       end;
     False:
       begin
         case DirectoryExists(Folder) of
-          True : GenerateMessage(FormImagesManager.Caption,
+          True : FormMain.ShowMessageBox(FormImagesManager.Caption,
                       'Search for not used images.'+#13#10+
-                        FormMain.GetArcadeEmulatorDescription(idMAME),
-                        '    No files were found in '+Folder, 2);
-          False: GenerateMessage(FormImagesManager.Caption,
+                      FormMain.GetArcadeEmulatorDescription(idMAME),
+                      '    No files were found in '+Folder, 2);
+          False: FormMain.ShowMessageBox(FormImagesManager.Caption,
                       'Search for not used images.'+#13#10+
-                        FormMain.GetArcadeEmulatorDescription(idMAME),
-                        '    No files were found in '+Folder+#13#10+'Folder does not exist.', 2);
+                      FormMain.GetArcadeEmulatorDescription(idMAME),
+                      '    No files were found in '+Folder+#13#10+'Folder does not exist.', 2);
         end;
       end;
   end;
@@ -1473,16 +1470,16 @@ var
 begin
   ReadIniFile;
   Folder:= FormMain.GetFolderFull(32);
-  FormMain.AddDefaultIcons('image.ico', Folder, IL_Buttons); // 00
-  FormMain.AddDefaultIcons('exit.ico', Folder, IL_Buttons); // 01
-  FormMain.AddDefaultIcons('help.ico', Folder, IL_Buttons); // 02
+  FormMain.AddDefaultIcons('image.ico',  Folder, IL_Buttons); // 00
+  FormMain.AddDefaultIcons('exit.ico',   Folder, IL_Buttons); // 01
+  FormMain.AddDefaultIcons('help.ico',   Folder, IL_Buttons); // 02
   FormMain.AddDefaultIcons('delete.ico', Folder, IL_Buttons); // 02
 
   FormMain.LoadSystemsIcons(IL_SystemsImages);
   FormMain.LoadCategoriesIcons(IL_SystemsImages);
   FormMain.LoadCategoriesIcons(IL_ImageCategory);
 
-  FormMain.LoadIconIntoImage(ImageCategoryArray[ImageCategorySelectLabel.Tag, 0], ImageCategoryIcon, 2);
+  FormMain.AddDefaultIcons(ImageCategoryArray[ImageCategorySelectLabel.Tag, 0], '', nil, 2, ImageCategoryIcon);
   ImageCategorySelectLabel.Caption:= GetImageCategoryTitle(ImageCategorySelectLabel.Tag);
 
   FormMain.ELV_ResetNormalColors(MissingImagesList);
@@ -1518,7 +1515,7 @@ begin
          if FormImagesManager.Components[Loop] is TEasyListView then
             begin
               FormMain.SetEasyListViewColors(TEasyListView(FormImagesManager.Components[Loop]), -1, -1, clWhite);//clrOrangeBarTop);
-              FormMain.SetEasyListViewHeaderColors(TEasyListView(FormImagesManager.Components[Loop]), True);
+              FormMain.SetEasyListViewHeaderColors(TEasyListView(FormImagesManager.Components[Loop]), True, False, False);
               FormMain.ELV_SetEditBkColor(TEasyListView(FormImagesManager.Components[Loop]));
               FormMain.SetWin10DarkScrollBar(TEasyListView(FormImagesManager.Components[Loop]));
             end;
@@ -1654,16 +1651,16 @@ var
 
   function ShowInvisibleGameMsg: Boolean;
   begin
-    Result:= GenerateMessage('WARNING', 'Run selected game.', '    The game is not visible in '+
-              'main games list, either because is set as missing or due to selected games filters.'+
-              #13#10+'The game might not run properly. Would you like to try it anyway ?', 1) = mrYes;
+    Result:= FormMain.ShowMessageBox('WARNING', 'Run selected game.', '    The game is not visible in '+
+                  'main games list, either because is set as missing or due to selected games filters.'+
+                  #13#10+'The game might not run properly. Would you like to try it anyway ?', 1) = mrYes;
     if not Result then
        RunGame:= False;
   end;
 
   function ShowGameNotFoundMsg: Boolean;
   begin
-    GenerateMessage('Error', FormMain.GetArcadeEmulatorDescription(idMAME),
+    FormMain.ShowMessageBox('Error', FormMain.GetArcadeEmulatorDescription(idMAME),
                     '    Could not find the game in main games list. For this feature to work, '+
                     'the game must be valid and visible on the main screen. Make sure the games list for '+
                     'this system is loaded.', 2, False, 1);
@@ -1836,7 +1833,7 @@ begin
   ListOutput.EndUpdate;
   ListOutput.SaveToFile(FileStr);
   FreeAndNil(ListOutput);
-  GenerateMessage(FormImagesManager.Caption, 'Save games list to a text file.',
+  FormMain.ShowMessageBox(FormImagesManager.Caption, 'Save games list to a text file.',
                   Format('The file "%s" was created based on the current games list.',
                          [FileStr]), 2);
 end;
@@ -2046,7 +2043,7 @@ begin
   ListOutput.EndUpdate;
   ListOutput.SaveToFile(FileStr);
   FreeAndNil(ListOutput);
-  GenerateMessage(FormImagesManager.Caption, 'Save games list to a text file.',
+  FormMain.ShowMessageBox(FormImagesManager.Caption, 'Save games list to a text file.',
                   Format('The file "%s" was created based on the current files list.',
                          [FileStr]), 2);
 end;
@@ -2094,7 +2091,7 @@ begin
         NotUsedImagesList.SetFocus;
         Exit;
       end;
-   if GenerateMessage(UpperCase(FormImagesManager.Caption), 'Delete invalid image files.',
+   if FormMain.ShowMessageBox(UpperCase(FormImagesManager.Caption), 'Delete invalid image files.',
                      '    You are about to delete all files on the list. '+
                      'Recycled bin is not supported. If for any reason a file cannot be deleted, it will not '+
                      'be removed from the list. Click No to cancel this operation.'+#13#10+
@@ -2128,7 +2125,7 @@ end;
 
 procedure TFormImagesManager.ButtonHelpClick(Sender: TObject);
 begin
-  FormMain.InitMessageBox; //CallMessageBox;
+  FormMain.InitMessageBox;
   FormMain.AddMsgText('Games With Missing Images', MsgTxtColors.colorKeyTitle, [fsBold], taCenter);
   FormMain.AddMsgText(#13#10+'How to create a list of all games without a snapshot'+#13#10+#13#10, MsgTxtColors.colorKeyValue, [], taCenter, 8, 'Verdana');
   FormMain.AddMsgText('    Select an ');
@@ -2202,7 +2199,7 @@ begin
   FormMain.AddMsgText(' in popup menu.'+#13#10+
                       'You can see the image of current selected games in the floating preview image window.');
 
-  GenerateMessage('Images Manager', 'Usage tips.'+#13#10+
+  FormMain.ShowMessageBox('Images Manager', 'Usage tips.'+#13#10+
                   'Note: a minimum resolution of 1024x768 is required!', '', 2);
 end;
 
@@ -2239,7 +2236,7 @@ begin
         NotUsedImagesList.SetFocus;
         Exit;
       end;
-   if GenerateMessage(UpperCase(FormImagesManager.Caption), 'Delete image files of missing games.',
+   if FormMain.ShowMessageBox(UpperCase(FormImagesManager.Caption), 'Delete image files of missing games.',
                      '    You are about to delete all files on the list. '+
                      'Recycled bin is not supported. If for any reason a file cannot be deleted, it will not '+
                      'be removed from the list. Click No to cancel this operation.'+#13#10+

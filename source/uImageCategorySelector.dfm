@@ -37,13 +37,10 @@ object FormImageCategorySelector: TFormImageCategorySelector
     ParentBackground = False
     Style = vgSimple
     object LabelSystemTitle: TShadowLabel
-      Left = -1
-      Top = 1
-      Width = 306
-      Height = 16
-      Align = alCustom
-      Alignment = taCenter
-      AutoSize = False
+      Left = 12
+      Top = 12
+      Width = 99
+      Height = 19
       Caption = 'IMAGE CATEGORY'
       Color = 16448250
       Font.Charset = ANSI_CHARSET
@@ -61,10 +58,9 @@ object FormImageCategorySelector: TFormImageCategorySelector
       ColorInnerFrame = clBlack
       Frames = []
       Transparent = True
-      Layout = tlCenter
     end
     object ButtonOk: TBitBtnEx
-      Left = 318
+      Left = 317
       Top = 8
       Width = 89
       Height = 25
@@ -76,7 +72,7 @@ object FormImageCategorySelector: TFormImageCategorySelector
       TabOrder = 0
     end
     object ButtonCancel: TBitBtnEx
-      Left = 416
+      Left = 415
       Top = 8
       Width = 89
       Height = 25
@@ -164,6 +160,7 @@ object FormImageCategorySelector: TFormImageCategorySelector
     TabOrder = 1
     View = elsTile
     CustomCheckRadioEnabled = False
+    CustomEnableIconHD = False
     OnDblClick = CategoriesListViewDblClick
     OnItemPaintText = CategoriesListViewItemPaintText
     OnItemSelectionChanged = CategoriesListViewItemSelectionChanged

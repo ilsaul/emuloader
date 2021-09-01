@@ -37,7 +37,7 @@ object FormArcadeScanGamesResults: TFormArcadeScanGamesResults
     EditManager.Font.Height = -12
     EditManager.Font.Name = 'Segoe UI'
     EditManager.Font.Style = []
-    ImagesState = IL_ScanResults
+    ImagesState = FormMain.IL_LeftPanel
     UseDockManager = False
     Font.Charset = ANSI_CHARSET
     Font.Color = clBlack
@@ -81,7 +81,7 @@ object FormArcadeScanGamesResults: TFormArcadeScanGamesResults
     IncrementalSearch.ResetTime = 1000
     IncrementalSearch.StartType = eissFocusedNode
     ImagesGroup = FormMain.IL_StandardIconsSmall
-    ImagesSmall = IL_ScanResults
+    ImagesSmall = FormMain.IL_LeftPanel
     PaintInfoColumn.CaptionIndent = 0
     PaintInfoColumn.HotTrack = False
     PaintInfoGroup.BandBlended = False
@@ -119,12 +119,13 @@ object FormArcadeScanGamesResults: TFormArcadeScanGamesResults
     TabOrder = 0
     View = elsReport
     CustomCheckRadioEnabled = False
+    CustomEnableIconHD = False
     OnGroupCompare = ROMsListViewGroupCompare
     OnItemCompare = ROMsListViewItemCompare
     OnItemPaintText = ROMsListViewItemPaintText
     OnItemSelectionChanged = ROMsListViewItemSelectionChanged
   end
-  object PanelTop: TPanelEx
+  object TopBar: TPanelEx
     Left = 0
     Top = 0
     Width = 999
@@ -150,7 +151,7 @@ object FormArcadeScanGamesResults: TFormArcadeScanGamesResults
     object LabelEmulatorVersion: TShadowLabel
       Left = 79
       Top = 4
-      Width = 515
+      Width = 513
       Height = 17
       Caption = 
         'Supermodel: A Sega Model 3 Arcade Emulator v0.3a-WIP (Jul 24 201' +
@@ -171,34 +172,13 @@ object FormArcadeScanGamesResults: TFormArcadeScanGamesResults
       Transparent = True
     end
     object LabelGamesListVersion: TShadowLabel
-      Left = 105
-      Top = 24
-      Width = 412
-      Height = 14
-      Caption = 
-        'Supermodel: A Sega Model 3 Arcade Emulator v0.3a-WIP (Jul 24 201' +
-        '2)'
-      Font.Charset = ANSI_CHARSET
-      Font.Color = clBlack
-      Font.Height = -11
-      Font.Name = 'Verdana'
-      Font.Style = []
-      ParentFont = False
-      ShowAccelChar = False
-      ShadowColor = 14540253
-      ShadowEnabled = False
-      EllipsType = etNone
-      ColorFrame = clBlack
-      ColorInnerFrame = clBlack
-      Frames = []
-      Transparent = True
-    end
-    object LabelGamesListList: TShadowLabel
       Left = 79
       Top = 24
-      Width = 27
+      Width = 404
       Height = 14
-      Caption = 'List:'
+      Caption = 
+        'Games List: A Sega Model 3 Arcade Emulator v0.3a-WIP (Jul 24 201' +
+        '2)'
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlack
       Font.Height = -11
@@ -217,7 +197,7 @@ object FormArcadeScanGamesResults: TFormArcadeScanGamesResults
     object LabelTotalGames: TShadowLabel
       Left = 79
       Top = 54
-      Width = 78
+      Width = 76
       Height = 16
       Caption = '000000 Games'
       ParentShowHint = False
@@ -232,15 +212,15 @@ object FormArcadeScanGamesResults: TFormArcadeScanGamesResults
       Transparent = True
     end
     object MAMEMachinesFilterIcon: TImage
-      Left = 301
+      Left = 219
       Top = 53
       Width = 16
       Height = 16
     end
     object LabelSearchBar: TShadowLabel
-      Left = 690
+      Left = 704
       Top = 53
-      Width = 72
+      Width = 70
       Height = 16
       Caption = 'Search Game'
       ParentShowHint = False
@@ -254,97 +234,145 @@ object FormArcadeScanGamesResults: TFormArcadeScanGamesResults
       Frames = []
       Transparent = True
     end
-    object SystemSelectorToolBar: TToolBar
-      Left = 773
-      Top = 8
-      Width = 225
-      Height = 30
-      Align = alNone
-      ButtonHeight = 30
-      ButtonWidth = 31
-      Color = 15856113
-      EdgeBorders = []
-      EdgeInner = esNone
-      EdgeOuter = esNone
+    object ButtonFilterTitleApply_ToolBar: TSpeedButtonEx
+      Left = 965
+      Top = 47
+      Width = 26
+      Height = 27
+      Hint = 'Click here to search'
       Flat = True
-      Images = FormMain.IL_ArcadeSystem_Small
-      ParentColor = False
-      TabOrder = 0
-      Transparent = False
-      OnCustomDraw = SystemSelectorToolBarCustomDraw
-      object sysMAME: TToolButton
-        Left = 0
-        Top = 0
-        AutoSize = True
-        Enabled = False
-        Grouped = True
-        ImageIndex = 1
-        Style = tbsCheck
-        OnClick = sysMAMEClick
-      end
-      object sysSupermodelSEGAModel3: TToolButton
-        Left = 31
-        Top = 0
-        AutoSize = True
-        Enabled = False
-        Grouped = True
-        ImageIndex = 2
-        Style = tbsCheck
-        OnClick = sysMAMEClick
-      end
-      object sysDemul: TToolButton
-        Left = 62
-        Top = 0
-        AutoSize = True
-        Enabled = False
-        Grouped = True
-        ImageIndex = 4
-        Style = tbsCheck
-        OnClick = sysMAMEClick
-      end
-      object sysHBMAME: TToolButton
-        Left = 93
-        Top = 0
-        Enabled = False
-        Grouped = True
-        ImageIndex = 5
-        Style = tbsCheck
-        OnClick = sysMAMEClick
-      end
-      object sysDICE: TToolButton
-        Left = 124
-        Top = 0
-        Enabled = False
-        Grouped = True
-        ImageIndex = 6
-        Style = tbsCheck
-        OnClick = sysMAMEClick
-      end
-      object sysSEGAModel2: TToolButton
-        Left = 155
-        Top = 0
-        AutoSize = True
-        Enabled = False
-        Grouped = True
-        ImageIndex = 7
-        Style = tbsCheck
-        OnClick = sysMAMEClick
-      end
-      object sysZiNc: TToolButton
-        Left = 186
-        Top = 0
-        AutoSize = True
-        Enabled = False
-        Grouped = True
-        ImageIndex = 8
-        Style = tbsCheck
-        OnClick = sysMAMEClick
-      end
+      ImageIndex = 9
+      Images = FormMain.IL_MiscToolBarPopup
+      OnClick = ButtonFilterTitleApply_ToolBarClick
+      FontColorDisabled = clBtnShadow
+      FontShadowColorDisabled = clBtnHighlight
+      GradientColorTop_Disabled = clSilver
+      GradientColorBottom_Disabled = clMedGray
+      FrameColor_Disabled = clGray
+    end
+    object sysMAME: TSpeedButtonEx
+      Left = 803
+      Top = 8
+      Width = 26
+      Height = 27
+      GroupIndex = 1
+      Enabled = False
+      Flat = True
+      ImageIndex = 1
+      Images = FormMain.IL_StandardIconsStandard
+      OnClick = sysMAMEClick
+      FontColorDisabled = clBtnShadow
+      FontShadowColorDisabled = clBtnHighlight
+      GradientColorTop_Disabled = clSilver
+      GradientColorBottom_Disabled = clMedGray
+      FrameColor_Disabled = clGray
+    end
+    object sysSupermodelSEGAModel3: TSpeedButtonEx
+      Left = 830
+      Top = 8
+      Width = 26
+      Height = 27
+      GroupIndex = 1
+      Enabled = False
+      Flat = True
+      ImageIndex = 2
+      Images = FormMain.IL_StandardIconsStandard
+      OnClick = sysMAMEClick
+      FontColorDisabled = clBtnShadow
+      FontShadowColorDisabled = clBtnHighlight
+      GradientColorTop_Disabled = clSilver
+      GradientColorBottom_Disabled = clMedGray
+      FrameColor_Disabled = clGray
+    end
+    object sysDemul: TSpeedButtonEx
+      Left = 857
+      Top = 8
+      Width = 26
+      Height = 27
+      GroupIndex = 1
+      Enabled = False
+      Flat = True
+      ImageIndex = 4
+      Images = FormMain.IL_StandardIconsStandard
+      OnClick = sysMAMEClick
+      FontColorDisabled = clBtnShadow
+      FontShadowColorDisabled = clBtnHighlight
+      GradientColorTop_Disabled = clSilver
+      GradientColorBottom_Disabled = clMedGray
+      FrameColor_Disabled = clGray
+    end
+    object sysHBMAME: TSpeedButtonEx
+      Left = 884
+      Top = 8
+      Width = 26
+      Height = 27
+      GroupIndex = 1
+      Enabled = False
+      Flat = True
+      ImageIndex = 5
+      Images = FormMain.IL_StandardIconsStandard
+      OnClick = sysMAMEClick
+      FontColorDisabled = clBtnShadow
+      FontShadowColorDisabled = clBtnHighlight
+      GradientColorTop_Disabled = clSilver
+      GradientColorBottom_Disabled = clMedGray
+      FrameColor_Disabled = clGray
+    end
+    object sysDICE: TSpeedButtonEx
+      Left = 911
+      Top = 8
+      Width = 26
+      Height = 27
+      GroupIndex = 1
+      Enabled = False
+      Flat = True
+      ImageIndex = 6
+      Images = FormMain.IL_StandardIconsStandard
+      OnClick = sysMAMEClick
+      FontColorDisabled = clBtnShadow
+      FontShadowColorDisabled = clBtnHighlight
+      GradientColorTop_Disabled = clSilver
+      GradientColorBottom_Disabled = clMedGray
+      FrameColor_Disabled = clGray
+    end
+    object sysSEGAModel2: TSpeedButtonEx
+      Left = 938
+      Top = 8
+      Width = 26
+      Height = 27
+      GroupIndex = 1
+      Enabled = False
+      Flat = True
+      ImageIndex = 7
+      Images = FormMain.IL_StandardIconsStandard
+      OnClick = sysMAMEClick
+      FontColorDisabled = clBtnShadow
+      FontShadowColorDisabled = clBtnHighlight
+      GradientColorTop_Disabled = clSilver
+      GradientColorBottom_Disabled = clMedGray
+      FrameColor_Disabled = clGray
+    end
+    object sysZiNc: TSpeedButtonEx
+      Left = 965
+      Top = 8
+      Width = 26
+      Height = 27
+      GroupIndex = 1
+      Enabled = False
+      Flat = True
+      ImageIndex = 8
+      Images = FormMain.IL_StandardIconsStandard
+      OnClick = sysMAMEClick
+      FontColorDisabled = clBtnShadow
+      FontShadowColorDisabled = clBtnHighlight
+      GradientColorTop_Disabled = clSilver
+      GradientColorBottom_Disabled = clMedGray
+      FrameColor_Disabled = clGray
     end
     object MAMEMachinesFilter: TComboBox2Ex
-      Left = 320
+      Left = 238
       Top = 50
-      Width = 185
+      Width = 135
       Height = 23
       Hint = 'MAME games filter'
       Style = csDropDownList
@@ -357,69 +385,80 @@ object FormArcadeScanGamesResults: TFormArcadeScanGamesResults
       ItemHeight = 15
       ItemIndex = 0
       ParentFont = False
-      TabOrder = 1
+      TabOrder = 0
       Text = 'List All'
       OnSelect = MAMEMachinesFilterSelect
       Items.Strings = (
         'List All'
-        'MAME Games Only'
-        'MAME Software List Games Only')
+        'Arcade Games'
+        'Software List Games')
     end
-    object SearchBarEdit: TEditEx
-      Left = 766
+    object SearchBarEdit: TTntEditEx
+      Left = 780
       Top = 48
-      Width = 189
+      Width = 182
       Height = 24
       Hint = 'Enter a game title or game name'
       AutoSize = False
       BevelOuter = bvNone
       Color = clWhite
-      Constraints.MaxHeight = 24
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlack
       Font.Height = -12
       Font.Name = 'Trebuchet MS'
       Font.Style = []
       ParentFont = False
-      TabOrder = 2
+      TabOrder = 1
       OnKeyPress = SearchBarEditKeyPress
     end
-    object SearchBarToolBar: TToolBar
-      Left = 958
-      Top = 45
-      Width = 37
-      Height = 30
-      Align = alNone
-      ButtonHeight = 30
-      ButtonWidth = 31
-      Color = 15856113
-      EdgeBorders = []
-      EdgeInner = esNone
-      EdgeOuter = esNone
-      Flat = True
-      Font.Charset = ANSI_CHARSET
-      Font.Color = clBlack
-      Font.Height = -12
-      Font.Name = 'Trebuchet MS'
-      Font.Style = []
-      Images = FormMain.IL_MiscToolBarPopup
-      ParentColor = False
-      ParentFont = False
-      ParentShowHint = False
-      ShowHint = True
+    object SetsFilter_CHDs: TAdvOfficeCheckBoxEx
+      Left = 383
+      Top = 51
+      Width = 80
+      Height = 20
+      Hint = 'Show only sets with CHDs (HDD, CD, Flash Card, VHS)'
+      TabOrder = 2
+      OnClick = SetsFilter_CHDsClick
+      Alignment = taLeftJustify
+      Caption = 'CHDs Only'
+      ReturnIsTab = False
+      Themed = True
+      CustomIconsEnabled = False
+      CustomEnableIconHD = False
+    end
+    object SetsFilter_DeviceROMs: TAdvOfficeCheckBoxEx
+      Left = 466
+      Top = 51
+      Width = 92
+      Height = 20
+      Hint = 'Show/hide sets that have device ROMs'
+      Checked = True
       TabOrder = 3
-      Transparent = False
-      Wrapable = False
-      OnCustomDraw = SystemSelectorToolBarCustomDraw
-      object ButtonFilterTitleApply_ToolBar: TToolButton
-        Left = 0
-        Top = 0
-        Hint = 'Click here to search'
-        AutoSize = True
-        Caption = 'Apply'
-        ImageIndex = 9
-        OnClick = ButtonFilterTitleApply_ToolBarClick
-      end
+      OnClick = SetsFilter_CHDsClick
+      Alignment = taLeftJustify
+      Caption = 'Device ROMs'
+      ReturnIsTab = False
+      State = cbChecked
+      Themed = True
+      CustomIconsEnabled = False
+      CustomEnableIconHD = False
+    end
+    object SetsFilter_BiosROMs: TAdvOfficeCheckBoxEx
+      Left = 561
+      Top = 51
+      Width = 80
+      Height = 20
+      Hint = 'Show/hide sets that have bios ROMs'
+      Checked = True
+      TabOrder = 4
+      OnClick = SetsFilter_CHDsClick
+      Alignment = taLeftJustify
+      Caption = 'Bios ROMs'
+      ReturnIsTab = False
+      State = cbChecked
+      Themed = True
+      CustomIconsEnabled = False
+      CustomEnableIconHD = False
     end
   end
   object ButtonToggleTree: TBitBtnEx
@@ -437,59 +476,5 @@ object FormArcadeScanGamesResults: TFormArcadeScanGamesResults
     ParentFont = False
     TabOrder = 2
     OnClick = ButtonToggleTreeClick
-  end
-  object IL_ScanResults: TImageList
-    Left = 576
-    Top = 120
-  end
-  object PopupSplitters: TBcBarPopupMenu
-    AutoHotkeys = maManual
-    Images = FormMain.IL_MenuPopup
-    OwnerDraw = True
-    Bar.GradientStart = clTeal
-    Bar.GradientStyle = gsDiagonalLeftRight
-    Bar.Width = 10
-    Bar.Visible = False
-    Bar.BarCaption.Font.Charset = DEFAULT_CHARSET
-    Bar.BarCaption.Font.Color = clWhite
-    Bar.BarCaption.Font.Height = -19
-    Bar.BarCaption.Font.Name = 'Tahoma'
-    Bar.BarCaption.Font.Style = [fsBold, fsItalic]
-    Bar.BarCaption.ShadowColor = clBlack
-    Bar.BarCaption.Visible = False
-    Separators.Fade = True
-    Separators.Font.Charset = ANSI_CHARSET
-    Separators.Font.Color = clWindowText
-    Separators.Font.Height = -11
-    Separators.Font.Name = 'Tahoma'
-    Separators.Font.Style = []
-    MenuFont.Charset = ANSI_CHARSET
-    MenuFont.Color = clBlack
-    MenuFont.Height = -12
-    MenuFont.Name = 'Trebuchet MS'
-    MenuFont.Style = []
-    MenuStyle = msWindowsXP
-    UseSystemFont = False
-    DrawModule = FormMain.BcDrawModule
-    OnMeasureMenuItem = PopupSplittersMeasureMenuItem
-    Left = 616
-    Top = 120
-    object CenterSplitter1: TMenuItem
-      Caption = 'Center This Splitter'
-    end
-    object MenuItem11: TMenuItem
-      Caption = 'Center All Splitters'
-    end
-    object PopupShowSplitterGrip: TMenuItem
-      AutoCheck = True
-      Caption = 'Show Splitter Grip Icon'
-      Checked = True
-    end
-    object N22: TMenuItem
-      Caption = '-'
-    end
-    object MenuItem13: TMenuItem
-      Caption = 'Customize Splitters'
-    end
   end
 end

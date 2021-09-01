@@ -68,7 +68,7 @@ type
 
 type
   TFormArcadeMAMEMachinesCustomize = class(TForm)
-    BottomBar: TPanelEx;
+    PanelBottom: TPanelEx;
     ButtonYes: TBitBtnEx;
     ButtonNo: TBitBtnEx;
     ButtonResetToCurrent: TBitBtnEx;
@@ -81,12 +81,11 @@ type
     LabelSystemTitle: TShadowLabel;
     EmulatorIcon: TImage;
     LabelEmulatorVersion: TShadowLabel;
-    FrameSoftwareList: TPanelEx;
-    MachinesListEditor: TEasyListview;
     FilterShowParentSetsOnly: TAdvOfficeCheckBoxEx;
     PopupMachines: TBcBarPopupMenu;
     PopupCheckMultipleSelected: TMenuItem;
     PopupUncheckMultipleSelected: TMenuItem;
+    MachinesListEditor: TEasyListview;
     procedure FormShow(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure CheckAllClick(Sender: TObject);
@@ -118,10 +117,12 @@ type
       ABarVisible: Boolean; var DefaultMeasure: Boolean);
     procedure PopupMachinesPopup(Sender: TObject);
     procedure PopupCheckMultipleSelectedClick(Sender: TObject);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
   private
     { Private declarations }
+    procedure Resize4K;
     procedure ELV_LoadMachinesList;
-    procedure ELV_LoadMachinesList_Grouped;
+    //procedure ELV_LoadMachinesList_Grouped;
     procedure ResizeForm;
     procedure UpdateCheckedStateCheckBox;
   public
@@ -153,7 +154,7 @@ end;
 function TMachineEditorGameInfo.GetImageIndexes(Column: Integer): TCommonImageIndexInteger;
 begin
   if Column = 0 then
-     Result:= FormMain.GetMAMEImageIndex(eImageIndex, '')
+     Result:= FormMain.GetMAMEImageIndex(eImageIndex, '', eGameSetStatus)
   else
      Result:= -1;
 end;
@@ -171,12 +172,55 @@ begin
   end;
 end;
 
+procedure TFormArcadeMAMEMachinesCustomize.Resize4K;
+begin
+  if not Is4KMode then
+     Exit;
+
+  with FormArcadeMAMEMachinesCustomize do
+  begin
+    ClientWidth:=  2184;
+    ClientHeight:= 1211;
+    Font.Size:= 16;
+
+    FormMain.Set4KEmuGameTopPanel(TopBar, SystemIcon, EmulatorIcon, LabelSystemTitle, 1650, LabelEmulatorVersion, 1960);
+
+    FormMain.Set4KCheckBoxSpecs(CheckAll, 10, 153, 140, 36, 16);
+    FormMain.Set4KLabelSpecs(LabelTotalMachinesList, -1, 160, -1, -1, 16);
+    LabelTotalMachinesList.Left:= ClientWidth-LabelTotalMachinesList.Width-10;
+
+    PanelBottom.Height:= 71;
+
+    FormMain.Set4KButtonSpecs(ButtonResetToCurrent, 10, 16, 168, 45, 16);
+    FormMain.Set4KCheckBoxSpecs(FilterShowUncheckedOnly, ButtonResetToCurrent.Left+ButtonResetToCurrent.Width+10, 20, 250, 36, 16);
+    FormMain.Set4KCheckBoxSpecs(FilterShowParentSetsOnly, 444, 20, 250, 36, 16);
+
+    FormMain.Set4KButtonsOkCancelPanel(PanelBottom, ButtonYes, ButtonNo, False);
+
+    FormMain.Set4KListViewSpecs(MachinesListEditor, 10, CheckAll.Top+40, 2164, 937, 16);
+    FormMain.Set4KListViewCheckBoxHDSpecs(MachinesListEditor);
+    MachinesListEditor.CellSizes.Report.Height:= 37;
+
+    FormMain.Set4KListViewColumnSizeSpecs(MachinesListEditor, 0, 700);
+    FormMain.Set4KListViewColumnSizeSpecs(MachinesListEditor, 1,  70);
+    FormMain.Set4KListViewColumnSizeSpecs(MachinesListEditor, 2, 465);
+    FormMain.Set4KListViewColumnSizeSpecs(MachinesListEditor, 3, 250);
+    FormMain.Set4KListViewColumnSizeSpecs(MachinesListEditor, 4, 250);
+    FormMain.Set4KListViewColumnSizeSpecs(MachinesListEditor, 5, 280);
+    FormMain.Set4KListViewColumnSizeSpecs(MachinesListEditor, 6, 130);
+
+    MachinesListEditor.ImagesSmall:= FormMain.IL_StandardIconsLarge;
+    MachinesListEditor.PaintInfoColumn.CaptionIndent:= 4; // reset to default value
+  end;
+end;
+
 procedure TFormArcadeMAMEMachinesCustomize.ELV_LoadMachinesList;
 var
   MachinesIni: THashedStringList;
   ExcludeFiles: THashedStringList;
   Loop: Integer;
   addItem: TEasyItem;
+  iLoop, iCount, MinColSize, iColSize: Integer;
 begin
   if not FormMain.ValidateFile(FormMain.GetGamesFolderEL+GetSystemFileName(idMAME, 5)) then
      Exit;
@@ -249,12 +293,43 @@ begin
   MachinesListEditor.EndUpdate(False);
 
   LabelTotalMachinesList.Tag:= MachinesListEditor.Items.Count;
+
+  if Is4KMode and FormMain.CheckTotal(MachinesListEditor) then
+     begin
+       MachinesListEditor.BeginUpdate;
+       iCount:= 0;
+       for iLoop:= 3 to 5 do
+       begin
+         if iLoop <> 5 then
+            iColSize:= MachinesListEditor.ImagesSmall.Width
+         else
+            iColSize:= 0;
+         iCount:= iCount+MachinesListEditor.Header.Columns[iLoop].Width;
+         FormMain.ELV_ColumnAutoSize(MachinesListEditor, iLoop, MachinesListEditor.ImagesSmall.Width);
+         if iLoop = 5 then
+            MachinesListEditor.Header.Columns[iLoop].Width:= MachinesListEditor.Header.Columns[iLoop].Width+MachinesListEditor.ImagesSmall.Width+4; // +4 = CaptionIndent ???
+       end;
+       iColSize:= 0;
+       for iLoop:= 3 to 5 do
+           iColSize:= iColSize+MachinesListEditor.Header.Columns[iLoop].Width;
+
+       if iColSize < iCount then
+          iColSize:= iCount-iColSize
+       else
+       if iColSize > iCount then
+          iColSize:= -(iColSize-iCount);
+          
+       MachinesListEditor.Header.Columns[0].Width:= MachinesListEditor.Header.Columns[0].Width+iColSize;
+       MachinesListEditor.EndUpdate;
+     end;
+
   UpdateCheckedStateCheckBox;
 
 //  ApplyMachinesListFilter;
 end;
 
-procedure TFormArcadeMAMEMachinesCustomize.ELV_LoadMachinesList_Grouped;
+// this function is not used anywhere; can't remember why I wrote it (April 10, 2021)
+{procedure TFormArcadeMAMEMachinesCustomize.ELV_LoadMachinesList_Grouped;
 var
   MachinesIni: TMemIniFile;
   SoftLists: TStringList;
@@ -346,14 +421,16 @@ begin
      MachinesListEditor.Sort.SortAll;
   MachinesListEditor.Items.ReIndexDisable:= False;
   MachinesListEditor.EndUpdate(False);
-  
+
   UpdateCheckedStateCheckBox;
 
 //  ApplyMachinesListFilter;
-end;
+end;}
 
 procedure TFormArcadeMAMEMachinesCustomize.ResizeForm;
 begin
+  if Is4KMode then
+     Exit;
   if Screen.Width > 1024 then
      begin
        MachinesListEditor.Header.Columns[0].Width:= MachinesListEditor.Header.Columns[0].Width-GetSystemMetrics(SM_CXVSCROLL);
@@ -361,7 +438,7 @@ begin
      end;
 
   LabelTotalMachinesList.Left:= 815;
-  FrameSoftwareList.Width:= 967;
+  MachinesListEditor.Width:= 967; // FrameSoftwareList.Width:= 967;
   ButtonYes.Left:= 783;
   ButtonNo.Left:= 886;
   LabelSystemTitle.Width:= 890;
@@ -370,13 +447,15 @@ end;
 
 procedure TFormArcadeMAMEMachinesCustomize.FormShow(Sender: TObject);
 begin
+  Resize4K;
   ResizeForm;
   FormMain.ELV_ResetNormalColors(MachinesListEditor);
-  FormMain.LoadMediaTypeIcons(IL_MediaType, True);
-  FormMain.LoadIconIntoImage('emu_ume', SystemIcon);
-  FormMain.LoadIconIntoImage('play_standard', EmulatorIcon);
+  FormMain.LoadMediaTypeIcons2(IL_MediaType, True);
+  FormMain.LoadSystemIcon(-1, SystemIcon, False);
+  FormMain.AddDefaultIcons('play_standard', '', nil, -1, EmulatorIcon);
+  FormMain.ShowIconErrorMessage;
 
-  FormMain.SetEasyListViewHeaderColors(MachinesListEditor, True);
+  FormMain.SetEasyListViewHeaderColors(MachinesListEditor, True, False, Is4KMode, True);
 
   LabelEmulatorVersion.Caption:= FormMain.EmulatorVersion[idMAME]+#13#10+FormMain.EmulatorFile[idMAME];
 
@@ -384,13 +463,8 @@ begin
 
   if IsNightMode then
      begin
-       SetFormColors(FormArcadeMAMEMachinesCustomize, TopBar, BottomBar, LabelSystemTitle, LabelEmulatorVersion, nil, -1, IsNightMode);
+       SetFormColors(FormArcadeMAMEMachinesCustomize, TopBar, PanelBottom, LabelSystemTitle, LabelEmulatorVersion, nil, -1, IsNightMode);
        SetLabelColors(LabelTotalMachinesList, clCream, item_caption_active_shadow_color[1]);
-
-       FormMain.ELV_SetRibbonNightColors(0, MachinesListEditor, True);
-
-       FrameSoftwareList.Color1:= FormArcadeMAMEMachinesCustomize.Color;
-       FormMain.SetEasyListViewColors(MachinesListEditor, menu_background_color[1], clWhite);
 
        SetCheckBoxColors(CheckAll,                 item_caption_active_color[1], item_caption_active_shadow_color[1]);
        SetCheckBoxColors(FilterShowUncheckedOnly,  item_caption_active_color[1], item_caption_active_shadow_color[1]);
@@ -400,17 +474,12 @@ begin
        FormMain.SetCheckBoxExCustomIcon(FilterShowUncheckedOnly);
        FormMain.SetCheckBoxExCustomIcon(FilterShowParentSetsOnly);
 
-       FormMain.SetEasyListViewHeaderColors(MachinesListEditor, True);
+       FormMain.SetEasyListViewColors(MachinesListEditor, menu_background_color[1], clWhite, -1, clrBorderGroupBoxGrayBk);
+       FormMain.SetEasyListViewHeaderColors(MachinesListEditor, True, False, Is4KMode, True);
        FormMain.ELV_SetRibbonNightColors(0, MachinesListEditor, True);
        FormMain.ELV_SetCheckRadioCustomIcon(MachinesListEditor);
-
-       MachinesListEditor.Align:= alNone;
-       MachinesListEditor.Height:= MachinesListEditor.Height-2;
-       MachinesListEditor.Top:= MachinesListEditor.Top+1;
-
        FormMain.SetWin10DarkScrollBar(MachinesListEditor);
 
-       SetPanelBorderColors(FrameSoftwareList, clrBorderGroupBoxGrayBk, clrInnerBorderGroupBoxGrayBk);
        FormMain.SetButtonExColors(ButtonYes);
        FormMain.SetButtonExColors(ButtonNo);
        FormMain.SetButtonExColors(ButtonResetToCurrent);
@@ -469,7 +538,6 @@ begin
     //cbGrayed: CheckAll.Caption:= 'Check All';
   end;
   LabelTotalMachinesList.Caption:= 'Checked '+IntToStr(iCheckCount)+' of '+IntToStr(MachinesListEditor.Items.Count);
-
 end;
 
 procedure TFormArcadeMAMEMachinesCustomize.CheckAllClick(Sender: TObject);
@@ -509,10 +577,11 @@ procedure TFormArcadeMAMEMachinesCustomize.MachinesListEditorItemPaintText(
   ACanvas: TCanvas);
 begin
   FormMain.GetCanvasDefaultFont(ACanvas, TMachineEditorGameInfo(Item).eGameSetStatus,
-                                TMachineEditorGameInfo(Item).eDriverStatus, IsNightMode);
+                                TMachineEditorGameInfo(Item).eDriverStatus, IsNightMode, Is4KMode);
 
   if not Item.Checked then
      ACanvas.Font.Color:= clGray;
+  Item.Ghosted:= (not Item.Checked) and (not FilterShowUncheckedOnly.Checked);
 end;
 
 procedure TFormArcadeMAMEMachinesCustomize.MachinesListEditorItemCheckChange(
@@ -720,6 +789,13 @@ begin
   until sItem = nil;
   MachinesListEditor.EndUpdate;
   MachinesListEditor.SetFocus;
+end;
+
+procedure TFormArcadeMAMEMachinesCustomize.FormKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if Key = #27 then
+     ButtonNo.Click;
 end;
 
 end.

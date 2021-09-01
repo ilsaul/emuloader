@@ -31,8 +31,8 @@ type
     N3: TMenuItem;
     PopupCheckAllHandheldSystems: TMenuItem;
     PopupUncheckAllHandheldSystems: TMenuItem;
+    LabelSysTotalSelected: TShadowLabel;
     procedure FormKeyPress(Sender: TObject; var Key: Char);
-    procedure FormActivate(Sender: TObject);
     procedure ConsCompSystemsListViewItemSelectionChanged(
       Sender: TCustomEasyListview; Item: TEasyItem);
     procedure ConsCompSystemsListViewKeyAction(Sender: TCustomEasyListview;
@@ -64,9 +64,12 @@ type
       ABarVisible: Boolean; var DefaultMeasure: Boolean);
   private
     { Private declarations }
+    procedure UpdateLabelTotalSelected;
     procedure ResizeForm;
     procedure SetSelectedSystems;
     procedure SelectUnselectAll(SystemTypeIndex: Integer; SelectItems: Boolean);
+    procedure Resize4K;
+
   public
     { Public declarations }
   end;
@@ -79,6 +82,45 @@ implementation
 uses uMain, uCommon, uCommonCustom;
 
 {$R *.dfm}
+
+procedure TFormSelectFilterSystemSimple.Resize4K;
+begin
+  if not Is4KMode then
+     Exit;
+
+  with FormSelectFilterSystemSimple do
+  begin
+    Font.Size:= 16;
+
+    FormMain.Set4KImageListSpecs(IL_Systems, 128);
+
+    ConsCompSystemsListView.PaintInfoItem.IconViewRemoveIconTopBorder:= True;
+    ConsCompSystemsListView.CellSizes.Icon.Width:=  156;
+    ConsCompSystemsListView.CellSizes.Icon.Height:= 207+32+4;// // 32+4 (systype icon + border)
+    ConsCompSystemsListView.View:= elsIcon;
+    ConsCompSystemsListView.PaintInfoItem.CaptionIndent:= 4; // reset to default
+    ConsCompSystemsListView.PaintInfoItem.ImageIndent:= 2; // reset to default
+    ConsCompSystemsListView.ImagesExLarge:= nil;
+    ConsCompSystemsListView.ImagesLarge:= IL_Systems;
+
+    FormMain.Set4KListViewSpecs(ConsCompSystemsListView, 8, 8, (ConsCompSystemsListView.CellSizes.Icon.Width*15)+20, (ConsCompSystemsListView.CellSizes.Icon.Height*5), 16); // 15 columns, 5 lines
+
+    ClientWidth:= (ConsCompSystemsListView.CellSizes.Icon.Width*15)+16;
+
+    PanelBottom.Height:= 100;
+    FormMain.Set4KLabelSpecs(LabelMultiSelect, -1, 4, -1, -1, 16);
+    LabelMultiSelect.Left:= (ClientWidth-LabelMultiSelect.Width) div 2;
+
+    FormMain.Set4KButtonSpecs(ButtonReload, 10, 45, 168, 45, 16);
+    FormMain.Set4KButtonSpecs(ResetToMachineTypeSystemsMegaFilter, ButtonReload.Left+ButtonReload.Width+10, 45, 198, 45, 16);
+
+    FormMain.Set4KLabelSpecs(LabelSysTotalSelected, ResetToMachineTypeSystemsMegaFilter.Left+ResetToMachineTypeSystemsMegaFilter.Width+10,
+                             ResetToMachineTypeSystemsMegaFilter.Top+5, -1, -1, 16);
+
+    if not ResetToMachineTypeSystemsMegaFilter.Visible then
+       LabelSysTotalSelected.Left:= ButtonReload.Left+ButtonReload.Width+10;
+  end;
+end;
 
 procedure TFormSelectFilterSystemSimple.ResizeForm;
 var
@@ -96,13 +138,14 @@ begin
   // if 640x480 it must be 2 columns
   // in all of them, need to check for the available Screen.Height and remove 45 for the windows task bar and the top position of the filters window
 
-  ColumnsCount:= 5;
+  if Is4KMode then
+     ColumnsCount:= 15
+  else
+     ColumnsCount:= 5;
   VisibleCount:= ConsCompSystemsListView.Groups.VisibleItemCount;
 
-  //MaxHeight:= (Screen.Height-45)-FormSelectFilterSystemSimple.Top;
-
   ScreenHeightTest:= Screen.Height;
-  MaxHeight:= (ScreenHeightTest-45)-FormSelectFilterSystemSimple.Top;
+  MaxHeight:= (Screen.DesktopHeight-45)-FormSelectFilterSystemSimple.Top;
 
   case ScreenHeightTest of
     1080:
@@ -141,6 +184,17 @@ begin
       end;
   else
     begin
+      if Is4KMode then
+         begin
+           if VisibleCount <= 20 then
+              ColumnsCount:= 10
+           else
+           if VisibleCount in [25..28, 40..42, 53..56, 61..70] then
+              ColumnsCount:= 14
+           else
+              ColumnsCount:= 15;
+         end
+      else
       if Screen.Height > 1080 then
          begin
            ColumnsCount:= 5;
@@ -163,10 +217,21 @@ begin
     end;
   end;}
 
-  if ColumnsCount <> 4 then
+  if Is4KMode then
      begin
-       ConsCompSystemsListView.Width:= (ConsCompSystemsListView.CellSizes.Tile.Width*ColumnsCount)+20;
-       FormSelectFilterSystemSimple.ClientWidth:= ConsCompSystemsListView.Width+8;
+       if ColumnsCount <> 15 then
+          begin
+            ConsCompSystemsListView.Width:= (ConsCompSystemsListView.CellSizes.Icon.Width*ColumnsCount)+20;
+            ClientWidth:= (ConsCompSystemsListView.CellSizes.Icon.Width*ColumnsCount)+16;
+          end;
+     end
+  else
+     begin
+       if ColumnsCount <> 4 then
+          begin
+            ConsCompSystemsListView.Width:= (ConsCompSystemsListView.CellSizes.Tile.Width*ColumnsCount)+20;
+            FormSelectFilterSystemSimple.ClientWidth:= ConsCompSystemsListView.Width+8;
+          end;
      end;
 
   HeightDiff:= ConsCompSystemsListView.Height;
@@ -185,29 +250,47 @@ begin
   else
      ItemsLineCount:= VisibleCount;
 
-  if ConsCompSystemsListView.View = elsReport then
-     ConsCompSystemsListView.Height:= (ConsCompSystemsListView.Groups.VisibleItemCount*ConsCompSystemsListView.CellSizes.Report.Height)+6
-  else
-  if ConsCompSystemsListView.View = elsTile then
-     ConsCompSystemsListView.Height:= (ItemsLineCount*ConsCompSystemsListView.CellSizes.Tile.Height)+6;
+  //if ConsCompSystemsListView.View = elsReport then
+  //   ConsCompSystemsListView.Height:= (ConsCompSystemsListView.Groups.VisibleItemCount*ConsCompSystemsListView.CellSizes.Report.Height)+6
+  //else
+  //if ConsCompSystemsListView.View = elsTile then
+  //   ConsCompSystemsListView.Height:= (ItemsLineCount*ConsCompSystemsListView.CellSizes.Tile.Height)+6;
 
-  HeightDiff:= HeightDiff-ConsCompSystemsListView.Height;
-  FormSelectFilterSystemSimple.ClientHeight:= FormSelectFilterSystemSimple.ClientHeight-HeightDiff;
-  if FormSelectFilterSystemSimple.Height > MaxHeight then
+  if Is4KMode then
      begin
-       FormSelectFilterSystemSimple.ClientHeight:= MaxHeight-GetSystemMetrics(SM_CYCAPTION);
-       ConsCompSystemsListView.Height:= FormSelectFilterSystemSimple.ClientHeight-5-PanelBottom.Height;
+       ConsCompSystemsListView.Height:= (ItemsLineCount*ConsCompSystemsListView.CellSizes.Icon.Height);//+6;
+       FormSelectFilterSystemSimple.ClientHeight:= (ConsCompSystemsListView.Height+16)+PanelBottom.Height;
+     end
+  else
+     begin
+       ConsCompSystemsListView.Height:= (ItemsLineCount*ConsCompSystemsListView.CellSizes.Tile.Height)+6;
+
+       HeightDiff:= HeightDiff-ConsCompSystemsListView.Height;
+       FormSelectFilterSystemSimple.ClientHeight:= FormSelectFilterSystemSimple.ClientHeight-HeightDiff;
+       if FormSelectFilterSystemSimple.Height > MaxHeight then
+          begin
+            FormSelectFilterSystemSimple.ClientHeight:= MaxHeight-GetSystemMetrics(SM_CYCAPTION);
+            ConsCompSystemsListView.Height:= FormSelectFilterSystemSimple.ClientHeight-5-PanelBottom.Height;
+          end;
+
+       FormSelectFilterSystemSimple.ClientWidth:= ConsCompSystemsListView.Width+8;
+       case ConsCompSystemsListView.Scrollbars.VertBarVisible of
+         True : ConsCompSystemsListView.HotTrack.Enabled:= False;
+         False: FormSelectFilterSystemSimple.ClientWidth:= FormSelectFilterSystemSimple.ClientWidth-20;
+       end;
      end;
 
-  FormSelectFilterSystemSimple.ClientWidth:= ConsCompSystemsListView.Width+8;
-  case ConsCompSystemsListView.Scrollbars.VertBarVisible of
-    True : ConsCompSystemsListView.HotTrack.Enabled:= False;
-    False: FormSelectFilterSystemSimple.ClientWidth:= FormSelectFilterSystemSimple.ClientWidth-20;
-  end;
-
-  ButtonCancel.Left:= (FormSelectFilterSystemSimple.ClientWidth-ButtonCancel.Width)-6;
-  ButtonOk.Left:= ButtonCancel.Left-ButtonOk.Width-4;
-  ButtonHelp.Left:= ButtonOk.Left-ButtonHelp.Width-4;
+  if Is4KMode then
+     begin
+       FormMain.Set4KButtonsOkCancelPanel(PanelBottom, ButtonOk, ButtonCancel, False);
+       FormMain.Set4KButtonSpecs(ButtonHelp, ButtonOk.Left-10-68, ButtonOk.Top, 68, 45, 16);
+     end
+  else
+     begin
+       ButtonCancel.Left:= (FormSelectFilterSystemSimple.ClientWidth-ButtonCancel.Width)-6;
+       ButtonOk.Left:= ButtonCancel.Left-ButtonOk.Width-4;
+       ButtonHelp.Left:= ButtonOk.Left-ButtonHelp.Width-4;
+     end;
   LabelMultiSelect.Left:= (PanelBottom.Width div 2) - (LabelMultiSelect.Width div 2);
 end;
 
@@ -279,25 +362,14 @@ begin
   end;
 end;
 
-procedure TFormSelectFilterSystemSimple.FormActivate(Sender: TObject);
-begin
-  if FormSelectFilterSystemSimple.Tag = 1 then
-     Exit;
-                                                           //1 -> should be "1" to show only available systems; 0 -> show all systems
-  FormMain.ELV_PopulateSystemsMulti(ConsCompSystemsListView, 1, False, True, False, True);
-  FormMain.ELV_FixTitleClickAreaMulti(ConsCompSystemsListView);
-
-  ResizeForm;
-  SetSelectedSystems;
-
-  FormSelectFilterSystemSimple.Tag:= 1;
-end;
-
 procedure TFormSelectFilterSystemSimple.ConsCompSystemsListViewItemSelectionChanged(
   Sender: TCustomEasyListview; Item: TEasyItem);
 begin
   if Item.Selected then
-     ButtonOk.Enabled:= FormMain.CheckSelected(ConsCompSystemsListView);
+     begin
+       ButtonOk.Enabled:= FormMain.CheckSelected(ConsCompSystemsListView);
+       UpdateLabelTotalSelected;
+     end;
 end;
 
 procedure TFormSelectFilterSystemSimple.ConsCompSystemsListViewKeyAction(
@@ -317,7 +389,7 @@ begin
      begin
        CanClose:= FormMain.CheckSelected(ConsCompSystemsListView);
        if not CanClose then
-          GenerateMessage('Info', 'Systems Quick Filter', 'Nothing is selected. Make sure to select at least one system.');  
+          FormMain.ShowMessageBox('Info', 'Systems Quick Filter', 'Nothing is selected. Make sure to select at least one system.');  
      end;
 end;
 
@@ -348,13 +420,23 @@ begin
        end;
     Item:= ConsCompSystemsListView.Groups.NextItem(Item); // get first system, bypass "all systems"
   until Item = nil;
+  UpdateLabelTotalSelected;
   ConsCompSystemsListView.SetFocus;
+end;
+
+procedure TFormSelectFilterSystemSimple.UpdateLabelTotalSelected;
+begin
+  LabelSysTotalSelected.Tag:= ConsCompSystemsListView.Selection.Count;
+  if LabelSysTotalSelected.Tag <> 1 then
+     LabelSysTotalSelected.Caption:= IntToStr(LabelSysTotalSelected.Tag)+' Systems Selected'
+  else
+     LabelSysTotalSelected.Caption:= IntToStr(LabelSysTotalSelected.Tag)+' System Selected';
 end;
 
 procedure TFormSelectFilterSystemSimple.FormShow(Sender: TObject);
 begin
-  //FormMain.LoadSystemsIcons(IL_Systems);
-  //FormMain.LoadConsCompSystemFilterIcons(IL_Systems);
+  Resize4K;
+  LabelSysTotalSelected.Caption:= '';
 
   FormMain.LoadSystemsIcons(IL_Systems, False);
   FormMain.LoadNonArcadeSystemIcons(IL_Systems, False, False);
@@ -367,6 +449,7 @@ begin
        SetBottomPanelColors(PanelBottom);
        FormMain.SetEasyListViewColors(ConsCompSystemsListView, menu_background_color[1], item_caption_active_color[1]);
        SetLabelColors(LabelMultiSelect, clrLightBlue, clNavy);
+       SetLabelColors(LabelSysTotalSelected, item_caption_active_color[1]);
 
        FormMain.ELV_SetNightModeColors(ConsCompSystemsListView);
        FormMain.SetWin10DarkScrollBar(ConsCompSystemsListView);
@@ -378,24 +461,38 @@ begin
        FormMain.SetButtonExColors(ButtonHelp);
      end;
 
-  //ELV_PopulateCustomSystems(SystemsListView, FormMain.ButtonGameFilterConsoleComputerSystems.Tag);
-  //FormMain.ELV_PopulateSystems(SystemsListView, True);
-  //SetSystemsState;
+
+                                                           //1 -> should be "1" to show only available systems; 0 -> show all systems
+  FormMain.ELV_PopulateSystemsMulti(ConsCompSystemsListView, 1, False, True, False, True);
+  if not Is4KMode then
+     begin
+       FormMain.ELV_FixTitleClickAreaMulti(ConsCompSystemsListView);
+       if not ResetToMachineTypeSystemsMegaFilter.Visible then
+          LabelSysTotalSelected.Left:= ButtonReload.Left+ButtonReload.Width+5;
+     end;
+
+  FormSelectFilterSystemSimple.Caption:= FormSelectFilterSystemSimple.Caption+' - '+IntToStr(ConsCompSystemsListView.Groups.VisibleItemCount)+' Systems';
+
+  ResizeForm;
+  SetSelectedSystems;
 end;
 
 procedure TFormSelectFilterSystemSimple.ConsCompSystemsListViewItemImageDrawIsCustom(
   Sender: TCustomEasyListview; Item: TEasyItem; Column: TEasyColumn;
   var IsCustom: Boolean);
 begin
-  IsCustom:= True; // this is for tiles view mode
+  IsCustom:= True;
 end;
 
 procedure TFormSelectFilterSystemSimple.ConsCompSystemsListViewItemImageGetSize(
   Sender: TCustomEasyListview; Item: TEasyItem; Column: TEasyColumn;
   var ImageWidth, ImageHeight: Integer);
 begin
-  ImageWidth:= ConsCompSystemsListView.ImagesExLarge.Width;//+16; // +16 is 16x16 icon size, plus 2 pixels border
-  ImageHeight:= ConsCompSystemsListView.ImagesExLarge.Height;
+  ImageWidth:= IL_Systems.Width;
+  if Is4KMode then
+     ImageHeight:= IL_Systems.Height+FormMain.IL_GroupedMode.Width+4 // +4 -> space between sys icon / sys type icon
+  else
+     ImageHeight:= IL_Systems.Height;
 end;
 
 procedure TFormSelectFilterSystemSimple.ConsCompSystemsListViewItemImageDraw(
@@ -406,66 +503,58 @@ var
   iLeft, iTop: Integer;
   iSysTypeIndex: Integer;
 begin
-  // this is for tiles view mode
-  iLeft:= RectArray.IconRect.Left+ConsCompSystemsListView.PaintInfoItem.ImageIndent+1;
-  iTop:=  RectArray.IconRect.Top+1;
-
-  if FormMain.ELV_IsArcadeSystemMulti(Item) then
-     begin
-       ConsCompSystemsListView.ImagesExLarge.Draw(ACanvas, iLeft, iTop, Item.ImageIndex);
-
-       iLeft:= iLeft+ConsCompSystemsListView.ImagesExLarge.Width+4;
-       iTop:= iTop+(ConsCompSystemsListView.ImagesExLarge.Height-FormMain.IL_MenuPopup.Height);
-
-       FormMain.IL_MenuPopup.Draw(ACanvas, iLeft, iTop, 24); // index 24 is "arcade" icon
-     end
+  if Is4KMode then
+     FormMain.ELV_DrawIconSystem_CustomSysType(Sender, Item, Column, ACanvas, RectArray, IL_Systems, True)
   else
-     begin
-       ConsCompSystemsListView.ImagesExLarge.Draw(ACanvas, iLeft, iTop, MaxArcadeSystems+1+Item.StateImageIndex);
+  begin
+    // this is for tiles view mode
+    iLeft:= RectArray.IconRect.Left+ConsCompSystemsListView.PaintInfoItem.ImageIndent+1;
+    iTop:=  RectArray.IconRect.Top+1;
 
-       iLeft:= iLeft+ConsCompSystemsListView.ImagesExLarge.Width+4;
-       iTop:= iTop+(ConsCompSystemsListView.ImagesExLarge.Height-FormMain.IL_MenuPopup.Height);
+    if FormMain.ELV_IsArcadeSystemMulti(Item) then
+       begin
+         ConsCompSystemsListView.ImagesExLarge.Draw(ACanvas, iLeft, iTop, Item.ImageIndex);
 
-       iSysTypeIndex:= -1;
-       if SystemIsConsole(Item.StateImageIndex) then
-          iSysTypeIndex:= 25 // index 25 is "console" icon
-       else
-       if SystemIsComputer(Item.StateImageIndex) then
-          iSysTypeIndex:= 26 // index 26 is "computer" icon
-       else
-       if SystemIsHandheld(Item.StateImageIndex) then
-          iSysTypeIndex:= 27; // index 27 is "handheld" icon
+         iLeft:= iLeft+ConsCompSystemsListView.ImagesExLarge.Width+4;
+         iTop:= iTop+(ConsCompSystemsListView.ImagesExLarge.Height-FormMain.IL_MenuPopup.Height);
 
-       if iSysTypeIndex <> -1 then
-          FormMain.IL_MenuPopup.Draw(ACanvas, iLeft, iTop, iSysTypeIndex);
-     end;
+         FormMain.IL_MenuPopup.Draw(ACanvas, iLeft, iTop, 24); // index 24 is "arcade" icon
+       end
+    else
+       begin
+         ConsCompSystemsListView.ImagesExLarge.Draw(ACanvas, iLeft, iTop, MaxArcadeSystems+1+Item.StateImageIndex);
+
+         iLeft:= iLeft+ConsCompSystemsListView.ImagesExLarge.Width+4;
+         iTop:= iTop+(ConsCompSystemsListView.ImagesExLarge.Height-FormMain.IL_MenuPopup.Height);
+
+         iSysTypeIndex:= -1;
+         if SystemIsConsole(Item.StateImageIndex) then
+            iSysTypeIndex:= 25 // index 25 is "console" icon
+         else
+         if SystemIsComputer(Item.StateImageIndex) then
+            iSysTypeIndex:= 26 // index 26 is "computer" icon
+         else
+         if SystemIsHandheld(Item.StateImageIndex) then
+            iSysTypeIndex:= 27; // index 27 is "handheld" icon
+
+         if iSysTypeIndex <> -1 then
+            FormMain.IL_MenuPopup.Draw(ACanvas, iLeft, iTop, iSysTypeIndex);
+       end;
+  end;
 end;
 
 procedure TFormSelectFilterSystemSimple.ConsCompSystemsListViewItemPaintText(
   Sender: TCustomEasyListview; Item: TEasyItem; Position: Integer;
   ACanvas: TCanvas);
 begin
-  if Position = 1 then
-     begin
-       ACanvas.Font.Style:= [];
-       ACanvas.Font.Name:= 'Segoe UI';
-       ACanvas.Font.Size:= 9;
-       ACanvas.Font.Color:= clMedGray;
-       //if LabelMultiSelect.Tag = 1 then
-       //   ACanvas.Font.Style:= [fsItalic];
-       if IsNightMode then
-          ACanvas.Font.Color:= clMedGray
-       else
-          ACanvas.Font.Color:= clGray;
-
-       if IsNightMode and Item.Selected then
-          ACanvas.Font.Color:= clrDarkGray;
-     end;
+  if not Is4KMode then
+     if Position = 1 then
+        FormMain.ELV_SetSelecionFontColors(ConsCompSystemsListView, Item, ACanvas);
 end;
 
 procedure TFormSelectFilterSystemSimple.ButtonHelpClick(Sender: TObject);
 begin
-  FormMain.InitMessageBox; //CallMessageBox;
+  FormMain.InitMessageBox;
   FormMain.AddMsgText('    This filter allows you to quickly select or or more systems without changing settings in ');
   FormMain.AddMsgText('Machine Type / Systems', MsgTxtColors.colorKeyTitle, [fsBold]);
   FormMain.AddMsgText(' main filter.'+#13#10+'Very useful if you just want to show a single system.'+#13#10+#13#10+
@@ -505,7 +594,7 @@ begin
                       '    There are more select/unselect options in the popup menu (mouse right-click). '+
                       'Make sure to call the popup menu on top of a selected system so you don''t lose current selections.');
 
-  GenerateMessage('Info', 'Systems Quick Filter', '');
+  FormMain.ShowMessageBox('Info', 'Systems Quick Filter', '');
   ConsCompSystemsListView.SetFocus;
 end;
 

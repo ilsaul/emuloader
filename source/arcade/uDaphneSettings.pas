@@ -21,7 +21,27 @@ const
 type
   TFormDaphneSettings = class(TForm)
     TopBar: TPanelEx;
-    GeneralBox: TAdvGroupBoxEx;
+    ButtonReadFile: TBitBtnEx;
+    ButtonOk: TBitBtnEx;
+    ButtonCancel: TBitBtnEx;
+    SystemIcon: TImage;
+    GameIcon: TImage;
+    LabelGameTitle: TShadowLabel;
+    LabelEmulatorFile: TShadowLabel;
+    AudioGroupBox: TPanelEx;
+    AudioGroupBoxLabel: TShadowLabel;
+    VideoBoxGroupBox: TPanelEx;
+    VideoBoxGroupBoxLabel: TShadowLabel;
+    ScreenResolutionLabel: TShadowLabel;
+    ScreenResolution: TComboBox2Ex;
+    Daphne_FullScreen: TAdvOfficeCheckBoxEx;
+    FullScale: TAdvOfficeCheckBoxEx;
+    IgnoreAspectRatio: TAdvOfficeCheckBoxEx;
+    Daphne_OpenGL: TAdvOfficeCheckBoxEx;
+    BlankSearches: TAdvOfficeCheckBoxEx;
+    BlankSkips: TAdvOfficeCheckBoxEx;
+    GeneralGroupBox: TPanelEx;
+    GeneralGroupBoxLabel: TShadowLabel;
     LaserDiscTypeLabel: TShadowLabel;
     LaserDiscType: TComboBox2Ex;
     Daphne_NoJoysticks: TAdvOfficeCheckBoxEx;
@@ -32,30 +52,12 @@ type
     Daphne_NoWarnings: TAdvOfficeCheckBoxEx;
     SendUsageStatistics: TAdvOfficeCheckBoxEx;
     EnableCheat: TAdvOfficeCheckBoxEx;
-    VideoBox: TAdvGroupBoxEx;
-    ScreenResolutionLabel: TShadowLabel;
-    ScreenResolution: TComboBox2Ex;
-    Daphne_FullScreen: TAdvOfficeCheckBoxEx;
-    FullScale: TAdvOfficeCheckBoxEx;
-    IgnoreAspectRatio: TAdvOfficeCheckBoxEx;
-    Daphne_OpenGL: TAdvOfficeCheckBoxEx;
-    BlankSearches: TAdvOfficeCheckBoxEx;
-    BlankSkips: TAdvOfficeCheckBoxEx;
-    AudioBox: TAdvGroupBoxEx;
-    NoSound: TAdvOfficeCheckBoxEx;
-    Daphne_PreferSamples: TAdvOfficeCheckBoxEx;
-    ButtonReadFile: TBitBtnEx;
-    ButtonOk: TBitBtnEx;
-    ButtonCancel: TBitBtnEx;
-    AudioVolumeVLDPLabel: TShadowLabel;
-    AudioVolumeVLDP: TGaugeBar;
     IdleExit: TAdvOfficeCheckBoxEx;
     IdleExitValue: TGaugeBar;
-    SystemIcon: TImage;
-    GameIcon: TImage;
-    LabelGameTitle: TShadowLabel;
-    LabelEmulatorFile: TShadowLabel;
-    LabelReadFileIni: TShadowLabel;
+    AudioVolumeVLDPLabel: TShadowLabel;
+    NoSound: TAdvOfficeCheckBoxEx;
+    Daphne_PreferSamples: TAdvOfficeCheckBoxEx;
+    AudioVolumeVLDP: TGaugeBar;
     procedure FormShow(Sender: TObject);
     procedure ButtonReadFileClick(Sender: TObject);
     procedure FormKeyPress(Sender: TObject; var Key: Char);
@@ -66,6 +68,7 @@ type
     { Private declarations }
     procedure ReadIni(iniFileStr: String);
     procedure WriteIni(const customIniFileStr: String);
+    procedure Resize4K;
   public
     { Public declarations }
     emuIni,
@@ -82,6 +85,104 @@ implementation
 uses uMain, uCommon;
 
 {$R *.dfm}
+
+procedure TFormDaphneSettings.Resize4K;
+var
+  iTopValue: Integer;
+
+  function GetTopPos(iPos: Integer): Integer;
+  begin
+    if iPos = -1 then
+       Result:= iTopValue
+    else
+       Result:= iPos;
+  end;
+
+  function MoveCheckBox(iCheckBox: TAdvOfficeCheckBoxEx; iTop: Integer = -1; iLeft: Integer = 10;  iWidth: Integer = 287): Boolean;
+  begin
+    Result:= True;
+    iTopValue:= GetTopPos(iTop);
+    FormMain.Set4KCheckBoxSpecs(iCheckBox, iLeft, iTopValue, iWidth, 36, 16);
+    iTopValue:= iTopValue+47;
+  end;
+
+  function MoveGaugeBar(iGaugeBar: TGaugeBar;  iLabelTitle: TShadowLabel; iTop: Integer = -1; iLeft: Integer = 10; iWidth: Integer = 287): Boolean; overload;
+  var
+    iSize: Integer;
+  begin
+    Result:= True;
+    iTopValue:= GetTopPos(iTop);
+    if iLabelTitle <> nil then
+    begin
+      if iLabelTitle.AutoSize then
+         iSize:= -1
+      else
+         iSize:= iWidth;
+      FormMain.Set4KLabelSpecs(iLabelTitle, iLeft, iTopValue, iSize, 31, 16);
+    end;
+
+    FormMain.Set4KGaugeBarSpecs(iGaugeBar, iLeft, iTopValue+36, iWidth, 36);
+    iTopValue:= iTopValue+82;
+  end;
+
+  function MoveComboBox(iComboBox: TComboBox2Ex; iLabelTitle: TShadowLabel; iTop: Integer = -1; iLeft: Integer = 10; iWidth: Integer = 287): Boolean;
+  begin
+    Result:= True;
+    iTopValue:= GetTopPos(iTop);
+    if iLabelTitle <> nil then
+       FormMain.Set4KLabelSpecs(iLabelTitle, iLeft, iTopValue, -1, -1, 16);
+    FormMain.Set4KComboBoxSpecs(iComboBox, iLeft, iTopValue+36, iWidth, 16);
+    iTopValue:= iTopValue+82;
+  end;
+  
+begin
+  if not Is4KMode then
+     Exit;
+
+  with FormDaphneSettings do
+  begin
+    Font.Size:= 16;
+    FormMain.Set4KEmuGameTopPanel(TopBar, SystemIcon, GameIcon, LabelGameTitle, 740, LabelEmulatorFile, 684);
+
+    FormMain.Set4KBoxLabel(GeneralGroupBox, GeneralGroupBoxLabel, 16, 160, 404, 532);
+    MoveComboBox(LaserDiscType, LaserDiscTypeLabel, 45, 10, GeneralGroupBox.Width-22);
+    MoveCheckBox(IdleExit);
+    MoveGaugeBar(IdleExitValue, nil, iTopValue-36, 10, GeneralGroupBox.Width-22);
+
+    MoveCheckBox(Daphne_NoJoysticks  , -1, 10, 150);
+    MoveCheckBox(SRAMContinuousUpdate, -1, 10, 275);
+    MoveCheckBox(FastBoot            , -1, 10, 120);
+    MoveCheckBox(StopLaserdiscPlayer , -1, 10, 230);
+
+    MoveCheckBox(Daphne_NoLog       , -1, 294, 228);
+    MoveCheckBox(Daphne_NoWarnings  , -1, 294, 155);
+    MoveCheckBox(SendUsageStatistics, -1, 294, 228);
+    MoveCheckBox(EnableCheat        , -1, 294, 160);
+
+    FormMain.Set4KBoxLabel(AudioGroupBox, AudioGroupBoxLabel, 16, 590, 169, 532);
+    MoveGaugeBar(AudioVolumeVLDP, AudioVolumeVLDPLabel, 45, 10, AudioGroupBox.Width-22);
+    MoveCheckBox(NoSound, -1, 10, 125);
+    MoveCheckBox(Daphne_PreferSamples, NoSound.Top, 355, 170);
+
+    FormMain.Set4KBoxLabel(VideoBoxGroupBox, VideoBoxGroupBoxLabel, 673, 160, 404, 309);
+    MoveComboBox(ScreenResolution, ScreenResolutionLabel, 45, 10, VideoBoxGroupBox.Width-22);
+
+    MoveCheckBox(Daphne_FullScreen, -1, 10, 220);
+    MoveCheckBox(FullScale        , -1, 10, 220);
+    MoveCheckBox(IgnoreAspectRatio, -1, 10, 220);
+    MoveCheckBox(Daphne_OpenGL    , -1, 10, 220);
+    MoveCheckBox(BlankSearches    , -1, 10, 220);
+    MoveCheckBox(BlankSkips       , -1, 10, 220);
+
+    FormMain.Set4KButtonSpecs(ButtonReadFile, 16, AudioGroupBox.Top+AudioGroupBox.Height+20, 168, 45, 16);
+    
+    ClientWidth:= VideoBoxGroupBox.Left+VideoBoxGroupBox.Width+16;
+    ClientHeight:= ButtonReadFile.Top+ButtonReadFile.Height+16;
+
+    FormMain.Set4KButtonSpecs(ButtonCancel,   ClientWidth-16-168, ButtonReadFile.Top, 168, 45, 16);
+    FormMain.Set4KButtonSpecs(ButtonOk, ButtonCancel.Left-10-168, ButtonReadFile.Top, 168, 45, 16);
+  end;
+end;
 
 procedure TFormDaphneSettings.ReadIni(IniFileStr: String);
 var
@@ -190,11 +291,24 @@ end;
 procedure TFormDaphneSettings.FormShow(Sender: TObject);
 var
   Loop: Integer;
+  iStr: String;
 begin
+  Resize4K;
   if IsNightMode then
   begin
+    FormMain.SetWin10DarkScrollBar(ScreenResolution);
     for Loop:= 0 to FormDaphneSettings.ComponentCount-1 do
     begin
+      if FormDaphneSettings.Components[Loop] is TPanelEx then
+         begin
+           iStr:= TPanelEx(FormDaphneSettings.Components[Loop]).Name;
+           if PosEx('GroupBox', iStr) <> 0 then
+              begin
+                SetPanelColors(TPanelEx(FormDaphneSettings.Components[Loop]), clrMedDarkGray, -1, True);
+                SetPanelBorderColors(TPanelEx(FormDaphneSettings.Components[Loop]), clrLightGrayFrame, clrBorderGroupBoxGrayBk);
+              end
+         end
+      else
       if FormDaphneSettings.Components[Loop] is TBitBtnEx then
          FormMain.SetButtonExColors(TBitBtnEx(FormDaphneSettings.Components[Loop]))
       else
@@ -218,13 +332,26 @@ begin
            TAdvOfficeCheckBoxEx(FormDaphneSettings.Components[Loop]).DisabledFontColor:= clGray;
            TAdvOfficeCheckBoxEx(FormDaphneSettings.Components[Loop]).DisabledFontShadowColor:= clrMedDarkGray;
            FormMain.SetCheckBoxExCustomIcon(TAdvOfficeCheckBoxEx(FormDaphneSettings.Components[Loop]));
-         end;
+         end
+      else
       if FormDaphneSettings.Components[Loop] is TShadowLabel then
-         SetLabelColors(TShadowLabel(FormDaphneSettings.Components[Loop]), item_caption_active_color[1], item_caption_active_shadow_color[1]);
+         begin
+           iStr:= TPanelEx(FormDaphneSettings.Components[Loop]).Name;
+           if PosEx('GroupBoxLabel', iStr) <> 0 then
+           begin
+             SetLabelBkFrameColors(TShadowLabel(FormDaphneSettings.Components[Loop]), clrBorderGroupBoxGrayBk, $00404040, clBlack);
+             SetLabelColors(TShadowLabel(FormDaphneSettings.Components[Loop]), clCream);
+           end
+           else
+           begin
+             SetLabelColors(TShadowLabel(FormDaphneSettings.Components[Loop]), item_caption_active_color[1], item_caption_active_shadow_color[1]);
+             if not TShadowLabel(FormDaphneSettings.Components[Loop]).Transparent then
+                    TShadowLabel(FormDaphneSettings.Components[Loop]).Color:= clrMedDarkGray;
+           end;
+         end;
     end;
     SetFormColors(FormDaphneSettings, nil, nil, LabelGameTitle, LabelEmulatorFile, nil, -1, IsNightMode);
     SetColorEmulatorTopBar(TopBar, idDaphne, True);
-    SetLabelColors(LabelReadFileIni, LabelEmulatorFile.Font.Color, LabelEmulatorFile.ShadowColor);
   end;
   
   LaserdiscType.Items.BeginUpdate;
@@ -233,18 +360,16 @@ begin
   LaserdiscType.Items.EndUpdate;
   LaserdiscType.ItemIndex:= 0;
 
-  //FormMain.IL_ArcadeSystem_ExtraLarge.GetIcon(idDaphne, SystemIcon.Picture.Icon);
-  FormMain.LoadIconIntoImage(FormMain.GetArcadeSystemIconFileName(idDaphne), SystemIcon);
+  FormMain.LoadSystemIcon(idDaphne, SystemIcon, False);
   FormMain.LoadMessageIcon(GameIcon, 'info.ico');
 
   LabelGameTitle.Caption:= FormMain.GetArcadeGameSysTitle(Tag = 1, idDaphne, emuVersionStr);
-  LabelEmulatorFile.Caption:= emuFileExec; //FormMain.EmulatorFile[idDaphne];
+  LabelEmulatorFile.Caption:= emuFileExec+#13#10+LabelEmulatorFile.Caption; //FormMain.EmulatorFile[idDaphne];
   //if FormMain.EmulatorVersion[idDaphne] <> '' then
   //   LabelEmulatorVersion.Caption:= FormMain.EmulatorVersion[idDaphne]
   //else
   //   LabelEmulatorVersion.Caption:= '';
 
-  AudioBox.DoubleBuffered:= True;
   IdleExit.DoubleBuffered:= True;
   ListScreenModes(ScreenResolution.Items, True);
   ScreenResolution.ItemIndex:= 0;
@@ -276,7 +401,7 @@ begin
               1: WriteIni(GameIni); // game options
             end;
           end;
-       SetCurrentDir(FormMain.FrontendPath);
+       SetCurrentDir(FrontendPath);
      end;
 end;
 

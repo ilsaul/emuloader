@@ -85,7 +85,7 @@ type
   private
     { Private declarations }
     procedure SetSystemsState;
-    procedure ResizeForm;
+    procedure Resize4K;
   public
     { Public declarations }
     ActionMode, selSysID: ShortInt;
@@ -99,6 +99,85 @@ implementation
 uses uMain;
 
 {$R *.dfm}
+
+procedure TFormArcadeSelectSystem.Resize4K;
+var
+  iPos: Integer;
+begin
+  if not Is4KMode then
+     Exit;
+
+  with FormArcadeSelectSystem do
+  begin
+    FormMain.Set4KImageListSpecs(IL_Systems, 128);
+    FormMain.Set4KArcadeSysPanel(PanelList, SystemsListView, nil, LabelSystemTitle, nil, True);
+    ClientWidth:= PanelList.Width+10+710;
+    ClientHeight:= 721;//811;
+    Font.Size:= 16;
+
+    iPos:= PanelList.Width;
+    PanelBottom.Height:= 71;
+    FormMain.Set4KButtonsOkCancelPanel(PanelBottom, ButtonOk, ButtonCancel, False);
+
+    //FormMain.Set4KLabelSpecs(LabelImportantTips, 62, 678, 588, 55, 16);
+    FormMain.Set4KCheckBoxSpecs(AddMAMEDeviceSetWithNoROMs, iPos+294, 624, 400, 36, 16);
+
+    FormMain.Set4KGroupBoxSpecs(ScanModeBox, iPos+10, 10, 690, 294, 16);
+    ScanModeBox.Caption:= '         Choose Scan Mode ';
+
+    FormMain.Set4KImageIconSpecs(ScanModeIcon, 32);
+
+    FormMain.Set4KCheckBoxSpecs(ScanModeCurrentTaskOnly, 470, -1, 195, 36, 16);
+
+    FormMain.Set4KShapeSpecs(LabelScanModeCurrentTaskOnly_BlankLine,  ScanModeCurrentTaskOnly.Left-9, 16, ScanModeCurrentTaskOnly.Width+18);
+    FormMain.Set4KShapeSpecs(LabelScanModeCurrentTaskOnly_BlankLine2, ScanModeCurrentTaskOnly.Left-9, 17, ScanModeCurrentTaskOnly.Width+18);
+
+    FormMain.Set4KRadioButtonSpecs(FullScan,          10,  46, 120, 36, 16);
+    FormMain.Set4KRadioButtonSpecs(QuickScan,         10,  96, 140, 36, 16);
+    FormMain.Set4KRadioButtonSpecs(ForceAllAvailable, 10, 146, 250, 36, 16);
+    FormMain.Set4KRadioButtonFontNameSpecs(FullScan);
+
+    FormMain.Set4KLabelSpecs(LabelFullScan,          209,  48, -1, -1, 16);
+    FormMain.Set4KLabelSpecs(LabelQuickScan,         224,  98, -1, -1, 16);
+    FormMain.Set4KLabelSpecs(LabelForceAllAvailable, 350, 148, -1, -1, 16);
+
+    FormMain.Set4KGroupBoxSpecs(ScanMAMESetsBox, 7, 208, 679, 83, 16);
+    ScanMAMESetsBox.Caption:= '        Scan MAME Sets (v0.162 or newer)';
+
+    FormMain.Set4KImageIconSpecs(ImageScanMAME, 32);
+
+    FormMain.Set4KRadioButtonSpecs(ScanMAMEAllSets,             2, 46, 105, 36, 16);
+    FormMain.Set4KRadioButtonSpecs(ScanMAMEArcadeMachines,    180, 46, 200, 36, 16);
+    FormMain.Set4KRadioButtonSpecs(ScanMAMESoftwareListGames, 452, 46, 225, 36, 16);
+    FormMain.Set4KRadioButtonFontNameSpecs(ScanMAMEAllSets);
+
+    FormMain.Set4KGroupBoxSpecs(MAMESoftwareListBox, iPos+10, 352, 690, 249, 16);
+    MAMESoftwareListBox.Caption:= '         MAME Software List Games ';
+
+    FormMain.Set4KImageIconSpecs(ImageMAMESoftwareList, 32);
+
+    FormMain.Set4KLabelSpecs(LabelMAMESoftwareListBox, 356, 1, -1, -1, 16);
+    LabelMAMESoftwareListBox.Caption:= 'console/computer/handheld';
+    FormMain.Set4KButtonSpecs(ButtonHelpCreateMAMESoftwareListGames, 628, 0, 36, 36, 16);
+
+    FormMain.Set4KShapeSpecs(LabelMAMESoftwareListBox_BlankLine,  347, 16, 327);
+    FormMain.Set4KShapeSpecs(LabelMAMESoftwareListBox_BlankLine2, 347, 17, 327);
+
+    FormMain.Set4KRadioButtonSpecs(MAMESoftwareList_Disabled,         10,  46, 140, 36, 16);
+    FormMain.Set4KRadioButtonSpecs(MAMESoftwareList_EnabledUpdate,    10,  96, 240, 36, 16);
+    FormMain.Set4KRadioButtonSpecs(MAMESoftwareList_EnabledOverwrite, 10, 146, 270, 36, 16);
+    FormMain.Set4KRadioButtonFontNameSpecs(MAMESoftwareList_EnabledUpdate);
+
+    FormMain.Set4KLabelSpecs(LabelMAMESoftwareList_Disabled,         356,  48, -1, -1, 16);
+    FormMain.Set4KLabelSpecs(LabelMAMESoftwareList_EnabledUpdate,    338,  98, -1, -1, 16);
+    FormMain.Set4KLabelSpecs(LabelMAMESoftwareList_EnabledOverwrite, 352, 148, -1, -1, 16);
+
+    FormMain.Set4KLabelSpecs(LabelCustomizeMAMESoftwareList, 112, 202, -1, -1, 14);
+
+    LabelMultiSelect.Font.Size:= 16;
+    FormMain.Set4KLabelSpecs(LabelMultiSelect, (PanelList.Width-LabelMultiSelect.Width) div 2, -1, -1, -1, 16);
+ end;
+end;
 
 procedure TFormArcadeSelectSystem.SetSystemsState;
 var
@@ -157,106 +236,11 @@ begin
   end;
 end;
 
-procedure TFormArcadeSelectSystem.ResizeForm;
-var
-  iScreenWidth{, iScreenHeight}: Integer;
-
-  function MoveSettingsLeft(PixelsToMove: Integer): Boolean;
-  begin
-    Result:= True;
-    ForceAllAvailable.Left:= ForceAllAvailable.Left-PixelsToMove;
-    LabelForceAllAvailable.Left:= LabelForceAllAvailable.Left-PixelsToMove;
-    QuickScan.Left:= QuickScan.Left-PixelsToMove;
-    LabelQuickScan.Left:= LabelQuickScan.Left-PixelsToMove;
-    FullScan.Left:= FullScan.Left-PixelsToMove;
-    LabelFullScan.Left:= LabelFullScan.Left-PixelsToMove;
-    ScanModeIcon.Left:= ScanModeIcon.Left-PixelsToMove;
-    ScanModeCurrentTaskOnly.Left:= ScanModeCurrentTaskOnly.Left-PixelsToMove;
-    ScanMAMESetsBox.Left:= ScanMAMESetsBox.Left-PixelsToMove;
-  end;
-
-begin
-  Exit; // will do nothing for now... (March 19, 2018)
-  iScreenWidth:= Screen.Width;
-  //iScreenHeight:= Screen.Height;
-
-  if iScreenWidth > 720 then
-     Exit;
-
-  if iScreenWidth = 720 then
-     begin
-       if SystemsListView.Width = 720 then
-          begin
-             SystemsListView.Left:= 1;
-
-             AddMAMEDeviceSetWithNoROMs.Left:= AddMAMEDeviceSetWithNoROMs.Left-14;
-
-             MoveSettingsLeft(14);
-             FormArcadeSelectSystem.ClientWidth:= 704;
-          end;
-     end
-  else
-  if iScreenWidth = 640 then
-     begin
-       //if ActionMode <> 2 then
-       begin
-         // Emulator default settings; Show ROMs Paths
-         SystemsListView.ImagesLarge:= FormMain.IL_ArcadeSystem_ExtraLarge;
-         SystemsListView.CellSizes.Icon.Width:= 58;
-         SystemsListView.CellSizes.Icon.Height:= 72;
-         SystemsListView.Font.Name:= 'Tahoma';
-         SystemsListView.Font.Size:= 7;
-       end;
-
-       FormArcadeSelectSystem.ClientHeight:= FormArcadeSelectSystem.ClientHeight-20;//+92;
-       ForceAllAvailable.Top:= ForceAllAvailable.Top-20;//+92;
-       LabelForceAllAvailable.Top:=  LabelForceAllAvailable.Top-20;//+92;
-       QuickScan.Top:= QuickScan.Top-20;//+92;
-       LabelQuickScan.Top:= LabelQuickScan.Top-20;//+92;
-       FullScan.Top:= FullScan.Top-20;//+92;
-       LabelFullScan.Top:= LabelFullScan.Top-20;//+92;
-       ScanModeIcon.Top:= ScanModeIcon.Top-20;//+92;
-       ScanModeCurrentTaskOnly.Top:= ScanModeCurrentTaskOnly.Top-20;//+92;
-       LabelMultiSelect.Top:= LabelMultiSelect.Top-20;
-
-       ScanMAMESetsBox.Top:= ScanMAMESetsBox.Top-20;//+92;
-
-       PanelList.Height:= PanelList.Height-20;//+92;
-       LabelSystemTitle.Top:= LabelSystemTitle.Top-20;//+92;
-       SystemsListView.Height:= SystemsListView.Height-20;//+92;
-       if SystemsListView.Width = 720 then
-          begin
-            ButtonOk.Left:= ButtonOk.Left-48;//117;
-            ButtonOk.Width:= 63;
-            ButtonCancel.Left:= ButtonCancel.Left-78;//117;
-            ButtonCancel.Width:= 63;
-
-            AddMAMEDeviceSetWithNoROMs.Left:= AddMAMEDeviceSetWithNoROMs.Left-173;
-
-            MoveSettingsLeft(90);//(117);
-            SystemsListView.Width:= SystemsListView.Width-180;//-234;
-            FormArcadeSelectSystem.ClientWidth:= FormArcadeSelectSystem.ClientWidth-180;// -234;
-          end
-       else
-          begin
-            LabelMultiSelect.Left:= LabelMultiSelect.Left-160;//102;//-156;
-            ButtonOk.Left:= ButtonOk.Left-78;
-            ButtonCancel.Left:= ButtonCancel.Left-78;
-            AddMAMEDeviceSetWithNoROMs.Left:= AddMAMEDeviceSetWithNoROMs.Left-170;
-
-            MoveSettingsLeft(51);//(78);
-            SystemsListView.Width:= SystemsListView.Width-160;//102;//156;
-            FormArcadeSelectSystem.ClientWidth:= FormArcadeSelectSystem.ClientWidth-160;//102;//-156;
-          end;
-       LabelMultiSelect.Font.Size:= 8;
-     end;
-  LabelSystemTitle.Width:= FormArcadeSelectSystem.ClientWidth;
-end;
-
 procedure TFormArcadeSelectSystem.FormShow(Sender: TObject);
 var
   Loop: Integer;
 begin
+  Resize4K;
   FormMain.ELV_ResetNormalColors(SystemsListView);
   if IsNightMode then
      begin
@@ -314,6 +298,7 @@ begin
      end;
 
   FormMain.LoadSystemsIcons(IL_Systems, False);
+  FormMain.ShowIconErrorMessage;
   MAMESoftwareListBox.Tag:= FormMain.MenuCreateMAMESoftwareListGames.Tag; // set MAME Software List mode
   MAMESoftwareListBox.Visible:= ActionMode in [1, 6]; // create games list / create MAME/HBMAME software list "ActionMode" only
 
@@ -337,10 +322,21 @@ begin
      begin
        if ScanMAMESetsBox.Tag <> 0 then
           ScanMAMEAllSets.Font.Style:= [];
-       case ScanMAMESetsBox.Tag of
-         1: ScanMAMEArcadeMachines.Font.Style:= [fsBold];
-         2: ScanMAMESoftwareListGames.Font.Style:= [fsBold];
-       end;
+
+       if Is4KMode then
+          begin
+            case ScanMAMESetsBox.Tag of
+              1: FormMain.Set4KRadioButtonFontNameSpecs(ScanMAMEArcadeMachines);
+              2: FormMain.Set4KRadioButtonFontNameSpecs(ScanMAMESoftwareListGames);
+            end;
+          end
+       else
+          begin
+            case ScanMAMESetsBox.Tag of
+              1: ScanMAMEArcadeMachines.Font.Style:= [fsBold];
+              2: ScanMAMESoftwareListGames.Font.Style:= [fsBold];
+            end;
+          end;
      end;
      
   SystemsListView.Selection.MultiSelect:= ActionMode in [1, 4, 5]; // create games list / audit games can have multi-selection
@@ -354,11 +350,17 @@ begin
   if not SystemsListView.Selection.MultiSelect then
      begin
        Caption:= 'Select a System';
-       ClientWidth:= 250;
-       ButtonOk.Left:= (ClientWidth-((ButtonOk.Width*2)+9)) div 2;
-       ButtonCancel.Left:= ButtonOk.Left+ButtonOk.Width+9;
-       //ButtonOk.Left:= ButtonOk.Left-189;
-       //ButtonCancel.Left:= ButtonCancel.Left-189;
+       ClientWidth:= PanelList.Width;
+       // ClientWidth:= 250;
+
+       if Is4KMode then
+          FormMain.Set4KButtonsOkCancelPanel(PanelBottom, ButtonOk, ButtonCancel)
+       else
+          begin
+            ButtonOk.Left:= (ClientWidth-((ButtonOk.Width*2)+9)) div 2;
+            ButtonCancel.Left:= ButtonOk.Left+ButtonOk.Width+9;
+          end;
+
        LabelMultiSelect.Visible:= False;
 
        if ActionMode = 2 then // MAME/Arcade default settings
@@ -370,8 +372,13 @@ begin
          SystemsListView.Height:= SystemsListView.Height-SystemsListView.CellSizes.Icon.Height;
          ClientWidth:= ClientWidth+SystemsListView.CellSizes.Icon.Width;
 
-         ButtonOk.Left:= (ClientWidth-((ButtonOk.Width*2)+9)) div 2;
-         ButtonCancel.Left:= ButtonOk.Left+ButtonOk.Width+9;
+         if Is4KMode then
+            FormMain.Set4KButtonsOkCancelPanel(PanelBottom, ButtonOk, ButtonCancel)
+         else
+            begin
+              ButtonOk.Left:= (ClientWidth-((ButtonOk.Width*2)+9)) div 2;
+              ButtonCancel.Left:= ButtonOk.Left+ButtonOk.Width+9;
+            end;
 
          LabelSystemTitle.Width:= LabelSystemTitle.Width+SystemsListView.CellSizes.Icon.Width;
          LabelSystemTitle.Top:= LabelSystemTitle.Top-SystemsListView.CellSizes.Icon.Height;
@@ -384,7 +391,10 @@ begin
 
   if ScanMAMESetsBox.Visible then
      begin
-       FormMain.IL_StandardIconsSmall.GetIcon(MaxGameID+MaxConsoleComputerSystems+1, ImageScanMAME.Picture.Icon);
+       if Is4KMode then
+          FormMain.IL_StandardIconsLarge.GetIcon(MaxGameID+MaxConsoleComputerSystems+idMAME, ImageScanMAME.Picture.Icon)
+       else
+          FormMain.IL_StandardIconsSmall.GetIcon(MaxGameID+MaxConsoleComputerSystems+idMAME, ImageScanMAME.Picture.Icon);
        case ScanMAMESetsBox.Tag of
          1: ScanMAMEArcadeMachines.Checked:= True;
          2: ScanMAMESoftwareListGames.Checked:= True;
@@ -392,18 +402,24 @@ begin
      end;
 
   if MAMESoftwareListBox.Visible then
-     FormMain.LoadIconIntoImage('emu_ume', ImageMAMESoftwareList);
+     begin
+       if Is4KMode then
+          FormMain.IL_StandardIconsLarge.GetIcon(MaxGameID+MaxConsoleComputerSystems+MaxArcadeSystems+1, ImageMAMESoftwareList.Picture.Icon)
+       else
+          FormMain.IL_StandardIconsSmall.GetIcon(MaxGameID+MaxConsoleComputerSystems+MaxArcadeSystems+1, ImageMAMESoftwareList.Picture.Icon);
+     end;
 
   if ActionMode in [1, 4, 5, 6] then
      begin
-       FormMain.IL_MenuPopup.GetIcon(8, ScanModeIcon.Picture.Icon);
+       if Is4KMode then
+          FormMain.IL_MediaType_Large.GetIcon(0, ScanModeIcon.Picture.Icon)
+       else        // IL_LeftPanel will always be 16x16 (April 14, 2021)
+          FormMain.IL_LeftPanel.GetIcon(15, ScanModeIcon.Picture.Icon);
        case FormMain.PopupSelectScanGamesMode.Tag of
          1: QuickScan.Checked:= True;
          2: ForceAllAvailable.Checked:= True;
        end;
      end;
-     
-  ResizeForm;
 end;
 
 procedure TFormArcadeSelectSystem.FormActivate(Sender: TObject);
@@ -422,10 +438,9 @@ procedure TFormArcadeSelectSystem.SystemsListViewItemPaintText(
   Sender: TCustomEasyListview; Item: TEasyItem; Position: Integer;
   ACanvas: TCanvas);
 begin
-  if Item.Ghosted then
-     begin
-       ACanvas.Font.Color:= clMedGray;
-     end;
+  FormMain.ELV_SetGhostedIconText(Item, SystemsListView, ACanvas);
+  //if Item.Ghosted then
+  //   ACanvas.Font.Color:= clMedGray;
 end;
 
 procedure TFormArcadeSelectSystem.SystemsListViewItemSelectionChanged(
@@ -471,22 +486,40 @@ end;
 procedure TFormArcadeSelectSystem.ScanMAMEAllSetsClick(Sender: TObject);
 begin
   ScanMAMESetsBox.Tag:= TAdvOfficeRadioButtonEx(Sender).Tag;
-  TAdvOfficeRadioButtonEx(Sender).Font.Style:= [fsBold];
+  if Is4KMode then
+     FormMain.Set4KRadioButtonFontNameSpecs(TAdvOfficeRadioButtonEx(Sender))
+  else
+     TAdvOfficeRadioButtonEx(Sender).Font.Style:= [fsBold];
   case TAdvOfficeRadioButtonEx(Sender).Tag of
     0:
       begin
         ScanMAMEArcadeMachines.Font.Style:= [];
         ScanMAMESoftwareListGames.Font.Style:= [];
+        if Is4KMode then
+           begin
+             ScanMAMEArcadeMachines.Font.Name:= FormArcadeSelectSystem.Font.Name;
+             ScanMAMESoftwareListGames.Font.Name:= FormArcadeSelectSystem.Font.Name;
+           end;
       end;
     1:
       begin
         ScanMAMEAllSets.Font.Style:= [];
         ScanMAMESoftwareListGames.Font.Style:= [];
+        if Is4KMode then
+           begin
+             ScanMAMEAllSets.Font.Name:= FormArcadeSelectSystem.Font.Name;
+             ScanMAMESoftwareListGames.Font.Name:= FormArcadeSelectSystem.Font.Name;
+           end;
       end;
     2:
       begin
         ScanMAMEAllSets.Font.Style:= [];
         ScanMAMEArcadeMachines.Font.Style:= [];
+        if Is4KMode then
+           begin
+             ScanMAMEAllSets.Font.Name:= FormArcadeSelectSystem.Font.Name;
+             ScanMAMEArcadeMachines.Font.Name:= FormArcadeSelectSystem.Font.Name;
+           end;
       end;
   end;
 end;
@@ -541,24 +574,43 @@ procedure TFormArcadeSelectSystem.MAMESoftwareList_EnabledUpdateClick(
   Sender: TObject);
 begin
   MAMESoftwareListBox.Tag:= TAdvOfficeRadioButtonEx(Sender).Tag;
-  TAdvOfficeRadioButtonEx(Sender).Font.Style:= [fsBold];
+  if Is4KMode then
+     FormMain.Set4KRadioButtonFontNameSpecs(TAdvOfficeRadioButtonEx(Sender))
+  else
+     TAdvOfficeRadioButtonEx(Sender).Font.Style:= [fsBold];
   case TAdvOfficeRadioButtonEx(Sender).Tag of
     0:
       begin
         MAMESoftwareList_EnabledUpdate.Font.Style:= [];
         MAMESoftwareList_EnabledOverwrite.Font.Style:= [];
+        if Is4KMode then
+           begin
+             MAMESoftwareList_EnabledUpdate.Font.Name:= FormArcadeSelectSystem.Font.Name;
+             MAMESoftwareList_EnabledOverwrite.Font.Name:= FormArcadeSelectSystem.Font.Name;
+           end;
       end;
     1:
       begin
         MAMESoftwareList_Disabled.Font.Style:= [];
         MAMESoftwareList_EnabledOverwrite.Font.Style:= [];
+        if Is4KMode then
+           begin
+             MAMESoftwareList_Disabled.Font.Name:= FormArcadeSelectSystem.Font.Name;
+             MAMESoftwareList_EnabledOverwrite.Font.Name:= FormArcadeSelectSystem.Font.Name;
+           end;
       end;
     2:
       begin
         MAMESoftwareList_Disabled.Font.Style:= [];
         MAMESoftwareList_EnabledUpdate.Font.Style:= [];
+        if Is4KMode then
+           begin
+             MAMESoftwareList_Disabled.Font.Name:= FormArcadeSelectSystem.Font.Name;
+             MAMESoftwareList_EnabledUpdate.Font.Name:= FormArcadeSelectSystem.Font.Name;
+           end;
       end;
   end;
+
   if ActionMode = 6 then
      ButtonOk.Enabled:= MAMESoftwareListBox.Tag <> 0;
 end;
@@ -566,24 +618,43 @@ end;
 procedure TFormArcadeSelectSystem.FullScanClick(Sender: TObject);
 begin
   ScanModeBox.Tag:= TAdvOfficeRadioButtonEx(Sender).Tag;
-  TAdvOfficeRadioButtonEx(Sender).Font.Style:= [fsBold];
+  if Is4KMode then
+     FormMain.Set4KRadioButtonFontNameSpecs(TAdvOfficeRadioButtonEx(Sender))
+  else
+     TAdvOfficeRadioButtonEx(Sender).Font.Style:= [fsBold];
   case TAdvOfficeRadioButtonEx(Sender).Tag of
     0:
       begin
         QuickScan.Font.Style:= [];
         ForceAllAvailable.Font.Style:= [];
+        if Is4KMode then
+           begin
+             QuickScan.Font.Name:= FormArcadeSelectSystem.Font.Name;
+             ForceAllAvailable.Font.Name:= FormArcadeSelectSystem.Font.Name;
+           end;
       end;
     1:
       begin
         FullScan.Font.Style:= [];
         ForceAllAvailable.Font.Style:= [];
+        if Is4KMode then
+           begin
+             FullScan.Font.Name:= FormArcadeSelectSystem.Font.Name;
+             ForceAllAvailable.Font.Name:= FormArcadeSelectSystem.Font.Name;
+           end;
       end;
     2:
       begin
         FullScan.Font.Style:= [];
         QuickScan.Font.Style:= [];
+        if Is4KMode then
+           begin
+             FullScan.Font.Name:= FormArcadeSelectSystem.Font.Name;
+             QuickScan.Font.Name:= FormArcadeSelectSystem.Font.Name;
+           end;
       end;
   end;
 end;
+
 
 end.

@@ -9,11 +9,6 @@ uses
   PanelEx, // Internal error: U752 :_((( line '8'
   GraphicEx, Dialogs, ImgList, ZipForge, SevenZip;
 
-const
-  aGameStatus: String = 'Game Status';
-  FileStatusStr: packed array[0..1] of String = ('Missing', 'Found');
-  LeftTextMaxSize: Integer = 198;
-
 type
   TFormGameDetails = class(TForm)
     TopBar: TPanelEx;
@@ -25,10 +20,8 @@ type
     LabelEmulatorVersion: TShadowLabel;
     LabelScanMode: TShadowLabel;
     IL_FileType: TImageList;
-    FrameROMsListView: TPanelEx;
     ROMsListView: TEasyListview;
     procedure FormKeyPress(Sender: TObject; var Key: Char);
-    procedure FormShow(Sender: TObject);
     procedure ROMsListViewItemPaintText(Sender: TCustomEasyListview;
       Item: TEasyItem; Position: Integer; ACanvas: TCanvas);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
@@ -40,15 +33,17 @@ type
     function ROMsListViewItemCompare(Sender: TCustomEasyListview;
       Column: TEasyColumn; Group: TEasyGroup; Item1, Item2: TEasyItem;
       var DoDefault: Boolean): Integer;
+    procedure FormShow(Sender: TObject);
   private
     { Private declarations }
+    LeftTextMaxSize: Integer;
     IsZiNcSystem: Boolean;
     ZiNcFilePath: String;
     EmuConGameFileName: WideString;
     TextPos, LeftPanelSize, LeftPanelMinimumTextSize, LeftPanelLastText, LeftPanelLastTextHeight: Integer;
-    missFile: TMemIniFile;
     MissingSetZipContents: THashedStringList;
     CRC32CollisionFile: TStringList;
+    missFile: TMemIniFile;
     IsSetMissing: Boolean;
     function  FindZiNcFile(const NameString: String): String;
     procedure CreateLabelTitle(const lTitle: WideString);
@@ -60,6 +55,7 @@ type
     function  FileSizeStr(iFileSize: Int64; const CHDFileName: WideString = ''; iArcadeMediaType: Integer = -1): String;
     procedure FillROMsTree;
     procedure FillEmuConGameFilesTree;
+    procedure Resize4K;
   public
     { Public declarations }
   end;
@@ -73,6 +69,48 @@ uses uMain;
 
 {$R *.DFM}
 
+procedure TFormGameDetails.Resize4K;
+begin
+  if not Is4KMode then
+     Exit;
+
+  with FormGameDetails do
+  begin
+    ClientWidth:= 2230;
+    ClientHeight:= 659;
+    Font.Size:= 16;
+
+    FormMain.Set4KEmuGameTopPanel(TopBar, SystemIcon, GameIcon, LabelGameTitle, 1635, LabelEmulatorVersion, 1370, LabelScanMode, 1664);
+
+    FormMain.Set4KLabelSpecs(LabelYear, 10, 159, -1, -1, 16);
+    FormMain.Set4KLabelFontNameSpecs(LabelYear);
+
+    FormMain.Set4KLabelSpecs(LabelYearValue, 174, LabelYear.Top, -1, -1, 16);
+
+    FormMain.Set4KListViewSpecs(ROMsListView, 580, 159, 1628, 490, 16);
+    FormMain.Set4KListViewHeaderFontSizeSpecs(ROMsListView);
+
+    ROMsListView.Header.Columns[0].Width:= 700;
+    ROMsListView.Header.Columns[1].Width:= 120;
+    ROMsListView.Header.Columns[2].Width:= 504;
+    ROMsListView.Header.Columns[3].Width:= 180;
+    ROMsListView.Header.Columns[4].Width:= 180;
+    ROMsListView.Header.Columns[5].Width:= 120;
+
+    ROMsListView.CellSizes.Report.Height:= 38;
+
+    ROMsListView.ImagesSmall:= FormMain.IL_MediaType_Large;
+    ROMsListView.ImagesState:= FormMain.IL_Misc_Large;
+    ROMsListView.PaintInfoItem.ImageIndent:= 3;
+  end;
+end;
+
+procedure TFormGameDetails.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+  if Key in [#27, #13] then
+     Close;
+end;
+
 function TFormGameDetails.FindZiNcFile(const NameString: String): String;
 begin
   Result:= '';
@@ -81,12 +119,6 @@ begin
        if FileExists(ZiNcFilePath+NameString+'.zip') then
           Result:= ZiNcFilePath+NameString+'.zip';
      end;
-end;
-
-procedure TFormGameDetails.FormKeyPress(Sender: TObject; var Key: Char);
-begin
-  if Key in [#27, #13] then
-     Close;
 end;
 
 procedure TFormGameDetails.CreateLabelTitle(const lTitle: WideString);
@@ -103,6 +135,83 @@ begin
   newLabel.Top:= TextPos;
   newLabel.Caption:= lTitle;
 end;
+
+{procedure TFormGameDetails.CreateLabelValue(const tValue: WideString; var ShadowLabelVar: TShadowLabel; DriverIndex: ShortInt = -1);
+var
+  newLabelValue: TShadowLabel;
+  ValueStr: String;
+begin
+  // this code might still be used in the future (TEasyListview instead of TLabel), do not delete (February 21, 2018)
+  //if DriverIndex > -1 then
+  //   begin
+  //     case DriverIndex of
+  //       1: ValueStr:= aStatus[FormMain.MemGameInfo.eEmulationStatus];
+  //       2: ValueStr:= aStatus[FormMain.MemGameInfo.eColorStatus];
+  //       3: ValueStr:= aStatus[FormMain.MemGameInfo.eSoundStatus];
+  //       4: ValueStr:= aStatus[FormMain.MemGameInfo.eGraphicStatus];
+  //     end;
+  //   end
+  //else
+     ValueStr:= tValue;
+  if (ValueStr = '') then //and (DriverIndex = -1) then
+     Exit;
+
+  newLabelValue:= TShadowLabel.Create(Self);
+  newLabelValue.Parent:= FormGameDetails;
+  newLabelValue.Font:= LabelYearValue.Font;
+  newLabelValue.ShadowEnabled:= LabelYearValue.ShadowEnabled;
+  newLabelValue.ShadowColor:= LabelYearValue.ShadowColor;
+  newLabelValue.ShowAccelChar:= False;
+  newLabelValue.Left:= LabelYearValue.Left; // default position
+
+  case DriverIndex of
+    //-1: newLabelValue.Left:= LabelYearValue.Left; // do nothing... this really need to be here ?
+     1: // EmulationStatus
+       begin
+         newLabelValue.Tag:= GetDriverStatusImageIndex(FormMain.MemGameInfo.eEmulationStatus);
+       end;
+     2: // ProtectionStatus
+       begin
+         if Is4KMode then
+            newLabelValue.Left:= newLabelValue.Left+103
+         else
+            newLabelValue.Left:= newLabelValue.Left+61;
+         newLabelValue.Tag:= GetDriverStatusImageIndex(FormMain.MemGameInfo.eProtectionStatus);
+       end;
+     3: // GraphicStatus
+       begin
+         newLabelValue.Tag:= GetDriverStatusImageIndex(FormMain.MemGameInfo.eGraphicStatus);
+       end;
+     4: // ColorStatus
+       begin
+         if Is4KMode then
+            newLabelValue.Left:= newLabelValue.Left+82
+         else
+            newLabelValue.Left:= newLabelValue.Left+49;
+
+         newLabelValue.Tag:= GetDriverStatusImageIndex(FormMain.MemGameInfo.eColorStatus);
+       end;
+     5: // SoundStatus
+       begin
+         if Is4KMode then
+            newLabelValue.Left:= newLabelValue.Left+82+60
+         else
+            newLabelValue.Left:= newLabelValue.Left+48+39;
+
+         newLabelValue.Tag:= GetDriverStatusImageIndex(FormMain.MemGameInfo.eSoundStatus);
+       end;
+  end;
+  
+  if DriverIndex = -1 then
+     SetLabelColor(NewLabelValue, NewLabelValue.Tag);
+  //else
+  //   SetLabelColor(NewLabelValue, 21);
+
+  newLabelValue.Top:= TextPos;
+  newLabelValue.Caption:= ValueStr;
+  ShadowLabelVar:= newLabelValue;
+  LeftPanelLastText:= newLabelValue.Top;
+end;}
 
 procedure TFormGameDetails.CreateLabelValue(const tValue: WideString; var ShadowLabelVar: TShadowLabel; DriverIndex: ShortInt = -1);
 var
@@ -123,39 +232,55 @@ begin
      ValueStr:= tValue;
   if ValueStr = '' then
      Exit;
+
   newLabelValue:= TShadowLabel.Create(Self);
   newLabelValue.Parent:= FormGameDetails;
   newLabelValue.Font:= LabelYearValue.Font;
   newLabelValue.ShadowEnabled:= LabelYearValue.ShadowEnabled;
   newLabelValue.ShadowColor:= LabelYearValue.ShadowColor;
   newLabelValue.ShowAccelChar:= False;
+  newLabelValue.Left:= LabelYearValue.Left; // default position
+
   case DriverIndex of
-    -1: newLabelValue.Left:= LabelYearValue.Left;
+    //-1: newLabelValue.Left:= LabelYearValue.Left; // do nothing... this really need to be here ?
      1: // EmulationStatus
        begin
-         newLabelValue.Left:= 5;
          newLabelValue.Tag:= GetDriverStatusImageIndex(FormMain.MemGameInfo.eEmulationStatus);
        end;
-     2: // ColorStatus
+     2: // ProtectionStatus
        begin
-         newLabelValue.Left:= 74;
+         if Is4KMode then
+            newLabelValue.Left:= newLabelValue.Left+103
+         else
+            newLabelValue.Left:= newLabelValue.Left+61;
+         newLabelValue.Tag:= GetDriverStatusImageIndex(FormMain.MemGameInfo.eProtectionStatus);
+       end;
+     3: // GraphicStatus
+       begin
+         newLabelValue.Tag:= GetDriverStatusImageIndex(FormMain.MemGameInfo.eGraphicStatus);
+       end;
+     4: // ColorStatus
+       begin
+         if Is4KMode then
+            newLabelValue.Left:= newLabelValue.Left+82
+         else
+            newLabelValue.Left:= newLabelValue.Left+49;
+
          newLabelValue.Tag:= GetDriverStatusImageIndex(FormMain.MemGameInfo.eColorStatus);
        end;
-     3: // SoundStatus
+     5: // SoundStatus
        begin
-         newLabelValue.Left:= 110;
+         if Is4KMode then
+            newLabelValue.Left:= newLabelValue.Left+82+60
+         else
+            newLabelValue.Left:= newLabelValue.Left+48+39;
+
          newLabelValue.Tag:= GetDriverStatusImageIndex(FormMain.MemGameInfo.eSoundStatus);
-       end;
-     4: // GraphicStatus
-       begin
-         newLabelValue.Left:= 150;
-         newLabelValue.Tag:= GetDriverStatusImageIndex(FormMain.MemGameInfo.eGraphicStatus);
        end;
   end;
   if DriverIndex <> -1 then
-     begin
-       SetLabelColor(NewLabelValue, NewLabelValue.Tag);
-     end;
+     SetLabelColor(NewLabelValue, NewLabelValue.Tag);
+
   newLabelValue.Top:= TextPos;
   newLabelValue.Caption:= ValueStr;
   ShadowLabelVar:= newLabelValue;
@@ -165,41 +290,51 @@ end;
 procedure TFormGameDetails.SetLabelColor(LabelSource: TShadowLabel; StateIndex: ShortInt);
 begin
   case StateIndex of
-     -5: // game type: "Game Files" string
+    -5: // game type: "Game Files" string
+      begin
+        LabelSource.Font.Color:= MsgTxtColors.colorFileName;
+        if IsNightMode then
+           LabelSource.ShadowColor:= clNavy;
+      end;
+    21: // unknown driver status
+      begin
+        if IsNightMode then
+           LabelSource.Font.Color:= clrDarkGray2
+        else
+           LabelSource.Font.Color:= clSilver;
+        //LabelSource.Font.Color:= item_caption_disabled_color[Ord(IsNightMode)];
+        if IsNightMode then
+           LabelSource.ShadowColor:= clNavy;
+      end;
+     0: // File Missing
+      begin
+        if IsNightMode then
+           LabelSource.Font.Color:= clrLightRed
+        else
+           LabelSource.Font.Color:= clRed;
+        if IsNightMode then
+           LabelSource.ShadowColor:= $323200;
+      end;
+     1: // Have File / ROM
        begin
-         LabelSource.Font.Color:= MsgTxtColors.colorFileName;
          if IsNightMode then
-            LabelSource.ShadowColor:= clNavy;
-       end;
-      0: // File Missing
-        begin
-          if IsNightMode then
-             LabelSource.Font.Color:= clrLightRed
-          else
-             LabelSource.Font.Color:= clRed;
-          if IsNightMode then
-             LabelSource.ShadowColor:= $323200;
-        end;
-      1: // Have File / ROM
-        begin
-          if IsNightMode then
              begin
                LabelSource.Font.Color:= clrLightGreen;// clLime;
                LabelSource.ShadowColor:= $003232;
              end
-          else
+         else
              LabelSource.Font.Color:= clGreen;
-        end;
+       end;
       2: // Missing ROMs/CHDs
-        begin
-          if IsNightMode then
-             begin
-               LabelSource.Font.Color:= clrOrangeBarTop;//clYellow;
-               LabelSource.ShadowColor:= $003232;
-             end
-          else
-             LabelSource.Font.Color:= clOlive;
-        end;
+       begin
+         if IsNightMode then
+            begin
+              LabelSource.Font.Color:= clrOrangeBarTop;//clYellow;
+              LabelSource.ShadowColor:= $003232;
+            end
+         else
+            LabelSource.Font.Color:= clOlive;
+       end;
       20: LabelSource.Font.Color:= MsgTxtColors.colorFileName; // Scan Mode
     end;
 end;
@@ -222,7 +357,7 @@ begin
   CreateLabelValue(sValue, LabelTemp);
   LabelTemp.Caption:= sValue;
   LabelTemp.Tag:= sImageIndex;
-     
+
   SetLabelColor(LabelTemp, sImageIndex);
 
   if LabelTemp.Width > LeftPanelSize then
@@ -252,12 +387,12 @@ end;
 function TFormGameDetails.GetDriverStatusImageIndex(StatusID: ShortInt): ShortInt;
 begin
   case StatusID of
-   -1: Result:= -1;
+   -1: Result:= 21;
     0: Result:= 1;
     1: Result:= 2;
     2: Result:= 0;
   else
-    Result:= -1;
+    Result:= 21;
   end;
 end;
 
@@ -270,7 +405,7 @@ var
   ListSamples: THashedStringList;
   Loop: Integer;
   Supermodel3ControlsList, SamplesPathList: TStringList;
-  ReqSoftwareName, ReqSetName: String;
+  ReqSoftwareName, ReqSetName, sFileName: String;
 
   function AddControlsList(const ctrlList: String): Boolean;
   var
@@ -404,34 +539,26 @@ var
     if FormMain.MemGameInfo.eDriverStatus < 1 then
        Exit; // driver is "good" or "none" then don't add extra status texts
 
-    {
-    // this is for the experimental EasyListView left panel!!!! September 16, 2016
-    if FormMain.MemGameInfo.eEmulationStatus <> -1 then
-       AddEntry2('', 'Emulation', FormMain.MemGameInfo.eEmulationStatus);
-    if FormMain.MemGameInfo.eColorStatus <> -1 then
-       AddEntry2('', 'Color', FormMain.MemGameInfo.eColorStatus);
-    if FormMain.MemGameInfo.eSoundStatus <> -1 then
-       AddEntry2('', 'Sound', FormMain.MemGameInfo.eSoundStatus);
-    if FormMain.MemGameInfo.eGraphicStatus <> -1 then
-       AddEntry2('', 'Graphic', FormMain.MemGameInfo.eGraphicStatus);
-    }
-
-    {case DriverIndex of
-      1: ValueStr:= aStatus[FormMain.MemGameInfo.eEmulationStatus];
-      2: ValueStr:= aStatus[FormMain.MemGameInfo.eColorStatus];
-      3: ValueStr:= aStatus[FormMain.MemGameInfo.eSoundStatus];
-      4: ValueStr:= aStatus[FormMain.MemGameInfo.eGraphicStatus];
-    end;}
-
     iLabelDriver:= nil;
-    if FormMain.MemGameInfo.eEmulationStatus <> -1 then
-       CreateLabelValue('   Emulation', iLabelDriver, 1);
-    if FormMain.MemGameInfo.eColorStatus <> -1 then
-       CreateLabelValue('Color', iLabelDriver, 2);
-    if FormMain.MemGameInfo.eSoundStatus <> -1 then
-       CreateLabelValue('Sound', iLabelDriver, 3);
-    if FormMain.MemGameInfo.eGraphicStatus <> -1 then
-       CreateLabelValue('Graphic', iLabelDriver, 4);
+    //if FormMain.MemGameInfo.eEmulationStatus <> -1 then
+       CreateLabelValue('Emulation', iLabelDriver, 1);
+
+    //if FormMain.MemGameInfo.eProtectionStatus <> -1 then
+       CreateLabelValue('Protection', iLabelDriver, 2);
+
+    //if (FormMain.MemGameInfo.eEmulationStatus <> -1) or (FormMain.MemGameInfo.eProtectionStatus <> -1) then
+    if iLabelDriver <> nil then
+       TextPos:= TextPos+iLabelDriver.Height;
+
+    //if FormMain.MemGameInfo.eGraphicStatus <> -1 then
+       CreateLabelValue('Graphic', iLabelDriver, 3);
+
+    //if FormMain.MemGameInfo.eColorStatus <> -1 then
+       CreateLabelValue('Color', iLabelDriver, 4);
+
+    //if FormMain.MemGameInfo.eSoundStatus <> -1 then
+       CreateLabelValue('Sound', iLabelDriver, 5);
+
     if iLabelDriver <> nil then
        TextPos:= TextPos+iLabelDriver.Height;
   end;
@@ -579,6 +706,7 @@ begin
   LabelYearValue.Visible:= FormMain.MemGameInfo.eYear <> '';
   LabelYear.Visible:= LabelYearValue.Visible;
   NoROMs:= False;
+  sFileName:= ''; // to check if requirement is a software list or a device that must be attached in a machine (if empty is a device, not a software)
   if LabelYearValue.Visible then
      begin
        LabelYearValue.Caption:= FormMain.MemGameInfo.eYear;
@@ -678,6 +806,9 @@ begin
             AddEntry2('   Refresh Rate', tmpString);
        end;
 
+    if FormMain.MemGameInfo.eRequiresArtwork then
+       AddEntry2('Artwork', 'External Artwork Required');
+       
     if IsSegaModel2 then
        FormMain.TempGameVars.eBiosName:= 'model2'
     else
@@ -691,6 +822,12 @@ begin
     ImgIndex:= GetDriverStatusImageIndex(FormMain.MemGameInfo.eDriverStatus);
     AddEntry2('Driver Status', aStatus[FormMain.MemGameInfo.eDriverStatus], ImgIndex);
     AddDriverStatus;
+
+    if FormMain.MemGameInfo.eCocktailStatus <> -1 then
+       AddEntry2('Cocktail', aStatus[FormMain.MemGameInfo.eCocktailStatus], GetDriverStatusImageIndex(FormMain.MemGameInfo.eCocktailStatus));
+
+    if FormMain.MemGameInfo.eNetwork <> -1 then
+       AddEntry2('Local Network', aStatus[FormMain.MemGameInfo.eNetwork], GetDriverStatusImageIndex(FormMain.MemGameInfo.eNetwork));
 
     if FormMain.IsMAMEBasedSys(FormMain.MemGameInfo.eSystemID) and (FormMain.MemGameInfo.eSoftwareName = '') then
        begin
@@ -717,10 +854,34 @@ begin
     if FormMain.MemGameInfo.eSoftwareName <> '' then
        begin
          FormMain.SoftListGetRequirementInfo(FormMain.MemGameInfo.eSystemID, FormMain.MemGameInfo.eName, FormMain.MemGameInfo.eSoftwareName, ReqSetName, ReqSoftwareName);
-         if ReqSetName <> '' then
-            AddEntry2('Required Set', ReqSetName);
-         if ReqSoftwareName <> '' then
-            AddEntry2('', 'Softlist: '+ReqSoftwareName);
+         sFileName:= FormMain.GetGamesFolderEL(1, FormMain.MemGameInfo.eSystemID)+GetSystemFileName(FormMain.MemGameInfo.eSystemID, 0, ReqSoftwareName);
+         if (ReqSetName <> '') or (ReqSoftwareName <> '') then
+         begin
+           if FileExists(sFileName) then
+           begin
+             if ReqSetName <> '' then
+                AddEntry2('Require Set', ReqSetName);
+             if ReqSoftwareName <> '' then
+                AddEntry2('', 'Softlist: '+ReqSoftwareName);
+           end
+           else
+           begin
+             // it's a device, not a software list XML file (August 12, 2021)
+             if (ReqSetName <> '') or (ReqSoftwareName <> '') then
+                begin
+                  if FormMain.MemGameInfo.eSoftwareName <> 'pcecd' then
+                  begin
+                    if ReqSoftwareName <> '' then
+                       AddEntry2('Require Dev', ReqSoftwareName+':'+ReqSetName)
+                    else
+                       AddEntry2('Require Dev', ReqSetName);
+                  end
+                  else
+                     AddEntry2('Require Dev', '-cart '+ReqSetName);
+                end;
+             sFileName:= '';
+           end;
+         end;
        end;
 
     AddEntry2('Main CPU Chip', FormMain.MemGameInfo.eChipCPU);
@@ -956,10 +1117,13 @@ begin
                else
                   ZipName:= FormMain.SearchZIPFolder(ReqSetName, FormMain.MemGameInfo.eSystemID, ReqSoftwareName);
 
-               if ZipName <> '' then
-                  AddEntry2('   Require Set', ExtractFileNameW(ZipName), Ord(ZipName <> ''))
-               else
-                  AddEntry2('   Require Set', ReqSetName, 0);
+               if sFileName <> '' then // will check for "emuloader\arcade\mame_softwarelist_games\software.el"
+               begin
+                 if ZipName <> '' then
+                    AddEntry2('   Require Set', ExtractFileNameW(ZipName), Ord(ZipName <> ''))
+                 else
+                    AddEntry2('   Require Set', ReqSetName, 0);
+               end;
              end;
       end;
   end;
@@ -1094,7 +1258,7 @@ var
          if not FormMain.IsROM_Device(FormMain.MemGameInfo.eROMIdentification) then
             Result:= 'Device'; // device ROM
        end
-    else
+   else
    if FormMain.IsFileID_BiosROM(ROMTag) then
       begin
         if not FormMain.IsROM_Bios(FormMain.MemGameInfo.eROMIdentification) then
@@ -1159,7 +1323,7 @@ var
 
   function AddROMs: Boolean;
   var
-    LoopROMs: Integer;
+    LoopROMs, IcoIndexSubtract: Integer;
     isCHD: Boolean;
     tmpString, tmpString2, CHDFile, CHDInfo, CHDChecksum, LineStr: String;
     HeaderVerCHD: Byte;
@@ -1389,30 +1553,34 @@ var
       Item.Captions[5]:= GetROM_Status(romCRC32, romSHA1, romTagIndex, IsCHD, IsBadDump, IsParentROM, HeaderVerCHD); // ROM Status
       
       Item.StateImageIndex:= StatusImageIndex;
+      if Is4KMode then
+         IcoIndexSubtract:= 15 // bigger icon size, different index IL_MediaType 24x24
+      else
+         IcoIndexSubtract:= 0; // IL_LeftPanel 16x16
       case isCHD of
         True:
           begin
             case romTagIndex of
-              12, 13, 14: Item.ImageIndex:= 22; // HDD (also general CHD)
-              15, 16, 17: Item.ImageIndex:= 20; // CD
-              18, 19, 20: Item.ImageIndex:= 21; // Compact Flash Card
-              21, 22, 23: Item.ImageIndex:= 23; // Video Tape (VHS)
+              12, 13, 14: Item.ImageIndex:= 22-IcoIndexSubtract; // HDD (also general CHD)
+              15, 16, 17: Item.ImageIndex:= 20-IcoIndexSubtract; // CD
+              18, 19, 20: Item.ImageIndex:= 21-IcoIndexSubtract; // Compact Flash Card
+              21, 22, 23: Item.ImageIndex:= 23-IcoIndexSubtract; // Video Tape (VHS)
             end;
           end;
         False:
           begin
             if FormMain.MemGameInfo.eSoftwareName = 'vgmplay' then
-               Item.ImageIndex:= 24
+               Item.ImageIndex:= 24-IcoIndexSubtract
             else
             case romTagIndex of
-              00, 01, 02: Item.ImageIndex:= 15; // ROM
-              03, 04, 05: Item.ImageIndex:= 16; // Cartridge
-              06, 07, 08: Item.ImageIndex:= 17; // Floppy Disk
-              09, 10, 11: Item.ImageIndex:= 18; // Cassette Tape
-              12, 13, 14: Item.ImageIndex:= 22; // HDD... is there any game ROMs with region="hdd" ???? not sure but better to have this here!!!
-              15, 16, 17: Item.ImageIndex:= 20; // CD (Demul (v5.8.2) have .bin files ROMs that are actually image CDs
-              18, 19, 20: Item.ImageIndex:= 21; // Compact Flash Card (but it's not a CHD file)... "Konami System 573"
-              21, 22, 23: Item.ImageIndex:= 23; // Video Tape (VHS) (but it's not a CHD file)...
+              00, 01, 02: Item.ImageIndex:= 15-IcoIndexSubtract; // ROM
+              03, 04, 05: Item.ImageIndex:= 16-IcoIndexSubtract; // Cartridge
+              06, 07, 08: Item.ImageIndex:= 17-IcoIndexSubtract; // Floppy Disk
+              09, 10, 11: Item.ImageIndex:= 18-IcoIndexSubtract; // Cassette Tape
+              12, 13, 14: Item.ImageIndex:= 22-IcoIndexSubtract; // HDD... is there any game ROMs with region="hdd" ???? not sure but better to have this here!!!
+              15, 16, 17: Item.ImageIndex:= 20-IcoIndexSubtract; // CD (Demul (v5.8.2) have .bin files ROMs that are actually image CDs
+              18, 19, 20: Item.ImageIndex:= 21-IcoIndexSubtract; // Compact Flash Card (but it's not a CHD file)... "Konami System 573"
+              21, 22, 23: Item.ImageIndex:= 23-IcoIndexSubtract; // Video Tape (VHS) (but it's not a CHD file)...
             end;
           end;
       end;
@@ -1486,6 +1654,8 @@ var
   end;
 
   function ELV_AddFile: Boolean;
+  var
+    IcoIndexSubtract: Integer;
   begin
     Result:= True;
     Item:= ROMsListView.Items.Add;
@@ -1494,15 +1664,20 @@ var
     //eCustomMediaType: ShortInt; // 0 -> ROM; 1 -> Cartridge; 2 -> Disc Image; 3 -> Floppy; 4 -> Cassette; 5 -> Hard Disk Drive
     Item.Tag:= Ord(FormMain.IsMediaTypeCHD(FormMain.MemGameInfo.eCustomMediaType, True));
     Item.StateImageIndex:= 0; //StatusImageIndex;
+    
+    if Is4KMode then
+       IcoIndexSubtract:= 15 // bigger icon size, different index IL_MediaType 24x24
+    else
+       IcoIndexSubtract:= 0; // IL_LeftPanel 16x16
 
     case FormMain.MemGameInfo.eCustomMediaType of
-      00: Item.ImageIndex:= 15; // ROM
-      01: Item.ImageIndex:= 16; // Cartridge
-      03: Item.ImageIndex:= 17; // Floppy Disk
-      04: Item.ImageIndex:= 18; // Cassette Tape
-      05: Item.ImageIndex:= 22; // HDD... is there any game ROMs with region="hdd" ???? not sure but better to have this here!!!
-      02: Item.ImageIndex:= 20; // Disc Image
-      //18, 19, 20: Item.ImageIndex:= 21; // Compact Flash Card (but it's not a CHD file)... "Konami System 573"
+      00: Item.ImageIndex:= 15-IcoIndexSubtract; // ROM
+      01: Item.ImageIndex:= 16-IcoIndexSubtract; // Cartridge
+      03: Item.ImageIndex:= 17-IcoIndexSubtract; // Floppy Disk
+      04: Item.ImageIndex:= 18-IcoIndexSubtract; // Cassette Tape
+      05: Item.ImageIndex:= 22-IcoIndexSubtract; // HDD... is there any game ROMs with region="hdd" ???? not sure but better to have this here!!!
+      02: Item.ImageIndex:= 20-IcoIndexSubtract; // Disc Image
+      //18, 19, 20: Item.ImageIndex:= 21-IcoIndexSubtract; // Compact Flash Card (but it's not a CHD file)... "Konami System 573"
     end;
 
     Item.Captions[1]:= romCRC32; // ROM CRC32 Checksum
@@ -1567,7 +1742,7 @@ begin
                          until (not FindNext(ArchiveItemZip));
                        end;
                   end;
-               Close;
+               CloseArchive;
                FileName:= '';
              except
                CloseArchive;
@@ -1636,241 +1811,6 @@ begin
   ROMsListView.EndUpdate;
 end;
 
-procedure TFormGameDetails.FormShow(Sender: TObject);
-var
-  Loop: Integer;
-  CHDsAllNoDump: Boolean;
-  iROM, iSHA1: String;
-
-  ROMsCount, BottomPos, HeaderSize, iROMsHeight: Integer;
-  iNewWidth: Integer;
-  iFormWidth: Integer;
-begin
-  FormMain.ELV_ResetNormalColors(ROMsListView);
-  iFormWidth:= FormGameDetails.ClientWidth;
-
-  FormMain.LoadGameIconIntoImage(FormMain.MemGameInfo.eSystemID, FormMain.MemGameInfo.eCustomSystemID, FormMain.MemGameInfo.eROMIdentification, SystemIcon, FormMain.MemGameInfo.eSoftwareName, FormMain.MemGameInfo.eIsCustomGame);
-
-  case FormMain.MemGameInfo.eIsCustomGame of
-    True:
-      begin
-        LabelScanMode.Visible:= False;
-        LabelEmulatorVersion.Width:= 875;
-        FormMain.IL_MainMenuOptions.GetIcon(15, GameIcon.Picture.Icon);
-      end;
-    False:
-      begin
-        FormMain.IL_ArcadeSystem_Small.GetIcon(FormMain.MemGameInfo.eSystemID, GameIcon.Picture.Icon);
-      end;
-  end;
-
-  LabelGameTitle.Caption:= FormMain.MemGameInfo.eTitle;
-  LabelEmulatorVersion.Caption:= 'name: '+FormMain.StatusBar_GamesGameName.Caption;
-
-  IsZiNcSystem:= FormMain.MemGameInfo.eSystemID = idZiNc;
-  ZiNcFilePath:= '';
-  LabelScanMode.Caption:= LabelScanMode.Hint+#13#10+aScanMode[FormMain.MemGameInfo.eScanMode];
-
-  SetFormColors(FormGameDetails, TopBar, nil, LabelGameTitle, LabelEmulatorVersion, LabelScanMode, FormMain.MemGameInfo.eGameSetStatus, IsNightMode);
-  SetColorsGameTopBar(FormMain.MemGameInfo.eGameSetStatus, TopBar); // change top bar color based on game set status
-  if IsNightMode then
-     begin
-       SetLabelColors(LabelYear,      clCream, item_caption_active_shadow_color[1]);
-       SetLabelColors(LabelYearValue, item_caption_active_color[1], item_caption_active_shadow_color[1]);
-
-       SetPanelBorderColors(FrameROMsListView, clrBorderGroupBoxGrayBk, clrInnerBorderGroupBoxGrayBk);
-
-       FrameROMsListView.Color1:= FormGameDetails.Color;
-
-       FormMain.SetEasyListViewColors(ROMsListView, menu_background_color[1], clWhite);
-       FormMain.SetEasyListViewHeaderColors(ROMsListView, True);
-       FormMain.ELV_SetRibbonNightColors(0, ROMsListView, True);
-       FormMain.SetWin10DarkScrollBar(ROMsListView);
-     end;
-  
-  FormMain.CheckSevenZip(FormMain.MemGameInfo.eSystemID);
-
-  LeftPanelMinimumTextSize:= 137; // this should be 198 due to the driver status colored texts ?????
-  // Checksum column size is 65, difference is 186...
-
-  if FormMain.MemGameInfo.eCHDsCount > 0 then
-     begin
-       CHDsAllNoDump:= FormMain.IsROMsListBasedSys(FormMain.MemGameInfo.eSystemID);
-       //if not FormMain.MemGameInfo.eROMsAllNoDump then // this is only for ROMs; CHD files are not included!
-          begin
-            if TEasyGameInfo(FormMain.SelectedEasyItem).eROMInfo <> nil then
-            begin
-              for Loop:=0 to TEasyGameInfo(FormMain.SelectedEasyItem).eROMInfo.Count-1 do
-              begin
-                iROM:= TEasyGameInfo(FormMain.SelectedEasyItem).eROMInfo[Loop];
-                // 12 and higher = CHD files
-                if StrToInt(iROM[1]+iROM[2]) >= 12 then
-                   begin
-                     iSHA1:= SoftListGetEntryValue(iROM, 'sha1');
-                     if iSHA1 = '' then
-                        iSHA1:= SoftListGetEntryValue(iROM, 'md5'); // for old MAME builds
-                     if iSHA1 <> '' then
-                        begin
-                          CHDsAllNoDump:= False;
-                          Break;
-                        end;
-                   end;
-              end;
-            end;
-          end;
-       if not CHDsAllNoDump then
-          begin
-            LeftPanelMinimumTextSize:= 0;
-          end;
-     end;
-
-  if FormGameDetails.Tag <> 0 then
-     Exit;
-  EmuConGameFileName:= '';
-  FormGameDetails.Tag:= 1;
-
-  if TEasyGameInfo(FormMain.SelectedEasyItem).eROMInfo <> nil then
-     begin
-       if Assigned(TEasyGameInfo(FormMain.SelectedEasyItem).eDeviceSets) then
-       if TEasyGameInfo(FormMain.SelectedEasyItem).eDeviceSets.Count > 1 then
-          ROMsListView.Header.Columns[4].Visible:= True;
-     end;
-
-  IsSetMissing:= False;
-  if not FormMain.MemGameInfo.eIsCustomGame then
-     begin
-       IsSetMissing:= (FormMain.MemGameInfo.eSystemID <> idDaphne) and (TEasyGameInfo(FormMain.SelectedEasyItem).eROMInfo <> nil) and
-                      FormMain.IsROM_Miss(FormMain.MemGameInfo.eROMIdentification) and (not FormMain.MemGameInfo.eROMsAllNoDump) and
-                      (not FormMain.IsROM_HaveMissROMs(FormMain.MemGameInfo.eGameSetStatus)) and //(not FormMain.MemGameInfo.eROMsAllNoDump) and
-                      //(not FormMain.IsROM_Have(FormMain.MemGameInfo.eGameSetStatus)) and
-                      (FormMain.MemGameInfo.eSoftwareName = '');
-
-       if IsSetMissing then
-       if FileExists(FormMain.GetGamesFolderEL(0)+GetSystemFileName(FormMain.MemGameInfo.eSystemID, 9)) then
-          begin
-            CRC32CollisionFile:= TStringList.Create;
-            CRC32CollisionFile.LoadFromFile(FormMain.GetGamesFolderEL(0)+GetSystemFileName(FormMain.MemGameInfo.eSystemID, 9));
-          end;
-     end;
-  ROMsListView.Width:= 1200;
-  FillGameTree;
-  Application.ProcessMessages;
-  case FormMain.MemGameInfo.eIsCustomGame of
-    True : FillEmuConGameFilesTree;
-    False: FillROMsTree;
-  end;
-
-  if IsSetMissing then
-     begin
-       FreeAndNil(CRC32CollisionFile);
-       FreeAndNil(MissingSetZipContents);
-     end;
-
-  if LeftPanelSize < LeftTextMaxSize then // 198
-     begin
-       if (LeftPanelMinimumTextSize > 0) and (LeftPanelSize < LeftPanelMinimumTextSize) then
-          LeftPanelSize:= LeftPanelMinimumTextSize;
-
-       FrameROMsListView.Left:= LabelYearValue.Left+LeftPanelSize+6; // 6 for the border
-       FormGameDetails.ClientWidth:= FrameROMsListView.Left+FrameROMsListView.Width+7; // 7 for the border
-     end;
-
-  BottomPos:= LeftPanelLastText+LeftPanelLastTextHeight;
-
-  HeaderSize:= ROMsListView.Header.Height+2+4; // +4 for the bottom border
-  ROMsCount:= ROMsListView.Groups.ItemCount;
-  iROMsHeight:= HeaderSize+(ROMsCount*ROMsListView.CellSizes.Report.Height);
-  //if ROMsCount <= 25 then
-  //   iROMsHeight:= HeaderSize+(ROMsCount*ROMsListView.CellSizes.Report.Height)
-  //else
-  //   begin
-  //     iROMsHeight:= HeaderSize+(25*ROMsListView.CellSizes.Report.Height); // original code, limit ROMs list height to 25 items
-  //     //iROMsHeight:= HeaderSize+(ROMsCount*ROMsListView.CellSizes.Report.Height);
-  //   end;
-  //iFormHeight:= LeftPanelLastText+LabelYearValue.Height+6; // 6 for the border
-
-  if BottomPos < (iROMsHeight+FrameROMsListView.Top) then
-     BottomPos:= iROMsHeight+FrameROMsListView.Top;
-
-  if BottomPos > (Screen.Height-100) then
-     BottomPos:= (Screen.Height-100); // prevent form height from being larger than screen height
-
-  ROMsListView.Height:= BottomPos-FrameROMsListView.Top;
-  FrameROMsListView.Height:= ROMsListView.Height+3;
-
-  Inc(BottomPos, 3); // add 4 pixels to the bottom of "FrameROMsListView"
-  ROMsListView.BeginUpdate;
-
-  if ROMsListView.Header.Columns[3].Visible then
-     begin
-       ROMsListView.Header.Columns[3].AutoSizeToFit; // file size column
-       if ROMsListView.Header.Columns[3].Width < 35 then
-          ROMsListView.Header.Columns[3].Width:= 35;
-     end;
-
-  if ROMsListView.Header.Columns[4].Visible then
-     begin
-       ROMsListView.Header.Columns[4].AutoSizeToFit; // device column
-       if ROMsListView.Header.Columns[4].Width < 50 then
-          ROMsListView.Header.Columns[4].Width:= 50;
-     end;
-
-  ROMsListView.Header.Columns[5].AutoSizeToFit; // status column
-  if ROMsListView.Header.Columns[5].Width < 50 then
-     ROMsListView.Header.Columns[5].Width:= 50;
-
-  iNewWidth:= 0;
-  for Loop:=0 to ROMsListView.Header.Columns.Count-1 do
-  begin
-    if ROMsListView.Header.Columns[Loop].Visible then
-       Inc(iNewWidth, ROMsListView.Header.Columns[Loop].Width);
-  end;
-
-  if iNewWidth <> ROMsListView.Width then
-     begin
-       if iNewWidth > ROMsListView.Width then
-          iNewWidth:= iNewWidth-ROMsListView.Width
-       else
-       if iNewWidth < ROMsListView.Width then
-          iNewWidth:= -(ROMsListView.Width-iNewWidth);
-
-       ROMsListView.Width:= ROMsListView.Width+iNewWidth;
-       FrameROMsListView.Width:= ROMsListView.Width+2;
-       iNewWidth:= FrameROMsListView.Left+FrameROMsListView.Width+7; // 7 is for the right border
-
-       FormGameDetails.ClientWidth:= iNewWidth;
-
-       iNewWidth:= 0; // set to zero in case new width is the same
-       if FormGameDetails.ClientWidth > iFormWidth then
-          iNewWidth:= FormGameDetails.ClientWidth-iFormWidth
-       else
-       if FormGameDetails.ClientWidth < iFormWidth then
-          iNewWidth:= -(iFormWidth-FormGameDetails.ClientWidth);
-
-       LabelGameTitle.Width:= TopBar.Width-LabelGameTitle.Left-7;
-       LabelScanMode.Left:= TopBar.Width-(LabelScanMode.Width+7);
-     end;
-
-  if ROMsListView.Groups.ItemCount > 0 then
-     ROMsListView.Header.Columns[0].Caption:= 'Name'+Format('%25s', [IntToStr(ROMsListView.Groups.VisibleItemCount)+' files']);
-
-  if ROMsListView.Scrollbars.VertBarVisible then
-     ROMsListView.Header.Columns[0].Width:= ROMsListView.Header.Columns[0].Width-GetSystemMetrics(SM_CXVSCROLL);
-
-  ROMsListView.EndUpdate;
-
-  Inc(BottomPos, 7); // add 7 pixels to make the 6 pixels border
-
-  if FormGameDetails.ClientHeight <> BottomPos then
-     FormGameDetails.ClientHeight:= BottomPos;
-
-  FrameROMsListView.Width:= ROMsListView.Width+2;
-  FrameROMsListView.Height:= ROMsListView.Height+3;
-
-  FormGameDetails.Left:= (Screen.Width shr 1)-(FormGameDetails.Width shr 1)-1;
-  FormGameDetails.Top:= ((Screen.Height-40) shr 1)-(FormGameDetails.Height shr 1)-1;
-end;
-
 procedure TFormGameDetails.ROMsListViewItemPaintText(
   Sender: TCustomEasyListview; Item: TEasyItem; Position: Integer;
   ACanvas: TCanvas);
@@ -1913,6 +1853,15 @@ procedure TFormGameDetails.FormCloseQuery(Sender: TObject;
   var CanClose: Boolean);
 begin
   FormMain.ClearListView(ROMsListView);
+  // make sure everything is freed from RAM... just to be sure
+  if Assigned(MissingSetZipContents) then
+     FreeAndNil(MissingSetZipContents);
+
+  if Assigned(CRC32CollisionFile) then
+     FreeAndNil(CRC32CollisionFile);
+
+  if Assigned(missFile) then
+     FreeAndNil(missFile);
 end;
 
 procedure TFormGameDetails.ROMsListViewItemSelectionChanged(
@@ -1961,6 +1910,237 @@ begin
   //else
   //if (gItem1.Tag = 1) and (gItem2.Tag = 0) then
   //   Result:= 1;
+end;
+
+procedure TFormGameDetails.FormShow(Sender: TObject);
+var
+  Loop: Integer;
+  CHDsAllNoDump: Boolean;
+  iROM, iSHA1: String;
+
+  ROMsCount, BottomPos, HeaderSize, iROMsHeight: Integer;
+  iNewWidth, iSize: Integer;
+  iFormWidth: Integer;
+begin
+  Resize4K;
+  if Is4KMode then
+     begin
+       LeftTextMaxSize:= 400;
+       LeftPanelMinimumTextSize:= 250;
+     end
+  else
+     begin
+       LeftTextMaxSize:= 198;
+       LeftPanelMinimumTextSize:= 137; // this should be 198 due to the driver status colored texts ?????
+       // Checksum column size is 65, difference is 186...
+     end;
+
+  FormMain.ELV_ResetNormalColors(ROMsListView);
+  iFormWidth:= FormGameDetails.ClientWidth;
+
+  FormMain.LoadSystemROMIdIcon(FormMain.MemGameInfo.eSystemID, FormMain.MemGameInfo.eCustomSystemID, FormMain.MemGameInfo.eROMIdentification, SystemIcon, FormMain.MemGameInfo.eSoftwareName, FormMain.MemGameInfo.eGameSetStatus, FormMain.MemGameInfo.eIsCustomGame);
+  FormMain.LoadGameIcon(GameIcon, FormMain.MemGameInfo.eIsCustomGame); // load game icon / emucon icon
+
+  if FormMain.MemGameInfo.eIsCustomGame then
+    begin
+      LabelScanMode.Visible:= False;
+      if Is4KMode then
+         LabelEmulatorVersion.Width:= 1600
+      else
+         LabelEmulatorVersion.Width:= 875;
+    end;
+
+  LabelGameTitle.Caption:= FormMain.MemGameInfo.eTitle;
+  LabelEmulatorVersion.Caption:= 'name: '+FormMain.StatusBar_GamesGameName.Caption;
+
+  IsZiNcSystem:= FormMain.MemGameInfo.eSystemID = idZiNc;
+  ZiNcFilePath:= '';
+  LabelScanMode.Caption:= LabelScanMode.Hint+#13#10+aScanMode[FormMain.MemGameInfo.eScanMode];
+
+  SetFormColors(FormGameDetails, TopBar, nil, LabelGameTitle, LabelEmulatorVersion, LabelScanMode, FormMain.MemGameInfo.eGameSetStatus, IsNightMode);
+  SetColorsGameTopBar(FormMain.MemGameInfo.eGameSetStatus, TopBar); // change top bar color based on game set status
+  if IsNightMode then
+     begin
+       SetLabelColors(LabelYear,      clCream, item_caption_active_shadow_color[1]);
+       SetLabelColors(LabelYearValue, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+
+       FormMain.SetEasyListViewColors(ROMsListView, menu_background_color[1], clWhite, -1, clrBorderGroupBoxGrayBk);
+       FormMain.SetEasyListViewHeaderColors(ROMsListView, True, False, Is4KMode, True);
+       FormMain.ELV_SetRibbonNightColors(0, ROMsListView, True);
+       FormMain.SetWin10DarkScrollBar(ROMsListView);
+     end;
+  
+  FormMain.CheckSevenZip(FormMain.MemGameInfo.eSystemID);
+
+  if FormMain.MemGameInfo.eCHDsCount > 0 then
+     begin
+       CHDsAllNoDump:= FormMain.IsROMsListBasedSys(FormMain.MemGameInfo.eSystemID);
+       //if not FormMain.MemGameInfo.eROMsAllNoDump then // this is only for ROMs; CHD files are not included!
+          begin
+            if TEasyGameInfo(FormMain.SelectedEasyItem).eROMInfo <> nil then
+            begin
+              for Loop:=0 to TEasyGameInfo(FormMain.SelectedEasyItem).eROMInfo.Count-1 do
+              begin
+                iROM:= TEasyGameInfo(FormMain.SelectedEasyItem).eROMInfo[Loop];
+                // 12 and higher = CHD files
+                if StrToInt(iROM[1]+iROM[2]) >= 12 then
+                   begin
+                     iSHA1:= SoftListGetEntryValue(iROM, 'sha1');
+                     if iSHA1 = '' then
+                        iSHA1:= SoftListGetEntryValue(iROM, 'md5'); // for old MAME builds
+                     if iSHA1 <> '' then
+                        begin
+                          CHDsAllNoDump:= False;
+                          Break;
+                        end;
+                   end;
+              end;
+            end;
+          end;
+       if not CHDsAllNoDump then
+          begin
+            LeftPanelMinimumTextSize:= 0;
+          end;
+     end;
+     
+  EmuConGameFileName:= '';
+
+  if TEasyGameInfo(FormMain.SelectedEasyItem).eROMInfo <> nil then
+     begin
+       if Assigned(TEasyGameInfo(FormMain.SelectedEasyItem).eDeviceSets) then
+       if TEasyGameInfo(FormMain.SelectedEasyItem).eDeviceSets.Count > 1 then
+          ROMsListView.Header.Columns[4].Visible:= True;
+     end;
+
+  IsSetMissing:= False;
+  if not FormMain.MemGameInfo.eIsCustomGame then
+     begin
+       IsSetMissing:= (FormMain.MemGameInfo.eSystemID <> idDaphne) and (TEasyGameInfo(FormMain.SelectedEasyItem).eROMInfo <> nil) and
+                      FormMain.IsROM_Miss(FormMain.MemGameInfo.eROMIdentification) and (not FormMain.MemGameInfo.eROMsAllNoDump) and
+                      (not FormMain.IsROM_HaveMissROMs(FormMain.MemGameInfo.eGameSetStatus)) and //(not FormMain.MemGameInfo.eROMsAllNoDump) and
+                      //(not FormMain.IsROM_Have(FormMain.MemGameInfo.eGameSetStatus)) and
+                      (FormMain.MemGameInfo.eSoftwareName = '');
+
+       if IsSetMissing then
+       if FileExists(FormMain.GetGamesFolderEL(0)+GetSystemFileName(FormMain.MemGameInfo.eSystemID, 9)) then
+          begin
+            CRC32CollisionFile:= TStringList.Create;
+            CRC32CollisionFile.LoadFromFile(FormMain.GetGamesFolderEL(0)+GetSystemFileName(FormMain.MemGameInfo.eSystemID, 9));
+          end;
+     end;
+  ROMsListView.Width:= 2500;
+  FillGameTree;
+  Application.ProcessMessages;
+  case FormMain.MemGameInfo.eIsCustomGame of
+    True : FillEmuConGameFilesTree;
+    False: FillROMsTree;
+  end;
+
+  if Is4KMode then
+     iSize:= 10
+  else
+     iSize:= 7;
+  if IsSetMissing then
+     begin
+       FreeAndNil(CRC32CollisionFile);
+       FreeAndNil(MissingSetZipContents);
+     end;
+
+  if LeftPanelSize < LeftTextMaxSize then // 198
+     begin
+       if (LeftPanelMinimumTextSize > 0) and (LeftPanelSize < LeftPanelMinimumTextSize) then
+          LeftPanelSize:= LeftPanelMinimumTextSize;
+
+       ROMsListView.Left:= LabelYearValue.Left+LeftPanelSize+6; // 6 for the border
+       FormGameDetails.ClientWidth:= ROMsListView.Left+ROMsListView.Width+iSize; // iSize = 7 for the border (10 for 4K mode)
+     end;
+
+  BottomPos:= LeftPanelLastText+LeftPanelLastTextHeight;
+
+  HeaderSize:= ROMsListView.Header.Height+Ord(ROMsListView.BorderHeaderFix)+ROMsListView.PaintInfoColumn.Border+4;// 2+4; // +4 for the bottom border ?
+  ROMsCount:= ROMsListView.Groups.ItemCount;
+  iROMsHeight:= HeaderSize+(ROMsCount*ROMsListView.CellSizes.Report.Height)+ROMsListView.PaintInfoColumn.Border; // + header border = 2 ???
+  if IsNightMode then
+     Inc(iROMsHeight); // to prevent mouse wheel scroll when scroll bars are not needed
+     
+  if BottomPos < (iROMsHeight+ROMsListView.Top) then
+     BottomPos:= iROMsHeight+ROMsListView.Top;
+
+  if BottomPos > (Screen.Height-100) then
+     BottomPos:= (Screen.Height-100); // prevent form height from being larger than screen height
+
+  ROMsListView.Height:= BottomPos-ROMsListView.Top;
+
+  Inc(BottomPos, 3); // add 4 pixels to the bottom of "FrameROMsListView"
+  ROMsListView.BeginUpdate;
+
+  if ROMsListView.Header.Columns[3].Visible then
+     begin
+       if Is4KMode then
+          iNewWidth:= 50
+       else
+          iNewWidth:= 35;
+
+       ROMsListView.Header.Columns[3].AutoSizeToFit; // file size column
+       if ROMsListView.Header.Columns[3].Width < iNewWidth then
+          ROMsListView.Header.Columns[3].Width:= iNewWidth;
+     end;
+
+  if ROMsListView.Header.Columns[4].Visible then
+     begin
+       if Is4KMode then
+          iNewWidth:= 75
+       else
+          iNewWidth:= 50;
+
+       ROMsListView.Header.Columns[4].AutoSizeToFit; // device column
+       if ROMsListView.Header.Columns[4].Width < iNewWidth then
+          ROMsListView.Header.Columns[4].Width:= iNewWidth;
+     end;
+
+  if Is4KMode then
+     iNewWidth:= 75
+  else
+     iNewWidth:= 50;
+
+  ROMsListView.Header.Columns[5].AutoSizeToFit; // status column
+  if ROMsListView.Header.Columns[5].Width < iNewWidth then
+     ROMsListView.Header.Columns[5].Width:= iNewWidth;
+
+  iNewWidth:= 0;
+  for Loop:=0 to ROMsListView.Header.Columns.Count-1 do
+  begin
+    if ROMsListView.Header.Columns[Loop].Visible then
+       Inc(iNewWidth, ROMsListView.Header.Columns[Loop].Width);
+  end;
+  iNewWidth:= iNewWidth+ROMsListView.PaintInfoColumn.Border;
+
+  if iNewWidth <> ROMsListView.Width then
+     begin
+       ROMsListView.Width:= iNewWidth;
+       FormGameDetails.ClientWidth:= ROMsListView.Left+ROMsListView.Width+iSize; //7;
+
+       LabelGameTitle.Width:= TopBar.Width-LabelGameTitle.Left-iSize; //7;
+       LabelScanMode.Left:= TopBar.Width-(LabelScanMode.Width+iSize); //7);
+     end;
+
+  if ROMsListView.Groups.ItemCount > 0 then
+     ROMsListView.Header.Columns[0].Caption:= 'Name'+Format('%25s', [IntToStr(ROMsListView.Groups.VisibleItemCount)+' files']);
+
+  if ROMsListView.Scrollbars.VertBarVisible then
+     ROMsListView.Header.Columns[0].Width:= ROMsListView.Header.Columns[0].Width-GetSystemMetrics(SM_CXVSCROLL);
+
+  ROMsListView.EndUpdate;
+
+  if Is4KMode then
+     Inc(BottomPos, 7)  // add 7 pixels to make the 10 pixels border
+  else
+     Inc(BottomPos, 4); // add 4 pixels to make the  7 pixels border
+
+  if FormGameDetails.ClientHeight <> BottomPos then
+     FormGameDetails.ClientHeight:= BottomPos;
+
+  CallCenterWindow(FormGameDetails);
 end;
 
 

@@ -4,7 +4,8 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
-  StdCtrls, ButtonsEx, ExtCtrls, EditEx, ShadowLabel, XiTrackBar, PanelEx;
+  StdCtrls, ButtonsEx, ExtCtrls, EditEx, ShadowLabel, XiTrackBar, PanelEx,
+  AdvOfficeButtons;
 
 type
   TFormNightModeRGBQuickEdit = class(TForm)
@@ -20,20 +21,20 @@ type
     NightModeRGBQuickEdit_HexLabel2: TShadowLabel;
     NightModeRGBQuickEdit_ButtonAbort: TBitBtnEx;
     NightModeRGBQuickEdit_ColorSampleLabel: TShadowLabel;
-    NightModeKeysHint2Label: TShadowLabel;
     NightModeRGBQuickEdit_ColorSample_CurrentLabel: TShadowLabel;
     TrackBarColorR: TXiTrackBar;
     TrackBarColorG: TXiTrackBar;
     TrackBarColorB: TXiTrackBar;
-    TrackBarColorR_ButtonDec: TSpeedButtonEx;
-    TrackBarColorR_ButtonInc: TSpeedButtonEx;
-    TrackBarColorG_ButtonDec: TSpeedButtonEx;
-    TrackBarColorG_ButtonInc: TSpeedButtonEx;
-    TrackBarColorB_ButtonDec: TSpeedButtonEx;
-    TrackBarColorB_ButtonInc: TSpeedButtonEx;
+    TrackBarColorR_ButtonDec: TBitBtnEx;
+    TrackBarColorR_ButtonInc: TBitBtnEx;
+    TrackBarColorG_ButtonDec: TBitBtnEx;
+    TrackBarColorG_ButtonInc: TBitBtnEx;
+    TrackBarColorB_ButtonDec: TBitBtnEx;
+    TrackBarColorB_ButtonInc: TBitBtnEx;
     NightModeRGBQuickEdit_ColorSample: TPanelEx;
     NightModeRGBQuickEdit_ColorSample_Current: TPanelEx;
     NightModeRGBQuickEdit_HexLabel: TShadowLabel;
+    LockSliders: TAdvOfficeCheckBoxEx;
     procedure NightModeRGBQuickEdit_RedKeyPress(Sender: TObject;
       var Key: Char);
     procedure NightModeRGBQuickEdit_RedChange(Sender: TObject);
@@ -48,6 +49,7 @@ type
   private
     { Private declarations }
     procedure NightModeRGBQuickEdit_ChangeColorSample;
+    procedure LockSliderMove(SliderSource, Slider2, Slider3: TXiTrackBar);
   public
     { Public declarations }
   end;
@@ -61,25 +63,25 @@ implementation
 
 procedure TFormNightModeRGBQuickEdit.NightModeRGBQuickEdit_ChangeColorSample;
 var
-  R, G, B: Byte;
+  Red, Green, Blue: Byte;
 begin
   if NightModeRGBQuickEdit_Red.Text <> '' then
-     R:= StrToInt(NightModeRGBQuickEdit_Red.Text)
+     Red:= StrToInt(NightModeRGBQuickEdit_Red.Text)
   else
-     R:= 0; // set it to black
+     Red:= 0; // set it to black
 
   if NightModeRGBQuickEdit_Green.Text <> '' then
-     G:= StrToInt(NightModeRGBQuickEdit_Green.Text)
+     Green:= StrToInt(NightModeRGBQuickEdit_Green.Text)
   else
-     G:= 0; // set it to black
+     Green:= 0; // set it to black
 
   if NightModeRGBQuickEdit_Blue.Text <> '' then
-     B:= StrToInt(NightModeRGBQuickEdit_Blue.Text)
+     Blue:= StrToInt(NightModeRGBQuickEdit_Blue.Text)
   else
-     B:= 0; // set it to black
+     Blue:= 0; // set it to black
 
-  NightModeRGBQuickEdit_ColorSample.Color1:= RGB(R, G, B);
-  NightModeRGBQuickEdit_HexLabel.Caption:= Format('%.2x%.2x%.2x', [R, G, B]);
+  NightModeRGBQuickEdit_ColorSample.Color1:= RGB(Red, Green, Blue);
+  NightModeRGBQuickEdit_HexLabel.Caption:= Format('%.2x%.2x%.2x', [Red, Green, Blue]);
 end;
 
 procedure TFormNightModeRGBQuickEdit.NightModeRGBQuickEdit_RedKeyPress(
@@ -107,24 +109,24 @@ begin
           iNumber:= 255;
           
        if TEditEx(Sender).Text <> IntToStr(iNumber) then
-          TEditEx(Sender).Text:= IntToStr(iNumber);
+          TEditEx(Sender).Text:=  IntToStr(iNumber);
 
        if TEditEx(Sender).Name = 'NightModeRGBQuickEdit_Red' then
           begin
             if TrackBarColorR.Position <> iNumber then
-               TrackBarColorR.Position:= iNumber;
+               TrackBarColorR.Position:=  iNumber;
           end
        else
        if TEditEx(Sender).Name = 'NightModeRGBQuickEdit_Green' then
           begin
             if TrackBarColorG.Position <> iNumber then
-               TrackBarColorG.Position:= iNumber
+               TrackBarColorG.Position:=  iNumber
           end
        else
        if TEditEx(Sender).Name = 'NightModeRGBQuickEdit_Blue' then
           begin
             if TrackBarColorB.Position <> iNumber then
-               TrackBarColorB.Position:= iNumber;
+               TrackBarColorB.Position:=  iNumber;
           end;
 
        NightModeRGBQuickEdit_ChangeColorSample;
@@ -145,40 +147,48 @@ begin
      end;
 end;
 
+procedure TFormNightModeRGBQuickEdit.LockSliderMove(SliderSource, Slider2, Slider3: TXiTrackBar);
+begin
+  if not LockSliders.Checked then
+     Exit;
+
+
+end;
+
 procedure TFormNightModeRGBQuickEdit.TrackBarColorRChange(Sender: TObject);
 begin
   if NightModeRGBQuickEdit_Red.Text <> IntToStr(TrackBarColorR.Position) then
-     NightModeRGBQuickEdit_Red.Text:= IntToStr(TrackBarColorR.Position);
+     NightModeRGBQuickEdit_Red.Text:=  IntToStr(TrackBarColorR.Position);
 end;
 
 procedure TFormNightModeRGBQuickEdit.TrackBarColorGChange(Sender: TObject);
 begin
   if NightModeRGBQuickEdit_Green.Text <> IntToStr(TrackBarColorG.Position) then
-     NightModeRGBQuickEdit_Green.Text:= IntToStr(TrackBarColorG.Position);
+     NightModeRGBQuickEdit_Green.Text:=  IntToStr(TrackBarColorG.Position);
 end;
 
 procedure TFormNightModeRGBQuickEdit.TrackBarColorBChange(Sender: TObject);
 begin
   if NightModeRGBQuickEdit_Blue.Text <> IntToStr(TrackBarColorB.Position) then
-     NightModeRGBQuickEdit_Blue.Text:= IntToStr(TrackBarColorB.Position);
+     NightModeRGBQuickEdit_Blue.Text:=  IntToStr(TrackBarColorB.Position);
 end;
 
 procedure TFormNightModeRGBQuickEdit.TrackBarColorR_ButtonDecClick(
   Sender: TObject);
 begin
-  TrackBarColorR.Position:= TrackBarColorR.Position+TSpeedButtonEx(Sender).Tag;
+  TrackBarColorR.Position:= TrackBarColorR.Position+TBitBtnEx(Sender).Tag;
 end;
 
 procedure TFormNightModeRGBQuickEdit.TrackBarColorG_ButtonDecClick(
   Sender: TObject);
 begin
-  TrackBarColorG.Position:= TrackBarColorG.Position+TSpeedButtonEx(Sender).Tag;
+  TrackBarColorG.Position:= TrackBarColorG.Position+TBitBtnEx(Sender).Tag;
 end;
 
 procedure TFormNightModeRGBQuickEdit.TrackBarColorB_ButtonDecClick(
   Sender: TObject);
 begin
-  TrackBarColorB.Position:= TrackBarColorB.Position+TSpeedButtonEx(Sender).Tag;
+  TrackBarColorB.Position:= TrackBarColorB.Position+TBitBtnEx(Sender).Tag;
 end;
 
 end.

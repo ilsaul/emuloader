@@ -24,7 +24,7 @@ object FormGameDetails: TFormGameDetails
   object LabelYear: TShadowLabel
     Left = 6
     Top = 89
-    Width = 28
+    Width = 25
     Height = 16
     Caption = 'Year'
     Font.Charset = ANSI_CHARSET
@@ -45,7 +45,7 @@ object FormGameDetails: TFormGameDetails
   object LabelYearValue: TShadowLabel
     Left = 93
     Top = 89
-    Width = 35
+    Width = 32
     Height = 16
     Caption = 'Year 8'
     Font.Charset = ANSI_CHARSET
@@ -144,14 +144,14 @@ object FormGameDetails: TFormGameDetails
       Layout = tlCenter
     end
     object LabelScanMode: TShadowLabel
-      Left = 841
+      Left = 871
       Top = 45
-      Width = 118
+      Width = 88
       Height = 29
       Hint = 'Scan Mode'
       Alignment = taRightJustify
       AutoSize = False
-      Caption = 'Scan Mode'#13#10'Force Game Available'
+      Caption = 'Scan Mode'#13#10'Force Available'
       Font.Charset = ANSI_CHARSET
       Font.Color = 10900224
       Font.Height = -12
@@ -169,110 +169,95 @@ object FormGameDetails: TFormGameDetails
       WordWrap = True
     end
   end
-  object FrameROMsListView: TPanelEx
+  object ROMsListView: TEasyListview
+    Tag = 1
     Left = 298
     Top = 89
     Width = 780
     Height = 490
-    Color1 = 15856113
-    Color2 = 1
-    Color3 = 7891291
-    Color4 = 16750899
-    ColorFrame = clSilver
-    ColorInnerFrame = 7891291
-    Frames = [frLeft, frTop, frRight, frBottom]
-    ParentBackground = False
-    Style = vgSolid
-    object ROMsListView: TEasyListview
-      Tag = 1
-      Left = 1
-      Top = 2
-      Width = 778
-      Height = 486
-      BackGround.Enabled = True
-      BorderStyle = bsNone
-      CellSizes.Report.Height = 22
-      Color = clWhite
-      EditManager.Font.Charset = ANSI_CHARSET
-      EditManager.Font.Color = clBlack
-      EditManager.Font.Height = -12
-      EditManager.Font.Name = 'Segoe UI'
-      EditManager.Font.Style = []
-      ImagesState = FormMain.IL_LeftPanel
-      UseDockManager = False
-      Font.Charset = ANSI_CHARSET
-      Font.Color = clBlack
-      Font.Height = -12
-      Font.Name = 'Segoe UI'
-      Font.Style = []
-      GroupFont.Charset = ANSI_CHARSET
-      GroupFont.Color = clBlack
-      GroupFont.Height = -12
-      GroupFont.Name = 'Segoe UI'
-      GroupFont.Style = []
-      HintType = ehtToolTip
-      Header.Columns.Items = {
-        0600000006000000110000005445617379436F6C756D6E53746F726564FFFECE
-        00060000008008000101000100000000000001BE000000FFFFFF1F0001000000
-        01000000040000004E0061006D00650000000000000000000000000011000000
-        5445617379436F6C756D6E53746F726564FFFECE000600000080080001010001
-        0100000000000140000000FFFFFF1F0001000000010000000500000043005200
-        430033003200000000000000000000000000110000005445617379436F6C756D
-        6E53746F726564FFFECE00060000008008000101000102000000000001200100
-        00FFFFFF1F000100000001000000050000005300480041002D00310000000000
-        0000000000000000110000005445617379436F6C756D6E53746F726564FFFECE
-        0006000000800800010100010300000000000173000000FFFFFF1F0001000000
-        0100000004000000530069007A00650000000000000000000000000011000000
-        5445617379436F6C756D6E53746F726564FFFECE000600000080000001010001
-        0400000000000178000000FFFFFF1F0001000000010000000600000044006500
-        7600690063006500000000000000000000000000110000005445617379436F6C
-        756D6E53746F726564FFFECE0006000000800800010100010500000000000178
-        000000FFFFFF1F00010000000100000006000000530074006100740075007300
-        000000000000000000000000}
-      Header.Draggable = False
-      Header.Font.Charset = ANSI_CHARSET
-      Header.Font.Color = clBlack
-      Header.Font.Height = -12
-      Header.Font.Name = 'Segoe UI'
-      Header.Font.Style = []
-      Header.Height = 23
-      Header.Sizeable = False
-      Header.Visible = True
-      ImagesSmall = FormMain.IL_LeftPanel
-      PaintInfoColumn.Border = 2
-      PaintInfoColumn.CaptionIndent = 0
-      PaintInfoGroup.Expandable = False
-      PaintInfoGroup.MarginBottom.CaptionIndent = 4
-      PaintInfoItem.BorderColor = 16370824
-      PaintInfoItem.ShowBorder = False
-      ParentFont = False
-      ParentShowHint = False
-      ShowThemedBorder = False
-      ShowHint = True
-      Selection.BlendColorSelRect = 10902593
-      Selection.BlendIcon = False
-      Selection.BorderColor = 10902593
-      Selection.BorderColorSelRect = 10902593
-      Selection.Color = 10902593
-      Selection.FullCellPaint = True
-      Selection.FullItemPaint = True
-      Selection.FullRowSelect = True
-      Selection.GradientColorBottom = 16506264
-      Selection.GradientColorTop = 15582647
-      Selection.InactiveBorderColor = 10902593
-      Selection.InactiveColor = 15582647
-      Selection.MouseButton = [cmbLeft, cmbRight]
-      Selection.RoundRectRadius = 2
-      Selection.TextColor = clBlack
-      Selection.UseFocusRect = False
-      TabOrder = 0
-      View = elsReport
-      CustomCheckRadioEnabled = False
-      OnColumnClick = ROMsListViewColumnClick
-      OnItemCompare = ROMsListViewItemCompare
-      OnItemPaintText = ROMsListViewItemPaintText
-      OnItemSelectionChanged = ROMsListViewItemSelectionChanged
-    end
+    BackGround.Enabled = True
+    BorderStyle = bsNone
+    CellSizes.Report.Height = 22
+    Color = clWhite
+    EditManager.Font.Charset = ANSI_CHARSET
+    EditManager.Font.Color = clBlack
+    EditManager.Font.Height = -12
+    EditManager.Font.Name = 'Segoe UI'
+    EditManager.Font.Style = []
+    ImagesState = FormMain.IL_LeftPanel
+    UseDockManager = False
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clBlack
+    Font.Height = -12
+    Font.Name = 'Segoe UI'
+    Font.Style = []
+    GroupFont.Charset = ANSI_CHARSET
+    GroupFont.Color = clBlack
+    GroupFont.Height = -12
+    GroupFont.Name = 'Segoe UI'
+    GroupFont.Style = []
+    HintType = ehtToolTip
+    Header.Columns.Items = {
+      0600000006000000110000005445617379436F6C756D6E53746F726564FFFECE
+      00060000008008000101000100000000000001BE000000FFFFFF1F0001000000
+      01000000040000004E0061006D00650000000000000000000000000011000000
+      5445617379436F6C756D6E53746F726564FFFECE000600000080080001010001
+      0100000000000140000000FFFFFF1F0001000000010000000500000043005200
+      430033003200000000000000000000000000110000005445617379436F6C756D
+      6E53746F726564FFFECE00060000008008000101000102000000000001200100
+      00FFFFFF1F000100000001000000050000005300480041002D00310000000000
+      0000000000000000110000005445617379436F6C756D6E53746F726564FFFECE
+      0006000000800800010100010300000000000173000000FFFFFF1F0001000000
+      0100000004000000530069007A00650000000000000000000000000011000000
+      5445617379436F6C756D6E53746F726564FFFECE000600000080000001010001
+      0400000000000178000000FFFFFF1F0001000000010000000600000044006500
+      7600690063006500000000000000000000000000110000005445617379436F6C
+      756D6E53746F726564FFFECE0006000000800800010100010500000000000178
+      000000FFFFFF1F00010000000100000006000000530074006100740075007300
+      000000000000000000000000}
+    Header.Draggable = False
+    Header.Font.Charset = ANSI_CHARSET
+    Header.Font.Color = clBlack
+    Header.Font.Height = -12
+    Header.Font.Name = 'Segoe UI'
+    Header.Font.Style = []
+    Header.Height = 23
+    Header.Sizeable = False
+    Header.Visible = True
+    ImagesSmall = FormMain.IL_LeftPanel
+    PaintInfoColumn.Border = 2
+    PaintInfoColumn.CaptionIndent = 0
+    PaintInfoGroup.Expandable = False
+    PaintInfoGroup.MarginBottom.CaptionIndent = 4
+    PaintInfoItem.BorderColor = 16370824
+    PaintInfoItem.ShowBorder = False
+    ParentFont = False
+    ParentShowHint = False
+    ShowHint = True
+    Selection.BlendColorSelRect = 10902593
+    Selection.BlendIcon = False
+    Selection.BorderColor = 10902593
+    Selection.BorderColorSelRect = 10902593
+    Selection.Color = 10902593
+    Selection.FullCellPaint = True
+    Selection.FullItemPaint = True
+    Selection.FullRowSelect = True
+    Selection.GradientColorBottom = 16506264
+    Selection.GradientColorTop = 15582647
+    Selection.InactiveBorderColor = 10902593
+    Selection.InactiveColor = 15582647
+    Selection.MouseButton = [cmbLeft, cmbRight]
+    Selection.RoundRectRadius = 2
+    Selection.TextColor = clBlack
+    Selection.UseFocusRect = False
+    TabOrder = 1
+    View = elsReport
+    CustomCheckRadioEnabled = False
+    CustomEnableIconHD = False
+    OnColumnClick = ROMsListViewColumnClick
+    OnItemCompare = ROMsListViewItemCompare
+    OnItemPaintText = ROMsListViewItemPaintText
+    OnItemSelectionChanged = ROMsListViewItemSelectionChanged
   end
   object IL_FileType: TImageList
     Left = 248

@@ -85,10 +85,12 @@ type
     IconHardDiskDriveReset: TImage;
     EmuHardDiskDriveParameter: TEditEx;
     EmuHardDiskDriveParameter2: TEditEx;
-    BitBtn1: TBitBtnEx;
     PanelSystemTitle: TPanelEx;
     LabelSystemTitle: TShadowLabel;
     LabelSystemType: TShadowLabel;
+    IconSystemType: TImage;
+    VirtualDriveFileNotFoundIcon: TImage;
+    EmuFileNotFoundIcon: TImage;
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure EmulatorFileChange(Sender: TObject);
     procedure EmuDescriptionChange(Sender: TObject);
@@ -123,7 +125,6 @@ type
     procedure IconCartridgeResetClick(Sender: TObject);
     procedure EmuHardDiskDriveParameterChange(Sender: TObject);
     procedure EmuHardDiskDriveParameter2Change(Sender: TObject);
-    procedure BitBtn1Click(Sender: TObject);
     procedure SystemsItemPaintText(Sender: TCustomEasyListview;
       Item: TEasyItem; Position: Integer; ACanvas: TCanvas);
     procedure SystemsItemImageDraw(Sender: TCustomEasyListview;
@@ -178,6 +179,7 @@ type
     procedure InitializeEmulatorVariablesTemp;
     procedure ToggleControls(const sysID: Integer);
     procedure UpdateEmulatorInfo;
+    procedure Resize4K;
   public
     { Public declarations }
   end;
@@ -190,6 +192,166 @@ implementation
 uses uMain;
 
 {$R *.dfm}
+
+procedure TFormConsCompEmulatorsSetup.Resize4K;
+var
+  iSystemsWidth, iSystemsHeight, iIndex: Integer;
+
+  function Set4KMediaControls(iTop: Integer; iIconMedia: TImage; iLabelMediaTitle, iLabelParam1, iLabelParam2: TShadowLabel;
+                              iEditParam1, iEditParam2: TEditEx; iIconReset: TImage): Boolean;
+  begin
+    Result:= True;
+    FormMain.Set4KImageIconSpecs(iIconMedia, 32, 10, iTop);
+    FormMain.Set4KLabelSpecs(iLabelMediaTitle, 50, iTop, -1, -1, 16);
+    FormMain.Set4KLabelFontNameSpecs(iLabelMediaTitle);
+
+    FormMain.Set4KEditSpecs(iEditParam1, 89, iTop+35, 901, 36, 16);
+    FormMain.Set4KEditFontNameSpecs(iEditParam1);
+    FormMain.Set4KLabelSpecs(iLabelParam1, 10, iEditParam1.Top+3, -1, -1, 16);
+    FormMain.Set4KLabelFontNameSpecs(iLabelParam1);
+
+    FormMain.Set4KEditSpecs(iEditParam2, 89, iEditParam1.Top+45, 901, 36, 16);
+    FormMain.Set4KEditFontNameSpecs(iEditParam2);
+    FormMain.Set4KLabelSpecs(iLabelParam2, 10, iEditParam2.Top+3, -1, -1, 16);
+    FormMain.Set4KLabelFontNameSpecs(iLabelParam2);
+
+    FormMain.Set4KImageIconSpecs(iIconReset, 32, 901, iTop-1);
+  end;
+
+  function Set4KPageButton(iSpeedButton, iPrevButton: TSpeedButtonEx): Boolean;
+  var
+    bLeft: Integer;
+  begin
+    Result:= True;
+    if iPrevButton <> nil then
+       bLeft:= iPrevButton.Left+iPrevButton.Width-1
+    else
+       bLeft:= 10;
+    FormMain.Set4KButtonSpecs(iSpeedButton, bLeft, iIndex, 168, 37, 16);
+
+    if iPrevButton = nil then
+       begin
+         iSpeedButton.Top:= iIndex-6;
+         iSpeedButton.Height:= 44;
+       end;
+  end;
+
+  function Set4KAppIconExec(iTop: Integer; iBevel: TBevelEx; iIconExec: TImage; iExecTitle: TShadowLabel; iExecEdit: TEditEx; iExecEditWidth: Integer;
+                            iExecSelectButton: TBitBtnEx; iIconExecNotFound: TImage): Boolean;
+  begin
+    Result:= True;
+    iBevel.Left:= 10;
+    iBevel.Top:= iTop;
+    iBevel.Width:= 50;
+    iBevel.Height:= 50;
+    FormMain.Set4KImageIconSpecs(iIconExec, 48, 11, iTop+1);
+
+    FormMain.Set4KLabelSpecs(iExecTitle, 97, iTop-21, -1, -1, 16);
+    FormMain.Set4KLabelFontNameSpecs(iExecTitle);
+
+    FormMain.Set4KEditSpecs(iExecEdit, 89, iExecTitle.Top+35, iExecEditWidth, 36, 16);
+    FormMain.Set4KEditFontNameSpecs(iExecEdit);
+
+    FormMain.Set4KButtonSpecs(iExecSelectButton, iExecEdit.Left+iExecEdit.Width+5, iExecEdit.Top, 89, 36, 16);
+    FormMain.Set4KImageIconSpecs(iIconExecNotFound, 32, iExecEdit.Left+iExecEdit.Width-32, iExecTitle.Top);
+  end;
+
+begin
+  if not Is4KMode then
+     Exit;
+
+  with FormConsCompEmulatorsSetup do
+  begin
+    FormMain.Set4KImageListSpecs(IL_Systems, 128);
+    FormMain.Set4KImageListSpecs(IL_EmulatorIcon, 48);
+
+    FormMain.Set4KConsoleComputerSysPanel(Systems, PanelSystemTitle, IconSystemType, LabelSystemType, LabelSystemTitle, PanelEmulators, iSystemsWidth, iSystemsHeight);
+
+    ClientWidth:=  iSystemsWidth+PanelEmulators.Width;
+    ClientHeight:= iSystemsHeight;
+    Font.Size:= 16;
+
+    // Virtual drive executable
+    Set4KAppIconExec(32, VirtualDriveIconFrame, VirtualDriveIcon, LabelDaemonToolsFile, DaemonToolsFile, 768, ButtonSelectDaemonTools, VirtualDriveFileNotFoundIcon);
+    FormMain.Set4KButtonSpecs(ButtonDaemonToolsHelp, ButtonSelectDaemonTools.Left+ButtonSelectDaemonTools.Width+3, ButtonSelectDaemonTools.Top, 36, 36, 16);
+
+    // Virtual driver mount/unmount parameters
+    FormMain.Set4KLabelSpecs(LabelDaemonToolsMount, 18, DaemonToolsFile.Top+47, -1, -1, 16);
+    FormMain.Set4KLabelFontNameSpecs(LabelDaemonToolsMount);
+
+    FormMain.Set4KEditSpecs(DaemonToolsMount, 10, LabelDaemonToolsMount.Top+35, 486, 36, 16);
+    FormMain.Set4KEditFontNameSpecs(DaemonToolsMount);
+
+    FormMain.Set4KLabelSpecs(LabelDaemonToolsUnmount, 512, LabelDaemonToolsMount.Top, -1, -1, 16);
+    FormMain.Set4KLabelFontNameSpecs(LabelDaemonToolsUnmount);
+
+    FormMain.Set4KEditSpecs(DaemonToolsUnmount, 504, LabelDaemonToolsUnmount.Top+35, 486, 36, 16);
+    FormMain.Set4KEditFontNameSpecs(DaemonToolsUnmount);
+
+    // Emulator page buttons
+    PageButtonsBottomLine.Left:= 2;
+    PageButtonsBottomLine.Top:= 236;
+    PageButtonsBottomLine.Width:= PanelEmulators.Width-4;
+
+    FormMain.Set4KButtonSpecs(Emulator1PageButton,  10, 193, 168, 45, 16);
+    FormMain.Set4KButtonSpecs(Emulator2PageButton, 178, 202, 168, 36, 16);
+    FormMain.Set4KButtonSpecs(Emulator3PageButton, 346, 202, 168, 36, 16);
+    FormMain.Set4KButtonSpecs(Emulator4PageButton, 514, 202, 168, 36, 16);
+
+    iIndex:= DaemonToolsMount.Top+73; // 38 pixels space between
+    //Set4KPageButton(Emulator1PageButton, nil);
+    //Set4KPageButton(Emulator2PageButton, Emulator1PageButton);
+    //Set4KPageButton(Emulator3PageButton, Emulator2PageButton);
+    //Set4KPageButton(Emulator4PageButton, Emulator3PageButton);
+    FormMain.Set4KButtonSpecs(ButtonClearEmulator, PanelEmulators.Width-68-10, PageButtonsBottomLine.Top-19, 68, 36, 16);
+
+    // Emulator Executable
+    Set4KAppIconExec(PageButtonsBottomLine.Top+51, EmuIconFrame, EmuIcon, LabelEmulatorFile, EmulatorFile, 807, ButtonSelectEmulator, EmuFileNotFoundIcon);
+    FormMain.Set4KEditSpecs(EmuDescription, 89, EmulatorFile.Top+45, 901, 36, 16);
+    FormMain.Set4KEditFontNameSpecs(EmuDescription);
+    FormMain.Set4KLabelSpecs(LabelEmuTitle, 10, EmuDescription.Top+3, -1, -1, 16);
+    FormMain.Set4KLabelFontNameSpecs(LabelEmuTitle);
+
+    // Cartridge parameters
+    Set4KMediaControls(EmuDescription.Top+EmuDescription.Height+35, IconCartridge, LabelEmuCartridgeParameter,
+                       LabelEmuCartridgeParameter1, LabelEmuCartridgeParameter2,
+                       EmuCartridgeParameter, EmuCartridgeParameter2, IconCartridgeReset);
+
+    // Disc Image parameters
+    Set4KMediaControls(EmuCartridgeParameter2.Top+EmuCartridgeParameter2.Height+35, IconDiscImage, LabelEmuDiscImageParameter,
+                       LabelEmuDiscImageParameter1, LabelEmuDiscImageParameter2,
+                       EmuDiscImageParameter, EmuDiscImageParameter2, IconDiscImageReset);
+
+    // Disc Image parameters
+    Set4KMediaControls(EmuDiscImageParameter2.Top+EmuDiscImageParameter2.Height+35, IconBootDisc, LabelEmuBootDiscParameter,
+                       LabelEmuBootDiscParameter1, LabelEmuBootDiscParameter2,
+                       EmuBootDiscParameter, EmuBootDiscParameter2, IconBootDiscReset);
+
+    // Floppy Disk parameters
+    Set4KMediaControls(EmuBootDiscParameter2.Top+EmuBootDiscParameter2.Height+35, IconFloppyDisk, LabelEmuFloppyDiskParameter,
+                       LabelEmuFloppyDiskParameter1, LabelEmuFloppyDiskParameter2,
+                       EmuFloppyDiskParameter, EmuFloppyDiskParameter2, IconFloppyDiskReset);
+
+    // Cassette Tape parameters
+    Set4KMediaControls(EmuFloppyDiskParameter2.Top+EmuFloppyDiskParameter2.Height+35, IconCassetteTape, LabelEmuCassetteTapeParameter,
+                       LabelEmuCassetteTapeParameter1, LabelEmuCassetteTapeParameter2,
+                       EmuCassetteTapeParameter, EmuCassetteTapeParameter2, IconCassetteTapeReset);
+
+    // Hard Disk Drive parameters
+    Set4KMediaControls(EmuCassetteTapeParameter2.Top+EmuCassetteTapeParameter2.Height+35, IconHardDiskDrive, LabelEmuHardDiskDriveParameter,
+                       LabelEmuHardDiskDriveParameter1, LabelEmuHardDiskDriveParameter2,
+                       EmuHardDiskDriveParameter, EmuHardDiskDriveParameter2, IconHardDiskDriveReset);
+    
+    // Bottom panel
+    PanelBottom.Height:= 71;
+    PanelBottom.Frames:= [];
+
+    FormMain.Set4KButtonSpecs(ButtonSelectFolders,                      10, 16, 268, 45, 16);
+    FormMain.Set4KButtonSpecs(ButtonCancel,       PanelBottom.Width-168-10, 16, 168, 45, 16);
+    FormMain.Set4KButtonSpecs(ButtonOk,           ButtonCancel.Left-168-10, 16, 168, 45, 16);
+    FormMain.Set4KButtonSpecs(ButtonInstructions,      ButtonOk.Left-89-10, 16,  89, 45, 16);
+  end;
+end;
 
 function TFormConsCompEmulatorsSetup.GetEmuNameParametersIni(sysID, MediaTypeID: Integer; const EmulatorFileName: String; var KeysListHolder: TStringList; CheckDefaultIni: Boolean): String;
 var
@@ -632,7 +794,7 @@ procedure TFormConsCompEmulatorsSetup.ToggleControls(const sysID: Integer);
                  ParameterEdit1, ParameterEdit2: TEditEx);
   begin
     IconImgDest.Visible:= ctrlEnabled;
-    IconDefaultParamDest.Visible:= ctrlEnabled; // disabled for now... enable for a future expansion maybe ???
+    IconDefaultParamDest.Visible:= ctrlEnabled;
     LabelMediaType.Enabled:= ctrlEnabled;
     LabelParameter1.Enabled:= ctrlEnabled;
     LabelParameter2.Enabled:= ctrlEnabled;
@@ -708,6 +870,7 @@ begin
   EmuHardDiskDriveParameter2.Clear;
   EmuIcon.Picture.Icon:= nil;
   EmuIconFrame.Visible:= not IsNightMode;
+  EmuFileNotFoundIcon.Visible:= False;
 end;
 
 procedure TFormConsCompEmulatorsSetup.ButtonSelectEmulatorClick(Sender: TObject);
@@ -733,10 +896,11 @@ begin
        EmuIconFrame.Visible:= True;
        Exit;
      end;
-  Result:= GetAppIcon(newEmulatorFileCustom[sysID, EmulatorIndex], IL_EmulatorIcon, 2);
+  Result:= GetAppIcon(newEmulatorFileCustom[sysID, EmulatorIndex], IL_EmulatorIcon, 32, 2);
   if Result = -1 then
      Result:= 0+(Ord(FormMain.IsExeBatchFile(newEmulatorFileCustom[sysID, EmulatorIndex])));
   IL_EmulatorIcon.GetIcon(Result, EmuIcon.Picture.Icon);
+
   EmuIconFrame.Visible:= False;
 end;
 
@@ -747,10 +911,13 @@ begin
        Result:= -1; // emulator not defined, icon is NIL
        VirtualDriveIcon.Picture.Icon:= nil;
        VirtualDriveIconFrame.Visible:= True;
+       VirtualDriveFileNotFoundIcon.Visible:= False;
        Exit;
-     end;
+     end
+  else
+     VirtualDriveFileNotFoundIcon.Visible:= not FileExists2(vtFileName);
 
-  Result:= GetAppIcon(vtFileName, IL_EmulatorIcon, 3);
+  Result:= GetAppIcon(vtFileName, IL_EmulatorIcon, 32, 3); //Result:= GetAppIcon (vtFileName, IL_EmulatorIcon, 3);
   if Result = -1 then
      begin
        VirtualDriveIcon.Picture.Icon:= nil;
@@ -766,16 +933,30 @@ end;
 procedure TFormConsCompEmulatorsSetup.SetResetParameterIcon(IconHolder: TImage; ButtonPressed: Boolean = False);
 begin
   IconHolder.Picture.Icon:= nil;
-  if ButtonPressed then
-     FormMain.IL_MenuPopup.GetIcon(15, IconHolder.Picture.Icon, dsSelected, itImage)
-  else
-     FormMain.IL_MenuPopup.GetIcon(15, IconHolder.Picture.Icon);
+  case Is4KMode of //FormMain.Menu4KMode2160pEnable.Checked of
+    True:
+      begin
+        if ButtonPressed then
+           FormMain.IL_Misc_Large.GetIcon(05, IconHolder.Picture.Icon, dsSelected, itImage)
+        else
+           FormMain.IL_Misc_Large.GetIcon(05, IconHolder.Picture.Icon);
+      end;
+    False:
+      begin
+        if ButtonPressed then
+           FormMain.IL_MenuPopup.GetIcon(15, IconHolder.Picture.Icon, dsSelected, itImage)
+        else
+           FormMain.IL_MenuPopup.GetIcon(15, IconHolder.Picture.Icon);
+      end;
+  end;
 end;
 
 procedure TFormConsCompEmulatorsSetup.ResizeForm;
 var
   iDiff, iScreenWidth, iScreenHeight: Integer;
 begin
+  if Is4KMode then //FormMain.Menu4KMode2160pEnable.Checked then
+     Exit;
   iScreenWidth:= Screen.Width;
   iScreenHeight:= Screen.Height;
 
@@ -811,8 +992,12 @@ begin
          PanelSystemTitle.Width:= PanelEmulators.Left-PanelSystemTitle.Left;
        end;
 
-    LabelSystemType.Left:= (PanelSystemTitle.Width-LabelSystemType.Width) div 2;
+    IconSystemType.Left:= PanelSystemTitle.Width-(IconSystemType.Width+4+LabelSystemType.Width) div 2;
+    LabelSystemType.Left:= IconSystemType.Left+4;
+    LabelSystemType.Top:= IconSystemType.Top-1;
+    //LabelSystemType.Left:= ((PanelSystemTitle.Width-LabelSystemType.Width) div 2)+24;
     LabelSystemTitle.Left:= (PanelSystemTitle.Width-LabelSystemTitle.Width) div 2;
+
   end;
 
   if iScreenHeight < 720 then
@@ -828,12 +1013,16 @@ begin
        PanelEmulators.Left:= PanelEmulators.Left+(Systems.CellSizes.Icon.Width);
        PanelEmulators.Height:= PanelEmulators.Height-iDiff;
 
-       LabelSystemType.Top:= LabelSystemType.Top-9;
+       LabelSystemType.Top:= LabelSystemType.Top-10;
+       IconSystemType.Top:= LabelSystemType.Top+1;
        LabelSystemTitle.Top:= LabelSystemTitle.Top-9;
        PanelSystemTitle.Width:= PanelEmulators.Left;
        PanelSystemTitle.Height:= Systems.Height-PanelSystemTitle.Top;
        LabelSystemTitle.Width:= PanelEmulators.Left-1;
-       LabelSystemType.Left:= (PanelSystemTitle.Width-LabelSystemType.Width) div 2;
+
+       IconSystemType.Left:= PanelSystemTitle.Width-(IconSystemType.Width+4+LabelSystemType.Width) div 2;
+       LabelSystemType.Left:= IconSystemType.Left+4;
+       //LabelSystemType.Left:= ((PanelSystemTitle.Width-LabelSystemType.Width) div 2)+24;
        LabelSystemTitle.Left:= (PanelSystemTitle.Width-LabelSystemTitle.Width) div 2;
        PanelBottom.Align:= alNone;
        PanelBottom.Top:= PanelBottom.Top+5;
@@ -845,7 +1034,18 @@ procedure TFormConsCompEmulatorsSetup.FormShow(Sender: TObject);
 var
   Loop: Integer;
 begin
+  Resize4K;
   ResizeForm;
+  if Is4KMode then
+     begin
+       FormMain.IL_Misc_Large.GetIcon(7, VirtualDriveFileNotFoundIcon.Picture.Icon);
+       FormMain.IL_Misc_Large.GetIcon(7, EmuFileNotFoundIcon.Picture.Icon);
+     end
+  else
+     begin
+       FormMain.IL_MenuPopup.GetIcon(31, VirtualDriveFileNotFoundIcon.Picture.Icon);
+       FormMain.IL_MenuPopup.GetIcon(31, EmuFileNotFoundIcon.Picture.Icon);
+     end;
 
   FormMain.ELV_ResetNormalColors(Systems);
   if IsNightMode then
@@ -948,6 +1148,7 @@ begin
   GetExtIcon('.exe', IL_EmulatorIcon); // virtual drive executable files
 
   FormMain.LoadNonArcadeSystemIcons(IL_Systems, False);
+  FormMain.ShowIconErrorMessage;
 
   EmuParametersCustom:= TMemIniFile.Create(GetEmuParametersFile);
   if EmuParametersCustom.SectionExists('Emulator Title') then
@@ -965,7 +1166,6 @@ begin
 
   ELV_PopulateCustomSystems(Systems, FormMain.GetSystemIDGamesList(True), -1, True);
 
-  // for a future expansion maybe ??? it will not be enabled for now
   SetResetParameterIcon(IconCartridgeReset);
   SetResetParameterIcon(IconDiscImageReset);
   SetResetParameterIcon(IconBootDiscReset);
@@ -973,12 +1173,27 @@ begin
   SetResetParameterIcon(IconCassetteTapeReset);
   SetResetParameterIcon(IconHardDiskDriveReset);
 
-  FormMain.IL_LeftPanel.GetIcon(16, IconCartridge.Picture.Icon);
-  FormMain.IL_LeftPanel.GetIcon(20, IconDiscImage.Picture.Icon);
-  FormMain.IL_LeftPanel.GetIcon(20, IconBootDisc.Picture.Icon);
-  FormMain.IL_LeftPanel.GetIcon(17, IconFloppyDisk.Picture.Icon);
-  FormMain.IL_LeftPanel.GetIcon(18, IconCassetteTape.Picture.Icon);
-  FormMain.IL_LeftPanel.GetIcon(22, IconHardDiskDrive.Picture.Icon);
+  case Is4KMode of //FormMain.Menu4KMode2160pEnable.Checked of
+    True:
+      begin
+        FormMain.IL_MediaType_Large.GetIcon(01, IconCartridge.Picture.Icon);
+        FormMain.IL_MediaType_Large.GetIcon(05, IconDiscImage.Picture.Icon);
+        FormMain.IL_MediaType_Large.GetIcon(05, IconBootDisc.Picture.Icon);
+        FormMain.IL_MediaType_Large.GetIcon(02, IconFloppyDisk.Picture.Icon);
+        FormMain.IL_MediaType_Large.GetIcon(03, IconCassetteTape.Picture.Icon);
+        FormMain.IL_MediaType_Large.GetIcon(07, IconHardDiskDrive.Picture.Icon);
+
+      end;
+    False:
+      begin
+        FormMain.IL_LeftPanel.GetIcon(16, IconCartridge.Picture.Icon);
+        FormMain.IL_LeftPanel.GetIcon(20, IconDiscImage.Picture.Icon);
+        FormMain.IL_LeftPanel.GetIcon(20, IconBootDisc.Picture.Icon);
+        FormMain.IL_LeftPanel.GetIcon(17, IconFloppyDisk.Picture.Icon);
+        FormMain.IL_LeftPanel.GetIcon(18, IconCassetteTape.Picture.Icon);
+        FormMain.IL_LeftPanel.GetIcon(22, IconHardDiskDrive.Picture.Icon);
+      end;
+  end;
 end;
 
 procedure TFormConsCompEmulatorsSetup.EmulatorFileChange(Sender: TObject);
@@ -990,6 +1205,7 @@ begin
      begin
        if EmulatorFile.Tag = 0 then // when clicking "Select" button, the TEditEx(Sender).OnChange is already called
           ReadEmuParameters(PanelEmulators.Tag);
+       EmuFileNotFoundIcon.Visible:= not FileExists2(EmulatorFile.Text);
      end
   else
      ButtonClearEmulator.Click;
@@ -1074,7 +1290,7 @@ end;
 
 procedure TFormConsCompEmulatorsSetup.ButtonInstructionsClick(Sender: TObject);
 begin
-  FormMain.InitMessageBox;// CallMessageBox;
+  FormMain.InitMessageBox;
   FormMain.AddMsgText('    Set ');
   FormMain.AddMsgText('emulators filenames', MsgTxtColors.colorKeyTitle, [fsBold]);
   FormMain.AddMsgText(', ');
@@ -1110,7 +1326,7 @@ begin
 
   FormMain.AddMsgText(#13#10+#13#10+'    Want to reset emulator title to default ? Clear the title edit box, select another system and back or click "Apply" button to exit.');
 
-  GenerateMessage ('Info', 'Emulators Setup'+#13#10+'Usage Instructions');
+  FormMain.ShowMessageBox('Info', 'Emulators Setup'+#13#10+'Usage Instructions');
 end;
 
 procedure TFormConsCompEmulatorsSetup.SystemsItemSelectionChanged(
@@ -1119,7 +1335,7 @@ begin
   if Item.Selected then
      begin
        Systems.Tag:= Systems.Selection.First.ImageIndex;
-       ELV_GetSystemTitleConsoleComputer(Systems, Item, LabelSystemTitle, LabelSystemType);
+       ELV_GetSystemTitleConsoleComputer(Systems, Item, LabelSystemTitle, LabelSystemType, IconSystemType);
        ToggleControls(Systems.Tag);
        if PanelEmulators.Tag <> 1 then
           begin
@@ -1137,7 +1353,7 @@ begin
      begin
        newVirtualDriveFile:= DaemonToolsFile.Text;
        SetVirtualDriveIcon(newVirtualDriveFile);
-     end;
+     end;                                             
 end;
 
 procedure TFormConsCompEmulatorsSetup.DaemonToolsMountChange(Sender: TObject);
@@ -1170,7 +1386,7 @@ procedure TFormConsCompEmulatorsSetup.ButtonDaemonToolsHelpClick(Sender: TObject
 begin
   // adds margin to a TEdit - MakeLong(left margin, right margin)...
   //SendMessage(Edit1.Handle, EM_SETMARGINS, EC_LEFTMARGIN or EC_RIGHTMARGIN, MakeLong(0, 30));
-  FormMain.InitMessageBox;// CallMessageBox;
+  FormMain.InitMessageBox;
   FormMain.AddMsgText('    Some emulators require a real CD/DVD for proper emulation instead of loading an image file. '+
                       'Only disc images mounted on a virtual drive can be used.'+#13#10+#13#10+
                       '    Officially, three virtual drive applications are supported, and have separate mount/unmount parameters for '+
@@ -1213,7 +1429,7 @@ begin
   FormMain.AddMsgText('play with...', MsgTxtColors.colorKeyTitle, [fsBold]);
   FormMain.AddMsgText(' option will be used.');
 
-  GenerateMessage('Info', 'Mouting Disc Images on a Virtual Drive');
+  FormMain.ShowMessageBox('Info', 'Mouting Disc Images on a Virtual Drive');
 end;
 
 procedure TFormConsCompEmulatorsSetup.ButtonSelectFoldersClick(Sender: TObject);
@@ -1234,14 +1450,15 @@ begin
 end;
 
 procedure TFormConsCompEmulatorsSetup.Emulator1PageButtonClick(Sender: TObject);
-
+var
+  iTop: Integer;
   function UncheckButton(ButtonHolder: TSpeedButtonEx): Boolean;
   begin
     Result:= TSpeedButtonEx(ButtonHolder).Top = TSpeedButtonEx(Sender).Top;
     if Result then
        begin
-         TSpeedButtonEx(ButtonHolder).Top:= TSpeedButtonEx(ButtonHolder).Top+3;
-         TSpeedButtonEx(ButtonHolder).Height:= TSpeedButtonEx(ButtonHolder).Height-3;
+         TSpeedButtonEx(ButtonHolder).Top:= TSpeedButtonEx(ButtonHolder).Top+iTop;
+         TSpeedButtonEx(ButtonHolder).Height:= TSpeedButtonEx(ButtonHolder).Height-iTop;
          if not IsNightMode then
             TSpeedButtonEx(ButtonHolder).Font.Color:= clrDarkGray;
        end;
@@ -1250,8 +1467,13 @@ procedure TFormConsCompEmulatorsSetup.Emulator1PageButtonClick(Sender: TObject);
 begin
   if TSpeedButtonEx(Sender).Tag = PanelEmulators.Tag then
      Exit;
-  TSpeedButtonEx(Sender).Top:= TSpeedButtonEx(Sender).Top-3;
-  TSpeedButtonEx(Sender).Height:= TSpeedButtonEx(Sender).Height+3;
+
+  if Is4KMode then
+     iTop:= 9
+  else
+     iTop:= 3;
+  TSpeedButtonEx(Sender).Top:= TSpeedButtonEx(Sender).Top-iTop;
+  TSpeedButtonEx(Sender).Height:= TSpeedButtonEx(Sender).Height+iTop;
   if not IsNightMode then
      TSpeedButtonEx(Sender).Font.Color:= clBlack;
 
@@ -1297,109 +1519,52 @@ begin
   ResetParametersToDefault(TImage(Sender).Tag);
 end;
 
-procedure TFormConsCompEmulatorsSetup.BitBtn1Click(Sender: TObject);
-begin
-  if IL_Systems.Width <> 68 then
-     Exit;
-
-  IL_Systems.Width:= 128;
-  IL_Systems.Height:= 128;
-
-  FormMain.LoadNonArcadeSystemIcons(IL_Systems, False);
-
-  Systems.PaintInfoItem.IconViewAdjustIconTopBorder:= True;
-  Systems.CellSizes.Icon.Height:= 184;
-  Systems.CellSizes.Icon.Width:= 156;
-  Systems.Font.Name:= 'Segoe UI';
-  Systems.Font.Size:= 9;
-end;
-
 procedure TFormConsCompEmulatorsSetup.SystemsItemPaintText(
   Sender: TCustomEasyListview; Item: TEasyItem; Position: Integer;
   ACanvas: TCanvas);
 begin
-  if Position = 1 then
-     begin
-       ACanvas.Font.Name:= 'Segoe UI';
-       ACanvas.Font.Size:= 9;
-       ACanvas.Font.Color:= clMedGray;
-       //ACanvas.Font.Style:= [fsItalic];
-       if IsNightMode then
-          ACanvas.Font.Color:= clMedGray
-       else
-          ACanvas.Font.Color:= clGray;
-
-       if IsNightMode and Item.Selected then
-          ACanvas.Font.Color:= clrDarkGray;
-     end;
+  if not Is4KMode then
+     if Position = 1 then
+        FormMain.ELV_SetSelecionFontColors(Systems, Item, ACanvas);
 end;
 
 procedure TFormConsCompEmulatorsSetup.SystemsItemImageDraw(
   Sender: TCustomEasyListview; Item: TEasyItem; Column: TEasyColumn;
   ACanvas: TCanvas; const RectArray: TEasyRectArrayObject;
   AlphaBlender: TEasyAlphaBlender);
-var
-  iLeft, iTop: Integer;
-  iSysTypeIndex: Integer;
 begin
-  if IL_Systems.Width < 128 then
+  //Exit; // debugging
+  if not Is4KMode then
      Exit;
-  // this is for tiles view mode
-  iLeft:= RectArray.IconRect.Left;//+Systems.PaintInfoItem.ImageIndent+1;
-  iTop:=  RectArray.IconRect.Top+2;
 
-  Systems.ImagesLarge.Draw(ACanvas, iLeft, iTop, Item.ImageIndex);
-
-  //iLeft:= iLeft+Systems.ImagesExLarge.Width+4;
-  iTop:= RectArray.TextRect.Bottom;// iTop+(Systems.ImagesLarge.Height+12+2);//-FormMain.IL_MenuPopup.Height);
-
-  iSysTypeIndex:= -1;
-  if SystemIsConsole(Item.ImageIndex) then
-     iSysTypeIndex:= 25 // index 25 is "console" icon
-  else
-  if SystemIsComputer(Item.ImageIndex) then
-     iSysTypeIndex:= 26 // index 26 is "computer" icon
-  else
-  if SystemIsHandheld(Item.ImageIndex) then
-     iSysTypeIndex:= 27; // index 27 is "handheld" icon
-
-  if iSysTypeIndex <> -1 then
-     begin
-       FormMain.IL_MenuPopup.Draw(ACanvas, iLeft, iTop, iSysTypeIndex);
-
-       ACanvas.Font.Name:= 'Segoe UI';
-       ACanvas.Font.Size:= 9;
-       ACanvas.Font.Color:= clMedGray;
-       ACanvas.Font.Style:= [];
-       if IsNightMode then
-          ACanvas.Font.Color:= clMedGray
-       else
-          ACanvas.Font.Color:= clGray;
-
-       if IsNightMode and Item.Selected then
-          ACanvas.Font.Color:= clrDarkGray;
-       ACanvas.Brush.Style:= bsClear;
-       ACanvas.TextOut(iLeft, iTop, Item.Captions[1]);
-     end;
+  FormMain.ELV_DrawIconSystem_CustomSysType(Sender, Item, Column, ACanvas, RectArray, IL_Systems, False);
 end;
 
 procedure TFormConsCompEmulatorsSetup.SystemsItemImageDrawIsCustom(
   Sender: TCustomEasyListview; Item: TEasyItem; Column: TEasyColumn;
   var IsCustom: Boolean);
 begin
-  if IL_Systems.Width = 128 then
-     IsCustom:= True; // this is for tiles view mode
+  //Exit; // debugging
+  if Is4KMode then
+     IsCustom:= True;
 end;
 
 procedure TFormConsCompEmulatorsSetup.SystemsItemImageGetSize(
   Sender: TCustomEasyListview; Item: TEasyItem; Column: TEasyColumn;
   var ImageWidth, ImageHeight: Integer);
 begin
-  if IL_Systems.Width = 128 then
+  //Exit; // debugging
+  if Is4KMode then
      begin
-       ImageWidth:= Systems.ImagesLarge.Width;
-       ImageHeight:= Systems.ImagesLarge.Height;
+       ImageWidth:=  IL_Systems.Width;            // 4K mode = 32x32  - normal mode = 16x16
+       ImageHeight:= IL_Systems.Height+FormMain.IL_GroupedMode.Width;
+       //if Is4KMode then
+          ImageHeight:= ImageHeight+4; // 4 -> space between sys icon / sys type icon
+       //else
+       //   ImageHeight:= ImageHeight+2;
      end;
 end;
 
+
 end.
+

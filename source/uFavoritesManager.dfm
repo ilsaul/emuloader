@@ -37,16 +37,6 @@ object FormFavoritesManager: TFormFavoritesManager
     EditManager.Font.Name = 'Segoe UI'
     EditManager.Font.Style = []
     UseDockManager = False
-    Font.Charset = ANSI_CHARSET
-    Font.Color = clBlack
-    Font.Height = -12
-    Font.Name = 'Segoe UI'
-    Font.Style = []
-    GroupFont.Charset = ANSI_CHARSET
-    GroupFont.Color = clWindowText
-    GroupFont.Height = -12
-    GroupFont.Name = 'Segoe UI'
-    GroupFont.Style = []
     HintType = ehtToolTip
     Header.Columns.Items = {
       0600000004000000110000005445617379436F6C756D6E53746F726564FFFECE
@@ -62,11 +52,6 @@ object FormFavoritesManager: TFormFavoritesManager
       000000FFFFFF1F0001000000010000000D000000440061007400650020004D00
       6F00640069006600690065006400000000000000000000000000}
     Header.Draggable = False
-    Header.Font.Charset = ANSI_CHARSET
-    Header.Font.Color = clBlack
-    Header.Font.Height = -12
-    Header.Font.Name = 'Segoe UI'
-    Header.Font.Style = []
     Header.Height = 23
     Header.Visible = True
     IncrementalSearch.Enabled = True
@@ -84,7 +69,6 @@ object FormFavoritesManager: TFormFavoritesManager
     PaintInfoItem.BorderColor = 16370824
     PaintInfoItem.ShowBorder = False
     PaintInfoItem.TileDetailCount = 2
-    ParentFont = False
     ParentShowHint = False
     ShowThemedBorder = False
     ShowHint = True
@@ -108,6 +92,7 @@ object FormFavoritesManager: TFormFavoritesManager
     TabOrder = 0
     View = elsReport
     CustomCheckRadioEnabled = False
+    CustomEnableIconHD = False
     OnColumnClick = FavoritesListColumnClick
     OnColumnSizeChanging = FavoritesListColumnSizeChanging
     OnDblClick = FavoritesListDblClick
@@ -136,7 +121,7 @@ object FormFavoritesManager: TFormFavoritesManager
     object LabelHotkeyText: TShadowLabel
       Left = 8
       Top = 33
-      Width = 597
+      Width = 595
       Height = 9
       Caption = 
         '  :edit title   :edit filename          :set active             ' +
@@ -159,7 +144,7 @@ object FormFavoritesManager: TFormFavoritesManager
     object LabelHotkeyKeys: TShadowLabel
       Left = 7
       Top = 33
-      Width = 567
+      Width = 565
       Height = 9
       Caption = 
         'F2            F3               Space Bar            Enter/Double' +
@@ -196,6 +181,11 @@ object FormFavoritesManager: TFormFavoritesManager
       Images = FormMain.IL_MenuPopup
       ParentFont = False
       OnClick = ButtonSetSelectedProfileActiveClick
+      FontColorDisabled = clBtnShadow
+      FontShadowColorDisabled = clBtnHighlight
+      GradientColorTop_Disabled = clSilver
+      GradientColorBottom_Disabled = clMedGray
+      FrameColor_Disabled = clGray
     end
     object ButtonSettings: TSpeedButtonEx
       Left = 2
@@ -213,6 +203,11 @@ object FormFavoritesManager: TFormFavoritesManager
       Images = FormMain.IL_MenuPopup
       ParentFont = False
       OnClick = ButtonSettingsClick
+      FontColorDisabled = clBtnShadow
+      FontShadowColorDisabled = clBtnHighlight
+      GradientColorTop_Disabled = clSilver
+      GradientColorBottom_Disabled = clMedGray
+      FrameColor_Disabled = clGray
     end
     object ButtonNew: TSpeedButtonEx
       Left = 24
@@ -231,6 +226,11 @@ object FormFavoritesManager: TFormFavoritesManager
       ParentShowHint = False
       ShowHint = True
       OnClick = ButtonNewClick
+      FontColorDisabled = clBtnShadow
+      FontShadowColorDisabled = clBtnHighlight
+      GradientColorTop_Disabled = clSilver
+      GradientColorBottom_Disabled = clMedGray
+      FrameColor_Disabled = clGray
     end
     object ButtonClearGames: TSpeedButtonEx
       Tag = 2
@@ -250,6 +250,11 @@ object FormFavoritesManager: TFormFavoritesManager
       ParentShowHint = False
       ShowHint = True
       OnClick = ButtonNewClick
+      FontColorDisabled = clBtnShadow
+      FontShadowColorDisabled = clBtnHighlight
+      GradientColorTop_Disabled = clSilver
+      GradientColorBottom_Disabled = clMedGray
+      FrameColor_Disabled = clGray
     end
     object ButtonRemoveInvalidEntries: TSpeedButtonEx
       Tag = 1
@@ -269,6 +274,11 @@ object FormFavoritesManager: TFormFavoritesManager
       ParentShowHint = False
       ShowHint = True
       OnClick = ButtonNewClick
+      FontColorDisabled = clBtnShadow
+      FontShadowColorDisabled = clBtnHighlight
+      GradientColorTop_Disabled = clSilver
+      GradientColorBottom_Disabled = clMedGray
+      FrameColor_Disabled = clGray
     end
     object ButtonReplicate: TSpeedButtonEx
       Tag = 3
@@ -288,6 +298,11 @@ object FormFavoritesManager: TFormFavoritesManager
       ParentShowHint = False
       ShowHint = True
       OnClick = ButtonNewClick
+      FontColorDisabled = clBtnShadow
+      FontShadowColorDisabled = clBtnHighlight
+      GradientColorTop_Disabled = clSilver
+      GradientColorBottom_Disabled = clMedGray
+      FrameColor_Disabled = clGray
     end
     object ButtonDelete: TSpeedButtonEx
       Tag = 4
@@ -307,13 +322,14 @@ object FormFavoritesManager: TFormFavoritesManager
       ParentShowHint = False
       ShowHint = True
       OnClick = ButtonNewClick
+      FontColorDisabled = clBtnShadow
+      FontShadowColorDisabled = clBtnHighlight
+      GradientColorTop_Disabled = clSilver
+      GradientColorBottom_Disabled = clMedGray
+      FrameColor_Disabled = clGray
     end
   end
-  object IL_SystemType: TImageList
-    Left = 160
-    Top = 88
-  end
-  object PopupSettings: TBcBarPopupMenu
+  object PopupFavoritesManagerSettings: TBcBarPopupMenu
     AutoHotkeys = maManual
     Images = FormMain.IL_MenuPopup
     OwnerDraw = True
@@ -342,7 +358,7 @@ object FormFavoritesManager: TFormFavoritesManager
     MenuStyle = msWindowsXP
     UseSystemFont = False
     DrawModule = FormMain.BcDrawModule
-    OnMeasureMenuItem = PopupSettingsMeasureMenuItem
+    OnMeasureMenuItem = PopupFavoritesManagerSettingsMeasureMenuItem
     Left = 120
     Top = 88
     object PopupSettingsSmallFont: TMenuItem
@@ -372,6 +388,10 @@ object FormFavoritesManager: TFormFavoritesManager
     object PopupSettingsCenterWindow: TMenuItem
       Caption = 'Center Window'
       OnClick = PopupSettingsCenterWindowClick
+    end
+    object PopupResetWindowSize: TMenuItem
+      Caption = 'Reset Window Size'
+      Hint = 'Set default window size and columns width'
     end
   end
 end

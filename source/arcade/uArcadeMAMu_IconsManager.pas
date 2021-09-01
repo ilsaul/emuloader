@@ -7,7 +7,7 @@ uses
   StdCtrls, ImgList, ExtCtrls, MPCommonObjects, MPCommonUtilities,
   EasyListview, Menus, BarMenus, IniFiles, ShellAPI, Buttons,
   ComCtrls, ToolWin, SplitterEx, PanelEx, ShadowLabel, ButtonsEx,
-  RichEditURL, EditEx;
+  RichEditURL, EditEx, TntComCtrls;
 
 type
   TMissingIconInfo = class(TEasyItemStored)
@@ -122,7 +122,7 @@ type
     PopupNotUsedSaveIconsListToFile: TMenuItem;
     PopupNotUsedRemoveRenamedIcons: TMenuItem;
     PopupNotUsedClearFileHistory: TMenuItem;
-    NotUsedIconHistory: TRichEditURL;
+    NotUsedIconHistory: TTntRichEdit;
     PopupNotUsedUpdateIconInfoSelectedIcons: TMenuItem;
     PopupNotUsedUpdateIconInfoAllIcons: TMenuItem;
     N7: TMenuItem;
@@ -306,6 +306,8 @@ type
 
     procedure SelectSystem;
     procedure CreateEditIcon(const IconName, SoftwareName: String; sysID: Integer);
+
+    procedure AddGamesSystemsIcons(IL_Holder: TImageList; AddSystems: Boolean = True);
   public
     { Public declarations }
     SourceIconFile, zzzIconFolder: String;
@@ -318,7 +320,7 @@ var
 
 implementation
 
-uses uMain, uStatus, uCommon, uArcadeMAMu_ExcludedList, uArcadeMAMu_DeleteNotWorkingIcons;
+uses uMain, uStatus, uCommon, uCommonCustom, uArcadeMAMu_ExcludedList, uArcadeMAMu_DeleteNotWorkingIcons;
 
 {$R *.dfm}
 
@@ -372,7 +374,7 @@ begin
                                                                           eDriverName, eBiosName, eSoftwareName,
                                                                           FormArcadeMAMu_IconsManager.IL_MissingIcons);
             if eImageIndex = -1 then
-               eImageIndex:= FormMain.GetMAMEImageIndex(eROMIdentification, eSoftwareName);
+               eImageIndex:= FormMain.GetMAMEImageIndex(eROMIdentification, eSoftwareName, eGameStatus);
             eIconLoaded:= True;
           end;
        Result:= eImageIndex;
@@ -429,6 +431,30 @@ begin
   end;
 end;
 
+procedure TFormArcadeMAMu_IconsManager.AddGamesSystemsIcons(IL_Holder: TImageList; AddSystems: Boolean = True);
+var
+  tempFolder: String;
+  Loop: ShortInt;
+begin
+  // will no longer be required after creating IL_StandardIconsUltraLarge TImageList, icons will always be there
+  // this is for thumbnails only ??? it loads 128x128 icons
+  IL_Holder.Clear;
+  tempFolder:= FormMain.GetFolderFull(33);
+  for Loop:=0 to MaxGameID do
+      FormMain.AddDefaultIcons(FormMain.GetELGameIconFileName(Loop), tempFolder, IL_Holder);
+
+  tempFolder:= FormMain.GetFolderFull(34);
+
+  for Loop:=1 to MaxConsoleComputerSystems do
+      FormMain.AddDefaultIcons(SystemsListCustom[Loop, 1], tempFolder, IL_Holder);
+
+  if not AddSystems then
+     Exit;
+  tempFolder:= FormMain.GetFolderFull(32);
+  for Loop:=1 to MaxArcadeSystems do
+      FormMain.AddDefaultIcons(FormMain.GetArcadeSystemIconFileName(Loop), tempFolder, IL_Holder);
+end;
+
 function TFormArcadeMAMu_IconsManager.IsFolderEmpty: Boolean;
 var
   Search: TSearchRec;
@@ -446,7 +472,7 @@ begin
   FindClose(Search);
 
   if not Result then
-     GenerateMessage('Warning', 'Folder is empty.',
+     FormMain.ShowMessageBox('Warning', 'Folder is empty.',
                      '    No icons could be found in icons folder. MAMu_ icons manager only works with '+
                      'unzipped icons.'+#13#10+'    Please make sure the folder exists and there are .ico files '+
                      'in there.', 2);
@@ -523,8 +549,15 @@ begin
 end;
 
 procedure TFormArcadeMAMu_IconsManager.AddFileHistory(ELV_Item: TEasyItem; TextString: String);
+var
+  iText: String;
 begin
-  TNotUsedIconInfo(ELV_Item).eHistory.Add(Format('%s - %s', [FormMain.GetDateTimeStr(DateTimeToFileDate(Now)), TextString]));
+  iText:= Format('%s - %s', [FormMain.GetDateTimeStr(DateTimeToFileDate(Now)), TextString]);
+  TNotUsedIconInfo(ELV_Item).eHistory.Add(iText);
+
+  NotUsedIconHistory.SelLength:= 0;
+  NotUsedIconHistory.SelStart:= NotUsedIconHistory.GetTextLen;
+  NotUsedIconHistory.SelText:= iText+#13;
   TNotUsedIconInfo(ELV_Item).eSaveHistory:= True;
 end;
 
@@ -534,7 +567,7 @@ begin
   if Result then
      Exit;
 
-  if GenerateMessage('Error', FormArcadeMAMu_IconsManager.Caption,
+  if FormMain.ShowMessageBox('Error', FormArcadeMAMu_IconsManager.Caption,
                      'No folder is selected for MAMu_ icons. Would you like to select one now ?', 1) = mrYes then
      begin
        FormMain.PopupSetFoldersMAMu_.Click;
@@ -573,7 +606,8 @@ var
   Item: TEasyItem;
 begin
   IL_MissingIcons.Clear;
-  FormMain.AddGamesSystemsIcons(IL_MissingIcons);
+  AddGamesSystemsIcons(IL_MissingIcons);
+  FormMain.ShowIconErrorMessage;
   if not FormMain.CheckTotal(MissingIconsList) then
      Exit;
   MissingIconsList.BeginUpdate;
@@ -786,7 +820,8 @@ begin
   FormStatus.MessageStr('Scanning for games with missing icons and validating '+
                         '"not working" icons.');
   IL_MissingIcons.Clear;
-  FormMain.AddGamesSystemsIcons(IL_MissingIcons);
+  AddGamesSystemsIcons(IL_MissingIcons);
+  FormMain.ShowIconErrorMessage;
   FormMain.ClearListView(MissingIconsList);
   TotalGames:= FormMain.GamesListView.Groups.ItemCount;
   GamesCount:= 0;
@@ -833,7 +868,7 @@ begin
      begin
        FormStatus.Close;
        if not Result then
-          GenerateMessage(FormArcadeMAMu_IconsManager.Caption, FormMain.GetArcadeEmulatorDescription(SystemSelectLabel.Tag),
+          FormMain.ShowMessageBox(FormArcadeMAMu_IconsManager.Caption, FormMain.GetArcadeEmulatorDescription(SystemSelectLabel.Tag),
                           '    Scan complete, but it seems that all games have icons. If you want to scan clone icons, '+
                           'make sure to select the "Search Clone Icons" check box.', 2);
      end;
@@ -885,7 +920,7 @@ begin
        zzzIconFolder:= FormMain.DetectFolderIcon(SourceIconFile);//'zzz.ico');
        if not FileExists(zzzIconFolder+SourceIconFile) then
           begin
-            GenerateMessage('Error', 'File not found', '    File '+SourceIconFile+{zzz.ico}' was not found. This file is required for this '+
+            FormMain.ShowMessageBox('Error', 'File not found', '    File '+SourceIconFile+{zzz.ico}' was not found. This file is required for this '+
                             'feature to work properly! Cannot proceed...', 2, False, 1);
             Exit;
           end;
@@ -899,6 +934,8 @@ begin
 
   if not Assigned(FormArcadeMAMu_DeleteNotWorkingIcons) then
      FormArcadeMAMu_DeleteNotWorkingIcons:= TFormArcadeMAMu_DeleteNotWorkingIcons.Create(nil);
+
+  AddGamesSystemsIcons(FormArcadeMAMu_DeleteNotWorkingIcons.IL_NotWorking, False);
   FormArcadeMAMu_DeleteNotWorkingIcons.LabelHotkeys.Tag:= ActionIndex;
   FormArcadeMAMu_DeleteNotWorkingIcons.SetMode;
   if not FormMain.CheckTotal(FormArcadeMAMu_DeleteNotWorkingIcons.NotWorkingIcons) then
@@ -988,7 +1025,7 @@ end;
 // not used icons functions
 function TFormArcadeMAMu_IconsManager.RenameIconFile(OldName, NewName, FilePath: String): Boolean;
 begin
-  FormMain.InitMessageBox;// CallMessageBox;
+  FormMain.InitMessageBox;
   FormMain.AddMsgText('    Rename file'+#13#10+'From ');
   FormMain.AddMsgText(FilePath+OldName, MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(#13#10+'To      ');
@@ -1002,14 +1039,14 @@ begin
      end;
   FormMain.AddMsgText(#13#10+#13#10+'Are you sure you want to continue ?');
 
-  Result:= GenerateMessage('Rename File', 'A filename is about to be changed.', '', 1, False, 2) = mrYes;
+  Result:= FormMain.ShowMessageBox('Rename File', 'A filename is about to be changed.', '', 1, False, 2) = mrYes;
   if not Result then
      Exit;
 
   Result:= RenameFile(FilePath+OldName, FilePath+NewName);
   Sleep(50);
   if not Result then
-     GenerateMessage('Error', 'Failed to rename file.',
+     FormMain.ShowMessageBox('Error', 'Failed to rename file.',
                      '    The file could not be renamed. Make sure the file is not being used by '+
                      'another application and is not locked by Windows.', 2, False, 1);
 end;
@@ -1168,13 +1205,13 @@ begin
            end
         else
            begin
-             GenerateMessage(FormArcadeMAMu_IconsManager.Caption, FormMain.GetArcadeEmulatorDescription(SystemSelectLabel.Tag),
+             FormMain.ShowMessageBox(FormArcadeMAMu_IconsManager.Caption, FormMain.GetArcadeEmulatorDescription(SystemSelectLabel.Tag),
                              'Scanning complete but nothing was found.', 2);
            end;
       end;
     False:
       begin
-        GenerateMessage('Error', FormMain.GetArcadeEmulatorDescription(SystemSelectLabel.Tag),
+        FormMain.ShowMessageBox('Error', FormMain.GetArcadeEmulatorDescription(SystemSelectLabel.Tag),
                         'Could not find any icon files in the following folders.'+#13#10+
                         FormMain.GetMAMu_IconFolder(SystemSelectLabel.Tag, False), 2);
       end;
@@ -1257,8 +1294,10 @@ end;
 procedure TFormArcadeMAMu_IconsManager.UpdateHistoryPanel(ELV_Item: TEasyItem);
 begin
   NotUsedIconHistory.Lines.BeginUpdate;
-  NotUsedIconHistory.Lines.Clear;
-  NotUsedIconHistory.Lines.AddStrings(TNotUsedIconInfo(ELV_Item).eHistory);
+  NotUsedIconHistory.Clear;
+  NotUsedIconHistory.SelStart:= 0;
+  NotUsedIconHistory.SelText:= TNotUsedIconInfo(ELV_Item).eHistory.Text;
+  //NotUsedIconHistory.Lines.AddStrings(TNotUsedIconInfo(ELV_Item).eHistory);
   NotUsedIconHistory.Lines.EndUpdate;
 end;
 
@@ -1291,7 +1330,7 @@ begin
      Exit;
   SystemSelectLabel.Tag:= selSys;
   SystemSelectLabel.Caption:= FormMain.GetArcadeEmulatorDescription(selSys);
-  FormMain.IL_ArcadeSystem_Small.GetIcon(SystemSelectLabel.Tag, SystemIcon.Picture.Icon);
+  FormMain.LoadSystemIcon(SystemSelectLabel.Tag, SystemIcon, False);
 end;
 
 procedure TFormArcadeMAMu_IconsManager.CreateEditIcon(const IconName, SoftwareName: String; sysID: Integer);
@@ -1299,7 +1338,7 @@ var
   BlankIcon: String;
   IconFullPath, SoftNameFolder: String;
 begin
-  BlankIcon:= FormMain.FrontendPath+'resources\blank_icon.ico';
+  BlankIcon:= FrontendPath+'resources\blank_icon.ico';
   case FileExists(BlankIcon) of
     True:
       begin
@@ -1323,18 +1362,18 @@ begin
            end;
         case FileExists(IconFullPath+SoftNameFolder+IconName) of
           True : CallShellExecute(nil, IconFullPath+SoftNameFolder+IconName); // ShellExecute(Handle, nil, PAnsiChar(IconFullPath+SoftNameFolder+IconName), nil, nil, SW_SHOWNORMAL);
-          False: GenerateMessage('Error', PopupCreateEditIcon.Caption,
+          False: FormMain.ShowMessageBox('Error', PopupCreateEditIcon.Caption,
                         Format('    Failed to create file "%s" or your computer needs a pause higher than 80 milliseconds.',
-                               [IconFullPath+SoftNameFolder+IconName]), 2, False, 1);
+                        [IconFullPath+SoftNameFolder+IconName]), 2, False, 1);
         end;
       end;
     False:
       begin
-        FormMain.InitMessageBox;// CallMessageBox;
+        FormMain.InitMessageBox;
         FormMain.AddMsgText('    Failed to create a blank icon file. File ');
         FormMain.AddMsgText(BlankIcon, MsgTxtColors.colorFileName, [fsBold]);
         FormMain.AddMsgText(' was not found!');
-        GenerateMessage('Error', PopupCreateEditIcon.Caption, '', 2, False, 1);
+        FormMain.ShowMessageBox('Error', PopupCreateEditIcon.Caption, '', 2, False, 1);
       end;
   end;
   Application.ProcessMessages;
@@ -1346,7 +1385,7 @@ var
   Loop: Integer;
 begin
   ReadIniFile;
-  IconHistoryFolder:= FormMain.FrontendPath+'resources\icons_history\';
+  IconHistoryFolder:= FrontendPath+'resources\icons_history\';
   CheckAndCreateFolder(IconHistoryFolder);
   Folder:= FormMain.GetFolderFull(32);
 
@@ -1377,11 +1416,11 @@ begin
        end;
 
        FormMain.SetEasyListViewColors(MissingIconsList, menu_background_color[1], clWhite);
-       FormMain.SetEasyListViewHeaderColors(MissingIconsList, True);
+       FormMain.SetEasyListViewHeaderColors(MissingIconsList, True, False, False);
        FormMain.ELV_SetEditBkColor(MissingIconsList);
 
        FormMain.SetEasyListViewColors(NotUsedIconsList, menu_background_color[1], clWhite);
-       FormMain.SetEasyListViewHeaderColors(NotUsedIconsList, True);
+       FormMain.SetEasyListViewHeaderColors(NotUsedIconsList, True, False, False);
        FormMain.ELV_SetEditBkColor(NotUsedIconsList);
        FormMain.ELV_SetRibbonNightColors(0, NotUsedIconsList, True);
 
@@ -1399,10 +1438,11 @@ begin
 
        SetEditNightColors(RenameFileNewFileName);
      end;
-     
+
   SystemSelectLabel.Caption:= FormMain.GetArcadeEmulatorDescription(SystemSelectLabel.Tag);
-  FormMain.AddGamesSystemsIcons(IL_MissingIcons);
-  FormMain.IL_ArcadeSystem_Small.GetIcon(SystemSelectLabel.Tag, SystemIcon.Picture.Icon);
+  AddGamesSystemsIcons(IL_MissingIcons);
+  FormMain.ShowIconErrorMessage;
+  FormMain.LoadSystemIcon(SystemSelectLabel.Tag, SystemIcon, False);
 
   ExcludeFileStr:= FormMain.GetArcadeFolder+'el_mamu_exclude.ini';
   ExcludeFiles:= THashedStringList.Create;
@@ -1514,7 +1554,7 @@ var
 
   function ShowInvisibleGameMsg: Boolean;
   begin
-    Result:= GenerateMessage('Warning', 'Run selected game.', '    The game is not visible in '+
+    Result:= FormMain.ShowMessageBox('Warning', 'Run selected game.', '    The game is not visible in '+
               'main games list, probably due to selected games filters.'+
               #13#10+'The game might not run properly. Would you like to try it anyway ?', 1) = mrYes;
     if not Result then
@@ -1523,7 +1563,7 @@ var
 
   function ShowGameNotFoundMsg: Boolean;
   begin
-    GenerateMessage('Error', FormMain.GetArcadeEmulatorDescription(TMissingIconInfo(SelectedItemMissing).eSystemID),
+    FormMain.ShowMessageBox('Error', FormMain.GetArcadeEmulatorDescription(TMissingIconInfo(SelectedItemMissing).eSystemID),
                     '    Could not find the game in main games list. For this feature to work, '+
                     'the game must be valid and visible on the main screen. Make sure that the games list for '+
                     'this system is loaded.', 2, False, 1);
@@ -1578,7 +1618,7 @@ begin
      Exit;
   if TMissingIconInfo(SelectedItemMissing).eSoftwareName <> '' then
      begin
-       GenerateMessage('Info', TMenuItem(Sender).Caption,
+       FormMain.ShowMessageBox('Info', TMenuItem(Sender).Caption,
                        '    You can only create a game icon for software list games. Aborting...');
        Exit;
      end;
@@ -1747,7 +1787,7 @@ begin
      begin
        AddFileHistory(SelectedItemNotUsed, 'Edit with associated editor');
        SaveHistoryToFile(SelectedItemNotUsed);
-       UpdateHistoryPanel(SelectedItemNotUsed);
+       //UpdateHistoryPanel(SelectedItemNotUsed);
        CallShellExecute(Sender, TNotUsedIconInfo(SelectedItemNotUsed).eFullPath+TNotUsedIconInfo(SelectedItemNotUsed).eFileName);
        //ShellExecute(Handle, nil, PAnsiChar(TNotUsedIconInfo(SelectedItemNotUsed).eFullPath+TNotUsedIconInfo(SelectedItemNotUsed).eFileName), nil, nil, SW_SHOWNORMAL);
      end;
@@ -1917,9 +1957,9 @@ begin
    ListOutput.EndUpdate;
    ListOutput.SaveToFile(FileStr);
    FreeAndNil(ListOutput);
-   GenerateMessage(FormArcadeMAMu_IconsManager.Caption, 'Save files list to a text file.',
+   FormMain.ShowMessageBox(FormArcadeMAMu_IconsManager.Caption, 'Save files list to a text file.',
                    Format('    File "%s" was created based on the current files list, '+
-                          'separated by system.', [FileStr]), 2);
+                   'separated by system.', [FileStr]), 2);
    NotUsedIconsList.SetFocus;
 end;
 
@@ -1999,7 +2039,7 @@ begin
         NotUsedIconsList.SetFocus;
         Exit;
       end;
-   if GenerateMessage(FormArcadeMAMu_IconsManager.Caption, 'Delete not used files.',
+   if FormMain.ShowMessageBox(FormArcadeMAMu_IconsManager.Caption, 'Delete not used files.',
                      '    You are about to delete all files on the list. '+
                      'Recycled bin is not supported. If for any reason a file cannot be deleted, it will not '+
                      'be removed from the list. History files will not be deleted. Click No button to cancel this operation.'+#13#10+
@@ -2040,7 +2080,7 @@ begin
      Exit;
   TNotUsedIconInfo(SelectedItemNotUsed).eHistory.Clear;
   TNotUsedIconInfo(SelectedItemNotUsed).eSaveHistory:= True;
-  NotUsedIconHistory.Lines.Clear;
+  NotUsedIconHistory.Clear;
 end;
 
 procedure TFormArcadeMAMu_IconsManager.ButtonClearHistoryNotUsedClick(
@@ -2139,7 +2179,7 @@ end;
 
 procedure TFormArcadeMAMu_IconsManager.PopupUpdateNotWorkingIconGamesHelpClick(Sender: TObject);
 begin
-  GenerateMessage('Help', 'Update "Not Working" Icon Games'+#13#10+
+  FormMain.ShowMessageBox('Help', 'Update "Not Working" Icon Games'+#13#10+
                             'What this feature does ?',
                   '    Games that have the "not working" icon are a copy of "zzz.ico" '+
                   'file. If you edit "zzz.ico", the MD5 checksum of these icons will not match.'+#13#10+#13#10+
@@ -2176,8 +2216,7 @@ begin
   case TMenuItem(Sender).Tag of
     0: // details view, small scons
       begin
-        IL_MissingIcons.Width:= 16;
-        IL_MissingIcons.Height:= 16;
+        FormMain.Set4KImageListSpecs(IL_MissingIcons, 16);
         MissingIconsList.CellSizes.Report.Height:= 22;
         RefreshIcons:= True;
       end;
@@ -2185,8 +2224,7 @@ begin
       begin
         if IL_MissingIcons.Width <> 32 then
            begin
-             IL_MissingIcons.Width:= 32;
-             IL_MissingIcons.Height:= 32;
+             FormMain.Set4KImageListSpecs(IL_MissingIcons, 32);
              RefreshIcons:= True;
            end;
         MissingIconsList.CellSizes.Report.Height:= 36;
@@ -2195,7 +2233,7 @@ begin
   MissingIconsList.BeginUpdate;
   case TMenuItem(Sender).Tag of
     0, 1: if MissingIconsList.View <> elsReport then MissingIconsList.View:= elsReport; // report view
-    2: if MissingIconsList.View <> elsTile then MissingIconsList.View:= elsTile;// tiles view
+    2:    if MissingIconsList.View <> elsTile   then MissingIconsList.View:= elsTile;   // tiles view
   end;
   MissingIconsList.EndUpdate;
   if RefreshIcons then
@@ -2244,9 +2282,9 @@ begin
   ListOutput.EndUpdate;
   ListOutput.SaveToFile(FileStr);
   FreeAndNil(ListOutput);
-  GenerateMessage(FormArcadeMAMu_IconsManager.Caption, 'Save games list to a text file.',
+  FormMain.ShowMessageBox(FormArcadeMAMu_IconsManager.Caption, 'Save games list to a text file.',
                   Format('    File "%s" was created based on the current games list, '+
-                         'separated by system.', [FileStr]), 2);
+                  'separated by system.', [FileStr]), 2);
 end;
 
 procedure TFormArcadeMAMu_IconsManager.PopupRestoreColumnsSizesClick(Sender: TObject);
@@ -2310,7 +2348,7 @@ end;
 procedure TFormArcadeMAMu_IconsManager.ButtonHelpClick(Sender: TObject);
 begin
   // missing icons
-  FormMain.InitMessageBox;// CallMessageBox;
+  FormMain.InitMessageBox;
   FormMain.AddMsgText('Games With Missing Icons', MsgTxtColors.colorKeyTitle, [fsBold], taCenter);
   FormMain.AddMsgText(#13#10+'How to create a list of all games without a custom icon'+#13#10+#13#10, MsgTxtColors.colorKeyValue, [fsBold], taCenter, -1, 'Verdana');
   FormMain.AddMsgText('    Select a system. There are extra search options in popup menu. Click ');
@@ -2367,7 +2405,7 @@ begin
                       'Only 1 (one) system is supported at a time. Click ');
   FormMain.AddMsgText('Delete Not Used Icons', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' button to delete all files listed. Recycle bin is NOT supported.');
-  GenerateMessage('Help', 'Usage tips.', '', 2);
+  FormMain.ShowMessageBox('Help', 'Usage tips.', '', 2);
 end;
 
 procedure TFormArcadeMAMu_IconsManager.MissingIconsListColumnSizeChanging(
@@ -2496,7 +2534,7 @@ begin
            end;
        end;
        SaveHistoryToFile(SelectedItemNotUsed, OldName);
-       UpdateHistoryPanel(SelectedItemNotUsed);
+       //UpdateHistoryPanel(SelectedItemNotUsed);
     end;
   end;
 

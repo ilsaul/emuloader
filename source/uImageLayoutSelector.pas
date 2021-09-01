@@ -30,6 +30,7 @@ type
     { Private declarations }
     procedure LoadLayoutIcons;
     procedure AddLayouts;
+    procedure Resize4K;
   public
     { Public declarations }
   end;
@@ -42,6 +43,32 @@ implementation
 uses uMain, uCommon;
 
 {$R *.dfm}
+
+procedure TFormImageLayoutSelector.Resize4K;
+begin
+  if not Is4KMode then
+     Exit;
+
+  with FormImageLayoutSelector do
+  begin
+    PanelBottom.Height:= 71;
+    //CategoriesListView.PaintInfoItem.IconViewRemoveIconTopBorder:= True;
+    LayoutsListView.CellSizes.Tile.Width:=  156;
+    LayoutsListView.CellSizes.Tile.Height:= 156;
+
+    ClientWidth:=  (LayoutsListView.CellSizes.Tile.Width*7) +16;
+    ClientHeight:= (LayoutsListView.CellSizes.Tile.Height*4)+16+PanelBottom.Height;
+    Font.Size:= 16;
+    FormMain.Set4KImageListSpecs(IL_Layouts, 128);
+
+    FormMain.Set4KListViewSpecs(LayoutsListView, 8, 8, (LayoutsListView.CellSizes.Tile.Width*7)+20, LayoutsListView.CellSizes.Tile.Height*4, 16);
+    LayoutsListView.Font.Name:= FormMain.Get4KSystemFont;
+    LayoutsListView.PaintInfoItem.ImageIndent:= 8;
+
+    FormMain.Set4KLabelSpecs(LabelLayoutTitle, 23, 25, -1, -1, 16);
+    FormMain.Set4KButtonsOkCancelPanel(PanelBottom, ButtonOk, ButtonCancel, False);
+  end;
+end;
 
 procedure TFormImageLayoutSelector.LoadLayoutIcons;
 var
@@ -64,6 +91,8 @@ end;
 
 procedure TFormImageLayoutSelector.FormShow(Sender: TObject);
 begin
+  Resize4K;
+  FormMain.ELV_ResetNormalColors(LayoutsListView);
   if IsNightMode then
      begin
        FormImageLayoutSelector.Color:= menu_background_color[1];
@@ -72,11 +101,8 @@ begin
        FormMain.SetSystemTitleLabelColors(LabelLayoutTitle);
        FormMain.SetButtonExColors(ButtonOk);
        FormMain.SetButtonExColors(ButtonCancel);
+       FormMain.ELV_SetNightModeColors(LayoutsListView);
      end;
-
-  FormMain.ELV_ResetNormalColors(LayoutsListView);
-  if IsNightMode then
-     FormMain.ELV_SetNightModeColors(LayoutsListView);
   LoadLayoutIcons;
 end;
 

@@ -3,7 +3,9 @@ object FormConsCompSelectEmulator: TFormConsCompSelectEmulator
   Top = 567
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
-  Caption = 'Select Emulator To Be Used For Each System (Console/Computer)'
+  Caption = 
+    'Select Emulator To Be Used For Each System (Console/Computer/Han' +
+    'dheld)'
   ClientHeight = 612
   ClientWidth = 684
   Color = 15856113
@@ -42,14 +44,28 @@ object FormConsCompSelectEmulator: TFormConsCompSelectEmulator
     EditManager.Font.Height = -12
     EditManager.Font.Name = 'Segoe UI'
     EditManager.Font.Style = []
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clBlack
+    Font.Height = -12
+    Font.Name = 'Segoe UI'
+    Font.Style = []
+    GroupFont.Charset = ANSI_CHARSET
+    GroupFont.Color = clMaroon
+    GroupFont.Height = -13
+    GroupFont.Name = 'Trebuchet MS'
+    GroupFont.Style = [fsBold]
     HintType = ehtToolTip
     Header.Columns.Items = {
       0600000001000000110000005445617379436F6C756D6E53746F726564FFFECE
       00060000008008000101000100000000000001D2010000FFFFFF1F0001000000
       00000000000000000000000000000000}
     Header.Draggable = False
+    Header.Font.Charset = ANSI_CHARSET
+    Header.Font.Color = clBlack
+    Header.Font.Height = -12
+    Header.Font.Name = 'Segoe UI'
+    Header.Font.Style = []
     Header.Height = 23
-    ImagesGroup = IL_Systems
     ImagesLarge = IL_EmulatorIcon
     PaintInfoGroup.BandEnabled = False
     PaintInfoGroup.Expandable = False
@@ -59,6 +75,7 @@ object FormConsCompSelectEmulator: TFormConsCompSelectEmulator
     PaintInfoItem.CheckType = ectRadio
     PaintInfoItem.TileDetailCount = 2
     ParentColor = True
+    ParentFont = False
     Scrollbars.HorzEnabled = False
     ShowGroupMargins = True
     ShowThemedBorder = False
@@ -72,10 +89,12 @@ object FormConsCompSelectEmulator: TFormConsCompSelectEmulator
     TabOrder = 0
     View = elsTile
     CustomCheckRadioEnabled = False
+    CustomEnableIconHD = False
+    CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+    CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     OnGroupImageDraw = EmulatorsListGroupImageDraw
     OnGroupImageGetSize = EmulatorsListGroupImageGetSize
     OnGroupImageDrawIsCustom = EmulatorsListGroupImageDrawIsCustom
-    OnGroupPaintText = EmulatorsListGroupPaintText
     OnItemCheckChange = EmulatorsListItemCheckChange
     OnItemPaintText = EmulatorsListItemPaintText
   end
@@ -153,18 +172,15 @@ object FormConsCompSelectEmulator: TFormConsCompSelectEmulator
       ReturnIsTab = False
       Themed = True
       CustomIconsEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
   end
   object IL_EmulatorIcon: TImageList
     Height = 32
     Width = 32
     Left = 56
-    Top = 160
-  end
-  object IL_Systems: TImageList
-    Height = 32
-    Width = 32
-    Left = 96
     Top = 160
   end
 end

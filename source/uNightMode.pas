@@ -23,8 +23,8 @@ type
     NightModeToolBarBkColorsButtonDefault: TBitBtnEx;
     NightModeToolBarBkTopColor: TColorBoxEx;
     NightModeToolBarBkBottomColor: TColorBoxEx;
-    NightModeLabelToolBarBkBottomColor: TShadowLabel;
-    NightModeLabelToolBarBkTopColor: TShadowLabel;
+    NightModeToolBarBkBottomColorLabel: TShadowLabel;
+    NightModeToolBarBkTopColorLabel: TShadowLabel;
     NightModeGamesListStatusBarColorsBox: TPanelEx;
     NightModeGamesListStatusBarColorsBoxLabel: TShadowLabel;
     NightModeGamesListStatusBarGradientBar: TAdvOfficeCheckBoxEx;
@@ -32,25 +32,25 @@ type
     NightModeGamesListStatusBarTopColor: TColorBoxEx;
     NightModeGamesListStatusBarBottomColor: TColorBoxEx;
     NightModeGamesListStatusBarFontColor: TColorBoxEx;
-    NightModeLabelGamesListStatusBarFontColor: TShadowLabel;
-    NightModeLabelGamesListStatusBarBottomColor: TShadowLabel;
-    NightModeLabelGamesListStatusBarTopColor: TShadowLabel;
+    NightModeGamesListStatusBarFontColorLabel: TShadowLabel;
+    NightModeGamesListStatusBarBottomColorLabel: TShadowLabel;
+    NightModeGamesListStatusBarTopColorLabel: TShadowLabel;
     NightModeGamesSelectionBarColorsBox: TPanelEx;
     NightModeGamesSelectionBarColorsBoxLabel: TShadowLabel;
-    NightModeLabelGamesSelectionTopColor: TShadowLabel;
-    NightModeLabelGamesSelectionFontColor: TShadowLabel;
-    NightModeLabelGamesSelectionFrameColor: TShadowLabel;
-    NightModeLabelGamesSelectionMissROMsTopColor: TShadowLabel;
-    NightModeLabelGamesSelectionMissROMsFontColor: TShadowLabel;
-    NightModeLabelGamesSelectionMissROMsFrameColor: TShadowLabel;
-    NightModeGamesSelectionMissROMsLabel: TShadowLabel;
-    NightModeLabelGamesSelectionInactiveTopColor: TShadowLabel;
-    NightModeLabelGamesSelectionInactiveFontColor: TShadowLabel;
-    NightModeLabelGamesSelectionInactiveFrameColor: TShadowLabel;
+    NightModeGamesSelectionTopColorLabel: TShadowLabel;
+    NightModeGamesSelectionFontColorLabel: TShadowLabel;
+    NightModeGamesSelectionFrameColorLabel: TShadowLabel;
+    NightModeGamesSelectionMissROMsTopColorLabel: TShadowLabel;
+    NightModeGamesSelectionMissROMsFontColorLabel: TShadowLabel;
+    NightModeGamesSelectionMissROMsFrameColorLabel: TShadowLabel;
+    NightModeGamesSelectionMissROMsTitleLabel: TShadowLabel;
+    NightModeGamesSelectionInactiveTopColorLabel: TShadowLabel;
+    NightModeGamesSelectionInactiveFontColorLabel: TShadowLabel;
+    NightModeGamesSelectionInactiveFrameColorLabel: TShadowLabel;
     NightModeGamesSelectionInactiveLabel: TShadowLabel;
-    NightModeLabelGamesSelectionBottomColor: TShadowLabel;
-    NightModeLabelGamesSelectionMissROMsBottomColor: TShadowLabel;
-    NightModeLabelGamesSelectionInactiveBottomColor: TShadowLabel;
+    NightModeGamesSelectionBottomColorLabel: TShadowLabel;
+    NightModeGamesSelectionMissROMsBottomColorLabel: TShadowLabel;
+    NightModeGamesSelectionInactiveBottomColorLabel: TShadowLabel;
     NightModeGameSelectionButtonDefault: TBitBtnEx;
     NightModeGameSelectionAlphaBlend: TAdvOfficeCheckBoxEx;
     NightModeGameSelectionGradientBar: TAdvOfficeCheckBoxEx;
@@ -75,32 +75,30 @@ type
     NightModePanelColorsTitleFontColor: TColorBoxEx;
     NightModePanelColorsTitleShadowFontColor: TColorBoxEx;
     NightModePanelColorsTitle2ShadowFontColor: TColorBoxEx;
-    NightModeLabelPanelColorsTitleFontColor: TShadowLabel;
+    NightModePanelColorsTitleFontColorLabel: TShadowLabel;
     NightModePanelColorsImageCategoryTextFontColorLabel: TShadowLabel;
-    NightModeLabelSearchGamesPanelTopColor: TShadowLabel;
+    NightModeSearchGamesPanelTopColorLabel: TShadowLabel;
     NightModeSearchGamesPanelTopColor: TColorBoxEx;
     NightModeSearchGamesPanelBottomColor: TColorBoxEx;
     NightModeSearchGamesPanelInnerFrameColor: TColorBoxEx;
     NightModeSearchGamesPanelOuterFrameColor: TColorBoxEx;
     NightModePanelColorsTitle2FontColor: TColorBoxEx;
-    NightModeLabelPanelColorsTitle2FontColor: TShadowLabel;
-    NightModeLabelSearchGamesPanelOuterFrameColor: TShadowLabel;
-    NightModeLabelSearchGamesPanelInnerFrameColor: TShadowLabel;
-    NightModeLabelSearchGamesPanelBottomColor: TShadowLabel;
+    NightModePanelColorsTitle2FontColorLabel: TShadowLabel;
+    NightModeSearchGamesPanelOuterFrameColorLabel: TShadowLabel;
+    NightModeSearchGamesPanelInnerFrameColorLabel: TShadowLabel;
+    NightModeSearchGamesPanelBottomColorLabel: TShadowLabel;
     PanelPage2: TPanelEx;
     NightModeSearchGamesPanelColorsBox: TPanelEx;
     NightModeSearchGamesPanelColorsBoxLabel: TShadowLabel;
-    NightModeLabelSearchGamesPanelFilterFontColor: TShadowLabel;
-    NightModeLabelSearchGamesPanelFieldFontColor: TShadowLabel;
-    NightModeLabelSearchGamesPanelCaptionBarFontColor: TShadowLabel;
-    NightModeLabelSearchGamesPanelEditBoxFontColor: TShadowLabel;
-    NightModeLabelSearchGamesPanelEditBoxBackgroundColor: TShadowLabel;
-    NightModeLabelSearchGamesPanelEditBoxCustomFrameColor: TShadowLabel;
-    LabelNightModeSearchGamesPanelEditBoxCustomFocusedFrameColor: TShadowLabel;
+    NightModeSearchGamesPanelFilterFontColorLabel: TShadowLabel;
+    NightModeSearchGamesPanelFieldFontColorLabel: TShadowLabel;
+    NightModeSearchGamesPanelEditBoxFontColorLabel: TShadowLabel;
+    NightModeSearchGamesPanelEditBoxBackgroundColorLabel: TShadowLabel;
+    NightModeSearchGamesPanelEditBoxCustomFrameColorLabel: TShadowLabel;
+    NightModeSearchGamesPanelEditBoxCustomFocusedFrameColorLabel: TShadowLabel;
     NightModeSearchGamesPanelColorsButtonDefault: TBitBtnEx;
     NightModeSearchGamesPanelFilterFontColor: TColorBoxEx;
     NightModeSearchGamesPanelFieldFontColor: TColorBoxEx;
-    NightModeSearchGamesPanelCaptionBarFontColor: TColorBoxEx;
     NightModeSearchGamesPanelEditBoxFontColor: TColorBoxEx;
     NightModeSearchGamesPanelEditBoxBackgroundColor: TColorBoxEx;
     NightModeSearchGamesPanelEditBoxCustomFrameColor: TColorBoxEx;
@@ -118,36 +116,34 @@ type
     NightModeGamesBackgroundImageButtonUpdate: TBitBtnEx;
     NightModeMAMEGameDocsBox: TPanelEx;
     NightModeMAMEGameDocsBoxLabel: TShadowLabel;
-    NightModeLabelGameDocsShowStatusBar: TShadowLabel;
     NightModeGameDocsFont_Setting: TShadowLabel;
     NightModeGameDocumentsBackgroundColor: TColorBoxEx;
     NightModeGameDocumentsButtonDefault: TBitBtnEx;
-    NightModeGameDocsShowBorder: TAdvOfficeCheckBoxEx;
     NightModeGameDocsBorderColor: TColorBoxEx;
     NightModeGameDocsBorderColorButtonDefault: TBitBtnEx;
     NightModeGameDocsShowStatusBar: TAdvOfficeCheckBoxEx;
     NightModeMenuPopupMenuBox: TPanelEx;
     NightModeMenuPopupMenuBoxLabel: TShadowLabel;
-    NightModeLabelMenuPopupMenuFrameColor: TShadowLabel;
+    NightModeMenuPopupMenuFrameColorLabel: TShadowLabel;
     NightModeMenuPopupMenuFrameColor: TColorBoxEx;
-    NightModeMenuPopupMenuFrameColorDefaultColors: TBitBtnEx;
+    NightModeMenuPopupMenuFrameColorButtonDefault: TBitBtnEx;
     NightModeButtonColorsBox: TPanelEx;
     NightModeButtonColorsBoxLabel: TShadowLabel;
-    NightModeLabelButtonColorFontColor: TShadowLabel;
-    NightModeLabelButtonColorGradientTop: TShadowLabel;
-    NightModeLabelButtonColorGradientBottom: TShadowLabel;
-    NightModeLabelButtonColorGradientBottomHover: TShadowLabel;
-    NightModeLabelButtonColorGradientTopHover: TShadowLabel;
-    NightModeLabelButtonColorGradientTopDisabled: TShadowLabel;
-    NightModeLabelButtonColorGradientBottomDisabled: TShadowLabel;
-    NightModeLabelButtonColorFrameColor: TShadowLabel;
-    NightModeLabelButtonColorFrameColorHover: TShadowLabel;
-    NightModeLabelButtonColorFrameColorDisabled: TShadowLabel;
-    NightModeLabelButtonColorFrameColorFocused: TShadowLabel;
-    NightModeLabelButtonColorFontColorDisabled: TShadowLabel;
-    NightModeLabelButtonColorGradientBottomSelected: TShadowLabel;
-    NightModeLabelButtonColorGradientTopSelected: TShadowLabel;
-    NightModeLabelButtonColorFrameColorSelected: TShadowLabel;
+    NightModeButtonColorFontColorLabel: TShadowLabel;
+    NightModeButtonColorGradientTopLabel: TShadowLabel;
+    NightModeButtonColorGradientBottomLabel: TShadowLabel;
+    NightModeButtonColorGradientBottomHoverLabel: TShadowLabel;
+    NightModeButtonColorGradientTopHoverLabel: TShadowLabel;
+    NightModeButtonColorGradientTopDisabledLabel: TShadowLabel;
+    NightModeButtonColorGradientBottomDisabledLabel: TShadowLabel;
+    NightModeButtonColorFrameColorLabel: TShadowLabel;
+    NightModeButtonColorFrameColorHoverLabel: TShadowLabel;
+    NightModeButtonColorFrameColorDisabledLabel: TShadowLabel;
+    NightModeButtonColorFrameColorFocusedLabel: TShadowLabel;
+    NightModeButtonColorFontColorDisabledLabel: TShadowLabel;
+    NightModeButtonColorGradientBottomSelectedLabel: TShadowLabel;
+    NightModeButtonColorGradientTopSelectedLabel: TShadowLabel;
+    NightModeButtonColorFrameColorSelectedLabel: TShadowLabel;
     NightModeButtonColorFontColor: TColorBoxEx;
     NightModeButtonColorGradientTop: TColorBoxEx;
     NightModeButtonColorGradientBottom: TColorBoxEx;
@@ -167,17 +163,17 @@ type
     NightModeButtonColorFrameColorSelected: TColorBoxEx;
     NightModeGamesListSplittersBox: TPanelEx;
     NightModeGamesListSplittersBoxLabel: TShadowLabel;
-    NightModeLabelGamesListSplitterSingleColor: TShadowLabel;
-    NightModeLabelGamesListSplitterSingleColorHot: TShadowLabel;
+    NightModeGamesListSplitterSingleColorLabel: TShadowLabel;
+    NightModeGamesListSplitterSingleColorHotLabel: TShadowLabel;
     NightModeGamesListSplitterSingleColorButtonDefault: TBitBtnEx;
     NightModeGamesListSplitterShowGripIcon: TAdvOfficeCheckBoxEx;
     NightModeGamesListSplitterSingleColor: TColorBoxEx;
     NightModeGamesListSplitterSingleColorHot: TColorBoxEx;
     NightModeImagesHintBox: TPanelEx;
     NightModeImagesHintBoxLabel: TShadowLabel;
-    NightModeLabelHintBox_Color: TShadowLabel;
-    NightModeLabelHintBox_Opacity: TShadowLabel;
-    NightModeLabelHintBox_TextColor: TShadowLabel;
+    NightModeHintBox_ColorLabel: TShadowLabel;
+    NightModeHintBox_OpacityLabel: TShadowLabel;
+    NightModeHintBox_TextColorLabel: TShadowLabel;
     NightModeHintBoxtColorsButtonDefault: TBitBtnEx;
     NightModeHintBox_Color: TColorBoxEx;
     NightModeHintBox_FrameColor: TColorBoxEx;
@@ -191,8 +187,8 @@ type
     NightModeHintBox_TextShadowEnabled: TAdvOfficeCheckBoxEx;
     NightModeImageSplittersBox: TPanelEx;
     NightModeImageSplittersBoxLabel: TShadowLabel;
-    NightModeLabelImageSplitterSingleColor: TShadowLabel;
-    NightModeLabelImageSplitterSingleColorHot: TShadowLabel;
+    NightModeImageSplitterSingleColorLabel: TShadowLabel;
+    NightModeImageSplitterSingleColorHotLabel: TShadowLabel;
     NightModeImageSplitterSingleColorButtonDefault: TBitBtnEx;
     NightModeImageSplitterShowGripIcon: TAdvOfficeCheckBoxEx;
     NightModeImageSplitterSingleColor: TColorBoxEx;
@@ -205,8 +201,8 @@ type
     NightModeProfiles: TComboBox2Ex;
     NightModeProfiles_ButtonSave: TBitBtnEx;
     NightModeProfiles_ButtonDelete: TBitBtnEx;
-    NightModeProfilesGroupBox: TPanelEx;
-    NightModeProfilesGroupBoxLabel: TShadowLabel;
+    NightModeProfilesBox: TPanelEx;
+    NightModeProfilesBoxLabel: TShadowLabel;
     NightModePanelColorsBoxPreview: TPanelEx;
     NightModePanelColorsBoxPreviewLabel: TShadowLabel;
     PanelInitZipFile: TPanelEx;
@@ -223,19 +219,16 @@ type
     ImageHintIcon: TImage;
     NightModeGamesSelectionBarPreview: TPanelEx;
     NightModeGamesSelectionBarPreviewLabel: TShadowLabel;
-    NightModePanelGamesList: TPanelEx;
-    NightModeGamesListView: TEasyListview;
     NightModeGamesSelectionBarPreviewButtonClose: TShadowLabel;
     NightModePanelColorsBoxPreviewButtonClose: TShadowLabel;
     NightModePanelColorsBoxButtonPreview: TBitBtnEx;
     NightModeImagesHintBoxPreviewButtonClose: TShadowLabel;
     NightModeImagesHintBoxButtonPreview: TBitBtnEx;
-    NightModeLabelSearchGamesPanelEditBoxFrameColor: TShadowLabel;
+    NightModeSearchGamesPanelEditBoxFrameColorTitleLabel: TShadowLabel;
     NightModePanelColorsTitleShadowEnabled: TAdvOfficeCheckBoxEx;
     NightModePanelColorsTitle2ShadowEnabled: TAdvOfficeCheckBoxEx;
     NightModeImageHintPanel_ImageView1: TBitBtnEx;
     NightModeImageHintPanel_ImageView2: TBitBtnEx;
-    NightModeHintBox_LargerFontSize: TAdvOfficeCheckBoxEx;
     NightModeHintBox_Position: TGaugeBar;
     NightModeHintBox_PositionLabel: TShadowLabel;
     ImageHintDetailsText: TShadowLabel;
@@ -248,21 +241,13 @@ type
     NightModeSearchGamesPanelColorsBoxPreviewButtonClose: TShadowLabel;
     NightModeSearchGamesPanelColorsBoxPreviewLabel: TShadowLabel;
     NightModePanelSearchGames: TPanelEx;
-    NightModePanelSearchGamesCaptionBar: TShadowLabel;
-    NightModeButtonFilterTitleClose: TShadowLabel;
     NightModeLabelSearchGamesFilter: TShadowLabel;
     NightModeLabelSearchGamesBy: TShadowLabel;
     NightModeFilterGameTitle: TEditEx;
-    NightModeToolBarFilterTitle: TToolBar;
-    NightModeButtonFilterTitleApply: TToolButton;
-    NightModeButtonFilterControls: TToolButton;
-    NightModeButtonFilterTitleReset: TToolButton;
-    NightModeButtonFilterTitleSettings: TToolButton;
-    NightModeButtonFilterTitlePanelMode: TToolButton;
     NightModeSearchGamesPanelColorsButtonPreview: TBitBtnEx;
     NightModeColorsBoxButtonDefault2: TBitBtnEx;
-    NightModeGamesListHeaderGroupBox: TPanelEx;
-    NightModeGamesListHeaderGroupBoxLabel: TShadowLabel;
+    NightModeGamesListHeaderBox: TPanelEx;
+    NightModeGamesListHeaderBoxLabel: TShadowLabel;
     NightModeGamesListHeaderButtonDefault: TBitBtnEx;
     NightModeGamesListHeaderBackgroundColor: TColorBoxEx;
     NightModeGamesListHeaderBackgroundColorHover: TColorBoxEx;
@@ -271,7 +256,7 @@ type
     NightModeGamesListHeaderBackgroundColorDown: TColorBoxEx;
     NightModeGamesListHeaderBackgroundColorDownLabel: TShadowLabel;
     NightModeGamesListHeaderFont: TShadowLabel;
-    NightModeGamesListHeaderFontColorLabel: TShadowLabel;
+    NightModeGamesListHeaderFontLabel: TShadowLabel;
     NightModeButtonColorsBoxPreview: TPanelEx;
     NightModeButtonColorsBoxPreviewButtonClose: TShadowLabel;
     NightModeButtonColorsBoxPreviewLabel: TShadowLabel;
@@ -286,13 +271,11 @@ type
     NightModeNewProfileBoxButtonClose: TShadowLabel;
     NightModeNewProfileBoxButtonConfirm: TBitBtnEx;
     NightModeNewProfileBoxButtonAbort: TBitBtnEx;
-    NightModeNewProfileProfilesListPanel: TPanelEx;
-    NightModeNewProfileProfilesList: TEasyListview;
     NightModeNewProfileProfileNameLabel: TShadowLabel;
     NightModeNewProfileProfileName: TEditEx;
     NightModeNewProfileProfileNameTipLabel: TShadowLabel;
     NightModeNewProfileUseColorsActiveProfile: TAdvOfficeCheckBoxEx;
-    NightModeNewProfileCreateWithDefaultColorsLabel: TShadowLabel;
+    NightModeNewProfileUseColorsActiveProfileLabel: TShadowLabel;
     NightModeProfiles_ButtonDefault: TBitBtnEx;
     NightModeGamesListHeaderButtonDefault2: TBitBtnEx;
     NightModeHintBoxtColorsButtonDefault2: TBitBtnEx;
@@ -305,16 +288,26 @@ type
     NightModeButtonColorsBoxButtonUpdateScreenButtons: TBitBtnEx;
     NightModePanelColorsImageZipTextFontColorLabel: TShadowLabel;
     NightModeCheckBoxRadioButtonBox: TPanelEx;
-    CheckBoxRadioButtonBoxLabel: TShadowLabel;
+    NightModeCheckBoxRadioButtonBoxLabel: TShadowLabel;
     NightModeCheckBoxRadioButtonBoxFolderFullPathLabel: TShadowLabel;
     NightModeCheckBoxRadioButtonProfile: TComboBox2Ex;
     NightModeCheckBoxRadioButton_Radio1: TAdvOfficeRadioButtonEx;
     NightModeCheckBoxRadioButton_Radio2: TAdvOfficeRadioButtonEx;
     NightModeCheckBoxRadioButton_Check1: TAdvOfficeCheckBoxEx;
     NightModeCheckBoxRadioButtonProfileButtonUpdate: TBitBtnEx;
-    NightModeLabelSearchGamesFloatingPanel: TShadowLabel;
-    NightModeUseWin10DarkModeScrollBars: TAdvOfficeCheckBoxEx;
-    NightModeUseWin10DarkModeScrollBarsButtonHelp: TBitBtnEx;
+    IL_NightModeCheckBoxRadioButtonIcons: TImageList;
+    IL_NightModeCheckBoxRadioButtonIconsHD: TImageList;
+    NightModeNewProfileBoxIcon: TImage;
+    NightModeNewProfileProfilesList: TEasyListview;
+    NightModeGameDocumentsBackgroundColorLabel: TShadowLabel;
+    NightModeGameDocsBorderColorLabel: TShadowLabel;
+    NightModeImageBorderColorLabel: TShadowLabel;
+    NightModeGamesBackgroundColorLabel: TShadowLabel;
+    ButtonFilterTitleApply_ToolBar: TSpeedButtonEx;
+    ButtonFilterControls_ToolBar: TSpeedButtonEx;
+    ButtonFilterTitleReset_ToolBar: TSpeedButtonEx;
+    ButtonFilterTitleSettings_ToolBar: TSpeedButtonEx;
+    NightModeGamesListView: TEasyListview;
     procedure NightModeButtonColorsSampleButton1Click(Sender: TObject);
     procedure NightModeButtonColorFontColorSelect(Sender: TObject);
     procedure NightModeButtonColorGradientTopSelect(Sender: TObject);
@@ -397,8 +390,6 @@ type
       Sender: TObject);
     procedure NightModeSearchGamesPanelEditBoxCustomFocusedFrameColorSelect(
       Sender: TObject);
-    procedure NightModeSearchGamesPanelCaptionBarFontColorSelect(
-      Sender: TObject);
     procedure NightModeSearchGamesPanelColorsButtonDefaultClick(
       Sender: TObject);
     procedure NightModeGamesListSplitterShowGripIconClick(Sender: TObject);
@@ -407,12 +398,11 @@ type
       Sender: TObject);
     procedure NightModeGameDocumentsBackgroundColorSelect(Sender: TObject);
     procedure NightModeGameDocumentsButtonDefaultClick(Sender: TObject);
-    procedure NightModeGameDocsShowBorderClick(Sender: TObject);
     procedure NightModeGameDocsBorderColorSelect(Sender: TObject);
     procedure NightModeGameDocsBorderColorButtonDefaultClick(
       Sender: TObject);
     procedure NightModeGameDocsShowStatusBarClick(Sender: TObject);
-    procedure NightModeMenuPopupMenuFrameColorDefaultColorsClick(
+    procedure NightModeMenuPopupMenuFrameColorButtonDefaultClick(
       Sender: TObject);
     procedure NightModeHintBoxtColorsButtonDefaultClick(Sender: TObject);
     procedure NightModeHintBox_OpacityChange(Sender: TObject);
@@ -454,7 +444,6 @@ type
     procedure NightModePanelColorsTitleShadowEnabledClick(Sender: TObject);
     procedure NightModePanelColorsTitle2ShadowEnabledClick(Sender: TObject);
     procedure NightModeImageHintPanel_ImageView1Click(Sender: TObject);
-    procedure NightModeHintBox_LargerFontSizeClick(Sender: TObject);
     procedure NightModeHintBox_PositionChange(Sender: TObject);
     procedure NightModeGameSelectionRoundCornersClick(Sender: TObject);
     procedure NightModeLabelButtonColorFontShadowColorDisabledClick(
@@ -467,8 +456,6 @@ type
     procedure NightModeSearchGamesPanelColorsButtonPreviewClick(
       Sender: TObject);
     procedure NightModeSearchGamesPanelColorsBoxPreviewButtonCloseClick(Sender: TObject);
-    procedure NightModeToolBarFilterTitleCustomDraw(Sender: TToolBar;
-      const ARect: TRect; var DefaultDraw: Boolean);
     procedure NightModeProfiles_ButtonNewClick(Sender: TObject);
     procedure NightModeProfiles_ButtonDeleteClick(Sender: TObject);
     procedure NightModeGamesListSplitterSingleColorHotSelect(
@@ -499,8 +486,6 @@ type
     procedure NightModeGameDocsFont_SettingClick(Sender: TObject);
     procedure NightModeCheckBoxRadioButtonProfileSelect(Sender: TObject);
     procedure NightModeCheckBoxRadioButtonProfileButtonUpdateClick(Sender: TObject);
-    procedure NightModeUseWin10DarkModeScrollBarsButtonHelpClick(
-      Sender: TObject);
   private
     { Private declarations }
     MoveControls: Boolean;
@@ -509,7 +494,7 @@ type
     procedure NightModeRepaintToolBar;
 
     procedure SetPanelExParentPos(PanelSource: TPanelEx; LeftPos, TopPos: Integer);
-    procedure HintBoxUpdateSize;
+    procedure HintBoxUpdateSize(UpdateMainScreen: Boolean = True);
   public
     { Public declarations }
     procedure AddNightModeProfiles(ReloadList: Boolean; AddNewProfileName: String = '');
@@ -521,6 +506,9 @@ type
 var
   FormNightMode: TFormNightMode;
 
+const
+  NightModeDefaultCheckTheme: String = 'Night Mode 1 Black';
+  
 implementation
 
 uses uMain, uApplyFilterMsgBox;
@@ -545,15 +533,15 @@ begin
                     if not IsNightModePreview then
                     begin
                       if FormMain.GamesListView.BackGround.Image <> nil then
-                         FormMain.GamesListView.BackGround.Image:= nil;
+                         FormMain.GamesListView.BackGround.Image:=  nil;
 
                       if FormMain.MachinesListSidePanel.BackGround.Image <> nil then
-                         FormMain.MachinesListSidePanel.BackGround.Image:= nil;
+                         FormMain.MachinesListSidePanel.BackGround.Image:=  nil;
                     end;
                   end;
                   if NightModeControls then
                      if NightModeGamesListView.BackGround.Image <> nil then
-                        NightModeGamesListView.BackGround.Image:= nil;
+                        NightModeGamesListView.BackGround.Image:=  nil;
                   //FormMain.BlinkBkEdit(ImageFileNameEditBox);
                 end;
              Exit;
@@ -659,7 +647,7 @@ begin
 
   iFoldersList:= THashedStringList.Create;
   GetFoldersList2(FormMain.GetFolderFull(32)+'overlay\', iFoldersList, True, False);
-  Application.ProcessMessages;
+
   if iFoldersList.Count > 0 then
      begin
        ToolBarOverlayIconsFolder.Items.AddStrings(iFoldersList);
@@ -689,7 +677,6 @@ begin
      begin
        FormMain.ImagesToolbarButtons.Invalidate;
        FormMain.ToolBarButtons.Invalidate; // games filters tool bar
-       FormMain.ToolBarFilterTitle_ToolBar.Invalidate;
      end;
 end;
 
@@ -872,21 +859,24 @@ begin
   SetDefaultColorBox(NightModeButtonColorGradientBottomHover);
   SetDefaultColorBox(NightModeButtonColorFrameColorHover);
 
-  NightModeLabelButtonColorFontShadowColorDisabled.Checked:= False;  
+  SetDefaultColorBox(NightModeButtonColorFontColorDisabled);
+  SetDefaultColorBox(NightModeButtonColorFontShadowColorDisabled);
+
+  SetDefaultColorBox(NightModeButtonColorGradientTopDisabled);
+  SetDefaultColorBox(NightModeButtonColorGradientBottomDisabled);
+  SetDefaultColorBox(NightModeButtonColorFrameColorDisabled);
+
+  NightModeLabelButtonColorFontShadowColorDisabled.Checked:= False;
   if TBitBtnEx(Sender).Tag = 0 then
      begin
        // my button colors
-       FormMain.SetSelectedColorBox(NightModeButtonColorGradientTopSelected, $00a66632); // RGB(50, 102, 166)
-       FormMain.SetSelectedColorBox(NightModeButtonColorGradientBottomSelected, $008c5326); // RGB(38, 83, 140)
-       FormMain.SetSelectedColorBox(NightModeButtonColorFrameColorSelected, $00222222); // RGB(34, 34, 34)
-
-       // disabled state
-       FormMain.SetSelectedColorBox(NightModeButtonColorFontColorDisabled, clGray);
-       FormMain.SetSelectedColorBox(NightModeButtonColorFontShadowColorDisabled, clrDarkGray);
+       SetSelectedColorBox(NightModeButtonColorGradientTopSelected,    $00a66632); // RGB(50, 102, 166)
+       SetSelectedColorBox(NightModeButtonColorGradientBottomSelected, $008c5326); // RGB(38,  83, 140)
+       SetSelectedColorBox(NightModeButtonColorFrameColorSelected,     $00222222); // RGB(34,  34,  34)
 
        //FormMain.SetSelectedColorBox(NightModeButtonColorGradientTopDisabled, $00646464); // RGB(100, 100, 100) ... just in case
-       FormMain.SetSelectedColorBox(NightModeButtonColorGradientBottomDisabled, clrMedDarkGray);
-       FormMain.SetSelectedColorBox(NightModeButtonColorFrameColorDisabled, $00222222); // RGB(34, 34, 34)
+       SetSelectedColorBox(NightModeButtonColorGradientBottomDisabled, clrMedDarkGray);
+       SetSelectedColorBox(NightModeButtonColorFrameColorDisabled,     $00222222); // RGB(34, 34, 34)
      end
   else
      begin
@@ -894,13 +884,6 @@ begin
        SetDefaultColorBox(NightModeButtonColorGradientTopSelected);
        SetDefaultColorBox(NightModeButtonColorGradientBottomSelected);
        SetDefaultColorBox(NightModeButtonColorFrameColorSelected);
-
-       SetDefaultColorBox(NightModeButtonColorFontColorDisabled);
-       SetDefaultColorBox(NightModeButtonColorFontShadowColorDisabled);
-
-       SetDefaultColorBox(NightModeButtonColorGradientTopDisabled);
-       SetDefaultColorBox(NightModeButtonColorGradientBottomDisabled);
-       SetDefaultColorBox(NightModeButtonColorFrameColorDisabled);
      end;
 end;
 
@@ -930,8 +913,8 @@ begin
        FormMain.GamesListView.Color:= NightModeGamesBackgroundColor.Selected;
        FormMain.MachinesListSidePanel.Color:= FormMain.GamesListView.Color;
        FormMain.Font_TilesViewDetailsText.Color:= GetContrastColor(NightModeGamesBackgroundColor.Selected);
-       FormMain.SetEasyListViewHeaderColors(FormMain.GamesListView, False);
-       FormMain.SetEasyListViewHeaderColors(FormMain.MachinesListSidePanel, False);
+       FormMain.SetEasyListViewHeaderColors(FormMain.GamesListView, False, False, False);
+       FormMain.SetEasyListViewHeaderColors(FormMain.MachinesListSidePanel, False, False, False);
      end;
   NightModeGamesListView.Color:= NightModeGamesBackgroundColor.Selected;
 end;
@@ -1007,20 +990,20 @@ procedure TFormNightMode.NightModeGameSelectionButtonDefaultClick(
 begin
   if TBitBtnEx(Sender).Tag = 0 then
      begin
-       FormMain.SetSelectedColorBox(NightModeGamesSelectionTopColor, clrDarkBlue);
-       FormMain.SetSelectedColorBox(NightModeGamesSelectionBottomColor, clrBlackBk);
-       FormMain.SetSelectedColorBox(NightModeGamesSelectionFrameColor, clBlue);
-       FormMain.SetSelectedColorBox(NightModeGamesSelectionFontColor, clWhite);
+       SetSelectedColorBox(NightModeGamesSelectionTopColor,    clrDarkBlue);
+       SetSelectedColorBox(NightModeGamesSelectionBottomColor, clrBlackBk);
+       SetSelectedColorBox(NightModeGamesSelectionFrameColor,  clBlue);
+       SetSelectedColorBox(NightModeGamesSelectionFontColor,   clWhite);
 
-       FormMain.SetSelectedColorBox(NightModeGamesSelectionMissROMsTopColor, clrDarkRed);
-       FormMain.SetSelectedColorBox(NightModeGamesSelectionMissROMsBottomColor, clrBlackBk);
-       FormMain.SetSelectedColorBox(NightModeGamesSelectionMissROMsFrameColor, clRed);
-       FormMain.SetSelectedColorBox(NightModeGamesSelectionMissROMsFontColor, clWhite);
+       SetSelectedColorBox(NightModeGamesSelectionMissROMsTopColor,    clrDarkRed);
+       SetSelectedColorBox(NightModeGamesSelectionMissROMsBottomColor, clrBlackBk);
+       SetSelectedColorBox(NightModeGamesSelectionMissROMsFrameColor,  clRed);
+       SetSelectedColorBox(NightModeGamesSelectionMissROMsFontColor,   clWhite);
 
-       FormMain.SetSelectedColorBox(NightModeGamesSelectionInactiveTopColor, $00d2d2c8); // RGB(200, 210, 210)
-       FormMain.SetSelectedColorBox(NightModeGamesSelectionInactiveBottomColor, $00dcdcdc); // RGB(220, 220, 220)
-       FormMain.SetSelectedColorBox(NightModeGamesSelectionInactiveFrameColor, $008e8e8e); // RGB(142, 142, 142)
-       FormMain.SetSelectedColorBox(NightModeGamesSelectionInactiveFontColor, clBlack);
+       SetSelectedColorBox(NightModeGamesSelectionInactiveTopColor,    $00d2d2c8); // RGB(200, 210, 210)
+       SetSelectedColorBox(NightModeGamesSelectionInactiveBottomColor, $00dcdcdc); // RGB(220, 220, 220)
+       SetSelectedColorBox(NightModeGamesSelectionInactiveFrameColor,  $008e8e8e); // RGB(142, 142, 142)
+       SetSelectedColorBox(NightModeGamesSelectionInactiveFontColor,   clBlack);
      end
   else
      begin
@@ -1057,7 +1040,6 @@ begin
        // this should never happen
        FormMain.ToolBarOverlayIconFolderStr:= 'Default';
        SetSelectedComboBox(0, ToolBarOverlayIconsFolder);
-       //ToolBarOverlayIconsFolder.ItemIndex:= 0;
        Exit;
      end;
 
@@ -1076,7 +1058,9 @@ begin
   if IsNightMode then
      begin
        FormMain.SetPanelExStyle(FormMain.PanelSearchGames_ToolBar, NightModeToolBarGradientBar.Checked);
-       FormMain.SetPanelExStyle(FormMain.PanelWebToolBarButtons, NightModeToolBarGradientBar.Checked);
+       FormMain.SetPanelExStyle(FormMain.PanelWebToolBarButtons,   NightModeToolBarGradientBar.Checked);
+
+       FormMain.SetPanelExStyle(NightModePanelSearchGames, NightModeToolBarGradientBar.Checked); // added July 21, 2021
        NightModeRepaintToolBar;
      end;
 end;
@@ -1086,7 +1070,9 @@ begin
   if IsNightMode then
      begin
        FormMain.PanelSearchGames_ToolBar.Color1:= NightModeToolBarBkTopColor.Selected;
-       FormMain.PanelWebToolBarButtons.Color1:= NightModeToolBarBkTopColor.Selected;
+       FormMain.PanelWebToolBarButtons.Color1:=   NightModeToolBarBkTopColor.Selected;
+
+       NightModePanelSearchGames.Color1:= NightModeToolBarBkTopColor.Selected; // added July 21, 2021
      end;
   NightModeRepaintToolBar;
 end;
@@ -1097,7 +1083,9 @@ begin
   if IsNightMode then
      begin
        FormMain.PanelSearchGames_ToolBar.Color2:= NightModeToolBarBkBottomColor.Selected;
-       FormMain.PanelWebToolBarButtons.Color2:= NightModeToolBarBkBottomColor.Selected;
+       FormMain.PanelWebToolBarButtons.Color2:=   NightModeToolBarBkBottomColor.Selected;
+
+       NightModePanelSearchGames.Color2:= NightModeToolBarBkBottomColor.Selected; // added July 21, 2021
      end;
   NightModeRepaintToolBar;
 end;
@@ -1107,8 +1095,8 @@ procedure TFormNightMode.NightModeToolBarBkColorsButtonDefaultClick(
 begin
   if TBitBtnEx(Sender).Tag = 0 then
      begin
-       FormMain.SetSelectedColorBox(NightModeToolBarBkTopColor, clrDarkBlue);
-       FormMain.SetSelectedColorBox(NightModeToolBarBkBottomColor, clrBlackBk);
+       SetSelectedColorBox(NightModeToolBarBkTopColor,    clrDarkBlue);
+       SetSelectedColorBox(NightModeToolBarBkBottomColor, clrBlackBk);
      end
   else
      begin
@@ -1123,9 +1111,9 @@ procedure TFormNightMode.NightModeGamesListStatusBarGradientBarClick(
 begin
   if IsNightMode then
      begin
-       FormMain.SetPanelExStyle(FormMain.StatusBarPanel, NightModeGamesListStatusBarGradientBar.Checked);
+       FormMain.SetPanelExStyle(FormMain.StatusBarPanel,         NightModeGamesListStatusBarGradientBar.Checked);
        FormMain.SetPanelExStyle(FormMain.StatusBarPanelMachines, NightModeGamesListStatusBarGradientBar.Checked);
-       FormMain.SetPanelExStyle(FormMain.MAMEInfoStatusBar, NightModeGamesListStatusBarGradientBar.Checked);
+       FormMain.SetPanelExStyle(FormMain.MAMEInfoStatusBar,      NightModeGamesListStatusBarGradientBar.Checked);
      end;
 end;
 
@@ -1134,9 +1122,9 @@ procedure TFormNightMode.NightModeGamesListStatusBarTopColorSelect(
 begin
   if IsNightMode then
      begin
-       FormMain.StatusBarPanel.Color1:= NightModeGamesListStatusBarTopColor.Selected;
+       FormMain.StatusBarPanel.Color1:=         NightModeGamesListStatusBarTopColor.Selected;
        FormMain.StatusBarPanelMachines.Color1:= NightModeGamesListStatusBarTopColor.Selected;
-       FormMain.MAMEInfoStatusBar.Color1:= NightModeGamesListStatusBarTopColor.Selected;
+       FormMain.MAMEInfoStatusBar.Color1:=      NightModeGamesListStatusBarTopColor.Selected;
      end;
 end;
 
@@ -1145,9 +1133,9 @@ procedure TFormNightMode.NightModeGamesListStatusBarBottomColorSelect(
 begin
   if IsNightMode then
      begin
-       FormMain.StatusBarPanel.Color2:= NightModeGamesListStatusBarBottomColor.Selected;
+       FormMain.StatusBarPanel.Color2:=         NightModeGamesListStatusBarBottomColor.Selected;
        FormMain.StatusBarPanelMachines.Color2:= NightModeGamesListStatusBarBottomColor.Selected;
-       FormMain.MAMEInfoStatusBar.Color2:= NightModeGamesListStatusBarBottomColor.Selected;
+       FormMain.MAMEInfoStatusBar.Color2:=      NightModeGamesListStatusBarBottomColor.Selected;
      end;
 end;
 
@@ -1156,8 +1144,8 @@ procedure TFormNightMode.NightModeGamesListStatusBarFontColorSelect(
 begin
   if IsNightMode then
      begin
-       FormMain.StatusBar_GamesTotal.Font.Color:= NightModeGamesListStatusBarFontColor.Selected;
-       FormMain.StatusBar_GamesGameName.Font.Color:= NightModeGamesListStatusBarFontColor.Selected;
+       FormMain.StatusBar_GamesTotal.Font.Color:=       NightModeGamesListStatusBarFontColor.Selected;
+       FormMain.StatusBar_GamesGameName.Font.Color:=    NightModeGamesListStatusBarFontColor.Selected;
        FormMain.StatusBar_MachinesGameName.Font.Color:= NightModeGamesListStatusBarFontColor.Selected;
      end;
 end;
@@ -1167,10 +1155,10 @@ procedure TFormNightMode.NightModeGamesListStatusBarButtonDefaultClick(
 begin
   if TBitBtnEx(Sender).Tag = 0 then
      begin
-       FormMain.SetSelectedColorBox(NightModeGamesListStatusBarTopColor, clrDarkBlue);
-       FormMain.SetSelectedColorBox(NightModeGamesListStatusBarBottomColor, clrBlackBk);
+       SetSelectedColorBox(NightModeGamesListStatusBarTopColor,    clrDarkBlue);
+       SetSelectedColorBox(NightModeGamesListStatusBarBottomColor, clrBlackBk);
 
-       FormMain.SetSelectedColorBox(NightModeGamesListStatusBarFontColor, clWhite);
+       SetSelectedColorBox(NightModeGamesListStatusBarFontColor, clWhite);
      end
   else
      begin
@@ -1186,15 +1174,7 @@ end;
 procedure TFormNightMode.NightModeSearchGamesPanelGradientBarClick(
   Sender: TObject);
 begin
-  if IsNightMode then
-     begin
-       FormMain.SetPanelExStyle(FormMain.PanelSearchGames, NightModeSearchGamesPanelGradientBar.Checked);
-       FormMain.SetPanelExStyle(FormMain.PanelFilterCPU, NightModeSearchGamesPanelGradientBar.Checked);
-       FormMain.ToolBarFilterTitle.Invalidate;
-       FormMain.ToolBarFilterByMainCPU.Invalidate;
-     end;
   FormMain.SetPanelExStyle(NightModePanelSearchGames, NightModeSearchGamesPanelGradientBar.Checked);
-  NightModeToolBarFilterTitle.Invalidate;
 end;
 
 procedure TFormNightMode.NightModeSearchGamesPanelTopColorSelect(
@@ -1202,19 +1182,11 @@ procedure TFormNightMode.NightModeSearchGamesPanelTopColorSelect(
 begin
   if IsNightMode then
      begin
-       FormMain.PanelSearchGames.Color1:= NightModeSearchGamesPanelTopColor.Selected;
-       FormMain.ToolBarFilterTitle.Invalidate;
-
-       FormMain.PanelFilterCPU.Color1:= NightModeSearchGamesPanelTopColor.Selected;
-       FormMain.ToolBarFilterByMainCPU.Invalidate;
-
-       FormMain.PanelInitZipFile.Color1:= NightModeSearchGamesPanelTopColor.Selected;
-
+       FormMain.PanelInitZipFile.Color1:=             NightModeSearchGamesPanelTopColor.Selected;
        FormApplyFilterMsgBox.PanelBackground.Color1:= NightModeSearchGamesPanelTopColor.Selected;
      end;
-  PanelInitZipFile.Color1:= NightModeSearchGamesPanelTopColor.Selected; // sample panel
+  PanelInitZipFile.Color1:=          NightModeSearchGamesPanelTopColor.Selected; // sample panel
   NightModePanelSearchGames.Color1:= NightModeSearchGamesPanelTopColor.Selected; // sample panel
-  NightModeToolBarFilterTitle.Invalidate; // sample panel
 end;
 
 procedure TFormNightMode.NightModeSearchGamesPanelBottomColorSelect(
@@ -1222,19 +1194,11 @@ procedure TFormNightMode.NightModeSearchGamesPanelBottomColorSelect(
 begin
   if IsNightMode then
      begin
-       FormMain.PanelSearchGames.Color2:= NightModeSearchGamesPanelBottomColor.Selected;
-       FormMain.ToolBarFilterTitle.Invalidate;
-
-       FormMain.PanelFilterCPU.Color2:= NightModeSearchGamesPanelBottomColor.Selected;
-       FormMain.ToolBarFilterByMainCPU.Invalidate;
-
-       FormMain.PanelInitZipFile.Color2:= NightModeSearchGamesPanelBottomColor.Selected;
-
+       FormMain.PanelInitZipFile.Color2:=             NightModeSearchGamesPanelBottomColor.Selected;
        FormApplyFilterMsgBox.PanelBackground.Color2:= NightModeSearchGamesPanelBottomColor.Selected;
      end;
-  PanelInitZipFile.Color2:= NightModeSearchGamesPanelBottomColor.Selected; // sample panel
+  PanelInitZipFile.Color2:=          NightModeSearchGamesPanelBottomColor.Selected; // sample panel
   NightModePanelSearchGames.Color2:= NightModeSearchGamesPanelBottomColor.Selected; // sample panel
-  NightModeToolBarFilterTitle.Invalidate; // sample panel
 end;
 
 procedure TFormNightMode.NightModeSearchGamesPanelInnerFrameColorSelect(
@@ -1242,14 +1206,10 @@ procedure TFormNightMode.NightModeSearchGamesPanelInnerFrameColorSelect(
 begin
   if IsNightMode then
      begin
-       FormMain.PanelSearchGames.ColorInnerFrame:= NightModeSearchGamesPanelInnerFrameColor.Selected;
-       FormMain.PanelFilterCPU.ColorInnerFrame:= NightModeSearchGamesPanelInnerFrameColor.Selected;
-
-       FormMain.PanelInitZipFile.ColorInnerFrame:= NightModeSearchGamesPanelInnerFrameColor.Selected;
-
+       FormMain.PanelInitZipFile.ColorInnerFrame:=             NightModeSearchGamesPanelInnerFrameColor.Selected;
        FormApplyFilterMsgBox.PanelBackground.ColorInnerFrame:= NightModeSearchGamesPanelInnerFrameColor.Selected;
      end;
-  PanelInitZipFile.ColorInnerFrame:= NightModeSearchGamesPanelInnerFrameColor.Selected; // sample panel
+  PanelInitZipFile.ColorInnerFrame:=          NightModeSearchGamesPanelInnerFrameColor.Selected; // sample panel
   NightModePanelSearchGames.ColorInnerFrame:= NightModeSearchGamesPanelInnerFrameColor.Selected; // sample panel
 end;
 
@@ -1258,14 +1218,10 @@ procedure TFormNightMode.NightModeSearchGamesPanelOuterFrameColorSelect(
 begin
   if IsNightMode then
      begin
-       FormMain.PanelSearchGames.ColorFrame:= NightModeSearchGamesPanelOuterFrameColor.Selected;
-       FormMain.PanelFilterCPU.ColorFrame:= NightModeSearchGamesPanelOuterFrameColor.Selected;
-
-       FormMain.PanelInitZipFile.ColorFrame:= NightModeSearchGamesPanelOuterFrameColor.Selected;
-
+       FormMain.PanelInitZipFile.ColorFrame:=             NightModeSearchGamesPanelOuterFrameColor.Selected;
        FormApplyFilterMsgBox.PanelBackground.ColorFrame:= NightModeSearchGamesPanelOuterFrameColor.Selected;
      end;
-  PanelInitZipFile.ColorFrame:= NightModeSearchGamesPanelOuterFrameColor.Selected; // sample panel
+  PanelInitZipFile.ColorFrame:=          NightModeSearchGamesPanelOuterFrameColor.Selected; // sample panel
   NightModePanelSearchGames.ColorFrame:= NightModeSearchGamesPanelOuterFrameColor.Selected; // sample panel
 end;
 
@@ -1294,7 +1250,7 @@ procedure TFormNightMode.NightModePanelColorsImageZipTextFontColorSelect(
 begin
   if IsNightMode then
      begin
-       FormMain.LabelInitZipFile.Font.Color:= NightModePanelColorsImageZipTextFontColor.Selected;
+       FormMain.LabelInitZipFile.Font.Color:=             NightModePanelColorsImageZipTextFontColor.Selected;
        FormApplyFilterMsgBox.LabelBoxMessage.Font.Color:= NightModePanelColorsImageZipTextFontColor.Selected;
      end;
 
@@ -1306,8 +1262,7 @@ procedure TFormNightMode.NightModePanelColorsTitleFontColorSelect(
 begin
   if IsNightMode then
      begin
-       FormMain.LabelInitZipTitle.Font.Color:= NightModePanelColorsTitleFontColor.Selected;
-
+       FormMain.LabelInitZipTitle.Font.Color:=                 NightModePanelColorsTitleFontColor.Selected;
        FormApplyFilterMsgBox.LabelBoxMessageTitle.Font.Color:= NightModePanelColorsTitleFontColor.Selected;
      end;
   LabelInitZipTitle.Font.Color:= NightModePanelColorsTitleFontColor.Selected; // sample panel
@@ -1318,8 +1273,7 @@ procedure TFormNightMode.NightModePanelColorsTitleShadowFontColorSelect(
 begin
   if IsNightMode then
      begin
-       FormMain.LabelInitZipTitle.ShadowColor:= NightModePanelColorsTitleShadowFontColor.Selected;
-
+       FormMain.LabelInitZipTitle.ShadowColor:=                 NightModePanelColorsTitleShadowFontColor.Selected;
        FormApplyFilterMsgBox.LabelBoxMessageTitle.ShadowColor:= NightModePanelColorsTitleShadowFontColor.Selected;
      end;
   LabelInitZipTitle.ShadowColor:= NightModePanelColorsTitleShadowFontColor.Selected; // sample panel
@@ -1340,17 +1294,17 @@ procedure TFormNightMode.NightModePanelsBackgroundColorsDefaultButtonClick(
 begin
   if TBitBtnEx(Sender).Tag = 0 then
      begin
-       FormMain.SetSelectedColorBox(NightModeSearchGamesPanelTopColor, clrDarkBlue);
-       FormMain.SetSelectedColorBox(NightModeSearchGamesPanelBottomColor, clrBlackBk);
-       FormMain.SetSelectedColorBox(NightModeSearchGamesPanelInnerFrameColor, clBlue);
-       FormMain.SetSelectedColorBox(NightModeSearchGamesPanelOuterFrameColor, clrLightBlue);
+       SetSelectedColorBox(NightModeSearchGamesPanelTopColor,        clrDarkBlue);
+       SetSelectedColorBox(NightModeSearchGamesPanelBottomColor,     clrBlackBk);
+       SetSelectedColorBox(NightModeSearchGamesPanelInnerFrameColor, clBlue);
+       SetSelectedColorBox(NightModeSearchGamesPanelOuterFrameColor, clrLightBlue);
 
-       FormMain.SetSelectedColorBox(NightModePanelColorsTitleFontColor, clYellow); // RGB(230,200,10)  - $000ac8e6 -- new color (no shadow enabled)
-       FormMain.SetSelectedColorBox(NightModePanelColorsTitleShadowFontColor, clMaroon);
-       FormMain.SetSelectedColorBox(NightModePanelColorsTitle2FontColor, clWhite); // RGB(180,180,220) - $00dcb4b4 -- new color (no shadow enabled)
-       FormMain.SetSelectedColorBox(NightModePanelColorsTitle2ShadowFontColor, clrMedBlue);
-       FormMain.SetSelectedColorBox(NightModePanelColorsImageCategoryTextFontColor, clCream);
-       FormMain.SetSelectedColorBox(NightModePanelColorsImageZipTextFontColor, clWhite);
+       SetSelectedColorBox(NightModePanelColorsTitleFontColor,             clYellow); // RGB(230,200,10)  - $000ac8e6 -- new color (no shadow enabled)
+       SetSelectedColorBox(NightModePanelColorsTitleShadowFontColor,       clMaroon);
+       SetSelectedColorBox(NightModePanelColorsTitle2FontColor,            clWhite);  // RGB(180,180,220) - $00dcb4b4 -- new color (no shadow enabled)
+       SetSelectedColorBox(NightModePanelColorsTitle2ShadowFontColor,      clrMedBlue);
+       SetSelectedColorBox(NightModePanelColorsImageCategoryTextFontColor, clCream);
+       SetSelectedColorBox(NightModePanelColorsImageZipTextFontColor,      clWhite);
      end
   else
      begin
@@ -1368,7 +1322,7 @@ begin
      end;
 
   NightModeSearchGamesPanelGradientBar.Checked:= True;
-  NightModePanelColorsTitleShadowEnabled.Checked:= TBitBtnEx(Sender).Tag = 0;
+  NightModePanelColorsTitleShadowEnabled.Checked:=  TBitBtnEx(Sender).Tag = 0;
   NightModePanelColorsTitle2ShadowEnabled.Checked:= TBitBtnEx(Sender).Tag = 0;
 end;
 
@@ -1377,10 +1331,9 @@ procedure TFormNightMode.NightModeSearchGamesPanelFilterFontColorSelect(
 begin
   if IsNightMode then
      begin
-       FormMain.LabelSearchGamesFilter.Font.Color:= NightModeSearchGamesPanelFilterFontColor.Selected;
        FormMain.LabelSearchGamesFilter_ToolBar.Font.Color:= NightModeSearchGamesPanelFilterFontColor.Selected;
-       FormMain.LabelSelectCPU.Font.Color:= NightModeSearchGamesPanelFilterFontColor.Selected;
-       FormMain.LabelCustomCPUFilter.Font.Color:= NightModeSearchGamesPanelFilterFontColor.Selected;
+       FormMain.LabelSelectCPU.Font.Color:=                 NightModeSearchGamesPanelFilterFontColor.Selected;
+       FormMain.LabelCustomCPUFilter.Font.Color:=           NightModeSearchGamesPanelFilterFontColor.Selected;
      end;
   NightModeLabelSearchGamesFilter.Font.Color:= NightModeSearchGamesPanelFilterFontColor.Selected; // sample panel
 end;
@@ -1390,7 +1343,6 @@ procedure TFormNightMode.NightModeSearchGamesPanelFieldFontColorSelect(
 begin
   if IsNightMode then
      begin
-       FormMain.LabelSearchGamesBy.Font.Color:= NightModeSearchGamesPanelFieldFontColor.Selected;
        FormMain.LabelSearchGamesBy_ToolBar.Font.Color:= NightModeSearchGamesPanelFieldFontColor.Selected;
      end;
   NightModeLabelSearchGamesBy.Font.Color:= NightModeSearchGamesPanelFieldFontColor.Selected; // sample panel
@@ -1402,8 +1354,7 @@ begin
   if IsNightMode then
      begin
        FormMain.FilterGameTitle_ToolBar.Font.Color:= NightModeSearchGamesPanelEditBoxFontColor.Selected;
-       FormMain.FilterGameTitle.Font.Color:= NightModeSearchGamesPanelEditBoxFontColor.Selected;
-       FormMain.FilterCPU.Font.Color:= NightModeSearchGamesPanelEditBoxFontColor.Selected;
+       FormMain.FilterCPU.Font.Color:=               NightModeSearchGamesPanelEditBoxFontColor.Selected;
      end;
   NightModeFilterGameTitle.Font.Color:= NightModeSearchGamesPanelEditBoxFontColor.Selected; // sample panel
 end;
@@ -1414,8 +1365,7 @@ begin
   if IsNightMode then
      begin
        FormMain.FilterGameTitle_ToolBar.Color:= NightModeSearchGamesPanelEditBoxBackgroundColor.Selected;
-       FormMain.FilterGameTitle.Color:= NightModeSearchGamesPanelEditBoxBackgroundColor.Selected;
-       FormMain.FilterCPU.Color:= NightModeSearchGamesPanelEditBoxBackgroundColor.Selected;
+       FormMain.FilterCPU.Color:=               NightModeSearchGamesPanelEditBoxBackgroundColor.Selected;
      end;
 
   NightModeFilterGameTitle.Color:= NightModeSearchGamesPanelEditBoxBackgroundColor.Selected; // sample panel
@@ -1427,8 +1377,7 @@ begin
   if IsNightMode then
      begin
        FormMain.FilterGameTitle_ToolBar.ColorFrame:= NightModeSearchGamesPanelEditBoxCustomFrameColor.Selected;
-       FormMain.FilterGameTitle.ColorFrame:= NightModeSearchGamesPanelEditBoxCustomFrameColor.Selected;
-       FormMain.FilterCPU.ColorFrame:= NightModeSearchGamesPanelEditBoxCustomFrameColor.Selected;
+       FormMain.FilterCPU.ColorFrame:=               NightModeSearchGamesPanelEditBoxCustomFrameColor.Selected;
      end;
   NightModeFilterGameTitle.ColorFrame:= NightModeSearchGamesPanelEditBoxCustomFrameColor.Selected; // sample panel
 end;
@@ -1439,21 +1388,9 @@ begin
   if IsNightMode then
      begin
        FormMain.FilterGameTitle_ToolBar.ColorFrameFocused:= NightModeSearchGamesPanelEditBoxCustomFocusedFrameColor.Selected;
-       FormMain.FilterGameTitle.ColorFrameFocused:= NightModeSearchGamesPanelEditBoxCustomFocusedFrameColor.Selected;
-       FormMain.FilterCPU.ColorFrameFocused:= NightModeSearchGamesPanelEditBoxCustomFocusedFrameColor.Selected;
+       FormMain.FilterCPU.ColorFrameFocused:=               NightModeSearchGamesPanelEditBoxCustomFocusedFrameColor.Selected;
      end;
   NightModeFilterGameTitle.ColorFrameFocused:= NightModeSearchGamesPanelEditBoxCustomFocusedFrameColor.Selected; // sample panel
-end;
-
-procedure TFormNightMode.NightModeSearchGamesPanelCaptionBarFontColorSelect(
-  Sender: TObject);
-begin
-  if IsNightMode then
-     begin
-       FormMain.PanelSearchGamesCaptionBar.Font.Color:= NightModeSearchGamesPanelCaptionBarFontColor.Selected;
-       FormMain.FilterCPU_LabelCaptionBar.Font.Color:= NightModeSearchGamesPanelCaptionBarFontColor.Selected;
-     end;
-  NightModePanelSearchGamesCaptionBar.Font.Color:= NightModeSearchGamesPanelCaptionBarFontColor.Selected; // sample panel
 end;
 
 procedure TFormNightMode.NightModeSearchGamesPanelColorsButtonDefaultClick(
@@ -1461,22 +1398,18 @@ procedure TFormNightMode.NightModeSearchGamesPanelColorsButtonDefaultClick(
 begin
   if TBitBtnEx(Sender).Tag = 0 then
      begin
-       FormMain.SetSelectedColorBox(NightModeSearchGamesPanelFilterFontColor, clWhite);
+       SetSelectedColorBox(NightModeSearchGamesPanelFilterFontColor, clWhite);
+       SetSelectedColorBox(NightModeSearchGamesPanelFieldFontColor,  clYellow);
 
-       FormMain.SetSelectedColorBox(NightModeSearchGamesPanelFieldFontColor, clYellow);
+       SetSelectedColorBox(NightModeSearchGamesPanelEditBoxFontColor,       clWhite);
+       SetSelectedColorBox(NightModeSearchGamesPanelEditBoxBackgroundColor, clrDarkBlue);
 
-       FormMain.SetSelectedColorBox(NightModeSearchGamesPanelEditBoxFontColor, clWhite);
-       FormMain.SetSelectedColorBox(NightModeSearchGamesPanelEditBoxBackgroundColor, clrDarkBlue);
-
-       FormMain.SetSelectedColorBox(NightModeSearchGamesPanelEditBoxCustomFrameColor, clrLightBlue);
-       FormMain.SetSelectedColorBox(NightModeSearchGamesPanelEditBoxCustomFocusedFrameColor, clWhite);
-
-       FormMain.SetSelectedColorBox(NightModeSearchGamesPanelCaptionBarFontColor, clWhite);
+       SetSelectedColorBox(NightModeSearchGamesPanelEditBoxCustomFrameColor,        clrLightBlue);
+       SetSelectedColorBox(NightModeSearchGamesPanelEditBoxCustomFocusedFrameColor, clWhite);
      end
   else
      begin
        SetDefaultColorBox(NightModeSearchGamesPanelFilterFontColor);
-
        SetDefaultColorBox(NightModeSearchGamesPanelFieldFontColor);
 
        SetDefaultColorBox(NightModeSearchGamesPanelEditBoxFontColor);
@@ -1484,8 +1417,6 @@ begin
 
        SetDefaultColorBox(NightModeSearchGamesPanelEditBoxCustomFrameColor);
        SetDefaultColorBox(NightModeSearchGamesPanelEditBoxCustomFocusedFrameColor);
-
-       SetDefaultColorBox(NightModeSearchGamesPanelCaptionBarFontColor);
      end;
 end;
 
@@ -1494,7 +1425,7 @@ procedure TFormNightMode.NightModeGamesListSplitterShowGripIconClick(
 begin
   if IsNightMode then
      begin
-       FormMain.SetGripIcon(FormMain.Splitter, NightModeGamesListSplitterShowGripIcon.Checked);
+       FormMain.SetGripIcon(FormMain.Splitter,         NightModeGamesListSplitterShowGripIcon.Checked);
        FormMain.SetGripIcon(FormMain.SplitterMachines, NightModeGamesListSplitterShowGripIcon.Checked);
      end;
 end;
@@ -1534,25 +1465,12 @@ procedure TFormNightMode.NightModeGameDocumentsButtonDefaultClick(
 begin
   NightModeGameDocsFont_Setting.Font.Color:= clrGamesListHeaderFontColor;
   NightModeGameDocsFont_Setting.Font.Name:= 'Calibri';
-  NightModeGameDocsFont_Setting.Font.Size:= 9;
+  NightModeGameDocsFont_Setting.Font.Size:= FormMain.GetDefaultFontSize;
   NightModeGameDocsFont_Setting.Font.Style:= [];
   if IsNightMode then
      FormMain.MAMEDocsText.Font:= NightModeGameDocsFont_Setting.Font;
 
-  FormMain.SetSelectedColorBox(NightModeGameDocumentsBackgroundColor, NightModeGameDocumentsBackgroundColor.DefaultColorColor);
-end;
-
-procedure TFormNightMode.NightModeGameDocsShowBorderClick(Sender: TObject);
-begin
-  if IsNightMode then
-     begin
-       if NightModeGameDocsShowBorder.Checked then
-          FormMain.PanelGameDocuments.BorderWidth:= 7
-       else
-          FormMain.PanelGameDocuments.BorderWidth:= 0;
-
-       FormMain.MAMEInfoStatusBar.Visible:= NightModeGameDocsShowStatusBar.Checked and (not NightModeGameDocsShowBorder.Checked);
-     end;
+  SetSelectedColorBox(NightModeGameDocumentsBackgroundColor, NightModeGameDocumentsBackgroundColor.DefaultColorColor);
 end;
 
 procedure TFormNightMode.NightModeGameDocsBorderColorSelect(
@@ -1566,7 +1484,6 @@ procedure TFormNightMode.NightModeGameDocsBorderColorButtonDefaultClick(
   Sender: TObject);
 begin
   SetDefaultColorBox(NightModeGameDocsBorderColor);
-  NightModeGameDocsShowBorder.Checked:= True;
   NightModeGameDocsShowStatusBar.Checked:= True;
 end;
 
@@ -1574,13 +1491,13 @@ procedure TFormNightMode.NightModeGameDocsShowStatusBarClick(
   Sender: TObject);
 begin
   if IsNightMode then
-     FormMain.MAMEInfoStatusBar.Visible:= NightModeGameDocsShowStatusBar.Checked and (not NightModeGameDocsShowBorder.Checked);
+     FormMain.MAMEInfoStatusBar.Visible:= NightModeGameDocsShowStatusBar.Checked;
 end;
 
-procedure TFormNightMode.NightModeMenuPopupMenuFrameColorDefaultColorsClick(
+procedure TFormNightMode.NightModeMenuPopupMenuFrameColorButtonDefaultClick(
   Sender: TObject);
 begin
-  SetDefaultColorBox(NightModeMenuPopupMenuFrameColor); // clrBorderGroupBoxGrayBk
+  SetDefaultColorBox(NightModeMenuPopupMenuFrameColor);
 end;
 
 procedure TFormNightMode.NightModeHintBoxtColorsButtonDefaultClick(
@@ -1590,8 +1507,8 @@ begin
   if TBitBtnEx(Sender).Tag = 0 then
      begin
        NightModeHintBox_Position.Position:= 4;
-       FormMain.SetSelectedColorBox(NightModeHintBox_Color, clrLightBlue); // RGB(51, 153, 255)
-       FormMain.SetSelectedColorBox(NightModeHintBox_FrameColor, NightModeHintBox_Color.Selected);
+       SetSelectedColorBox(NightModeHintBox_Color, clrLightBlue); // RGB(51, 153, 255)
+       SetSelectedColorBox(NightModeHintBox_FrameColor, NightModeHintBox_Color.Selected);
      end
   else
      begin
@@ -1604,7 +1521,7 @@ end;
 
 procedure TFormNightMode.NightModeHintBox_OpacityChange(Sender: TObject);
 begin
-  NightModeLabelHintBox_Opacity.Caption:= 'Opacity ['+IntToStr(NightModeHintBox_Opacity.Position)+']';
+  NightModeHintBox_OpacityLabel.Caption:= 'Opacity ['+IntToStr(NightModeHintBox_Opacity.Position)+']';
   ImageHintPanel.Opacity:= NightModeHintBox_Opacity.Position;
   ImageHintPanel.Invalidate;
 end;
@@ -1620,8 +1537,8 @@ procedure TFormNightMode.NightModeHintTextDefaultColorsButtonDefaultClick(
 begin
   if TBitBtnEx(Sender).Tag = 0 then
      begin
-       FormMain.SetSelectedColorBox(NightModeHintBox_TextColor, clWhite);
-       FormMain.SetSelectedColorBox(NightModeHintBox_TextShadowColor, clBlack);
+       SetSelectedColorBox(NightModeHintBox_TextColor,       clWhite);
+       SetSelectedColorBox(NightModeHintBox_TextShadowColor, clBlack);
      end
   else
      begin
@@ -1629,8 +1546,7 @@ begin
        SetDefaultColorBox(NightModeHintBox_TextShadowColor);
      end;
   NightModeHintBox_TextShadowEnabled.Checked:= TBitBtnEx(Sender).Tag = 0;
-  NightModeHintBox_FontItalicStyle.Checked:= TBitBtnEx(Sender).Tag = 0;
-  NightModeHintBox_LargerFontSize.Checked:= False;
+  NightModeHintBox_FontItalicStyle.Checked:=   TBitBtnEx(Sender).Tag = 0;
 end;
 
 procedure TFormNightMode.NightModeImageSplitterShowGripIconClick(
@@ -1677,15 +1593,21 @@ procedure TFormNightMode.SetPanelExParentPos(PanelSource: TPanelEx; LeftPos, Top
 begin
   PanelSource.Parent:= PanelPage2;
   PanelSource.Left:= LeftPos;
-  PanelSource.Top:= TopPos;
+  PanelSource.Top:=  TopPos;
 end;
 
 procedure TFormNightMode.FormShow(Sender: TObject);
 var
-  ScreenW, ScreenH: Integer;
+  ScreenW, ScreenH, iPos4K: Integer;
   AdjustWindow: Boolean;
 begin
   CurrentProfileName:= FormMain.GetNightModeIniFile(True);
+
+  if Is4KMode and (FormNightMode.Font.Size <> 16) then
+     begin
+       FormNightMode.Font.Size:= 16;
+       MoveControls:= False; // if user unchecks "Disable 4K Mode", panels and controls must be updated again
+     end;
 
   if not MoveControls then
   begin
@@ -1701,61 +1623,58 @@ begin
     begin
       // fallback to 2 pages and re-arrange controls into "PanelPage2"
       PanelPage2.Left:= 0;
-      PanelPage2.Top:= 0;
-      PanelPage2.Width:= 909;
+      PanelPage2.Top:=  0;
+      PanelPage2.Width:=  909;
       PanelPage2.Height:= 569;
 
-      SetPanelExParentPos(NightModeButtonColorsBox, 8, 8); // Buttons Colors
-      SetPanelExParentPos(NightModeGamesListStatusBarColorsBox, 311, 8); // Games List Status Bar Colors
-      SetPanelExParentPos(NightModeImagesHintBox, 311, 145); // Image Hint box
-      SetPanelExParentPos(NightModeImageSplittersBox, 311, 386); // Image Splitters
-      SetPanelExParentPos(NightModeImageBorderColorBox, 311, 501); // Image 7 Pixels Border
-      SetPanelExParentPos(NightModeMAMEGameDocsBox, 614, 8); // Game Docs
-
-      NightModeUseWin10DarkModeScrollBarsButtonHelp.Parent:= PanelPage2;
-      NightModeUseWin10DarkModeScrollBarsButtonHelp.Left:= 8;
-      NightModeUseWin10DarkModeScrollBarsButtonHelp.Top:= NightModeButtonColorsBox.Top+NightModeButtonColorsBox.Height+16;
-
-      NightModeUseWin10DarkModeScrollBars.Parent:= PanelPage2;
-      NightModeUseWin10DarkModeScrollBars.Left:= 34;
-      NightModeUseWin10DarkModeScrollBars.Top:= NightModeUseWin10DarkModeScrollBarsButtonHelp.Top+4;
+      SetPanelExParentPos(NightModeButtonColorsBox,               8,   8); // Buttons Colors
+      SetPanelExParentPos(NightModeGamesListStatusBarColorsBox, 311,   8); // Games List Status Bar Colors
+      SetPanelExParentPos(NightModeImagesHintBox,               311, 150); // Image Hint box
+      SetPanelExParentPos(NightModeImageSplittersBox,           311, 386); // Image Splitters
+      SetPanelExParentPos(NightModeImageBorderColorBox,         311, 501); // Image 7 Pixels Border
+      SetPanelExParentPos(NightModeMAMEGameDocsBox,             614,   8); // Game Docs
+      SetPanelExParentPos(NightModeGamesListHeaderBox,          614, 150); // Games List Column Header 
 
       PanelBottom.Height:= PanelBottom.Height+2;
-      PanelBottom.Align:= alBottom;
-      PanelBottom.Style:= vgSimple;
-      PanelPage1.Width:= PanelPage2.Width;
-      PanelPage1.Height:= PanelPage2.Height;
+      PanelBottom.Align:=  alBottom;
+      PanelBottom.Style:=  vgSimple;
+      PanelPage1.Width:=   PanelPage2.Width;
+      PanelPage1.Height:=  PanelPage2.Height;
 
       ButtonPage1.GroupIndex:= 1;
       ButtonPage2.GroupIndex:= 1;
       ButtonPage1.Down:= True;
 
-      ClientWidth:= PanelPage1.Width;
+      ClientWidth:=  PanelPage1.Width;
       ClientHeight:= PanelPage1.Height+PanelBottom.Height;
-
-      // code to show panels side by side (1920x1080 minimum required)
-      //PanelPage2.Left:= PanelPage1.Width;
-      //ClientWidth:= PanelPage2.Left+PanelPage2.Width;
-      //PanelPage2.Visible:= True;
-      //ButtonPage1.Visible:= False;
-      //ButtonPage2.Visible:= False;
     end
     else
     begin
       ButtonPage1.Enabled:= False;
       ButtonPage2.Enabled:= False;
-      PanelBottom.Width:= 594;
+      ButtonPage1.Visible:= False;
+      ButtonPage2.Visible:= False;
       PanelBottom.Style:= vgSolid;
-      PanelBottom.Color1:= NightModeProfilesGroupBox.Color1;
-      PanelBottom.Parent:= NightModeProfilesGroupBox;
-      PanelBottom.Top:= 25;
-      PanelBottom.Left:= 4;
+      PanelBottom.Color1:= NightModeProfilesBox.Color1;
+      PanelBottom.Parent:= NightModeProfilesBox;
+      if Is4KMode then
+         begin
+           iPos4K:= 12;
+           PanelBottom.Align:= alBottom;
+         end
+      else
+         begin
+           iPos4K:= 0;
+           PanelBottom.Width:= 594;
+           PanelBottom.Top:= 25;
+           PanelBottom.Left:= 4;
 
-      ClientWidth:= PanelPage1.Width;
-      ClientHeight:= PanelPage1.Height;
+           ClientWidth:=  PanelPage1.Width;
+           ClientHeight:= PanelPage1.Height;
+         end;
     end;
 
-    // this is to put both panel side by side...
+    // this is to put both panel side by side (not used anymore as of July 2021)
     //if ScreenW = 1920 then
     //   begin
     //     PanelPage2.Left:= PanelPage1.Width;
@@ -1765,29 +1684,26 @@ begin
     //   end;
 
     NightModeNewProfileBox.Parent:= PanelPage1;
-    NightModeNewProfileBox.Left:= (PanelPage1.Width-NightModeNewProfileBox.Width) div 2;
-    NightModeNewProfileBox.Top:= (PanelPage1.Height-NightModeNewProfileBox.Height) div 2;
+    NightModeNewProfileBox.Left:= (PanelPage1.Width -NightModeNewProfileBox.Width)  div 2;
+    NightModeNewProfileBox.Top:=  (PanelPage1.Height-NightModeNewProfileBox.Height) div 2;
+    FormMain.SetWin10DarkScrollBar(NightModeNewProfileProfilesList, True);
 
     // center window in Windows desktop
-    FormNightMode.Left:= (Screen.Width shr 1)-(Width shr 1)-1;
-    FormNightMode.Top:= (Screen.Height shr 1)-(Height shr 1)-1;
+    CallCenterWindow(FormNightMode);
 
     NightModeImageHintPanel_ImageView1.Click;
 
-    //PopulateIconOverlayFoldersList;
-    //AddNightModeProfiles;
-
     NightModeGamesSelectionBarPreview.Parent:= PanelPage1;
-    NightModeGamesSelectionBarPreview.Left:= NightModeGamesSelectionBarColorsBox.Left+NightModeGamesSelectionBarColorsBox.Width+4;
-    NightModeGamesSelectionBarPreview.Top:= 8;
+    NightModeGamesSelectionBarPreview.Left:= NightModeGamesSelectionBarColorsBox.Left+NightModeGamesSelectionBarColorsBox.Width+8+iPos4K;
+    NightModeGamesSelectionBarPreview.Top:=  NightModeGamesSelectionBarColorsBox.Top+8+iPos4K;
 
     NightModePanelColorsBoxPreview.Parent:= PanelPage1;
-    NightModePanelColorsBoxPreview.Left:= NightModePanelColorsBox.Left;
-    NightModePanelColorsBoxPreview.Top:= NightModePanelColorsBox.Top-NightModePanelColorsBoxPreview.Height-4;
+    NightModePanelColorsBoxPreview.Left:= NightModePanelColorsBox.Left-NightModePanelColorsBoxPreview.Width-8-iPos4K;
+    NightModePanelColorsBoxPreview.Top:=  NightModePanelColorsBox.Top+8+iPos4K;
 
     NightModeSearchGamesPanelColorsBoxPreview.Parent:= PanelPage1;
-    NightModeSearchGamesPanelColorsBoxPreview.Left:= NightModeSearchGamesPanelColorsBox.Left-NightModeSearchGamesPanelColorsBoxPreview.Width-4;
-    NightModeSearchGamesPanelColorsBoxPreview.Top:= NightModeSearchGamesPanelColorsBox.Top;
+    NightModeSearchGamesPanelColorsBoxPreview.Left:= NightModeSearchGamesPanelColorsBox.Left+NightModeSearchGamesPanelColorsBox.Width+8+iPos4K;
+    NightModeSearchGamesPanelColorsBoxPreview.Top:=  NightModeSearchGamesPanelColorsBox.Top+8+iPos4K;
 
     NightModeImagesHintBoxPreview.Parent:= NightModeImagesHintBox.Parent;
 
@@ -1795,32 +1711,35 @@ begin
 
     if AdjustWindow then
        begin
-         NightModeImagesHintBoxPreview.Left:= NightModeImagesHintBox.Left+NightModeImagesHintBox.Width+4;
-         NightModeImagesHintBoxPreview.Top:= NightModeImagesHintBox.Top;
+         NightModePanelColorsBoxPreview.Left:= NightModePanelColorsBox.Left-NightModePanelColorsBoxPreview.Width-4;
+         NightModePanelColorsBoxPreview.Top:= NightModePanelColorsBox.Top;
 
-         NightModeButtonColorsBoxPreview.Top:= NightModeButtonColorsBox.Top;
+         NightModeGamesSelectionBarPreview.Left:= NightModeGamesSelectionBarColorsBox.Left+NightModeGamesSelectionBarColorsBox.Width+4;
+         NightModeGamesSelectionBarPreview.Top:=  NightModeGamesSelectionBarColorsBox.Top;
+
+         NightModeImagesHintBoxPreview.Left:= NightModeImagesHintBox.Left+NightModeImagesHintBox.Width+4;
+         NightModeImagesHintBoxPreview.Top:=  NightModeImagesHintBox.Top;
+
          NightModeButtonColorsBoxPreview.Left:= NightModeButtonColorsBox.Left+NightModeButtonColorsBox.Width+4;
+         NightModeButtonColorsBoxPreview.Top:=  NightModeButtonColorsBox.Top;
+
+         NightModeSearchGamesPanelColorsBoxPreview.Left:= NightModeSearchGamesPanelColorsBox.Left;
+         NightModeSearchGamesPanelColorsBoxPreview.Top:=  NightModeSearchGamesPanelColorsBox.Top+NightModeSearchGamesPanelColorsBox.Height+4;
        end
     else
        begin
-         NightModeImagesHintBoxPreview.Left:= NightModeImagesHintBox.Left;
-         NightModeImagesHintBoxPreview.Top:= NightModeImagesHintBox.Top-NightModeImagesHintBoxPreview.Height-4;
+         NightModeImagesHintBoxPreview.Left:= NightModeImagesHintBox.Left+8+iPos4K;
+         NightModeImagesHintBoxPreview.Top:=  NightModeImagesHintBox.Top-NightModeImagesHintBoxPreview.Height-8-iPos4K;
 
-         NightModeButtonColorsBoxPreview.Top:= NightModeButtonColorsBox.Top;
-         NightModeButtonColorsBoxPreview.Left:= NightModeButtonColorsBox.Left-NightModeButtonColorsBoxPreview.Width-4;
+         NightModeButtonColorsBoxPreview.Top:=  NightModeButtonColorsBox.Top+8+iPos4K;
+         NightModeButtonColorsBoxPreview.Left:= NightModeButtonColorsBox.Left-NightModeButtonColorsBoxPreview.Width-8-iPos4K;
        end;
 
-    FormMain.LoadIconIntoImage('EmuLoader_Orb', InitZipSystemIcon);
+    FormMain.AddDefaultIcons('EmuLoader_Orb', '', nil, -1, InitZipSystemIcon);
     ImageHintPanel.Opacity:= NightModeHintBox_Opacity.Position;
     HintBoxUpdateSize;
   end;
-
-  //NightModeNewProfileBox.Parent:= PanelPage1;
-  //NightModeNewProfileBox.Left:= (PanelPage1.Width-NightModeNewProfileBox.Width) div 2;
-  //NightModeNewProfileBox.Top:= (PanelPage1.Height-NightModeNewProfileBox.Height) div 2;
-
-  //FormMain.ELV_ResetNormalColors(NightModeGamesListView); // these cannot be here... do not remove this comment! (June 23, 2019)
-  //FormMain.ELV_SetRibbonNightColors(0, NightModeGamesListView, True);
+  
   NightModeProfiles.SetFocus;
 end;
 
@@ -1846,62 +1765,60 @@ end;
 
 procedure TFormNightMode.NightModeHintBox_TextColorSelect(Sender: TObject);
 begin
-  ImageHintText.Font.Color:= NightModeHintBox_TextColor.Selected;
+  ImageHintText.Font.Color:=        NightModeHintBox_TextColor.Selected;
   ImageHintDetailsText.Font.Color:= NightModeHintBox_TextColor.Selected;
 end;
 
 procedure TFormNightMode.NightModeHintBox_TextShadowColorSelect(
   Sender: TObject);
 begin
-  ImageHintText.ShadowColor:= NightModeHintBox_TextShadowColor.Selected;
+  ImageHintText.ShadowColor:=        NightModeHintBox_TextShadowColor.Selected;
   ImageHintDetailsText.ShadowColor:= NightModeHintBox_TextShadowColor.Selected;
 end;
 
 procedure TFormNightMode.NightModeHintBox_TextShadowEnabledClick(
   Sender: TObject);
 begin
-  ImageHintText.ShadowEnabled:= NightModeHintBox_TextShadowEnabled.Checked;
+  ImageHintText.ShadowEnabled:=        NightModeHintBox_TextShadowEnabled.Checked;
   ImageHintDetailsText.ShadowEnabled:= NightModeHintBox_TextShadowEnabled.Checked;
 end;
 
-procedure TFormNightMode.HintBoxUpdateSize;
+procedure TFormNightMode.HintBoxUpdateSize(UpdateMainScreen: Boolean = True);
 var
-  IconSize: Integer;
+  IconSize, iSize: Integer;
 begin
-  // large font size 16 pixels
-  // icon pos: left 8, top 13
-  // title position: left 28, top 8
-  // resolution position left 30, top 34
-  // panel height: 56 pixels
-
-  // icon pos: left 8, top 8
-  // small font size 10 pixels
-  // title position left 28, top 5
-  // resolution position left 30, top 25
-  // panel height: 48 pixels
-
-  IconSize:= 20; // 16 pixels icon size + 4 pixels border
-  ImageHintIcon.Picture.Icon:= nil;
-  FormMain.IL_MenuPopup.GetIcon(06, ImageHintIcon.Picture.Icon); // unzipped image
-  if NightModeHintBox_LargerFontSize.Checked then
-     begin
-       ImageHintIcon.Top:= 13;
-       ImageHintText.Top:= 8;
-       ImageHintDetailsText.Top:= 34;
-       ImageHintPanel.Height:= 56;
-       ImageHintText.Font.Size:= 14;
-     end
+  if Is4KMode then
+     iSize:= 32
   else
-     begin
-       ImageHintIcon.Top:= 8;
-       ImageHintText.Top:= 5;
-       ImageHintDetailsText.Top:= 25;
-       ImageHintPanel.Height:= 48;
-       ImageHintText.Font.Size:= 10;
-     end;
+     iSize:= 16;
 
-  ImageHintPanel.Width:= ImageHintText.Width+16+IconSize; // 16 is the size of the icon
-  FormMain.UpdateImageHintBoxPosition(ImageHintPanel, ImageHintPanel_Image, NightModeHintBox_Position.Position); // must re-position hint box panel
+  if Is4KMode then
+     FormMain.Set4KImageIconSpecs(ImageHintIcon, 32, 10, 10)
+  else
+     FormMain.Set4KImageIconSpecs(ImageHintIcon, 16,  8,  8);
+
+  IconSize:= ImageHintIcon.Width+4; // 20; // 16 or 24 pixels icon size + 4 pixels border
+  ImageHintIcon.Picture.Icon:= nil;
+
+  case ImageHintIcon.Width of
+    32:
+      begin
+        FormMain.Set4KLabelSpecs(ImageHintText,        ImageHintIcon.Left+IconSize, 12, -1, -1, 16);
+        FormMain.Set4KLabelSpecs(ImageHintDetailsText, ImageHintText.Left,          43, -1, -1, 14);
+        ImageHintPanel.Height:= 80;
+      end;
+    16:
+      begin
+        FormMain.Set4KLabelSpecs(ImageHintText,        ImageHintIcon.Left+IconSize, 5, -1, -1, 10);
+        FormMain.Set4KLabelSpecs(ImageHintDetailsText, ImageHintText.Left  ,       25, -1, -1,  9);
+        ImageHintPanel.Height:= 48;
+      end;
+  end;
+  FormMain.IL_MenuPopup.GetIcon(06, ImageHintIcon.Picture.Icon); // unzipped image
+
+  ImageHintPanel.Width:= ImageHintText.Width+ImageHintIcon.Width+IconSize; // 16 or 32 is the size of the icon
+  if UpdateMainScreen then
+     FormMain.UpdateImageHintBoxPosition(ImageHintPanel, ImageHintPanel_Image, NightModeHintBox_Position.Position); // must re-position hint box panel
 end;
 
 procedure TFormNightMode.NightModeHintBox_FontItalicStyleClick(
@@ -1925,7 +1842,7 @@ procedure TFormNightMode.NightModeGamesListViewItemPaintText(
   ACanvas: TCanvas);
 begin
   FormMain.GetCanvasFont(1, -1, False, Item.ImageIndex, 0, '', ACanvas, False, NightModeGamesListView);
-  ACanvas.Font.Size:= 9;
+  ACanvas.Font.Size:= FormMain.GetDefaultFontSize; //9;
   if Item.Selected then
      begin
        if NightModeGamesListView.Focused then
@@ -1990,8 +1907,9 @@ begin
        if iStr = '' then
           Exit;
 
-       if FormMain.NightModeProfileStr <> iStr then
-          FormMain.WriteNightModeSettings(FormMain.NightModeProfileStr); // save current profile first
+       //if not FormMain.IsStartup then
+          if FormMain.NightModeProfileStr <> iStr then
+             FormMain.WriteNightModeSettings(FormMain.NightModeProfileStr); // save current profile first
 
        FormMain.NightModeProfileStr:= iStr;
 
@@ -2006,8 +1924,7 @@ procedure TFormNightMode.NightModePanelColorsTitleShadowEnabledClick(Sender: TOb
 begin
   if IsNightMode then
      begin
-       FormMain.LabelInitZipTitle.ShadowEnabled:= NightModePanelColorsTitleShadowEnabled.Checked;
-
+       FormMain.LabelInitZipTitle.ShadowEnabled:=                 NightModePanelColorsTitleShadowEnabled.Checked;
        FormApplyFilterMsgBox.LabelBoxMessageTitle.ShadowEnabled:= NightModePanelColorsTitleShadowEnabled.Checked;
      end;
   LabelInitZipTitle.ShadowEnabled:= NightModePanelColorsTitleShadowEnabled.Checked; // sample panel
@@ -2040,23 +1957,17 @@ begin
      end;
 end;
 
-procedure TFormNightMode.NightModeHintBox_LargerFontSizeClick(
-  Sender: TObject);
-begin
-  HintBoxUpdateSize;
-end;
-
 procedure TFormNightMode.NightModeHintBox_PositionChange(Sender: TObject);
 begin
   case NightModeHintBox_Position.Position of
-    1: NightModeHintBox_PositionLabel.Caption:= 'Top / Left';
-    2: NightModeHintBox_PositionLabel.Caption:= 'Top / Middle';
-    3: NightModeHintBox_PositionLabel.Caption:= 'Top / Right';
-    4: NightModeHintBox_PositionLabel.Caption:= 'Middle / Left'; // this is the default
-    5: NightModeHintBox_PositionLabel.Caption:= 'Middle / Right';
-    6: NightModeHintBox_PositionLabel.Caption:= 'Bottom / Left';
-    7: NightModeHintBox_PositionLabel.Caption:= 'Bottom / Middle';
-    8: NightModeHintBox_PositionLabel.Caption:= 'Bottom / Right';
+    1: NightModeHintBox_PositionLabel.Caption:= 'Top/Left';
+    2: NightModeHintBox_PositionLabel.Caption:= 'Top/Middle';
+    3: NightModeHintBox_PositionLabel.Caption:= 'Top/Right';
+    4: NightModeHintBox_PositionLabel.Caption:= 'Middle/Left'; // this is the default
+    5: NightModeHintBox_PositionLabel.Caption:= 'Middle/Right';
+    6: NightModeHintBox_PositionLabel.Caption:= 'Bottom/Left';
+    7: NightModeHintBox_PositionLabel.Caption:= 'Bottom/Middle';
+    8: NightModeHintBox_PositionLabel.Caption:= 'Bottom/Right';
   end;
   FormMain.UpdateImageHintBoxPosition(ImageHintPanel, ImageHintPanel_Image, NightModeHintBox_Position.Position);
 end;
@@ -2065,7 +1976,7 @@ procedure TFormNightMode.NightModeGameSelectionRoundCornersClick(Sender: TObject
 begin
   if IsNightMode then
      begin
-       FormMain.GamesListView.Selection.RoundRect:= NightModeGameSelectionRoundCorners.Checked;
+       FormMain.GamesListView.Selection.RoundRect:=         NightModeGameSelectionRoundCorners.Checked;
        FormMain.MachinesListSidePanel.Selection.RoundRect:= NightModeGameSelectionRoundCorners.Checked;
      end;
   NightModeGamesListView.Selection.RoundRect:= NightModeGameSelectionRoundCorners.Checked;
@@ -2079,6 +1990,12 @@ end;
 
 procedure TFormNightMode.FormCreate(Sender: TObject);
 begin
+  if Is4KMode then
+     begin
+       NightModeGamesListHeaderFont.Font.Size:=  16;
+       NightModeGameDocsFont_Setting.Font.Size:= 16;
+     end;
+     
   if not FormMain.ValidateFile(FormMain.GetNightModeIniFile) then
      FormMain.WriteNightModeSettings;
   FormMain.PopulateCheckRadioProfiles(False);
@@ -2123,27 +2040,12 @@ begin
   NightModeSearchGamesPanelColorsBoxPreview.Visible:= False;
 end;
 
-procedure TFormNightMode.NightModeToolBarFilterTitleCustomDraw(
-  Sender: TToolBar; const ARect: TRect; var DefaultDraw: Boolean);
-begin
-  if NightModePanelSearchGames.Style = vgSimple then
-     FormMain.DrawGradient(Sender.Canvas, Sender.ClientRect, gsVertical, False,
-                  NightModePanelSearchGames.Canvas.Pixels[3, TToolBar(Sender).Top],
-                  NightModePanelSearchGames.Canvas.Pixels[3, TToolBar(Sender).Top+TToolBar(Sender).Height], 0, 0, 0)
-  else
-  begin
-    Sender.Canvas.Brush.Color:= NightModePanelSearchGames.Color1;
-    Sender.Canvas.Pen.Color:= NightModePanelSearchGames.Color1;
-    Sender.Canvas.Rectangle(Sender.ClientRect);
-  end;
-end;
-
 procedure TFormNightMode.NightModeProfiles_ButtonNewClick(Sender: TObject);
 
   procedure SetParentPanel(PanelExSource: TPanelEx);
   begin
     if NightModeNewProfileBox.Parent <> PanelExSource then
-       NightModeNewProfileBox.Parent:= PanelExSource;
+       NightModeNewProfileBox.Parent:=  PanelExSource;
   end;
 
 begin
@@ -2158,6 +2060,8 @@ begin
   NewProfile_PopulateELV;
 
   PanelBottom.Enabled:= False;
+  if NightModeNewProfileBoxIcon.Picture.Icon.Empty then
+     FormMain.IL_MenuPopup.GetIcon(19, NightModeNewProfileBoxIcon.Picture.Icon);
   NightModeNewProfileBox.Visible:= True;
 
   NightModeNewProfileProfileName.SetFocus;
@@ -2188,7 +2092,7 @@ begin
   if not FileExists(iStr) then
      Exit;
 
-  if GenerateMessage('Night Mode', 'Delete Night Mode Profile',
+  if FormMain.ShowMessageBox('Night Mode', 'Delete Night Mode Profile',
                   '    You are about to delete file "'+iStr+'".'+#13#10+
                   'Are you sure ?', 1, True, 1) = mrNo then
      Exit;
@@ -2227,7 +2131,7 @@ procedure TFormNightMode.NightModeGamesListHeaderBackgroundColorSelect(
 begin
   if IsNightMode then
      begin
-       FormMain.GamesListView.Header.HeaderColumnColor:= NightModeGamesListHeaderBackgroundColor.Selected;
+       FormMain.GamesListView.Header.HeaderColumnColor:=         NightModeGamesListHeaderBackgroundColor.Selected;
        FormMain.MachinesListSidePanel.Header.HeaderColumnColor:= NightModeGamesListHeaderBackgroundColor.Selected;
      end;
   NightModeGamesListHeaderFont.Color:= NightModeGamesListHeaderBackgroundColor.Selected;
@@ -2238,7 +2142,7 @@ procedure TFormNightMode.NightModeGamesListHeaderBackgroundColorHoverSelect(
 begin
   if IsNightMode then
      begin
-       FormMain.GamesListView.Header.HeaderColumnColorHot:= NightModeGamesListHeaderBackgroundColorHover.Selected;
+       FormMain.GamesListView.Header.HeaderColumnColorHot:=         NightModeGamesListHeaderBackgroundColorHover.Selected;
        FormMain.MachinesListSidePanel.Header.HeaderColumnColorHot:= NightModeGamesListHeaderBackgroundColorHover.Selected;
      end;
 end;
@@ -2248,7 +2152,7 @@ procedure TFormNightMode.NightModeGamesListHeaderBackgroundColorDownSelect(
 begin
   if IsNightMode then
      begin
-       FormMain.GamesListView.Header.HeaderColumnColorClick:= NightModeGamesListHeaderBackgroundColorDown.Selected;
+       FormMain.GamesListView.Header.HeaderColumnColorClick:=         NightModeGamesListHeaderBackgroundColorDown.Selected;
        FormMain.MachinesListSidePanel.Header.HeaderColumnColorClick:= NightModeGamesListHeaderBackgroundColorDown.Selected;
      end;
 end;
@@ -2263,9 +2167,9 @@ begin
 
   if TBitBtnEx(Sender).Tag = 0 then
      begin
-       FormMain.SetSelectedColorBox(NightModeGamesListHeaderBackgroundColor, $00241f15); // RGB(27,31,36)
-       FormMain.SetSelectedColorBox(NightModeGamesListHeaderBackgroundColorHover, clrMedDarkGray); // RGB(80,80,80)
-       FormMain.SetSelectedColorBox(NightModeGamesListHeaderBackgroundColorDown, menu_background_color[1]); // RGB(39,39,39)
+       SetSelectedColorBox(NightModeGamesListHeaderBackgroundColor,      $00241f15);                // RGB(27,31,36)
+       SetSelectedColorBox(NightModeGamesListHeaderBackgroundColorHover, clrMedDarkGray);           // RGB(80,80,80)
+       SetSelectedColorBox(NightModeGamesListHeaderBackgroundColorDown,  menu_background_color[1]); // RGB(39,39,39)
      end
   else
      begin
@@ -2373,7 +2277,7 @@ procedure TFormNightMode.NightModeProfiles_ButtonDefaultClick(
   Sender: TObject);
 begin
   NightModeGameSelectionButtonDefault2.Click; // Games List Selection Bar
-  NightModeMenuPopupMenuFrameColorDefaultColors.Click; // Menus / Popup Menus
+  NightModeMenuPopupMenuFrameColorButtonDefault.Click; // Menus / Popup Menus
   NightModeToolBarBkColorsButtonDefault2.Click; // Tool Bar Background Colors
   NightModePanelsBackgroundColorsDefaultButton2.Click; // Panels Colors (Mostly Frames and Message Boxes)
   NightModeSearchGamesPanelColorsButtonDefault2.Click; // Search Games Panel Colors
@@ -2429,7 +2333,10 @@ begin
      begin
        NightModeGameDocsFont_Setting.Font:= FormMain.FontDialog.Font;
        if IsNightMode then
-          FormMain.MAMEDocsText.Font:= NightModeGameDocsFont_Setting.Font;
+          begin
+            FormMain.MAMEDocsText.Font:= NightModeGameDocsFont_Setting.Font;
+            FormMain.MAMEDocsText.Invalidate;
+          end;
      end;
 end;
 
@@ -2445,24 +2352,13 @@ begin
   FormMain.SetCheckBoxExCustomIcon(NightModeCheckBoxRadioButton_Check1);
   FormMain.SetRadioButtonExCustomIcon(NightModeCheckBoxRadioButton_Radio1);
   FormMain.SetRadioButtonExCustomIcon(NightModeCheckBoxRadioButton_Radio2);
+  //radio group is not showing custom icons, checkbox is showing 23x23 when it shouldn't
+  //need to create TIcon for both 13x13 and 23x23 for each checkbox / radiobutton :(
 end;
 
 procedure TFormNightMode.NightModeCheckBoxRadioButtonProfileButtonUpdateClick(Sender: TObject);
 begin
   FormMain.PopulateCheckRadioProfiles(True);
-end;
-
-procedure TFormNightMode.NightModeUseWin10DarkModeScrollBarsButtonHelpClick(
-  Sender: TObject);
-begin
-  GenerateMessage('Info', NightModeUseWin10DarkModeScrollBars.Caption,
-                  '    Windows 10 doesn''t paint all controls with dark theme colors. This setting tries to do exactly that, '+
-                  'force scroll bars to paint in dark colors. This is an experimental feature and it requires '+
-                  'Windows 10 build 1809 or newer. Emu Loader does this by using an undocumented API function:'+#13#10+#13#10+
-                  'SetWindowTheme(hWnd, ''DarkMode_Explorer'', NULL)'+#13#10+#13#10+
-                  '    Until Windows 10 officially adds support for dark themed controls of third-party applications, this hack '+
-                  'will be used. It doesn''t work for all controls though, specially ComboBox and ColorBox.'+#13#10+
-                  'It even works if your Windows 10 is not setup with a dark theme, perfect for this frontend needs.', 2);
 end;
 
 end.

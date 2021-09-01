@@ -14,30 +14,52 @@ type
     TopBar: TPanelEx;
     GameIcon: TImage;
     LabelGameTitle: TShadowLabel;
-    AudioBox: TAdvGroupBoxEx;
-    AdvGroupBox3: TAdvGroupBoxEx;
-    SoundFilter: TAdvOfficeCheckBoxEx;
-    SoundStereoExciter: TAdvOfficeCheckBoxEx;
-    SoundLiteSurround: TAdvOfficeCheckBoxEx;
-    SoundFilterCutoffLabel: TShadowLabel;
-    SoundFilterCutoff: TComboBox2Ex;
-    LabelSoundLiteSurroundMultiplier: TShadowLabel;
-    SoundLiteSurroundMultiplier: TGaugeBar;
-    SlowGeometry: TAdvOfficeCheckBoxEx;
-    MemoryPrediction: TAdvOfficeCheckBoxEx;
-    StackInRAMHack: TAdvOfficeCheckBoxEx;
-    RotateLabel: TShadowLabel;
-    Rotate: TComboBox2Ex;
-    NetGameServer: TAdvOfficeCheckBoxEx;
-    NetGameConnectLabel: TShadowLabel;
-    NetGameConnect: TEditEx;
-    OpenGLD3DRendererBox: TAdvGroupBoxEx;
+    LabelEmulatorVersion: TShadowLabel;
+    SystemIcon: TImage;
+    ButtonReadFile: TBitBtnEx;
+    LabelReadFileIni: TShadowLabel;
+    ButtonOk: TBitBtnEx;
+    ButtonCancel: TBitBtnEx;
+    LabelGameStatus: TShadowLabel;
+    FolderROMsGroupBox: TPanelEx;
+    FolderROMsGroupBoxLabel: TShadowLabel;
+    ControllerZNCGroupBox: TPanelEx;
+    ControllerZNCGroupBoxLabel: TShadowLabel;
+    FolderROMs: TEasyListview;
+    FolderROMsButtonUp: TBitBtnEx;
+    FolderROMsButtonDown: TBitBtnEx;
+    FolderROMsButtonSelect: TBitBtnEx;
+    FolderROMsButtonEdit: TBitBtnEx;
+    FolderROMsButtonDelete: TBitBtnEx;
+    FolderROMsButtonClear: TBitBtnEx;
+    AudioGroupBox: TPanelEx;
+    AudioGroupBoxLabel: TShadowLabel;
+    ControllerZNCButtonSelect: TBitBtnEx;
+    ControllerZNC: TEditEx;
+    ControllerConfigFileGroupBox: TPanelEx;
+    ControllerConfigFileGroupBoxLabel: TShadowLabel;
+    ControllerConfigFileButtonSelect: TBitBtnEx;
+    ControllerConfigFile: TEditEx;
+    RendererZNCGroupBox: TPanelEx;
+    RendererZNCGroupBoxLabel: TShadowLabel;
+    RendererZNCButtonSelect: TBitBtnEx;
+    RendererZNC: TEditEx;
+    RendererConfigFileGroupBox: TPanelEx;
+    RendererConfigFileGroupBoxLabel: TShadowLabel;
+    RendererConfigFileButtonSelect: TBitBtnEx;
+    RendererConfigFile: TEditEx;
+    OpenGLD3DRendererGroupBox: TPanelEx;
+    OpenGLD3DRendererGroupBoxLabel: TShadowLabel;
     ResolutionLabel: TShadowLabel;
     ColorDepthLabel: TShadowLabel;
     ScanLinesLabel: TShadowLabel;
     BlendingLabel: TShadowLabel;
     FramerateManualLabel: TShadowLabel;
     TurnDisplayLabel: TShadowLabel;
+    TextureSettingsLabel: TShadowLabel;
+    TextureTypeLabel: TShadowLabel;
+    TextureCacheLabel: TShadowLabel;
+    TextureFilterLabel: TShadowLabel;
     Resolution: TComboBox2Ex;
     FullScreen: TAdvOfficeCheckBoxEx;
     ColorDepth: TComboBox2Ex;
@@ -48,44 +70,30 @@ type
     FrameLimitation: TAdvOfficeCheckBoxEx;
     FrameSkip: TAdvOfficeCheckBoxEx;
     FramerateDetection: TAdvOfficeCheckBoxEx;
-    LabelEmulatorVersion: TShadowLabel;
-    SystemIcon: TImage;
-    ButtonReadFile: TBitBtnEx;
-    LabelReadFileIni: TShadowLabel;
-    ButtonOk: TBitBtnEx;
-    ButtonCancel: TBitBtnEx;
-    ControllerZNCLabel: TShadowLabel;
-    ControllerZNC: TEditEx;
-    ControllerZNCButtonSelect: TBitBtnEx;
-    RendererZNCLabel: TShadowLabel;
-    RendererZNC: TEditEx;
-    RendererZNCButtonSelect: TBitBtnEx;
-    ControllerConfigFileLabel: TShadowLabel;
-    ControllerConfigFile: TEditEx;
-    ControllerConfigFileButtonSelect: TBitBtnEx;
-    RendererConfigFileLabel: TShadowLabel;
-    RendererConfigFile: TEditEx;
-    RendererConfigFileButtonSelect: TBitBtnEx;
-    ROMsFoldersLabel: TShadowLabel;
-    FolderROMs: TEasyListview;
-    ButtonUp: TBitBtnEx;
-    ButtonDown: TBitBtnEx;
-    FolderROMButtonSelect: TBitBtnEx;
-    FolderROMsButtonEdit: TBitBtnEx;
-    FolderROMsButtonDelete: TBitBtnEx;
-    FolderROMsButtonClear: TBitBtnEx;
-    LabelGameStatus: TShadowLabel;
     TurnDisplay: TComboBox2Ex;
-    FramerateManual: TEditEx;
-    FramerateManualRangeLabel: TShadowLabel;
     EnableKeys: TAdvOfficeCheckBoxEx;
-    TextureSettingsLabel: TShadowLabel;
-    TextureTypeLabel: TShadowLabel;
     TextureType: TComboBox2Ex;
-    TextureCacheLabel: TShadowLabel;
     TextureCache: TComboBox2Ex;
     TextureFilter: TComboBox2Ex;
-    TextureFilterLabel: TShadowLabel;
+    FramerateManual: TGaugeBar;
+    VideoGroupBox: TPanelEx;
+    VideoGroupBoxLabel: TShadowLabel;
+    RotateLabel: TShadowLabel;
+    NetGameConnectLabel: TShadowLabel;
+    SlowGeometry: TAdvOfficeCheckBoxEx;
+    MemoryPrediction: TAdvOfficeCheckBoxEx;
+    StackInRAMHack: TAdvOfficeCheckBoxEx;
+    Rotate: TComboBox2Ex;
+    NetGameServer: TAdvOfficeCheckBoxEx;
+    NetGameConnect: TEditEx;
+    SoundFilterCutoffLabel: TShadowLabel;
+    LabelSoundLiteSurroundMultiplier: TShadowLabel;
+    SoundFilter: TAdvOfficeCheckBoxEx;
+    SoundStereoExciter: TAdvOfficeCheckBoxEx;
+    SoundLiteSurround: TAdvOfficeCheckBoxEx;
+    SoundFilterCutoff: TComboBox2Ex;
+    SoundLiteSurroundMultiplier: TGaugeBar;
+    SoundEnableSound: TAdvOfficeCheckBoxEx;
     procedure ButtonReadFileClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure SoundLiteSurroundMultiplierChange(Sender: TObject);
@@ -95,7 +103,7 @@ type
     procedure ControllerConfigFileButtonSelectClick(Sender: TObject);
     procedure RendererZNCButtonSelectClick(Sender: TObject);
     procedure RendererConfigFileButtonSelectClick(Sender: TObject);
-    procedure FolderROMButtonSelectClick(Sender: TObject);
+    procedure FolderROMsButtonSelectClick(Sender: TObject);
     procedure FolderROMsButtonEditClick(Sender: TObject);
     procedure FolderROMsButtonDeleteClick(Sender: TObject);
     procedure FolderROMsButtonClearClick(Sender: TObject);
@@ -106,14 +114,17 @@ type
     procedure FolderROMsItemEdited(Sender: TCustomEasyListview;
       Item: TEasyItem; var NewValue: Variant; var Accept: Boolean);
     procedure FormKeyPress(Sender: TObject; var Key: Char);
-    procedure ButtonUpClick(Sender: TObject);
-    procedure FramerateManualKeyPress(Sender: TObject; var Key: Char);
+    procedure FolderROMsButtonUpClick(Sender: TObject);
     procedure ControllerZNCChange(Sender: TObject);
+    procedure FolderROMsItemPaintText(Sender: TCustomEasyListview;
+      Item: TEasyItem; Position: Integer; ACanvas: TCanvas);
+    procedure FramerateManualChange(Sender: TObject);
   private
     { Private declarations }
     procedure ReadZiNc_cfg(iniFile: String);
     procedure WriteZiNc_cfg(const customIniFile: String);
     procedure RemovePathFromFileName(EditHolder: TEditEx);
+    procedure Resize4K;
   public
     emuIni,
     GameIni,
@@ -130,6 +141,169 @@ implementation
 uses uMain, uCommon;
 
 {$R *.dfm}
+
+procedure TFormZiNcSettings.Resize4K;
+var
+  iTopValue: Integer;
+
+  function GetTopPos(iPos: Integer): Integer;
+  begin
+    if iPos = -1 then
+       Result:= iTopValue
+    else
+       Result:= iPos;
+  end;
+
+  function MoveCheckBox(iCheckBox: TAdvOfficeCheckBoxEx; iTop: Integer = -1; iLeft: Integer = 10;  iWidth: Integer = 287): Boolean;
+  begin
+    Result:= True;
+    iTopValue:= GetTopPos(iTop);
+    FormMain.Set4KCheckBoxSpecs(iCheckBox, iLeft, iTopValue, iWidth, 36, 16);
+    iTopValue:= iTopValue+47;
+  end;
+
+  function MoveGaugeBar(iGaugeBar: TGaugeBar;  iLabelTitle: TShadowLabel; iTop: Integer = -1; iLeft: Integer = 10; iWidth: Integer = 287): Boolean;
+  begin
+    Result:= True;
+    iTopValue:= GetTopPos(iTop);
+    if iLabelTitle <> nil then
+       FormMain.Set4KLabelSpecs(iLabelTitle, iLeft, iTopValue, iWidth, 31, 16);
+
+    FormMain.Set4KGaugeBarSpecs(iGaugeBar, iLeft, iTopValue+36, iWidth, 36);
+    iTopValue:= iTopValue+82;
+  end;
+
+  function MoveEdit(iEdit: TEditEx; iLabelTitle: TShadowLabel; iButton: TBitBtnEx = nil; iTop: Integer = -1; iLeft: Integer = 10; iWidth: Integer = 287): Boolean;
+  var
+    iSize: Integer;
+  begin
+    Result:= True;
+    iTopValue:= GetTopPos(iTop);
+    if iLabelTitle <> nil then
+       FormMain.Set4KLabelSpecs(iLabelTitle, iLeft, iTopValue, -1, -1, 16);
+    iSize:= iWidth;
+    if iButton <> nil then
+       iSize:= iSize-70-5;
+
+    FormMain.Set4KEditSpecs(iEdit, iLeft, iTopValue+36, iSize, 36, 16);
+    if iButton <> nil then
+       FormMain.Set4KButtonSpecs(iButton, iLeft+iSize+5, iTopValue+36, 70, 36, 16);
+    iTopValue:= iTopValue+82;
+  end;
+
+  function MoveComboBox(iComboBox: TComboBox2Ex; iLabelTitle: TShadowLabel; iTop: Integer = -1; iLeft: Integer = 10; iWidth: Integer = 587): Boolean;
+  begin
+    Result:= True;
+    iTopValue:= GetTopPos(iTop);
+    if iLabelTitle <> nil then
+       FormMain.Set4KLabelSpecs(iLabelTitle, iLeft, iTopValue, -1, -1, 16);
+    FormMain.Set4KComboBoxSpecs(iComboBox, iLeft, iTopValue+36, iWidth, 16);
+    iTopValue:= iTopValue+82;
+  end;
+  
+begin
+  if not Is4KMode then
+     Exit;
+
+  with FormZiNcSettings do
+  begin
+    ClientWidth:=  1677;
+    ClientHeight:= 1206;
+    Font.Size:= 16;
+
+    FormMain.Set4KEmuGameTopPanel(TopBar, SystemIcon, GameIcon, LabelGameTitle, 1515, LabelEmulatorVersion, 1245, LabelGameStatus, 1460);
+
+    // Path to ROM Sets
+    FormMain.Set4KBoxLabel(FolderROMsGroupBox, FolderROMsGroupBoxLabel, 16, 160, 329, 1645);
+    FormMain.Set4KListViewSpecs(FolderROMs, 10, 45, 1538, 272, 16);
+    FolderROMs.CellSizes.Report.Height:= 32;
+
+    FormMain.Set4KButtonSpecs(FolderROMsButtonUp    , FolderROMsGroupBox.Width-12-75, 45,                     75, 36, 16);
+    FormMain.Set4KButtonSpecs(FolderROMsButtonDown  , FolderROMsButtonUp.Left, FolderROMsButtonUp.Top+41,     75, 36, 16);
+    FormMain.Set4KButtonSpecs(FolderROMsButtonSelect, FolderROMsButtonUp.Left, 158,                           75, 36, 16);
+    FormMain.Set4KButtonSpecs(FolderROMsButtonEdit  , FolderROMsButtonUp.Left, FolderROMsButtonSelect.Top+41, 75, 36, 16);
+    FormMain.Set4KButtonSpecs(FolderROMsButtonDelete, FolderROMsButtonUp.Left, FolderROMsButtonEdit.Top+41,   75, 36, 16);
+    FormMain.Set4KButtonSpecs(FolderROMsButtonClear , FolderROMsButtonUp.Left, FolderROMsButtonDelete.Top+41, 75, 36, 16);
+
+    // Controller [.znc file]
+    FormMain.Set4KBoxLabel(ControllerZNCGroupBox, ControllerZNCGroupBoxLabel, 16, 514, 93, 643);
+    MoveEdit(ControllerZNC, nil, ControllerZNCButtonSelect, 45-36, 10, 621);
+
+    // Controller Config [.cfg file]
+    FormMain.Set4KBoxLabel(ControllerConfigFileGroupBox, ControllerConfigFileGroupBoxLabel, 684, 514, 93, 643);
+    MoveEdit(ControllerConfigFile, nil, ControllerConfigFileButtonSelect, 45-36, 10, 621);
+
+    // Renderer [.znc file]
+    FormMain.Set4KBoxLabel(RendererZNCGroupBox, RendererZNCGroupBoxLabel, 16, 632, 93, 643);
+    MoveEdit(RendererZNC, nil, RendererZNCButtonSelect, 45-36, 10, 621);
+
+    // Renderer Config [.cfg file]
+    FormMain.Set4KBoxLabel(RendererConfigFileGroupBox, RendererConfigFileGroupBoxLabel, 684, 632, 93, 643);
+    MoveEdit(RendererConfigFile, nil, RendererConfigFileButtonSelect, 45-36, 10, 621);
+
+    // OpenGL / Direct3D Renderer
+    FormMain.Set4KBoxLabel(OpenGLD3DRendererGroupBox, OpenGLD3DRendererGroupBoxLabel, 16, 750, 375, 977);
+
+    MoveComboBox(Resolution, ResolutionLabel, 45, 10, 187);
+    MoveComboBox(ColorDepth, ColorDepthLabel, -1, 10, 187);
+    MoveComboBox(Scanlines,  ScanlinesLabel,  -1, 10, 187);
+    MoveGaugeBar(FramerateManual, FramerateManualLabel, -1, 10, OpenGLD3DRendererGroupBox.Width-22);
+
+    MoveComboBox(Blending, BlendingLabel, 45, 222, 221);
+
+    FormMain.Set4KLabelSpecs(TextureSettingsLabel, 559, 45, -1, -1, 16);
+    FormMain.Set4KLabelSpecs(TextureTypeLabel, 559, 83, -1, -1, 16);
+    MoveComboBox(TextureType,   nil, 81-36, 610, 90);
+    FormMain.Set4KLabelSpecs(TextureCacheLabel, 717, 83, -1, -1, 16);
+    MoveComboBox(TextureCache,  nil, 81-36, 779, 60);
+    FormMain.Set4KLabelSpecs(TextureFilterLabel, 854, 83, -1, -1, 16);
+    MoveComboBox(TextureFilter, nil, 81-36, 905, 60);
+
+    MoveCheckBox(Dithering, 128, 222, 195);
+    MoveCheckBox(FullScreen, -1, 222, 135);
+
+    MoveCheckBox(ShowFPS   , 128, 511, 140);
+    MoveCheckBox(FrameSkip ,  -1, 511, 140);
+    MoveCheckBox(EnableKeys,  -1, 511, 235);
+
+    MoveCheckBox(FramerateDetection, 128, 751, 220);
+    MoveCheckBox(FrameLimitation   ,  -1, 751, 190);
+
+    FormMain.Set4KLabelSpecs(TurnDisplayLabel, 222, 247, -1, -1, 16);
+    MoveComboBox(TurnDisplay, nil, 245-36, 383, 60);
+
+    // Video
+    FormMain.Set4KBoxLabel(VideoGroupBox, VideoGroupBoxLabel, 1018, 750, 375, 309);
+    MoveCheckBox(SlowGeometry, 44);
+    MoveCheckBox(MemoryPrediction);
+    MoveCheckBox(StackInRAMHack);
+
+    FormMain.Set4KLabelSpecs(RotateLabel, 10, 187, -1, -1, 16);
+    MoveComboBox(Rotate, nil, 185-36, 75, 222);
+    MoveCheckBox(NetGameServer, 244, 10, 195);
+    MoveEdit(NetGameConnect, NetGameConnectLabel, nil, -1, 10, 287);
+
+    // Audio
+    FormMain.Set4KBoxLabel(AudioGroupBox, AudioGroupBoxLabel, 1352, 514, 354, 309);
+    MoveCheckBox(SoundEnableSound, 44);
+    MoveCheckBox(SoundStereoExciter);
+    MoveCheckBox(SoundLiteSurround);
+    MoveGaugeBar(SoundLiteSurroundMultiplier, nil, 185-36, 10, 250);
+    FormMain.Set4KLabelSpecs(LabelSoundLiteSurroundMultiplier, 266, 187, 40, 31, 16);
+    MoveCheckBox(SoundFilter);
+    FormMain.Set4KLabelSpecs(SoundFilterCutoffLabel, 37, 270, -1, -1, 16);
+    MoveComboBox(SoundFilterCutoff, nil, 306-36, 37, 260);
+
+    FormMain.Set4KButtonSpecs(ButtonReadFile, 16, ClientHeight-16-45, 168, 45, 16);
+    FormMain.Set4KButtonSpecs(ButtonCancel, ClientWidth-16-168,   ButtonReadFile.Top, 168, 45, 16);
+    FormMain.Set4KButtonSpecs(ButtonOk, ButtonCancel.Left-10-168, ButtonReadFile.Top, 168, 45, 16);
+    FormMain.Set4KLabelSpecs(LabelReadFileIni, 200, ButtonReadFile.Top+7, 1100, 31, 16);
+
+
+
+
+  end;
+end;
 
 procedure TFormZiNcSettings.ReadZiNc_cfg(iniFile: String);
 var
@@ -206,7 +380,7 @@ begin
   for Loop:=0 to ZiNcFileCfg.Count-1 do
   begin
     if ZiNcFileCfg.Names[Loop] = '--use-sound' then
-       AudioBox.CheckBox.Checked:= LowerCase(ZiNcFileCfg.ValueFromIndex[Loop]) = 'yes'
+       SoundEnableSound.Checked:= LowerCase(ZiNcFileCfg.ValueFromIndex[Loop]) = 'yes'
        //Sound.Checked:= LowerCase(ZiNcFileCfg.ValueFromIndex[Loop]) = 'yes'
     else
     if ZiNcFileCfg.Names[Loop] = '--renderer' then
@@ -307,15 +481,16 @@ begin
          else
          if Trim(ZiNcFileCfg.Names[Loop]) = 'FramerateManual' then
             begin
-              FramerateManual.Text:= FixValueString(ZiNcFileCfg.ValueFromIndex[Loop]);
-              if FramerateManual.Text = '' then
-                 FramerateManual.Text:= '100'
+              tempStr:= FixValueString(ZiNcFileCfg.ValueFromIndex[Loop]);
+              if tempStr = '' then
+                 tempStr:= '100'
               else
                  begin
-                   Position:= StrToInt(FramerateManual.Text);
+                   Position:= StrToInt(tempStr);
                    if (Position < 0) or (Position > 1000) then
-                      FramerateManual.Text:= '100';
+                      tempStr:= '100';
                  end;
+              FramerateManual.Position:= StrToInt(tempstr);
             end
          else
          if Trim(ZiNcFileCfg.Names[Loop]) = 'TextureType' then
@@ -383,7 +558,7 @@ begin
         cmdString:= '';
      end;
 
-  if not AudioBox.CheckBox.Checked then // Sound.Checked then
+  if not SoundEnableSound.Checked then // Sound.Checked then
      AddSetting('--use-sound=no');
 
   if (RendererZNC.Text <> '') and (LowerCase(RendererZNC.Text) <> 'renderer.znc') then
@@ -455,19 +630,19 @@ begin
     0: ZiNcFileCfg.Add(WriteRendererLine('ColorDepth', '16', 'Fullscreen color depth: 16/32'));
     1: ZiNcFileCfg.Add(WriteRendererLine('ColorDepth', '32', 'Fullscreen color depth: 16/32'));
   end;
-  ZiNcFileCfg.Add(WriteRendererLine('ScanLines', IntToStr(Scanlines.ItemIndex), 'Scannlines: 0=none, 1=black, 2=bright'));
-  ZiNcFileCfg.Add(WriteRendererLine('Filtering', IntToStr(TextureFilter.ItemIndex), 'Texture filtering: 0-3'));
-  ZiNcFileCfg.Add(WriteRendererLine('Blending', IntToStr(Blending.ItemIndex), 'Enhanced color blend: ogl: 0/1; D3D: 0-2'));
-  ZiNcFileCfg.Add(WriteRendererLine('Dithering', IntToStr(Ord(Dithering.Checked)), 'Dithering: 0/1'));
-  ZiNcFileCfg.Add(WriteRendererLine('ShowFPS', IntToStr(Ord(ShowFPS.Checked)), 'FPS display on startup: 0/1'));
-  ZiNcFileCfg.Add(WriteRendererLine('FrameLimitation', IntToStr(Ord(FrameLimitation.Checked)), 'Frame limit: 0/1'));
-  ZiNcFileCfg.Add(WriteRendererLine('FrameSkipping', IntToStr(Ord(FrameSkip.Checked)), 'Frame skip: 0/1'));
+  ZiNcFileCfg.Add(WriteRendererLine('ScanLines',          IntToStr(Scanlines.ItemIndex),             'Scannlines: 0=none, 1=black, 2=bright'));
+  ZiNcFileCfg.Add(WriteRendererLine('Filtering',          IntToStr(TextureFilter.ItemIndex),         'Texture filtering: 0-3'));
+  ZiNcFileCfg.Add(WriteRendererLine('Blending',           IntToStr(Blending.ItemIndex),              'Enhanced color blend: ogl: 0/1; D3D: 0-2'));
+  ZiNcFileCfg.Add(WriteRendererLine('Dithering',          IntToStr(Ord(Dithering.Checked)),          'Dithering: 0/1'));
+  ZiNcFileCfg.Add(WriteRendererLine('ShowFPS',            IntToStr(Ord(ShowFPS.Checked)),            'FPS display on startup: 0/1'));
+  ZiNcFileCfg.Add(WriteRendererLine('FrameLimitation',    IntToStr(Ord(FrameLimitation.Checked)),    'Frame limit: 0/1'));
+  ZiNcFileCfg.Add(WriteRendererLine('FrameSkipping',      IntToStr(Ord(FrameSkip.Checked)),          'Frame skip: 0/1'));
   ZiNcFileCfg.Add(WriteRendererLine('FramerateDetection', IntToStr(Ord(FramerateDetection.Checked)), 'Auto framerate detection: 0/1'));
-  ZiNcFileCfg.Add(WriteRendererLine('FramerateManual', FramerateManual.Text, 'Manual framerate: 0-1000'));
-  ZiNcFileCfg.Add(WriteRendererLine('TextureType', IntToStr(TextureType.ItemIndex), 'Textures: 0=default, 1=4 bit, 2=5bit, 3=8bit'));
-  ZiNcFileCfg.Add(WriteRendererLine('TextureCaching', IntToStr(TextureCache.ItemIndex), 'Caching type: 0-2'));
-  ZiNcFileCfg.Add(WriteRendererLine('TurnDisplay', IntToStr(TurnDisplay.ItemIndex), 'Turn the whole display (0-2, 0=default)'));
-  ZiNcFileCfg.Add(WriteRendererLine('EnableKeys', IntToStr(Ord(EnableKeys.Checked)), 'Enable renderer keys: 0/1, def=1 (enables keys for the fps menu/pause)'));
+  ZiNcFileCfg.Add(WriteRendererLine('FramerateManual',    IntToStr(FramerateManual.Position),        'Manual framerate: 0-1000'));
+  ZiNcFileCfg.Add(WriteRendererLine('TextureType',        IntToStr(TextureType.ItemIndex),           'Textures: 0=default, 1=4 bit, 2=5bit, 3=8bit'));
+  ZiNcFileCfg.Add(WriteRendererLine('TextureCaching',     IntToStr(TextureCache.ItemIndex),          'Caching type: 0-2'));
+  ZiNcFileCfg.Add(WriteRendererLine('TurnDisplay',        IntToStr(TurnDisplay.ItemIndex),           'Turn the whole display (0-2, 0=default)'));
+  ZiNcFileCfg.Add(WriteRendererLine('EnableKeys',         IntToStr(Ord(EnableKeys.Checked)),         'Enable renderer keys: 0/1, def=1 (enables keys for the fps menu/pause)'));
 
   if PosEx(':', RendererConfigFile.Text) = 0 then
      tempFileName:= ExtractFilePath(FormMain.EmulatorFile[idZiNc])+RendererConfigFile.Text
@@ -502,27 +677,29 @@ end;
 procedure TFormZiNcSettings.FormShow(Sender: TObject);
 var
   Loop: Integer;
+  iStr: String;
 begin
+  Resize4K;
   FormMain.ELV_ResetNormalColors(FolderROMs);
-
   if IsNightMode then
   begin
     for Loop:= 0 to FormZiNcSettings.ComponentCount-1 do
     begin
+      if FormZiNcSettings.Components[Loop] is TPanelEx then
+      begin
+        iStr:= TPanelEx(FormZiNcSettings.Components[Loop]).Name;
+        if PosEx('GroupBox', iStr) <> 0 then
+           begin
+             SetPanelColors(TPanelEx(FormZiNcSettings.Components[Loop]), clrMedDarkGray, -1, True);
+             SetPanelBorderColors(TPanelEx(FormZiNcSettings.Components[Loop]), clrLightGrayFrame, clrBorderGroupBoxGrayBk);
+           end;
+      end
+      else
       if FormZiNcSettings.Components[Loop] is TBitBtnEx then
          FormMain.SetButtonExColors(TBitBtnEx(FormZiNcSettings.Components[Loop]))
       else
       if FormZiNcSettings.Components[Loop] is TEditEx then
          SetEditNightColors(TEditEx(FormZiNcSettings.Components[Loop]))
-      else
-      if FormZiNcSettings.Components[Loop] is TAdvGroupBoxEx then
-         begin
-           SetGroupBoxBorderStyle(TAdvGroupBoxEx(FormZiNcSettings.Components[Loop]));
-           SetGroupBoxColors(TAdvGroupBoxEx(FormZiNcSettings.Components[Loop]),
-                             clrBorderGroupBoxGrayBk, clrInnerBorderGroupBoxGrayBk,
-                             item_caption_active_color[1], item_caption_active_shadow_color[1], -1, clrMedDarkGray, False);
-           FormMain.SetGroupBoxExCustomIcon(TAdvGroupBoxEx(FormZiNcSettings.Components[Loop]));
-         end
       else
       if FormZiNcSettings.Components[Loop] is TComboBox2Ex then
          SetComboBox2ExColors(TComboBox2Ex(FormZiNcSettings.Components[Loop]), True)
@@ -538,7 +715,20 @@ begin
            FormMain.SetCheckBoxExCustomIcon(TAdvOfficeCheckBoxEx(FormZiNcSettings.Components[Loop]));
          end;
       if FormZiNcSettings.Components[Loop] is TShadowLabel then
-         SetLabelColors(TShadowLabel(FormZiNcSettings.Components[Loop]), item_caption_active_color[1], item_caption_active_shadow_color[1]);
+         begin
+           iStr:= TPanelEx(FormZiNcSettings.Components[Loop]).Name;
+           if PosEx('GroupBoxLabel', iStr) <> 0 then
+           begin
+             SetLabelBkFrameColors(TShadowLabel(FormZiNcSettings.Components[Loop]), clrBorderGroupBoxGrayBk, $00404040, clBlack);
+             SetLabelColors(TShadowLabel(FormZiNcSettings.Components[Loop]), clCream);
+           end
+           else
+           begin
+             SetLabelColors(TShadowLabel(FormZiNcSettings.Components[Loop]), item_caption_active_color[1], item_caption_active_shadow_color[1]);
+             if not TShadowLabel(FormZiNcSettings.Components[Loop]).Transparent then
+                    TShadowLabel(FormZiNcSettings.Components[Loop]).Color:= clrMedDarkGray;
+           end;
+         end
     end;
     SetFormColors(FormZiNcSettings, nil, nil, LabelGameTitle, LabelEmulatorVersion, LabelGameStatus, -1, IsNightMode);
     SetColorEmulatorTopBar(TopBar, idZiNc, True);
@@ -550,19 +740,13 @@ begin
 
   LabelGameTitle.Caption:= FormMain.GetArcadeGameSysTitle(Tag = 1, idZiNc, emuVersionStr);
 
-  //if FormMain.EmulatorVersion[idZiNc] <> '' then
-  //   LabelEmulatorVersion.Caption:= FormMain.EmulatorVersion[idZiNc]
-  //else
-  //   LabelEmulatorVersion.Caption:= '';
-
   if Tag = 0 then
      begin
        //LabelEmulatorVersion.Caption:= FormMain.EmulatorFile[idZiNc]+#13#10+LabelReadFileIni.Caption;
        LabelEmulatorVersion.Caption:= emuFileExec+#13#10+LabelReadFileIni.Caption;
        LabelReadFileIni.Visible:= False;
        SetColorEmulatorTopBar(TopBar, idZiNc, True); // TopBar.Color1:= $00c0cddc;
-       FormMain.LoadIconIntoImage(FormMain.GetArcadeSystemIconFileName(idZiNc), SystemIcon);
-       //FormMain.IL_ArcadeSystem_ExtraLarge.GetIcon(idZiNc, SystemIcon.Picture.Icon);
+       FormMain.LoadSystemIcon(idZiNc, SystemIcon, False);
        FormMain.LoadMessageIcon(GameIcon, 'info.ico');
        LabelGameStatus.Visible:= False;
      end
@@ -580,19 +764,18 @@ begin
           LabelEmulatorVersion.Caption:= 'name: '+FormMain.StatusBar_GamesGameName.Caption+#13#10+
                                          LabelEmulatorVersion.Caption;
        LabelGameStatus.Caption:= LabelGameStatus.Hint+#13#10+FormMain.GetGameStatusText(FormMain.MemGameInfo.eGameSetStatus, FormMain.MemGameInfo.eROMIdentification);
-       ROMsFoldersLabel.Enabled:= False;
+       FolderROMsGroupBox.Enabled:= False;
        FolderROMs.Enabled:= False;
-       FolderROMs.Font.Color:= clSilver;
-       ButtonUp.Enabled:= False;
-       ButtonDown.Enabled:= False;
-       FolderROMButtonSelect.Enabled:= False;
+       //FolderROMs.Font.Color:= clSilver;
+       FolderROMsButtonUp.Enabled:= False;
+       FolderROMsButtonDown.Enabled:= False;
+       FolderROMsButtonSelect.Enabled:= False;
        FolderROMsButtonEdit.Enabled:= False;
        FolderROMsButtonDelete.Enabled:= False;
        FolderROMsButtonClear.Enabled:= False;
 
-       FormMain.LoadGameIconIntoImage(FormMain.MemGameInfo.eSystemID, FormMain.MemGameInfo.eCustomSystemID, FormMain.MemGameInfo.eROMIdentification, SystemIcon, FormMain.MemGameInfo.eSoftwareName, FormMain.MemGameInfo.eIsCustomGame);
-       //FormMain.IL_StandardIconsExtraLarge.GetIcon(FormMain.MemGameInfo.eROMIdentification, SystemIcon.Picture.Icon);
-       FormMain.IL_ArcadeSystem_Small.GetIcon(FormMain.MemGameInfo.eSystemID, GameIcon.Picture.Icon);
+       FormMain.LoadSystemROMIdIcon(FormMain.MemGameInfo.eSystemID, FormMain.MemGameInfo.eCustomSystemID, FormMain.MemGameInfo.eROMIdentification, SystemIcon, FormMain.MemGameInfo.eSoftwareName, FormMain.MemGameInfo.eGameSetStatus, FormMain.MemGameInfo.eIsCustomGame);
+       FormMain.LoadGameIcon(GameIcon, False);
 
        SetColorsGameTopBar(FormMain.MemGameInfo.eGameSetStatus, TopBar);
        //case FormMain.MemGameInfo.eGameSetStatus of
@@ -601,8 +784,7 @@ begin
        //  2: TopBar.Color1:= $00eeeeee; // silver (base on green)
        //end;
      end;
-  OpenGLD3DRendererBox.DoubleBuffered:= True;
-  AudioBox.DoubleBuffered:= True;
+
   PopulateScreenResolution(Resolution);
   ButtonReadFile.Click;
   Screen.Cursor:= crDefault;
@@ -627,7 +809,7 @@ begin
               1: WriteZiNc_cfg(GameIni); // game options
             end;
           end;
-       SetCurrentDir(FormMain.FrontendPath);
+       SetCurrentDir(FrontendPath);
      end;
 end;
 
@@ -695,7 +877,7 @@ begin
   RemovePathFromFileName(RendererConfigFile);
 end;
 
-procedure TFormZiNcSettings.FolderROMButtonSelectClick(Sender: TObject);
+procedure TFormZiNcSettings.FolderROMsButtonSelectClick(Sender: TObject);
 begin
   FormMain.DialogSelectMultiFolders(FolderROMs);
 end;
@@ -752,18 +934,21 @@ begin
      ButtonCancel.Click;
 end;
 
-procedure TFormZiNcSettings.ButtonUpClick(Sender: TObject);
+procedure TFormZiNcSettings.FolderROMsButtonUpClick(Sender: TObject);
 begin
   FormMain.ELV_MoveItem(FolderROMs, Boolean(TBitBtnEx(Sender).Tag));
 end;
 
-procedure TFormZiNcSettings.FramerateManualKeyPress(Sender: TObject;
-  var Key: Char);
+procedure TFormZiNcSettings.FolderROMsItemPaintText(
+  Sender: TCustomEasyListview; Item: TEasyItem; Position: Integer;
+  ACanvas: TCanvas);
 begin
-  Key:= FormMain.KeyPressValidateNumbers(Key);
-  //if not (Key in ['0'..'9', Chr(VK_BACK)]) then
-  //   Key:= Char(0);
+  FormMain.ELV_ItemPaintText_General(Sender, Item, ACanvas);
 end;
 
+procedure TFormZiNcSettings.FramerateManualChange(Sender: TObject);
+begin
+  FramerateManualLabel.Caption:= FramerateManualLabel.Hint+IntToStr(FramerateManual.Position)+' fps]';
+end;
 
 end.

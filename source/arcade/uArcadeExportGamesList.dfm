@@ -21,7 +21,7 @@ object FormArcadeExportGamesList: TFormArcadeExportGamesList
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 15
-  object BottomBar: TPanelEx
+  object PanelBottom: TPanelEx
     Left = 0
     Top = 363
     Width = 620
@@ -49,7 +49,7 @@ object FormArcadeExportGamesList: TFormArcadeExportGamesList
       OnClick = ButtonApplyAndExitClick
     end
     object ButtonCancel: TBitBtnEx
-      Left = 518
+      Left = 523
       Top = 8
       Width = 89
       Height = 25
@@ -91,6 +91,7 @@ object FormArcadeExportGamesList: TFormArcadeExportGamesList
     Width = 193
     Height = 259
     CheckBox.CustomIconsEnabled = False
+    CheckBox.CustomEnableIconHD = False
     RoundEdges = True
     Caption = 'Export All Games'
     Ctl3D = True
@@ -98,7 +99,7 @@ object FormArcadeExportGamesList: TFormArcadeExportGamesList
     object LabelExportOption_MAMESoftwareListGames: TShadowLabel
       Left = 23
       Top = 75
-      Width = 151
+      Width = 149
       Height = 19
       Caption = '(console/computer games)'
       Font.Charset = ANSI_CHARSET
@@ -132,6 +133,9 @@ object FormArcadeExportGamesList: TFormArcadeExportGamesList
       State = cbChecked
       Themed = True
       CustomIconsEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
     object ExportOption_NonArcadeMAMEMachines: TAdvOfficeCheckBoxEx
       Tag = 1
@@ -149,6 +153,9 @@ object FormArcadeExportGamesList: TFormArcadeExportGamesList
       State = cbChecked
       Themed = True
       CustomIconsEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
     object ExportOption_MAMESoftwareListGames: TAdvOfficeCheckBoxEx
       Tag = 1
@@ -166,6 +173,9 @@ object FormArcadeExportGamesList: TFormArcadeExportGamesList
       State = cbChecked
       Themed = True
       CustomIconsEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
     object ExportOption_MAME: TAdvOfficeCheckBoxEx
       Tag = 1
@@ -183,6 +193,9 @@ object FormArcadeExportGamesList: TFormArcadeExportGamesList
       State = cbChecked
       Themed = True
       CustomIconsEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
     object ExportOption_Supermodel3: TAdvOfficeCheckBoxEx
       Tag = 1
@@ -200,6 +213,9 @@ object FormArcadeExportGamesList: TFormArcadeExportGamesList
       State = cbChecked
       Themed = True
       CustomIconsEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
     object ExportOption_Daphne: TAdvOfficeCheckBoxEx
       Tag = 1
@@ -217,6 +233,9 @@ object FormArcadeExportGamesList: TFormArcadeExportGamesList
       State = cbChecked
       Themed = True
       CustomIconsEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
     object ExportOption_Demul: TAdvOfficeCheckBoxEx
       Tag = 1
@@ -234,6 +253,9 @@ object FormArcadeExportGamesList: TFormArcadeExportGamesList
       State = cbChecked
       Themed = True
       CustomIconsEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
     object ExportOption_HBMAME: TAdvOfficeCheckBoxEx
       Tag = 1
@@ -251,6 +273,9 @@ object FormArcadeExportGamesList: TFormArcadeExportGamesList
       State = cbChecked
       Themed = True
       CustomIconsEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
     object ExportOption_DICE: TAdvOfficeCheckBoxEx
       Tag = 1
@@ -268,6 +293,9 @@ object FormArcadeExportGamesList: TFormArcadeExportGamesList
       State = cbChecked
       Themed = True
       CustomIconsEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
     object ExportOption_SegaModel2: TAdvOfficeCheckBoxEx
       Tag = 1
@@ -285,6 +313,9 @@ object FormArcadeExportGamesList: TFormArcadeExportGamesList
       State = cbChecked
       Themed = True
       CustomIconsEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
     object ExportOption_ZiNc: TAdvOfficeCheckBoxEx
       Tag = 1
@@ -302,6 +333,9 @@ object FormArcadeExportGamesList: TFormArcadeExportGamesList
       State = cbChecked
       Themed = True
       CustomIconsEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
   end
   object GroupMAMEContentManagerPlus: TAdvGroupBoxEx
@@ -310,6 +344,7 @@ object FormArcadeExportGamesList: TFormArcadeExportGamesList
     Width = 209
     Height = 45
     CheckBox.CustomIconsEnabled = False
+    CheckBox.CustomEnableIconHD = False
     RoundEdges = True
     Caption = 'MAME Content Manager Plus'
     Ctl3D = True
@@ -331,6 +366,9 @@ object FormArcadeExportGamesList: TFormArcadeExportGamesList
       State = cbChecked
       Themed = True
       CustomIconsEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
     object MCMPlus_HBMAME: TAdvOfficeCheckBoxEx
       Tag = 1
@@ -349,6 +387,9 @@ object FormArcadeExportGamesList: TFormArcadeExportGamesList
       State = cbChecked
       Themed = True
       CustomIconsEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
   end
   object GroupExportOptionsGameColumnsFullFormat: TAdvGroupBoxEx
@@ -357,6 +398,7 @@ object FormArcadeExportGamesList: TFormArcadeExportGamesList
     Width = 183
     Height = 309
     CheckBox.CustomIconsEnabled = False
+    CheckBox.CustomEnableIconHD = False
     RoundEdges = True
     Caption = 'Game Info To Export'
     Ctl3D = True
@@ -446,6 +488,9 @@ object FormArcadeExportGamesList: TFormArcadeExportGamesList
       TabOrder = 0
       View = elsReport
       CustomCheckRadioEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
       OnItemPaintText = GameInfoListToExportItemPaintText
     end
     object GameInfoListToExport_MoveUp: TBitBtnEx
@@ -502,6 +547,9 @@ object FormArcadeExportGamesList: TFormArcadeExportGamesList
       ShadowColor = clSilver
       Themed = True
       CustomIconsEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
     object ButtonHelp_GameInfoToExport_MicrosoftExcelFormat: TBitBtnEx
       Left = 154
@@ -570,6 +618,9 @@ object FormArcadeExportGamesList: TFormArcadeExportGamesList
       ShadowColor = clSilver
       Themed = True
       CustomIconsEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
   end
   object TopBar: TPanelEx
@@ -752,6 +803,7 @@ object FormArcadeExportGamesList: TFormArcadeExportGamesList
       TabOrder = 0
       View = elsReport
       CustomCheckRadioEnabled = False
+      CustomEnableIconHD = False
       OnItemPaintText = ExportListItemPaintText
       OnItemSelectionChanged = ExportListItemSelectionChanged
     end

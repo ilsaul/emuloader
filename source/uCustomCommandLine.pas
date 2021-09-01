@@ -22,7 +22,17 @@ type
     ButtonClearCustomCommandLine: TBitBtnEx;
     ButtonOk: TBitBtnEx;
     ButtonCancel: TBitBtnEx;
-    ParametersBox: TAdvGroupBoxEx;
+    EmulatorBatchFileGroupBox: TPanelEx;
+    EmulatorBatchFileGroupBoxLabel: TShadowLabel;
+    PanelEx1: TPanelEx;
+    ShadowLabel1: TShadowLabel;
+    EmulatorBatchFile: TEditEx;
+    EmulatorBatchFileButtonSelect: TBitBtnEx;
+    ParametersGroupBox: TPanelEx;
+    ParametersGroupBoxLabel: TShadowLabel;
+    LabelSuffixToAdd: TShadowLabel;
+    LabelFieldToAdd: TShadowLabel;
+    LabelPrefixToAdd: TShadowLabel;
     ParametersListView: TEasyListview;
     ButtonMoveParameterUp: TBitBtnEx;
     ButtonMoveParameterDown: TBitBtnEx;
@@ -30,21 +40,17 @@ type
     ButtonAddParameter: TBitBtnEx;
     ButtonUpdate: TBitBtnEx;
     SuffixToAdd: TEditEx;
-    LabelSuffixToAdd: TShadowLabel;
     FieldToAdd: TComboBoxEx;
-    LabelFieldToAdd: TShadowLabel;
     PrefixToAdd: TEditEx;
-    LabelPrefixToAdd: TShadowLabel;
     PrefixSendLeadingSpace: TAdvOfficeCheckBoxEx;
     ParameterSurroundWithQuotes: TAdvOfficeCheckBoxEx;
-    CustomEmulatorFileBoxLabel: TShadowLabel;
-    EmulatorBatchFile: TEditEx;
-    EmulatorBatchFileButtonSelect: TBitBtnEx;
-    AdditionalParameters: TEditEx;
-    AdditionalParametersBoxLabel: TShadowLabel;
-    CommandLinePreviewLabel: TShadowLabel;
-    CommandLinePreview: TMemo;
+    AdditionalParametersGroupBox: TPanelEx;
+    AdditionalParametersGroupBoxLabel: TShadowLabel;
     AdditionalParametersButtonClear: TBitBtnEx;
+    AdditionalParameters: TEditEx;
+    CommandLinePreviewGroupBox: TPanelEx;
+    CommandLinePreviewGroupBoxLabel: TShadowLabel;
+    CommandLinePreview: TMemo;
     procedure EmulatorBatchFileButtonSelectClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure ButtonClearCustomCommandLineClick(Sender: TObject);
@@ -167,7 +173,7 @@ var
   end;
 
 begin
-  if FormMain.CheckReadOnly(FileNameFullPath) then
+  if CheckReadOnly(FileNameFullPath) then
      Exit;
 
   CommandLineFile:= THashedStringList.Create;
@@ -186,7 +192,7 @@ begin
   CommandLineFile.EndUpdate;
   case CheckAndCreateFolder(ExtractFilePath(FileNameFullPath)) of
     True : CommandLineFile.SaveToFile(FileNameFullPath);
-    False: GenerateMessage('Error', 'Save Custom Command Line', 'Failed to update file.'+#13#10+
+    False: FormMain.ShowMessageBox('Error', 'Save Custom Command Line', 'Failed to update file.'+#13#10+
                            Format('Could not save "%s" file. Folder was '+
                            'not found and could not be created.', [FileNameFullPath]), 2, False, 1);
   end;
@@ -197,7 +203,7 @@ procedure TFormCustomCommandLine.EmulatorBatchFileButtonSelectClick(
   Sender: TObject);
 begin
   FormMain.DialogOpenFile(2, 'Select a file', EmulatorBatchFile, False);
-  SetCurrentDir(FormMain.FrontendPath);
+  SetCurrentDir(FrontendPath);
 end;
 
 procedure TFormCustomCommandLine.FormShow(Sender: TObject);
@@ -210,20 +216,14 @@ begin
   FormMain.ELV_ResetNormalColors(ParametersListView);
   //FormMain.GetGameROMIcon(TopBar);
 
-  FormMain.LoadGameIconIntoImage(FormMain.MemGameInfo.eSystemID, FormMain.MemGameInfo.eCustomSystemID, FormMain.MemGameInfo.eROMIdentification, SystemIcon, FormMain.MemGameInfo.eSoftwareName, FormMain.MemGameInfo.eIsCustomGame);
+  FormMain.LoadSystemROMIdIcon(FormMain.MemGameInfo.eSystemID, FormMain.MemGameInfo.eCustomSystemID, FormMain.MemGameInfo.eROMIdentification, SystemIcon, FormMain.MemGameInfo.eSoftwareName, FormMain.MemGameInfo.eGameSetStatus, FormMain.MemGameInfo.eIsCustomGame);
+  FormMain.LoadGameIcon(GameIcon, False);
 
-  case FormMain.MemGameInfo.eIsCustomGame of
-    True:
-      begin
-        LabelScanMode.Visible:= False;
-        //LabelEmulatorVersion.Width:= 875;
-        FormMain.IL_MainMenuOptions.GetIcon(15, GameIcon.Picture.Icon);
-      end;
-    False:
-      begin
-        FormMain.IL_ArcadeSystem_Small.GetIcon(FormMain.MemGameInfo.eSystemID, GameIcon.Picture.Icon);
-      end;
-  end;
+  if FormMain.MemGameInfo.eIsCustomGame then
+     begin
+       LabelScanMode.Visible:= False;
+       //LabelEmulatorVersion.Width:= 875;
+     end;
 
   LabelGameTitle.Caption:= FormMain.MemGameInfo.eTitle;
   LabelEmulatorVersion.Caption:= 'name: '+FormMain.StatusBar_GamesGameName.Caption;
@@ -279,25 +279,25 @@ begin
           end;
        end;
 
-       SetGroupBoxBorderStyle(ParametersBox);
-       SetGroupBoxColors(ParametersBox,
-                         clrBorderGroupBoxGrayBk, clrInnerBorderGroupBoxGrayBk,
-                         item_caption_active_color[1], item_caption_active_shadow_color[1], -1, clrMedDarkGray, False);
-       FormMain.SetGroupBoxExCustomIcon(ParametersBox);
+       //SetGroupBoxBorderStyle(ParametersBox);
+       //SetGroupBoxColors(ParametersBox,
+       //                  clrBorderGroupBoxGrayBk, clrInnerBorderGroupBoxGrayBk,
+       //                  item_caption_active_color[1], item_caption_active_shadow_color[1], -1, clrMedDarkGray, False);
+       //FormMain.SetGroupBoxExCustomIcon(ParametersBox);
 
        //SetComboBox2ExColors(FieldToAdd, True);
 
        SetLabelColors(LabelIniFile, clrLightRed);
 
-       SetLabelColors(CustomEmulatorFileBoxLabel, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       //SetLabelColors(CustomEmulatorFileBoxLabel, item_caption_active_color[1], item_caption_active_shadow_color[1]);
        SetLabelColors(LabelPrefixToAdd, item_caption_active_color[1], item_caption_active_shadow_color[1]);
        SetLabelColors(LabelFieldToAdd, item_caption_active_color[1], item_caption_active_shadow_color[1]);
        SetLabelColors(LabelSuffixToAdd, item_caption_active_color[1], item_caption_active_shadow_color[1]);
-       SetLabelColors(AdditionalParametersBoxLabel, item_caption_active_color[1], item_caption_active_shadow_color[1]);
-       SetLabelColors(CommandLinePreviewLabel, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       //SetLabelColors(AdditionalParametersBoxLabel, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       //SetLabelColors(CommandLinePreviewLabel, item_caption_active_color[1], item_caption_active_shadow_color[1]);
 
        FormMain.SetEasyListViewColors(ParametersListView, menu_background_color[1], clWhite, -1, clGray);
-       FormMain.SetEasyListViewHeaderColors(ParametersListView, True);
+       FormMain.SetEasyListViewHeaderColors(ParametersListView, True, False, False);
        FormMain.ELV_SetCheckRadioCustomIcon(ParametersListView);
        FormMain.ELV_SetEditBkColor(ParametersListView);
        FormMain.ELV_SetRibbonNightColors(0, ParametersListView, True);
@@ -401,7 +401,7 @@ begin
       end;
     False:
       begin
-        GenerateMessage('Error', 'Cannot update an empty parameter.', 'You did not selected a parameter to update. '+
+        FormMain.ShowMessageBox('Error', 'Cannot update an empty parameter.', 'You did not selected a parameter to update. '+
                         'Please select one to continue.', 2, False, 1);
       end;
   end;
@@ -455,7 +455,7 @@ begin
   if cmdLine <> '' then
      begin
        CommandLinePreview.Lines.Add(cmdLine);
-       //GenerateMessage('Custom Command Line', 'This is a preview of the command line that will be used to run the game.',
+       //FormMain.ShowMessageBox('Custom Command Line', 'This is a preview of the command line that will be used to run the game.',
        //                cmdLine, 2);
      end;
 end;

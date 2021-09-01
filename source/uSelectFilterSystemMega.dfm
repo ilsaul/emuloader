@@ -16,7 +16,6 @@ object FormSelectFilterSystemMega: TFormSelectFilterSystemMega
   KeyPreview = True
   OldCreateOrder = False
   Scaled = False
-  OnActivate = FormActivate
   OnCloseQuery = FormCloseQuery
   OnKeyPress = FormKeyPress
   OnShow = FormShow
@@ -69,7 +68,7 @@ object FormSelectFilterSystemMega: TFormSelectFilterSystemMega
     object LabelCategoryIniForMESS: TShadowLabel
       Left = 180
       Top = 8
-      Width = 205
+      Width = 203
       Height = 14
       Cursor = crHandPoint
       Hint = 'http://www.progettosnaps.net/renameset/'
@@ -97,7 +96,7 @@ object FormSelectFilterSystemMega: TFormSelectFilterSystemMega
     object LabelCategoryIniFolderForMESS: TShadowLabel
       Left = 160
       Top = 21
-      Width = 245
+      Width = 243
       Height = 17
       Caption = '(place "mess.ini" file in "\arcade\filters\" folder)'
       Font.Charset = ANSI_CHARSET
@@ -192,6 +191,7 @@ object FormSelectFilterSystemMega: TFormSelectFilterSystemMega
       CellSizes.Tile.Width = 300
       CellSizes.Report.Height = 28
       Color = clWhite
+      GhostedItemBlend25 = False
       EditManager.Font.Charset = ANSI_CHARSET
       EditManager.Font.Color = clBlack
       EditManager.Font.Height = -12
@@ -254,6 +254,9 @@ object FormSelectFilterSystemMega: TFormSelectFilterSystemMega
       TabOrder = 0
       View = elsTile
       CustomCheckRadioEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
       OnItemCheckChange = MachinesTypeListItemCheckChange
       OnItemPaintText = MachinesTypeListItemPaintText
     end
@@ -285,6 +288,7 @@ object FormSelectFilterSystemMega: TFormSelectFilterSystemMega
       CellSizes.Tile.Width = 200
       CellSizes.Report.Height = 28
       Color = clWhite
+      GhostedItemBlend25 = False
       EditManager.Font.Charset = ANSI_CHARSET
       EditManager.Font.Color = clBlack
       EditManager.Font.Height = -12
@@ -349,6 +353,9 @@ object FormSelectFilterSystemMega: TFormSelectFilterSystemMega
       TabOrder = 0
       View = elsTile
       CustomCheckRadioEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
       OnItemCheckChange = SystemsListViewItemCheckChange
       OnItemImageDraw = SystemsListViewItemImageDraw
       OnItemImageGetSize = SystemsListViewItemImageGetSize

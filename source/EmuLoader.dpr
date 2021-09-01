@@ -5,6 +5,7 @@ uses
   SynFastWideString,
   madExcept,
   Forms,
+  VersionHelpers,
   uCommon in 'uCommon.pas',
   uStatus in 'uStatus.pas' {FormStatus},
   uMain in 'uMain.pas' {FormMain},
@@ -24,14 +25,13 @@ uses
   uArcadeScanAudioSamples in 'arcade\uArcadeScanAudioSamples.pas' {FormArcadeScanAudioSamples},
   uArcadeScanGamesResults in 'arcade\uArcadeScanGamesResults.pas' {FormArcadeScanGamesResults},
   uImageLayoutSettings in 'uImageLayoutSettings.pas' {FormImageLayoutSettings},
-  uThumbnailViewSettings in 'uThumbnailViewSettings.pas' {FormThumbnailView},
-  uArcadeFileVersions in 'arcade\uArcadeFileVersions.pas' {FormArcadeFileVersions},
+  uThumbnailViewSettings in 'uThumbnailViewSettings.pas' {FormThumbnailViewSettings},
   uSelectDirectory in 'uSelectDirectory.pas' {FormSelectDirectory},
   uArcadeROMsFolders in 'arcade\uArcadeROMsFolders.pas' {FormArcadeROMsFolders},
   uGamesListFontSettings in 'uGamesListFontSettings.pas' {FormGamesListFontSettings},
   uImagesDeleteClones in 'arcade\uImagesDeleteClones.pas' {FormImagesDeleteClones},
   uArcadeMAMu_ExcludedList in 'arcade\uArcadeMAMu_ExcludedList.pas' {FormArcadeMAMu_ExcludedList},
-  uDeleteGamesFiles in 'uDeleteGamesFiles.pas' {FormDeleteGamesFiles},
+  uDeleteGameFiles in 'uDeleteGameFiles.pas' {FormDeleteGameFiles},
   uArcadeFiltersGamesExtra in 'arcade\uArcadeFiltersGamesExtra.pas' {FormArcadeFiltersExtra},
   uArcadeMAMu_IconsManager in 'arcade\uArcadeMAMu_IconsManager.pas' {FormArcadeMAMu_IconsManager},
   uImagesManager in 'uImagesManager.pas' {FormImagesManager},
@@ -67,8 +67,8 @@ uses
   uImageCategorySettings in 'uImageCategorySettings.pas' {FormImageCategorySettings},
   uVideoPreviewSettings in 'uVideoPreviewSettings.pas' {FormVideoPreviewSettings},
   uSelectFilterSystemMega in 'uSelectFilterSystemMega.pas' {FormSelectFilterSystemMega},
-  uLastPlayedGamesMega in 'uLastPlayedGamesMega.pas' {FormLastPlayedGamesMega},
-  uSelectFile in 'uSelectFile.pas' {FormSelectFile},
+  uLastPlayedGames in 'uLastPlayedGames.pas' {FormLastPlayedGames},
+  uSelectFile in 'arcade\uSelectFile.pas' {FormSelectFile},
   uConsCompSystemRules in 'console_computer\uConsCompSystemRules.pas' {FormConsCompSystemRules},
   uSelectFilterSystemSimple in 'uSelectFilterSystemSimple.pas' {FormSelectFilterSystemSimple},
   uImageLayoutSelector in 'uImageLayoutSelector.pas' {FormImageLayoutSelector},
@@ -78,21 +78,58 @@ uses
   uFavoritesManagerCleanseProfile in 'uFavoritesManagerCleanseProfile.pas' {FormFavoritesManagerCleanseProfile},
   uNightMode in 'uNightMode.pas' {FormNightMode},
   uNightModeRGBQuickEdit in 'uNightModeRGBQuickEdit.pas' {FormNightModeRGBQuickEdit},
-  uGetWindowsVersion in 'uGetWindowsVersion.pas',
-  uMessageBox_4K in '4K\uMessageBox_4K.pas' {FormMessageBox4K};
+  uMessageBox_4K in '4K\uMessageBox_4K.pas' {FormMessageBox4K},
+  uZTestWorkbench in 'uZTestWorkbench.pas' {FormZTestWorkbench},
+  uCustomParameters in 'arcade\uCustomParameters.pas' {FormCustomParameters};
 
-// {$R *.RES}
 {$R EmuLoader.res}
 
 begin
+  if not IsWindowsVistaOrGreater then
+     begin
+       //MB_ICONWARNING = MB_ICONEXCLAMATION = $00000030;
+       Application.MessageBox(PChar('This operating system is not supported!'+#13#10+
+                              'Please use Windows Vista or newer. Aborting...'), 'Emu Loader', $00000030);
+
+       Exit;
+     end;
+
   if CheckAppOneInstance then
      Exit;
+
+  IsNightMode:= True;
+  Is4KMode:= Read4KSetting; // validates 4K resolution and read setting from "EmuLoader.ini", if found; also sets "FrontendPath:= ExtractFilePath(Application.ExeName);"
+  FrontendVersion:= 'v'+GetFileInfo2(Application.ExeName, VersionInfo[3]);
+  if PosEx('.0.0', FrontendVersion) = 0 then
+     Delete(FrontendVersion, Length(FrontendVersion)-1, 2)
+  else
+     Delete(FrontendVersion, Length(FrontendVersion)-3, 4);
+
+  CreateSplashIniFile;       // remove splash settings from "ini_files\lightmode.ini" [Splash] section and create "ini_files\splash.ini"
+  CreateGamesFiltersIniFile; // remove tool bar filters settings from "emuloader.ini" and create "ini_files\games_filters.ini"
+  // -> these functions will be removed in a future version
+
+  FormStatus:= TFormStatus.Create(nil); // create splash screen here to show as soon as possible: "this is not the app's main Form you're looking for!" (May 01, 2021)
+  FormStatus.LabelVersion.Caption:= FrontendVersion;
+  FormStatus.TitleStr('Initializing');
+  FormStatus.MessageStr('Loading primary settings.', False);
+
+  FormStatus.StartThreadClock;
+  FormStatus.Show;
+
+  Application.ProcessMessages;
+  FormApplyFilterMsgBox:= TFormApplyFilterMsgBox.Create(nil); // creating this Form here forces splash screen to show up... why Delphi 7, WHY!!!? (May 21, 2021)
   Application.Initialize;
   Application.Title := 'Emu Loader: Multiple Systems Frontend';
-  Application.HintPause:= 200; // fix for the hint pause... :_(
-  Application.HintColor:= $00f8f4f3;//$00EEEBE6;
+  Application.HintPause:= 200; // fix for the hint pause timer
+  Application.HintColor:= $00f8f4f3; //$00eeebe6;
+
+  FormStatus.MessageStr('Initializing main screen.');
   Application.CreateForm(TFormMain, FormMain);
+  // application's main form
+  FormStatus.MessageStr('Initializing night mode screen.');
   Application.CreateForm(TFormNightMode, FormNightMode);
+  FormStatus.MessageStr('Initializing preferences screen.');
   Application.CreateForm(TFormPreferences, FormPreferences);
   Application.Run;
 end.

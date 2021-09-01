@@ -6,15 +6,15 @@ uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
   uCommon, uCommonCustom, Dialogs, StdCtrls, PanelEx, ExtCtrls, ComCtrls, ToolWin,
   IniFiles, ImgList, SplitterEx, MPCommonObjects, MPCommonUtilities, EasyListview, ShadowLabel,
-  Buttons, AdvOfficeButtons, Menus, BarMenus, EditEx, ButtonsEx;
+  Buttons, AdvOfficeButtons, Menus, BarMenus, EditEx, ButtonsEx,
+  TntStdCtrls, TntEditEx;
 
 type
   TFormConsCompGamesEditor = class(TForm)
     PanelSystems: TPanelEx;
     Systems: TEasyListview;
     Splitter: TSplitterEx;
-    IL_Systems: TImageList;
-    PanelCustomGamesSelectedSystem: TPanelEx;
+    PanelCustomGames: TPanelEx;
     CustomGamesList: TEasyListview;
     PanelEditSelected: TPanelEx;
     LabelEditSelected: TShadowLabel;
@@ -35,32 +35,22 @@ type
     PopupEditAll: TMenuItem;
     N1: TMenuItem;
     PopupResetSystemsPanelSize: TMenuItem;
-    PanelSystemTitleBottom: TPanelEx;
-    PanelSystemTitle: TPanelEx;
-    LabelSystemTitle: TShadowLabel;
     LabelCustomGamesListTotal: TShadowLabel;
     PanelToolBarGamesEditor: TPanelEx;
     PanelSearchGames: TPanelEx;
-    ToolBarFilterTitle: TToolBar;
-    ButtonFilterTitleApply: TToolButton;
-    ButtonFilterTitleReset: TToolButton;
     LabelHotkeyText: TShadowLabel;
     LabelHotkeyKeys: TShadowLabel;
-    GamesListFontSize: TShadowLabel;
     ButtonApplyChanges: TBitBtnEx;
     ButtonAbortChanges: TBitBtnEx;
-    GamesListFontSizeLarger_x4: TBitBtnEx;
-    GamesListFontSizeLarger: TBitBtnEx;
-    GamesListFontSizeSmaller_x4: TBitBtnEx;
-    GamesListFontSizeSmaller: TBitBtnEx;
     SystemsHideScrollBarArea: TAdvOfficeCheckBoxEx;
     LabelToolBarFilterTitle: TShadowLabel;
-    FilterGameTitle: TEditEx;
-    PopupMenuOptions: TBcBarPopupMenu;
-    PopupSystemsViewMode: TMenuItem;
-    PopupSystemsViewMode_Tiles: TMenuItem;
-    PopupSystemsViewMode_LargeIcons: TMenuItem;
-    ButtonOptions: TSpeedButtonEx;
+    FilterGameTitle: TTntEditEx;
+    ButtonFilterTitleApply: TSpeedButtonEx;
+    ButtonFilterTitleReset: TSpeedButtonEx;
+    ShowBiggerGamesListFont: TAdvOfficeCheckBoxEx;
+    LabelEditSelected_Total: TShadowLabel;
+    LabelEditSelectedDrag: TShadowLabel;
+    IL_Systems: TImageList;
     procedure FormShow(Sender: TObject);
     procedure SystemsItemSelectionChanged(Sender: TCustomEasyListview;
       Item: TEasyItem);
@@ -99,11 +89,8 @@ type
     procedure ButtonFilterTitleApplyClick(Sender: TObject);
     procedure ButtonFilterTitleResetClick(Sender: TObject);
     procedure SystemsHideScrollBarAreaClick(Sender: TObject);
-    procedure GamesListFontSizeSmallerClick(Sender: TObject);
     procedure ButtonApplyChangesClick(Sender: TObject);
     procedure ButtonAbortChangesClick(Sender: TObject);
-    procedure ButtonOptionsClick(Sender: TObject);
-    procedure PopupSystemsViewMode_TilesClick(Sender: TObject);
     procedure SystemsItemImageDraw(Sender: TCustomEasyListview;
       Item: TEasyItem; Column: TEasyColumn; ACanvas: TCanvas;
       const RectArray: TEasyRectArrayObject;
@@ -118,10 +105,13 @@ type
     procedure SplitterMoved(Sender: TObject);
     procedure FormResize(Sender: TObject);
     procedure FormCreate(Sender: TObject);
-    procedure ToolBarFilterTitleCustomDraw(Sender: TToolBar;
-      const ARect: TRect; var DefaultDraw: Boolean);
     procedure CustomGamesListItemPaintText(Sender: TCustomEasyListview;
       Item: TEasyItem; Position: Integer; ACanvas: TCanvas);
+    procedure CustomGamesListHintCustomInfo(Sender: TCustomEasyListview;
+      TargetObj: TEasyCollectionItem; Info: TEasyHintInfo);
+    procedure ShowBiggerGamesListFontClick(Sender: TObject);
+    procedure PanelEditSelectedMouseDown(Sender: TObject;
+      Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
   private
     { Private declarations }
     extraDataFile: array[1..MaxConsoleComputerSystems] of THashedStringList;
@@ -139,6 +129,7 @@ type
     procedure ELV_AdjustCellHeight(ELV_Holder: TEasyListView);
     procedure ReadSettings;
     procedure WriteSettings;
+    procedure Resize4K;
   public
     { Public declarations }
     mResult: Integer;
@@ -246,6 +237,88 @@ begin
      Result:= -1;
 end;
 
+procedure TFormConsCompGamesEditor.Resize4K;
+begin
+  if not Is4KMode then
+     Exit;
+
+  with FormConsCompGamesEditor do
+  begin
+    Font.Size:= 16;
+    FormMain.Set4KImageListSpecs(IL_Systems, 128);
+
+    FormMain.Set4KListViewHeaderFontSizeSpecs(Systems);
+    Systems.PaintInfoItem.IconViewRemoveIconTopBorder:= True;
+    Systems.CellSizes.Icon.Width:=  156;
+    Systems.CellSizes.Icon.Height:= 207+32+4;// // 32+4 (systype icon + border)
+    Systems.BorderWidth:= 8;
+    Systems.View:= elsIcon;
+    Systems.PaintInfoItem.CaptionIndent:= 4; // reset to default
+    Systems.PaintInfoItem.ImageIndent:=   2; // reset to default
+    Systems.ImagesExLarge:= nil;
+    Systems.ImagesLarge:= IL_Systems;
+    Systems.Font.Size:= 16;
+
+    FormMain.Set4KPanelSpecs(PanelSystems, -1, -1, (Systems.CellSizes.Icon.Width*4)+GetSystemMetrics(SM_CXVSCROLL)+16+2, -1);
+
+    ClientWidth:=  PanelSystems.Width+Splitter.Width+2022; // PanelCustomGames.Width should be 2022 (see "source\4K\designs\console_computer\uConsCompGamesEditor_4K.pas")
+    ClientHeight:= (Systems.CellSizes.Icon.Height*7)+16;
+
+    PanelToolBarGamesEditor.Height:= 75;
+
+    FormMain.Set4KCheckBoxSpecs(ShowBiggerGamesListFont,   10, 9, 305, 36, 16);
+    FormMain.Set4KCheckBoxSpecs(SystemsHideScrollBarArea, 405, 9, 250, 36, 16);
+
+    FormMain.Set4KLabelSpecs(LabelHotkeyKeys, 10, 49, -1, -1, 14);
+    FormMain.Set4KLabelSpecs(LabelHotkeyText, 11, 49, -1, -1, 14);
+
+    FormMain.Set4KButtonSpecs(ButtonApplyChanges, 720, 15, 168, 45, 16);
+    FormMain.Set4KButtonSpecs(ButtonAbortChanges, 905, 15, 168, 45, 16);
+    FormMain.Set4KButtonFontNameSpecs(ButtonApplyChanges);
+    FormMain.Set4KButtonFontNameSpecs(ButtonAbortChanges);
+
+    PanelSearchGames.Width:= 373;
+    FormMain.Set4KLabelSpecs(LabelToolBarFilterTitle, 8, 4, -1, -1, 16);
+    FormMain.Set4KEditSpecs(FilterGameTitle, 8, 33, 280, 34, 16);
+    FormMain.Set4KButtonSpecs(ButtonFilterTitleApply, FilterGameTitle.Left+FilterGameTitle.Width+4, FilterGameTitle.Top-1, 36, 37, 16);
+    FormMain.Set4KButtonSpecs(ButtonFilterTitleReset, ButtonFilterTitleApply.Left+37, FilterGameTitle.Top-1, 36, 37, 16);
+
+    LabelCustomGamesListTotal.Height:= 36;
+    LabelCustomGamesListTotal.Font.Size:= 16;
+    LabelCustomGamesListTotal.CaptionIndent:= 10;
+
+    FormMain.Set4KListViewSpecs(CustomGamesList, -1, -1, -1, -1, 16);
+    FormMain.Set4KListViewHeaderFontSizeSpecs(CustomGamesList);
+
+    CustomGamesList.CellSizes.Report.Height:= 40;
+    //CustomGamesList.PaintInfoColumn.CaptionIndent:= 4; // reset to default
+    CustomGamesList.ImagesSmall:= FormMain.IL_StandardIconsLarge;
+    FormMain.Set4KListViewColumnSizeSpecs(CustomGamesList, 0, 780-GetSystemMetrics(SM_CXVSCROLL));
+    FormMain.Set4KListViewColumnSizeSpecs(CustomGamesList, 1, 90);
+    FormMain.Set4KListViewColumnSizeSpecs(CustomGamesList, 2, 450);
+    FormMain.Set4KListViewColumnSizeSpecs(CustomGamesList, 3, 120);
+    FormMain.Set4KListViewColumnSizeSpecs(CustomGamesList, 4, 150);
+    FormMain.Set4KListViewColumnSizeSpecs(CustomGamesList, 5, 432);
+    
+    FormMain.Set4KPanelSpecs(PanelEditSelected, -1,  -1, 927, 424);
+    FormMain.Set4KLabelSpecs(LabelEditSelected, 32,  32,  -1, -1, 16);
+    FormMain.Set4KLabelSpecs(LabelEditSelectedDrag, 455,  96, -1, -1, 16);
+
+    FormMain.Set4KCheckBoxSpecs(LabelEditSelected_Manufacturer, 32, 165, 160, 36, 16);
+    FormMain.Set4KEditSpecs(EditSelected_Manufacturer, 200, 165, 695, 36, 16);
+
+    FormMain.Set4KCheckBoxSpecs(LabelEditSelected_Year, 32, 221, 65, 36, 16);
+    FormMain.Set4KEditSpecs(EditSelected_Year, 200, 221, 220, 36, 16);
+
+    FormMain.Set4KCheckBoxSpecs(LabelEditSelected_NumberPlayers, 528, 221, 140, 36, 16);
+    FormMain.Set4KEditSpecs(EditSelected_NumberPlayers, 675, 221, 220, 36, 16);
+
+    FormMain.Set4KLabelSpecs(LabelEditSelected_Total, 32, 354, -1, -1, 16);
+    FormMain.Set4KButtonSpecs(ButtonMultiSelectedInfo_Confirm, 549, 347, 168, 45, 16);
+    FormMain.Set4KButtonSpecs(MultiSelectedInfo_Cancel,        727, 347, 168, 45, 16);
+  end;
+end;
+
 procedure TFormConsCompGamesEditor.UpdateSystemsDimensions;
 var
   SysTitleBarHeight: Integer;
@@ -254,9 +327,7 @@ begin
      Exit;
 
   SysTitleBarHeight:= 0;
-  if PanelSystemTitle.Visible then
-     SysTitleBarHeight:= PanelSystemTitle.Height+PanelSystemTitleBottom.Height;
-  Systems.Width:= PanelSystems.Width+GetSystemMetrics(SM_CXVSCROLL);
+  Systems.Width:=  PanelSystems.Width+GetSystemMetrics(SM_CXVSCROLL);
   Systems.Height:= PanelSystems.Height-SysTitleBarHeight;
 end;
 
@@ -307,7 +378,7 @@ var
     TCustomGameInfo(addItem).eGameSizeText:= uMain.TEasyGameInfo(Item).eGameSizeText;
 
     // extra data format
-    // MediaType IsUnicode <file>Game Filename (no path)/> <title>GameTitle/> <year>Year/> <manuf>Manufacturer/> <nplayer>NumberOfPlayers/>
+    // MediaType <file>Game Filename (no path)/> <title>GameTitle/> <year>Year/> <manuf>Manufacturer/> <nplayer>NumberOfPlayers/>
     if extraDataFile[TCustomGameInfo(addItem).eCustomSystemID] <> nil then
     //if Assigned(extraDataFile[TCustomGameInfo(addItem).eCustomSystemID]) then
        begin
@@ -318,7 +389,7 @@ var
              True : iFileName:= UTF8Encode(TCustomGameInfo(addItem).eName);
              False: iFileName:= TCustomGameInfo(addItem).eName;
            end;
-           iStrSearch:= IntToStr(TCustomGameInfo(addItem).eCustomMediaType)+IntToStr(Ord(TCustomGameInfo(addItem).eIsUnicode))+FormMain.MountGameInfoFieldStr('file', iFileName);
+           iStrSearch:= IntToStr(TCustomGameInfo(addItem).eCustomMediaType)+FormMain.MountGameInfoFieldStr('file', iFileName);
 
            for Loop:=0 to extraDataFile[TCustomGameInfo(addItem).eCustomSystemID].Count-1 do
            begin
@@ -426,8 +497,7 @@ begin
       True : iGameInfoStr:= UTF8Encode(TCustomGameInfo(Item).eName);
       False: iGameInfoStr:= TCustomGameInfo(Item).eName;
     end;
-    iGameInfoStr:= IntToStr(TCustomGameInfo(Item).eCustomMediaType)+IntToStr(Ord(TCustomGameInfo(Item).eIsUnicode))+
-                   FormMain.MountGameInfoFieldStr('file', iGameInfoStr);
+    iGameInfoStr:= IntToStr(TCustomGameInfo(Item).eCustomMediaType)+FormMain.MountGameInfoFieldStr('file', iGameInfoStr);
 
     wStr:= ChangeFileExtW(TCustomGameInfo(Item).eName, '');
     if TCustomGameInfo(Item).eTitle <> wStr then
@@ -471,8 +541,6 @@ procedure TFormConsCompGamesEditor.ApplySystemFilter;
 var
   Item: TEasyItem;
 begin
-  LabelSystemTitle.Caption:= UpperCase(SystemsListCustom[Systems.Tag, 0]);
-
   if not FormMain.CheckTotal(CustomGamesList) then
      Exit;
 
@@ -510,7 +578,7 @@ begin
   if CustomGamesList.Scrollbars.HorzBarVisible then
      begin
        if CustomGamesList.Scrollbars.OffsetX <> ScrollBarPosition then
-          CustomGamesList.Scrollbars.OffsetX:= ScrollBarPosition;
+          CustomGamesList.Scrollbars.OffsetX:=  ScrollBarPosition;
      end;
 end;
 
@@ -595,8 +663,16 @@ procedure TFormConsCompGamesEditor.EditSelectedFields(ColumnIndex: Integer);
   var
     Item: TEasyItem;
   begin
+    
+    PanelEditSelected.Left:= (PanelCustomGames.Width-PanelEditSelected.Width)  div 2;
+    PanelEditSelected.Top:= (PanelCustomGames.Height-PanelEditSelected.Height) div 2;
     PanelEditSelected.Visible:= True;
-    //PanelBottomCustomGamesList.Top:= PanelBottomCustomGamesList.Top-30;
+
+    if FormMain.CheckMultipleSelected(CustomGamesList) then
+       LabelEditSelected_Total.Caption:= IntToStr(CustomGamesList.Selection.Count)+' games selected'
+    else
+       LabelEditSelected_Total.Caption:= '1 game selected';
+
     LabelEditSelected_Manufacturer.Checked:= (ColumnIndex = -1);
     LabelEditSelected_Year.Checked:= (ColumnIndex = -1);
     LabelEditSelected_NumberPlayers.Checked:= (ColumnIndex = -1);
@@ -670,6 +746,7 @@ procedure TFormConsCompGamesEditor.ELV_AdjustCellHeight(ELV_Holder: TEasyListVie
 var
   iHeight, NewCellHeight: Integer;
 begin
+  exit;
   iHeight:= ELV_Holder.Canvas.TextHeight('Ag[Á');
   NewCellHeight:= iHeight+5;
 
@@ -688,40 +765,34 @@ procedure TFormConsCompGamesEditor.ReadSettings;
 var
   iIniFile: TMemIniFile;
   Loop: Integer;
+  iSectionStr: String;
 begin
   if not FileExists(GetMiscSettingsFile) then
      Exit;
 
+  if Is4KMode then
+     iSectionStr:= 'Games Editor 4K'
+  else
+     iSectionStr:= 'Games Editor';
   iIniFile:= TMemIniFile.Create(GetMiscSettingsFile);
+  //                  add '4K' str to not mix settings
+  FormConsCompGamesEditor.Tag:= Ord(iIniFile.ReadString (iSectionStr, 'WindowState', 'Normal') = 'Maximized');
+  FormConsCompGamesEditor.Width:=   iIniFile.ReadInteger(iSectionStr, 'ScreenWidth',  FormConsCompGamesEditor.Width);
+  FormConsCompGamesEditor.Height:=  iIniFile.ReadInteger(iSectionStr, 'ScreenHeight', FormConsCompGamesEditor.Height);
 
-  FormConsCompGamesEditor.Tag:= Ord(iIniFile.ReadString('Games Editor', 'WindowState', 'Normal') = 'Maximized');
-  FormConsCompGamesEditor.Width:= iIniFile.ReadInteger('Games Editor', 'ScreenWidth', FormConsCompGamesEditor.Width);
-  FormConsCompGamesEditor.Height:= iIniFile.ReadInteger('Games Editor', 'ScreenHeight', FormConsCompGamesEditor.Height);
 
-  Loop:= iIniFile.ReadInteger('Games Editor', 'SystemsViewMode', 1);
-  if Loop <> 1 then
+  PanelSystems.Width:= iIniFile.ReadInteger(iSectionStr, 'SystemsPanelWidth', PanelSystems.Width);//392);
+  if iIniFile.ReadInteger(iSectionStr, 'SystemsHideScrollBarArea', 0) = 1 then
      begin
-       //PopupSystemsViewMode.Items[Loop].Checked:= True;
-       PopupSystemsViewMode.Items[Loop].Click;
-     end;
-     
-  PanelSystems.Width:= iIniFile.ReadInteger('Games Editor', 'SystemsPanelWidth', 392);
-  if iIniFile.ReadInteger('Games Editor', 'SystemsHideScrollBarArea', 0) = 1 then
-     begin
-       PanelSystems.Width:= PanelSystems.Width+GetSystemMetrics(SM_CXVSCROLL); // add extra ScrollBar area before executing CheckBox code! (DO NOT REMOVE THIS CODE!!!)
+       PanelSystems.Width:= PanelSystems.Width+GetSystemMetrics(SM_CXVSCROLL); // add extra ScrollBar area before executing CheckBox code; DO NOT REMOVE THIS CODE!
        SystemsHideScrollBarArea.Checked:= True;
      end;
 
   CustomGamesList.BeginUpdate;
   for Loop:= 0 to CustomGamesList.Header.Columns.Count-1 do
-      CustomGamesList.Header.Columns[Loop].Width:= iIniFile.ReadInteger('Games Editor', 'GamesListColumnWidth'+IntToStr(Loop), CustomGamesList.Header.Columns[Loop].Width);
+      CustomGamesList.Header.Columns[Loop].Width:= iIniFile.ReadInteger(iSectionStr, 'GamesListColumnWidth'+IntToStr(Loop), CustomGamesList.Header.Columns[Loop].Width);
 
-  GamesListFontSize.Tag:= iIniFile.ReadInteger('Games Editor', 'SoftListFontSize', 9);
-  if (GamesListFontSize.Tag < 8) or (GamesListFontSize.Tag > 72) then
-     GamesListFontSize.Tag:= 9; // reset font size to 9
-
-  GamesListFontSize.Caption:= IntToStr(GamesListFontSize.Tag);
-  CustomGamesList.Font.Size:= GamesListFontSize.Tag;
+  ShowBiggerGamesListFont.Checked:= Boolean(iIniFile.ReadInteger(iSectionStr, 'ShowBiggerGamesListFont', 0));
 
   CustomGamesList.EndUpdate;
 
@@ -731,9 +802,17 @@ end;
 procedure TFormConsCompGamesEditor.WriteSettings;
 var
   iIniFile: TMemIniFile;
-  tmpString: String;
+  tmpString, iSectionStr: String;
   Loop: Integer;
 begin
+  if CheckReadOnly(GetMiscSettingsFile) then
+     Exit;
+
+  if Is4KMode then
+     iSectionStr:= 'Games Editor 4K'
+  else
+     iSectionStr:= 'Games Editor';
+
   iIniFile:= TMemIniFile.Create(GetMiscSettingsFile);
 
   if FormConsCompGamesEditor.WindowState = wsMaximized then
@@ -741,21 +820,21 @@ begin
   else
      tmpString:= 'Normal';
 
-  iIniFile.WriteString('Games Editor', 'WindowState', tmpString);
+  iIniFile.EraseSection(iSectionStr);
+  iIniFile.WriteString(iSectionStr, 'WindowState', tmpString);
   if FormConsCompGamesEditor.WindowState <> wsMaximized then
      begin
-       iIniFile.WriteInteger('Games Editor', 'ScreenWidth', FormConsCompGamesEditor.Width);
-       iIniFile.WriteInteger('Games Editor', 'ScreenHeight', FormConsCompGamesEditor.Height);
+       iIniFile.WriteInteger(iSectionStr, 'ScreenWidth',  FormConsCompGamesEditor.Width);
+       iIniFile.WriteInteger(iSectionStr, 'ScreenHeight', FormConsCompGamesEditor.Height);
      end;
 
-  iIniFile.WriteInteger('Games Editor', 'SystemsPanelWidth', PanelSystems.Width);
-  iIniFile.WriteInteger('Games Editor', 'SystemsHideScrollBarArea', Ord(SystemsHideScrollBarArea.Checked));
-  iIniFile.WriteInteger('Games Editor', 'SystemsViewMode', PopupSystemsViewMode.Tag);
+  iIniFile.WriteInteger(iSectionStr, 'SystemsPanelWidth', PanelSystems.Width);
+  iIniFile.WriteInteger(iSectionStr, 'SystemsHideScrollBarArea', Ord(SystemsHideScrollBarArea.Checked));
 
   for Loop:= 0 to CustomGamesList.Header.Columns.Count-1 do
-      iIniFile.WriteInteger('Games Editor', 'GamesListColumnWidth'+IntToStr(Loop), CustomGamesList.Header.Columns[Loop].Width);
+      iIniFile.WriteInteger(iSectionStr, 'GamesListColumnWidth'+IntToStr(Loop), CustomGamesList.Header.Columns[Loop].Width);
 
-  iIniFile.WriteInteger('Games Editor', 'SoftListFontSize', GamesListFontSize.Tag);
+  iIniFile.WriteInteger(iSectionStr, 'ShowBiggerGamesListFont', Ord(ShowBiggerGamesListFont.Checked));
 
   iIniFile.UpdateFile;
   FreeAndNil(iIniFile);
@@ -763,7 +842,7 @@ end;
 
 procedure TFormConsCompGamesEditor.FormShow(Sender: TObject);
 begin
-  //TForm(Sender).ClientWidth:= 986; // Width:= 1002;
+  Resize4K;
   mResult:= mrAbort;
   FormStatus.TitleStr('Custom Games Editor');
   FormStatus.MessageStr('Loading systems icons.');
@@ -783,25 +862,24 @@ begin
        FormConsCompGamesEditor.Color:= menu_background_color[1];
 
        FormConsCompGamesEditor.PanelSystems.Color1:= menu_background_color[1];
-       FormMain.SetEasyListViewColors(Systems, clrBlackBk, clWhite);
+       FormMain.SetEasyListViewColors(Systems, menu_background_color[1], item_caption_active_color[1]);
 
-       SetPanelColors(PanelSystemTitle, menu_background_color[1], clrDarkGray);
-       SetPanelColors(PanelSystemTitleBottom, clrDarkGray, clrBlackBk);
-
-       FormMain.SetSystemTitleLabelColors(LabelSystemTitle);
-
-       PanelCustomGamesSelectedSystem.Color1:= menu_background_color[1];
+       PanelCustomGames.Color1:=  menu_background_color[1];
        PanelEditSelected.Color1:= menu_background_color[1];
 
        FormMain.SetEasyListViewColors(CustomGamesList, menu_background_color[1], clWhite);
-       CustomGamesList.ShowThemedBorder:= False;
        FormMain.ELV_SetEditBkColor(CustomGamesList);
 
+       FormMain.ELV_SetNightModeColors(Systems);
+       FormMain.SetEasyListViewHeaderColors(CustomGamesList, True, False, Is4KMode);
+       FormMain.ELV_SetRibbonNightColors(0, CustomGamesList, True);
+       
        LabelCustomGamesListTotal.Color:= clrLightBlack;
        SetLabelColors(LabelCustomGamesListTotal, item_caption_active_color[1], item_caption_active_shadow_color[1]);
        LabelCustomGamesListTotal.Frames:= [];
 
        SetLabelColors(LabelEditSelected, clCream, item_caption_active_shadow_color[1]);
+       SetLabelColors(LabelEditSelectedDrag, clMedGray, item_caption_active_shadow_color[1]);
 
        SetCheckBoxColors(LabelEditSelected_Manufacturer,  item_caption_active_color[1], item_caption_active_shadow_color[1]);
        SetCheckBoxColors(LabelEditSelected_Year,          item_caption_active_color[1], item_caption_active_shadow_color[1]);
@@ -815,10 +893,12 @@ begin
        SetEditNightColors(EditSelected_Year);
        SetEditNightColors(EditSelected_NumberPlayers);
 
+       SetLabelColors(LabelEditSelected_Total, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+
        FormMain.SetButtonExColors(ButtonMultiSelectedInfo_Confirm);
        FormMain.SetButtonExColors(MultiSelectedInfo_Cancel);
 
-       FormMain.UpdateSplitterStyle(Splitter, tsSolidColor, menu_background_color[1], clGray);
+       FormMain.UpdateSplitterStyle(Splitter, tsSolidColor, clrBlackBk, clGray);
        FormMain.SetGripIcon(Splitter, False);
 
        SetPanelColors(PanelToolBarGamesEditor, FormMain.PanelSearchGames_ToolBar.Color1,
@@ -836,19 +916,14 @@ begin
 
        FilterGameTitle.UseCustomBorder:= True;
 
+       SetCheckBoxColors(ShowBiggerGamesListFont, clCream, item_caption_active_shadow_color[1]);
+       FormMain.SetCheckBoxExCustomIcon(ShowBiggerGamesListFont);
+
        SetCheckBoxColors(SystemsHideScrollBarArea, clCream, item_caption_active_shadow_color[1]);
        FormMain.SetCheckBoxExCustomIcon(SystemsHideScrollBarArea);
 
-       SetLabelColors(GamesListFontSize, item_caption_active_color[1], item_caption_active_shadow_color[1]);
-       FormMain.SetButtonExColors(GamesListFontSizeSmaller);
-       FormMain.SetButtonExColors(GamesListFontSizeSmaller_x4);
-       FormMain.SetButtonExColors(GamesListFontSizeLarger);
-       FormMain.SetButtonExColors(GamesListFontSizeLarger_x4);
-
        FormMain.SetButtonExColors(ButtonApplyChanges);
        FormMain.SetButtonExColors(ButtonAbortChanges);
-
-       FormMain.SetButtonExColors(ButtonOptions);
 
        SetLabelColors(LabelHotkeyText, clCream, item_caption_active_shadow_color[1]);
        SetLabelColors(LabelHotkeyKeys, clrLightRed, item_caption_active_shadow_color[1]);
@@ -863,37 +938,29 @@ begin
   ReadSettings;
 
   ELV_AdjustCellHeight(CustomGamesList);
-  
+
   if FormConsCompGamesEditor.Tag = 1 then
      WindowState:= wsMaximized
   else
-     begin
-       FormConsCompGamesEditor.Top:= (Screen.Height-FormConsCompGamesEditor.Height) div 2;
-       FormConsCompGamesEditor.Left:= (Screen.Width-FormConsCompGamesEditor.Width) div 2;
-     end;
+     CallCenterWindow(FormConsCompGamesEditor);
 
   FormMain.IL_MenuPopup.GetIcon(23, FormConsCompGamesEditor.Icon);
 
-  FormMain.LoadNonArcadeSystemIcons(IL_Systems, False);
-
   if IsNightMode then
      begin
-       FormMain.ELV_SetNightModeColors(Systems);
-       FormMain.SetEasyListViewHeaderColors(CustomGamesList, True);
-       FormMain.ELV_SetRibbonNightColors(0, CustomGamesList, True);
        FormMain.SetWin10DarkScrollBar(Systems);
        FormMain.SetWin10DarkScrollBar(CustomGamesList);
      end;
 
-  //ReadEmulatorsInfo;
   FormStatus.MessageStr('Loading console/computer games.');
   LoadGamesInList;
-  //UpdateTotalGamesLabel;
 
-  ELV_PopulateCustomSystems(Systems, -1, 0);
+  FormMain.LoadNonArcadeSystemIcons(IL_Systems, False, False);
+
+  ELV_PopulateCustomSystems(Systems, -1, 0, False);
   Systems.Groups.FirstItem.Captions[1]:= ''; // fix the empty spaces for "All Systems" entry
-  LabelSystemTitle.Caption:= UpperCase(SystemsListCustom[Systems.Tag, 0]);
-  if FormMain.ELV_IsTileView(Systems) then
+
+  if not Is4KMode then
      FormMain.ELV_FixTitleClickAreaMulti(Systems);
 
   if FormMain.CheckSelected(FormMain.GamesListView) then
@@ -1200,29 +1267,10 @@ begin
        PanelSystems.Width:= PanelSystems.Width+GetSystemMetrics(SM_CXVSCROLL);
        Systems.Align:= alClient;
      end;
+
+  if Is4KMode then
+     Systems.Scrollbars.VertEnabled:= not SystemsHideScrollBarArea.Checked;
   Systems.EndUpdate;
-end;
-
-procedure TFormConsCompGamesEditor.GamesListFontSizeSmallerClick(
-  Sender: TObject);
-var
-  iValue: Integer;
-begin
-  iValue:= GamesListFontSize.Tag;
-  case TShadowLabel(Sender).Tag of
-    -4: Dec(iValue, 4);
-    -1: Dec(iValue);
-     1: Inc(iValue);
-     4: Inc(iValue, 4);
-  end;
-
-  if (iValue < 8) or (iValue > 72) then
-     Exit;
-
-  GamesListFontSize.Tag:= iValue;
-  GamesListFontSize.Caption:= IntToStr(iValue);
-  CustomGamesList.Font.Size:= iValue;
-  ELV_AdjustCellHeight(CustomGamesList);
 end;
 
 procedure TFormConsCompGamesEditor.ButtonApplyChangesClick(Sender: TObject);
@@ -1238,85 +1286,6 @@ begin
   Close;
 end;
 
-procedure TFormConsCompGamesEditor.ButtonOptionsClick(Sender: TObject);
-begin
-  ShowDropdownMenu(TSpeedButtonEx(Sender), PopupMenuOptions);
-end;
-
-procedure TFormConsCompGamesEditor.PopupSystemsViewMode_TilesClick(
-  Sender: TObject);
-begin
-  if TMenuItem(Sender).Tag = PopupSystemsViewMode.Tag then
-     begin
-       TMenuItem(Sender).Checked:= True;
-       Exit;
-     end;
-
-  if not TMenuItem(Sender).Checked then
-     Exit;
-
-  PopupSystemsViewMode.Tag:= TMenuItem(Sender).Tag;
-
-  Systems.BeginUpdate;
-  if TMenuItem(Sender).Tag = 0 then
-     begin
-       // tiles view mode, 32x32 icons
-       IL_Systems.Width:= 32;
-       IL_Systems.Height:= 32;
-       Systems.Font.Name:= 'Trebuchet MS';
-       Systems.Font.Size:= 9;
-       Systems.PaintInfoItem.ImageIndent:= 0;
-       Systems.PaintInfoItem.ShowBorder:= True;
-       Systems.PaintInfoItem.CaptionIndent:= 0;
-       if IsNightMode then
-          begin
-            FormMain.SetEasyListViewColors(Systems, menu_background_color[1], item_caption_active_color[1]);
-            Splitter.Appearance.SingleColor:= clrBlackBk;
-          end;
-       PanelSystemTitleBottom.Visible:= False;
-       PanelSystemTitle.Visible:= False;
-       if Systems.Align = alNone then
-          begin
-            Systems.Top:= Systems.Top-(PanelSystemTitle.Height+PanelSystemTitleBottom.Height);
-            Systems.Height:= Systems.Height+(PanelSystemTitle.Height+PanelSystemTitleBottom.Height);
-          end;
-     end
-  else
-     begin
-       // large icons, 48x48 icons
-       IL_Systems.Width:= 48;
-       IL_Systems.Height:= 48;
-       Systems.Font.Name:= 'Tahoma';
-       Systems.Font.Size:= 7;
-       Systems.PaintInfoItem.ImageIndent:= 2;
-       Systems.PaintInfoItem.ShowBorder:= True;
-       Systems.PaintInfoItem.CaptionIndent:= 4;
-       if IsNightMode then
-          begin
-            FormMain.SetEasyListViewColors(Systems, clrBlackBk, clWhite);
-            Splitter.Appearance.SingleColor:= menu_background_color[1];
-          end;
-       PanelSystemTitle.Visible:= True;
-       PanelSystemTitleBottom.Visible:= True;
-       if Systems.Align = alNone then
-          begin
-            Systems.Top:= Systems.Top+(PanelSystemTitle.Height+PanelSystemTitleBottom.Height);
-            Systems.Height:= Systems.Height-(PanelSystemTitle.Height+PanelSystemTitleBottom.Height);
-          end;
-     end;
-
-  FormMain.LoadNonArcadeSystemIcons(IL_Systems, False);
-
-  if TMenuItem(Sender).Tag = 0 then
-     Systems.View:= elsTile
-  else
-     Systems.View:= elsIcon;
-
-  FormMain.ELV_FixTitleClickAreaMulti(Systems, Systems.View = elsTile);
-
-  Systems.EndUpdate;
-end;
-
 procedure TFormConsCompGamesEditor.SystemsItemImageDraw(
   Sender: TCustomEasyListview; Item: TEasyItem; Column: TEasyColumn;
   ACanvas: TCanvas; const RectArray: TEasyRectArrayObject;
@@ -1325,69 +1294,62 @@ var
   iLeft, iTop: Integer;
   iSysTypeIndex: Integer;
 begin
-  if not FormMain.ELV_IsTileView(Systems) then
-     Exit;
-  // this is for tiles view mode
-  iLeft:= RectArray.IconRect.Left+Systems.PaintInfoItem.ImageIndent+1;
-  iTop:=  RectArray.IconRect.Top+1;
-
-  Systems.ImagesExLarge.Draw(ACanvas, iLeft, iTop, Item.ImageIndex);
-
-  iLeft:= iLeft+Systems.ImagesExLarge.Width+4;
-  iTop:= iTop+(Systems.ImagesExLarge.Height-FormMain.IL_MenuPopup.Height);
-
-  iSysTypeIndex:= -1;
-  if SystemIsConsole(Item.ImageIndex) then
-     iSysTypeIndex:= 25 // index 25 is "console" icon
+  if Is4KMode then
+     FormMain.ELV_DrawIconSystem_CustomSysType(Sender, Item, Column, ACanvas, RectArray, IL_Systems, False, False)
   else
-  if SystemIsComputer(Item.ImageIndex) then
-     iSysTypeIndex:= 26 // index 26 is "computer" icon
-  else
-  if SystemIsHandheld(Item.ImageIndex) then
-     iSysTypeIndex:= 27; // index 27 is "handheld" icon
+  begin
+    iLeft:= RectArray.IconRect.Left+Systems.PaintInfoItem.ImageIndent+1;
+    iTop:=  RectArray.IconRect.Top+1;
 
-  if iSysTypeIndex <> -1 then
-     FormMain.IL_MenuPopup.Draw(ACanvas, iLeft, iTop, iSysTypeIndex);
+    IL_Systems.Draw(ACanvas, iLeft, iTop, Item.ImageIndex);
+
+    iLeft:= iLeft+IL_Systems.Width+4;
+    iTop:=  iTop+(IL_Systems.Height-FormMain.IL_MenuPopup.Height);
+
+    if Item.ImageIndex = 0 then
+       Exit;
+
+    iSysTypeIndex:= -1;
+    if SystemIsConsole(Item.ImageIndex) then
+       iSysTypeIndex:= 25 // index 25 is "console" icon
+    else
+    if SystemIsComputer(Item.ImageIndex) then
+       iSysTypeIndex:= 26 // index 26 is "computer" icon
+    else
+    if SystemIsHandheld(Item.ImageIndex) then
+       iSysTypeIndex:= 27; // index 27 is "handheld" icon
+
+    if iSysTypeIndex <> -1 then
+       FormMain.IL_MenuPopup.Draw(ACanvas, iLeft, iTop, iSysTypeIndex);
+  end;
 end;
 
 procedure TFormConsCompGamesEditor.SystemsItemImageDrawIsCustom(
   Sender: TCustomEasyListview; Item: TEasyItem; Column: TEasyColumn;
   var IsCustom: Boolean);
 begin
-  if FormMain.ELV_IsTileView(Systems) then
-     IsCustom:= True; // this is for tiles view mode
+  IsCustom:= True;
 end;
 
 procedure TFormConsCompGamesEditor.SystemsItemImageGetSize(
   Sender: TCustomEasyListview; Item: TEasyItem; Column: TEasyColumn;
   var ImageWidth, ImageHeight: Integer);
 begin
-  if FormMain.ELV_IsTileView(Systems) then
-     begin
-       ImageWidth:= Systems.ImagesExLarge.Width;//+16; // +16 is 16x16 icon size, plus 2 pixels border
-       ImageHeight:= Systems.ImagesExLarge.Height;
-     end;
+  ImageWidth:=  IL_Systems.Width;
+  ImageHeight:= IL_Systems.Height;
+  if Is4KMode then
+     ImageHeight:= ImageHeight+FormMain.IL_GroupedMode.Width+4; // +4 -> space between sys icon / sys type icon
 end;
 
 procedure TFormConsCompGamesEditor.SystemsItemPaintText(
   Sender: TCustomEasyListview; Item: TEasyItem; Position: Integer;
   ACanvas: TCanvas);
 begin
-  if not FormMain.ELV_IsTileView(Systems) then
+  if Is4KMode then
      Exit;
-  if Position = 1 then
-     begin
-       ACanvas.Font.Name:= 'Segoe UI';
-       ACanvas.Font.Size:= 9;
-       ACanvas.Font.Color:= clMedGray;
-       if IsNightMode then
-          ACanvas.Font.Color:= clMedGray
-       else
-          ACanvas.Font.Color:= clGray;
 
-       if IsNightMode and Item.Selected then
-          ACanvas.Font.Color:= clrDarkGray;
-     end;
+  if Position = 1 then
+     FormMain.ELV_SetSelecionFontColors(Systems, Item, ACanvas);
 end;
 
 procedure TFormConsCompGamesEditor.SplitterMoved(Sender: TObject);
@@ -1401,26 +1363,18 @@ begin
 end;
 
 procedure TFormConsCompGamesEditor.FormCreate(Sender: TObject);
+var
+  iSize: Integer;
 begin
   if FormMain.MenuCustomizeSplashScreen.Tag = 0 then //if Screen.Fonts.IndexOf('Terminal') = -1 then
      begin
-       FormMain.ChangeLabelFontConsolas(LabelHotkeyKeys, 7);
-       FormMain.ChangeLabelFontConsolas(LabelHotkeyText, 7);
+       if Is4KMode then
+          iSize:= LabelHotKeyKeys.Font.Size
+       else
+          iSize:= 7;
+       FormMain.ChangeLabelFontConsolas(LabelHotkeyKeys, iSize);
+       FormMain.ChangeLabelFontConsolas(LabelHotkeyText, iSize);
      end;
-end;
-
-procedure TFormConsCompGamesEditor.ToolBarFilterTitleCustomDraw(
-  Sender: TToolBar; const ARect: TRect; var DefaultDraw: Boolean);
-begin
-  if PanelSearchGames.Style = vgSolid then
-     begin
-       Sender.Canvas.Brush.Color:= PanelSearchGames.Canvas.Pixels[3, TToolBar(Sender).Top];
-       Sender.Canvas.Rectangle(Sender.ClientRect);
-     end
-  else
-     FormMain.DrawGradient(Sender.Canvas, Sender.ClientRect, gsVertical, False,
-                           PanelSearchGames.Canvas.Pixels[3, TToolBar(Sender).Top],
-                           PanelSearchGames.Canvas.Pixels[3, TToolBar(Sender).Top+TToolBar(Sender).Height], 0, 0, 0);
 end;
 
 procedure TFormConsCompGamesEditor.CustomGamesListItemPaintText(
@@ -1428,6 +1382,47 @@ procedure TFormConsCompGamesEditor.CustomGamesListItemPaintText(
   ACanvas: TCanvas);
 begin
   FormMain.ELV_SetEditingFontColor(TEasyListView(Sender), Item, ACanvas);
+end;
+
+procedure TFormConsCompGamesEditor.CustomGamesListHintCustomInfo(
+  Sender: TCustomEasyListview; TargetObj: TEasyCollectionItem;
+  Info: TEasyHintInfo);
+begin
+  FormMain.ELV_Set4KHint(Info);
+end;
+
+procedure TFormConsCompGamesEditor.ShowBiggerGamesListFontClick(
+  Sender: TObject);
+var
+  iValue: Integer;
+begin
+  if ShowBiggerGamesListFont.Checked then
+     begin
+       if Is4KMode then
+          iValue:= 20
+       else
+          iValue:= 12;
+     end
+  else
+     begin
+       iValue:= FormMain.GetDefaultFontSize;
+     end;
+
+  if CustomGamesList.Font.Size <> iValue then
+     begin
+       CustomGamesList.Font.Size:= iValue;
+       //ELV_AdjustCellHeight(CustomGamesList); // no need for this anymore (July 07, 2021)
+     end;
+end;
+
+procedure TFormConsCompGamesEditor.PanelEditSelectedMouseDown(
+  Sender: TObject; Button: TMouseButton; Shift: TShiftState; X,
+  Y: Integer);
+const
+  sc_DragMove = $f012;
+begin
+  ReleaseCapture;
+  PanelEditSelected.Perform(wm_SysCommand, sc_DragMove, 0);
 end;
 
 end.

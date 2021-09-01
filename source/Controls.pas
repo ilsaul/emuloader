@@ -8652,7 +8652,6 @@ end;
 procedure THintWindow.Paint;
 var
   R, ClipRect: TRect;
-  //rgn: THandle;
 begin
   R := ClientRect;
   if CheckWin32Version(6) and ThemeServices.ThemesEnabled then
@@ -8660,17 +8659,6 @@ begin
     // Paint Vista gradient background if themes enabled
     ClipRect := R;
     InflateRect(R, 4, 4);
-    {rgn:= CreateRoundRectRgn(0, 0, R.Right-R.Left, R.Bottom-R.Top, 2, 2);
-    // region doesn't work, because the outer frame doesn't paint correctly :_((
-    if rgn > 0 then
-       begin
-         try
-           SetWindowRgn(Handle, rgn, True);
-         finally
-           DeleteObject(rgn);
-         end;
-       end;}
-
     with ThemeServices do
       DrawElement(Canvas.Handle, GetElementDetails(tttStandardNormal), R);//, ClipRect);
     R := ClipRect;

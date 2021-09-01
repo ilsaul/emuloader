@@ -1,6 +1,6 @@
 object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
-  Left = 652
-  Top = 344
+  Left = 551
+  Top = 317
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
   Caption = 'Arcade Emulators Setup'
@@ -107,6 +107,7 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
       Selection.UseFocusRect = False
       TabOrder = 0
       CustomCheckRadioEnabled = False
+      CustomEnableIconHD = False
       OnItemSelectionChanged = SystemSelectorItemSelectionChanged
     end
   end
@@ -127,7 +128,7 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
     Style = vgSimple
     object ButtonOk: TBitBtnEx
       Tag = 1
-      Left = 446
+      Left = 445
       Top = 8
       Width = 89
       Height = 25
@@ -137,7 +138,7 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
       OnClick = ButtonOkClick
     end
     object ButtonCancel: TBitBtnEx
-      Left = 544
+      Left = 543
       Top = 8
       Width = 89
       Height = 25
@@ -195,6 +196,9 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
       ReturnIsTab = False
       Themed = True
       CustomIconsEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
   end
   object PanelEmulatorDetails: TPanelEx
@@ -214,7 +218,7 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
     object LabelArcade_versioninfo: TShadowLabel
       Left = 12
       Top = 46
-      Width = 70
+      Width = 68
       Height = 16
       Caption = 'Version Info'
       Font.Charset = ANSI_CHARSET
@@ -235,7 +239,7 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
     object LabelAlterMAME1: TShadowLabel
       Left = 26
       Top = 76
-      Width = 172
+      Width = 170
       Height = 16
       Caption = 'AlterMAME 1 (.exe; .bat; .cmd)'
       Font.Charset = ANSI_CHARSET
@@ -256,7 +260,7 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
     object LabelAlterMAME1_versioninfo: TShadowLabel
       Left = 12
       Top = 119
-      Width = 70
+      Width = 68
       Height = 16
       Caption = 'Version Info'
       Font.Charset = ANSI_CHARSET
@@ -277,7 +281,7 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
     object LabelArcade_exec: TShadowLabel
       Left = 26
       Top = 3
-      Width = 170
+      Width = 168
       Height = 16
       Caption = 'Emulator File (.exe; .bat; .cmd)'
       Font.Charset = ANSI_CHARSET
@@ -298,7 +302,7 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
     object LabelAlterMAME1_Autorun: TShadowLabel
       Left = 227
       Top = 228
-      Width = 299
+      Width = 297
       Height = 16
       Caption = 'Run game with AlterMAME 1 if fails with primary MAME'
       Font.Charset = ANSI_CHARSET
@@ -319,7 +323,7 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
     object LabelAlterMAME1_Tip1: TShadowLabel
       Left = 310
       Top = 76
-      Width = 229
+      Width = 227
       Height = 16
       Caption = 'Play MAME games with a second emulator'
       Font.Charset = ANSI_CHARSET
@@ -342,7 +346,7 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
     object LabelAlterMAME2: TShadowLabel
       Left = 26
       Top = 149
-      Width = 172
+      Width = 170
       Height = 16
       Caption = 'AlterMAME 2 (.exe; .bat; .cmd)'
       Font.Charset = ANSI_CHARSET
@@ -363,7 +367,7 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
     object LabelAlterMAME2_versioninfo: TShadowLabel
       Left = 12
       Top = 192
-      Width = 70
+      Width = 68
       Height = 16
       Caption = 'Version Info'
       Font.Charset = ANSI_CHARSET
@@ -384,7 +388,7 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
     object LabelAlterMAME2_Tip1: TShadowLabel
       Left = 323
       Top = 149
-      Width = 216
+      Width = 214
       Height = 16
       Caption = 'Play MAME games with a third emulator'
       Font.Charset = ANSI_CHARSET
@@ -428,7 +432,7 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
     object LabelAlterMAME2_Autorun: TShadowLabel
       Left = 227
       Top = 248
-      Width = 289
+      Width = 287
       Height = 16
       Caption = 'Run game with AlterMAME 2 if fails with AlterMAME 1'
       Font.Charset = ANSI_CHARSET
@@ -447,7 +451,7 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
       Transparent = True
     end
     object ButtonBrowseArcade_exec: TBitBtnEx
-      Left = 538
+      Left = 536
       Top = 20
       Width = 47
       Height = 21
@@ -482,7 +486,7 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
     object AlterMAME1_exec: TEditEx
       Left = 8
       Top = 93
-      Width = 529
+      Width = 526
       Height = 21
       TabStop = False
       AutoSize = False
@@ -501,7 +505,7 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
       OnChange = AlterMAME1_execChange
     end
     object ButtonBrowseAlterMAME1: TBitBtnEx
-      Left = 538
+      Left = 536
       Top = 93
       Width = 47
       Height = 21
@@ -513,7 +517,7 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
       OnClick = ButtonBrowseAlterMAME1Click
     end
     object ButtonClearAlterMAME1: TBitBtnEx
-      Left = 586
+      Left = 585
       Top = 93
       Width = 47
       Height = 21
@@ -525,7 +529,7 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
       OnClick = ButtonClearAlterMAME1Click
     end
     object ButtonHelpAlterMAME: TBitBtnEx
-      Left = 548
+      Left = 547
       Top = 232
       Width = 85
       Height = 25
@@ -558,6 +562,9 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
       ReturnIsTab = False
       Themed = True
       CustomIconsEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
     object AlterMAME1_versioninfo: TEditEx
       Left = 96
@@ -597,7 +604,7 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
       object LabelMAMELink_Tabs: TShadowLabel
         Left = 42
         Top = 0
-        Width = 198
+        Width = 196
         Height = 16
         Caption = #8226'                                    '#8226'                        '#8226
         Font.Charset = ANSI_CHARSET
@@ -618,7 +625,7 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
       object LabelMAMELink1: TShadowLabel
         Left = 1
         Top = 0
-        Width = 39
+        Width = 37
         Height = 16
         Cursor = crHandPoint
         Hint = 'http://mamedev.org'
@@ -646,7 +653,7 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
       object LabelMAMELink3: TShadowLabel
         Left = 165
         Top = 0
-        Width = 64
+        Width = 62
         Height = 16
         Cursor = crHandPoint
         Hint = 'http://wolfmame.marpirc.net'
@@ -674,7 +681,7 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
       object LabelMAMELink4: TShadowLabel
         Left = 242
         Top = 0
-        Width = 23
+        Width = 21
         Height = 16
         Cursor = crHandPoint
         Hint = 
@@ -704,7 +711,7 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
       object LabelMAMELink2: TShadowLabel
         Left = 52
         Top = 0
-        Width = 101
+        Width = 99
         Height = 16
         Cursor = crHandPoint
         Hint = 'http://hbmame.1emulation.com'
@@ -733,7 +740,7 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
     object Arcade_exec: TEditEx
       Left = 8
       Top = 20
-      Width = 529
+      Width = 526
       Height = 21
       TabStop = False
       AutoSize = False
@@ -754,7 +761,7 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
     object AlterMAME2_exec: TEditEx
       Left = 8
       Top = 166
-      Width = 529
+      Width = 526
       Height = 21
       TabStop = False
       AutoSize = False
@@ -773,7 +780,7 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
       OnChange = AlterMAME2_execChange
     end
     object ButtonBrowseAlterMAME2: TBitBtnEx
-      Left = 538
+      Left = 536
       Top = 166
       Width = 47
       Height = 21
@@ -785,7 +792,7 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
       OnClick = ButtonBrowseAlterMAME2Click
     end
     object ButtonClearAlterMAME2: TBitBtnEx
-      Left = 586
+      Left = 585
       Top = 166
       Width = 47
       Height = 21
@@ -840,9 +847,12 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
       ReturnIsTab = False
       Themed = True
       CustomIconsEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
     object ButtonClearArcade_exec: TBitBtnEx
-      Left = 586
+      Left = 585
       Top = 20
       Width = 47
       Height = 21

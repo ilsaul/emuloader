@@ -25,7 +25,7 @@ object FormColumnsEditor: TFormColumnsEditor
   object LabelButtonUpDown: TShadowLabel
     Left = 313
     Top = 45
-    Width = 122
+    Width = 120
     Height = 16
     Caption = '[Ctrl+Up / Ctrl+Down]'
     Font.Charset = ANSI_CHARSET
@@ -46,7 +46,7 @@ object FormColumnsEditor: TFormColumnsEditor
   object LabelButtonEditWidth: TShadowLabel
     Left = 313
     Top = 73
-    Width = 142
+    Width = 140
     Height = 16
     Caption = '[F2 / Mouse Double-Click]'
     Font.Charset = ANSI_CHARSET
@@ -67,7 +67,7 @@ object FormColumnsEditor: TFormColumnsEditor
   object LabelButtonSize: TShadowLabel
     Left = 313
     Top = 100
-    Width = 124
+    Width = 122
     Height = 16
     Caption = '[Ctrl+Left / Ctrl+Right]'
     Font.Charset = ANSI_CHARSET
@@ -88,7 +88,7 @@ object FormColumnsEditor: TFormColumnsEditor
   object LabelButtonDefaultSize: TShadowLabel
     Left = 313
     Top = 152
-    Width = 23
+    Width = 21
     Height = 16
     Caption = '[F3]'
     Font.Charset = ANSI_CHARSET
@@ -109,7 +109,7 @@ object FormColumnsEditor: TFormColumnsEditor
   object LabelButtonResetSize: TShadowLabel
     Left = 313
     Top = 126
-    Width = 23
+    Width = 21
     Height = 16
     Caption = '[F4]'
     Font.Charset = ANSI_CHARSET
@@ -130,7 +130,7 @@ object FormColumnsEditor: TFormColumnsEditor
   object LabelButtonReloadProfileDefaultSettings: TShadowLabel
     Left = 313
     Top = 217
-    Width = 23
+    Width = 21
     Height = 16
     Caption = '[F5]'
     Font.Charset = ANSI_CHARSET
@@ -151,7 +151,7 @@ object FormColumnsEditor: TFormColumnsEditor
   object LabelToggleVisibility: TShadowLabel
     Left = 313
     Top = 176
-    Width = 149
+    Width = 145
     Height = 16
     Caption = '[Space Bar] Toggle Visibility'
     Font.Charset = ANSI_CHARSET
@@ -172,7 +172,7 @@ object FormColumnsEditor: TFormColumnsEditor
   object LabelButtonSetDefaultAll: TShadowLabel
     Left = 313
     Top = 249
-    Width = 23
+    Width = 21
     Height = 16
     Caption = '[F6]'
     Font.Charset = ANSI_CHARSET
@@ -432,108 +432,94 @@ object FormColumnsEditor: TFormColumnsEditor
     TabOrder = 12
     OnClick = ButtonCustomizeColumnHeaderFontSetDefaultClick
   end
-  object PanelColumnsList: TPanelEx
+  object ColumnsListView: TEasyListview
     Left = 0
-    Top = 0
+    Top = -2
     Width = 218
-    Height = 464
-    Color1 = clWhite
-    Color2 = 15856113
-    Color3 = clYellow
-    Color4 = clTeal
-    ColorFrame = 7891291
-    ColorInnerFrame = 7891291
-    Frames = [frRight]
-    ParentBackground = False
-    Style = vgSolid
-    object ColumnsListView: TEasyListview
-      Left = 4
-      Top = 2
-      Width = 211
-      Height = 463
-      BackGround.Enabled = True
-      CellSizes.Report.Height = 19
-      Color = clWhite
-      EditManager.Font.Charset = ANSI_CHARSET
-      EditManager.Font.Color = clBlack
-      EditManager.Font.Height = -13
-      EditManager.Font.Name = 'Consolas'
-      EditManager.Font.Style = []
-      UseDockManager = False
-      DragManager.Enabled = True
-      Font.Charset = ANSI_CHARSET
-      Font.Color = clBlack
-      Font.Height = -13
-      Font.Name = 'Consolas'
-      Font.Style = []
-      GroupFont.Charset = ANSI_CHARSET
-      GroupFont.Color = clBlack
-      GroupFont.Height = -12
-      GroupFont.Name = 'Segoe UI'
-      GroupFont.Style = []
-      HintType = ehtToolTip
-      Header.AutoSizeHeightMargin = 6
-      Header.Columns.Items = {
-        0600000002000000110000005445617379436F6C756D6E53746F726564FFFECE
-        00060000008008000000000100000000000000A0000000FFFFFF1F0001000000
-        01000000050000005400690074006C0065000000000000000000000000001100
-        00005445617379436F6C756D6E53746F726564FFFECE00060000008008000000
-        00010100000000000031000000FFFFFF1F000100000001000000040000005300
-        69007A006500000000000000000000000000}
-      Header.Draggable = False
-      Header.Font.Charset = ANSI_CHARSET
-      Header.Font.Color = clBlack
-      Header.Font.Height = -9
-      Header.Font.Name = 'Verdana'
-      Header.Font.Style = []
-      Header.Height = 18
-      Header.Sizeable = False
-      HotTrack.Color = clBlack
-      HotTrack.Enabled = True
-      HotTrack.ItemTrack = [htiIcon, htiText, htiAnyWhere]
-      HotTrack.Underline = False
-      IncrementalSearch.Enabled = True
-      IncrementalSearch.ResetTime = 1000
-      IncrementalSearch.StartType = eissFocusedNode
-      PaintInfoColumn.Border = 2
-      PaintInfoColumn.CaptionIndent = 0
-      PaintInfoColumn.HotTrack = False
-      PaintInfoGroup.Expandable = False
-      PaintInfoGroup.MarginBottom.CaptionIndent = 4
-      PaintInfoItem.BorderColor = 16370824
-      PaintInfoItem.CheckIndent = 1
-      PaintInfoItem.CheckSize = 13
-      PaintInfoItem.CheckType = ectBox
-      PaintInfoItem.ShowBorder = False
-      ParentFont = False
-      ParentShowHint = False
-      ShowThemedBorder = False
-      ShowHint = False
-      Selection.BlendColorSelRect = 10902593
-      Selection.BlendIcon = False
-      Selection.BorderColor = 10902593
-      Selection.BorderColorSelRect = 10902593
-      Selection.Color = 10902593
-      Selection.FullCellPaint = True
-      Selection.FullItemPaint = True
-      Selection.FullRowSelect = True
-      Selection.GradientColorBottom = 16506264
-      Selection.GradientColorTop = 15582647
-      Selection.InactiveBorderColor = 10902593
-      Selection.InactiveColor = 15582647
-      Selection.MouseButton = [cmbLeft, cmbRight]
-      Selection.RoundRectRadius = 2
-      Selection.TextColor = clBlack
-      Selection.UseFocusRect = False
-      TabOrder = 0
-      View = elsReport
-      CustomCheckRadioEnabled = False
-      OnDblClick = ColumnsListViewDblClick
-      OnItemCheckChange = ColumnsListViewItemCheckChange
-      OnItemEdited = ColumnsListViewItemEdited
-      OnItemEditEnd = ColumnsListViewItemEditEnd
-      OnItemPaintText = ColumnsListViewItemPaintText
-      OnKeyAction = ColumnsListViewKeyAction
-    end
+    Height = 471
+    BackGround.Enabled = True
+    BorderWidth = 4
+    CellSizes.Report.Height = 19
+    Color = clWhite
+    EditManager.Font.Charset = ANSI_CHARSET
+    EditManager.Font.Color = clBlack
+    EditManager.Font.Height = -13
+    EditManager.Font.Name = 'Consolas'
+    EditManager.Font.Style = []
+    UseDockManager = False
+    DragManager.Enabled = True
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clBlack
+    Font.Height = -13
+    Font.Name = 'Consolas'
+    Font.Style = []
+    GroupFont.Charset = ANSI_CHARSET
+    GroupFont.Color = clBlack
+    GroupFont.Height = -12
+    GroupFont.Name = 'Segoe UI'
+    GroupFont.Style = []
+    HintType = ehtToolTip
+    Header.AutoSizeHeightMargin = 6
+    Header.Columns.Items = {
+      0600000002000000110000005445617379436F6C756D6E53746F726564FFFECE
+      00060000008008000000000100000000000000A0000000FFFFFF1F0001000000
+      01000000050000005400690074006C0065000000000000000000000000001100
+      00005445617379436F6C756D6E53746F726564FFFECE00060000008008000000
+      00010100000000000032000000FFFFFF1F000100000001000000040000005300
+      69007A006500000000000000000000000000}
+    Header.Draggable = False
+    Header.Font.Charset = ANSI_CHARSET
+    Header.Font.Color = clBlack
+    Header.Font.Height = -9
+    Header.Font.Name = 'Verdana'
+    Header.Font.Style = []
+    Header.Height = 18
+    Header.Sizeable = False
+    HotTrack.Color = clBlack
+    HotTrack.Enabled = True
+    HotTrack.ItemTrack = [htiIcon, htiText, htiAnyWhere]
+    HotTrack.Underline = False
+    IncrementalSearch.Enabled = True
+    IncrementalSearch.ResetTime = 1000
+    IncrementalSearch.StartType = eissFocusedNode
+    PaintInfoColumn.Border = 2
+    PaintInfoColumn.HotTrack = False
+    PaintInfoGroup.Expandable = False
+    PaintInfoGroup.MarginBottom.CaptionIndent = 4
+    PaintInfoItem.BorderColor = 16370824
+    PaintInfoItem.CheckIndent = 1
+    PaintInfoItem.CheckSize = 13
+    PaintInfoItem.CheckType = ectBox
+    PaintInfoItem.ShowBorder = False
+    ParentFont = False
+    ParentShowHint = False
+    ShowThemedBorder = False
+    ShowHint = False
+    Selection.BlendColorSelRect = 10902593
+    Selection.BlendIcon = False
+    Selection.BorderColor = 10902593
+    Selection.BorderColorSelRect = 10902593
+    Selection.Color = 10902593
+    Selection.FullCellPaint = True
+    Selection.FullItemPaint = True
+    Selection.FullRowSelect = True
+    Selection.GradientColorBottom = 16506264
+    Selection.GradientColorTop = 15582647
+    Selection.InactiveBorderColor = 10902593
+    Selection.InactiveColor = 15582647
+    Selection.MouseButton = [cmbLeft, cmbRight]
+    Selection.RoundRectRadius = 2
+    Selection.TextColor = clBlack
+    Selection.UseFocusRect = False
+    TabOrder = 13
+    View = elsReport
+    CustomCheckRadioEnabled = False
+    CustomEnableIconHD = False
+    OnDblClick = ColumnsListViewDblClick
+    OnItemCheckChange = ColumnsListViewItemCheckChange
+    OnItemEdited = ColumnsListViewItemEdited
+    OnItemEditEnd = ColumnsListViewItemEditEnd
+    OnItemPaintText = ColumnsListViewItemPaintText
+    OnKeyAction = ColumnsListViewKeyAction
   end
 end

@@ -246,6 +246,29 @@ const
   {$EXTERNALSYM PROP_LG_CYDLG}
   PROP_LG_CYDLG           = 218;
 
+
+  { ====== Ranges for control message IDs ======================= }
+  {$EXTERNALSYM CBM_FIRST}
+  CBM_FIRST               = $1700;      { Combobox control messages }
+
+  {$EXTERNALSYM CCM_FIRST}
+  CCM_FIRST               = $2000;      { Common control shared messages }
+  {$EXTERNALSYM CCM_LAST}
+  CCM_LAST                = CCM_FIRST + $200;
+
+// ====================== Combobox Control =============================
+// *** The following Combobox control declarations require Windows >= Vista ***
+                                   
+// custom combobox control messages
+  {$EXTERNALSYM CB_SETMINVISIBLE}
+  CB_SETMINVISIBLE        = CBM_FIRST + 1;
+  {$EXTERNALSYM CB_GETMINVISIBLE}
+  CB_GETMINVISIBLE        = CBM_FIRST + 2;
+  {$EXTERNALSYM CB_SETCUEBANNER}
+  CB_SETCUEBANNER         = CBM_FIRST + 3;
+  {$EXTERNALSYM CB_GETCUEBANNER}
+  CB_GETCUEBANNER         = CBM_FIRST + 4;
+
 type
   HPropSheetPage = Pointer;
 
@@ -479,6 +502,11 @@ const
   ICC_PAGESCROLLER_CLASS = $00001000; // page scroller
   {$EXTERNALSYM ICC_NATIVEFNTCTL_CLASS}
   ICC_NATIVEFNTCTL_CLASS = $00002000; // native font control
+  { For Windows >= XP }
+  {$EXTERNALSYM ICC_STANDARD_CLASSES}
+  ICC_STANDARD_CLASSES   = $00004000;
+  {$EXTERNALSYM ICC_LINK_CLASS}
+  ICC_LINK_CLASS         = $00008000;
 
 {$EXTERNALSYM InitCommonControls}
 procedure InitCommonControls; stdcall;
@@ -511,11 +539,20 @@ const
   TCM_FIRST               = $1300;      { Tab control messages }
   {$EXTERNALSYM PGM_FIRST}
   PGM_FIRST               = $1400;      { Pager control messages }
-  {$EXTERNALSYM CCM_FIRST}
-  CCM_FIRST               = $2000;      { Common control shared messages }
+  { For Windows >= XP }
+  {$EXTERNALSYM ECM_FIRST}
+  ECM_FIRST               = $1500;      { Edit control messages }
+  {$EXTERNALSYM BCM_FIRST}
+  BCM_FIRST               = $1600;      { Button control messages }
 
   {$EXTERNALSYM CCM_SETBKCOLOR}
   CCM_SETBKCOLOR          = CCM_FIRST + 1; // lParam is bkColor
+
+const
+  {$EXTERNALSYM EM_SETCUEBANNER}
+  EM_SETCUEBANNER             = ECM_FIRST + 1;   // Set the cue banner with the lParm = LPCWSTR
+  {$EXTERNALSYM EM_GETCUEBANNER}
+  EM_GETCUEBANNER             = ECM_FIRST + 2;   // Set the cue banner with the lParm = LPCWSTR
 
 type
   {$EXTERNALSYM tagCOLORSCHEME}
@@ -638,6 +675,23 @@ const
   {$EXTERNALSYM PGN_LAST}
   PGN_LAST                = 0-950;
 
+  {$EXTERNALSYM WMN_FIRST}
+  WMN_FIRST               = 0-1000;
+  {$EXTERNALSYM WMN_LAST}
+  WMN_LAST                = 0-1200;
+
+  { For Windows >= XP }
+  {$EXTERNALSYM BCN_FIRST}
+  BCN_FIRST               = 0-1250;
+  {$EXTERNALSYM BCN_LAST}
+  BCN_LAST                = 0-1350;
+
+  { For Windows >= Vista }
+  {$EXTERNALSYM TRBN_FIRST}
+  TRBN_FIRST              = 0-1501;          { trackbar }
+  {$EXTERNALSYM TRBN_LAST}
+  TRBN_LAST               = 0-1519;
+
   {$EXTERNALSYM MSGF_COMMCTRL_BEGINDRAG}
   MSGF_COMMCTRL_BEGINDRAG     = $4200;
   {$EXTERNALSYM MSGF_COMMCTRL_SIZEHEADER}
@@ -746,6 +800,20 @@ type
   PNMChar = ^TNMChar;
   TNMChar = tagNMCHAR;
 
+  { For IE >= 0x0600 }
+  { $EXTERNALSYM tagNMCUSTOMTEXT}
+  tagNMCUSTOMTEXT = record
+    hdr: NMHDR;
+    hDC: HDC;
+    lpString: LPCWSTR;
+    nCount: Integer;
+    lpRect: PRect;
+    uFormat: UINT;
+    fLink: BOOL;
+  end;
+  PNMCustomText = ^TNMCustomText;
+  TNMCustomText = tagNMCUSTOMTEXT;
+
 { ==================== CUSTOM DRAW ========================================== }
 
 const
@@ -812,6 +880,7 @@ const
   CDIS_MARKED           = $0080;
   {$EXTERNALSYM CDIS_INDETERMINATE}
   CDIS_INDETERMINATE    = $0100;
+  { For Windows >= XP }
   {$EXTERNALSYM CDIS_SHOWKEYBOARDCUES}
   CDIS_SHOWKEYBOARDCUES = $0200;
   // For Windows >= Vista
@@ -1143,6 +1212,18 @@ const
   HDS_DRAGDROP            = $00000040;
   {$EXTERNALSYM HDS_FULLDRAG}
   HDS_FULLDRAG            = $00000080;
+  {$EXTERNALSYM HDS_FILTERBAR}
+  HDS_FILTERBAR           = $00000100;
+  { For Windows >= XP }
+  {$EXTERNALSYM HDS_FLAT}
+  HDS_FLAT                = $0200;
+  { For Windows >= Vista }
+  {$EXTERNALSYM HDS_CHECKBOXES}
+  HDS_CHECKBOXES          = $0400;
+  {$EXTERNALSYM HDS_NOSIZING}
+  HDS_NOSIZING            = $0800;
+  {$EXTERNALSYM HDS_OVERFLOW}
+  HDS_OVERFLOW            = $1000;
 
 type
   PHDItemA = ^THDItemA;
@@ -1217,26 +1298,47 @@ const
   HDI_STATE               = $0200;
 
   {$EXTERNALSYM HDF_LEFT}
-  HDF_LEFT                = 0;
+  HDF_LEFT                = 0;     { Same as LVCFMT_LEFT }
   {$EXTERNALSYM HDF_RIGHT}
-  HDF_RIGHT               = 1;
+  HDF_RIGHT               = 1;     { Same as LVCFMT_RIGHT }
   {$EXTERNALSYM HDF_CENTER}
-  HDF_CENTER              = 2;
+  HDF_CENTER              = 2;     { Same as LVCFMT_CENTER }
   {$EXTERNALSYM HDF_JUSTIFYMASK}
-  HDF_JUSTIFYMASK         = $0003;
+  HDF_JUSTIFYMASK         = $0003; { Same as LVCFMT_CENTER }
   {$EXTERNALSYM HDF_RTLREADING}
   HDF_RTLREADING          = 4; 
 
-  {$EXTERNALSYM HDF_OWNERDRAW}
-  HDF_OWNERDRAW           = $8000;
-  {$EXTERNALSYM HDF_STRING}
-  HDF_STRING              = $4000;
   {$EXTERNALSYM HDF_BITMAP}
   HDF_BITMAP              = $2000;
-  {$EXTERNALSYM HDF_BITMAP_ON_RIGHT}
-  HDF_BITMAP_ON_RIGHT     = $1000;
+  {$EXTERNALSYM HDF_STRING}
+  HDF_STRING              = $4000;
+  {$EXTERNALSYM HDF_OWNERDRAW}
+  HDF_OWNERDRAW           = $8000; { Same as LVCFMT_COL_HAS_IMAGES }
+
   {$EXTERNALSYM HDF_IMAGE}
-  HDF_IMAGE               = $0800;
+  HDF_IMAGE               = $0800; { Same as LVCFMT_IMAGE }
+  {$EXTERNALSYM HDF_BITMAP_ON_RIGHT}
+  HDF_BITMAP_ON_RIGHT     = $1000; { Same as LVCFMT_BITMAP_ON_RIGHT }
+
+  { For Windows >= XP }
+  {$EXTERNALSYM HDF_SORTUP}
+  HDF_SORTUP              = $0400;
+  {$EXTERNALSYM HDF_SORTDOWN}
+  HDF_SORTDOWN            = $0200;
+
+  { For Windows >= Vista }
+  {$EXTERNALSYM HDF_CHECKBOX}
+  HDF_CHECKBOX            = $0040;
+  {$EXTERNALSYM HDF_CHECKED}
+  HDF_CHECKED             = $0080;
+  {$EXTERNALSYM HDF_FIXEDWIDTH}
+  HDF_FIXEDWIDTH          = $0100; { Can't resize the column; same as LVCFMT_FIXED_WIDTH }
+  {$EXTERNALSYM HDF_SPLITBUTTON}
+  HDF_SPLITBUTTON         = $1000000; { Column is a split button; same as LVCFMT_SPLITBUTTON }
+
+  { For Windows >= Vista }
+  {$EXTERNALSYM HDIS_FOCUSED}
+  HDIS_FOCUSED            = $00000001;
 
   {$EXTERNALSYM HDM_GETITEMCOUNT}
   HDM_GETITEMCOUNT        = HDM_FIRST + 0;
@@ -1336,6 +1438,13 @@ const
   HHT_TORIGHT             = $0400;
   {$EXTERNALSYM HHT_TOLEFT}
   HHT_TOLEFT              = $0800;
+  { For Windows >= Vista }
+  {$EXTERNALSYM HHT_ONITEMSTATEICON}
+  HHT_ONITEMSTATEICON     = $1000;
+  {$EXTERNALSYM HHT_ONDROPDOWN}
+  HHT_ONDROPDOWN          = $2000;
+  {$EXTERNALSYM HHT_ONOVERFLOW}
+  HHT_ONOVERFLOW          = $4000;
 
 type
   PHDHitTestInfo = ^THDHitTestInfo;
@@ -1350,6 +1459,11 @@ type
   HD_HITTESTINFO = _HD_HITTESTINFO;
 
 const
+  HDSIL_NORMAL            = 0;
+  {$EXTERNALSYM HDSIL_NORMAL}
+  HDSIL_STATE             = 1;
+  {$EXTERNALSYM HDSIL_STATE}
+
   {$EXTERNALSYM HDM_HITTEST}
   HDM_HITTEST             = HDM_FIRST + 6;
   {$EXTERNALSYM HDM_GETITEMRECT}
@@ -1372,6 +1486,33 @@ const
   HDM_SETUNICODEFORMAT    = CCM_SETUNICODEFORMAT;
   {$EXTERNALSYM HDM_GETUNICODEFORMAT}
   HDM_GETUNICODEFORMAT    = CCM_GETUNICODEFORMAT;
+
+  { For IE >= 0x0500 }
+  {$EXTERNALSYM HDM_SETBITMAPMARGIN}
+  HDM_SETBITMAPMARGIN          = HDM_FIRST + 20;
+  {$EXTERNALSYM HDM_GETBITMAPMARGIN}
+  HDM_GETBITMAPMARGIN          = HDM_FIRST + 21;
+  {$EXTERNALSYM HDM_SETFILTERCHANGETIMEOUT}
+  HDM_SETFILTERCHANGETIMEOUT   = HDM_FIRST + 22;
+  {$EXTERNALSYM HDM_EDITFILTER}
+  HDM_EDITFILTER               = HDM_FIRST + 23;
+  {$EXTERNALSYM HDM_CLEARFILTER}
+  HDM_CLEARFILTER              = HDM_FIRST + 24;
+
+  { For Windows >= 0x0600 }
+  // Not currently implemented
+  //{$EXTERNALSYM HDM_TRANSLATEACCELERATOR}
+  //HDM_TRANSLATEACCELERATOR    = CCM_TRANSLATEACCELERATOR;
+
+  { For Windows >= Vista}
+  {$EXTERNALSYM HDM_GETITEMDROPDOWNRECT}
+  HDM_GETITEMDROPDOWNRECT     = HDM_FIRST + 25;   // rect of item's drop down button
+  {$EXTERNALSYM HDM_GETOVERFLOWRECT}
+  HDM_GETOVERFLOWRECT         = HDM_FIRST + 26;   // rect of overflow button
+  {$EXTERNALSYM HDM_GETFOCUSEDITEM}
+  HDM_GETFOCUSEDITEM          = HDM_FIRST + 27;
+  {$EXTERNALSYM HDM_SETFOCUSEDITEM}
+  HDM_SETFOCUSEDITEM          = HDM_FIRST + 28;
 
 {$EXTERNALSYM Header_GetItemRect}
 function Header_GetItemRect(hwnd: HWND; iItem: Integer; lprc: PRect): Integer;
@@ -1431,6 +1572,28 @@ const
   HDN_BEGINDRAG            = HDN_FIRST-10;
   {$EXTERNALSYM HDN_ENDDRAG}
   HDN_ENDDRAG              = HDN_FIRST-11;
+
+  { For IE >= 0x0500 }
+  {$EXTERNALSYM HDN_FILTERCHANGE}
+  HDN_FILTERCHANGE         = HDN_FIRST-12;
+  {$EXTERNALSYM HDN_FILTERBTNCLICK}
+  HDN_FILTERBTNCLICK       = HDN_FIRST-13;
+
+  { For IE >= 0x0600 }
+  {$EXTERNALSYM HDN_BEGINFILTEREDIT}
+  HDN_BEGINFILTEREDIT      = HDN_FIRST-14;
+  {$EXTERNALSYM HDN_ENDFILTEREDIT}
+  HDN_ENDFILTEREDIT        = HDN_FIRST-15;
+
+  { For Windows >= Vista }
+  {$EXTERNALSYM HDN_ITEMSTATEICONCLICK}
+  HDN_ITEMSTATEICONCLICK   = HDN_FIRST-16;
+  {$EXTERNALSYM HDN_ITEMKEYDOWN}
+  HDN_ITEMKEYDOWN          = HDN_FIRST-17;
+  {$EXTERNALSYM HDN_DROPDOWN}
+  HDN_DROPDOWN             = HDN_FIRST-18;
+  {$EXTERNALSYM HDN_OVERFLOWCLICK}
+  HDN_OVERFLOWCLICK        = HDN_FIRST-19;
 
   {$EXTERNALSYM HDN_ITEMCHANGINGW}
   HDN_ITEMCHANGINGW        = HDN_FIRST-20;
@@ -1702,6 +1865,9 @@ type
     rcText: TRect;                   // Rect for text
     nStringBkMode: Integer;
     nHLStringBkMode: Integer;
+
+    { For Windows >= XP }
+    iListGap: Integer;
   end;
   PNMTBCustomDraw = ^TNMTBCustomDraw;
   TNMTBCustomDraw = _NMTBCUSTOMDRAW;
@@ -1719,6 +1885,16 @@ const
   {$EXTERNALSYM TBCDRF_NOETCHEDEFFECT}
   TBCDRF_NOETCHEDEFFECT       = $00100000;  // Don't draw etched effect for disabled items
 
+  { For IE >= 0x0500 }
+  {$EXTERNALSYM TBCDRF_BLENDICON}
+  TBCDRF_BLENDICON            = $00200000;  // Use ILD_BLEND50 on the icon image
+  {$EXTERNALSYM TBCDRF_NOBACKGROUND}
+  TBCDRF_NOBACKGROUND         = $00400000;  // Use ILD_BLEND50 on the icon image
+
+  { For Windows >= Vista }
+  {$EXTERNALSYM TBCDRF_USECDCOLORS}
+  TBCDRF_USECDCOLORS          = $00800000;  // Use CustomDrawColors to RenderText regardless of VisualStyle
+  
   {$EXTERNALSYM TB_ENABLEBUTTON}
   TB_ENABLEBUTTON         = WM_USER + 1;
   {$EXTERNALSYM TB_CHECKBUTTON}
@@ -1777,6 +1953,14 @@ const
   IDB_HIST_SMALL_COLOR    = 8;
   {$EXTERNALSYM IDB_HIST_LARGE_COLOR}
   IDB_HIST_LARGE_COLOR    = 9;
+  {$EXTERNALSYM IDB_HIST_NORMAL}
+  IDB_HIST_NORMAL         = 12;
+  {$EXTERNALSYM IDB_HIST_HOT}
+  IDB_HIST_HOT            = 13;
+  {$EXTERNALSYM IDB_HIST_DISABLED}
+  IDB_HIST_DISABLED       = 14;
+  {$EXTERNALSYM IDB_HIST_PRESSED}
+  IDB_HIST_PRESSED       = 15;
 
 { icon indexes for standard bitmap }
   {$EXTERNALSYM STD_CUT}
@@ -2187,6 +2371,68 @@ const
   {$EXTERNALSYM TB_GETSTRING}
   TB_GETSTRING            = WM_USER + 92;
 
+  { For Windows >= XP }
+  {$EXTERNALSYM TBMF_PAD}
+  TBMF_PAD                = $00000001;
+  {$EXTERNALSYM TBMF_BARPAD}
+  TBMF_BARPAD             = $00000002;
+  {$EXTERNALSYM TBMF_BUTTONSPACING}
+  TBMF_BUTTONSPACING      = $00000004;
+
+type
+  { For Windows >= XP }
+  { $EXTERNALSYM TBMETRICSA}
+  TBMETRICSA = packed record
+    cbSize: Integer;
+    dwMask: DWORD;
+
+    cxPad: Integer;   { PAD }
+    cyPad: Integer;
+    cxBarPad: Integer;{ BARPAD }
+    cyBarPad: Integer;
+    cxButtonSpacing: Integer;{ BUTTONSPACING }
+    cyButtonSpacing: Integer;
+  end;
+  { $EXTERNALSYM TBMETRICSW}
+  TBMETRICSW = packed record
+    cbSize: Integer;
+    dwMask: DWORD;
+
+    cxPad: Integer;   { PAD }
+    cyPad: Integer;
+    cxBarPad: Integer;{ BARPAD }
+    cyBarPad: Integer;
+    cxButtonSpacing: Integer;{ BUTTONSPACING }
+    cyButtonSpacing: Integer;
+  end;
+  {$EXTERNALSYM TBMETRICS}
+  TBMETRICS = TBMETRICSW;
+  PTBMetricsA = ^TTBMetricsA;
+  PTBMetricsW = ^TTBMetricsW;
+  PTBMetrics = PTBMetricsW;
+  TTBMetricsA = TBMETRICSA;
+  TTBMetricsW = TBMETRICSW;
+  TTBMetrics = TTBMetricsW;
+
+const
+  { For Windows >= XP }
+  {$EXTERNALSYM TB_GETMETRICS}
+  TB_GETMETRICS           = WM_USER + 101;
+  {$EXTERNALSYM TB_SETMETRICS}
+  TB_SETMETRICS           = WM_USER + 102;
+
+  { For Windows >= Vista }
+  {$EXTERNALSYM TB_GETITEMDROPDOWNRECT}
+  TB_GETITEMDROPDOWNRECT  = WM_USER + 103;
+  {$EXTERNALSYM TB_SETPRESSEDIMAGELIST}
+  TB_SETPRESSEDIMAGELIST  = WM_USER + 104;
+  {$EXTERNALSYM TB_GETPRESSEDIMAGELIST}
+  TB_GETPRESSEDIMAGELIST  = WM_USER + 105;
+
+  { For Windows >= XP }
+  {$EXTERNALSYM TB_SETWINDOWTHEME}
+  TB_SETWINDOWTHEME       = CCM_SETWINDOWTHEME;
+  
   {$EXTERNALSYM TBN_BEGINDRAG}
   TBN_BEGINDRAG           = TBN_FIRST-1;
   {$EXTERNALSYM TBN_ENDDRAG}
@@ -2418,6 +2664,14 @@ const
   RBBS_GRIPPERALWAYS  = $00000080;  // always show the gripper
   {$EXTERNALSYM RBBS_NOGRIPPER}
   RBBS_NOGRIPPER      = $00000100;  // never show the gripper
+  { For IE >= 0x0500 }
+  {$EXTERNALSYM RBBS_USECHEVRON}
+  RBBS_USECHEVRON     = $00000200;  { display drop-down button for this band if it's sized smaller than ideal width }
+  { For IE >= 0x0501 }
+  {$EXTERNALSYM RBBS_HIDETITLE}
+  RBBS_HIDETITLE      = $00000400;  { keep band title hidden }
+  {$EXTERNALSYM RBBS_TOPALIGN}
+  RBBS_TOPALIGN       = $00000800;  { keep band in top row }
 
   {$EXTERNALSYM RBBIM_STYLE}
   RBBIM_STYLE       = $00000001;
@@ -2443,6 +2697,11 @@ const
   RBBIM_LPARAM        = $00000400;
   {$EXTERNALSYM RBBIM_HEADERSIZE}
   RBBIM_HEADERSIZE    = $00000800;  // control the size of the header
+  { For Windows >= Vista }
+  {$EXTERNALSYM RBBIM_CHEVRONLOCATION}
+  RBBIM_CHEVRONLOCATION = $00001000;
+  {$EXTERNALSYM RBBIM_CHEVRONSTATE}
+  RBBIM_CHEVRONSTATE    = $00002000;
 
 type
   {$EXTERNALSYM tagREBARBANDINFOA}
@@ -2467,6 +2726,9 @@ type
     cxIdeal: UINT;
     lParam: LPARAM;
     cxHeader: UINT;
+
+    rcChevronLocation: TRect;       // the rect is in client co-ord wrt hwndChild
+    uChevronState: UINT;            // STATE_SYSTEM_*
   end;
   {$EXTERNALSYM tagREBARBANDINFOW}
   tagREBARBANDINFOW = packed record
@@ -2490,6 +2752,9 @@ type
     cxIdeal: UINT;
     lParam: LPARAM;
     cxHeader: UINT;
+
+    rcChevronLocation: TRect;       // the rect is in client co-ord wrt hwndChild
+    uChevronState: UINT;            // STATE_SYSTEM_*
   end;
   {$EXTERNALSYM tagREBARBANDINFO}
   tagREBARBANDINFO = tagREBARBANDINFOA;
@@ -2545,6 +2810,15 @@ const
   {$EXTERNALSYM RB_SIZETORECT}
   RB_SIZETORECT      = WM_USER +  23; // resize the rebar/break bands and such to this rect (lparam;
 
+  { For Windows >= XP }
+  {$EXTERNALSYM RBSTR_CHANGERECT}
+  RBSTR_CHANGERECT            = $0001;   { flags for RB_SIZETORECT }
+
+  {$EXTERNALSYM RB_SETCOLORSCHEME}
+  RB_SETCOLORSCHEME   = CCM_SETCOLORSCHEME; { lParam is color scheme }
+  {$EXTERNALSYM RB_GETCOLORSCHEME}
+  RB_GETCOLORSCHEME   = CCM_GETCOLORSCHEME; { fills in COLORSCHEME pointed to by lParam }
+  
   // for manual drag control
   // lparam == cursor pos
         // -1 means do it yourself.
@@ -2587,7 +2861,25 @@ const
   {$EXTERNALSYM RB_GETUNICODEFORMAT}
   RB_GETUNICODEFORMAT     = CCM_GETUNICODEFORMAT;
 
+  { For Windows >= XP }
+  {$EXTERNALSYM RB_GETBANDMARGINS}
+  RB_GETBANDMARGINS   = WM_USER + 40;
+  {$EXTERNALSYM RB_SETWINDOWTHEME}
+  RB_SETWINDOWTHEME   = CCM_SETWINDOWTHEME;
 
+  { For Windows >= Vista }
+  {$EXTERNALSYM RB_SETEXTENDEDSTYLE}
+  RB_SETEXTENDEDSTYLE = WM_USER + 41;
+  {$EXTERNALSYM RB_GETEXTENDEDSTYLE}
+  RB_GETEXTENDEDSTYLE = WM_USER + 42;
+
+  { For IE >= 0x0500 }
+  {$EXTERNALSYM RB_PUSHCHEVRON}
+  RB_PUSHCHEVRON      = WM_USER + 43;
+
+  { For Windows >= Vista }
+  {$EXTERNALSYM RB_SETBANDWIDTH}
+  RB_SETBANDWIDTH     = WM_USER + 44;    { set width for docked band }
 
 
 
@@ -2623,6 +2915,22 @@ const
   {$EXTERNALSYM RBN_CHILDSIZE}
   RBN_CHILDSIZE       = RBN_FIRST - 8;
 
+  { For IE >= 0x0500 }
+  {$EXTERNALSYM RBN_CHEVRONPUSHED}
+  RBN_CHEVRONPUSHED   = RBN_FIRST - 10;
+
+  { For IE >= 0x0600 }
+  {$EXTERNALSYM RBN_SPLITTERDRAG}
+  RBN_SPLITTERDRAG    = RBN_FIRST - 11;
+
+  { For IE >= 0x0500 }
+  {$EXTERNALSYM RBN_MINMAX}
+  RBN_MINMAX          = RBN_FIRST - 21;
+
+  { For Windows >= XP }
+  {$EXTERNALSYM RBN_AUTOBREAK}
+  RBN_AUTOBREAK       = RBN_FIRST - 22;
+  
 type
   {$EXTERNALSYM tagNMREBARCHILDSIZE}
   tagNMREBARCHILDSIZE = packed record
@@ -2667,6 +2975,49 @@ type
   PNMRBAutoSize = ^TNMRBAutoSize;
   TNMRBAutoSize = tagNMRBAUTOSIZE;
 
+  { For IE >= 0x0500 }
+  {$EXTERNALSYM tagNMREBARCHEVRON}
+  tagNMREBARCHEVRON = packed record
+    hdr: NMHDR;
+    uBand: UINT;
+    wID: UINT;
+    lParam: LPARAM;
+    rc: TRect;
+    lParamNM: LPARAM;
+  end;
+  PNMReBarChevron = ^TNMReBarChevron;
+  TNMReBarChevron = tagNMREBARCHEVRON;
+
+  { For IE >= 0x0600 }
+  { $EXTERNALSYM tagNMREBARSPLITTER}
+  tagNMREBARSPLITTER = packed record
+    hdr: NMHDR;
+    rcSizing: TRect;
+  end;
+  PNMReBarSplitter = ^TNMReBarSplitter;
+  TNMReBarSplitter = tagNMREBARSPLITTER;
+
+const
+  { For Windows >= XP }
+  {$EXTERNALSYM RBAB_AUTOSIZE}
+  RBAB_AUTOSIZE   = $0001;   { These are not flags and are all mutually exclusive }
+  {$EXTERNALSYM RBAB_ADDBAND}
+  RBAB_ADDBAND    = $0002;
+
+type
+  { $EXTERNALSYM tagNMREBARAUTOBREAK}
+  tagNMREBARAUTOBREAK = packed record
+    hdr: NMHDR;
+    uBand: UINT;
+    wID: UINT;
+    lParam: LPARAM;
+    uMsg: UINT;
+    fStyleCurrent: UINT;
+    fAutoBreak: BOOL;
+  end;
+  PNMReBarAutoBreak = ^TNMReBarAutoBreak;
+  TNMReBarAutoBreak = tagNMREBARAUTOBREAK;
+    
 const
   {$EXTERNALSYM RBHT_NOWHERE}
   RBHT_NOWHERE    = $0001;
@@ -2676,6 +3027,12 @@ const
   RBHT_CLIENT     = $0003;
   {$EXTERNALSYM RBHT_GRABBER}
   RBHT_GRABBER    = $0004;
+  { For IE >= 0x0500 }
+  {$EXTERNALSYM RBHT_CHEVRON}
+  RBHT_CHEVRON    = $0008;
+  { For IE >= 0x0600 }
+  {$EXTERNALSYM RBHT_SPLITTER}
+  RBHT_SPLITTER   = $0010;
 
 type
   {$EXTERNALSYM _RB_HITTESTINFO}
@@ -2707,6 +3064,9 @@ type
     hInst: THandle;
     lpszText: PAnsiChar;
     lParam: LPARAM;
+    
+    { For Windows >= XP }
+    lpReserved: Pointer;
   end;
   {$EXTERNALSYM tagTOOLINFOW}
   tagTOOLINFOW = packed record
@@ -2718,6 +3078,9 @@ type
     hInst: THandle;
     lpszText: PWideChar;
     lParam: LPARAM;
+
+    { For Windows >= XP }
+    lpReserved: Pointer;
   end;
   {$EXTERNALSYM tagTOOLINFO}
   tagTOOLINFO = tagTOOLINFOA;
@@ -2736,6 +3099,18 @@ const
   TTS_ALWAYSTIP           = $01;
   {$EXTERNALSYM TTS_NOPREFIX}
   TTS_NOPREFIX            = $02;
+  { For IE >= 0x0500 }
+  {$EXTERNALSYM TTS_NOANIMATE}
+  TTS_NOANIMATE           = $10;
+  {$EXTERNALSYM TTS_NOFADE}
+  TTS_NOFADE              = $20;
+  {$EXTERNALSYM TTS_BALLOON}
+  TTS_BALLOON             = $40;
+  {$EXTERNALSYM TTS_CLOSE}
+  TTS_CLOSE               = $80;
+  { For Windows >= Vista }
+  {$EXTERNALSYM TTS_USEVISUALSTYLE}
+  TTS_USEVISUALSTYLE      = $100;  // Use themed hyperlinks
 
   {$EXTERNALSYM TTF_IDISHWND}
   TTF_IDISHWND            = $0001;
@@ -2758,6 +3133,8 @@ const
   TTF_ABSOLUTE            = $0080;
   {$EXTERNALSYM TTF_TRANSPARENT}
   TTF_TRANSPARENT         = $0100;
+  {$EXTERNALSYM TTF_PARSELINKS}
+  TTF_PARSELINKS          = $1000;  // For IE >= 0x0501 
   {$EXTERNALSYM TTF_DI_SETITEM}
   TTF_DI_SETITEM          = $8000;       // valid only on the TTN_NEEDTEXT callback
 
@@ -2770,6 +3147,24 @@ const
   {$EXTERNALSYM TTDT_INITIAL}
   TTDT_INITIAL            = 3;
 
+  // ToolTip Icons (Set with TTM_SETTITLE)
+  {$EXTERNALSYM TTI_NONE}
+  TTI_NONE                = 0;
+  {$EXTERNALSYM TTI_INFO}
+  TTI_INFO                = 1;
+  {$EXTERNALSYM TTI_WARNING}
+  TTI_WARNING             = 2;
+  {$EXTERNALSYM TTI_ERROR}
+  TTI_ERROR               = 3;
+  { For Windows >= Vista }
+  {$EXTERNALSYM TTI_INFO_LARGE}
+  TTI_INFO_LARGE          = 4;
+  {$EXTERNALSYM TTI_WARNING_LARGE}
+  TTI_WARNING_LARGE       = 5;
+  {$EXTERNALSYM TTI_ERROR_LARGE}
+  TTI_ERROR_LARGE         = 6;
+
+  // Tool Tip Messages
   {$EXTERNALSYM TTM_ACTIVATE}
   TTM_ACTIVATE            = WM_USER + 1;
   {$EXTERNALSYM TTM_SETDELAYTIME}
@@ -2845,7 +3240,35 @@ const
   {$EXTERNALSYM TTM_UPDATE}
   TTM_UPDATE               = WM_USER + 29;
 
+  { For IE >= 0X0500 }
+  {$EXTERNALSYM TTM_GETBUBBLESIZE}
+  TTM_GETBUBBLESIZE       = WM_USER + 30;
+  {$EXTERNALSYM TTM_ADJUSTRECT}
+  TTM_ADJUSTRECT          = WM_USER + 31;
+  {$EXTERNALSYM TTM_SETTITLEA}
+  TTM_SETTITLEA           = WM_USER + 32;   { wParam = TTI_*, lParam = char* szTitle }
+  {$EXTERNALSYM TTM_SETTITLEW}
+  TTM_SETTITLEW           = WM_USER + 33;   { wParam = TTI_*, lParam = wchar* szTitle }
 
+  { For Windows >= XP }
+  {$EXTERNALSYM TTM_POPUP}
+  TTM_POPUP               = WM_USER + 34;
+  {$EXTERNALSYM TTM_GETTITLE}
+  TTM_GETTITLE            = WM_USER + 35;  { wParam = 0, lParam = TTGETTITLE* }
+
+type
+  { For Windows >= XP }
+  { $EXTERNALSYM _TTGETTITLE}
+  _TTGETTITLE = record
+    dwSize: DWORD;
+    uTitleBitmap: Integer;
+    cch: Integer;
+    pszTitle: PWCHAR;
+  end;
+  PTTGetTitle = ^TTTGetTitle;
+  TTTGetTitle = _TTGETTITLE;
+
+const
 
 
 
@@ -2888,7 +3311,14 @@ const
   {$EXTERNALSYM TTM_GETCURRENTTOOL}
   TTM_GETCURRENTTOOL      = TTM_GETCURRENTTOOLA;
 
+  { For IE >= 0X0500 }
+  {$EXTERNALSYM TTM_SETTITLE}
+  TTM_SETTITLE            = TTM_SETTITLEW;
 
+  { For Windows >= XP }
+  {$EXTERNALSYM TTM_SETWINDOWTHEME}
+  TTM_SETWINDOWTHEME      = CCM_SETWINDOWTHEME;
+  
   {$EXTERNALSYM TTM_RELAYEVENT}
   TTM_RELAYEVENT          = WM_USER + 7;
   {$EXTERNALSYM TTM_GETTOOLCOUNT}
@@ -3153,6 +3583,22 @@ const
   {$EXTERNALSYM TBS_TOOLTIPS}
   TBS_TOOLTIPS            = $0100;
 
+  { For IE >= 0x0500 }
+  {$EXTERNALSYM TBS_REVERSED}
+  TBS_REVERSED            = $0200;  { Accessibility hint: the smaller number (usually the min value) means "high" and the larger number (usually the max value) means "low" }
+
+  { For IE >= 0x0501 }
+  {$EXTERNALSYM TBS_DOWNISLEFT}
+  TBS_DOWNISLEFT          = $0400;  { Down=Left and Up=Right (default is Down=Right and Up=Left) }
+
+  { For IE >= 0x0600 }
+  {$EXTERNALSYM TBS_NOTIFYBEFOREMOVE}
+  TBS_NOTIFYBEFOREMOVE    = $0800;  { Trackbar should notify parent before repositioning the slider due to user action (enables snapping) }
+
+  { For NTDDI_VERSION >= NTDDI_LONGHORN }
+  {$EXTERNALSYM TBS_TRANSPARENTBKGND}
+  TBS_TRANSPARENTBKGND    = $1000;  { Background is painted by the parent via WM_PRINTCLIENT }
+  
   {$EXTERNALSYM TBM_GETPOS}
   TBM_GETPOS              = WM_USER;
   {$EXTERNALSYM TBM_GETRANGEMIN}
@@ -3261,6 +3707,9 @@ const
   TBCD_THUMB   = $0002;
   {$EXTERNALSYM TBCD_CHANNEL}
   TBCD_CHANNEL = $0003;
+  { For Windows >= Vista }
+  {$EXTERNALSYM TRBN_THUMBPOSCHANGING}
+  TRBN_THUMBPOSCHANGING       = TRBN_FIRST-1;
 
 { ====== DRAG LIST CONTROL ================== }
 
@@ -3378,6 +3827,10 @@ const
   UDM_SETUNICODEFORMAT    = CCM_SETUNICODEFORMAT;
   {$EXTERNALSYM UDM_GETUNICODEFORMAT}
   UDM_GETUNICODEFORMAT    = CCM_GETUNICODEFORMAT;
+  {$EXTERNALSYM UDM_SETPOS32}
+  UDM_SETPOS32            = WM_USER+113;
+  {$EXTERNALSYM UDM_GETPOS32}
+  UDM_GETPOS32            = WM_USER+114;
 
 {$EXTERNALSYM CreateUpDownControl}
 function CreateUpDownControl(dwStyle: Longint; X, Y, CX, CY: Integer;
@@ -3445,7 +3898,37 @@ const
   {$EXTERNALSYM PBM_SETBKCOLOR}
   PBM_SETBKCOLOR          = CCM_SETBKCOLOR;  // lParam = bkColor
 
+  { For Windows >= XP }
+  {$EXTERNALSYM PBS_MARQUEE}
+  PBS_MARQUEE             = $08;
+  {$EXTERNALSYM PBM_SETMARQUEE}
+  PBM_SETMARQUEE          = WM_USER+10;
 
+  { For Windows >= Vista }
+  {$EXTERNALSYM PBS_SMOOTHREVERSE}
+  PBS_SMOOTHREVERSE       = $10;
+
+  { For Windows >= Vista }
+  {$EXTERNALSYM PBM_GETSTEP}
+  PBM_GETSTEP             = WM_USER+13;
+  {$EXTERNALSYM PBM_GETBKCOLOR}
+  PBM_GETBKCOLOR          = WM_USER+14;
+  {$EXTERNALSYM PBM_GETBARCOLOR}
+  PBM_GETBARCOLOR         = WM_USER+15;
+  {$EXTERNALSYM PBM_SETSTATE}
+  PBM_SETSTATE            = WM_USER+16;  { wParam = PBST_[State] (NORMAL, ERROR, PAUSED) }
+  {$EXTERNALSYM PBM_GETSTATE}
+  PBM_GETSTATE            = WM_USER+17;
+
+  { For Windows >= Vista }
+  {$EXTERNALSYM PBST_NORMAL}
+  PBST_NORMAL             = $0001;
+  {$EXTERNALSYM PBST_ERROR}
+  PBST_ERROR              = $0002;
+  {$EXTERNALSYM PBST_PAUSED}
+  PBST_PAUSED             = $0003;
+
+  
 {  ====== HOTKEY CONTROL ========================== }
 
 const
@@ -3512,6 +3995,110 @@ const
   CCS_RIGHT               = (CCS_VERT or CCS_BOTTOM);
   {$EXTERNALSYM CCS_NOMOVEX}
   CCS_NOMOVEX             = (CCS_VERT or CCS_NOMOVEY);
+
+
+// ====== SysLink control =========================================
+
+
+const
+  { For Windows >= XP }
+  {$EXTERNALSYM INVALID_LINK_INDEX}
+  INVALID_LINK_INDEX  = -1;
+  {$EXTERNALSYM MAX_LINKID_TEXT}
+  MAX_LINKID_TEXT     = 48;
+  {$EXTERNALSYM L_MAX_URL_LENGTH}
+  L_MAX_URL_LENGTH    = 2048 + 32 + sizeof('://');
+
+  { For Windows >= XP }
+  {$EXTERNALSYM WC_LINK}
+  WC_LINK         = 'SysLink';
+
+  { For Windows >= XP }
+  {$EXTERNALSYM LWS_TRANSPARENT}
+  LWS_TRANSPARENT     = $0001;
+  {$EXTERNALSYM LWS_IGNORERETURN}
+  LWS_IGNORERETURN    = $0002;
+  { For Windows >= Vista }
+  {$EXTERNALSYM LWS_NOPREFIX}
+  LWS_NOPREFIX        = $0004;
+  {$EXTERNALSYM LWS_USEVISUALSTYLE}
+  LWS_USEVISUALSTYLE  = $0008;
+  {$EXTERNALSYM LWS_USECUSTOMTEXT}
+  LWS_USECUSTOMTEXT   = $0010;
+  {$EXTERNALSYM LWS_RIGHT}
+  LWS_RIGHT           = $0020;
+
+  { For Windows >= XP }
+  {$EXTERNALSYM LIF_ITEMINDEX}
+  LIF_ITEMINDEX    = $00000001;
+  {$EXTERNALSYM LIF_STATE}
+  LIF_STATE        = $00000002;
+  {$EXTERNALSYM LIF_ITEMID}
+  LIF_ITEMID       = $00000004;
+  {$EXTERNALSYM LIF_URL}
+  LIF_URL          = $00000008;
+
+  { For Windows >= XP }
+  {$EXTERNALSYM LIS_FOCUSED}
+  LIS_FOCUSED         = $00000001;
+  {$EXTERNALSYM LIS_ENABLED}
+  LIS_ENABLED         = $00000002;
+  {$EXTERNALSYM LIS_VISITED}
+  LIS_VISITED         = $00000004;
+  { For Windows >= Vista }
+  {$EXTERNALSYM LIS_HOTTRACK}
+  LIS_HOTTRACK        = $00000008;
+  {$EXTERNALSYM LIS_DEFAULTCOLORS}
+  LIS_DEFAULTCOLORS   = $00000010; // Don't use any custom text colors
+
+type
+  { For Windows >= XP }
+  { $EXTERNALSYM tagLITEM}
+  tagLITEM = record
+    mask: UINT;
+    iLink: Integer;
+    state: UINT;
+    stateMask: UINT;
+    szID: packed array[0..MAX_LINKID_TEXT-1] of WCHAR;
+    szUrl: packed array[0..L_MAX_URL_LENGTH-1] of WCHAR;
+  end;
+  PLItem = ^TLItem;
+  TLItem = tagLITEM;
+
+  { For Windows >= XP }
+  { $EXTERNALSYM tagLHITTESTINFO}
+  tagLHITTESTINFO = record
+    pt: TPoint;
+    item: TLItem;
+  end;
+  PLHitTestInfo = ^TLHitTestInfo;
+  TLHitTestInfo = tagLHITTESTINFO;
+
+  { For Windows >= XP }
+  { $EXTERNALSYM tagNMLINK}
+  tagNMLINK = record
+    hdr: NMHDR;
+    item: TLItem;
+  end;
+  PNMLink = ^TNMLink;
+  TNMLink = tagNMLINK;
+
+//  SysLink notifications
+//  NM_CLICK   // wParam: control ID, lParam: PNMLINK, ret: ignored.
+
+//  LinkWindow messages
+const
+  { For Windows >= XP }
+  {$EXTERNALSYM LM_HITTEST}
+  LM_HITTEST         = WM_USER+$300;    // wParam: n/a, lparam: PLHITTESTINFO, ret: BOOL
+  {$EXTERNALSYM LM_GETIDEALHEIGHT}
+  LM_GETIDEALHEIGHT  = WM_USER+$301;    // wParam: cxMaxWidth, lparam: n/a, ret: cy
+  {$EXTERNALSYM LM_SETITEM}
+  LM_SETITEM         = WM_USER+$302;    // wParam: n/a, lparam: LITEM*, ret: BOOL
+  {$EXTERNALSYM LM_GETITEM}
+  LM_GETITEM         = WM_USER+$303;    // wParam: n/a, lparam: LITEM*, ret: BOOL
+  {$EXTERNALSYM LM_GETIDEALSIZE}
+  LM_GETIDEALSIZE    = LM_GETIDEALHEIGHT;   // wParam: cxMaxWidth, lparam: SIZE*, ret: cy
 
 
 { ====== LISTVIEW CONTROL ====================== }
@@ -3601,6 +4188,44 @@ const
   {$EXTERNALSYM LVS_EX_MULTIWORKAREAS}
   LVS_EX_MULTIWORKAREAS   = $00002000;
 
+  { For IE >= 0x0500 }
+  {$EXTERNALSYM LVS_EX_LABELTIP}
+  LVS_EX_LABELTIP         = $00004000; { listview unfolds partly hidden labels if it does not have infotip text }
+  {$EXTERNALSYM LVS_EX_BORDERSELECT}
+  LVS_EX_BORDERSELECT     = $00008000; { border selection style instead of highlight }
+
+  { For Windows >= XP }
+  {$EXTERNALSYM LVS_EX_DOUBLEBUFFER}
+  LVS_EX_DOUBLEBUFFER     = $00010000;
+  {$EXTERNALSYM LVS_EX_HIDELABELS}
+  LVS_EX_HIDELABELS       = $00020000;
+  {$EXTERNALSYM LVS_EX_SINGLEROW}
+  LVS_EX_SINGLEROW        = $00040000;
+  {$EXTERNALSYM LVS_EX_SNAPTOGRID}
+  LVS_EX_SNAPTOGRID       = $00080000;  { Icons automatically snap to grid. }
+  {$EXTERNALSYM LVS_EX_SIMPLESELECT}
+  LVS_EX_SIMPLESELECT     = $00100000;  { Also changes overlay rendering to top right for icon mode. }
+
+  { For Windows >= Vista }
+  {$EXTERNALSYM LVS_EX_JUSTIFYCOLUMNS}
+  LVS_EX_JUSTIFYCOLUMNS   = $00200000;  { Icons are lined up in columns that use up the whole view area. }
+  {$EXTERNALSYM LVS_EX_TRANSPARENTBKGND}
+  LVS_EX_TRANSPARENTBKGND = $00400000;  { Background is painted by the parent via WM_PRINTCLIENT }
+  {$EXTERNALSYM LVS_EX_TRANSPARENTSHADOWTEXT}
+  LVS_EX_TRANSPARENTSHADOWTEXT = $00800000;  { Enable shadow text on transparent backgrounds only (useful with bitmaps) }
+  {$EXTERNALSYM LVS_EX_AUTOAUTOARRANGE}
+  LVS_EX_AUTOAUTOARRANGE  = $01000000;  { Icons automatically arrange if no icon positions have been set }
+  {$EXTERNALSYM LVS_EX_HEADERINALLVIEWS}
+  LVS_EX_HEADERINALLVIEWS = $02000000;  { Display column header in all view modes }
+  {$EXTERNALSYM LVS_EX_AUTOCHECKSELECT}
+  LVS_EX_AUTOCHECKSELECT  = $08000000;
+  {$EXTERNALSYM LVS_EX_AUTOSIZECOLUMNS}
+  LVS_EX_AUTOSIZECOLUMNS  = $10000000;
+  {$EXTERNALSYM LVS_EX_COLUMNSNAPPOINTS}
+  LVS_EX_COLUMNSNAPPOINTS = $40000000;
+  {$EXTERNALSYM LVS_EX_COLUMNOVERFLOW}
+  LVS_EX_COLUMNOVERFLOW   = $80000000; 
+
 const
   {$EXTERNALSYM LVM_SETUNICODEFORMAT}
   LVM_SETUNICODEFORMAT     = CCM_SETUNICODEFORMAT;
@@ -3643,6 +4268,8 @@ const
   LVSIL_SMALL             = 1;
   {$EXTERNALSYM LVSIL_STATE}
   LVSIL_STATE             = 2;
+  {$EXTERNALSYM LVSIL_GROUPHEADER}
+  LVSIL_GROUPHEADER       = 3;
 
 const
   {$EXTERNALSYM LVM_SETIMAGELIST}
@@ -3672,6 +4299,15 @@ const
   LVIF_INDENT             = $0010;
   {$EXTERNALSYM LVIF_NORECOMPUTE}
   LVIF_NORECOMPUTE        = $0800;
+  { For Windows >= XP }
+  {$EXTERNALSYM LVIF_GROUPID}
+  LVIF_GROUPID            = $00000100;
+  {$EXTERNALSYM LVIF_COLUMNS}
+  LVIF_COLUMNS            = $00000200;
+
+  { For Windows >= Vista }
+  {$EXTERNALSYM LVIF_COLFMT}
+  LVIF_COLFMT             = $00010000; { The piColFmt member is valid in addition to puColumns }
 
   {$EXTERNALSYM LVIS_FOCUSED}
   LVIS_FOCUSED            = $0001;
@@ -3697,8 +4333,13 @@ const
   I_INDENTCALLBACK        = -1;
   {$EXTERNALSYM I_IMAGENONE}
   I_IMAGENONE             = -2;
+  { For Windows >= XP }
   {$EXTERNALSYM I_COLUMNSCALLBACK}
   I_COLUMNSCALLBACK       = -1;
+  {$EXTERNALSYM I_GROUPIDCALLBACK}
+  I_GROUPIDCALLBACK   = -1;
+  {$EXTERNALSYM I_GROUPIDNONE}
+  I_GROUPIDNONE       = -2;
 
 type
   PLVItemA = ^TLVItemA;
@@ -4675,6 +5316,13 @@ const
   LVBKIF_STYLE_TILE       = $00000010;
   {$EXTERNALSYM LVBKIF_STYLE_MASK}
   LVBKIF_STYLE_MASK       = $00000010;
+  { For Windows >= XP }
+  {$EXTERNALSYM LVBKIF_FLAG_TILEOFFSET}
+  LVBKIF_FLAG_TILEOFFSET  = $00000100;
+  {$EXTERNALSYM LVBKIF_TYPE_WATERMARK}
+  LVBKIF_TYPE_WATERMARK   = $10000000;
+  {$EXTERNALSYM LVBKIF_FLAG_ALPHABLEND}
+  LVBKIF_FLAG_ALPHABLEND  = $20000000;
 
   {$EXTERNALSYM LVM_SETBKIMAGEA}
   LVM_SETBKIMAGEA         = LVM_FIRST + 68;
@@ -5014,6 +5662,31 @@ const
   TVS_NOSCROLL            = $2000;
   {$EXTERNALSYM TVS_NONEVENHEIGHT}
   TVS_NONEVENHEIGHT       = $4000;
+  { For IE >= 0x0500 }
+  {$EXTERNALSYM TVS_NOHSCROLL}
+  TVS_NOHSCROLL           = $8000;  // TVS_NOSCROLL overrides this
+
+  { For Windows >= Vista }
+  {$EXTERNALSYM TVS_EX_MULTISELECT}
+  TVS_EX_MULTISELECT          = $0002;
+  {$EXTERNALSYM TVS_EX_DOUBLEBUFFER}
+  TVS_EX_DOUBLEBUFFER         = $0004;
+  {$EXTERNALSYM TVS_EX_NOINDENTSTATE}
+  TVS_EX_NOINDENTSTATE        = $0008;
+  {$EXTERNALSYM TVS_EX_RICHTOOLTIP}
+  TVS_EX_RICHTOOLTIP          = $0010;
+  {$EXTERNALSYM TVS_EX_AUTOHSCROLL}
+  TVS_EX_AUTOHSCROLL          = $0020;
+  {$EXTERNALSYM TVS_EX_FADEINOUTEXPANDOS}
+  TVS_EX_FADEINOUTEXPANDOS    = $0040;
+  {$EXTERNALSYM TVS_EX_PARTIALCHECKBOXES}
+  TVS_EX_PARTIALCHECKBOXES    = $0080;
+  {$EXTERNALSYM TVS_EX_EXCLUSIONCHECKBOXES}
+  TVS_EX_EXCLUSIONCHECKBOXES  = $0100;
+  {$EXTERNALSYM TVS_EX_DIMMEDCHECKBOXES}
+  TVS_EX_DIMMEDCHECKBOXES     = $0200;
+  {$EXTERNALSYM TVS_EX_DRAWIMAGEASYNC}
+  TVS_EX_DRAWIMAGEASYNC       = $0400;
 
 type
   {$EXTERNALSYM HTREEITEM}
@@ -6046,6 +6719,9 @@ const
   CBES_EX_NOSIZELIMIT          = $00000008;
   {$EXTERNALSYM CBES_EX_CASESENSITIVE}
   CBES_EX_CASESENSITIVE        = $00000010;
+  { For Windows >= Vista }
+  {$EXTERNALSYM CBES_EX_TEXTENDELLIPSIS}
+  CBES_EX_TEXTENDELLIPSIS      = $00000020;
 
 type
   {$EXTERNALSYM NMCOMBOBOXEXA}

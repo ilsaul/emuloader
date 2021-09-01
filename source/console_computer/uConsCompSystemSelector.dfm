@@ -79,7 +79,11 @@ object FormConsCompSystemSelector: TFormConsCompSystemSelector
     Selection.UseFocusRect = False
     TabOrder = 0
     CustomCheckRadioEnabled = False
+    CustomEnableIconHD = False
     OnItemDblClick = SystemsItemDblClick
+    OnItemImageDraw = SystemsItemImageDraw
+    OnItemImageGetSize = SystemsItemImageGetSize
+    OnItemImageDrawIsCustom = SystemsItemImageDrawIsCustom
     OnItemPaintText = SystemsItemPaintText
     OnKeyAction = SystemsKeyAction
   end
@@ -99,9 +103,9 @@ object FormConsCompSystemSelector: TFormConsCompSystemSelector
     ParentBackground = False
     Style = vgSimple
     object LabelCreateNewList: TShadowLabel
-      Left = 8
+      Left = 200
       Top = 22
-      Width = 194
+      Width = 192
       Height = 14
       Caption = 'uncheck to add games to an existing list'
       Font.Charset = ANSI_CHARSET
@@ -120,7 +124,7 @@ object FormConsCompSystemSelector: TFormConsCompSystemSelector
       Transparent = True
     end
     object CreateNewList: TAdvOfficeCheckBoxEx
-      Left = 4
+      Left = 182
       Top = 2
       Width = 149
       Height = 19
@@ -131,7 +135,6 @@ object FormConsCompSystemSelector: TFormConsCompSystemSelector
       Font.Name = 'Verdana'
       Font.Style = [fsBold]
       ParentFont = False
-      ShowHint = True
       TabOrder = 0
       OnClick = CreateNewListClick
       Alignment = taLeftJustify
@@ -141,6 +144,9 @@ object FormConsCompSystemSelector: TFormConsCompSystemSelector
       State = cbChecked
       Themed = True
       CustomIconsEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
     object ButtonHelp: TBitBtnEx
       Left = 486

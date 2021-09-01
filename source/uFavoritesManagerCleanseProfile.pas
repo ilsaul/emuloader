@@ -10,7 +10,6 @@ uses
 type
   TFormFavoritesManagerCleanseProfile = class(TForm)
     FavoritesCleanseList: TEasyListview;
-    IL_Systems: TImageList;
     PanelBottom: TPanelEx;
     ButtonAbort: TBitBtnEx;
     ButtonConfirm: TBitBtnEx;
@@ -103,3 +102,4 @@ begin
 end;
 
 end.
+

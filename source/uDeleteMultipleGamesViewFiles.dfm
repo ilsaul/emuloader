@@ -1,7 +1,7 @@
 object FormDeleteMultipleGamesViewFiles: TFormDeleteMultipleGamesViewFiles
   Left = 688
   Top = 309
-  ActiveControl = FilesListView
+  ActiveControl = FilesListViewDeleteMulti
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
   Caption = 'Delete Multiple Games [Viewing Files Details]'
@@ -22,12 +22,11 @@ object FormDeleteMultipleGamesViewFiles: TFormDeleteMultipleGamesViewFiles
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 15
-  object FilesListView: TEasyListview
+  object FilesListViewDeleteMulti: TEasyListview
     Left = 0
     Top = 0
     Width = 734
     Height = 512
-    Align = alClient
     BorderStyle = bsNone
     CellSizes.Tile.Width = 732
     Color = clWhite
@@ -43,7 +42,7 @@ object FormDeleteMultipleGamesViewFiles: TFormDeleteMultipleGamesViewFiles
     Font.Style = []
     GroupFont.Charset = ANSI_CHARSET
     GroupFont.Color = clBlack
-    GroupFont.Height = -13
+    GroupFont.Height = -16
     GroupFont.Name = 'Verdana'
     GroupFont.Style = [fsBold]
     HintType = ehtToolTip
@@ -57,26 +56,30 @@ object FormDeleteMultipleGamesViewFiles: TFormDeleteMultipleGamesViewFiles
     Header.Font.Name = 'Segoe UI'
     Header.Font.Style = []
     Header.Height = 23
-    ImagesGroup = FormMain.IL_StandardIconsStandard
+    ImagesGroup = FormMain.IL_StandardIconsLarge
     ImagesExLarge = IL_MediaType
     PaintInfoGroup.BandBlended = False
     PaintInfoGroup.BandColor = clGray
     PaintInfoGroup.BandColorFade = 16448250
-    PaintInfoGroup.BandIndent = 28
+    PaintInfoGroup.BandEnabled = False
+    PaintInfoGroup.BandIndent = 40
     PaintInfoGroup.BandLength = 515
     PaintInfoGroup.BandThickness = 1
-    PaintInfoGroup.CaptionIndent = 56
+    PaintInfoGroup.CaptionIndent = 80
     PaintInfoGroup.Expandable = False
     PaintInfoGroup.ExpandImageIndent = 6
     PaintInfoGroup.ImageIndent = 30
     PaintInfoGroup.MarginBottom.Size = 10
+    PaintInfoGroup.MarginBottom.Visible = True
     PaintInfoGroup.MarginBottom.CaptionIndent = 4
-    PaintInfoGroup.MarginTop.Size = 40
-    PaintInfoItem.ImageIndent = 20
+    PaintInfoGroup.MarginTop.Size = 43
+    PaintInfoItem.ImageIndent = 33
+    PaintInfoItem.TileCaptionLines = 1
     PaintInfoItem.TileDetailCount = 3
     ParentFont = False
     ParentShowHint = False
     ShowGroupMargins = True
+    ShowThemedBorder = False
     ShowHint = True
     Selection.BlendIcon = False
     Selection.FullCellPaint = True
@@ -90,12 +93,14 @@ object FormDeleteMultipleGamesViewFiles: TFormDeleteMultipleGamesViewFiles
     TabOrder = 0
     View = elsTile
     CustomCheckRadioEnabled = False
-    OnGroupImageDraw = FilesListViewGroupImageDraw
-    OnGroupImageDrawIsCustom = FilesListViewGroupImageDrawIsCustom
-    OnItemPaintText = FilesListViewItemPaintText
-    OnKeyAction = FilesListViewKeyAction
+    CustomEnableIconHD = False
+    OnGroupImageDraw = FilesListViewDeleteMultiGroupImageDraw
+    OnGroupImageDrawIsCustom = FilesListViewDeleteMultiGroupImageDrawIsCustom
+    OnGroupPaintText = FilesListViewDeleteMultiGroupPaintText
+    OnItemPaintText = FilesListViewDeleteMultiItemPaintText
+    OnKeyAction = FilesListViewDeleteMultiKeyAction
   end
-  object BottomBar: TPanelEx
+  object PanelBottom: TPanelEx
     Left = 0
     Top = 512
     Width = 734
@@ -114,7 +119,7 @@ object FormDeleteMultipleGamesViewFiles: TFormDeleteMultipleGamesViewFiles
     object LabelTotalItems: TShadowLabel
       Left = 8
       Top = 5
-      Width = 78
+      Width = 76
       Height = 16
       Caption = '000000 Games'
       ShowAccelChar = False
@@ -129,7 +134,7 @@ object FormDeleteMultipleGamesViewFiles: TFormDeleteMultipleGamesViewFiles
     object LabelGhostedFiles: TShadowLabel
       Left = 280
       Top = 12
-      Width = 242
+      Width = 240
       Height = 37
       Caption = 
         'NOTE: Ghosted files will not be deleted. They are shown here jus' +

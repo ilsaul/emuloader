@@ -120,6 +120,7 @@ object FormImagesManager: TFormImagesManager
     TabOrder = 0
     View = elsReport
     CustomCheckRadioEnabled = False
+    CustomEnableIconHD = False
     OnColumnClick = MissingImagesListColumnClick
     OnColumnSizeChanged = MissingImagesListColumnSizeChanged
     OnColumnSizeChanging = MissingImagesListColumnSizeChanging
@@ -242,6 +243,7 @@ object FormImagesManager: TFormImagesManager
       TabOrder = 1
       View = elsTile
       CustomCheckRadioEnabled = False
+      CustomEnableIconHD = False
       OnDblClick = NotUsedImagesListDblClick
       OnItemPaintText = NotUsedImagesListItemPaintText
       OnItemSelectionChanged = NotUsedImagesListItemSelectionChanged
@@ -283,7 +285,7 @@ object FormImagesManager: TFormImagesManager
       object RenameFileTitleLabel: TShadowLabel
         Left = 65
         Top = 4
-        Width = 92
+        Width = 90
         Height = 17
         Caption = 'Rename File'
         Font.Charset = ANSI_CHARSET
@@ -469,7 +471,7 @@ object FormImagesManager: TFormImagesManager
     object LabelTotalItemsMissing: TShadowLabel
       Left = 4
       Top = 1
-      Width = 85
+      Width = 83
       Height = 22
       Caption = 'Missing Images'
       Constraints.MinHeight = 22
@@ -496,11 +498,16 @@ object FormImagesManager: TFormImagesManager
       Font.Style = [fsBold]
       ParentFont = False
       OnClick = ButtonNotUsedImagesDeleteFilesClick
+      FontColorDisabled = clBtnShadow
+      FontShadowColorDisabled = clBtnHighlight
+      GradientColorTop_Disabled = clSilver
+      GradientColorBottom_Disabled = clMedGray
+      FrameColor_Disabled = clGray
     end
     object LabelTotalItemsNotUsed: TShadowLabel
       Left = 614
       Top = 0
-      Width = 79
+      Width = 77
       Height = 23
       Caption = 'Invalid Images'
       Constraints.MinHeight = 23
@@ -527,6 +534,11 @@ object FormImagesManager: TFormImagesManager
       Font.Style = [fsBold]
       ParentFont = False
       OnClick = ButtonInvalidImagesDeleteFilesClick
+      FontColorDisabled = clBtnShadow
+      FontShadowColorDisabled = clBtnHighlight
+      GradientColorTop_Disabled = clSilver
+      GradientColorBottom_Disabled = clMedGray
+      FrameColor_Disabled = clGray
     end
   end
   object IL_Buttons: TImageList

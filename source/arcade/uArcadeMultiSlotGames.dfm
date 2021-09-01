@@ -1,6 +1,6 @@
 object FormArcadeMultiSlotGames: TFormArcadeMultiSlotGames
-  Left = 679
-  Top = 584
+  Left = 998
+  Top = 523
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
   Caption = 'Neo-Geo MVS (Multi Video System)'
@@ -23,7 +23,7 @@ object FormArcadeMultiSlotGames: TFormArcadeMultiSlotGames
   TextHeight = 15
   object LabelHelpText: TShadowLabel
     Left = 428
-    Top = 242
+    Top = 243
     Width = 380
     Height = 28
     Alignment = taCenter
@@ -88,7 +88,7 @@ object FormArcadeMultiSlotGames: TFormArcadeMultiSlotGames
   object ButtonUp: TBitBtnEx
     Tag = 1
     Left = 4
-    Top = 242
+    Top = 243
     Width = 85
     Height = 25
     Hint = 'Move selected game to upper slot [Ctrl+Up Arrow]'
@@ -100,7 +100,7 @@ object FormArcadeMultiSlotGames: TFormArcadeMultiSlotGames
   end
   object ButtonDown: TBitBtnEx
     Left = 93
-    Top = 242
+    Top = 243
     Width = 85
     Height = 25
     Hint = 'Move selected game to lower slot [Ctrl+Down Arrow]'
@@ -112,7 +112,7 @@ object FormArcadeMultiSlotGames: TFormArcadeMultiSlotGames
   end
   object ButtonRemoveFromList: TBitBtnEx
     Left = 182
-    Top = 242
+    Top = 243
     Width = 85
     Height = 25
     Hint = 'Remove selected games from the list [Delete]'
@@ -124,7 +124,7 @@ object FormArcadeMultiSlotGames: TFormArcadeMultiSlotGames
   end
   object PanelNeoGeoMVS: TPanelEx
     Left = 4
-    Top = 288
+    Top = 289
     Width = 986
     Height = 31
     Color1 = 15856113
@@ -177,7 +177,7 @@ object FormArcadeMultiSlotGames: TFormArcadeMultiSlotGames
     Left = 4
     Top = 4
     Width = 986
-    Height = 229
+    Height = 230
     CellSizes.Tile.Width = 254
     CellSizes.Report.Height = 20
     Color = clWhite
@@ -256,15 +256,16 @@ object FormArcadeMultiSlotGames: TFormArcadeMultiSlotGames
     TabOrder = 6
     View = elsReport
     CustomCheckRadioEnabled = False
+    CustomEnableIconHD = False
     OnItemPaintText = GamesListItemPaintText
     OnItemSelectionChanged = GamesListItemSelectionChanged
     OnKeyAction = GamesListKeyAction
   end
   object PanelMultiSlotMachines: TPanelEx
     Left = 8
-    Top = 332
+    Top = 333
     Width = 978
-    Height = 289
+    Height = 290
     Color1 = 15856113
     Color2 = 16448250
     Color3 = 1
@@ -278,8 +279,8 @@ object FormArcadeMultiSlotGames: TFormArcadeMultiSlotGames
     Style = vgSolid
     object LabelMultiSlotMachinesChooseMachineToRun: TShadowLabel
       Left = 15
-      Top = 254
-      Width = 355
+      Top = 255
+      Width = 353
       Height = 17
       Caption = 'Choose machine to run games with, click "Ok" button'
       Font.Charset = ANSI_CHARSET
@@ -299,8 +300,8 @@ object FormArcadeMultiSlotGames: TFormArcadeMultiSlotGames
     end
     object LabelMultiSlotMachinesBoldDefaultMachine: TShadowLabel
       Left = 517
-      Top = 255
-      Width = 171
+      Top = 256
+      Width = 169
       Height = 15
       Caption = 'default machine is in bold'
       Font.Charset = ANSI_CHARSET
@@ -322,7 +323,7 @@ object FormArcadeMultiSlotGames: TFormArcadeMultiSlotGames
       Left = 15
       Top = 16
       Width = 946
-      Height = 225
+      Height = 226
       CellSizes.Tile.Width = 254
       CellSizes.Report.Height = 20
       Color = clWhite
@@ -410,12 +411,14 @@ object FormArcadeMultiSlotGames: TFormArcadeMultiSlotGames
       TabOrder = 0
       View = elsReport
       CustomCheckRadioEnabled = False
+      CustomEnableIconHD = False
       OnDblClick = MultiSlotMachinesDblClick
+      OnItemPaintText = MultiSlotMachinesItemPaintText
       OnKeyAction = MultiSlotMachinesKeyAction
     end
     object ButtonOkMultiSlotMachines: TBitBtnEx
-      Left = 824
-      Top = 251
+      Left = 823
+      Top = 252
       Width = 65
       Height = 23
       Hint = 
@@ -427,7 +430,7 @@ object FormArcadeMultiSlotGames: TFormArcadeMultiSlotGames
     end
     object ButtonCancelMultiSlotMachines: TBitBtnEx
       Left = 896
-      Top = 251
+      Top = 252
       Width = 65
       Height = 23
       Hint = 

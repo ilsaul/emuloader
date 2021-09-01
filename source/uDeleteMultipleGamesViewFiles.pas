@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
-  Dialogs, StdCtrls, MPCommonObjects, EasyListview, ExtCtrls,
+  Dialogs, StdCtrls, EasyListview, MPCommonObjects, MPCommonUtilities, ExtCtrls,
   ImgList, IniFiles, FileCtrl, PanelEx, ShadowLabel, uCommon, uCommonCustom,
   Buttons, ButtonsEx;
 
@@ -115,31 +115,36 @@ type
 
 type
   TFormDeleteMultipleGamesViewFiles = class(TForm)
-    FilesListView: TEasyListview;
+    FilesListViewDeleteMulti: TEasyListview;
     IL_MediaType: TImageList;
-    BottomBar: TPanelEx;
+    PanelBottom: TPanelEx;
     LabelTotalItems: TShadowLabel;
     ButtonShowFileTypes: TBitBtnEx;
     LabelGhostedFiles: TShadowLabel;
     ButtonClose: TBitBtnEx;
     procedure FormShow(Sender: TObject);
-    procedure FilesListViewItemPaintText(Sender: TCustomEasyListview;
+    procedure FilesListViewDeleteMultiItemPaintText(Sender: TCustomEasyListview;
       Item: TEasyItem; Position: Integer; ACanvas: TCanvas);
-    procedure FilesListViewKeyAction(Sender: TCustomEasyListview;
+    procedure FilesListViewDeleteMultiKeyAction(Sender: TCustomEasyListview;
       var CharCode: Word; var Shift: TShiftState; var DoDefault: Boolean);
     procedure FormKeyPress(Sender: TObject; var Key: Char);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
-    procedure FilesListViewGroupImageDraw(Sender: TCustomEasyListview;
+    procedure FilesListViewDeleteMultiGroupImageDraw(Sender: TCustomEasyListview;
       Group: TEasyGroup; ACanvas: TCanvas;
       const RectArray: TEasyRectArrayObject;
       AlphaBlender: TEasyAlphaBlender);
-    procedure FilesListViewGroupImageDrawIsCustom(
+    procedure FilesListViewDeleteMultiGroupImageDrawIsCustom(
       Sender: TCustomEasyListview; Group: TEasyGroup;
       var IsCustom: Boolean);
     procedure ButtonShowFileTypesClick(Sender: TObject);
+    procedure FilesListViewDeleteMultiGroupPaintText(Sender: TCustomEasyListview;
+      Group: TEasyGroup; ACanvas: TCanvas);
   private
     { Private declarations }
-    procedure LoadMediaIcons;
+    EmuConIcon: TImage;
+    FileTextMaxCount: Integer;
+    procedure Resize4K;
+    procedure ResizeForm;
     procedure AddGames(var GroupToFocus: TEasyGroup);
     procedure UpdateTotalFilesLabel;
   public
@@ -170,6 +175,8 @@ begin
       end;
     1:
       begin
+        Result:= '';
+        //for ExtraCount:= 1 to 87 do Result:= Result+'j'; Exit; // debug only, do not enabled (March 22, 2021)
         extraStr:= '';
         if not eIsCustomGame then
         begin
@@ -203,11 +210,11 @@ begin
                   end;
              end;
         end;
-        case FormDeleteMultipleGamesViewFiles.FilesListView.Scrollbars.VertBarVisible of
+        case FormDeleteMultipleGamesViewFiles.FilesListViewDeleteMulti.Scrollbars.VertBarVisible of
           True : VertBar:= 2;
           False: VertBar:= 0;
         end;
-        ExtraCount:= 90-VertBar;
+        ExtraCount:= FormDeleteMultipleGamesViewFiles.FileTextMaxCount-VertBar;
         if extraStr <> '' then
            begin
              extraStr:= '['+extraStr+'] ';
@@ -219,22 +226,18 @@ begin
             begin
               if eCustomGameFileShowText = '' then
                  eCustomGameFileShowText:= WideFormat('%-'+IntToStr(ExtraCount)+'s', [ShortDirStringW(eFileName, ExtraCount)]);
-
-              Result:= eCustomGameFileShowText;// WideFormat('%-'+IntToStr(ExtraCount)+'s', [ShortDirStringW(eCustomGameFileFullPath, ExtraCount)]);
-              //Result:= WideFormat('%-'+IntToStr(ExtraCount)+'s', [ShortDirStringW(eFileName, ExtraCount)]);
+              Result:= eCustomGameFileShowText;
             end;
           False:
             begin
               if extraStr <> '' then
                  begin
-                   extraStr:= '['+extraStr+'] ';
+                   //extraStr:= '['+extraStr+'] ';
                    ExtraCount:= ExtraCount-Length(extraStr);
                  end;
               Result:= Format(extraStr+'%-'+IntToStr(ExtraCount)+'s', [ShortDirString(eFileName, ExtraCount)]);
             end;
         end;
-
-        //Result:= Format(extraStr+'%-'+IntToStr(ExtraCount)+'s', [ShortDirString(eFileName, ExtraCount)]);
       end;
     2:
       begin
@@ -279,18 +282,6 @@ begin
                     Result:= eMediaType;
                   end;
               end;
-
-              //case eMediaType of
-              //  0: Result:= eMediaType;
-              //  1:
-              //    begin
-              //      case eFileType of
-              //        12, 13, 14: Result:= eMediaType;
-              //        15, 16, 17: Result:= eMediaType+1;
-              //        18, 19, 20: Result:= eMediaType+2;
-              //      end;
-              //    end;
-              //end;
             end
          else
             Result:= eFileType+4; // game config files
@@ -308,29 +299,77 @@ begin
      Result:= ''
 end;
 
-procedure TFormDeleteMultipleGamesViewFiles.LoadMediaIcons;
-var
-  Loop: ShortInt;
-  Folder: String;
+procedure TFormDeleteMultipleGamesViewFiles.Resize4K;
 begin
-  Folder:= FormMain.GetFolderFull(32);
-  for Loop:=Low(aMediaType)+1 to High(aMediaType) do
-      FormMain.AddDefaultIcons(aMediaType[Loop, 1]+'.ico', Folder, IL_MediaType); // zipfile.ico and chd.ico
+  if not Is4KMode then //FormMain.Menu4KMode2160pEnable.Checked then
+     begin
+       ResizeForm;
+       Exit;
+     end;
 
-  FormMain.AddDefaultIcons('media_disc.ico', Folder, IL_MediaType);             // 2
-  FormMain.AddDefaultIcons('media_flashcard.ico', Folder, IL_MediaType);        // 3
+  with FormDeleteMultipleGamesViewFiles do
+  begin
+    Font.Size:= 16;
+    ClientWidth:= 1400;
 
-  FormMain.AddDefaultIcons('settings.ico', Folder, IL_MediaType);               // 4
-  FormMain.AddDefaultIcons('bios_chip.ico', Folder, IL_MediaType);              // 5
-  FormMain.AddDefaultIcons('bios_chip.ico', Folder, IL_MediaType);              // 6
-  FormMain.AddDefaultIcons('bios_chip.ico', Folder, IL_MediaType);              // 7
-  FormMain.AddDefaultIcons('bios_chip.ico', Folder, IL_MediaType);              // 8
+    FormMain.Set4KImageListSpecs(IL_MediaType, 68);
 
-  for Loop:= 1 to Length(MediaTypeCustom) do
-      FormMain.AddDefaultIcons(MediaTypeCustom[Loop, 1], Folder, IL_MediaType); // 9..13
+    FilesListViewDeleteMulti.Width:= ClientWidth;
+    FilesListViewDeleteMulti.CellSizes.Tile.Width:= FilesListViewDeleteMulti.Width-1;
+    FilesListViewDeleteMulti.CellSizes.Tile.Height:= 98;// IL_MediaType.Height+10;
+    FilesListViewDeleteMulti.Width:= FilesListViewDeleteMulti.Width+GetSystemMetrics(SM_CXVSCROLL);
 
-  FormMain.AddDefaultIcons('media_vhs.ico', Folder, IL_MediaType);              // 14
-  FormMain.AddDefaultIcons('media_videogamemusic.ico', Folder, IL_MediaType);   // 15
+    FilesListViewDeleteMulti.Font.Size:= 16;
+    FilesListViewDeleteMulti.GroupFont.Size:= 18;
+    FilesListViewDeleteMulti.ImagesGroup:= FormMain.IL_StandardIconsExtraLarge; // FormDeleteMultipleGamesFiles.IL_StandardIcons68;
+
+    FilesListViewDeleteMulti.PaintInfoItem.ImageIndent:= 48+2;
+
+    FilesListViewDeleteMulti.PaintInfoGroup.BandIndent:= FormMain.IL_StandardIconsExtraLarge.Width+10;
+    FilesListViewDeleteMulti.PaintInfoGroup.BandLength:= FilesListViewDeleteMulti.Width-FormMain.IL_StandardIconsExtraLarge.Width-48;
+    FilesListViewDeleteMulti.PaintInfoGroup.MarginTop.Size:= FormMain.IL_StandardIconsExtraLarge.Width+8+3;
+    FilesListViewDeleteMulti.PaintInfoGroup.CaptionIndent:= 48*2+16;
+
+    PanelBottom.Height:= 85;
+
+    FormMain.Set4KButtonSpecs(ButtonShowFileTypes, 10, 30, 260, 45, 16);
+    FormMain.Set4KButtonSpecs(ButtonClose,       1222, 30, 168, 45, 16);
+
+    FormMain.Set4KLabelSpecs(LabelTotalItems,   280, 37,  -1, -1, 16);
+    FormMain.Set4KLabelSpecs(LabelGhostedFiles, 595, 14, 413, -1, 16);
+  end;
+end;
+
+procedure TFormDeleteMultipleGamesViewFiles.ResizeForm;
+var
+  iScreenWidth, iScreenHeight, MaxHeight: Integer;
+begin
+  iScreenWidth:=  Screen.Width;
+  iScreenHeight:= Screen.Height;// Screen.WorkAreaRect.Bottom-Screen.WorkAreaRect.Top;
+
+  if iScreenWidth < 1024 then
+     Exit; // resolution less than 1024x768 is no longer supported
+
+  MaxHeight:= iScreenHeight-300;
+
+  if (iScreenWidth > 1023) and (iScreenWidth < 1920) then
+     begin
+       ClientWidth:= 700;
+       FileTextMaxCount:= 81;
+     end
+  else
+  if iScreenWidth > 1919 then
+     begin
+       ClientWidth:= 1400;
+       FileTextMaxCount:= 181;
+     end;
+
+  ButtonClose.Left:= ClientWidth-ButtonClose.Width-9;
+  LabelGhostedFiles.Left:= (ClientWidth div 2)-(LabelGhostedFiles.Width div 2);
+  FilesListViewDeleteMulti.Width:= ClientWidth;
+  FilesListViewDeleteMulti.CellSizes.Tile.Width:= FilesListViewDeleteMulti.Width-1;
+  FilesListViewDeleteMulti.Width:= FilesListViewDeleteMulti.Width+GetSystemMetrics(SM_CXVSCROLL);
+  FilesListViewDeleteMulti.PaintInfoItem.CaptionIndent:= 0;
 end;
 
 procedure TFormDeleteMultipleGamesViewFiles.AddGames(var GroupToFocus: TEasyGroup);
@@ -347,8 +386,8 @@ var
 begin
   selIndex:= 1;
   case FormDeleteMultipleGamesViewFiles.Tag of
-    0: Item:=  FormDeleteMultipleGamesFiles.GamesList.Groups.FirstItem; // all games
-    1: Item:=  FormDeleteMultipleGamesFiles.GamesList.Selection.First; // all games
+    0: Item:=  FormDeleteMultipleGamesFiles.GamesListDeleteMulti.Groups.FirstItem; // all games
+    1: Item:=  FormDeleteMultipleGamesFiles.GamesListDeleteMulti.Selection.First;  // all games
   end;
   GroupToFocus:= nil;
   if Item = nil then
@@ -358,29 +397,29 @@ begin
   end
   else
   begin
-    GroupGameTitle:= uDeleteMultipleGamesFiles.TGameInfo(Item).eTitle;
-    GroupSoftwareName:= uDeleteMultipleGamesFiles.TGameInfo(Item).eSoftwareName;
+    GroupGameTitle:= uDeleteMultipleGamesFiles.TGameInfoDeleteMulti(Item).eTitle;
+    GroupSoftwareName:= uDeleteMultipleGamesFiles.TGameInfoDeleteMulti(Item).eSoftwareName;
   end;
   repeat
-    addGroup:= FilesListView.Groups.AddCustom(TViewGameInfoGroup, nil);
+    addGroup:= FilesListViewDeleteMulti.Groups.AddCustom(TViewGameInfoGroup, nil);
 
-    TViewGameInfoGroup(addGroup).eROMIdentification:= uDeleteMultipleGamesFiles.TGameInfo(Item).eROMIdentification;
-    TViewGameInfoGroup(addGroup).eSystemID:= uDeleteMultipleGamesFiles.TGameInfo(Item).eSystemID;
-    TViewGameInfoGroup(addGroup).eMediaType:= uDeleteMultipleGamesFiles.TGameInfo(Item).eMediaType;
-    TViewGameInfoGroup(addGroup).eCustomSystemID:= uDeleteMultipleGamesFiles.TGameInfo(Item).eCustomSystemID;
-    TViewGameInfoGroup(addGroup).eCustomMediaType:= uDeleteMultipleGamesFiles.TGameInfo(Item).eCustomMediaType;
-    TViewGameInfoGroup(addGroup).eTitle:= uDeleteMultipleGamesFiles.TGameInfo(Item).eTitle;
-    TViewGameInfoGroup(addGroup).eName:= uDeleteMultipleGamesFiles.TGameInfo(Item).eName;
-    TViewGameInfoGroup(addGroup).eClone:= uDeleteMultipleGamesFiles.TGameInfo(Item).eClone;
-    TViewGameInfoGroup(addGroup).eCloneParent:= uDeleteMultipleGamesFiles.TGameInfo(Item).eCloneParent;
-    TViewGameInfoGroup(addGroup).eMerged:= uDeleteMultipleGamesFiles.TGameInfo(Item).eMerged;
-    TViewGameInfoGroup(addGroup).eHaveROMsArcade:= uDeleteMultipleGamesFiles.TGameInfo(Item).eHaveROMsArcade;
-    TViewGameInfoGroup(addGroup).eHaveCHDsArcade:= uDeleteMultipleGamesFiles.TGameInfo(Item).eHaveCHDsArcade;
-    TViewGameInfoGroup(addGroup).eHaveCFGsArcade:= uDeleteMultipleGamesFiles.TGameInfo(Item).eHaveCFGsArcade;
-    TViewGameInfoGroup(addGroup).eDriverStatus:= uDeleteMultipleGamesFiles.TGameInfo(Item).eDriverStatus;
-    TViewGameInfoGroup(addGroup).eSoftwareName:= uDeleteMultipleGamesFiles.TGameInfo(Item).eSoftwareName;
-    TViewGameInfoGroup(addGroup).eGameStatus:= uDeleteMultipleGamesFiles.TGameInfo(Item).eGameStatus;
-    TViewGameInfoGroup(addGroup).eIsCustomGame:= uDeleteMultipleGamesFiles.TGameInfo(Item).eIsCustomGame;
+    TViewGameInfoGroup(addGroup).eROMIdentification:= uDeleteMultipleGamesFiles.TGameInfoDeleteMulti(Item).eROMIdentification;
+    TViewGameInfoGroup(addGroup).eSystemID:= uDeleteMultipleGamesFiles.TGameInfoDeleteMulti(Item).eSystemID;
+    TViewGameInfoGroup(addGroup).eMediaType:= uDeleteMultipleGamesFiles.TGameInfoDeleteMulti(Item).eMediaType;
+    TViewGameInfoGroup(addGroup).eCustomSystemID:= uDeleteMultipleGamesFiles.TGameInfoDeleteMulti(Item).eCustomSystemID;
+    TViewGameInfoGroup(addGroup).eCustomMediaType:= uDeleteMultipleGamesFiles.TGameInfoDeleteMulti(Item).eCustomMediaType;
+    TViewGameInfoGroup(addGroup).eTitle:= uDeleteMultipleGamesFiles.TGameInfoDeleteMulti(Item).eTitle;
+    TViewGameInfoGroup(addGroup).eName:= uDeleteMultipleGamesFiles.TGameInfoDeleteMulti(Item).eName;
+    TViewGameInfoGroup(addGroup).eClone:= uDeleteMultipleGamesFiles.TGameInfoDeleteMulti(Item).eClone;
+    TViewGameInfoGroup(addGroup).eCloneParent:= uDeleteMultipleGamesFiles.TGameInfoDeleteMulti(Item).eCloneParent;
+    TViewGameInfoGroup(addGroup).eMerged:= uDeleteMultipleGamesFiles.TGameInfoDeleteMulti(Item).eMerged;
+    TViewGameInfoGroup(addGroup).eHaveROMsArcade:= uDeleteMultipleGamesFiles.TGameInfoDeleteMulti(Item).eHaveROMsArcade;
+    TViewGameInfoGroup(addGroup).eHaveCHDsArcade:= uDeleteMultipleGamesFiles.TGameInfoDeleteMulti(Item).eHaveCHDsArcade;
+    TViewGameInfoGroup(addGroup).eHaveCFGsArcade:= uDeleteMultipleGamesFiles.TGameInfoDeleteMulti(Item).eHaveCFGsArcade;
+    TViewGameInfoGroup(addGroup).eDriverStatus:= uDeleteMultipleGamesFiles.TGameInfoDeleteMulti(Item).eDriverStatus;
+    TViewGameInfoGroup(addGroup).eSoftwareName:= uDeleteMultipleGamesFiles.TGameInfoDeleteMulti(Item).eSoftwareName;
+    TViewGameInfoGroup(addGroup).eGameStatus:= uDeleteMultipleGamesFiles.TGameInfoDeleteMulti(Item).eGameStatus;
+    TViewGameInfoGroup(addGroup).eIsCustomGame:= uDeleteMultipleGamesFiles.TGameInfoDeleteMulti(Item).eIsCustomGame;
 
     if GroupGameTitle <> '' then
        begin
@@ -393,21 +432,21 @@ begin
        end;
 
     // add files
-    if uDeleteMultipleGamesFiles.TGameInfo(Item).eIsCustomGame then
+    if uDeleteMultipleGamesFiles.TGameInfoDeleteMulti(Item).eIsCustomGame then
     begin
       // for console/computer/handheld only (EmuCon)
 
-      tmpFileName:= uDeleteMultipleGamesFiles.TGameInfo(Item).eCustomGameFileFullPath;
-      addItem:= FilesListView.Items.AddCustom(TViewFileInfo, addGroup);
+      tmpFileName:= uDeleteMultipleGamesFiles.TGameInfoDeleteMulti(Item).eCustomGameFileFullPath;
+      addItem:= FilesListViewDeleteMulti.Items.AddCustom(TViewFileInfo, addGroup);
       TViewFileInfo(addItem).eROMIdentification:= TViewGameInfoGroup(addGroup).eROMIdentification;
-      TViewFileInfo(addItem).eSystemID:= uDeleteMultipleGamesFiles.TGameInfo(Item).eSystemID;
+      TViewFileInfo(addItem).eSystemID:= uDeleteMultipleGamesFiles.TGameInfoDeleteMulti(Item).eSystemID;
       TViewFileInfo(addItem).eMediaType:= 0;
-      TViewFileInfo(addItem).eCustomSystemID:= uDeleteMultipleGamesFiles.TGameInfo(Item).eCustomSystemID;
-      TViewFileInfo(addItem).eCustomMediaType:= uDeleteMultipleGamesFiles.TGameInfo(Item).eCustomMediaType;
+      TViewFileInfo(addItem).eCustomSystemID:= uDeleteMultipleGamesFiles.TGameInfoDeleteMulti(Item).eCustomSystemID;
+      TViewFileInfo(addItem).eCustomMediaType:= uDeleteMultipleGamesFiles.TGameInfoDeleteMulti(Item).eCustomMediaType;
       TViewFileInfo(addItem).eFileType:= -1;
-      TViewFileInfo(addItem).eSoftwareName:= uDeleteMultipleGamesFiles.TGameInfo(Item).eSoftwareName; // might not be needed!!
-      TViewFileInfo(addItem).eGameStatus:= uDeleteMultipleGamesFiles.TGameInfo(Item).eGameStatus; // might not be needed!!
-      TViewFileInfo(addItem).eFileName:= tmpFileName; // uDeleteMultipleGamesFiles.TGameInfo(Item).eName;
+      TViewFileInfo(addItem).eSoftwareName:= uDeleteMultipleGamesFiles.TGameInfoDeleteMulti(Item).eSoftwareName; // might not be needed!!
+      TViewFileInfo(addItem).eGameStatus:= uDeleteMultipleGamesFiles.TGameInfoDeleteMulti(Item).eGameStatus; // might not be needed!!
+      TViewFileInfo(addItem).eFileName:= tmpFileName; // uDeleteMultipleGamesFiles.TGameInfoDeleteMulti(Item).eName;
       TViewFileInfo(addItem).eFileSize:= GetFileSizeW(tmpFileName);
       TViewFileInfo(addItem).eFileSizeText:= FormMain.GetSizeType(TViewFileInfo(addItem).eFileSize, False);
       TViewFileInfo(addItem).eDateTimeText:= FormMain.GetDateTimeStr(FileAgeW(tmpFileName));
@@ -415,7 +454,7 @@ begin
       TViewFileInfo(addItem).eParentFile:= False; // always false, used by CHDs only
       TViewFileInfo(addItem).eHeaderVerCHD:= 0;
       TViewFileInfo(addItem).eIsCustomGame:= True;
-      TViewFileInfo(addItem).eIsUnicode:= uDeleteMultipleGamesFiles.TGameInfo(Item).eIsUnicode;
+      TViewFileInfo(addItem).eIsUnicode:= uDeleteMultipleGamesFiles.TGameInfoDeleteMulti(Item).eIsUnicode;
       TViewFileInfo(addItem).eCustomGameFileFullPath:= tmpFileName;
              
       addItem.Details[1]:= 1;
@@ -427,10 +466,10 @@ begin
     else
     begin
       // for MAME and arcade only
-      if Assigned(uDeleteMultipleGamesFiles.TGameInfo(Item).eGameFiles) and
-         (uDeleteMultipleGamesFiles.TGameInfo(Item).eGameFiles.Count > 0) then
+      if Assigned(uDeleteMultipleGamesFiles.TGameInfoDeleteMulti(Item).eGameFiles) and
+         (uDeleteMultipleGamesFiles.TGameInfoDeleteMulti(Item).eGameFiles.Count > 0) then
          begin
-           for Loop:=0 to uDeleteMultipleGamesFiles.TGameInfo(Item).eGameFiles.Count-1 do
+           for Loop:=0 to uDeleteMultipleGamesFiles.TGameInfoDeleteMulti(Item).eGameFiles.Count-1 do
            begin
              // 00 -> rom; 01 -> CHD; -1 -> config files
              // media_type FileID IsParentCHD filename
@@ -438,7 +477,7 @@ begin
              // 00000 elvator.rom
              // -1000 elvator.cfg
 
-             tmpStr:= uDeleteMultipleGamesFiles.TGameInfo(Item).eGameFiles[Loop];
+             tmpStr:= uDeleteMultipleGamesFiles.TGameInfoDeleteMulti(Item).eGameFiles[Loop];
              tmpMediaType:= StrToInt(tmpStr[1]+tmpStr[2]);
              tmpFileType:= StrToInt(tmpStr[3]+tmpStr[4]);
              IsParentCHD:= StrToInt(tmpStr[5]);
@@ -446,7 +485,7 @@ begin
              tmpFileName:= tmpStr;
              Delete(tmpFileName, 1, 6);
 
-             addItem:= FilesListView.Items.AddCustom(TViewFileInfo, addGroup);
+             addItem:= FilesListViewDeleteMulti.Items.AddCustom(TViewFileInfo, addGroup);
              TViewFileInfo(addItem).eROMIdentification:= TViewGameInfoGroup(addGroup).eROMIdentification;
              TViewFileInfo(addItem).eSystemID:= TViewGameInfoGroup(addGroup).eSystemID;
               // 0 - .cfg; .input
@@ -498,54 +537,88 @@ begin
          end;
     end;
     case FormDeleteMultipleGamesViewFiles.Tag of
-      0: Item:= FormDeleteMultipleGamesFiles.GamesList.Groups.NextItem(Item); // all games
-      1: Item:= FormMain.ELV_GetNextSelected(FormDeleteMultipleGamesFiles.GamesList, Item, selIndex); // all games
+      0: Item:= FormDeleteMultipleGamesFiles.GamesListDeleteMulti.Groups.NextItem(Item); // all games
+      1: Item:= FormMain.ELV_GetNextSelected(FormDeleteMultipleGamesFiles.GamesListDeleteMulti, Item, selIndex); // all games
     end;
   until Item = nil;
 end;
 
 procedure TFormDeleteMultipleGamesViewFiles.UpdateTotalFilesLabel;
 begin
-  LabelTotalItems.Caption:= IntToStr(FilesListView.Groups.VisibleCount)+' Games';
-  if FilesListView.Scrollbars.VertBarVisible then
-     FilesListView.CellSizes.Tile.Width:= 732-GetSystemMetrics(SM_CXVSCROLL)// 565
-  else
-     FilesListView.CellSizes.Tile.Width:= 732;// 582;
+  LabelTotalItems.Caption:= IntToStr(FilesListViewDeleteMulti.Groups.VisibleCount)+' Games';
+  //if FilesListView.Scrollbars.VertBarVisible then
+  //   FilesListView.CellSizes.Tile.Width:= 732-GetSystemMetrics(SM_CXVSCROLL)// 565
+  //else
+  //   FilesListView.CellSizes.Tile.Width:= 732;// 582;
 end;
 
 procedure TFormDeleteMultipleGamesViewFiles.FormShow(Sender: TObject);
 var
   SearchGroup: TEasyGroup;
+  tGroup, tItem, hSize, MaxSize: Integer;
+
 begin
-  FormMain.ELV_ResetNormalColors(FilesListView);
-  FormMain.ELV_SetRibbonNightColors(0, FilesListView, True);
-  LoadMediaIcons;
-  //if Screen.Height = 480 then
-  //   begin
-  //     FormDeleteMultipleGamesViewFiles.ClientHeight:= 402;
-  //   end;
+  case Is4KMode of //FormMain.Menu4KMode2160pEnable.Checked of
+    True : FileTextMaxCount:= 124;
+    False: FileTextMaxCount:= 90; // this is for TGameInfoDeleteMulti.GetCaptions
+  end;
 
-  FormDeleteMultipleGamesViewFiles.Left:= (Screen.Width shr 1)-((FormDeleteMultipleGamesViewFiles.Width shr 1)-1); // to center the form
+  EmuConIcon:= TImage.Create(nil);
+  EmuConIcon.Transparent:= True;
+  case Is4KMode of //FormMain.Menu4KMode2160pEnable.Checked of
+    True : FormMain.Set4KImageIconSpecs(EmuConIcon, 48);
+    False: FormMain.Set4KImageIconSpecs(EmuConIcon, 32);
+  end;
+  FormMain.LoadGameIcon(EmuConIcon, True);
 
-  FormMain.SetWin10DarkScrollBar(FilesListView);
+  FormMain.ELV_ResetNormalColors(FilesListViewDeleteMulti);
+  FormMain.ELV_SetRibbonNightColors(0, FilesListViewDeleteMulti, True);
+  Resize4K;
+  FormMain.LoadMediaIcons(IL_MediaType);
+
+  FormMain.SetWin10DarkScrollBar(FilesListViewDeleteMulti);
 
   // add all files in the list
-  FilesListView.BeginUpdate;
-  FilesListView.Items.ReIndexDisable:= True;
+  FilesListViewDeleteMulti.BeginUpdate;
+  FilesListViewDeleteMulti.Items.ReIndexDisable:= True;
   AddGames(SearchGroup);
-  FormMain.ELV_RemoveDefaultGroup(FilesListView);
-  FilesListView.Items.ReIndexDisable:= False;
+  FormMain.ELV_RemoveDefaultGroup(FilesListViewDeleteMulti);
+  FilesListViewDeleteMulti.Items.ReIndexDisable:= False;
+  //FilesListViewDeleteMulti.Invalidate;
+  FilesListViewDeleteMulti.EndUpdate;
+  FilesListViewDeleteMulti.SetFocus;
 
-  //if FilesListView.Scrollbars.VertBarVisible then
-  //   FilesListView.CellSizes.Tile.Width:= FilesListView.CellSizes.Tile.Width-GetSystemMetrics(SM_CXVSCROLL);
+  tGroup:= FilesListViewDeleteMulti.Groups.Count;
+  tItem:=  FilesListViewDeleteMulti.Groups.ItemCount;
 
-  FilesListView.Invalidate;
-  FilesListView.EndUpdate;
-  FilesListView.SetFocus;
+  MaxSize:= Screen.Height-PanelBottom.Height-300;
+
+  tGroup:= tGroup*(FilesListViewDeleteMulti.PaintInfoGroup.MarginTop.Size+FilesListViewDeleteMulti.PaintInfoGroup.MarginBottom.Size);
+  tItem:=  tItem * FilesListViewDeleteMulti.CellSizes.Tile.Height;
+
+  hSize:= tGroup+tItem;
+  if hSize > MaxSize then
+     hSize:= MaxSize;
+  //else
+  //   hSize:= hSize+PanelBottom.Height;
+
+  FilesListViewDeleteMulti.Height:= hSize;
+
+  FormDeleteMultipleGamesViewFiles.ClientHeight:= hSize+PanelBottom.Height;
+
+  if FilesListViewDeleteMulti.Scrollbars.VertBarVisible then
+     begin
+       //FilesListView.Width:= FilesListView.Width+GetSystemMetrics(SM_CXVSCROLL);
+       FormDeleteMultipleGamesViewFiles.ClientWidth:= FilesListViewDeleteMulti.Width;
+       ButtonClose.Left:= ButtonClose.Left+GetSystemMetrics(SM_CXVSCROLL);
+     end;
+
+  CallCenterWindow(FormDeleteMultipleGamesViewFiles);
+  //FormDeleteMultipleGamesViewFiles.Left:= (Screen.Width shr 1)-((FormDeleteMultipleGamesViewFiles.Width shr 1)-1); // to center the form
 
   if SearchGroup <> nil then
      begin
-       FilesListView.Selection.FocusedGroup:= SearchGroup;
+       FilesListViewDeleteMulti.Selection.FocusedGroup:= SearchGroup;
        SearchGroup.MakeVisible(emvMiddle) //(emvAuto);
      end;
 
@@ -553,14 +626,14 @@ begin
   Application.ProcessMessages;
 end;
 
-procedure TFormDeleteMultipleGamesViewFiles.FilesListViewItemPaintText(
+procedure TFormDeleteMultipleGamesViewFiles.FilesListViewDeleteMultiItemPaintText(
   Sender: TCustomEasyListview; Item: TEasyItem; Position: Integer;
   ACanvas: TCanvas);
 begin
   case Position of
     0:
       begin
-        ACanvas.Font.Name:= 'Trebuchet MS';
+        ACanvas.Font.Name:= FormMain.Get4KSystemFont;
         ACanvas.Font.Size:= ACanvas.Font.Size+2; // 11
         if LabelTotalItems.Tag = 0 then
            ACanvas.Font.Color:= clMaroon // light mode
@@ -579,6 +652,10 @@ begin
         ACanvas.Font.Name:= 'Consolas';
       end;
   end;
+  if Position in [1, 2] then
+     if Is4KMode then //FormMain.Menu4KMode2160pEnable.Checked then
+        ACanvas.Font.Size:= 14;
+        
   if Item.Ghosted then
      begin
        if Position = 0 then
@@ -588,7 +665,7 @@ begin
      end;
 end;
 
-procedure TFormDeleteMultipleGamesViewFiles.FilesListViewKeyAction(
+procedure TFormDeleteMultipleGamesViewFiles.FilesListViewDeleteMultiKeyAction(
   Sender: TCustomEasyListview; var CharCode: Word; var Shift: TShiftState;
   var DoDefault: Boolean);
 begin
@@ -609,30 +686,74 @@ procedure TFormDeleteMultipleGamesViewFiles.FormCloseQuery(Sender: TObject;
   var CanClose: Boolean);
 begin
   if CanClose then
-     FormMain.ClearListView(FilesListView);
-end;
-
-procedure TFormDeleteMultipleGamesViewFiles.FilesListViewGroupImageDraw(
-  Sender: TCustomEasyListview; Group: TEasyGroup; ACanvas: TCanvas;
-  const RectArray: TEasyRectArrayObject; AlphaBlender: TEasyAlphaBlender);
-begin
-  if TViewGameInfoGroup(Group).eIsCustomGame then
      begin
-       FormMain.IL_MenuPopup.Draw(ACanvas, Group.BoundsRectTopMargin.Left+4, Group.BoundsRectTopMargin.Top+12, 23); // load EmuCon icon
-
-       FormMain.IL_StandardIconsStandard.Draw(ACanvas, Group.BoundsRectTopMargin.Left+26, Group.BoundsRectTopMargin.Top+8,
-                                              MaxGameID+TViewGameInfoGroup(Group).eCustomSystemID);
-     end
-  else
-     begin
-       FormMain.IL_StandardIconsSmall.Draw(ACanvas, Group.BoundsRectTopMargin.Left+4, Group.BoundsRectTopMargin.Top+12,
-                                           MaxGameID+MaxConsoleComputerSystems+TViewGameInfoGroup(Group).eSystemID);
-       FormMain.IL_StandardIconsStandard.Draw(ACanvas, Group.BoundsRectTopMargin.Left+26, Group.BoundsRectTopMargin.Top+8,
-                                           FormMain.GetMAMEImageIndex(TViewGameInfoGroup(Group).eROMIdentification, TViewGameInfoGroup(Group).eSoftwareName));
+       FormMain.ClearListView(FilesListViewDeleteMulti);
+       FreeAndNil(EmuConIcon);
      end;
 end;
 
-procedure TFormDeleteMultipleGamesViewFiles.FilesListViewGroupImageDrawIsCustom(
+procedure TFormDeleteMultipleGamesViewFiles.FilesListViewDeleteMultiGroupImageDraw(
+  Sender: TCustomEasyListview; Group: TEasyGroup; ACanvas: TCanvas;
+  const RectArray: TEasyRectArrayObject; AlphaBlender: TEasyAlphaBlender);
+begin
+  if Is4KMode then //FormMain.Menu4KMode2160pEnable.Checked then
+  begin
+    if TViewGameInfoGroup(Group).eIsCustomGame then
+       begin
+         //draw 48x48 emucon.ico
+         if Assigned(EmuConIcon) then
+            ACanvas.Draw(Group.BoundsRectTopMargin.Left+4, Group.BoundsRectTopMargin.Top+4, EmuConIcon.Picture.Graphic);
+         //FormMain.IL_MenuPopup.Draw(ACanvas, Group.BoundsRectTopMargin.Left+4, Group.BoundsRectTopMargin.Top+4, 23); // load EmuCon icon
+
+         // game icon
+         FilesListViewDeleteMulti.ImagesGroup.Draw(ACanvas, Group.BoundsRectTopMargin.Left+8+EmuConIcon.Width{48}, Group.BoundsRectTopMargin.Top+4,
+                                                   MaxGameID+TViewGameInfoGroup(Group).eCustomSystemID);
+       end
+    else
+       begin
+         // system icon
+         FilesListViewDeleteMulti.ImagesGroup.Draw(ACanvas, Group.BoundsRectTopMargin.Left+4, Group.BoundsRectTopMargin.Top+4,
+                                                   MaxGameID+MaxConsoleComputerSystems+TViewGameInfoGroup(Group).eSystemID);
+
+         // game icon
+         FilesListViewDeleteMulti.ImagesGroup.Draw(ACanvas, Group.BoundsRectTopMargin.Left+8+48, Group.BoundsRectTopMargin.Top+4,
+                                                   FormMain.GetMAMEImageIndex(TViewGameInfoGroup(Group).eROMIdentification, TViewGameInfoGroup(Group).eSoftwareName, TViewGameInfoGroup(Group).eGameStatus));
+       end;
+  end
+  else
+  begin
+    if TViewGameInfoGroup(Group).eIsCustomGame then
+       begin
+         // draw 32x32 emucon.ico
+         if Assigned(EmuConIcon) then
+            ACanvas.Draw(Group.BoundsRectTopMargin.Left+4, Group.BoundsRectTopMargin.Top+4, EmuConIcon.Picture.Graphic);
+         //FormMain.IL_MenuPopup.Draw(ACanvas, Group.BoundsRectTopMargin.Left+4, Group.BoundsRectTopMargin.Top+12, 23); // load EmuCon icon
+
+         //game icon
+         FilesListViewDeleteMulti.ImagesGroup.Draw(ACanvas, Group.BoundsRectTopMargin.Left+8+EmuConIcon.Width{28}, Group.BoundsRectTopMargin.Top+4,
+                                                   MaxGameID+TViewGameInfoGroup(Group).eCustomSystemID);
+
+         //FormMain.IL_StandardIconsStandard.Draw(ACanvas, Group.BoundsRectTopMargin.Left+26, Group.BoundsRectTopMargin.Top+8,
+         //                                       MaxGameID+TViewGameInfoGroup(Group).eCustomSystemID);
+       end
+    else
+       begin
+         // system icon
+         //FormMain.IL_StandardIconsSmall.
+         FilesListViewDeleteMulti.ImagesGroup.Draw(ACanvas, Group.BoundsRectTopMargin.Left+4, Group.BoundsRectTopMargin.Top+4,
+                                                   MaxGameID+MaxConsoleComputerSystems+TViewGameInfoGroup(Group).eSystemID);
+
+         // game icon
+         FilesListViewDeleteMulti.ImagesGroup.Draw(ACanvas, Group.BoundsRectTopMargin.Left+8+EmuConIcon.Width{28}, Group.BoundsRectTopMargin.Top+4,
+                                                   FormMain.GetMAMEImageIndex(TViewGameInfoGroup(Group).eROMIdentification, TViewGameInfoGroup(Group).eSoftwareName, TViewGameInfoGroup(Group).eGameStatus));
+
+         //FormMain.IL_StandardIconsStandard.Draw(ACanvas, Group.BoundsRectTopMargin.Left+26, Group.BoundsRectTopMargin.Top+8,
+         //                                    FormMain.GetMAMEImageIndex(TViewGameInfoGroup(Group).eROMIdentification, TViewGameInfoGroup(Group).eSoftwareName));
+       end;
+  end;
+end;
+
+procedure TFormDeleteMultipleGamesViewFiles.FilesListViewDeleteMultiGroupImageDrawIsCustom(
   Sender: TCustomEasyListview; Group: TEasyGroup; var IsCustom: Boolean);
 begin
   IsCustom:= True;
@@ -652,25 +773,43 @@ begin
     0: ButtonShowFileTypes.Caption:= 'Show Only Files to Delete';
     1: ButtonShowFileTypes.Caption:= 'Show All Files';
   end;
-  FilesListView.BeginUpdate;
-  FilesListView.Groups.MakeAllVisible;
-  FilesListView.Groups.Rebuild(True); // need to rebuild to list gets messed up
-  Item:= FilesListView.Groups.FirstItem;
+  FilesListViewDeleteMulti.BeginUpdate;
+  FilesListViewDeleteMulti.Groups.MakeAllVisible;
+  FilesListViewDeleteMulti.Groups.Rebuild(True); // need to rebuild to list gets messed up
+  Item:= FilesListViewDeleteMulti.Groups.FirstItem;
   repeat
     if Item.Ghosted then
        Item.Visible:= ButtonShowFileTypes.Tag = 0;
-    Item:= FilesListView.Groups.NextItem(Item);
+    Item:= FilesListViewDeleteMulti.Groups.NextItem(Item);
   until Item = nil;
-  FilesListView.Groups.Rebuild(True); // need to rebuild to list gets messed up
+  FilesListViewDeleteMulti.Groups.Rebuild(True); // need to rebuild to list gets messed up
 
-  Group:= FilesListView.Groups.FirstGroup;
+  Group:= FilesListViewDeleteMulti.Groups.FirstGroup;
   repeat
     if Group.VisibleCount = 0 then
        Group.Visible:= False;
-    Group:= FilesListView.Groups.NextGroup(Group);
+    Group:= FilesListViewDeleteMulti.Groups.NextGroup(Group);
   until Group = nil;
-  FilesListView.EndUpdate;
+  FilesListViewDeleteMulti.EndUpdate;
   UpdateTotalFilesLabel;
+end;
+
+procedure TFormDeleteMultipleGamesViewFiles.FilesListViewDeleteMultiGroupPaintText(
+  Sender: TCustomEasyListview; Group: TEasyGroup; ACanvas: TCanvas);
+begin
+  FormMain.GetCanvasFont(TViewGameInfoGroup(Group).eSystemID,
+                         TViewGameInfoGroup(Group).eCustomSystemID,
+                         TViewGameInfoGroup(Group).eIsCustomGame,
+                         TViewGameInfoGroup(Group).eGameStatus,
+                         TViewGameInfoGroup(Group).eDriverStatus,
+                         TViewGameInfoGroup(Group).eClone,
+                         ACanvas, False, FilesListViewDeleteMulti);
+
+  ACanvas.Font.Style:= [fsBold];
+  case Is4KMode of //FormMain.Menu4KMode2160pEnable.Checked of
+    True : ACanvas.Font.Size:= 18; // fixed font size
+    False: ACanvas.Font.Size:= 10;
+  end;
 end;
 
 end.

@@ -3,7 +3,7 @@ object FormConsCompGamesFolders: TFormConsCompGamesFolders
   Top = 489
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
-  Caption = 'Console/Computer Games Folders Settings'
+  Caption = 'Console/Computer/Handheld Games Folders Settings'
   ClientHeight = 714
   ClientWidth = 1206
   Color = 15856113
@@ -77,6 +77,10 @@ object FormConsCompGamesFolders: TFormConsCompGamesFolders
     Selection.UseFocusRect = False
     TabOrder = 0
     CustomCheckRadioEnabled = False
+    CustomEnableIconHD = False
+    OnItemImageDraw = SystemsItemImageDraw
+    OnItemImageGetSize = SystemsItemImageGetSize
+    OnItemImageDrawIsCustom = SystemsItemImageDrawIsCustom
     OnItemSelectionChanged = SystemsItemSelectionChanged
   end
   object PanelFolders: TPanelEx
@@ -96,7 +100,7 @@ object FormConsCompGamesFolders: TFormConsCompGamesFolders
     object LabelFolderROM: TShadowLabel
       Left = 39
       Top = 8
-      Width = 98
+      Width = 96
       Height = 16
       Caption = 'Cartridge Folders'
       Font.Charset = ANSI_CHARSET
@@ -117,7 +121,7 @@ object FormConsCompGamesFolders: TFormConsCompGamesFolders
     object LabelFolderDiscImage: TShadowLabel
       Left = 39
       Top = 115
-      Width = 107
+      Width = 105
       Height = 16
       Caption = 'Disc Image Folders'
       Font.Charset = ANSI_CHARSET
@@ -138,7 +142,7 @@ object FormConsCompGamesFolders: TFormConsCompGamesFolders
     object LabelFolderFloppyDisk: TShadowLabel
       Left = 39
       Top = 222
-      Width = 109
+      Width = 107
       Height = 16
       Caption = 'Floppy Disk Folders'
       Font.Charset = ANSI_CHARSET
@@ -159,7 +163,7 @@ object FormConsCompGamesFolders: TFormConsCompGamesFolders
     object LabelFolderCassetteTape: TShadowLabel
       Left = 39
       Top = 329
-      Width = 118
+      Width = 115
       Height = 16
       Caption = 'Cassete Tape Folders'
       Font.Charset = ANSI_CHARSET
@@ -233,7 +237,7 @@ object FormConsCompGamesFolders: TFormConsCompGamesFolders
     object LabelFolderHardDiskDrive: TShadowLabel
       Left = 39
       Top = 433
-      Width = 134
+      Width = 132
       Height = 16
       Caption = 'Hard Disk Drive Folders'
       Font.Charset = ANSI_CHARSET
@@ -262,7 +266,7 @@ object FormConsCompGamesFolders: TFormConsCompGamesFolders
       Tag = 1
       Left = 12
       Top = 25
-      Width = 317
+      Width = 312
       Height = 77
       Hint = 'Select a folder for cartridges'
       BackGround.Enabled = True
@@ -290,7 +294,7 @@ object FormConsCompGamesFolders: TFormConsCompGamesFolders
       HintType = ehtToolTip
       Header.Columns.Items = {
         0600000001000000110000005445617379436F6C756D6E53746F726564FFFECE
-        0006000000800800010100010000000000000139010000FFFFFF1F0001000000
+        0006000000800800010100010000000000000134010000FFFFFF1F0001000000
         00000000000000000000000000000000}
       Header.Draggable = False
       Header.FixedSingleColumn = True
@@ -333,13 +337,14 @@ object FormConsCompGamesFolders: TFormConsCompGamesFolders
       TabOrder = 0
       View = elsReport
       CustomCheckRadioEnabled = False
+      CustomEnableIconHD = False
       OnItemEdited = FolderROMItemEdited
       OnItemEditEnd = FolderROMItemEditEnd
       OnKeyAction = FolderROMKeyAction
     end
     object ButtonMoveFolderUp_ROM: TBitBtnEx
       Tag = 1
-      Left = 330
+      Left = 327
       Top = 25
       Width = 43
       Height = 21
@@ -352,7 +357,7 @@ object FormConsCompGamesFolders: TFormConsCompGamesFolders
       OnClick = ButtonMoveFolderUp_ROMClick
     end
     object ButtonMoveFolderDown_ROM: TBitBtnEx
-      Left = 373
+      Left = 372
       Top = 25
       Width = 43
       Height = 21
@@ -365,8 +370,8 @@ object FormConsCompGamesFolders: TFormConsCompGamesFolders
       OnClick = ButtonMoveFolderUp_ROMClick
     end
     object ButtonAddFolder_ROM: TBitBtnEx
-      Left = 330
-      Top = 60
+      Left = 327
+      Top = 58
       Width = 43
       Height = 21
       Hint = 'Add a folder'
@@ -378,7 +383,7 @@ object FormConsCompGamesFolders: TFormConsCompGamesFolders
       OnClick = ButtonAddFolder_ROMClick
     end
     object ButtonDeleteFolder_ROM: TBitBtnEx
-      Left = 330
+      Left = 327
       Top = 81
       Width = 43
       Height = 21
@@ -391,8 +396,8 @@ object FormConsCompGamesFolders: TFormConsCompGamesFolders
       OnClick = ButtonDeleteFolder_ROMClick
     end
     object ButtonEditFolder_ROM: TBitBtnEx
-      Left = 373
-      Top = 60
+      Left = 372
+      Top = 58
       Width = 43
       Height = 21
       Hint = 'Click here to edit the selected folder [F2]'
@@ -404,7 +409,7 @@ object FormConsCompGamesFolders: TFormConsCompGamesFolders
       OnClick = ButtonEditFolder_ROMClick
     end
     object ButtonClearFolder_ROM: TBitBtnEx
-      Left = 373
+      Left = 372
       Top = 81
       Width = 43
       Height = 21
@@ -420,7 +425,7 @@ object FormConsCompGamesFolders: TFormConsCompGamesFolders
       Tag = 2
       Left = 12
       Top = 132
-      Width = 317
+      Width = 312
       Height = 77
       Hint = 'Select a folder for disc images'
       BackGround.Enabled = True
@@ -445,7 +450,7 @@ object FormConsCompGamesFolders: TFormConsCompGamesFolders
       HintType = ehtToolTip
       Header.Columns.Items = {
         0600000001000000110000005445617379436F6C756D6E53746F726564FFFECE
-        0006000000800800010100010000000000000139010000FFFFFF1F0001000000
+        0006000000800800010100010000000000000134010000FFFFFF1F0001000000
         00000000000000000000000000000000}
       Header.Draggable = False
       Header.FixedSingleColumn = True
@@ -488,13 +493,14 @@ object FormConsCompGamesFolders: TFormConsCompGamesFolders
       TabOrder = 7
       View = elsReport
       CustomCheckRadioEnabled = False
+      CustomEnableIconHD = False
       OnItemEdited = FolderDiscImageItemEdited
       OnItemEditEnd = FolderDiscImageItemEditEnd
       OnKeyAction = FolderDiscImageKeyAction
     end
     object ButtonMoveFolderUp_ISO: TBitBtnEx
       Tag = 1
-      Left = 330
+      Left = 327
       Top = 132
       Width = 43
       Height = 21
@@ -507,7 +513,7 @@ object FormConsCompGamesFolders: TFormConsCompGamesFolders
       OnClick = ButtonMoveFolderUp_ROMClick
     end
     object ButtonMoveFolderDown_ISO: TBitBtnEx
-      Left = 373
+      Left = 372
       Top = 132
       Width = 43
       Height = 21
@@ -520,8 +526,8 @@ object FormConsCompGamesFolders: TFormConsCompGamesFolders
       OnClick = ButtonMoveFolderUp_ROMClick
     end
     object ButtonAddFolder_ISO: TBitBtnEx
-      Left = 330
-      Top = 167
+      Left = 327
+      Top = 165
       Width = 43
       Height = 21
       Hint = 'Add a folder'
@@ -533,7 +539,7 @@ object FormConsCompGamesFolders: TFormConsCompGamesFolders
       OnClick = ButtonAddFolder_ROMClick
     end
     object ButtonDeleteFolder_ISO: TBitBtnEx
-      Left = 330
+      Left = 327
       Top = 188
       Width = 43
       Height = 21
@@ -546,8 +552,8 @@ object FormConsCompGamesFolders: TFormConsCompGamesFolders
       OnClick = ButtonDeleteFolder_ROMClick
     end
     object ButtonEditFolder_ISO: TBitBtnEx
-      Left = 373
-      Top = 167
+      Left = 372
+      Top = 165
       Width = 43
       Height = 21
       Hint = 'Click here to edit the selected folder [F2]'
@@ -559,7 +565,7 @@ object FormConsCompGamesFolders: TFormConsCompGamesFolders
       OnClick = ButtonEditFolder_ROMClick
     end
     object ButtonClearFolder_ISO: TBitBtnEx
-      Left = 373
+      Left = 372
       Top = 188
       Width = 43
       Height = 21
@@ -575,7 +581,7 @@ object FormConsCompGamesFolders: TFormConsCompGamesFolders
       Tag = 3
       Left = 12
       Top = 239
-      Width = 317
+      Width = 312
       Height = 77
       Hint = 'Select a folder for floppy disks'
       BackGround.Enabled = True
@@ -600,7 +606,7 @@ object FormConsCompGamesFolders: TFormConsCompGamesFolders
       HintType = ehtToolTip
       Header.Columns.Items = {
         0600000001000000110000005445617379436F6C756D6E53746F726564FFFECE
-        0006000000800800010100010000000000000139010000FFFFFF1F0001000000
+        0006000000800800010100010000000000000134010000FFFFFF1F0001000000
         00000000000000000000000000000000}
       Header.Draggable = False
       Header.FixedSingleColumn = True
@@ -644,12 +650,13 @@ object FormConsCompGamesFolders: TFormConsCompGamesFolders
       TabOrder = 14
       View = elsReport
       CustomCheckRadioEnabled = False
+      CustomEnableIconHD = False
       OnItemEdited = FolderFloppyDiskItemEdited
       OnItemEditEnd = FolderFloppyDiskItemEditEnd
       OnKeyAction = FolderFloppyDiskKeyAction
     end
     object ButtonMoveFolderDown_FLOPPY: TBitBtnEx
-      Left = 373
+      Left = 372
       Top = 239
       Width = 43
       Height = 21
@@ -662,8 +669,8 @@ object FormConsCompGamesFolders: TFormConsCompGamesFolders
       OnClick = ButtonMoveFolderUp_ROMClick
     end
     object ButtonAddFolder_FLOPPY: TBitBtnEx
-      Left = 330
-      Top = 274
+      Left = 327
+      Top = 272
       Width = 43
       Height = 21
       Hint = 'Add a folder'
@@ -675,7 +682,7 @@ object FormConsCompGamesFolders: TFormConsCompGamesFolders
       OnClick = ButtonAddFolder_ROMClick
     end
     object ButtonDeleteFolder_FLOPPY: TBitBtnEx
-      Left = 330
+      Left = 327
       Top = 295
       Width = 43
       Height = 21
@@ -688,8 +695,8 @@ object FormConsCompGamesFolders: TFormConsCompGamesFolders
       OnClick = ButtonDeleteFolder_ROMClick
     end
     object ButtonEditFolder_FLOPPY: TBitBtnEx
-      Left = 373
-      Top = 274
+      Left = 372
+      Top = 272
       Width = 43
       Height = 21
       Hint = 'Click here to edit the selected folder [F2]'
@@ -701,7 +708,7 @@ object FormConsCompGamesFolders: TFormConsCompGamesFolders
       OnClick = ButtonEditFolder_ROMClick
     end
     object ButtonClearFolder_FLOPPY: TBitBtnEx
-      Left = 373
+      Left = 372
       Top = 295
       Width = 43
       Height = 21
@@ -717,7 +724,7 @@ object FormConsCompGamesFolders: TFormConsCompGamesFolders
       Tag = 4
       Left = 12
       Top = 346
-      Width = 317
+      Width = 312
       Height = 77
       Hint = 'Select a folder for cassete tapes'
       BackGround.Enabled = True
@@ -742,7 +749,7 @@ object FormConsCompGamesFolders: TFormConsCompGamesFolders
       HintType = ehtToolTip
       Header.Columns.Items = {
         0600000001000000110000005445617379436F6C756D6E53746F726564FFFECE
-        0006000000800800010100010000000000000139010000FFFFFF1F0001000000
+        0006000000800800010100010000000000000134010000FFFFFF1F0001000000
         00000000000000000000000000000000}
       Header.Draggable = False
       Header.FixedSingleColumn = True
@@ -785,13 +792,14 @@ object FormConsCompGamesFolders: TFormConsCompGamesFolders
       TabOrder = 20
       View = elsReport
       CustomCheckRadioEnabled = False
+      CustomEnableIconHD = False
       OnItemEdited = FolderCassetteTapeItemEdited
       OnItemEditEnd = FolderCassetteTapeItemEditEnd
       OnKeyAction = FolderCassetteTapeKeyAction
     end
     object ButtonMoveFolderUp_TAPE: TBitBtnEx
       Tag = 1
-      Left = 330
+      Left = 327
       Top = 346
       Width = 43
       Height = 21
@@ -804,7 +812,7 @@ object FormConsCompGamesFolders: TFormConsCompGamesFolders
       OnClick = ButtonMoveFolderUp_ROMClick
     end
     object ButtonMoveFolderDown_TAPE: TBitBtnEx
-      Left = 373
+      Left = 372
       Top = 346
       Width = 43
       Height = 21
@@ -817,8 +825,8 @@ object FormConsCompGamesFolders: TFormConsCompGamesFolders
       OnClick = ButtonMoveFolderUp_ROMClick
     end
     object ButtonAddFolder_TAPE: TBitBtnEx
-      Left = 330
-      Top = 381
+      Left = 327
+      Top = 379
       Width = 43
       Height = 21
       Hint = 'Add a folder'
@@ -830,7 +838,7 @@ object FormConsCompGamesFolders: TFormConsCompGamesFolders
       OnClick = ButtonAddFolder_ROMClick
     end
     object ButtonDeleteFolder_TAPE: TBitBtnEx
-      Left = 330
+      Left = 327
       Top = 402
       Width = 43
       Height = 21
@@ -843,8 +851,8 @@ object FormConsCompGamesFolders: TFormConsCompGamesFolders
       OnClick = ButtonDeleteFolder_ROMClick
     end
     object ButtonEditFolder_TAPE: TBitBtnEx
-      Left = 373
-      Top = 381
+      Left = 372
+      Top = 379
       Width = 43
       Height = 21
       Hint = 'Click here to edit the selected folder [F2]'
@@ -856,7 +864,7 @@ object FormConsCompGamesFolders: TFormConsCompGamesFolders
       OnClick = ButtonEditFolder_ROMClick
     end
     object ButtonClearFolder_TAPE: TBitBtnEx
-      Left = 373
+      Left = 372
       Top = 402
       Width = 43
       Height = 21
@@ -870,7 +878,7 @@ object FormConsCompGamesFolders: TFormConsCompGamesFolders
     end
     object ButtonMoveFolderUp_FLOPPY: TBitBtnEx
       Tag = 1
-      Left = 330
+      Left = 327
       Top = 239
       Width = 43
       Height = 21
@@ -927,7 +935,7 @@ object FormConsCompGamesFolders: TFormConsCompGamesFolders
       Tag = 5
       Left = 12
       Top = 450
-      Width = 317
+      Width = 312
       Height = 77
       Hint = 'Select a folder for cassete tapes'
       BackGround.Enabled = True
@@ -952,7 +960,7 @@ object FormConsCompGamesFolders: TFormConsCompGamesFolders
       HintType = ehtToolTip
       Header.Columns.Items = {
         0600000001000000110000005445617379436F6C756D6E53746F726564FFFECE
-        0006000000800800010100010000000000000139010000FFFFFF1F0001000000
+        0006000000800800010100010000000000000134010000FFFFFF1F0001000000
         00000000000000000000000000000000}
       Header.Draggable = False
       Header.FixedSingleColumn = True
@@ -995,13 +1003,14 @@ object FormConsCompGamesFolders: TFormConsCompGamesFolders
       TabOrder = 29
       View = elsReport
       CustomCheckRadioEnabled = False
+      CustomEnableIconHD = False
       OnItemEdited = FolderHardDiskDriveItemEdited
       OnItemEditEnd = FolderHardDiskDriveItemEditEnd
       OnKeyAction = FolderHardDiskDriveKeyAction
     end
     object ButtonMoveFolderUp_HARDDISK: TBitBtnEx
       Tag = 1
-      Left = 330
+      Left = 327
       Top = 450
       Width = 43
       Height = 21
@@ -1014,7 +1023,7 @@ object FormConsCompGamesFolders: TFormConsCompGamesFolders
       OnClick = ButtonMoveFolderUp_ROMClick
     end
     object ButtonMoveFolderDown_HARDDISK: TBitBtnEx
-      Left = 373
+      Left = 372
       Top = 450
       Width = 43
       Height = 21
@@ -1027,8 +1036,8 @@ object FormConsCompGamesFolders: TFormConsCompGamesFolders
       OnClick = ButtonMoveFolderUp_ROMClick
     end
     object ButtonAddFolder_HARDDISK: TBitBtnEx
-      Left = 330
-      Top = 485
+      Left = 327
+      Top = 483
       Width = 43
       Height = 21
       Hint = 'Add a folder'
@@ -1040,7 +1049,7 @@ object FormConsCompGamesFolders: TFormConsCompGamesFolders
       OnClick = ButtonAddFolder_ROMClick
     end
     object ButtonDeleteFolder_HARDDISK: TBitBtnEx
-      Left = 330
+      Left = 327
       Top = 506
       Width = 43
       Height = 21
@@ -1053,8 +1062,8 @@ object FormConsCompGamesFolders: TFormConsCompGamesFolders
       OnClick = ButtonDeleteFolder_ROMClick
     end
     object ButtonEditFolder_HARDDISK: TBitBtnEx
-      Left = 373
-      Top = 485
+      Left = 372
+      Top = 483
       Width = 43
       Height = 21
       Hint = 'Click here to edit the selected folder [F2]'
@@ -1066,7 +1075,7 @@ object FormConsCompGamesFolders: TFormConsCompGamesFolders
       OnClick = ButtonEditFolder_ROMClick
     end
     object ButtonClearFolder_HARDDISK: TBitBtnEx
-      Left = 373
+      Left = 372
       Top = 506
       Width = 43
       Height = 21
@@ -1095,7 +1104,7 @@ object FormConsCompGamesFolders: TFormConsCompGamesFolders
     Style = vgSolid
     object LabelSystemTitle: TShadowLabel
       Left = 10
-      Top = 46
+      Top = 56
       Width = 292
       Height = 16
       Alignment = taCenter
@@ -1120,15 +1129,13 @@ object FormConsCompGamesFolders: TFormConsCompGamesFolders
       Layout = tlCenter
     end
     object LabelSystemType: TShadowLabel
-      Left = 103
-      Top = 24
-      Width = 105
-      Height = 16
-      Alignment = taCenter
+      Left = 134
+      Top = 23
+      Width = 62
+      Height = 19
       AutoSize = False
-      Caption = 'ARCADE'
+      Caption = 'HANDHELD'
       Color = 16448250
-      Constraints.MaxHeight = 16
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlue
       Font.Height = -12
@@ -1146,10 +1153,13 @@ object FormConsCompGamesFolders: TFormConsCompGamesFolders
       Transparent = True
       Layout = tlCenter
     end
-  end
-  object IL_GameIconSmall: TImageList
-    Left = 816
-    Top = 608
+    object IconSystemType: TImage
+      Left = 112
+      Top = 24
+      Width = 16
+      Height = 16
+      Transparent = True
+    end
   end
   object IL_Systems: TImageList
     Height = 68

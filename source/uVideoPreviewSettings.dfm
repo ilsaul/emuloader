@@ -6,7 +6,7 @@ object FormVideoPreviewSettings: TFormVideoPreviewSettings
   Caption = 'Video Preview Settings: Watch Game Videos With a Media Player'
   ClientHeight = 637
   ClientWidth = 930
-  Color = 15856113
+  Color = clWhite
   Font.Charset = ANSI_CHARSET
   Font.Color = clBlack
   Font.Height = -12
@@ -17,7 +17,6 @@ object FormVideoPreviewSettings: TFormVideoPreviewSettings
   Position = poScreenCenter
   Scaled = False
   OnCloseQuery = FormCloseQuery
-  OnCreate = FormCreate
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 15
@@ -74,7 +73,6 @@ object FormVideoPreviewSettings: TFormVideoPreviewSettings
     Top = 438
     Width = 930
     Height = 158
-    Align = alBottom
     BevelOuter = bvNone
     Color1 = 15856113
     Color2 = clSilver
@@ -89,7 +87,7 @@ object FormVideoPreviewSettings: TFormVideoPreviewSettings
     object LabelVideoPreviewFolder: TShadowLabel
       Left = 13
       Top = 2
-      Width = 300
+      Width = 298
       Height = 16
       Caption = 'Folder (emulator relative path support, no network path)'
       ShowAccelChar = False
@@ -104,7 +102,7 @@ object FormVideoPreviewSettings: TFormVideoPreviewSettings
     object LabelVideoPreviewMediaPlayerExecutable: TShadowLabel
       Left = 13
       Top = 63
-      Width = 183
+      Width = 181
       Height = 16
       Caption = 'Media Player File (.exe; .bat; .cmd)'
       ShowAccelChar = False
@@ -119,7 +117,7 @@ object FormVideoPreviewSettings: TFormVideoPreviewSettings
     object LabelVideoPreviewMediaPlayerParameters: TShadowLabel
       Left = 13
       Top = 111
-      Width = 318
+      Width = 316
       Height = 16
       Caption = 'Media Player Parameters         (%1 tag required for filename)'
       ShowAccelChar = False
@@ -134,7 +132,7 @@ object FormVideoPreviewSettings: TFormVideoPreviewSettings
     object LabelVideoPreviewAutoPlay: TShadowLabel
       Left = 728
       Top = 56
-      Width = 147
+      Width = 145
       Height = 16
       Caption = '(use with extreme caution!)'
       Font.Charset = ANSI_CHARSET
@@ -153,9 +151,9 @@ object FormVideoPreviewSettings: TFormVideoPreviewSettings
       Transparent = True
     end
     object LabelVideoPreviewDummyVideoParameters: TShadowLabel
-      Left = 477
+      Left = 478
       Top = 111
-      Width = 306
+      Width = 304
       Height = 16
       Caption = 'Dummy Video Media Player Parameters (%1 tag optional)'
       ShowAccelChar = False
@@ -170,7 +168,7 @@ object FormVideoPreviewSettings: TFormVideoPreviewSettings
     object LabelSnapDirAutoSearch: TShadowLabel
       Left = 10
       Top = 42
-      Width = 365
+      Width = 363
       Height = 14
       Caption = 
         'Snap Dir Auto-Search: emudir\videosnaps\; snap_dir\videosnaps\; ' +
@@ -207,10 +205,10 @@ object FormVideoPreviewSettings: TFormVideoPreviewSettings
       OnChange = VideoPreviewFolderChange
     end
     object ButtonSelectVideoPreviewFolder: TBitBtnEx
-      Left = 416
-      Top = 18
+      Left = 414
+      Top = 19
       Width = 43
-      Height = 23
+      Height = 21
       Hint = 'Click here to select a folder'
       Caption = 'Select'
       TabOrder = 1
@@ -231,10 +229,10 @@ object FormVideoPreviewSettings: TFormVideoPreviewSettings
       TabOrder = 2
     end
     object ButtonSelectVideoPreviewMediaPlayer: TBitBtnEx
-      Left = 416
-      Top = 79
+      Left = 414
+      Top = 80
       Width = 43
-      Height = 23
+      Height = 21
       Hint = 'Click here to select a file'
       Caption = 'Select'
       TabOrder = 3
@@ -265,6 +263,9 @@ object FormVideoPreviewSettings: TFormVideoPreviewSettings
       ReturnIsTab = False
       Themed = True
       CustomIconsEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
     object VideoPreviewParentGameVideo: TAdvOfficeCheckBoxEx
       Left = 658
@@ -278,10 +279,13 @@ object FormVideoPreviewSettings: TFormVideoPreviewSettings
       ReturnIsTab = False
       Themed = True
       CustomIconsEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
     object ButtonHelpVideoPreviewMediaPlayerParameters: TBitBtnEx
       Left = 147
-      Top = 109
+      Top = 108
       Width = 19
       Height = 19
       Hint = 'Why ???'
@@ -306,6 +310,9 @@ object FormVideoPreviewSettings: TFormVideoPreviewSettings
       ReturnIsTab = False
       Themed = True
       CustomIconsEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
     object ButtonHelpVideoPreviewPlayDummyVideo: TBitBtnEx
       Left = 636
@@ -324,7 +331,7 @@ object FormVideoPreviewSettings: TFormVideoPreviewSettings
       OnClick = ButtonHelpVideoPreviewPlayDummyVideoClick
     end
     object VideoPreviewDummyVideoParameters: TEditEx
-      Left = 472
+      Left = 473
       Top = 128
       Width = 403
       Height = 21
@@ -337,8 +344,8 @@ object FormVideoPreviewSettings: TFormVideoPreviewSettings
       TabOrder = 10
     end
     object ButtonSnaplDirAutoSearchHelp: TBitBtnEx
-      Left = 391
-      Top = 40
+      Left = 392
+      Top = 41
       Width = 19
       Height = 19
       Hint = 'What is Auto-Search ?'
@@ -374,22 +381,25 @@ object FormVideoPreviewSettings: TFormVideoPreviewSettings
       State = cbChecked
       Themed = True
       CustomIconsEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
     object ButtonResetVideoPreviewMediaPlayerParameters: TBitBtnEx
-      Left = 416
-      Top = 127
+      Left = 414
+      Top = 128
       Width = 43
-      Height = 23
+      Height = 21
       Hint = 'Reset parameter to current'
       Caption = 'Reset'
       TabOrder = 13
       OnClick = ButtonResetVideoPreviewMediaPlayerParametersClick
     end
     object ButtonResetVideoPreviewDummyVideoParameters: TBitBtnEx
-      Left = 880
-      Top = 127
+      Left = 879
+      Top = 128
       Width = 43
-      Height = 23
+      Height = 21
       Hint = 'Reset dummy parameter to current'
       Caption = 'Reset'
       TabOrder = 14
@@ -397,18 +407,18 @@ object FormVideoPreviewSettings: TFormVideoPreviewSettings
     end
     object ButtonResetVideoPreviewMediaPlayer: TBitBtnEx
       Left = 459
-      Top = 79
+      Top = 80
       Width = 43
-      Height = 23
+      Height = 21
       Hint = 'Reset filename to current'
       Caption = 'Reset'
       TabOrder = 15
     end
     object ButtonResetVideoPreviewFolder: TBitBtnEx
       Left = 459
-      Top = 18
+      Top = 19
       Width = 43
-      Height = 23
+      Height = 21
       Hint = 'Reset folder to current'
       Caption = 'Reset'
       TabOrder = 16
@@ -500,6 +510,10 @@ object FormVideoPreviewSettings: TFormVideoPreviewSettings
     Selection.UseFocusRect = False
     TabOrder = 2
     CustomCheckRadioEnabled = False
+    CustomEnableIconHD = False
+    OnItemImageDraw = SystemsVideoPreviewItemImageDraw
+    OnItemImageGetSize = SystemsVideoPreviewItemImageGetSize
+    OnItemImageDrawIsCustom = SystemsVideoPreviewItemImageDrawIsCustom
     OnItemPaintText = SystemsVideoPreviewItemPaintText
     OnItemSelectionChanged = SystemsVideoPreviewItemSelectionChanged
   end
@@ -508,7 +522,6 @@ object FormVideoPreviewSettings: TFormVideoPreviewSettings
     Top = 410
     Width = 930
     Height = 16
-    Align = alBottom
     Color1 = clWhite
     Color2 = 15132390
     Color3 = clYellow
@@ -519,9 +532,9 @@ object FormVideoPreviewSettings: TFormVideoPreviewSettings
     ParentBackground = False
     Style = vgSimple
     object LabelSystemTitle: TShadowLabel
-      Left = 8
+      Left = 240
       Top = 0
-      Width = 914
+      Width = 450
       Height = 16
       Alignment = taCenter
       AutoSize = False
@@ -542,16 +555,14 @@ object FormVideoPreviewSettings: TFormVideoPreviewSettings
       ColorInnerFrame = clBlack
       Frames = []
       Transparent = True
-      Layout = tlCenter
     end
     object LabelSystemType: TShadowLabel
       Left = 32
       Top = 0
-      Width = 48
-      Height = 16
+      Width = 46
+      Height = 19
       Caption = 'ARCADE'
       Color = 16448250
-      Constraints.MaxHeight = 16
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlue
       Font.Height = -12
@@ -567,16 +578,14 @@ object FormVideoPreviewSettings: TFormVideoPreviewSettings
       ColorInnerFrame = clBlack
       Frames = []
       Transparent = True
-      Layout = tlCenter
     end
     object LabelSystemNotAvailable: TShadowLabel
       Left = 719
       Top = 0
-      Width = 179
-      Height = 16
+      Width = 177
+      Height = 19
       Caption = 'THIS SYSTEM IS NOT AVAILABLE'
       Color = 16448250
-      Constraints.MaxHeight = 16
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlack
       Font.Height = -12
@@ -592,7 +601,6 @@ object FormVideoPreviewSettings: TFormVideoPreviewSettings
       ColorInnerFrame = clBlack
       Frames = []
       Transparent = True
-      Layout = tlCenter
       Visible = False
     end
   end
@@ -601,7 +609,6 @@ object FormVideoPreviewSettings: TFormVideoPreviewSettings
     Top = 426
     Width = 930
     Height = 12
-    Align = alBottom
     Color1 = 15132390
     Color2 = 15856113
     Color3 = clYellow

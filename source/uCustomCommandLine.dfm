@@ -4,8 +4,8 @@ object FormCustomCommandLine: TFormCustomCommandLine
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
   Caption = 'Custom Command Line'
-  ClientHeight = 557
-  ClientWidth = 804
+  ClientHeight = 717
+  ClientWidth = 904
   Color = 15856113
   DefaultMonitor = dmMainForm
   Font.Charset = ANSI_CHARSET
@@ -22,7 +22,7 @@ object FormCustomCommandLine: TFormCustomCommandLine
   object LabelIniFile: TShadowLabel
     Left = 8
     Top = 84
-    Width = 73
+    Width = 71
     Height = 19
     Caption = ' > File: %s.ini'
     Font.Charset = ANSI_CHARSET
@@ -39,61 +39,10 @@ object FormCustomCommandLine: TFormCustomCommandLine
     Frames = []
     Transparent = True
   end
-  object CustomEmulatorFileBoxLabel: TShadowLabel
-    Left = 8
-    Top = 112
-    Width = 248
-    Height = 16
-    Caption = 'Emulator File / Batch File (full path, no quotes)'
-    Color = clCream
-    ParentColor = False
-    ShowAccelChar = False
-    ShadowColor = clGray
-    ShadowEnabled = False
-    EllipsType = etNone
-    ColorFrame = 15132390
-    ColorInnerFrame = clBlack
-    Frames = []
-    Transparent = True
-  end
-  object AdditionalParametersBoxLabel: TShadowLabel
-    Left = 8
-    Top = 392
-    Width = 334
-    Height = 16
-    Caption = 'Additional Parameters (added at the end of the command line)'
-    Color = clCream
-    ParentColor = False
-    ShowAccelChar = False
-    ShadowColor = clGray
-    ShadowEnabled = False
-    EllipsType = etNone
-    ColorFrame = 15132390
-    ColorInnerFrame = clBlack
-    Frames = []
-    Transparent = True
-  end
-  object CommandLinePreviewLabel: TShadowLabel
-    Left = 8
-    Top = 440
-    Width = 151
-    Height = 16
-    Caption = 'Full Command Line Preview'
-    Color = clCream
-    ParentColor = False
-    ShowAccelChar = False
-    ShadowColor = clGray
-    ShadowEnabled = False
-    EllipsType = etNone
-    ColorFrame = 15132390
-    ColorInnerFrame = clBlack
-    Frames = []
-    Transparent = True
-  end
   object TopBar: TPanelEx
     Left = 0
     Top = 0
-    Width = 804
+    Width = 904
     Height = 80
     Align = alTop
     Color1 = 15792869
@@ -115,7 +64,7 @@ object FormCustomCommandLine: TFormCustomCommandLine
     object LabelGameTitle: TShadowLabel
       Left = 106
       Top = 1
-      Width = 691
+      Width = 790
       Height = 33
       AutoSize = False
       Caption = 
@@ -148,7 +97,7 @@ object FormCustomCommandLine: TFormCustomCommandLine
     object LabelEmulatorVersion: TShadowLabel
       Left = 106
       Top = 46
-      Width = 565
+      Width = 655
       Height = 27
       AutoSize = False
       Caption = 
@@ -171,7 +120,7 @@ object FormCustomCommandLine: TFormCustomCommandLine
       Layout = tlCenter
     end
     object LabelScanMode: TShadowLabel
-      Left = 679
+      Left = 779
       Top = 45
       Width = 118
       Height = 29
@@ -198,8 +147,8 @@ object FormCustomCommandLine: TFormCustomCommandLine
   end
   object PanelBottom: TPanelEx
     Left = 0
-    Top = 516
-    Width = 804
+    Top = 676
+    Width = 904
     Height = 41
     Align = alBottom
     Color1 = 15856113
@@ -236,7 +185,7 @@ object FormCustomCommandLine: TFormCustomCommandLine
       OnClick = ButtonClearCustomCommandLineClick
     end
     object ButtonOk: TBitBtnEx
-      Left = 655
+      Left = 755
       Top = 8
       Width = 68
       Height = 23
@@ -249,7 +198,7 @@ object FormCustomCommandLine: TFormCustomCommandLine
       OnClick = ButtonOkClick
     end
     object ButtonCancel: TBitBtnEx
-      Left = 726
+      Left = 826
       Top = 8
       Width = 68
       Height = 23
@@ -261,22 +210,107 @@ object FormCustomCommandLine: TFormCustomCommandLine
       TabOrder = 3
     end
   end
-  object ParametersBox: TAdvGroupBoxEx
+  object EmulatorBatchFileGroupBox: TPanelEx
     Left = 8
-    Top = 160
-    Width = 785
-    Height = 221
-    CheckBox.CustomIconsEnabled = False
-    RoundEdges = True
-    Caption = 
-      'Parameters (add spaces, at the end of prefix and/or before the s' +
-      'uffix, if needed)'
-    Ctl3D = True
-    TabOrder = 2
+    Top = 112
+    Width = 888
+    Height = 57
+    Color1 = 15856113
+    Color2 = clSilver
+    Color3 = clYellow
+    Color4 = clTeal
+    ColorFrame = clSilver
+    ColorInnerFrame = clGreen
+    EnableCustomBorder = ecbSingle
+    Frames = []
+    ParentBackground = False
+    Style = vgSolid
+    Visible = False
+    object EmulatorBatchFileGroupBoxLabel: TShadowLabel
+      Left = 0
+      Top = 0
+      Width = 886
+      Height = 18
+      Align = alTop
+      AutoSize = False
+      Caption = 'Emulator File / Batch File (full path, no quotes)'
+      CaptionIndent = 3
+      Color = clCream
+      ParentColor = False
+      ShowAccelChar = False
+      ShadowColor = clGray
+      ShadowEnabled = False
+      EllipsType = etNone
+      ColorFrame = 15132390
+      ColorInnerFrame = clBlack
+      Frames = [lfrLeft, lfrRight, lfrBottom]
+      Transparent = False
+    end
+    object EmulatorBatchFile: TEditEx
+      Left = 8
+      Top = 24
+      Width = 820
+      Height = 23
+      Color = clWhite
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 0
+    end
+    object EmulatorBatchFileButtonSelect: TBitBtnEx
+      Left = 831
+      Top = 24
+      Width = 49
+      Height = 23
+      Hint = 'Click here to select a file'
+      Caption = 'Select'
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 1
+      OnClick = EmulatorBatchFileButtonSelectClick
+    end
+  end
+  object ParametersGroupBox: TPanelEx
+    Left = 8
+    Top = 192
+    Width = 888
+    Height = 225
+    Color1 = 15856113
+    Color2 = clSilver
+    Color3 = clYellow
+    Color4 = clTeal
+    ColorFrame = clSilver
+    ColorInnerFrame = clGreen
+    EnableCustomBorder = ecbSingle
+    Frames = []
+    ParentBackground = False
+    Style = vgSolid
+    Visible = False
+    object ParametersGroupBoxLabel: TShadowLabel
+      Left = 0
+      Top = 0
+      Width = 886
+      Height = 18
+      Align = alTop
+      AutoSize = False
+      Caption = 
+        'Parameters (add spaces, at the end of prefix and/or before the s' +
+        'uffix, if needed)'
+      CaptionIndent = 3
+      Color = clCream
+      ParentColor = False
+      ShowAccelChar = False
+      ShadowColor = clGray
+      ShadowEnabled = False
+      EllipsType = etNone
+      ColorFrame = 15132390
+      ColorInnerFrame = clBlack
+      Frames = [lfrLeft, lfrRight, lfrBottom]
+      Transparent = False
+    end
     object LabelSuffixToAdd: TShadowLabel
       Left = 493
-      Top = 147
-      Width = 71
+      Top = 151
+      Width = 70
       Height = 16
       Caption = 'Suffix to Add'
       ShadowColor = clGray
@@ -288,8 +322,8 @@ object FormCustomCommandLine: TFormCustomCommandLine
     end
     object LabelFieldToAdd: TShadowLabel
       Left = 290
-      Top = 147
-      Width = 67
+      Top = 151
+      Width = 65
       Height = 16
       Caption = 'Field to Add'
       ShadowColor = clGray
@@ -301,8 +335,8 @@ object FormCustomCommandLine: TFormCustomCommandLine
     end
     object LabelPrefixToAdd: TShadowLabel
       Left = 8
-      Top = 147
-      Width = 71
+      Top = 151
+      Width = 70
       Height = 16
       Caption = 'Prefix to Add'
       ShadowColor = clGray
@@ -315,7 +349,7 @@ object FormCustomCommandLine: TFormCustomCommandLine
     object ParametersListView: TEasyListview
       Tag = 1
       Left = 8
-      Top = 20
+      Top = 24
       Width = 710
       Height = 121
       BackGround.Enabled = True
@@ -379,6 +413,7 @@ object FormCustomCommandLine: TFormCustomCommandLine
       TabOrder = 0
       View = elsReport
       CustomCheckRadioEnabled = False
+      CustomEnableIconHD = False
       OnItemPaintText = ParametersListViewItemPaintText
       OnItemSelectionChanged = ParametersListViewItemSelectionChanged
       OnKeyAction = ParametersListViewKeyAction
@@ -386,7 +421,7 @@ object FormCustomCommandLine: TFormCustomCommandLine
     object ButtonMoveParameterUp: TBitBtnEx
       Tag = 1
       Left = 725
-      Top = 19
+      Top = 23
       Width = 49
       Height = 23
       Hint = 'Move selected item up'
@@ -396,7 +431,7 @@ object FormCustomCommandLine: TFormCustomCommandLine
     end
     object ButtonMoveParameterDown: TBitBtnEx
       Left = 725
-      Top = 51
+      Top = 55
       Width = 49
       Height = 23
       Hint = 'Move selected item down'
@@ -406,7 +441,7 @@ object FormCustomCommandLine: TFormCustomCommandLine
     end
     object ButtonParameterDelete: TBitBtnEx
       Left = 725
-      Top = 83
+      Top = 87
       Width = 49
       Height = 23
       Hint = 'Delete selected item'
@@ -416,7 +451,7 @@ object FormCustomCommandLine: TFormCustomCommandLine
     end
     object ButtonAddParameter: TBitBtnEx
       Left = 725
-      Top = 115
+      Top = 119
       Width = 49
       Height = 23
       Hint = 'Add a new parameter to the list'
@@ -428,7 +463,7 @@ object FormCustomCommandLine: TFormCustomCommandLine
     end
     object ButtonUpdate: TBitBtnEx
       Left = 725
-      Top = 163
+      Top = 167
       Width = 49
       Height = 23
       Hint = 
@@ -442,7 +477,7 @@ object FormCustomCommandLine: TFormCustomCommandLine
     end
     object SuffixToAdd: TEditEx
       Left = 493
-      Top = 163
+      Top = 167
       Width = 220
       Height = 23
       Hint = 'Prefix for the parameter (not required)'
@@ -451,7 +486,7 @@ object FormCustomCommandLine: TFormCustomCommandLine
     end
     object FieldToAdd: TComboBoxEx
       Left = 290
-      Top = 163
+      Top = 167
       Width = 153
       Height = 24
       Hint = 'Fields list'
@@ -484,7 +519,7 @@ object FormCustomCommandLine: TFormCustomCommandLine
     end
     object PrefixToAdd: TEditEx
       Left = 8
-      Top = 163
+      Top = 167
       Width = 220
       Height = 23
       Hint = 'Prefix for the parameter (not required)'
@@ -493,7 +528,7 @@ object FormCustomCommandLine: TFormCustomCommandLine
     end
     object PrefixSendLeadingSpace: TAdvOfficeCheckBoxEx
       Left = 8
-      Top = 195
+      Top = 199
       Width = 397
       Height = 17
       Hint = 
@@ -508,10 +543,13 @@ object FormCustomCommandLine: TFormCustomCommandLine
       ReturnIsTab = False
       State = cbChecked
       CustomIconsEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
     object ParameterSurroundWithQuotes: TAdvOfficeCheckBoxEx
       Left = 437
-      Top = 195
+      Top = 199
       Width = 285
       Height = 17
       TabOrder = 10
@@ -519,63 +557,155 @@ object FormCustomCommandLine: TFormCustomCommandLine
       Caption = 'Surround Parameter With Quotes (Prefix Excluded)'
       ReturnIsTab = False
       CustomIconsEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
   end
-  object EmulatorBatchFile: TEditEx
+  object AdditionalParametersGroupBox: TPanelEx
     Left = 8
-    Top = 128
-    Width = 729
-    Height = 23
-    Color = clWhite
-    ParentShowHint = False
-    ShowHint = True
-    TabOrder = 3
+    Top = 440
+    Width = 888
+    Height = 57
+    Color1 = 15856113
+    Color2 = clSilver
+    Color3 = clYellow
+    Color4 = clTeal
+    ColorFrame = clSilver
+    ColorInnerFrame = clGreen
+    EnableCustomBorder = ecbSingle
+    Frames = []
+    ParentBackground = False
+    Style = vgSolid
+    Visible = False
+    object AdditionalParametersGroupBoxLabel: TShadowLabel
+      Left = 0
+      Top = 0
+      Width = 886
+      Height = 18
+      Align = alTop
+      AutoSize = False
+      Caption = 'Additional Parameters (added at the end of the command line)'
+      CaptionIndent = 3
+      Color = clCream
+      ParentColor = False
+      ShowAccelChar = False
+      ShadowColor = clGray
+      ShadowEnabled = False
+      EllipsType = etNone
+      ColorFrame = 15132390
+      ColorInnerFrame = clBlack
+      Frames = [lfrLeft, lfrRight, lfrBottom]
+      Transparent = False
+    end
+    object AdditionalParametersButtonClear: TBitBtnEx
+      Left = 744
+      Top = 24
+      Width = 49
+      Height = 23
+      Caption = 'Clear'
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 0
+      OnClick = AdditionalParametersButtonClearClick
+    end
+    object AdditionalParameters: TEditEx
+      Left = 8
+      Top = 24
+      Width = 729
+      Height = 23
+      Hint = 'Type the parameters, surrounded by quotes if it has long name'
+      Color = clWhite
+      TabOrder = 1
+    end
   end
-  object EmulatorBatchFileButtonSelect: TBitBtnEx
-    Left = 744
-    Top = 128
-    Width = 49
-    Height = 23
-    Hint = 'Click here to select a file'
-    Caption = 'Select'
-    ParentShowHint = False
-    ShowHint = True
-    TabOrder = 4
-    OnClick = EmulatorBatchFileButtonSelectClick
-  end
-  object AdditionalParameters: TEditEx
+  object CommandLinePreviewGroupBox: TPanelEx
     Left = 8
-    Top = 408
-    Width = 729
-    Height = 23
-    Hint = 'Type the parameters, surrounded by quotes if it has long name'
-    Color = clWhite
-    TabOrder = 5
+    Top = 517
+    Width = 888
+    Height = 148
+    Color1 = 15856113
+    Color2 = clSilver
+    Color3 = clYellow
+    Color4 = clTeal
+    ColorFrame = clSilver
+    ColorInnerFrame = clGreen
+    EnableCustomBorder = ecbSingle
+    Frames = []
+    ParentBackground = False
+    Style = vgSolid
+    Visible = False
+    object CommandLinePreviewGroupBoxLabel: TShadowLabel
+      Left = 0
+      Top = 0
+      Width = 886
+      Height = 18
+      Align = alTop
+      AutoSize = False
+      Caption = 'Full Command Line Preview'
+      CaptionIndent = 3
+      Color = clCream
+      ParentColor = False
+      ShowAccelChar = False
+      ShadowColor = clGray
+      ShadowEnabled = False
+      EllipsType = etNone
+      ColorFrame = 15132390
+      ColorInnerFrame = clBlack
+      Frames = [lfrLeft, lfrRight, lfrBottom]
+      Transparent = False
+    end
+    object CommandLinePreview: TMemo
+      Left = 8
+      Top = 24
+      Width = 785
+      Height = 113
+      Color = 15856113
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -13
+      Font.Name = 'Consolas'
+      Font.Style = []
+      ParentFont = False
+      ReadOnly = True
+      TabOrder = 0
+    end
   end
-  object CommandLinePreview: TMemo
-    Left = 8
-    Top = 456
-    Width = 785
-    Height = 51
-    Color = 15856113
-    Font.Charset = ANSI_CHARSET
-    Font.Color = clBlack
-    Font.Height = -13
-    Font.Name = 'Consolas'
-    Font.Style = []
-    ParentFont = False
-    ReadOnly = True
-    TabOrder = 6
-  end
-  object AdditionalParametersButtonClear: TBitBtnEx
-    Left = 744
-    Top = 408
-    Width = 49
-    Height = 23
-    Caption = 'Clear'
-    ParentShowHint = False
-    ShowHint = True
-    TabOrder = 7
-    OnClick = AdditionalParametersButtonClearClick
+  object PanelEx1: TPanelEx
+    Left = 512
+    Top = 85
+    Width = 287
+    Height = 96
+    Color1 = 15856113
+    Color2 = clSilver
+    Color3 = clYellow
+    Color4 = clTeal
+    ColorFrame = clSilver
+    ColorInnerFrame = clGreen
+    EnableCustomBorder = ecbSingle
+    Frames = []
+    ParentBackground = False
+    Style = vgSolid
+    Visible = False
+    object ShadowLabel1: TShadowLabel
+      Left = 0
+      Top = 0
+      Width = 285
+      Height = 18
+      Align = alTop
+      AutoSize = False
+      Caption = 'Sample Box'
+      CaptionIndent = 3
+      Color = clCream
+      ParentColor = False
+      ShowAccelChar = False
+      ShadowColor = clGray
+      ShadowEnabled = False
+      EllipsType = etNone
+      ColorFrame = 15132390
+      ColorInnerFrame = clBlack
+      Frames = [lfrLeft, lfrRight, lfrBottom]
+      Transparent = False
+    end
   end
 end

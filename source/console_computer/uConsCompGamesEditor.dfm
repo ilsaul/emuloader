@@ -2,10 +2,10 @@ object FormConsCompGamesEditor: TFormConsCompGamesEditor
   Left = 627
   Top = 437
   Width = 1580
-  Height = 970
+  Height = 946
   ActiveControl = Systems
   BorderIcons = [biSystemMenu, biMaximize]
-  Caption = 'Console/Computer Games Editor'
+  Caption = 'Console/Computer/Handheld Games Editor'
   Color = 15856113
   DefaultMonitor = dmMainForm
   Font.Charset = ANSI_CHARSET
@@ -25,7 +25,7 @@ object FormConsCompGamesEditor: TFormConsCompGamesEditor
     Left = 392
     Top = 0
     Width = 6
-    Height = 932
+    Height = 907
     ResizeStyle = rsUpdate
     OnMoved = SplitterMoved
     Appearance.BorderColor = clNone
@@ -43,7 +43,7 @@ object FormConsCompGamesEditor: TFormConsCompGamesEditor
     Left = 0
     Top = 0
     Width = 392
-    Height = 932
+    Height = 907
     Align = alLeft
     BevelOuter = bvNone
     Color1 = 15856113
@@ -58,9 +58,9 @@ object FormConsCompGamesEditor: TFormConsCompGamesEditor
     object Systems: TEasyListview
       Tag = -1
       Left = 0
-      Top = 24
+      Top = 0
       Width = 392
-      Height = 908
+      Height = 907
       Align = alClient
       BorderStyle = bsNone
       CellSizes.Icon.Height = 82
@@ -71,13 +71,13 @@ object FormConsCompGamesEditor: TFormConsCompGamesEditor
       Color = clWhite
       EditManager.Font.Charset = ANSI_CHARSET
       EditManager.Font.Color = clBlack
-      EditManager.Font.Height = -9
-      EditManager.Font.Name = 'Tahoma'
+      EditManager.Font.Height = -12
+      EditManager.Font.Name = 'Trebuchet MS'
       EditManager.Font.Style = []
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlack
-      Font.Height = -9
-      Font.Name = 'Tahoma'
+      Font.Height = -12
+      Font.Name = 'Trebuchet MS'
       Font.Style = []
       GroupFont.Charset = ANSI_CHARSET
       GroupFont.Color = clBlack
@@ -101,10 +101,10 @@ object FormConsCompGamesEditor: TFormConsCompGamesEditor
       HotTrack.Enabled = True
       HotTrack.ItemTrack = [htiIcon, htiText, htiAnyWhere]
       HotTrack.Underline = False
-      ImagesLarge = IL_Systems
       ImagesExLarge = IL_Systems
       PaintInfoGroup.MarginBottom.CaptionIndent = 4
-      PaintInfoItem.ShowBorder = False
+      PaintInfoItem.CaptionIndent = 0
+      PaintInfoItem.ImageIndent = 0
       PaintInfoItem.TileDetailCount = 2
       ParentFont = False
       ParentShowHint = False
@@ -118,78 +118,21 @@ object FormConsCompGamesEditor: TFormConsCompGamesEditor
       Selection.TextColor = clBlack
       Selection.UseFocusRect = False
       TabOrder = 0
+      View = elsTile
       CustomCheckRadioEnabled = False
+      CustomEnableIconHD = False
       OnItemImageDraw = SystemsItemImageDraw
       OnItemImageGetSize = SystemsItemImageGetSize
       OnItemImageDrawIsCustom = SystemsItemImageDrawIsCustom
       OnItemPaintText = SystemsItemPaintText
       OnItemSelectionChanged = SystemsItemSelectionChanged
     end
-    object PanelSystemTitleBottom: TPanelEx
-      Left = 0
-      Top = 16
-      Width = 392
-      Height = 8
-      Align = alTop
-      Color1 = 15132390
-      Color2 = clWhite
-      Color3 = clYellow
-      Color4 = clTeal
-      ColorFrame = clGreen
-      ColorInnerFrame = clGreen
-      Frames = []
-      ParentBackground = False
-      Style = vgSimple
-    end
-    object PanelSystemTitle: TPanelEx
-      Left = 0
-      Top = 0
-      Width = 392
-      Height = 16
-      Align = alTop
-      Color1 = 15856113
-      Color2 = 15132390
-      Color3 = clYellow
-      Color4 = clTeal
-      ColorFrame = clGreen
-      ColorInnerFrame = clGreen
-      Frames = []
-      ParentBackground = False
-      Style = vgSimple
-      object LabelSystemTitle: TShadowLabel
-        Left = 0
-        Top = 0
-        Width = 392
-        Height = 16
-        Align = alBottom
-        Alignment = taCenter
-        AutoSize = False
-        Caption = 'SYSTEM TITLE'
-        Color = 16448250
-        Font.Charset = ANSI_CHARSET
-        Font.Color = clMaroon
-        Font.Height = -12
-        Font.Name = 'Trebuchet MS'
-        Font.Style = [fsBold]
-        ParentColor = False
-        ParentFont = False
-        ShowAccelChar = False
-        ShadowColor = 14540253
-        ShadowEnabled = True
-        EllipsType = etNone
-        ColorFrame = clBlack
-        ColorInnerFrame = clBlack
-        Frames = []
-        Transparent = True
-        Layout = tlCenter
-      end
-    end
   end
-  object PanelCustomGamesSelectedSystem: TPanelEx
+  object PanelCustomGames: TPanelEx
     Left = 398
     Top = 0
     Width = 1166
-    Height = 932
+    Height = 907
     Align = alClient
     BevelOuter = bvNone
     Color1 = 15856113
@@ -203,13 +146,14 @@ object FormConsCompGamesEditor: TFormConsCompGamesEditor
     Style = vgSolid
     object LabelCustomGamesListTotal: TShadowLabel
       Left = 0
-      Top = 764
+      Top = 883
       Width = 1166
       Height = 24
       Hint = ' MAME software lists assigned to '
       Align = alBottom
       AutoSize = False
-      Caption = '  00000 games - MSX 2+'
+      Caption = '00000 games - MSX 2+'
+      CaptionIndent = 6
       Color = 15856113
       ParentColor = False
       ParentShowHint = False
@@ -220,7 +164,7 @@ object FormConsCompGamesEditor: TFormConsCompGamesEditor
       EllipsType = etNone
       ColorFrame = 7891291
       ColorInnerFrame = clBlack
-      Frames = [lfrLeft, lfrRight, lfrBottom]
+      Frames = []
       Transparent = False
       Layout = tlCenter
     end
@@ -228,7 +172,7 @@ object FormConsCompGamesEditor: TFormConsCompGamesEditor
       Left = 0
       Top = 47
       Width = 1166
-      Height = 717
+      Height = 836
       Align = alClient
       CellSizes.SmallIcon.Height = 20
       CellSizes.Tile.Width = 254
@@ -284,7 +228,6 @@ object FormConsCompGamesEditor: TFormConsCompGamesEditor
       IncrementalSearch.ResetTime = 1000
       IncrementalSearch.StartType = eissFocusedNode
       ImagesSmall = FormMain.IL_StandardIconsStandard
-      PaintInfoColumn.CaptionIndent = 0
       PaintInfoGroup.BandBlended = False
       PaintInfoGroup.BandEnabled = False
       PaintInfoGroup.Expandable = False
@@ -294,10 +237,10 @@ object FormConsCompGamesEditor: TFormConsCompGamesEditor
       PaintInfoGroup.MarginTop.Size = 20
       PaintInfoItem.BorderColor = 16370824
       PaintInfoItem.ShowBorder = False
-      PaintInfoItem.TileDetailCount = 2
       ParentFont = False
       ParentShowHint = False
       PopupMenu = PopupGamesList
+      ShowThemedBorder = False
       ShowThemedBorderColor = 7891291
       ShowHint = True
       Selection.BlendAlphaImage = 0
@@ -321,148 +264,16 @@ object FormConsCompGamesEditor: TFormConsCompGamesEditor
       TabOrder = 0
       View = elsReport
       CustomCheckRadioEnabled = False
+      CustomEnableIconHD = False
       OnColumnClick = CustomGamesListColumnClick
       OnColumnSizeChanging = CustomGamesListColumnSizeChanging
+      OnHintCustomInfo = CustomGamesListHintCustomInfo
       OnIncrementalSearch = CustomGamesListIncrementalSearch
       OnItemCompare = CustomGamesListItemCompare
       OnItemEdited = CustomGamesListItemEdited
       OnItemEditEnd = CustomGamesListItemEditEnd
       OnItemPaintText = CustomGamesListItemPaintText
       OnKeyAction = CustomGamesListKeyAction
-    end
-    object PanelEditSelected: TPanelEx
-      Left = 0
-      Top = 788
-      Width = 1166
-      Height = 144
-      Align = alBottom
-      BevelOuter = bvNone
-      Color1 = 15856113
-      Color2 = clSilver
-      Color3 = clYellow
-      Color4 = clTeal
-      ColorFrame = clGreen
-      ColorInnerFrame = clGreen
-      Frames = []
-      ParentBackground = False
-      Style = vgSolid
-      Visible = False
-      object LabelEditSelected: TShadowLabel
-        Left = 8
-        Top = 16
-        Width = 511
-        Height = 16
-        Caption = 
-          'Change info of all selected games at once! Make sure to select a' +
-          'll fields you want to change.'
-        Font.Charset = ANSI_CHARSET
-        Font.Color = clBlack
-        Font.Height = -12
-        Font.Name = 'Segoe UI'
-        Font.Style = [fsBold]
-        ParentFont = False
-        ShowAccelChar = False
-        ShadowColor = clGray
-        ShadowEnabled = False
-        EllipsType = etNone
-        ColorFrame = clBlack
-        ColorInnerFrame = clBlack
-        Frames = []
-        Transparent = True
-      end
-      object LabelEditSelected_Year: TAdvOfficeCheckBoxEx
-        Left = 8
-        Top = 65
-        Width = 45
-        Height = 20
-        Checked = True
-        TabOrder = 0
-        OnClick = LabelEditSelected_YearClick
-        Alignment = taLeftJustify
-        Caption = 'Year'
-        ReturnIsTab = False
-        State = cbChecked
-        Themed = True
-        CustomIconsEnabled = False
-      end
-      object EditSelected_Year: TEditEx
-        Left = 104
-        Top = 64
-        Width = 153
-        Height = 23
-        AutoSize = False
-        Color = clWhite
-        TabOrder = 4
-        OnKeyPress = EditSelected_ManufacturerKeyPress
-      end
-      object LabelEditSelected_Manufacturer: TAdvOfficeCheckBoxEx
-        Left = 8
-        Top = 41
-        Width = 93
-        Height = 20
-        Checked = True
-        TabOrder = 1
-        OnClick = LabelEditSelected_ManufacturerClick
-        Alignment = taLeftJustify
-        Caption = 'Manufacturer'
-        ReturnIsTab = False
-        State = cbChecked
-        Themed = True
-        CustomIconsEnabled = False
-      end
-      object EditSelected_Manufacturer: TEditEx
-        Left = 104
-        Top = 40
-        Width = 417
-        Height = 23
-        AutoSize = False
-        Color = clWhite
-        TabOrder = 2
-        OnKeyPress = EditSelected_ManufacturerKeyPress
-      end
-      object LabelEditSelected_NumberPlayers: TAdvOfficeCheckBoxEx
-        Left = 280
-        Top = 65
-        Width = 83
-        Height = 20
-        Checked = True
-        TabOrder = 3
-        OnClick = LabelEditSelected_NumberPlayersClick
-        Alignment = taLeftJustify
-        Caption = '# of Players'
-        ReturnIsTab = False
-        State = cbChecked
-        Themed = True
-        CustomIconsEnabled = False
-      end
-      object EditSelected_NumberPlayers: TEditEx
-        Left = 368
-        Top = 64
-        Width = 153
-        Height = 23
-        AutoSize = False
-        Color = clWhite
-        TabOrder = 5
-        OnKeyPress = EditSelected_ManufacturerKeyPress
-      end
-      object ButtonMultiSelectedInfo_Confirm: TBitBtnEx
-        Left = 8
-        Top = 104
-        Width = 89
-        Height = 25
-        Caption = 'Confirm'
-        TabOrder = 6
-        OnClick = ButtonMultiSelectedInfo_ConfirmClick
-      end
-      object MultiSelectedInfo_Cancel: TBitBtnEx
-        Left = 104
-        Top = 104
-        Width = 89
-        Height = 25
-        Caption = 'Cancel'
-        TabOrder = 7
-        OnClick = MultiSelectedInfo_CancelClick
-      end
     end
     object PanelToolBarGamesEditor: TPanelEx
       Left = 0
@@ -483,7 +294,7 @@ object FormConsCompGamesEditor: TFormConsCompGamesEditor
       object LabelHotkeyText: TShadowLabel
         Left = 8
         Top = 33
-        Width = 387
+        Width = 385
         Height = 9
         Caption = '  :title    :year    :manufacturer    :number of players    :all'
         Font.Charset = OEM_CHARSET
@@ -504,7 +315,7 @@ object FormConsCompGamesEditor: TFormConsCompGamesEditor
       object LabelHotkeyKeys: TShadowLabel
         Left = 7
         Top = 33
-        Width = 363
+        Width = 361
         Height = 9
         Caption = 'F2        F3       F4               F5                    F6'
         Font.Charset = OEM_CHARSET
@@ -521,43 +332,6 @@ object FormConsCompGamesEditor: TFormConsCompGamesEditor
         ColorInnerFrame = clBlack
         Frames = []
         Transparent = True
-      end
-      object GamesListFontSize: TShadowLabel
-        Tag = 9
-        Left = 123
-        Top = 3
-        Width = 25
-        Height = 23
-        Hint = 'Software lists font size (default 9)'
-        Alignment = taCenter
-        AutoSize = False
-        Caption = '9'
-        Font.Charset = ANSI_CHARSET
-        Font.Color = clBlack
-        Font.Height = -15
-        Font.Name = 'Trebuchet MS'
-        Font.Style = []
-        ParentFont = False
-        ShowAccelChar = False
-        ShadowColor = clGray
-        ShadowEnabled = False
-        EllipsType = etNone
-        ColorFrame = 7891291
-        ColorInnerFrame = clBlack
-        Frames = [lfrLeft, lfrTop, lfrRight, lfrBottom]
-        Transparent = True
-        Layout = tlCenter
-      end
-      object ButtonOptions: TSpeedButtonEx
-        Left = 2
-        Top = 2
-        Width = 22
-        Height = 24
-        Hint = 'Settings'
-        Flat = True
-        ImageIndex = 7
-        Images = FormMain.IL_MenuPopup
-        OnClick = ButtonOptionsClick
       end
       object ButtonApplyChanges: TBitBtnEx
         Left = 416
@@ -576,7 +350,7 @@ object FormConsCompGamesEditor: TFormConsCompGamesEditor
         OnClick = ButtonApplyChangesClick
       end
       object ButtonAbortChanges: TBitBtnEx
-        Left = 537
+        Left = 546
         Top = 11
         Width = 121
         Height = 25
@@ -588,13 +362,13 @@ object FormConsCompGamesEditor: TFormConsCompGamesEditor
         Font.Name = 'Trebuchet MS'
         Font.Style = [fsBold]
         ParentFont = False
-        TabOrder = 6
+        TabOrder = 2
         OnClick = ButtonAbortChangesClick
       end
       object PanelSearchGames: TPanelEx
-        Left = 958
+        Left = 951
         Top = 0
-        Width = 208
+        Width = 215
         Height = 47
         Align = alRight
         Color1 = clSilver
@@ -609,7 +383,7 @@ object FormConsCompGamesEditor: TFormConsCompGamesEditor
         object LabelToolBarFilterTitle: TShadowLabel
           Left = 4
           Top = 4
-          Width = 131
+          Width = 129
           Height = 14
           Caption = 'Search games by Title'
           Font.Charset = ANSI_CHARSET
@@ -627,54 +401,39 @@ object FormConsCompGamesEditor: TFormConsCompGamesEditor
           Frames = []
           Transparent = True
         end
-        object ToolBarFilterTitle: TToolBar
-          Left = 155
-          Top = 19
-          Width = 52
-          Height = 24
-          Align = alNone
-          ButtonHeight = 24
-          Caption = 'Search Bar'
-          Color = 15856113
-          Constraints.MinWidth = 52
-          EdgeBorders = []
-          EdgeInner = esNone
-          EdgeOuter = esNone
+        object ButtonFilterTitleApply: TSpeedButtonEx
+          Left = 156
+          Top = 18
+          Width = 26
+          Height = 27
+          Hint = 'Click here to apply filter'
           Flat = True
-          Font.Charset = ANSI_CHARSET
-          Font.Color = clBlack
-          Font.Height = -12
-          Font.Name = 'Trebuchet MS'
-          Font.Style = []
-          Images = FormMain.IL_LeftPanel
-          ParentColor = False
-          ParentFont = False
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 0
-          Transparent = False
-          Wrapable = False
-          OnCustomDraw = ToolBarFilterTitleCustomDraw
-          object ButtonFilterTitleApply: TToolButton
-            Left = 0
-            Top = 0
-            Hint = 'Click here to apply filter'
-            AutoSize = True
-            Caption = 'Apply'
-            ImageIndex = 6
-            OnClick = ButtonFilterTitleApplyClick
-          end
-          object ButtonFilterTitleReset: TToolButton
-            Left = 23
-            Top = 0
-            Hint = 'Click here to reset filter'
-            AutoSize = True
-            Caption = 'Reset'
-            ImageIndex = 7
-            OnClick = ButtonFilterTitleResetClick
-          end
+          ImageIndex = 9
+          Images = FormMain.IL_MiscToolBarPopup
+          OnClick = ButtonFilterTitleApplyClick
+          FontColorDisabled = clBtnShadow
+          FontShadowColorDisabled = clBtnHighlight
+          GradientColorTop_Disabled = clSilver
+          GradientColorBottom_Disabled = clMedGray
+          FrameColor_Disabled = clGray
         end
-        object FilterGameTitle: TEditEx
+        object ButtonFilterTitleReset: TSpeedButtonEx
+          Left = 183
+          Top = 18
+          Width = 26
+          Height = 27
+          Hint = 'Click here to reset filter'
+          Flat = True
+          ImageIndex = 3
+          Images = FormMain.IL_MiscToolBarPopup
+          OnClick = ButtonFilterTitleResetClick
+          FontColorDisabled = clBtnShadow
+          FontShadowColorDisabled = clBtnHighlight
+          GradientColorTop_Disabled = clSilver
+          GradientColorBottom_Disabled = clMedGray
+          FrameColor_Disabled = clGray
+        end
+        object FilterGameTitle: TTntEditEx
           Left = 4
           Top = 19
           Width = 149
@@ -683,108 +442,232 @@ object FormConsCompGamesEditor: TFormConsCompGamesEditor
           AutoSize = False
           BevelOuter = bvNone
           Color = clWhite
-          Constraints.MaxHeight = 24
           Font.Charset = ANSI_CHARSET
           Font.Color = clBlack
           Font.Height = -12
           Font.Name = 'Trebuchet MS'
           Font.Style = []
           ParentFont = False
-          TabOrder = 1
+          TabOrder = 0
           OnKeyPress = FilterGameTitleKeyPress
         end
       end
-      object GamesListFontSizeLarger_x4: TBitBtnEx
-        Tag = 4
-        Left = 176
-        Top = 2
-        Width = 46
-        Height = 25
-        Hint = 'Larger font size (4 steps)'
-        Caption = #232#232
-        Font.Charset = SYMBOL_CHARSET
-        Font.Color = clBlack
-        Font.Height = -15
-        Font.Name = 'Wingdings'
-        Font.Style = []
-        ParentFont = False
-        TabOrder = 1
-        OnClick = GamesListFontSizeSmallerClick
-      end
-      object GamesListFontSizeLarger: TBitBtnEx
-        Tag = 1
-        Left = 150
-        Top = 2
-        Width = 25
-        Height = 25
-        Hint = 'Larger font size'
-        Caption = #232
-        Font.Charset = SYMBOL_CHARSET
-        Font.Color = clBlack
-        Font.Height = -15
-        Font.Name = 'Wingdings'
-        Font.Style = []
-        ParentFont = False
-        TabOrder = 2
-        OnClick = GamesListFontSizeSmallerClick
-      end
-      object GamesListFontSizeSmaller_x4: TBitBtnEx
-        Tag = -4
-        Left = 48
-        Top = 2
-        Width = 46
-        Height = 25
-        Hint = 'Smaller font size (4 steps)'
-        Caption = #231#231
-        Font.Charset = SYMBOL_CHARSET
-        Font.Color = clBlack
-        Font.Height = -15
-        Font.Name = 'Wingdings'
-        Font.Style = []
-        ParentFont = False
-        TabOrder = 3
-        OnClick = GamesListFontSizeSmallerClick
-      end
-      object GamesListFontSizeSmaller: TBitBtnEx
-        Tag = -1
-        Left = 96
-        Top = 2
-        Width = 25
-        Height = 25
-        Hint = 'Smaller font size'
-        Caption = #231
-        Font.Charset = SYMBOL_CHARSET
-        Font.Color = clBlack
-        Font.Height = -15
-        Font.Name = 'Wingdings'
-        Font.Style = []
-        ParentFont = False
-        TabOrder = 4
-        OnClick = GamesListFontSizeSmallerClick
-      end
       object SystemsHideScrollBarArea: TAdvOfficeCheckBoxEx
-        Left = 254
+        Left = 250
         Top = 5
         Width = 146
         Height = 20
         Hint = 
           'Allow you to use the lost empty space on the right side'#13#10'when sc' +
           'roll bar is not visible'
-        TabOrder = 5
+        TabOrder = 1
         OnClick = SystemsHideScrollBarAreaClick
         Alignment = taLeftJustify
         Caption = 'Hide Systems Scroll Bar'
         ReturnIsTab = False
         Themed = True
         CustomIconsEnabled = False
+        CustomEnableIconHD = False
+        CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+        CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
+      end
+      object ShowBiggerGamesListFont: TAdvOfficeCheckBoxEx
+        Left = 8
+        Top = 5
+        Width = 175
+        Height = 20
+        TabOrder = 4
+        OnClick = ShowBiggerGamesListFontClick
+        Alignment = taLeftJustify
+        Caption = 'Show Bigger Games List Font'
+        ReturnIsTab = False
+        Themed = True
+        CustomIconsEnabled = False
+        CustomEnableIconHD = False
+        CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+        CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
       end
     end
-  end
-  object IL_Systems: TImageList
-    Height = 48
-    Width = 48
-    Left = 8
-    Top = 192
+    object PanelEditSelected: TPanelEx
+      Left = 308
+      Top = 370
+      Width = 549
+      Height = 231
+      BevelOuter = bvNone
+      Color1 = 15856113
+      Color2 = clSilver
+      Color3 = clYellow
+      Color4 = clTeal
+      ColorFrame = clSilver
+      ColorInnerFrame = clGreen
+      Frames = [frLeft, frTop, frRight, frBottom]
+      ParentBackground = False
+      Style = vgSolid
+      Visible = False
+      OnMouseDown = PanelEditSelectedMouseDown
+      object LabelEditSelected: TShadowLabel
+        Left = 21
+        Top = 16
+        Width = 507
+        Height = 37
+        Caption = 
+          'Edit info of multiple selected games at once, even if they are n' +
+          'ot from the same system.'#13#10'Make sure to tick checkboxes of all fi' +
+          'elds you want to change.'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Trebuchet MS'
+        Font.Style = [fsBold]
+        ParentFont = False
+        ShowAccelChar = False
+        ShadowColor = clGray
+        ShadowEnabled = False
+        EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
+        Transparent = True
+        OnMouseDown = PanelEditSelectedMouseDown
+      end
+      object LabelEditSelected_Total: TShadowLabel
+        Left = 18
+        Top = 193
+        Width = 121
+        Height = 16
+        Caption = '000000 games selected'
+        ShadowColor = clGray
+        ShadowEnabled = False
+        EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
+      end
+      object LabelEditSelectedDrag: TShadowLabel
+        Left = 271
+        Top = 56
+        Width = 256
+        Height = 19
+        Caption = 'drag this panel around to get it out of of way!'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clGray
+        Font.Height = -12
+        Font.Name = 'Trebuchet MS'
+        Font.Style = [fsItalic]
+        ParentFont = False
+        ShowAccelChar = False
+        ShadowColor = clGray
+        ShadowEnabled = False
+        EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
+        Transparent = True
+        OnMouseDown = PanelEditSelectedMouseDown
+      end
+      object LabelEditSelected_Year: TAdvOfficeCheckBoxEx
+        Left = 18
+        Top = 134
+        Width = 45
+        Height = 20
+        Checked = True
+        TabOrder = 0
+        OnClick = LabelEditSelected_YearClick
+        Alignment = taLeftJustify
+        Caption = 'Year'
+        ReturnIsTab = False
+        State = cbChecked
+        Themed = True
+        CustomIconsEnabled = False
+        CustomEnableIconHD = False
+        CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+        CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
+      end
+      object EditSelected_Year: TEditEx
+        Left = 114
+        Top = 133
+        Width = 153
+        Height = 23
+        AutoSize = False
+        Color = clWhite
+        TabOrder = 4
+        OnKeyPress = EditSelected_ManufacturerKeyPress
+      end
+      object LabelEditSelected_Manufacturer: TAdvOfficeCheckBoxEx
+        Left = 18
+        Top = 101
+        Width = 93
+        Height = 20
+        Checked = True
+        TabOrder = 1
+        OnClick = LabelEditSelected_ManufacturerClick
+        Alignment = taLeftJustify
+        Caption = 'Manufacturer'
+        ReturnIsTab = False
+        State = cbChecked
+        Themed = True
+        CustomIconsEnabled = False
+        CustomEnableIconHD = False
+        CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+        CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
+      end
+      object EditSelected_Manufacturer: TEditEx
+        Left = 114
+        Top = 100
+        Width = 417
+        Height = 23
+        AutoSize = False
+        Color = clWhite
+        TabOrder = 2
+        OnKeyPress = EditSelected_ManufacturerKeyPress
+      end
+      object LabelEditSelected_NumberPlayers: TAdvOfficeCheckBoxEx
+        Left = 290
+        Top = 134
+        Width = 83
+        Height = 20
+        Checked = True
+        TabOrder = 3
+        OnClick = LabelEditSelected_NumberPlayersClick
+        Alignment = taLeftJustify
+        Caption = '# of Players'
+        ReturnIsTab = False
+        State = cbChecked
+        Themed = True
+        CustomIconsEnabled = False
+        CustomEnableIconHD = False
+        CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+        CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
+      end
+      object EditSelected_NumberPlayers: TEditEx
+        Left = 378
+        Top = 133
+        Width = 153
+        Height = 23
+        AutoSize = False
+        Color = clWhite
+        TabOrder = 5
+        OnKeyPress = EditSelected_ManufacturerKeyPress
+      end
+      object ButtonMultiSelectedInfo_Confirm: TBitBtnEx
+        Left = 339
+        Top = 188
+        Width = 89
+        Height = 25
+        Caption = 'Confirm'
+        TabOrder = 6
+        OnClick = ButtonMultiSelectedInfo_ConfirmClick
+      end
+      object MultiSelectedInfo_Cancel: TBitBtnEx
+        Left = 442
+        Top = 188
+        Width = 89
+        Height = 25
+        Caption = 'Cancel'
+        TabOrder = 7
+        OnClick = MultiSelectedInfo_CancelClick
+      end
+    end
   end
   object PopupGamesList: TBcBarPopupMenu
     AutoHotkeys = maManual
@@ -852,52 +735,10 @@ object FormConsCompGamesEditor: TFormConsCompGamesEditor
       OnClick = PopupResetSystemsPanelSizeClick
     end
   end
-  object PopupMenuOptions: TBcBarPopupMenu
-    AutoHotkeys = maManual
-    Images = FormMain.IL_MenuPopup
-    OwnerDraw = True
-    TrackButton = tbLeftButton
-    Bar.Visible = False
-    Bar.BarCaption.Font.Charset = DEFAULT_CHARSET
-    Bar.BarCaption.Font.Color = clWhite
-    Bar.BarCaption.Font.Height = -19
-    Bar.BarCaption.Font.Name = 'Tahoma'
-    Bar.BarCaption.Font.Style = [fsBold, fsItalic]
-    Separators.Font.Charset = ANSI_CHARSET
-    Separators.Font.Color = clBlack
-    Separators.Font.Height = -11
-    Separators.Font.Name = 'Tahoma'
-    Separators.Font.Style = []
-    MenuFont.Charset = ANSI_CHARSET
-    MenuFont.Color = clBlack
-    MenuFont.Height = -12
-    MenuFont.Name = 'Trebuchet MS'
-    MenuFont.Style = []
-    MenuStyle = msWindowsXP
-    UseSystemFont = False
-    DrawModule = FormMain.BcDrawModule
-    OnMeasureMenuItem = PopupGamesListMeasureMenuItem
-    Left = 352
-    Top = 32
-    object PopupSystemsViewMode: TMenuItem
-      Tag = 1
-      Caption = 'Systems View Mode'
-      object PopupSystemsViewMode_Tiles: TMenuItem
-        AutoCheck = True
-        Caption = 'Tiles View'
-        Hint = 'Detailed system type info and icons'
-        RadioItem = True
-        OnClick = PopupSystemsViewMode_TilesClick
-      end
-      object PopupSystemsViewMode_LargeIcons: TMenuItem
-        Tag = 1
-        AutoCheck = True
-        Caption = 'Large Icons View'
-        Checked = True
-        Hint = 'System title only'
-        RadioItem = True
-        OnClick = PopupSystemsViewMode_TilesClick
-      end
-    end
+  object IL_Systems: TImageList
+    Height = 32
+    Width = 32
+    Left = 342
+    Top = 72
   end
 end

@@ -6,7 +6,7 @@ uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
   Dialogs, uCommon, uCommonCustom, StdCtrls, Buttons, MPCommonObjects, EasyListview,
   ShadowLabel, ExtCtrls, PanelEx, ImgList, IniFiles, uMain, EditEx,
-  ButtonsEx, ColorBoxEx, AdvOfficeButtons;
+  ButtonsEx, ColorBoxEx, AdvOfficeButtons, BevelEx;
 
 type
   TFormImageCategorySettings = class(TForm)
@@ -15,35 +15,34 @@ type
     IL_ImageCategory_ExtraLarge: TImageList;
     PanelImageCategories: TPanelEx;
     ImageCategory_Selector: TEasyListview;
-    PanelSystemTitle: TPanelEx;
-    PanelImageCategorySelector: TPanelEx;
-    LabelImageCategoryFolder: TShadowLabel;
-    ButtonResetImageCategoryFolder: TBitBtnEx;
-    ButtonClearImageCategoryFolder: TBitBtnEx;
-    ButtonImageCategoryFolder: TBitBtnEx;
-    ImageCategoryFolder: TEditEx;
-    ButtonDefaultImageCategoryFolder: TBitBtnEx;
-    ButtonZippedImages: TBitBtnEx;
-    ButtonOk: TBitBtnEx;
-    ButtonCancel: TBitBtnEx;
     PanelCategoriesBottom: TPanelEx;
-    LabelSystemType: TShadowLabel;
-    LabelSystemTitle: TShadowLabel;
-    LabelSystemNotAvailable: TShadowLabel;
-    LabelShowHideCategories: TShadowLabel;
-    PanelCategoryTitle: TPanelEx;
     LabelCategoryTitle: TShadowLabel;
-    PanelCategoryTitleBottom: TPanelEx;
+    LabelImageCategoryBackgroundColor: TShadowLabel;
     ImageCategoryBackgroundColor: TColorBoxEx;
-    LabelImageBackgroundColor: TShadowLabel;
+    LabelShowHideCategories: TShadowLabel;
     ButtonImageCategoryBackgroundColorReset: TBitBtnEx;
+    ImageSingleBackgroundColorEnabled: TAdvOfficeCheckBoxEx;
     ImageSingleBackgroundColor: TColorBoxEx;
     ImageSingleBackgroundColorButtonReset: TBitBtnEx;
-    ImageSingleBackgroundColorEnabled: TAdvOfficeCheckBoxEx;
+    LabelImageCategoryFolder: TShadowLabel;
+    ImageCategoryFolder: TEditEx;
+    ButtonSelectImageCategoryFolder: TBitBtnEx;
+    ButtonDefaultImageCategoryFolder: TBitBtnEx;
+    ButtonResetImageCategoryFolder: TBitBtnEx;
+    ButtonClearImageCategoryFolder: TBitBtnEx;
+    PanelSystemsTitleBottom: TPanelEx;
+    PanelSystemsTitle: TPanelEx;
+    LabelSystemTitle: TShadowLabel;
+    LabelSystemType: TShadowLabel;
+    LabelSystemNotAvailable: TShadowLabel;
+    ButtonZippedImages: TBitBtnEx;
+    PanelBottom: TPanelEx;
+    ButtonOk: TBitBtnEx;
+    ButtonCancel: TBitBtnEx;
     procedure SystemsItemSelectionChanged(Sender: TCustomEasyListview;
       Item: TEasyItem);
     procedure ImageCategoryFolderChange(Sender: TObject);
-    procedure ButtonImageCategoryFolderClick(Sender: TObject);
+    procedure ButtonSelectImageCategoryFolderClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure ButtonZippedImagesClick(Sender: TObject);
@@ -64,6 +63,15 @@ type
     procedure SystemsItemPaintText(Sender: TCustomEasyListview;
       Item: TEasyItem; Position: Integer; ACanvas: TCanvas);
     procedure ButtonDefaultImageCategoryFolderClick(Sender: TObject);
+    procedure SystemsItemImageDraw(Sender: TCustomEasyListview;
+      Item: TEasyItem; Column: TEasyColumn; ACanvas: TCanvas;
+      const RectArray: TEasyRectArrayObject;
+      AlphaBlender: TEasyAlphaBlender);
+    procedure SystemsItemImageDrawIsCustom(Sender: TCustomEasyListview;
+      Item: TEasyItem; Column: TEasyColumn; var IsCustom: Boolean);
+    procedure SystemsItemImageGetSize(Sender: TCustomEasyListview;
+      Item: TEasyItem; Column: TEasyColumn; var ImageWidth,
+      ImageHeight: Integer);
   private
     { Private declarations }
 
@@ -78,6 +86,7 @@ type
     procedure ReadSnapDir_MAME;
     procedure UpdateSnapDir_MAME;
     procedure SetImageCategoryValues;
+    procedure Resize4K;
   public
     { Public declarations }
   end;
@@ -88,6 +97,117 @@ var
 implementation
 
 {$R *.dfm}
+
+procedure TFormImageCategorySettings.Resize4K;
+var
+  iLeft: Integer;
+begin
+  if not Is4KMode then
+     Exit;
+
+  with FormImageCategorySettings do
+  begin
+    ClientWidth:= (156*15)+16; // 2340 + 16 = 2356; (15 system columns)
+    Font.Size:= 16;
+
+    FormMain.Set4KImageListSpecs(IL_Systems, 128);
+    FormMain.Set4KImageListSpecs(IL_ImageCategory_ExtraLarge, 128);
+
+    Systems.Font.Name:= FormMain.Get4KSystemFont;
+    Systems.PaintInfoItem.IconViewRemoveIconTopBorder:= True;
+    Systems.CellSizes.Icon.Width:=  156;
+    Systems.CellSizes.Icon.Height:= 207+32+4;// = 243 // 32+4 (systype icon + border)
+
+    Systems.BorderWidth:= 8;
+    FormMain.Set4KListViewSpecs(Systems, 0, 0, (Systems.CellSizes.Icon.Width*15)+(Systems.BorderWidth*2)+20, (Systems.CellSizes.Icon.Height*5)+(Systems.BorderWidth*2), 16); // 15 columns, 5 lines
+
+    FormMain.Set4KPanelSpecs(PanelSystemsTitleBottom, 0, Systems.Height, ClientWidth, -1);
+
+    if not IsNightMode then
+       begin
+         SetPanelColors(PanelSystemsTitleBottom, $00e6e6e6, $00f1f1f1);
+         SetPanelColors(PanelImageCategories, $00f1f1f1, -1, True);
+       end;
+
+    ImageCategory_Selector.CellSizes.Tile.Width:= 156+22+ImageCategory_Selector.PaintInfoItem.CheckIndent+ImageCategory_Selector.PaintInfoItem.ImageIndent;
+    ImageCategory_Selector.CellSizes.Tile.Height:= 156;
+
+    PanelImageCategories.Frames:= [];
+    FormMain.Set4KPanelSpecs(PanelImageCategories, 0, PanelSystemsTitleBottom.Top+PanelSystemsTitleBottom.Height,
+                             (ImageCategory_Selector.CellSizes.Tile.Width*9)+ 16,
+                             (ImageCategory_Selector.CellSizes.Tile.Height*2)+16);
+
+    ClientHeight:= PanelImageCategories.Top+PanelImageCategories.Height;
+
+    ImageCategory_Selector.PaintInfoItem.CheckIndent:= 3; // ImageCategory_Selector.PaintInfoItem.ImageIndent:= 2;
+    FormMain.Set4KListViewCheckBoxHDSpecs(ImageCategory_Selector);
+    ImageCategory_Selector.Font.Name:= FormMain.Get4KSystemFont;
+
+    FormMain.Set4KListViewSpecs(ImageCategory_Selector, 8, 8,
+                                (ImageCategory_Selector.CellSizes.Tile.Width*9)+20,
+                                (ImageCategory_Selector.CellSizes.Tile.Height*2), 16);
+
+    PanelSystemsTitle.Visible:=       False;
+    LabelSystemType.Visible:=         False;
+    PanelCategoriesBottom.Visible:=   False;
+    LabelSystemNotAvailable.Visible:= False;
+
+    iLeft:= PanelImageCategories.Width;
+
+    ButtonZippedImages.Parent:= PanelBottom;
+    ButtonZippedImages.Caption:= 'Help';
+
+    FormMain.Set4KPanelSpecs(PanelBottom, iLeft, ClientHeight-71, ClientWidth-iLeft, 71);
+    FormMain.Set4KButtonsOkCancelPanel(PanelBottom, ButtonOk, ButtonCancel, False);
+    FormMain.Set4KButtonSpecs(ButtonZippedImages, ButtonOk.Left-10-89, ButtonOk.Top, 89, 45, 16);
+    PanelBottom.Frames:= [];
+    //ButtonOk.Top:= 10;
+    //ButtonCancel.Top:= 10;
+    //ButtonZippedImages.Top:= 10;
+
+    FormMain.Set4KLabelSpecs(LabelShowHideCategories, 10, 16, 246, 45, 16);
+
+    LabelCategoryTitle.Parent:= FormImageCategorySettings;
+    FormMain.Set4KLabelSpecs(LabelCategoryTitle, iLeft{+((ClientWidth-iLeft-200-10) div 2)}, PanelImageCategories.Top+10, 200, 28, 16);
+    PanelSystemsTitle.Visible:= False;
+
+    LabelSystemTitle.Parent:= FormImageCategorySettings;
+    LabelSystemTitle.WordWrap:= False;
+    FormMain.Set4KLabelSpecs(LabelSystemTitle, iLeft+400{ClientWidth-300-10}, LabelCategoryTitle.Top, 300, 28, 16);
+
+    FormMain.Set4KButtonSpecs(ButtonImageCategoryBackgroundColorReset, ClientWidth-10-89,
+                              LabelCategoryTitle.Top+LabelCategoryTitle.Height+20, 89, 36, 16);
+    FormMain.Set4KColorBoxSpecs(ImageCategoryBackgroundColor, ButtonImageCategoryBackgroundColorReset.Left-5-312, ButtonImageCategoryBackgroundColorReset.Top);
+    FormMain.Set4KLabelSpecs(LabelImageCategoryBackgroundColor, iLeft, ImageCategoryBackgroundColor.Top+3, -1, -1, 16);
+    LabelImageCategoryBackgroundColor.Caption:= 'Image Background Color';
+
+    LabelImageCategoryFolder.Parent:=         FormImageCategorySettings;
+    ImageCategoryFolder.Parent:=              FormImageCategorySettings;
+    ButtonSelectImageCategoryFolder.Parent:=  FormImageCategorySettings;
+    ButtonClearImageCategoryFolder.Parent:=   FormImageCategorySettings;
+    ButtonResetImageCategoryFolder.Parent:=   FormImageCategorySettings;
+    ButtonDefaultImageCategoryFolder.Parent:= FormImageCategorySettings;
+
+    FormMain.Set4KButtonSpecs(ButtonResetImageCategoryFolder, ButtonImageCategoryBackgroundColorReset.Left,
+                              ButtonImageCategoryBackgroundColorReset.Top+ButtonImageCategoryBackgroundColorReset.Height+20, 89, 36, 16);
+
+    FormMain.Set4KButtonSpecs(ButtonClearImageCategoryFolder,   ButtonResetImageCategoryFolder.Left-5-89, ButtonResetImageCategoryFolder.Top, 89, 36, 16);
+    FormMain.Set4KButtonSpecs(ButtonDefaultImageCategoryFolder, ButtonClearImageCategoryFolder.Left-5-89, ButtonResetImageCategoryFolder.Top, 89, 36, 16);
+
+    FormMain.Set4KButtonSpecs(ButtonSelectImageCategoryFolder, ButtonResetImageCategoryFolder.Left,
+                              ButtonResetImageCategoryFolder.Top+ButtonResetImageCategoryFolder.Height+5, 89, 36, 16);
+
+    FormMain.Set4KEditSpecs(ImageCategoryFolder, iLeft, ButtonSelectImageCategoryFolder.Top, (ButtonSelectImageCategoryFolder.Left-5)-iLeft, 36, 16);
+    FormMain.Set4KLabelSpecs(LabelImageCategoryFolder, iLeft, ImageCategoryFolder.Top-36, -1, -1, 16);
+    LabelImageCategoryFolder.Caption:= 'Image Folder [.png; .jpg]';
+    LabelImageCategoryFolder.Hint:=    'Image Folder [%s]';
+
+    FormMain.Set4KButtonSpecs(ImageSingleBackgroundColorButtonReset, ClientWidth-10-89,
+                              ImageCategoryFolder.Top+ImageCategoryFolder.Height+20, 89, 36, 16);
+    FormMain.Set4KColorBoxSpecs(ImageSingleBackgroundColor, ImageSingleBackgroundColorButtonReset.Left-5-312, ImageSingleBackgroundColorButtonReset.Top);
+    FormMain.Set4KCheckBoxSpecs(ImageSingleBackgroundColorEnabled, iLeft, ImageSingleBackgroundColor.Top, 260, 36, 16);
+  end;
+end;
 
 procedure TFormImageCategorySettings.PopulateFolders;
 var
@@ -256,9 +376,15 @@ begin
   if Item.Selected then
      begin
        Systems.Tag:= FormMain.ELV_GetSystemTagMulti(Systems); // Systems.Tag:= Item.ImageIndex;
-       FormMain.ELV_GetSystemTitle(Systems, Item, LabelSystemTitle, LabelSystemType);
+       if PanelSystemsTitle.Visible then
+          begin
+            FormMain.ELV_GetSystemTitle(Systems, Item, LabelSystemTitle, LabelSystemType);
+            LabelSystemNotAvailable.Visible:= Item.Ghosted;
+          end
+       else
+       if Is4KMode then
+          LabelSystemTitle.Caption:= UpperCase(Item.Caption);
        SetImageCategoryValues;
-       LabelSystemNotAvailable.Visible:= Item.Ghosted; 
      end;
 end;
 
@@ -274,17 +400,17 @@ begin
        if FormMain.ELV_IsArcadeSystemSelected(Systems) then
           begin
             if newSnapshotFolderArcade[Systems.Tag, ImageCategory_Selector.Tag] <> TEditEx(Sender).Text then
-               newSnapshotFolderArcade[Systems.Tag, ImageCategory_Selector.Tag]:= TEditEx(Sender).Text;
+               newSnapshotFolderArcade[Systems.Tag, ImageCategory_Selector.Tag]:=  TEditEx(Sender).Text;
           end
        else
           begin
             if newSnapshotFolderConsComp[Systems.Tag, ImageCategory_Selector.Tag] <> TEditEx(Sender).Text then
-               newSnapshotFolderConsComp[Systems.Tag, ImageCategory_Selector.Tag]:= TEditEx(Sender).Text;
+               newSnapshotFolderConsComp[Systems.Tag, ImageCategory_Selector.Tag]:=  TEditEx(Sender).Text;
           end;
      end;
 end;
 
-procedure TFormImageCategorySettings.ButtonImageCategoryFolderClick(
+procedure TFormImageCategorySettings.ButtonSelectImageCategoryFolderClick(
   Sender: TObject);
 var
   iStr: String;
@@ -307,19 +433,25 @@ begin
      end
   else
      begin
-       GenerateMessage('Error', 'Missing selection.', '    Either the system or image category is not selected! Aborting...');
+       FormMain.ShowMessageBox('Error', 'Missing selection.', '    Either the system or image category is not selected! Aborting...');
      end;
 end;
 
 procedure TFormImageCategorySettings.FormShow(Sender: TObject);
 begin
+  Resize4K;
+  FormMain.ELV_ResetNormalColors(Systems);
+  FormMain.ELV_ResetNormalColors(ImageCategory_Selector);
+
   if IsNightMode then
      begin
        FormImageCategorySettings.Color:= menu_background_color[1];
-       SetBottomPanelColors(PanelImageCategorySelector); // SetPanelColors(PanelImageCategorySelector, menu_background_color[1], clrMedDarkGray);
+       SetBottomPanelColors(PanelBottom);
+       if not Is4KMode then
+          PanelBottom.ColorFrame:= clrBorderGroupBoxGrayBk;
 
        FormMain.SetEasyListViewColors(Systems, clrBlackBk, clWhite);
-       PanelSystemTitle.Color1:= clrLightBlack;
+       PanelSystemsTitle.Color1:= clrLightBlack;
        FormMain.SetSystemTitleLabelColors(LabelSystemTitle);
        FormMain.SetSystemTypeLabelColors(LabelSystemType);
        SetLabelColors(LabelSystemNotAvailable, clSilver, clNavy);
@@ -333,11 +465,15 @@ begin
        LabelShowHideCategories.Color:= clrDarkGray;
        LabelShowHideCategories.ColorFrame:= clrMedDarkGray;
 
-       SetSystemTitleBarNightColors(PanelCategoryTitle, FormImageCategorySettings.PanelCategoryTitleBottom, False);
+       if PanelSystemsTitle.Visible then
+          SetSystemTitleBarNightColors(PanelSystemsTitle, PanelSystemsTitleBottom, False)
+       else
+          SetSystemTitleBottomBarNightColors(PanelSystemsTitleBottom);
+
        PanelCategoriesBottom.Color1:= menu_background_color[1];
 
-       SetLabelColors(LabelImageCategoryFolder,  item_caption_active_color[1], item_caption_active_shadow_color[1]);
-       SetLabelColors(LabelImageBackgroundColor, item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetLabelColors(LabelImageCategoryFolder,          item_caption_active_color[1], item_caption_active_shadow_color[1]);
+       SetLabelColors(LabelImageCategoryBackgroundColor, item_caption_active_color[1], item_caption_active_shadow_color[1]);
 
        SetCheckBoxColors(ImageSingleBackgroundColorEnabled, item_caption_active_color[1], item_caption_active_shadow_color[1]);
        FormMain.SetCheckBoxExCustomIcon(ImageSingleBackgroundColorEnabled); 
@@ -345,16 +481,21 @@ begin
        SetEditNightColors(ImageCategoryFolder);
        SetColorBoxColors(ImageCategoryBackgroundColor, True);
        SetColorBoxColors(ImageSingleBackgroundColor, True);
+       FormMain.SetWin10DarkScrollBar(ImageCategoryBackgroundColor);
+       FormMain.SetWin10DarkScrollBar(ImageSingleBackgroundColor);
 
        FormMain.SetButtonExColors(ButtonOk);
        FormMain.SetButtonExColors(ButtonCancel);
-       FormMain.SetButtonExColors(ButtonImageCategoryFolder);
+       FormMain.SetButtonExColors(ButtonSelectImageCategoryFolder);
        FormMain.SetButtonExColors(ButtonClearImageCategoryFolder);
        FormMain.SetButtonExColors(ButtonResetImageCategoryFolder);
        FormMain.SetButtonExColors(ImageSingleBackgroundColorButtonReset);
        FormMain.SetButtonExColors(ButtonDefaultImageCategoryFolder);
        FormMain.SetButtonExColors(ButtonImageCategoryBackgroundColorReset);
        FormMain.SetButtonExColors(ButtonZippedImages);
+
+       FormMain.ELV_SetNightModeColors(ImageCategory_Selector);
+       FormMain.ELV_SetNightModeColors(Systems);
      end;
 
   LoadCustomMAMEIconToForm(TForm(Sender));
@@ -363,15 +504,6 @@ begin
   FormMain.LoadNonArcadeSystemIcons(IL_Systems, False, False);
 
   FormMain.LoadCategoriesIcons(IL_ImageCategory_ExtraLarge);
-
-  FormMain.ELV_ResetNormalColors(Systems);
-  FormMain.ELV_ResetNormalColors(ImageCategory_Selector);
-
-  if IsNightMode then
-     begin
-       FormMain.ELV_SetNightModeColors(ImageCategory_Selector);
-       FormMain.ELV_SetNightModeColors(Systems);
-     end;
 
   PopulateFolders;
 
@@ -398,7 +530,7 @@ end;
 
 procedure TFormImageCategorySettings.ButtonZippedImagesClick(Sender: TObject);
 begin
-  FormMain.InitMessageBox; //CallMessageBox;
+  FormMain.InitMessageBox;
 
   FormMain.AddMsgText('    You can show/hide image categories, change their background color and select folders'+#13#10+#13#10);
   FormMain.AddMsgText('1.', MsgTxtColors.colorWarning, [fsBold]);
@@ -421,7 +553,7 @@ begin
   FormMain.AddMsgText('Abort', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' button to cancel any changes you''ve made.'+#13#10+#13#10+
                       '    Disabled systems are visible with ghosted icon and gray text, and you can change their settings, except folder paths for MAME/HBMAME.');
-  GenerateMessage('Help', 'How to setup images.', '', 2);
+  FormMain.ShowMessageBox('Help', 'How to setup images.', '', 2);
 end;
 
 procedure TFormImageCategorySettings.ButtonClearImageCategoryFolderClick(
@@ -588,6 +720,37 @@ procedure TFormImageCategorySettings.ButtonDefaultImageCategoryFolderClick(
 begin
   if CheckSystemAndImageCatSelected then
      ImageCategoryFolder.Text:= ImageCategoryArray[ImageCategory_Selector.Tag, 3];
+end;
+
+procedure TFormImageCategorySettings.SystemsItemImageDraw(
+  Sender: TCustomEasyListview; Item: TEasyItem; Column: TEasyColumn;
+  ACanvas: TCanvas; const RectArray: TEasyRectArrayObject;
+  AlphaBlender: TEasyAlphaBlender);
+begin
+  if Is4KMode then
+     FormMain.ELV_DrawIconSystem_CustomSysType(Sender, Item, Column, ACanvas, RectArray, IL_Systems, True);
+end;
+
+procedure TFormImageCategorySettings.SystemsItemImageDrawIsCustom(
+  Sender: TCustomEasyListview; Item: TEasyItem; Column: TEasyColumn;
+  var IsCustom: Boolean);
+begin
+  //Exit; // debugging
+  if Is4KMode then
+     IsCustom:= True;
+end;
+
+procedure TFormImageCategorySettings.SystemsItemImageGetSize(
+  Sender: TCustomEasyListview; Item: TEasyItem; Column: TEasyColumn;
+  var ImageWidth, ImageHeight: Integer);
+begin
+  //Exit; // debugging
+  if Is4KMode then
+     begin
+       ImageWidth:=  IL_Systems.Width;            // 4K mode = 32x32  - normal mode = 16x16
+       ImageHeight:= IL_Systems.Height+FormMain.IL_GroupedMode.Width;
+       ImageHeight:= ImageHeight+4; // 4 -> space between sys icon / sys type icon
+     end;
 end;
 
 end.

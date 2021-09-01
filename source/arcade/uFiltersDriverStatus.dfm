@@ -22,7 +22,7 @@ object FormArcadeFiltersDriverStatus: TFormArcadeFiltersDriverStatus
   object LabelSelectCategory: TShadowLabel
     Left = 24
     Top = 8
-    Width = 94
+    Width = 92
     Height = 16
     Caption = 'Select a Category'
     Font.Charset = ANSI_CHARSET
@@ -43,7 +43,7 @@ object FormArcadeFiltersDriverStatus: TFormArcadeFiltersDriverStatus
   object LabelFilterStatus: TShadowLabel
     Left = 24
     Top = 64
-    Width = 78
+    Width = 76
     Height = 16
     Caption = 'Select a Status'
     Font.Charset = ANSI_CHARSET
@@ -101,6 +101,7 @@ object FormArcadeFiltersDriverStatus: TFormArcadeFiltersDriverStatus
     Top = 249
     Width = 250
     Height = 41
+    Align = alBottom
     Color1 = clWhite
     Color2 = 15856113
     Color3 = clYellow
@@ -140,15 +141,18 @@ object FormArcadeFiltersDriverStatus: TFormArcadeFiltersDriverStatus
     Top = 85
     Width = 225
     Height = 20
+    Hint = 'List All'
     TabOrder = 1
-    TabStop = True
     OnClick = ListAllClick
     Alignment = taLeftJustify
-    Caption = '            List All'
-    Checked = True
+    Caption = 'List All'
+    CaptionIndent = 36
     ReturnIsTab = False
     Themed = True
     CustomIconsEnabled = False
+    CustomEnableIconHD = False
+    CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+    CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
   end
   object DriverStatusCategory: TComboBox2Ex
     Left = 24
@@ -181,13 +185,18 @@ object FormArcadeFiltersDriverStatus: TFormArcadeFiltersDriverStatus
     Top = 117
     Width = 225
     Height = 20
+    Hint = 'Working (Good+Imperfect)'
     TabOrder = 2
     OnClick = ListAllClick
     Alignment = taLeftJustify
-    Caption = '            Working (Good+Imperfect)'
+    Caption = 'Working (Good+Imperfect)'
+    CaptionIndent = 36
     ReturnIsTab = False
     Themed = True
     CustomIconsEnabled = False
+    CustomEnableIconHD = False
+    CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+    CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
   end
   object Imperfect: TAdvOfficeRadioButtonEx
     Tag = 3
@@ -195,13 +204,18 @@ object FormArcadeFiltersDriverStatus: TFormArcadeFiltersDriverStatus
     Top = 181
     Width = 225
     Height = 20
+    Hint = 'Working (Imperfect)'
     TabOrder = 4
     OnClick = ListAllClick
     Alignment = taLeftJustify
-    Caption = '            Working (Imperfect)'
+    Caption = 'Working (Imperfect)'
+    CaptionIndent = 36
     ReturnIsTab = False
     Themed = True
     CustomIconsEnabled = False
+    CustomEnableIconHD = False
+    CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+    CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
   end
   object Preliminary: TAdvOfficeRadioButtonEx
     Tag = 4
@@ -209,13 +223,18 @@ object FormArcadeFiltersDriverStatus: TFormArcadeFiltersDriverStatus
     Top = 213
     Width = 225
     Height = 20
+    Hint = 'Non-Working (Preliminary)'
     TabOrder = 5
     OnClick = ListAllClick
     Alignment = taLeftJustify
-    Caption = '            Non-Working (Preliminary)'
+    Caption = 'Non-Working (Preliminary)'
+    CaptionIndent = 36
     ReturnIsTab = False
     Themed = True
     CustomIconsEnabled = False
+    CustomEnableIconHD = False
+    CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+    CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
   end
   object Good: TAdvOfficeRadioButtonEx
     Tag = 2
@@ -223,12 +242,17 @@ object FormArcadeFiltersDriverStatus: TFormArcadeFiltersDriverStatus
     Top = 149
     Width = 225
     Height = 20
+    Hint = 'Working (Good)'
     TabOrder = 3
     OnClick = ListAllClick
     Alignment = taLeftJustify
-    Caption = '            Working (Good)'
+    Caption = 'Working (Good)'
+    CaptionIndent = 36
     ReturnIsTab = False
     Themed = True
     CustomIconsEnabled = False
+    CustomEnableIconHD = False
+    CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+    CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
   end
 end

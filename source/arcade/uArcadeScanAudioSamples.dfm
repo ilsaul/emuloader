@@ -21,7 +21,7 @@ object FormArcadeScanAudioSamples: TFormArcadeScanAudioSamples
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 15
-  object FilesListView: TEasyListview
+  object ScanMissAudioFilesListView: TEasyListview
     Left = 0
     Top = 0
     Width = 884
@@ -36,7 +36,7 @@ object FormArcadeScanAudioSamples: TFormArcadeScanAudioSamples
     EditManager.Font.Height = -12
     EditManager.Font.Name = 'Segoe UI'
     EditManager.Font.Style = []
-    ImagesState = IL_Systems
+    ImagesState = FormMain.IL_StandardIconsStandard
     Font.Charset = ANSI_CHARSET
     Font.Color = clBlack
     Font.Height = -12
@@ -62,8 +62,8 @@ object FormArcadeScanAudioSamples: TFormArcadeScanAudioSamples
       1F00010000000100000006000000440072006900760065007200000000000000
       000000000000110000005445617379436F6C756D6E53746F726564FFFECE0006
       00000080080001010001040000000000019B000000FFFFFF1F00010000000100
-      00000B000000530061006D0070006C0065002000460069006C00650000000000
-      0000000000000000}
+      000017000000530061006D0070006C0065002000460069006C00650020002800
+      2E007A00690070003B0020002E0037007A002900000000000000000000000000}
     Header.Draggable = False
     Header.Font.Charset = ANSI_CHARSET
     Header.Font.Color = clBlack
@@ -104,12 +104,13 @@ object FormArcadeScanAudioSamples: TFormArcadeScanAudioSamples
     TabOrder = 0
     View = elsReport
     CustomCheckRadioEnabled = False
-    OnColumnClick = FilesListViewColumnClick
-    OnDblClick = FilesListViewDblClick
-    OnItemCompare = FilesListViewItemCompare
-    OnItemPaintText = FilesListViewItemPaintText
-    OnItemSelectionChanged = FilesListViewItemSelectionChanged
-    OnKeyAction = FilesListViewKeyAction
+    CustomEnableIconHD = False
+    OnColumnClick = ScanMissAudioFilesListViewColumnClick
+    OnDblClick = ScanMissAudioFilesListViewDblClick
+    OnItemCompare = ScanMissAudioFilesListViewItemCompare
+    OnItemPaintText = ScanMissAudioFilesListViewItemPaintText
+    OnItemSelectionChanged = ScanMissAudioFilesListViewItemSelectionChanged
+    OnKeyAction = ScanMissAudioFilesListViewKeyAction
   end
   object PanelBottom: TPanelEx
     Left = 0
@@ -129,7 +130,7 @@ object FormArcadeScanAudioSamples: TFormArcadeScanAudioSamples
     object LabelDownloadLink: TShadowLabel
       Left = 308
       Top = 6
-      Width = 269
+      Width = 267
       Height = 16
       Cursor = crHandPoint
       Hint = 'http://www.progettosnaps.net/samples_en.html'
@@ -157,7 +158,7 @@ object FormArcadeScanAudioSamples: TFormArcadeScanAudioSamples
     object LabelTotalItems: TShadowLabel
       Left = 4
       Top = 5
-      Width = 130
+      Width = 128
       Height = 16
       Caption = '000000 Missing Samples'
       ShowAccelChar = False

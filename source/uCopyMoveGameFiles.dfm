@@ -35,7 +35,7 @@ object FormCopyMoveGameFiles: TFormCopyMoveGameFiles
     object LabelCopyToTitle: TShadowLabel
       Left = 32
       Top = 3
-      Width = 140
+      Width = 138
       Height = 17
       Caption = 'Copying 000.000 files to'
       Font.Charset = ANSI_CHARSET
@@ -56,7 +56,7 @@ object FormCopyMoveGameFiles: TFormCopyMoveGameFiles
     object LabelCopyTo: TShadowLabel
       Left = 174
       Top = 3
-      Width = 119
+      Width = 117
       Height = 17
       Caption = 'c:\emulators\games'
       Font.Charset = ANSI_CHARSET
@@ -216,7 +216,7 @@ object FormCopyMoveGameFiles: TFormCopyMoveGameFiles
     object LabelGameNameCloneOf: TShadowLabel
       Left = 78
       Top = 46
-      Width = 535
+      Width = 533
       Height = 14
       Caption = 
         'name: gamename [clone of gamename] [bios: biosname] [merged] [so' +
@@ -237,7 +237,7 @@ object FormCopyMoveGameFiles: TFormCopyMoveGameFiles
       Transparent = True
     end
   end
-  object Log: TRichEditURL
+  object Log: TTntRichEdit
     Left = 8
     Top = 255
     Width = 717
@@ -249,7 +249,6 @@ object FormCopyMoveGameFiles: TFormCopyMoveGameFiles
     Font.Name = 'Lucida Console'
     Font.Style = []
     ParentFont = False
-    ReadOnly = True
     ScrollBars = ssBoth
     TabOrder = 2
     WantReturns = False

@@ -20,16 +20,14 @@ object FormGamesListFontSettings: TFormGamesListFontSettings
   Scaled = False
   OnCloseQuery = FormCloseQuery
   OnKeyPress = FormKeyPress
-  OnResize = FormResize
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 15
   object GamesFont: TEasyListview
-    Left = 0
+    Left = 8
     Top = 0
     Width = 984
     Height = 435
-    Align = alClient
     CellSizes.Tile.Height = 62
     CellSizes.Tile.Width = 358
     CellSizes.Report.Height = 40
@@ -89,7 +87,11 @@ object FormGamesListFontSettings: TFormGamesListFontSettings
     TabOrder = 0
     View = elsTile
     CustomCheckRadioEnabled = False
+    CustomEnableIconHD = False
     OnDblClick = GamesFontDblClick
+    OnItemImageDraw = GamesFontItemImageDraw
+    OnItemImageGetSize = GamesFontItemImageGetSize
+    OnItemImageDrawIsCustom = GamesFontItemImageDrawIsCustom
     OnItemPaintText = GamesFontItemPaintText
     OnItemSelectionChanged = GamesFontItemSelectionChanged
     OnKeyAction = GamesFontKeyAction
@@ -112,7 +114,7 @@ object FormGamesListFontSettings: TFormGamesListFontSettings
     object LabelBackgroundColor: TShadowLabel
       Left = 8
       Top = 6
-      Width = 99
+      Width = 97
       Height = 16
       Caption = 'Background Color'
       ShowAccelChar = False
@@ -149,18 +151,12 @@ object FormGamesListFontSettings: TFormGamesListFontSettings
       OnSelect = GamesBackgroundColorSelect
     end
     object ButtonDefaultBkSortedColor: TBitBtnEx
-      Left = 217
+      Left = 216
       Top = 23
       Width = 47
       Height = 21
       Hint = 'Set default values'
       Caption = 'Default'
-      Font.Charset = DEFAULT_CHARSET
-      Font.Color = clBlack
-      Font.Height = -12
-      Font.Name = 'Segoe UI'
-      Font.Style = []
-      ParentFont = False
       TabOrder = 1
       OnClick = ButtonDefaultBkSortedColorClick
     end
@@ -176,11 +172,14 @@ object FormGamesListFontSettings: TFormGamesListFontSettings
       ReturnIsTab = False
       Themed = True
       CustomIconsEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
     object GamesBackgroundImage: TEditEx
       Left = 284
       Top = 23
-      Width = 318
+      Width = 315
       Height = 21
       AutoSize = False
       Color = clWhite
@@ -203,6 +202,9 @@ object FormGamesListFontSettings: TFormGamesListFontSettings
       State = cbChecked
       Themed = True
       CustomIconsEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
     object GamesBackgroundImageButtonUpdate: TBitBtnEx
       Left = 653
@@ -211,17 +213,11 @@ object FormGamesListFontSettings: TFormGamesListFontSettings
       Height = 21
       Hint = 'Click here to load the image if you'#39've made a manual change'
       Caption = 'Update'
-      Font.Charset = DEFAULT_CHARSET
-      Font.Color = clBlack
-      Font.Height = -12
-      Font.Name = 'Segoe UI'
-      Font.Style = []
-      ParentFont = False
       TabOrder = 5
       OnClick = GamesBackgroundImageButtonUpdateClick
     end
     object GamesBackgroundImageButtonSelect: TBitBtnEx
-      Left = 604
+      Left = 602
       Top = 23
       Width = 49
       Height = 21

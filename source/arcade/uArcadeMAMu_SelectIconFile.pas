@@ -127,7 +127,7 @@ var
 begin
   if FormArcadeMAMu_IconsManager.ZZZIconList.Count = 0 then
      begin
-       GenerateMessage('Error', 'No files found.', '    There are no files available '+
+       FormMain.ShowMessageBox('Error', 'No files found.', '    There are no files available '+
                        'in icons folder(s). Aborting...', 2);
        Exit;
      end;

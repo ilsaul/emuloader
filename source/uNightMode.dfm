@@ -5,7 +5,7 @@ object FormNightMode: TFormNightMode
   BorderStyle = bsSingle
   Caption = 'Night Mode'
   ClientHeight = 1009
-  ClientWidth = 1635
+  ClientWidth = 1728
   Color = 15856113
   DefaultMonitor = dmMainForm
   Font.Charset = ANSI_CHARSET
@@ -75,10 +75,10 @@ object FormNightMode: TFormNightMode
         Frames = [lfrLeft, lfrRight, lfrBottom]
         Transparent = False
       end
-      object NightModeLabelToolBarBkBottomColor: TShadowLabel
+      object NightModeToolBarBkBottomColorLabel: TShadowLabel
         Left = 4
         Top = 71
-        Width = 43
+        Width = 41
         Height = 16
         Caption = 'Bottom'
         Font.Charset = ANSI_CHARSET
@@ -96,10 +96,10 @@ object FormNightMode: TFormNightMode
         Frames = []
         Transparent = True
       end
-      object NightModeLabelToolBarBkTopColor: TShadowLabel
+      object NightModeToolBarBkTopColorLabel: TShadowLabel
         Left = 4
         Top = 47
-        Width = 22
+        Width = 20
         Height = 16
         Caption = 'Top'
         Font.Charset = ANSI_CHARSET
@@ -137,6 +137,9 @@ object FormNightMode: TFormNightMode
         State = cbChecked
         Themed = True
         CustomIconsEnabled = False
+        CustomEnableIconHD = False
+        CustomIconsImages = IL_NightModeCheckBoxRadioButtonIcons
+        CustomIconsImagesHD = IL_NightModeCheckBoxRadioButtonIconsHD
       end
       object NightModeToolBarBkColorsButtonDefault: TBitBtnEx
         Left = 221
@@ -195,7 +198,7 @@ object FormNightMode: TFormNightMode
     end
     object NightModeGamesSelectionBarColorsBox: TPanelEx
       Left = 8
-      Top = 8
+      Top = 74
       Width = 287
       Height = 401
       Color1 = 5263440
@@ -235,10 +238,10 @@ object FormNightMode: TFormNightMode
         Frames = [lfrLeft, lfrRight, lfrBottom]
         Transparent = False
       end
-      object NightModeLabelGamesSelectionTopColor: TShadowLabel
+      object NightModeGamesSelectionTopColorLabel: TShadowLabel
         Left = 4
         Top = 69
-        Width = 56
+        Width = 54
         Height = 16
         Caption = 'Top Bkgrd'
         Font.Charset = ANSI_CHARSET
@@ -256,10 +259,10 @@ object FormNightMode: TFormNightMode
         Frames = []
         Transparent = True
       end
-      object NightModeLabelGamesSelectionFontColor: TShadowLabel
+      object NightModeGamesSelectionFontColorLabel: TShadowLabel
         Left = 4
         Top = 141
-        Width = 51
+        Width = 49
         Height = 16
         Caption = 'Text Font'
         Font.Charset = ANSI_CHARSET
@@ -277,10 +280,10 @@ object FormNightMode: TFormNightMode
         Frames = []
         Transparent = True
       end
-      object NightModeLabelGamesSelectionFrameColor: TShadowLabel
+      object NightModeGamesSelectionFrameColorLabel: TShadowLabel
         Left = 4
         Top = 117
-        Width = 68
+        Width = 66
         Height = 16
         Caption = 'Frame Color'
         Font.Charset = ANSI_CHARSET
@@ -298,10 +301,10 @@ object FormNightMode: TFormNightMode
         Frames = []
         Transparent = True
       end
-      object NightModeLabelGamesSelectionMissROMsTopColor: TShadowLabel
+      object NightModeGamesSelectionMissROMsTopColorLabel: TShadowLabel
         Left = 4
         Top = 187
-        Width = 56
+        Width = 54
         Height = 16
         Caption = 'Top Bkgrd'
         Font.Charset = ANSI_CHARSET
@@ -319,10 +322,10 @@ object FormNightMode: TFormNightMode
         Frames = []
         Transparent = True
       end
-      object NightModeLabelGamesSelectionMissROMsFontColor: TShadowLabel
+      object NightModeGamesSelectionMissROMsFontColorLabel: TShadowLabel
         Left = 4
         Top = 258
-        Width = 51
+        Width = 49
         Height = 16
         Caption = 'Text Font'
         Font.Charset = ANSI_CHARSET
@@ -340,10 +343,10 @@ object FormNightMode: TFormNightMode
         Frames = []
         Transparent = True
       end
-      object NightModeLabelGamesSelectionMissROMsFrameColor: TShadowLabel
+      object NightModeGamesSelectionMissROMsFrameColorLabel: TShadowLabel
         Left = 4
         Top = 234
-        Width = 68
+        Width = 66
         Height = 16
         Caption = 'Frame Color'
         Font.Charset = ANSI_CHARSET
@@ -361,10 +364,10 @@ object FormNightMode: TFormNightMode
         Frames = []
         Transparent = True
       end
-      object NightModeGamesSelectionMissROMsLabel: TShadowLabel
+      object NightModeGamesSelectionMissROMsTitleLabel: TShadowLabel
         Left = 76
         Top = 166
-        Width = 181
+        Width = 179
         Height = 16
         Caption = 'Games With Missing ROMs/CHDs'
         Font.Charset = ANSI_CHARSET
@@ -382,10 +385,10 @@ object FormNightMode: TFormNightMode
         Frames = []
         Transparent = True
       end
-      object NightModeLabelGamesSelectionInactiveTopColor: TShadowLabel
+      object NightModeGamesSelectionInactiveTopColorLabel: TShadowLabel
         Left = 4
         Top = 304
-        Width = 56
+        Width = 54
         Height = 16
         Caption = 'Top Bkgrd'
         Font.Charset = ANSI_CHARSET
@@ -403,10 +406,10 @@ object FormNightMode: TFormNightMode
         Frames = []
         Transparent = True
       end
-      object NightModeLabelGamesSelectionInactiveFontColor: TShadowLabel
+      object NightModeGamesSelectionInactiveFontColorLabel: TShadowLabel
         Left = 4
         Top = 376
-        Width = 51
+        Width = 49
         Height = 16
         Caption = 'Text Font'
         Font.Charset = ANSI_CHARSET
@@ -424,10 +427,10 @@ object FormNightMode: TFormNightMode
         Frames = []
         Transparent = True
       end
-      object NightModeLabelGamesSelectionInactiveFrameColor: TShadowLabel
+      object NightModeGamesSelectionInactiveFrameColorLabel: TShadowLabel
         Left = 4
         Top = 352
-        Width = 68
+        Width = 66
         Height = 16
         Caption = 'Frame Color'
         Font.Charset = ANSI_CHARSET
@@ -448,7 +451,7 @@ object FormNightMode: TFormNightMode
       object NightModeGamesSelectionInactiveLabel: TShadowLabel
         Left = 76
         Top = 283
-        Width = 81
+        Width = 79
         Height = 16
         Caption = 'Inactive Colors'
         Font.Charset = ANSI_CHARSET
@@ -466,10 +469,10 @@ object FormNightMode: TFormNightMode
         Frames = []
         Transparent = True
       end
-      object NightModeLabelGamesSelectionBottomColor: TShadowLabel
+      object NightModeGamesSelectionBottomColorLabel: TShadowLabel
         Left = 4
         Top = 93
-        Width = 59
+        Width = 57
         Height = 16
         Caption = 'Bottom Bk'
         Font.Charset = ANSI_CHARSET
@@ -487,10 +490,10 @@ object FormNightMode: TFormNightMode
         Frames = []
         Transparent = True
       end
-      object NightModeLabelGamesSelectionMissROMsBottomColor: TShadowLabel
+      object NightModeGamesSelectionMissROMsBottomColorLabel: TShadowLabel
         Left = 4
         Top = 211
-        Width = 59
+        Width = 57
         Height = 16
         Caption = 'Bottom Bk'
         Font.Charset = ANSI_CHARSET
@@ -508,10 +511,10 @@ object FormNightMode: TFormNightMode
         Frames = []
         Transparent = True
       end
-      object NightModeLabelGamesSelectionInactiveBottomColor: TShadowLabel
+      object NightModeGamesSelectionInactiveBottomColorLabel: TShadowLabel
         Left = 4
         Top = 328
-        Width = 59
+        Width = 57
         Height = 16
         Caption = 'Bottom Bk'
         Font.Charset = ANSI_CHARSET
@@ -562,6 +565,9 @@ object FormNightMode: TFormNightMode
         State = cbChecked
         Themed = True
         CustomIconsEnabled = False
+        CustomEnableIconHD = False
+        CustomIconsImages = IL_NightModeCheckBoxRadioButtonIcons
+        CustomIconsImagesHD = IL_NightModeCheckBoxRadioButtonIconsHD
       end
       object NightModeGameSelectionGradientBar: TAdvOfficeCheckBoxEx
         Left = 4
@@ -583,6 +589,9 @@ object FormNightMode: TFormNightMode
         State = cbChecked
         Themed = True
         CustomIconsEnabled = False
+        CustomEnableIconHD = False
+        CustomIconsImages = IL_NightModeCheckBoxRadioButtonIcons
+        CustomIconsImagesHD = IL_NightModeCheckBoxRadioButtonIconsHD
       end
       object NightModeGameSelectionButtonPreview: TBitBtnEx
         Left = 170
@@ -770,6 +779,9 @@ object FormNightMode: TFormNightMode
         State = cbChecked
         Themed = True
         CustomIconsEnabled = False
+        CustomEnableIconHD = False
+        CustomIconsImages = IL_NightModeCheckBoxRadioButtonIcons
+        CustomIconsImagesHD = IL_NightModeCheckBoxRadioButtonIconsHD
       end
       object NightModeGamesSelectionTopColor: TColorBoxEx
         Left = 76
@@ -801,10 +813,10 @@ object FormNightMode: TFormNightMode
       end
     end
     object NightModeSearchGamesPanelColorsBox: TPanelEx
-      Left = 614
-      Top = 8
+      Left = 311
+      Top = 188
       Width = 287
-      Height = 258
+      Height = 220
       Color1 = 5263440
       Color2 = clSilver
       Color3 = clYellow
@@ -823,7 +835,7 @@ object FormNightMode: TFormNightMode
         Height = 18
         Align = alTop
         AutoSize = False
-        Caption = 'Search Games Panel Colors'
+        Caption = 'Tool Bar Search Games Panel Colors'
         CaptionIndent = 3
         Color = 5787720
         Font.Charset = ANSI_CHARSET
@@ -842,10 +854,10 @@ object FormNightMode: TFormNightMode
         Frames = [lfrLeft, lfrRight, lfrBottom]
         Transparent = False
       end
-      object NightModeLabelSearchGamesPanelFilterFontColor: TShadowLabel
+      object NightModeSearchGamesPanelFilterFontColorLabel: TShadowLabel
         Left = 4
         Top = 47
-        Width = 56
+        Width = 54
         Height = 16
         Caption = 'Filter Font'
         Font.Charset = ANSI_CHARSET
@@ -863,10 +875,10 @@ object FormNightMode: TFormNightMode
         Frames = []
         Transparent = True
       end
-      object NightModeLabelSearchGamesPanelFieldFontColor: TShadowLabel
+      object NightModeSearchGamesPanelFieldFontColorLabel: TShadowLabel
         Left = 4
         Top = 71
-        Width = 55
+        Width = 53
         Height = 16
         Caption = 'Field Font'
         Font.Charset = ANSI_CHARSET
@@ -884,12 +896,12 @@ object FormNightMode: TFormNightMode
         Frames = []
         Transparent = True
       end
-      object NightModeLabelSearchGamesPanelCaptionBarFontColor: TShadowLabel
+      object NightModeSearchGamesPanelEditBoxFontColorLabel: TShadowLabel
         Left = 4
-        Top = 233
+        Top = 102
         Width = 72
         Height = 16
-        Caption = 'Caption Font'
+        Caption = 'Edit Text Font'
         Font.Charset = ANSI_CHARSET
         Font.Color = 12574688
         Font.Height = -12
@@ -905,12 +917,12 @@ object FormNightMode: TFormNightMode
         Frames = []
         Transparent = True
       end
-      object NightModeLabelSearchGamesPanelEditBoxFontColor: TShadowLabel
+      object NightModeSearchGamesPanelEditBoxBackgroundColorLabel: TShadowLabel
         Left = 4
-        Top = 95
-        Width = 51
+        Top = 126
+        Width = 69
         Height = 16
-        Caption = 'Text Font'
+        Caption = 'Edit Bk Color'
         Font.Charset = ANSI_CHARSET
         Font.Color = 12574688
         Font.Height = -12
@@ -926,31 +938,10 @@ object FormNightMode: TFormNightMode
         Frames = []
         Transparent = True
       end
-      object NightModeLabelSearchGamesPanelEditBoxBackgroundColor: TShadowLabel
+      object NightModeSearchGamesPanelEditBoxCustomFrameColorLabel: TShadowLabel
         Left = 4
-        Top = 119
-        Width = 72
-        Height = 16
-        Caption = 'Text Bk Color'
-        Font.Charset = ANSI_CHARSET
-        Font.Color = 12574688
-        Font.Height = -12
-        Font.Name = 'Segoe UI'
-        Font.Style = []
-        ParentFont = False
-        ShowAccelChar = False
-        ShadowColor = clGray
-        ShadowEnabled = False
-        EllipsType = etNone
-        ColorFrame = clBlack
-        ColorInnerFrame = clBlack
-        Frames = []
-        Transparent = True
-      end
-      object NightModeLabelSearchGamesPanelEditBoxCustomFrameColor: TShadowLabel
-        Left = 4
-        Top = 164
-        Width = 68
+        Top = 171
+        Width = 66
         Height = 16
         Caption = 'Frame Color'
         Font.Charset = ANSI_CHARSET
@@ -968,10 +959,10 @@ object FormNightMode: TFormNightMode
         Frames = []
         Transparent = True
       end
-      object LabelNightModeSearchGamesPanelEditBoxCustomFocusedFrameColor: TShadowLabel
+      object NightModeSearchGamesPanelEditBoxCustomFocusedFrameColorLabel: TShadowLabel
         Left = 4
-        Top = 188
-        Width = 79
+        Top = 195
+        Width = 77
         Height = 16
         Caption = 'Focused Color'
         Font.Charset = ANSI_CHARSET
@@ -989,33 +980,12 @@ object FormNightMode: TFormNightMode
         Frames = []
         Transparent = True
       end
-      object NightModeLabelSearchGamesPanelEditBoxFrameColor: TShadowLabel
+      object NightModeSearchGamesPanelEditBoxFrameColorTitleLabel: TShadowLabel
         Left = 96
-        Top = 144
-        Width = 114
+        Top = 151
+        Width = 80
         Height = 16
-        Caption = 'Edit Box Frame Color'
-        Font.Charset = ANSI_CHARSET
-        Font.Color = 12574688
-        Font.Height = -12
-        Font.Name = 'Segoe UI'
-        Font.Style = []
-        ParentFont = False
-        ShowAccelChar = False
-        ShadowColor = clGray
-        ShadowEnabled = False
-        EllipsType = etNone
-        ColorFrame = clBlack
-        ColorInnerFrame = clBlack
-        Frames = []
-        Transparent = True
-      end
-      object NightModeLabelSearchGamesFloatingPanel: TShadowLabel
-        Left = 96
-        Top = 213
-        Width = 78
-        Height = 16
-        Caption = 'Floating Panel'
+        Caption = 'Edit Box Frame'
         Font.Charset = ANSI_CHARSET
         Font.Color = 12574688
         Font.Height = -12
@@ -1073,24 +1043,9 @@ object FormNightMode: TFormNightMode
         OnSelect = NightModeSearchGamesPanelFieldFontColorSelect
         CustomColorsEnabled = True
       end
-      object NightModeSearchGamesPanelCaptionBarFontColor: TColorBoxEx
-        Left = 96
-        Top = 230
-        Width = 185
-        Height = 22
-        Hint = 'Font Color For The Caption Bar'
-        DefaultColorColor = 11836807
-        NoneColorColor = clNone
-        Selected = 11836807
-        Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
-        ItemHeight = 16
-        TabOrder = 3
-        OnSelect = NightModeSearchGamesPanelCaptionBarFontColorSelect
-        CustomColorsEnabled = True
-      end
       object NightModeSearchGamesPanelEditBoxFontColor: TColorBoxEx
         Left = 96
-        Top = 92
+        Top = 99
         Width = 185
         Height = 22
         Hint = 'Font Color For The Edit Box'
@@ -1099,13 +1054,13 @@ object FormNightMode: TFormNightMode
         Selected = 11836807
         Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
         ItemHeight = 16
-        TabOrder = 4
+        TabOrder = 3
         OnSelect = NightModeSearchGamesPanelEditBoxFontColorSelect
         CustomColorsEnabled = True
       end
       object NightModeSearchGamesPanelEditBoxBackgroundColor: TColorBoxEx
         Left = 96
-        Top = 116
+        Top = 123
         Width = 185
         Height = 22
         Hint = 'Background Color For The Edit Box'
@@ -1114,13 +1069,13 @@ object FormNightMode: TFormNightMode
         Selected = 4734774
         Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
         ItemHeight = 16
-        TabOrder = 5
+        TabOrder = 4
         OnSelect = NightModeSearchGamesPanelEditBoxBackgroundColorSelect
         CustomColorsEnabled = True
       end
       object NightModeSearchGamesPanelEditBoxCustomFrameColor: TColorBoxEx
         Left = 96
-        Top = 161
+        Top = 168
         Width = 185
         Height = 22
         Hint = 'Frame Color For The Edit Box'
@@ -1128,13 +1083,13 @@ object FormNightMode: TFormNightMode
         Selected = 1513239
         Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
         ItemHeight = 16
-        TabOrder = 6
+        TabOrder = 5
         OnSelect = NightModeSearchGamesPanelEditBoxCustomFrameColorSelect
         CustomColorsEnabled = True
       end
       object NightModeSearchGamesPanelEditBoxCustomFocusedFrameColor: TColorBoxEx
         Left = 96
-        Top = 185
+        Top = 192
         Width = 185
         Height = 22
         Hint = 'Focused Frame Color For The Edit Box'
@@ -1143,7 +1098,7 @@ object FormNightMode: TFormNightMode
         Selected = 11836807
         Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
         ItemHeight = 16
-        TabOrder = 7
+        TabOrder = 6
         OnSelect = NightModeSearchGamesPanelEditBoxCustomFocusedFrameColorSelect
         CustomColorsEnabled = True
       end
@@ -1156,7 +1111,7 @@ object FormNightMode: TFormNightMode
         Caption = 'Preview'
         ParentShowHint = False
         ShowHint = True
-        TabOrder = 8
+        TabOrder = 7
         OnClick = NightModeSearchGamesPanelColorsButtonPreviewClick
         UseCustomDraw = True
       end
@@ -1168,7 +1123,7 @@ object FormNightMode: TFormNightMode
         Height = 21
         Hint = 'Reset colors to default'
         Caption = '2'
-        TabOrder = 9
+        TabOrder = 8
         OnClick = NightModeSearchGamesPanelColorsButtonDefaultClick
         ImageIndex = 15
         Images = FormMain.IL_MenuPopup
@@ -1282,6 +1237,27 @@ object FormNightMode: TFormNightMode
         Frames = [lfrLeft, lfrRight, lfrBottom]
         Transparent = False
       end
+      object NightModeGamesBackgroundColorLabel: TShadowLabel
+        Left = 4
+        Top = 22
+        Width = 97
+        Height = 16
+        Caption = 'Background Color'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = 12574688
+        Font.Height = -12
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+        ShowAccelChar = False
+        ShadowColor = clGray
+        ShadowEnabled = False
+        EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
+        Transparent = True
+      end
       object NightModeGamesBackgroundColor: TColorBoxEx
         Left = 4
         Top = 39
@@ -1343,6 +1319,9 @@ object FormNightMode: TFormNightMode
         State = cbChecked
         Themed = True
         CustomIconsEnabled = False
+        CustomEnableIconHD = False
+        CustomIconsImages = IL_NightModeCheckBoxRadioButtonIcons
+        CustomIconsImagesHD = IL_NightModeCheckBoxRadioButtonIconsHD
       end
       object NightModeGamesTileBackground: TAdvOfficeCheckBoxEx
         Left = 746
@@ -1365,6 +1344,9 @@ object FormNightMode: TFormNightMode
         State = cbChecked
         Themed = True
         CustomIconsEnabled = False
+        CustomEnableIconHD = False
+        CustomIconsImages = IL_NightModeCheckBoxRadioButtonIcons
+        CustomIconsImagesHD = IL_NightModeCheckBoxRadioButtonIconsHD
       end
       object NightModeGamesBackgroundImageButtonSelect: TBitBtnEx
         Left = 789
@@ -1400,10 +1382,10 @@ object FormNightMode: TFormNightMode
       end
     end
     object NightModeMAMEGameDocsBox: TPanelEx
-      Left = 8
-      Top = 574
+      Left = 917
+      Top = 491
       Width = 287
-      Height = 142
+      Height = 126
       Color1 = 5263440
       Color2 = clSilver
       Color3 = clYellow
@@ -1441,37 +1423,16 @@ object FormNightMode: TFormNightMode
         Frames = [lfrLeft, lfrRight, lfrBottom]
         Transparent = False
       end
-      object NightModeLabelGameDocsShowStatusBar: TShadowLabel
-        Left = 20
-        Top = 119
-        Width = 128
-        Height = 19
-        Caption = 'Disable 7 pixels border'
-        Font.Charset = ANSI_CHARSET
-        Font.Color = clSilver
-        Font.Height = -12
-        Font.Name = 'Trebuchet MS'
-        Font.Style = []
-        ParentFont = False
-        ShowAccelChar = False
-        ShadowColor = 6316128
-        ShadowEnabled = False
-        EllipsType = etNone
-        ColorFrame = clBlack
-        ColorInnerFrame = clBlack
-        Frames = []
-        Transparent = True
-      end
       object NightModeGameDocsFont_Setting: TShadowLabel
-        Left = 196
-        Top = 114
-        Width = 85
-        Height = 22
+        Left = 186
+        Top = 57
+        Width = 95
+        Height = 28
         Hint = 'Select font for texts'
         Alignment = taCenter
         AutoSize = False
-        Caption = 'Font'
-        Color = 2565927
+        Caption = 'Select Font'
+        Color = 1513239
         Font.Charset = ANSI_CHARSET
         Font.Color = 11836807
         Font.Height = -12
@@ -1490,12 +1451,54 @@ object FormNightMode: TFormNightMode
         Layout = tlCenter
         OnClick = NightModeGameDocsFont_SettingClick
       end
-      object NightModeGameDocumentsBackgroundColor: TColorBoxEx
+      object NightModeGameDocumentsBackgroundColorLabel: TShadowLabel
         Left = 4
+        Top = 25
+        Width = 32
+        Height = 16
+        Caption = 'Bkgrd'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = 12574688
+        Font.Height = -12
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+        ShowAccelChar = False
+        ShadowColor = clGray
+        ShadowEnabled = False
+        EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
+        Transparent = True
+      end
+      object NightModeGameDocsBorderColorLabel: TShadowLabel
+        Left = 4
+        Top = 101
+        Width = 36
+        Height = 16
+        Caption = 'Border'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = 12574688
+        Font.Height = -12
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+        ShowAccelChar = False
+        ShadowColor = clGray
+        ShadowEnabled = False
+        EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
+        Transparent = True
+      end
+      object NightModeGameDocumentsBackgroundColor: TColorBoxEx
+        Left = 46
         Top = 22
-        Width = 228
+        Width = 185
         Height = 22
-        Hint = 'MAME Game Docs Background Color'
+        Hint = 'Background Color'
         DefaultColorColor = 1513239
         Selected = 1513239
         Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
@@ -1514,56 +1517,34 @@ object FormNightMode: TFormNightMode
         TabOrder = 1
         OnClick = NightModeGameDocumentsButtonDefaultClick
       end
-      object NightModeGameDocsShowBorder: TAdvOfficeCheckBoxEx
-        Left = 4
-        Top = 51
-        Width = 193
-        Height = 17
-        Hint = '7 pixels border color'
-        Checked = True
-        Font.Charset = ANSI_CHARSET
-        Font.Color = 12574688
-        Font.Height = -12
-        Font.Name = 'Segoe UI'
-        Font.Style = []
-        ParentFont = False
-        TabOrder = 2
-        OnClick = NightModeGameDocsShowBorderClick
-        Alignment = taLeftJustify
-        Caption = 'Show Game Docs 7 Pixels Border'
-        ReturnIsTab = False
-        State = cbChecked
-        Themed = True
-        CustomIconsEnabled = False
-      end
       object NightModeGameDocsBorderColor: TColorBoxEx
-        Left = 4
-        Top = 73
-        Width = 228
+        Left = 46
+        Top = 98
+        Width = 185
         Height = 22
-        Hint = 'MAME Game Docs 7 Pixels Border Color'
+        Hint = '7 Pixels Border Color'
         DefaultColorColor = 1513239
         Selected = 1513239
         Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
         ItemHeight = 16
-        TabOrder = 3
+        TabOrder = 2
         OnSelect = NightModeGameDocsBorderColorSelect
         CustomColorsEnabled = True
       end
       object NightModeGameDocsBorderColorButtonDefault: TBitBtnEx
         Left = 235
-        Top = 72
+        Top = 97
         Width = 47
         Height = 24
         Caption = 'Default'
-        TabOrder = 4
+        TabOrder = 3
         OnClick = NightModeGameDocsBorderColorButtonDefaultClick
       end
       object NightModeGameDocsShowStatusBar: TAdvOfficeCheckBoxEx
         Left = 4
-        Top = 102
-        Width = 175
-        Height = 18
+        Top = 51
+        Width = 110
+        Height = 20
         Checked = True
         Font.Charset = ANSI_CHARSET
         Font.Color = 12574688
@@ -1571,19 +1552,22 @@ object FormNightMode: TFormNightMode
         Font.Name = 'Segoe UI'
         Font.Style = []
         ParentFont = False
-        TabOrder = 5
+        TabOrder = 4
         OnClick = NightModeGameDocsShowStatusBarClick
         Alignment = taLeftJustify
-        Caption = 'Show Game Docs Status Bar'
+        Caption = 'Show Status Bar'
         ReturnIsTab = False
         State = cbChecked
         Themed = True
         CustomIconsEnabled = False
+        CustomEnableIconHD = False
+        CustomIconsImages = IL_NightModeCheckBoxRadioButtonIcons
+        CustomIconsImagesHD = IL_NightModeCheckBoxRadioButtonIconsHD
       end
     end
     object NightModeMenuPopupMenuBox: TPanelEx
       Left = 8
-      Top = 425
+      Top = 8
       Width = 287
       Height = 50
       Color1 = 5263440
@@ -1623,10 +1607,10 @@ object FormNightMode: TFormNightMode
         Frames = [lfrLeft, lfrRight, lfrBottom]
         Transparent = False
       end
-      object NightModeLabelMenuPopupMenuFrameColor: TShadowLabel
+      object NightModeMenuPopupMenuFrameColorLabel: TShadowLabel
         Left = 4
         Top = 25
-        Width = 36
+        Width = 34
         Height = 16
         Caption = 'Frame'
         Font.Charset = ANSI_CHARSET
@@ -1645,7 +1629,7 @@ object FormNightMode: TFormNightMode
         Transparent = True
       end
       object NightModeMenuPopupMenuFrameColor: TColorBoxEx
-        Left = 44
+        Left = 46
         Top = 22
         Width = 185
         Height = 22
@@ -1658,7 +1642,7 @@ object FormNightMode: TFormNightMode
         OnSelect = NightModeMenuPopupMenuFrameColorSelect
         CustomColorsEnabled = True
       end
-      object NightModeMenuPopupMenuFrameColorDefaultColors: TBitBtnEx
+      object NightModeMenuPopupMenuFrameColorButtonDefault: TBitBtnEx
         Left = 235
         Top = 21
         Width = 47
@@ -1666,7 +1650,7 @@ object FormNightMode: TFormNightMode
         Hint = 'Set menus colors to default'
         Caption = 'Default'
         TabOrder = 1
-        OnClick = NightModeMenuPopupMenuFrameColorDefaultColorsClick
+        OnClick = NightModeMenuPopupMenuFrameColorButtonDefaultClick
       end
     end
     object NightModeButtonColorsBox: TPanelEx
@@ -1711,10 +1695,10 @@ object FormNightMode: TFormNightMode
         Frames = [lfrLeft, lfrRight, lfrBottom]
         Transparent = False
       end
-      object NightModeLabelButtonColorFontColor: TShadowLabel
+      object NightModeButtonColorFontColorLabel: TShadowLabel
         Left = 4
         Top = 47
-        Width = 51
+        Width = 49
         Height = 16
         Caption = 'Text Font'
         Font.Charset = ANSI_CHARSET
@@ -1732,10 +1716,10 @@ object FormNightMode: TFormNightMode
         Frames = []
         Transparent = True
       end
-      object NightModeLabelButtonColorGradientTop: TShadowLabel
+      object NightModeButtonColorGradientTopLabel: TShadowLabel
         Left = 4
         Top = 78
-        Width = 22
+        Width = 20
         Height = 16
         Caption = 'Top'
         Font.Charset = ANSI_CHARSET
@@ -1753,10 +1737,10 @@ object FormNightMode: TFormNightMode
         Frames = []
         Transparent = True
       end
-      object NightModeLabelButtonColorGradientBottom: TShadowLabel
+      object NightModeButtonColorGradientBottomLabel: TShadowLabel
         Left = 4
         Top = 102
-        Width = 43
+        Width = 41
         Height = 16
         Caption = 'Bottom'
         Font.Charset = ANSI_CHARSET
@@ -1774,10 +1758,10 @@ object FormNightMode: TFormNightMode
         Frames = []
         Transparent = True
       end
-      object NightModeLabelButtonColorGradientBottomHover: TShadowLabel
+      object NightModeButtonColorGradientBottomHoverLabel: TShadowLabel
         Left = 4
         Top = 205
-        Width = 78
+        Width = 76
         Height = 16
         Caption = 'Bottom Hover'
         Font.Charset = ANSI_CHARSET
@@ -1795,10 +1779,10 @@ object FormNightMode: TFormNightMode
         Frames = []
         Transparent = True
       end
-      object NightModeLabelButtonColorGradientTopHover: TShadowLabel
+      object NightModeButtonColorGradientTopHoverLabel: TShadowLabel
         Left = 4
         Top = 181
-        Width = 57
+        Width = 55
         Height = 16
         Caption = 'Top Hover'
         Font.Charset = ANSI_CHARSET
@@ -1816,10 +1800,10 @@ object FormNightMode: TFormNightMode
         Frames = []
         Transparent = True
       end
-      object NightModeLabelButtonColorGradientTopDisabled: TShadowLabel
+      object NightModeButtonColorGradientTopDisabledLabel: TShadowLabel
         Left = 4
         Top = 394
-        Width = 70
+        Width = 68
         Height = 16
         Caption = 'Top Disabled'
         Font.Charset = ANSI_CHARSET
@@ -1837,10 +1821,10 @@ object FormNightMode: TFormNightMode
         Frames = []
         Transparent = True
       end
-      object NightModeLabelButtonColorGradientBottomDisabled: TShadowLabel
+      object NightModeButtonColorGradientBottomDisabledLabel: TShadowLabel
         Left = 4
         Top = 418
-        Width = 91
+        Width = 89
         Height = 16
         Caption = 'Bottom Disabled'
         Font.Charset = ANSI_CHARSET
@@ -1858,10 +1842,10 @@ object FormNightMode: TFormNightMode
         Frames = []
         Transparent = True
       end
-      object NightModeLabelButtonColorFrameColor: TShadowLabel
+      object NightModeButtonColorFrameColorLabel: TShadowLabel
         Left = 4
         Top = 126
-        Width = 36
+        Width = 34
         Height = 16
         Caption = 'Frame'
         Font.Charset = ANSI_CHARSET
@@ -1879,10 +1863,10 @@ object FormNightMode: TFormNightMode
         Frames = []
         Transparent = True
       end
-      object NightModeLabelButtonColorFrameColorHover: TShadowLabel
+      object NightModeButtonColorFrameColorHoverLabel: TShadowLabel
         Left = 4
         Top = 229
-        Width = 71
+        Width = 69
         Height = 16
         Caption = 'Frame Hover'
         Font.Charset = ANSI_CHARSET
@@ -1900,10 +1884,10 @@ object FormNightMode: TFormNightMode
         Frames = []
         Transparent = True
       end
-      object NightModeLabelButtonColorFrameColorDisabled: TShadowLabel
+      object NightModeButtonColorFrameColorDisabledLabel: TShadowLabel
         Left = 4
         Top = 442
-        Width = 84
+        Width = 82
         Height = 16
         Caption = 'Frame Disabled'
         Font.Charset = ANSI_CHARSET
@@ -1921,10 +1905,10 @@ object FormNightMode: TFormNightMode
         Frames = []
         Transparent = True
       end
-      object NightModeLabelButtonColorFrameColorFocused: TShadowLabel
+      object NightModeButtonColorFrameColorFocusedLabel: TShadowLabel
         Left = 4
         Top = 150
-        Width = 83
+        Width = 81
         Height = 16
         Caption = 'Frame Focused'
         Font.Charset = ANSI_CHARSET
@@ -1942,10 +1926,10 @@ object FormNightMode: TFormNightMode
         Frames = []
         Transparent = True
       end
-      object NightModeLabelButtonColorFontColorDisabled: TShadowLabel
+      object NightModeButtonColorFontColorDisabledLabel: TShadowLabel
         Left = 4
         Top = 339
-        Width = 72
+        Width = 70
         Height = 16
         Caption = 'Text Disabled'
         Font.Charset = ANSI_CHARSET
@@ -1963,10 +1947,10 @@ object FormNightMode: TFormNightMode
         Frames = []
         Transparent = True
       end
-      object NightModeLabelButtonColorGradientBottomSelected: TShadowLabel
+      object NightModeButtonColorGradientBottomSelectedLabel: TShadowLabel
         Left = 4
         Top = 284
-        Width = 90
+        Width = 88
         Height = 16
         Caption = 'Bottom Selected'
         Font.Charset = ANSI_CHARSET
@@ -1984,10 +1968,10 @@ object FormNightMode: TFormNightMode
         Frames = []
         Transparent = True
       end
-      object NightModeLabelButtonColorGradientTopSelected: TShadowLabel
+      object NightModeButtonColorGradientTopSelectedLabel: TShadowLabel
         Left = 4
         Top = 260
-        Width = 69
+        Width = 67
         Height = 16
         Caption = 'Top Selected'
         Font.Charset = ANSI_CHARSET
@@ -2005,10 +1989,10 @@ object FormNightMode: TFormNightMode
         Frames = []
         Transparent = True
       end
-      object NightModeLabelButtonColorFrameColorSelected: TShadowLabel
+      object NightModeButtonColorFrameColorSelectedLabel: TShadowLabel
         Left = 4
         Top = 308
-        Width = 83
+        Width = 81
         Height = 16
         Caption = 'Frame Selected'
         Font.Charset = ANSI_CHARSET
@@ -2102,8 +2086,8 @@ object FormNightMode: TFormNightMode
         Width = 185
         Height = 22
         Hint = 'Bottom Gradient Color On Disabled'
-        DefaultColorColor = 4473924
-        Selected = 4473924
+        DefaultColorColor = 1973790
+        Selected = 1973790
         Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
         ItemHeight = 16
         TabOrder = 5
@@ -2116,8 +2100,8 @@ object FormNightMode: TFormNightMode
         Width = 185
         Height = 22
         Hint = 'Top Gradient Color On Disabled'
-        DefaultColorColor = 6579300
-        Selected = 6579300
+        DefaultColorColor = 3158064
+        Selected = 3158064
         Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
         ItemHeight = 16
         TabOrder = 6
@@ -2158,8 +2142,8 @@ object FormNightMode: TFormNightMode
         Width = 185
         Height = 22
         Hint = 'Frame Color On Disabled'
-        DefaultColorColor = 4473924
-        Selected = 4473924
+        DefaultColorColor = 2236962
+        Selected = 2236962
         Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
         ItemHeight = 16
         TabOrder = 9
@@ -2186,8 +2170,6 @@ object FormNightMode: TFormNightMode
         Width = 185
         Height = 22
         Hint = 'Font Color For The Disabled Text'
-        DefaultColorColor = clGray
-        Selected = clGray
         Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
         ItemHeight = 16
         TabOrder = 11
@@ -2200,8 +2182,8 @@ object FormNightMode: TFormNightMode
         Width = 185
         Height = 22
         Hint = 'Shadow Font Color For The Disabled Ttext'
-        DefaultColorColor = 1513239
-        Selected = 1513239
+        DefaultColorColor = 3158064
+        Selected = 3158064
         Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
         ItemHeight = 16
         TabOrder = 12
@@ -2281,6 +2263,9 @@ object FormNightMode: TFormNightMode
         ReturnIsTab = False
         Themed = True
         CustomIconsEnabled = False
+        CustomEnableIconHD = False
+        CustomIconsImages = IL_NightModeCheckBoxRadioButtonIcons
+        CustomIconsImagesHD = IL_NightModeCheckBoxRadioButtonIconsHD
       end
       object NightModeColorsBoxButtonDefault2: TBitBtnEx
         Tag = 1
@@ -2365,10 +2350,10 @@ object FormNightMode: TFormNightMode
         Frames = [lfrLeft, lfrRight, lfrBottom]
         Transparent = False
       end
-      object NightModeLabelGamesListSplitterSingleColor: TShadowLabel
+      object NightModeGamesListSplitterSingleColorLabel: TShadowLabel
         Left = 4
         Top = 47
-        Width = 32
+        Width = 30
         Height = 16
         Caption = 'Color'
         Font.Charset = ANSI_CHARSET
@@ -2386,10 +2371,10 @@ object FormNightMode: TFormNightMode
         Frames = []
         Transparent = True
       end
-      object NightModeLabelGamesListSplitterSingleColorHot: TShadowLabel
+      object NightModeGamesListSplitterSingleColorHotLabel: TShadowLabel
         Left = 4
         Top = 71
-        Width = 55
+        Width = 53
         Height = 16
         Caption = 'Hot Color'
         Font.Charset = ANSI_CHARSET
@@ -2436,6 +2421,9 @@ object FormNightMode: TFormNightMode
         ReturnIsTab = False
         Themed = True
         CustomIconsEnabled = False
+        CustomEnableIconHD = False
+        CustomIconsImages = IL_NightModeCheckBoxRadioButtonIcons
+        CustomIconsImagesHD = IL_NightModeCheckBoxRadioButtonIconsHD
       end
       object NightModeGamesListSplitterSingleColor: TColorBoxEx
         Left = 60
@@ -2510,10 +2498,10 @@ object FormNightMode: TFormNightMode
         Frames = [lfrLeft, lfrRight, lfrBottom]
         Transparent = False
       end
-      object NightModeLabelHintBox_Color: TShadowLabel
+      object NightModeHintBox_ColorLabel: TShadowLabel
         Left = 4
         Top = 51
-        Width = 66
+        Width = 64
         Height = 16
         Caption = 'Bkgrd Color'
         Font.Charset = ANSI_CHARSET
@@ -2531,10 +2519,10 @@ object FormNightMode: TFormNightMode
         Frames = []
         Transparent = True
       end
-      object NightModeLabelHintBox_Opacity: TShadowLabel
+      object NightModeHintBox_OpacityLabel: TShadowLabel
         Left = 4
         Top = 103
-        Width = 73
+        Width = 71
         Height = 16
         Caption = 'Opacity [190]'
         Color = 5263440
@@ -2554,10 +2542,10 @@ object FormNightMode: TFormNightMode
         Frames = []
         Transparent = False
       end
-      object NightModeLabelHintBox_TextColor: TShadowLabel
+      object NightModeHintBox_TextColorLabel: TShadowLabel
         Left = 4
         Top = 175
-        Width = 51
+        Width = 49
         Height = 16
         Caption = 'Text Font'
         Font.Charset = ANSI_CHARSET
@@ -2578,9 +2566,9 @@ object FormNightMode: TFormNightMode
       object NightModeHintBox_PositionLabel: TShadowLabel
         Left = 82
         Top = 25
-        Width = 82
+        Width = 74
         Height = 16
-        Caption = 'Bottom / Right'
+        Caption = 'Bottom/Right'
         Color = 5263440
         Font.Charset = ANSI_CHARSET
         Font.Color = 12574688
@@ -2657,6 +2645,9 @@ object FormNightMode: TFormNightMode
         ReturnIsTab = False
         Themed = True
         CustomIconsEnabled = False
+        CustomEnableIconHD = False
+        CustomIconsImages = IL_NightModeCheckBoxRadioButtonIcons
+        CustomIconsImagesHD = IL_NightModeCheckBoxRadioButtonIconsHD
       end
       object NightModeHintBox_Opacity: TGaugeBar
         Left = 4
@@ -2721,6 +2712,9 @@ object FormNightMode: TFormNightMode
         ReturnIsTab = False
         Themed = True
         CustomIconsEnabled = False
+        CustomEnableIconHD = False
+        CustomIconsImages = IL_NightModeCheckBoxRadioButtonIcons
+        CustomIconsImagesHD = IL_NightModeCheckBoxRadioButtonIconsHD
       end
       object NightModeHintBox_TextColor: TColorBoxEx
         Left = 76
@@ -2770,6 +2764,9 @@ object FormNightMode: TFormNightMode
         ReturnIsTab = False
         Themed = True
         CustomIconsEnabled = False
+        CustomEnableIconHD = False
+        CustomIconsImages = IL_NightModeCheckBoxRadioButtonIcons
+        CustomIconsImagesHD = IL_NightModeCheckBoxRadioButtonIconsHD
       end
       object NightModeImagesHintBoxButtonPreview: TBitBtnEx
         Left = 170
@@ -2782,26 +2779,6 @@ object FormNightMode: TFormNightMode
         ShowHint = True
         TabOrder = 11
         OnClick = NightModeImagesHintBoxButtonPreviewClick
-      end
-      object NightModeHintBox_LargerFontSize: TAdvOfficeCheckBoxEx
-        Left = 76
-        Top = 149
-        Width = 107
-        Height = 20
-        Hint = 'Change font size to 14 pixels'
-        Font.Charset = ANSI_CHARSET
-        Font.Color = 12574688
-        Font.Height = -12
-        Font.Name = 'Segoe UI'
-        Font.Style = []
-        ParentFont = False
-        TabOrder = 12
-        OnClick = NightModeHintBox_LargerFontSizeClick
-        Alignment = taLeftJustify
-        Caption = 'Larger Font Size'
-        ReturnIsTab = False
-        Themed = True
-        CustomIconsEnabled = False
       end
       object NightModeHintBox_Position: TGaugeBar
         Left = 4
@@ -2834,7 +2811,7 @@ object FormNightMode: TFormNightMode
         Height = 21
         Hint = 'Reset hint box colors and position to default (darker colors)'
         Caption = '2'
-        TabOrder = 14
+        TabOrder = 13
         OnClick = NightModeHintBoxtColorsButtonDefaultClick
         ImageIndex = 15
         Images = FormMain.IL_MenuPopup
@@ -2847,7 +2824,7 @@ object FormNightMode: TFormNightMode
         Height = 21
         Hint = 'Reset text colors to default (orange color)'
         Caption = '2'
-        TabOrder = 15
+        TabOrder = 14
         OnClick = NightModeHintTextDefaultColorsButtonDefaultClick
         ImageIndex = 15
         Images = FormMain.IL_MenuPopup
@@ -2895,10 +2872,10 @@ object FormNightMode: TFormNightMode
         Frames = [lfrLeft, lfrRight, lfrBottom]
         Transparent = False
       end
-      object NightModeLabelImageSplitterSingleColor: TShadowLabel
+      object NightModeImageSplitterSingleColorLabel: TShadowLabel
         Left = 4
         Top = 47
-        Width = 32
+        Width = 30
         Height = 16
         Caption = 'Color'
         Font.Charset = ANSI_CHARSET
@@ -2916,10 +2893,10 @@ object FormNightMode: TFormNightMode
         Frames = []
         Transparent = True
       end
-      object NightModeLabelImageSplitterSingleColorHot: TShadowLabel
+      object NightModeImageSplitterSingleColorHotLabel: TShadowLabel
         Left = 4
         Top = 71
-        Width = 55
+        Width = 53
         Height = 16
         Caption = 'Hot Color'
         Font.Charset = ANSI_CHARSET
@@ -2968,6 +2945,9 @@ object FormNightMode: TFormNightMode
         State = cbChecked
         Themed = True
         CustomIconsEnabled = False
+        CustomEnableIconHD = False
+        CustomIconsImages = IL_NightModeCheckBoxRadioButtonIcons
+        CustomIconsImagesHD = IL_NightModeCheckBoxRadioButtonIconsHD
       end
       object NightModeImageSplitterSingleColor: TColorBoxEx
         Left = 60
@@ -3042,10 +3022,31 @@ object FormNightMode: TFormNightMode
         Frames = [lfrLeft, lfrRight, lfrBottom]
         Transparent = False
       end
-      object NightModeImageBorderColor: TColorBoxEx
+      object NightModeImageBorderColorLabel: TShadowLabel
         Left = 4
+        Top = 25
+        Width = 36
+        Height = 16
+        Caption = 'Border'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = 12574688
+        Font.Height = -12
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+        ShowAccelChar = False
+        ShadowColor = clGray
+        ShadowEnabled = False
+        EllipsType = etNone
+        ColorFrame = clBlack
+        ColorInnerFrame = clBlack
+        Frames = []
+        Transparent = True
+      end
+      object NightModeImageBorderColor: TColorBoxEx
+        Left = 46
         Top = 22
-        Width = 225
+        Width = 185
         Height = 22
         Hint = 'Image 7 Pixels Border Color'
         DefaultColorColor = 1513239
@@ -3067,7 +3068,7 @@ object FormNightMode: TFormNightMode
         OnClick = NightModeImageBorderColorButtonDefaultClick
       end
     end
-    object NightModeProfilesGroupBox: TPanelEx
+    object NightModeProfilesBox: TPanelEx
       Left = 8
       Top = 732
       Width = 590
@@ -3083,7 +3084,7 @@ object FormNightMode: TFormNightMode
       ParentBackground = False
       ShowHint = True
       Style = vgSolid
-      object NightModeProfilesGroupBoxLabel: TShadowLabel
+      object NightModeProfilesBoxLabel: TShadowLabel
         Left = 0
         Top = 0
         Width = 588
@@ -3111,10 +3112,10 @@ object FormNightMode: TFormNightMode
       end
     end
     object NightModePanelColorsBox: TPanelEx
-      Left = 311
-      Top = 187
+      Left = 614
+      Top = 8
       Width = 287
-      Height = 288
+      Height = 316
       Color1 = 5263440
       Color2 = clSilver
       Color3 = clYellow
@@ -3152,10 +3153,10 @@ object FormNightMode: TFormNightMode
         Frames = [lfrLeft, lfrRight, lfrBottom]
         Transparent = False
       end
-      object NightModeLabelPanelColorsTitleFontColor: TShadowLabel
+      object NightModePanelColorsTitleFontColorLabel: TShadowLabel
         Left = 4
-        Top = 191
-        Width = 52
+        Top = 212
+        Width = 50
         Height = 16
         Caption = 'Title Font'
         Font.Charset = ANSI_CHARSET
@@ -3175,8 +3176,8 @@ object FormNightMode: TFormNightMode
       end
       object NightModePanelColorsImageCategoryTextFontColorLabel: TShadowLabel
         Left = 4
-        Top = 143
-        Width = 87
+        Top = 157
+        Width = 85
         Height = 16
         Caption = 'Image Text Font'
         Font.Charset = ANSI_CHARSET
@@ -3194,10 +3195,10 @@ object FormNightMode: TFormNightMode
         Frames = []
         Transparent = True
       end
-      object NightModeLabelSearchGamesPanelTopColor: TShadowLabel
+      object NightModeSearchGamesPanelTopColorLabel: TShadowLabel
         Left = 4
         Top = 47
-        Width = 22
+        Width = 20
         Height = 16
         Caption = 'Top'
         Font.Charset = ANSI_CHARSET
@@ -3215,10 +3216,10 @@ object FormNightMode: TFormNightMode
         Frames = []
         Transparent = True
       end
-      object NightModeLabelPanelColorsTitle2FontColor: TShadowLabel
+      object NightModePanelColorsTitle2FontColorLabel: TShadowLabel
         Left = 4
-        Top = 239
-        Width = 61
+        Top = 267
+        Width = 59
         Height = 16
         Caption = 'Title 2 Font'
         Font.Charset = ANSI_CHARSET
@@ -3236,10 +3237,10 @@ object FormNightMode: TFormNightMode
         Frames = []
         Transparent = True
       end
-      object NightModeLabelSearchGamesPanelOuterFrameColor: TShadowLabel
+      object NightModeSearchGamesPanelOuterFrameColorLabel: TShadowLabel
         Left = 4
-        Top = 119
-        Width = 69
+        Top = 126
+        Width = 67
         Height = 16
         Caption = 'Outer Frame'
         Font.Charset = ANSI_CHARSET
@@ -3257,10 +3258,10 @@ object FormNightMode: TFormNightMode
         Frames = []
         Transparent = True
       end
-      object NightModeLabelSearchGamesPanelInnerFrameColor: TShadowLabel
+      object NightModeSearchGamesPanelInnerFrameColorLabel: TShadowLabel
         Left = 4
-        Top = 95
-        Width = 66
+        Top = 102
+        Width = 64
         Height = 16
         Caption = 'Inner Frame'
         Font.Charset = ANSI_CHARSET
@@ -3278,10 +3279,10 @@ object FormNightMode: TFormNightMode
         Frames = []
         Transparent = True
       end
-      object NightModeLabelSearchGamesPanelBottomColor: TShadowLabel
+      object NightModeSearchGamesPanelBottomColorLabel: TShadowLabel
         Left = 4
         Top = 71
-        Width = 43
+        Width = 41
         Height = 16
         Caption = 'Bottom'
         Font.Charset = ANSI_CHARSET
@@ -3301,8 +3302,8 @@ object FormNightMode: TFormNightMode
       end
       object NightModePanelColorsImageZipTextFontColorLabel: TShadowLabel
         Left = 4
-        Top = 167
-        Width = 83
+        Top = 181
+        Width = 81
         Height = 16
         Caption = 'Image Zip Font'
         Font.Charset = ANSI_CHARSET
@@ -3341,6 +3342,9 @@ object FormNightMode: TFormNightMode
         State = cbChecked
         Themed = True
         CustomIconsEnabled = False
+        CustomEnableIconHD = False
+        CustomIconsImages = IL_NightModeCheckBoxRadioButtonIcons
+        CustomIconsImagesHD = IL_NightModeCheckBoxRadioButtonIconsHD
       end
       object NightModePanelsBackgroundColorsDefaultButton: TBitBtnEx
         Left = 221
@@ -3355,7 +3359,7 @@ object FormNightMode: TFormNightMode
       end
       object NightModePanelColorsImageCategoryTextFontColor: TColorBoxEx
         Left = 96
-        Top = 140
+        Top = 154
         Width = 185
         Height = 22
         Hint = 'Font Color For The Image Category Text'
@@ -3370,7 +3374,7 @@ object FormNightMode: TFormNightMode
       end
       object NightModePanelColorsImageZipTextFontColor: TColorBoxEx
         Left = 96
-        Top = 164
+        Top = 178
         Width = 185
         Height = 22
         Hint = 'Font Color For The Image Zip File Text'
@@ -3385,7 +3389,7 @@ object FormNightMode: TFormNightMode
       end
       object NightModePanelColorsTitleFontColor: TColorBoxEx
         Left = 96
-        Top = 188
+        Top = 209
         Width = 185
         Height = 22
         Hint = 'Font Color For The Title Text'
@@ -3400,7 +3404,7 @@ object FormNightMode: TFormNightMode
       end
       object NightModePanelColorsTitleShadowFontColor: TColorBoxEx
         Left = 96
-        Top = 212
+        Top = 233
         Width = 185
         Height = 22
         Hint = 'Shadow Font Color For The Title Text'
@@ -3415,7 +3419,7 @@ object FormNightMode: TFormNightMode
       end
       object NightModePanelColorsTitle2ShadowFontColor: TColorBoxEx
         Left = 96
-        Top = 260
+        Top = 288
         Width = 185
         Height = 22
         Hint = 'Shadow Font Color For The Second Title Text'
@@ -3458,7 +3462,7 @@ object FormNightMode: TFormNightMode
       end
       object NightModeSearchGamesPanelInnerFrameColor: TColorBoxEx
         Left = 96
-        Top = 92
+        Top = 99
         Width = 185
         Height = 22
         Hint = 'Inner Frame Color'
@@ -3473,7 +3477,7 @@ object FormNightMode: TFormNightMode
       end
       object NightModeSearchGamesPanelOuterFrameColor: TColorBoxEx
         Left = 96
-        Top = 116
+        Top = 123
         Width = 185
         Height = 22
         Hint = 'Outer Frame Color'
@@ -3488,7 +3492,7 @@ object FormNightMode: TFormNightMode
       end
       object NightModePanelColorsTitle2FontColor: TColorBoxEx
         Left = 96
-        Top = 236
+        Top = 264
         Width = 185
         Height = 22
         Hint = 'Font Color For The Second Title Text'
@@ -3513,7 +3517,7 @@ object FormNightMode: TFormNightMode
       end
       object NightModePanelColorsTitleShadowEnabled: TAdvOfficeCheckBoxEx
         Left = 4
-        Top = 213
+        Top = 234
         Width = 90
         Height = 20
         Font.Charset = ANSI_CHARSET
@@ -3529,10 +3533,13 @@ object FormNightMode: TFormNightMode
         ReturnIsTab = False
         Themed = True
         CustomIconsEnabled = False
+        CustomEnableIconHD = False
+        CustomIconsImages = IL_NightModeCheckBoxRadioButtonIcons
+        CustomIconsImagesHD = IL_NightModeCheckBoxRadioButtonIconsHD
       end
       object NightModePanelColorsTitle2ShadowEnabled: TAdvOfficeCheckBoxEx
         Left = 4
-        Top = 261
+        Top = 289
         Width = 91
         Height = 20
         Font.Charset = ANSI_CHARSET
@@ -3548,6 +3555,9 @@ object FormNightMode: TFormNightMode
         ReturnIsTab = False
         Themed = True
         CustomIconsEnabled = False
+        CustomEnableIconHD = False
+        CustomIconsImages = IL_NightModeCheckBoxRadioButtonIcons
+        CustomIconsImagesHD = IL_NightModeCheckBoxRadioButtonIconsHD
       end
       object NightModePanelsBackgroundColorsDefaultButton2: TBitBtnEx
         Tag = 1
@@ -3567,7 +3577,7 @@ object FormNightMode: TFormNightMode
       Left = 311
       Top = 574
       Width = 287
-      Height = 120
+      Height = 127
       Color1 = 5263440
       Color2 = clSilver
       Color3 = clYellow
@@ -3605,10 +3615,10 @@ object FormNightMode: TFormNightMode
         Frames = [lfrLeft, lfrRight, lfrBottom]
         Transparent = False
       end
-      object NightModeLabelGamesListStatusBarFontColor: TShadowLabel
+      object NightModeGamesListStatusBarFontColorLabel: TShadowLabel
         Left = 4
-        Top = 95
-        Width = 51
+        Top = 102
+        Width = 49
         Height = 16
         Caption = 'Text Font'
         Font.Charset = ANSI_CHARSET
@@ -3626,10 +3636,10 @@ object FormNightMode: TFormNightMode
         Frames = []
         Transparent = True
       end
-      object NightModeLabelGamesListStatusBarBottomColor: TShadowLabel
+      object NightModeGamesListStatusBarBottomColorLabel: TShadowLabel
         Left = 4
         Top = 71
-        Width = 43
+        Width = 41
         Height = 16
         Caption = 'Bottom'
         Font.Charset = ANSI_CHARSET
@@ -3647,10 +3657,10 @@ object FormNightMode: TFormNightMode
         Frames = []
         Transparent = True
       end
-      object NightModeLabelGamesListStatusBarTopColor: TShadowLabel
+      object NightModeGamesListStatusBarTopColorLabel: TShadowLabel
         Left = 4
         Top = 47
-        Width = 22
+        Width = 20
         Height = 16
         Caption = 'Top'
         Font.Charset = ANSI_CHARSET
@@ -3689,6 +3699,9 @@ object FormNightMode: TFormNightMode
         State = cbChecked
         Themed = True
         CustomIconsEnabled = False
+        CustomEnableIconHD = False
+        CustomIconsImages = IL_NightModeCheckBoxRadioButtonIcons
+        CustomIconsImagesHD = IL_NightModeCheckBoxRadioButtonIconsHD
       end
       object NightModeGamesListStatusBarButtonDefault: TBitBtnEx
         Left = 221
@@ -3731,7 +3744,7 @@ object FormNightMode: TFormNightMode
       end
       object NightModeGamesListStatusBarFontColor: TColorBoxEx
         Left = 91
-        Top = 92
+        Top = 99
         Width = 190
         Height = 22
         Hint = 'Text Font Color'
@@ -3757,11 +3770,11 @@ object FormNightMode: TFormNightMode
         Images = FormMain.IL_MenuPopup
       end
     end
-    object NightModeGamesListHeaderGroupBox: TPanelEx
-      Left = 917
-      Top = 491
+    object NightModeGamesListHeaderBox: TPanelEx
+      Left = 8
+      Top = 574
       Width = 287
-      Height = 120
+      Height = 127
       Color1 = 5263440
       Color2 = clSilver
       Color3 = clYellow
@@ -3773,7 +3786,7 @@ object FormNightMode: TFormNightMode
       ParentBackground = False
       ShowHint = True
       Style = vgSolid
-      object NightModeGamesListHeaderGroupBoxLabel: TShadowLabel
+      object NightModeGamesListHeaderBoxLabel: TShadowLabel
         Left = 0
         Top = 0
         Width = 285
@@ -3801,8 +3814,8 @@ object FormNightMode: TFormNightMode
       end
       object NightModeGamesListHeaderBackgroundColorHoverLabel: TShadowLabel
         Left = 4
-        Top = 71
-        Width = 35
+        Top = 78
+        Width = 33
         Height = 16
         Caption = 'Hover'
         Font.Charset = ANSI_CHARSET
@@ -3822,8 +3835,8 @@ object FormNightMode: TFormNightMode
       end
       object NightModeGamesListHeaderBackgroundColorLabel: TShadowLabel
         Left = 4
-        Top = 47
-        Width = 34
+        Top = 54
+        Width = 32
         Height = 16
         Caption = 'Bkgrd'
         Font.Charset = ANSI_CHARSET
@@ -3843,8 +3856,8 @@ object FormNightMode: TFormNightMode
       end
       object NightModeGamesListHeaderBackgroundColorDownLabel: TShadowLabel
         Left = 4
-        Top = 95
-        Width = 34
+        Top = 102
+        Width = 32
         Height = 16
         Caption = 'Down'
         Font.Charset = ANSI_CHARSET
@@ -3865,12 +3878,13 @@ object FormNightMode: TFormNightMode
       object NightModeGamesListHeaderFont: TShadowLabel
         Left = 60
         Top = 20
-        Width = 85
+        Width = 95
         Height = 22
         Hint = 'Customize Header Font'
+        Alignment = taCenter
         AutoSize = False
-        Caption = ' Click Me'
-        Color = 2367253
+        Caption = 'Select Font'
+        Color = 2367259
         Font.Charset = ANSI_CHARSET
         Font.Color = 11836807
         Font.Height = -12
@@ -3889,10 +3903,10 @@ object FormNightMode: TFormNightMode
         Layout = tlCenter
         OnClick = NightModeGamesListHeaderFontClick
       end
-      object NightModeGamesListHeaderFontColorLabel: TShadowLabel
+      object NightModeGamesListHeaderFontLabel: TShadowLabel
         Left = 4
         Top = 23
-        Width = 51
+        Width = 49
         Height = 16
         Caption = 'Text Font'
         Font.Charset = ANSI_CHARSET
@@ -3923,7 +3937,7 @@ object FormNightMode: TFormNightMode
       end
       object NightModeGamesListHeaderBackgroundColor: TColorBoxEx
         Left = 60
-        Top = 44
+        Top = 51
         Width = 221
         Height = 22
         Hint = 'Background Color'
@@ -3938,7 +3952,7 @@ object FormNightMode: TFormNightMode
       end
       object NightModeGamesListHeaderBackgroundColorHover: TColorBoxEx
         Left = 60
-        Top = 68
+        Top = 75
         Width = 221
         Height = 22
         Hint = 'Background Color White Hovering'
@@ -3953,7 +3967,7 @@ object FormNightMode: TFormNightMode
       end
       object NightModeGamesListHeaderBackgroundColorDown: TColorBoxEx
         Left = 60
-        Top = 92
+        Top = 99
         Width = 221
         Height = 22
         Hint = 'Background Color While Pressed'
@@ -3982,10 +3996,10 @@ object FormNightMode: TFormNightMode
       end
     end
     object NightModeCheckBoxRadioButtonBox: TPanelEx
-      Left = 614
-      Top = 282
+      Left = 311
+      Top = 425
       Width = 287
-      Height = 67
+      Height = 50
       Color1 = 5263440
       Color2 = clSilver
       Color3 = clYellow
@@ -3997,7 +4011,7 @@ object FormNightMode: TFormNightMode
       ParentBackground = False
       ShowHint = True
       Style = vgSolid
-      object CheckBoxRadioButtonBoxLabel: TShadowLabel
+      object NightModeCheckBoxRadioButtonBoxLabel: TShadowLabel
         Left = 0
         Top = 0
         Width = 285
@@ -4027,8 +4041,8 @@ object FormNightMode: TFormNightMode
       end
       object NightModeCheckBoxRadioButtonBoxFolderFullPathLabel: TShadowLabel
         Left = 235
-        Top = 20
-        Width = 46
+        Top = 4
+        Width = 44
         Height = 16
         Caption = 'FullPath'
         Color = 2629656
@@ -4051,9 +4065,9 @@ object FormNightMode: TFormNightMode
         Visible = False
       end
       object NightModeCheckBoxRadioButtonProfile: TComboBox2Ex
-        Left = 4
-        Top = 39
-        Width = 225
+        Left = 55
+        Top = 22
+        Width = 199
         Height = 21
         Style = csOwnerDrawFixed
         Color = clWhite
@@ -4063,9 +4077,9 @@ object FormNightMode: TFormNightMode
         CustomColorsEnabled = True
       end
       object NightModeCheckBoxRadioButton_Radio1: TAdvOfficeRadioButtonEx
-        Left = 100
-        Top = 20
-        Width = 62
+        Left = 21
+        Top = 23
+        Width = 15
         Height = 19
         Font.Charset = ANSI_CHARSET
         Font.Color = 12574688
@@ -4076,16 +4090,16 @@ object FormNightMode: TFormNightMode
         TabOrder = 1
         TabStop = True
         Alignment = taLeftJustify
-        Caption = 'Radio 1'
         Checked = True
         ReturnIsTab = False
         Themed = True
         CustomIconsEnabled = False
+        CustomEnableIconHD = False
       end
       object NightModeCheckBoxRadioButton_Radio2: TAdvOfficeRadioButtonEx
-        Left = 172
-        Top = 20
-        Width = 62
+        Left = 38
+        Top = 23
+        Width = 15
         Height = 19
         Font.Charset = ANSI_CHARSET
         Font.Color = 12574688
@@ -4095,15 +4109,15 @@ object FormNightMode: TFormNightMode
         ParentFont = False
         TabOrder = 2
         Alignment = taLeftJustify
-        Caption = 'Radio 2'
         ReturnIsTab = False
         Themed = True
         CustomIconsEnabled = False
+        CustomEnableIconHD = False
       end
       object NightModeCheckBoxRadioButton_Check1: TAdvOfficeCheckBoxEx
         Left = 4
-        Top = 20
-        Width = 73
+        Top = 23
+        Width = 15
         Height = 19
         AllowGrayed = True
         Checked = True
@@ -4115,54 +4129,23 @@ object FormNightMode: TFormNightMode
         ParentFont = False
         TabOrder = 3
         Alignment = taLeftJustify
-        Caption = 'CheckBox'
         ReturnIsTab = False
         State = cbChecked
         Themed = True
         CustomIconsEnabled = False
+        CustomEnableIconHD = False
       end
       object NightModeCheckBoxRadioButtonProfileButtonUpdate: TBitBtnEx
-        Left = 233
-        Top = 38
-        Width = 49
+        Left = 258
+        Top = 21
+        Width = 24
         Height = 24
         Hint = 'Click here to update the folders list (no restart needed)'
-        Caption = 'Update'
         TabOrder = 4
         OnClick = NightModeCheckBoxRadioButtonProfileButtonUpdateClick
+        ImageIndex = 15
+        Images = FormMain.IL_MenuPopup
       end
-    end
-    object NightModeUseWin10DarkModeScrollBars: TAdvOfficeCheckBoxEx
-      Left = 334
-      Top = 700
-      Width = 260
-      Height = 20
-      Checked = True
-      Font.Charset = ANSI_CHARSET
-      Font.Color = 12574688
-      Font.Height = -12
-      Font.Name = 'Segoe UI'
-      Font.Style = []
-      ParentFont = False
-      TabOrder = 17
-      Alignment = taLeftJustify
-      Caption = 'Use Windows 10 Dark Scroll Bar in Games List'
-      ReturnIsTab = False
-      State = cbChecked
-      CustomIconsEnabled = False
-    end
-    object NightModeUseWin10DarkModeScrollBarsButtonHelp: TBitBtnEx
-      Left = 310
-      Top = 700
-      Width = 19
-      Height = 17
-      Hint = 'What is this for ?'
-      Caption = '?'
-      ParentShowHint = False
-      ShowHint = True
-      TabOrder = 18
-      OnClick = NightModeUseWin10DarkModeScrollBarsButtonHelpClick
-      UseCustomDraw = True
     end
   end
   object PanelPage2: TPanelEx
@@ -4210,6 +4193,11 @@ object FormNightMode: TFormNightMode
       Font.Style = []
       ParentFont = False
       OnClick = ButtonPage1Click
+      FontColorDisabled = clBtnShadow
+      FontShadowColorDisabled = clBtnHighlight
+      GradientColorTop_Disabled = clSilver
+      GradientColorBottom_Disabled = clMedGray
+      FrameColor_Disabled = clGray
       UseCustomDraw = True
     end
     object ButtonPage2: TSpeedButtonEx
@@ -4226,6 +4214,11 @@ object FormNightMode: TFormNightMode
       Font.Style = []
       ParentFont = False
       OnClick = ButtonPage2Click
+      FontColorDisabled = clBtnShadow
+      FontShadowColorDisabled = clBtnHighlight
+      GradientColorTop_Disabled = clSilver
+      GradientColorBottom_Disabled = clMedGray
+      FrameColor_Disabled = clGray
       UseCustomDraw = True
     end
     object NightModeProfiles_ButtonNew: TBitBtnEx
@@ -4328,7 +4321,7 @@ object FormNightMode: TFormNightMode
     object NightModePanelColorsBoxPreviewLabel: TShadowLabel
       Left = 46
       Top = 8
-      Width = 121
+      Width = 119
       Height = 16
       Caption = 'Preview: Panels Colors'
       Color = 5787720
@@ -4399,7 +4392,7 @@ object FormNightMode: TFormNightMode
       object LabelInitZipTitle: TShadowLabel
         Left = 60
         Top = 8
-        Width = 305
+        Width = 303
         Height = 17
         Caption = 'Initializing Zipped Images Contents Array'
         Font.Charset = ANSI_CHARSET
@@ -4498,8 +4491,8 @@ object FormNightMode: TFormNightMode
   object NightModeImagesHintBoxPreview: TPanelEx
     Left = 1224
     Top = 588
-    Width = 287
-    Height = 281
+    Width = 413
+    Height = 316
     Color1 = 3289650
     Color2 = clSilver
     Color3 = clYellow
@@ -4514,7 +4507,7 @@ object FormNightMode: TFormNightMode
     object NightModeImagesHintBoxPreviewLabel: TShadowLabel
       Left = 46
       Top = 8
-      Width = 132
+      Width = 130
       Height = 16
       Caption = 'Preview: Image Hint Box'
       Color = 5787720
@@ -4570,11 +4563,11 @@ object FormNightMode: TFormNightMode
     object ImageHintPanel_Image: TImage32
       Left = 12
       Top = 28
-      Width = 258
-      Height = 205
+      Width = 384
+      Height = 240
       Bitmap.DrawMode = dmBlend
       Bitmap.ResamplerClassName = 'TNearestResampler'
-      BitmapAlign = baTopLeft
+      BitmapAlign = baCenter
       Color = 2565927
       ParentColor = False
       Scale = 1.000000000000000000
@@ -4582,8 +4575,8 @@ object FormNightMode: TFormNightMode
       TabOrder = 0
       object ImageHintPanel: TPanelEx
         Tag = -1
-        Left = 67
-        Top = 137
+        Left = 192
+        Top = 171
         Width = 171
         Height = 48
         Color1 = 1578258
@@ -4598,7 +4591,7 @@ object FormNightMode: TFormNightMode
         object ImageHintText: TShadowLabel
           Left = 28
           Top = 5
-          Width = 94
+          Width = 92
           Height = 19
           Caption = 'Game Snapshot'
           Font.Charset = ANSI_CHARSET
@@ -4626,9 +4619,9 @@ object FormNightMode: TFormNightMode
         object ImageHintDetailsText: TShadowLabel
           Left = 30
           Top = 25
-          Width = 92
+          Width = 82
           Height = 19
-          Caption = '0000x0000 (PNG)'
+          Caption = '0000x0000 PNG'
           Font.Charset = ANSI_CHARSET
           Font.Color = 20985
           Font.Height = -12
@@ -4648,7 +4641,7 @@ object FormNightMode: TFormNightMode
     end
     object NightModeImageHintPanel_ImageView1: TBitBtnEx
       Left = 11
-      Top = 243
+      Top = 278
       Width = 89
       Height = 23
       Caption = 'View Snap 1'
@@ -4663,8 +4656,8 @@ object FormNightMode: TFormNightMode
     end
     object NightModeImageHintPanel_ImageView2: TBitBtnEx
       Tag = 1
-      Left = 182
-      Top = 243
+      Left = 308
+      Top = 278
       Width = 89
       Height = 23
       Caption = 'View Snap 2'
@@ -4697,7 +4690,7 @@ object FormNightMode: TFormNightMode
     object NightModeGamesSelectionBarPreviewLabel: TShadowLabel
       Left = 46
       Top = 8
-      Width = 178
+      Width = 176
       Height = 16
       Caption = 'Preview: Games List Selection Bar'
       Color = 5787720
@@ -4750,123 +4743,108 @@ object FormNightMode: TFormNightMode
       OnMouseEnter = NightModeGamesSelectionBarPreviewButtonCloseMouseEnter
       OnMouseLeave = NightModeGamesSelectionBarPreviewButtonCloseMouseLeave
     end
-    object NightModePanelGamesList: TPanelEx
+    object NightModeGamesListView: TEasyListview
       Left = 12
       Top = 28
       Width = 263
       Height = 141
-      Color1 = 15856113
-      Color2 = clSilver
-      Color3 = clYellow
-      Color4 = clTeal
-      ColorFrame = clGreen
-      ColorInnerFrame = clGreen
-      Frames = []
-      ParentBackground = False
-      Style = vgSolid
-      object NightModeGamesListView: TEasyListview
-        Left = 0
-        Top = 0
-        Width = 263
-        Height = 141
-        Align = alClient
-        CellSizes.SmallIcon.Height = 20
-        CellSizes.Tile.Width = 260
-        CellSizes.Report.Height = 28
-        Color = clBlack
-        DisabledBlendAlpha = 0
-        EditManager.Font.Charset = ANSI_CHARSET
-        EditManager.Font.Color = clWhite
-        EditManager.Font.Height = -12
-        EditManager.Font.Name = 'Segoe UI'
-        EditManager.Font.Style = []
-        UseDockManager = False
-        Font.Charset = ANSI_CHARSET
-        Font.Color = clWhite
-        Font.Height = -12
-        Font.Name = 'Segoe UI'
-        Font.Style = []
-        GroupFont.Charset = ANSI_CHARSET
-        GroupFont.Color = clBlack
-        GroupFont.Height = -12
-        GroupFont.Name = 'Segoe UI'
-        GroupFont.Style = []
-        Groups.Items = {
-          060000000100000010000000544561737947726F757053746F726564FFFECE00
-          06000000810806000000030000000F00000054456173794974656D53746F7265
-          64FFFECE00060000008008010000000F00000041007600610069006C00610062
-          006C0065002000470061006D0065007300000000000100000000000000000000
-          0000000000000000000F00000054456173794974656D53746F726564FFFECE00
-          060000008008010000001C000000470061006D00650073002000570069007400
-          680020004D0069007300730069006E006700200052004F004D0073002F004300
-          4800440073000000000001000000010000000000000000000000000000000F00
-          000054456173794974656D53746F726564FFFECE000600000080080100000028
-          000000530065006C00650063007400200061006E0020004900740065006D0020
-          0074006F002000540065007300740020007400680065002000530065006C0065
-          006300740069006F006E00200042006100720000000000010000000000000000
-          000000000000000000000000000000000000000000000000000000}
-        HintType = ehtToolTip
-        Header.Columns.Items = {
-          0600000001000000110000005445617379436F6C756D6E53746F726564FFFECE
-          0006000000800800010100010000000000000103010000FFFFFF1F0001000000
-          01000000050000005400690074006C006500000000000000000000000000}
-        Header.Draggable = False
-        Header.FixedSingleColumn = True
-        Header.Font.Charset = ANSI_CHARSET
-        Header.Font.Color = clBlack
-        Header.Font.Height = -12
-        Header.Font.Name = 'Segoe UI'
-        Header.Font.Style = []
-        Header.Height = 23
-        Header.Sizeable = False
-        IncrementalSearch.Enabled = True
-        IncrementalSearch.ResetTime = 1000
-        IncrementalSearch.StartType = eissFocusedNode
-        PaintInfoColumn.CaptionIndent = 0
-        PaintInfoGroup.BandBlended = False
-        PaintInfoGroup.BandEnabled = False
-        PaintInfoGroup.Expandable = False
-        PaintInfoGroup.MarginBottom.Size = 0
-        PaintInfoGroup.MarginBottom.Visible = True
-        PaintInfoGroup.MarginBottom.CaptionIndent = 4
-        PaintInfoGroup.MarginTop.Size = 20
-        PaintInfoItem.BorderColor = 16370824
-        PaintInfoItem.ShowBorder = False
-        PaintInfoItem.TileDetailCount = 2
-        ParentFont = False
-        ParentShowHint = False
-        ShowThemedBorder = False
-        ShowHint = True
-        Selection.BlendAlphaImage = 0
-        Selection.BlendColorSelRect = 10902593
-        Selection.BlendIcon = False
-        Selection.BorderColor = 10902593
-        Selection.BorderColorSelRect = 10902593
-        Selection.Color = 10902593
-        Selection.FullCellPaint = True
-        Selection.FullItemPaint = True
-        Selection.FullRowSelect = True
-        Selection.GradientColorBottom = 16506264
-        Selection.GradientColorTop = 15582647
-        Selection.InactiveBorderColor = 10902593
-        Selection.InactiveColor = 15582647
-        Selection.MouseButton = [cmbLeft, cmbRight]
-        Selection.RoundRectRadius = 2
-        Selection.TextColor = clBlack
-        Selection.UseFocusRect = False
-        TabOrder = 0
-        View = elsReport
-        CustomCheckRadioEnabled = False
-        OnItemPaintText = NightModeGamesListViewItemPaintText
-        OnItemSelectionChanged = NightModeGamesListViewItemSelectionChanged
-      end
+      CellSizes.SmallIcon.Height = 20
+      CellSizes.Tile.Width = 260
+      CellSizes.Report.Height = 28
+      Color = clBlack
+      DisabledBlendAlpha = 0
+      EditManager.Font.Charset = ANSI_CHARSET
+      EditManager.Font.Color = clWhite
+      EditManager.Font.Height = -12
+      EditManager.Font.Name = 'Segoe UI'
+      EditManager.Font.Style = []
+      UseDockManager = False
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clWhite
+      Font.Height = -12
+      Font.Name = 'Segoe UI'
+      Font.Style = []
+      GroupFont.Charset = ANSI_CHARSET
+      GroupFont.Color = clBlack
+      GroupFont.Height = -12
+      GroupFont.Name = 'Segoe UI'
+      GroupFont.Style = []
+      Groups.Items = {
+        060000000100000010000000544561737947726F757053746F726564FFFECE00
+        06000000810806000000030000000F00000054456173794974656D53746F7265
+        64FFFECE00060000008008010000000F00000041007600610069006C00610062
+        006C0065002000470061006D0065007300000000000100000000000000000000
+        0000000000000000000F00000054456173794974656D53746F726564FFFECE00
+        060000008008010000001C000000470061006D00650073002000570069007400
+        680020004D0069007300730069006E006700200052004F004D0073002F004300
+        4800440073000000000001000000010000000000000000000000000000000F00
+        000054456173794974656D53746F726564FFFECE000600000080080100000028
+        000000530065006C00650063007400200061006E0020004900740065006D0020
+        0074006F002000540065007300740020007400680065002000530065006C0065
+        006300740069006F006E00200042006100720000000000010000000000000000
+        000000000000000000000000000000000000000000000000000000}
+      HintType = ehtToolTip
+      Header.Columns.Items = {
+        0600000001000000110000005445617379436F6C756D6E53746F726564FFFECE
+        0006000000800800010100010000000000000103010000FFFFFF1F0001000000
+        01000000050000005400690074006C006500000000000000000000000000}
+      Header.Draggable = False
+      Header.FixedSingleColumn = True
+      Header.Font.Charset = ANSI_CHARSET
+      Header.Font.Color = clBlack
+      Header.Font.Height = -12
+      Header.Font.Name = 'Segoe UI'
+      Header.Font.Style = []
+      Header.Height = 23
+      Header.Sizeable = False
+      IncrementalSearch.Enabled = True
+      IncrementalSearch.ResetTime = 1000
+      IncrementalSearch.StartType = eissFocusedNode
+      PaintInfoColumn.CaptionIndent = 0
+      PaintInfoGroup.BandBlended = False
+      PaintInfoGroup.BandEnabled = False
+      PaintInfoGroup.Expandable = False
+      PaintInfoGroup.MarginBottom.Size = 0
+      PaintInfoGroup.MarginBottom.Visible = True
+      PaintInfoGroup.MarginBottom.CaptionIndent = 4
+      PaintInfoGroup.MarginTop.Size = 20
+      PaintInfoItem.BorderColor = 16370824
+      PaintInfoItem.ShowBorder = False
+      PaintInfoItem.TileDetailCount = 2
+      ParentFont = False
+      ParentShowHint = False
+      ShowThemedBorder = False
+      ShowHint = True
+      Selection.BlendAlphaImage = 0
+      Selection.BlendColorSelRect = 10902593
+      Selection.BlendIcon = False
+      Selection.BorderColor = 10902593
+      Selection.BorderColorSelRect = 10902593
+      Selection.Color = 10902593
+      Selection.FullCellPaint = True
+      Selection.FullItemPaint = True
+      Selection.FullRowSelect = True
+      Selection.GradientColorBottom = 16506264
+      Selection.GradientColorTop = 15582647
+      Selection.InactiveBorderColor = 10902593
+      Selection.InactiveColor = 15582647
+      Selection.MouseButton = [cmbLeft, cmbRight]
+      Selection.RoundRectRadius = 2
+      Selection.TextColor = clBlack
+      Selection.UseFocusRect = False
+      TabOrder = 0
+      View = elsReport
+      CustomCheckRadioEnabled = False
+      CustomEnableIconHD = False
+      OnItemPaintText = NightModeGamesListViewItemPaintText
+      OnItemSelectionChanged = NightModeGamesListViewItemSelectionChanged
     end
   end
   object NightModeSearchGamesPanelColorsBoxPreview: TPanelEx
     Left = 424
     Top = 863
-    Width = 402
-    Height = 130
+    Width = 347
+    Height = 104
     Color1 = 3289650
     Color2 = clSilver
     Color3 = clYellow
@@ -4914,9 +4892,9 @@ object FormNightMode: TFormNightMode
     object NightModeSearchGamesPanelColorsBoxPreviewLabel: TShadowLabel
       Left = 46
       Top = 8
-      Width = 193
+      Width = 236
       Height = 16
-      Caption = 'Preview: Search Games Panel Colors'
+      Caption = 'Preview: Tool Bar Search Games Panel Colors'
       Color = 5787720
       Font.Charset = ANSI_CHARSET
       Font.Color = clCream
@@ -4937,10 +4915,10 @@ object FormNightMode: TFormNightMode
     object NightModePanelSearchGames: TPanelEx
       Left = 12
       Top = 28
-      Width = 374
-      Height = 86
+      Width = 319
+      Height = 60
       Color1 = 4734774
-      Color2 = 1578258
+      Color2 = 1513239
       Color3 = clYellow
       Color4 = clTeal
       ColorFrame = 1578258
@@ -4949,65 +4927,10 @@ object FormNightMode: TFormNightMode
       Frames = []
       ParentBackground = False
       Style = vgSimple
-      object NightModePanelSearchGamesCaptionBar: TShadowLabel
-        Left = 1
-        Top = 1
-        Width = 368
-        Height = 25
-        AutoSize = False
-        Caption = '   Search Games Filter'
-        Color = 11836807
-        Font.Charset = ANSI_CHARSET
-        Font.Color = 11836807
-        Font.Height = -13
-        Font.Name = 'Verdana'
-        Font.Style = []
-        ParentColor = False
-        ParentFont = False
-        ShowAccelChar = False
-        ShadowColor = 1578258
-        ShadowEnabled = False
-        EllipsType = etNone
-        ColorFrame = clBlack
-        ColorInnerFrame = clBlack
-        Frames = []
-        Transparent = True
-        Layout = tlCenter
-      end
-      object NightModeButtonFilterTitleClose: TShadowLabel
-        Left = 326
-        Top = 3
-        Width = 41
-        Height = 21
-        Hint = 'Close'
-        Alignment = taCenter
-        AutoSize = False
-        Caption = 'X'
-        Color = 89
-        Font.Charset = ANSI_CHARSET
-        Font.Color = clWhite
-        Font.Height = -13
-        Font.Name = 'Verdana'
-        Font.Style = [fsBold]
-        ParentColor = False
-        ParentFont = False
-        ShowAccelChar = False
-        ShadowColor = clBlack
-        ShadowEnabled = True
-        EllipsType = etNone
-        ColorFrame = 23170
-        ColorInnerFrame = clBlack
-        EnableInnerFrame = True
-        Frames = [lfrLeft, lfrTop, lfrRight, lfrBottom]
-        Transparent = False
-        Layout = tlCenter
-        OnMouseEnter = NightModeGamesSelectionBarPreviewButtonCloseMouseEnter
-        OnMouseLeave = NightModeGamesSelectionBarPreviewButtonCloseMouseLeave
-      end
       object NightModeLabelSearchGamesFilter: TShadowLabel
         Left = 8
-        Top = 32
-        Width = 49
+        Top = 6
+        Width = 47
         Height = 14
         Caption = 'Filter by'
         Font.Charset = ANSI_CHARSET
@@ -5027,8 +4950,8 @@ object FormNightMode: TFormNightMode
       end
       object NightModeLabelSearchGamesBy: TShadowLabel
         Left = 60
-        Top = 32
-        Width = 27
+        Top = 6
+        Width = 25
         Height = 14
         Caption = 'Title'
         Font.Charset = ANSI_CHARSET
@@ -5046,10 +4969,72 @@ object FormNightMode: TFormNightMode
         Frames = []
         Transparent = True
       end
+      object ButtonFilterTitleApply_ToolBar: TSpeedButtonEx
+        Left = 200
+        Top = 21
+        Width = 26
+        Height = 27
+        Hint = 'Click here to apply filter'
+        Flat = True
+        ImageIndex = 9
+        Images = FormMain.IL_MiscToolBarPopup
+        FontColorDisabled = clBtnShadow
+        FontShadowColorDisabled = clBtnHighlight
+        GradientColorTop_Disabled = clSilver
+        GradientColorBottom_Disabled = clMedGray
+        FrameColor_Disabled = clGray
+      end
+      object ButtonFilterControls_ToolBar: TSpeedButtonEx
+        Left = 227
+        Top = 21
+        Width = 26
+        Height = 27
+        Hint = 
+          'Click here to select a MAME controls filter (will be applied imm' +
+          'ediately)'
+        Flat = True
+        ImageIndex = 12
+        Images = FormMain.IL_MiscToolBarPopup
+        FontColorDisabled = clBtnShadow
+        FontShadowColorDisabled = clBtnHighlight
+        GradientColorTop_Disabled = clSilver
+        GradientColorBottom_Disabled = clMedGray
+        FrameColor_Disabled = clGray
+      end
+      object ButtonFilterTitleReset_ToolBar: TSpeedButtonEx
+        Left = 254
+        Top = 21
+        Width = 26
+        Height = 27
+        Hint = 'Click here to reset filters to default (games tool bar buttons)'
+        Flat = True
+        ImageIndex = 3
+        Images = FormMain.IL_MiscToolBarPopup
+        FontColorDisabled = clBtnShadow
+        FontShadowColorDisabled = clBtnHighlight
+        GradientColorTop_Disabled = clSilver
+        GradientColorBottom_Disabled = clMedGray
+        FrameColor_Disabled = clGray
+      end
+      object ButtonFilterTitleSettings_ToolBar: TSpeedButtonEx
+        Left = 281
+        Top = 21
+        Width = 26
+        Height = 27
+        Hint = 'Click here to change settings'
+        Flat = True
+        ImageIndex = 10
+        Images = FormMain.IL_MiscToolBarPopup
+        FontColorDisabled = clBtnShadow
+        FontShadowColorDisabled = clBtnHighlight
+        GradientColorTop_Disabled = clSilver
+        GradientColorBottom_Disabled = clMedGray
+        FrameColor_Disabled = clGray
+      end
       object NightModeFilterGameTitle: TEditEx
         Left = 8
-        Top = 48
-        Width = 199
+        Top = 22
+        Width = 189
         Height = 24
         AutoSize = False
         BevelOuter = bvNone
@@ -5066,76 +5051,6 @@ object FormNightMode: TFormNightMode
         ColorFrame = 9141097
         ColorFrameFocused = clWhite
         UseCustomBorder = True
-      end
-      object NightModeToolBarFilterTitle: TToolBar
-        Left = 209
-        Top = 45
-        Width = 160
-        Height = 30
-        Align = alNone
-        ButtonHeight = 30
-        ButtonWidth = 31
-        Color = 15856113
-        EdgeBorders = []
-        EdgeInner = esNone
-        EdgeOuter = esNone
-        Flat = True
-        Font.Charset = ANSI_CHARSET
-        Font.Color = clBlack
-        Font.Height = -12
-        Font.Name = 'Trebuchet MS'
-        Font.Style = []
-        Images = FormMain.IL_MiscToolBarPopup
-        ParentColor = False
-        ParentFont = False
-        ParentShowHint = False
-        ShowHint = True
-        TabOrder = 1
-        Transparent = False
-        Wrapable = False
-        OnCustomDraw = NightModeToolBarFilterTitleCustomDraw
-        object NightModeButtonFilterTitleApply: TToolButton
-          Left = 0
-          Top = 0
-          Hint = 'Click here to apply filter'
-          AutoSize = True
-          Caption = 'Apply'
-          ImageIndex = 9
-        end
-        object NightModeButtonFilterControls: TToolButton
-          Left = 31
-          Top = 0
-          Hint = 
-            'Click here to select a controls filter (will be applied immediat' +
-            'ely)'
-          AutoSize = True
-          Caption = 'Controls'
-          ImageIndex = 12
-        end
-        object NightModeButtonFilterTitleReset: TToolButton
-          Left = 62
-          Top = 0
-          Hint = 'Click here to reset filters to default (games tool bar buttons)'
-          AutoSize = True
-          Caption = 'Reset'
-          ImageIndex = 3
-        end
-        object NightModeButtonFilterTitleSettings: TToolButton
-          Left = 93
-          Top = 0
-          Hint = 'Click here to change filter settings'
-          AutoSize = True
-          Caption = 'Settings'
-          ImageIndex = 10
-        end
-        object NightModeButtonFilterTitlePanelMode: TToolButton
-          Left = 124
-          Top = 0
-          Hint = 'Click here to attach the panel to filters tool bar'
-          AutoSize = True
-          Caption = 'Panel Position'
-          ImageIndex = 11
-        end
       end
     end
   end
@@ -5192,7 +5107,7 @@ object FormNightMode: TFormNightMode
     object NightModeButtonColorsBoxPreviewLabel: TShadowLabel
       Left = 46
       Top = 8
-      Width = 134
+      Width = 132
       Height = 16
       Caption = '  Preview: Buttons Colors'
       Color = 5787720
@@ -5235,6 +5150,11 @@ object FormNightMode: TFormNightMode
         GroupIndex = 2
         Down = True
         Caption = 'Selected'
+        FontColorDisabled = clBtnShadow
+        FontShadowColorDisabled = clBtnHighlight
+        GradientColorTop_Disabled = clSilver
+        GradientColorBottom_Disabled = clMedGray
+        FrameColor_Disabled = clGray
         UseCustomDraw = True
       end
       object NightModeButtonColorsSampleButton1: TBitBtnEx
@@ -5290,8 +5210,8 @@ object FormNightMode: TFormNightMode
   object NightModeNewProfileBox: TPanelEx
     Left = 1224
     Top = 8
-    Width = 400
-    Height = 341
+    Width = 404
+    Height = 364
     Color1 = 3289650
     Color2 = clSilver
     Color3 = clYellow
@@ -5304,9 +5224,9 @@ object FormNightMode: TFormNightMode
     Style = vgSolid
     Visible = False
     object NightModeNewProfileBoxLabel: TShadowLabel
-      Left = 46
-      Top = 8
-      Width = 112
+      Left = 40
+      Top = 16
+      Width = 110
       Height = 16
       Caption = 'Create A New Profile'
       Color = 5787720
@@ -5327,9 +5247,9 @@ object FormNightMode: TFormNightMode
       Transparent = True
     end
     object NightModeNewProfileBoxButtonClose: TShadowLabel
-      Left = 12
-      Top = 8
-      Width = 28
+      Left = 349
+      Top = 16
+      Width = 35
       Height = 16
       Hint = 'Close'
       Alignment = taCenter
@@ -5360,9 +5280,9 @@ object FormNightMode: TFormNightMode
       OnMouseLeave = NightModeGamesSelectionBarPreviewButtonCloseMouseLeave
     end
     object NightModeNewProfileProfileNameLabel: TShadowLabel
-      Left = 16
-      Top = 176
-      Width = 72
+      Left = 20
+      Top = 196
+      Width = 70
       Height = 16
       Caption = 'Profile Name'
       Font.Charset = ANSI_CHARSET
@@ -5381,9 +5301,9 @@ object FormNightMode: TFormNightMode
       Transparent = True
     end
     object NightModeNewProfileProfileNameTipLabel: TShadowLabel
-      Left = 109
-      Top = 199
-      Width = 256
+      Left = 113
+      Top = 219
+      Width = 254
       Height = 16
       Caption = 'You may select a profile above to copy its colors'
       Font.Charset = ANSI_CHARSET
@@ -5401,10 +5321,10 @@ object FormNightMode: TFormNightMode
       Frames = []
       Transparent = True
     end
-    object NightModeNewProfileCreateWithDefaultColorsLabel: TShadowLabel
-      Left = 32
-      Top = 247
-      Width = 155
+    object NightModeNewProfileUseColorsActiveProfileLabel: TShadowLabel
+      Left = 36
+      Top = 267
+      Width = 153
       Height = 16
       Caption = 'Ignore profile selected above'
       Font.Charset = ANSI_CHARSET
@@ -5422,9 +5342,16 @@ object FormNightMode: TFormNightMode
       Frames = []
       Transparent = True
     end
+    object NightModeNewProfileBoxIcon: TImage
+      Left = 16
+      Top = 16
+      Width = 16
+      Height = 16
+      Transparent = True
+    end
     object NightModeNewProfileBoxButtonConfirm: TBitBtnEx
-      Left = 104
-      Top = 299
+      Left = 106
+      Top = 319
       Width = 89
       Height = 25
       Caption = 'Confirm'
@@ -5439,8 +5366,8 @@ object FormNightMode: TFormNightMode
     end
     object NightModeNewProfileBoxButtonAbort: TBitBtnEx
       Tag = 1
-      Left = 203
-      Top = 299
+      Left = 205
+      Top = 319
       Width = 89
       Height = 25
       Caption = 'Abort'
@@ -5453,118 +5380,20 @@ object FormNightMode: TFormNightMode
       TabOrder = 1
       OnClick = NightModeNewProfileBoxButtonCloseClick
     end
-    object NightModeNewProfileProfilesListPanel: TPanelEx
-      Left = 12
-      Top = 28
-      Width = 368
-      Height = 141
-      Color1 = 15856113
-      Color2 = clSilver
-      Color3 = clYellow
-      Color4 = clTeal
-      ColorFrame = 5787720
-      ColorInnerFrame = 3485739
-      EnableCustomBorder = ecbSingle
-      Frames = []
-      ParentBackground = False
-      Style = vgSolid
-      object NightModeNewProfileProfilesList: TEasyListview
-        Left = 0
-        Top = 0
-        Width = 366
-        Height = 139
-        Align = alClient
-        CellSizes.SmallIcon.Height = 20
-        CellSizes.Tile.Width = 260
-        CellSizes.Report.Height = 22
-        Color = 2565927
-        DisabledBlendAlpha = 0
-        EditManager.Font.Charset = ANSI_CHARSET
-        EditManager.Font.Color = clWhite
-        EditManager.Font.Height = -12
-        EditManager.Font.Name = 'Segoe UI'
-        EditManager.Font.Style = []
-        UseDockManager = False
-        Font.Charset = ANSI_CHARSET
-        Font.Color = clWhite
-        Font.Height = -12
-        Font.Name = 'Segoe UI'
-        Font.Style = []
-        GroupFont.Charset = ANSI_CHARSET
-        GroupFont.Color = clBlack
-        GroupFont.Height = -12
-        GroupFont.Name = 'Segoe UI'
-        GroupFont.Style = []
-        HintType = ehtToolTip
-        Header.Columns.Items = {
-          0600000001000000110000005445617379436F6C756D6E53746F726564FFFECE
-          000600000080080001010001000000000000016A010000FFFFFF1F0001000000
-          01000000050000005400690074006C006500000000000000000000000000}
-        Header.Draggable = False
-        Header.FixedSingleColumn = True
-        Header.Font.Charset = ANSI_CHARSET
-        Header.Font.Color = clBlack
-        Header.Font.Height = -12
-        Header.Font.Name = 'Segoe UI'
-        Header.Font.Style = []
-        Header.Height = 23
-        Header.Sizeable = False
-        IncrementalSearch.Enabled = True
-        IncrementalSearch.ResetTime = 1000
-        IncrementalSearch.StartType = eissFocusedNode
-        PaintInfoColumn.CaptionIndent = 0
-        PaintInfoGroup.BandBlended = False
-        PaintInfoGroup.BandEnabled = False
-        PaintInfoGroup.Expandable = False
-        PaintInfoGroup.MarginBottom.Size = 0
-        PaintInfoGroup.MarginBottom.Visible = True
-        PaintInfoGroup.MarginBottom.CaptionIndent = 4
-        PaintInfoGroup.MarginTop.Size = 20
-        PaintInfoItem.BorderColor = 16370824
-        PaintInfoItem.ShowBorder = False
-        PaintInfoItem.TileDetailCount = 2
-        ParentFont = False
-        ParentShowHint = False
-        ShowThemedBorder = False
-        ShowHint = True
-        Selection.BlendAlphaImage = 0
-        Selection.BlendColorSelRect = 10902593
-        Selection.BlendIcon = False
-        Selection.BorderColor = 10902593
-        Selection.BorderColorSelRect = 10902593
-        Selection.Color = 10902593
-        Selection.FullCellPaint = True
-        Selection.FullItemPaint = True
-        Selection.FullRowSelect = True
-        Selection.GradientColorBottom = 16506264
-        Selection.GradientColorTop = 15582647
-        Selection.InactiveBorderColor = 10902593
-        Selection.InactiveColor = 15582647
-        Selection.MouseButton = [cmbLeft, cmbRight]
-        Selection.RoundRectRadius = 2
-        Selection.TextColor = clBlack
-        Selection.UseFocusRect = False
-        TabOrder = 0
-        View = elsReport
-        CustomCheckRadioEnabled = False
-        OnItemPaintText = NightModeNewProfileProfilesListItemPaintText
-        OnItemSelectionChanged = NightModeNewProfileProfilesListItemSelectionChanged
-      end
-    end
     object NightModeNewProfileProfileName: TEditEx
-      Left = 90
-      Top = 173
+      Left = 94
+      Top = 193
       Width = 289
       Height = 21
       AutoSize = False
       Ctl3D = True
       ParentCtl3D = False
-      TabOrder = 3
+      TabOrder = 2
       UseCustomBorder = True
     end
     object NightModeNewProfileUseColorsActiveProfile: TAdvOfficeCheckBoxEx
-      Left = 16
-      Top = 229
+      Left = 20
+      Top = 249
       Width = 235
       Height = 18
       Font.Charset = ANSI_CHARSET
@@ -5573,13 +5402,110 @@ object FormNightMode: TFormNightMode
       Font.Name = 'Segoe UI'
       Font.Style = []
       ParentFont = False
-      TabOrder = 4
+      TabOrder = 3
       OnClick = NightModeNewProfileUseColorsActiveProfileClick
       Alignment = taLeftJustify
       Caption = 'Always Use Colors of The Active Profile'
       ReturnIsTab = False
       Themed = True
       CustomIconsEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = IL_NightModeCheckBoxRadioButtonIcons
+      CustomIconsImagesHD = IL_NightModeCheckBoxRadioButtonIconsHD
     end
+    object NightModeNewProfileProfilesList: TEasyListview
+      Left = 16
+      Top = 48
+      Width = 368
+      Height = 141
+      CellSizes.SmallIcon.Height = 20
+      CellSizes.Tile.Width = 260
+      CellSizes.Report.Height = 22
+      Color = 2565927
+      DisabledBlendAlpha = 0
+      EditManager.Font.Charset = ANSI_CHARSET
+      EditManager.Font.Color = clWhite
+      EditManager.Font.Height = -12
+      EditManager.Font.Name = 'Segoe UI'
+      EditManager.Font.Style = []
+      UseDockManager = False
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clWhite
+      Font.Height = -12
+      Font.Name = 'Segoe UI'
+      Font.Style = []
+      GroupFont.Charset = ANSI_CHARSET
+      GroupFont.Color = clBlack
+      GroupFont.Height = -12
+      GroupFont.Name = 'Segoe UI'
+      GroupFont.Style = []
+      HintType = ehtToolTip
+      Header.Columns.Items = {
+        0600000001000000110000005445617379436F6C756D6E53746F726564FFFECE
+        000600000080080001010001000000000000016C010000FFFFFF1F0001000000
+        01000000050000005400690074006C006500000000000000000000000000}
+      Header.Draggable = False
+      Header.FixedSingleColumn = True
+      Header.Font.Charset = ANSI_CHARSET
+      Header.Font.Color = clBlack
+      Header.Font.Height = -12
+      Header.Font.Name = 'Segoe UI'
+      Header.Font.Style = []
+      Header.Height = 23
+      Header.Sizeable = False
+      IncrementalSearch.Enabled = True
+      IncrementalSearch.ResetTime = 1000
+      IncrementalSearch.StartType = eissFocusedNode
+      PaintInfoColumn.CaptionIndent = 0
+      PaintInfoGroup.BandBlended = False
+      PaintInfoGroup.BandEnabled = False
+      PaintInfoGroup.Expandable = False
+      PaintInfoGroup.MarginBottom.Size = 0
+      PaintInfoGroup.MarginBottom.Visible = True
+      PaintInfoGroup.MarginBottom.CaptionIndent = 4
+      PaintInfoGroup.MarginTop.Size = 20
+      PaintInfoItem.BorderColor = 16370824
+      PaintInfoItem.ShowBorder = False
+      PaintInfoItem.TileDetailCount = 2
+      ParentFont = False
+      ParentShowHint = False
+      ShowThemedBorderColor = 5787720
+      ShowHint = True
+      Selection.BlendAlphaImage = 0
+      Selection.BlendColorSelRect = 10902593
+      Selection.BlendIcon = False
+      Selection.BorderColor = 10902593
+      Selection.BorderColorSelRect = 10902593
+      Selection.Color = 10902593
+      Selection.FullCellPaint = True
+      Selection.FullItemPaint = True
+      Selection.FullRowSelect = True
+      Selection.GradientColorBottom = 16506264
+      Selection.GradientColorTop = 15582647
+      Selection.InactiveBorderColor = 10902593
+      Selection.InactiveColor = 15582647
+      Selection.MouseButton = [cmbLeft, cmbRight]
+      Selection.RoundRectRadius = 2
+      Selection.TextColor = clBlack
+      Selection.UseFocusRect = False
+      TabOrder = 4
+      View = elsReport
+      CustomCheckRadioEnabled = False
+      CustomEnableIconHD = False
+      OnItemPaintText = NightModeNewProfileProfilesListItemPaintText
+      OnItemSelectionChanged = NightModeNewProfileProfilesListItemSelectionChanged
+    end
+  end
+  object IL_NightModeCheckBoxRadioButtonIcons: TImageList
+    Height = 13
+    Width = 13
+    Left = 840
+    Top = 952
+  end
+  object IL_NightModeCheckBoxRadioButtonIconsHD: TImageList
+    Height = 23
+    Width = 23
+    Left = 880
+    Top = 952
   end
 end

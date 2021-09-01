@@ -12,79 +12,50 @@ uses
 type
   TFormMAMESettings_SimpleMode = class(TForm)
     TopBar: TPanelEx;
-    NotebookPages: TNotebook;
-    VectorGroupBox: TAdvGroupBoxEx;
-    Antialias: TAdvOfficeCheckBoxEx;
-    VideoOutputModeGroupBox: TAdvGroupBoxEx;
-    WindowMode: TAdvOfficeCheckBoxEx;
-    MaximizeWindow: TAdvOfficeCheckBoxEx;
-    KeepAspectRatio: TAdvOfficeCheckBoxEx;
-    WaitVerticalSync: TAdvOfficeCheckBoxEx;
-    HardwareStretch: TAdvOfficeCheckBoxEx;
-    ButtonReadFile: TBitBtnEx;
-    ButtonOk: TBitBtnEx;
-    ButtonCancel: TBitBtnEx;
-    FolderROMsLabel: TShadowLabel;
-    FolderROMs: TEasyListview;
-    FolderROMsButtonUp: TBitBtnEx;
-    FolderROMsButtonDown: TBitBtnEx;
-    FolderROMsButtonSelect: TBitBtnEx;
-    FolderROMsButtonEdit: TBitBtnEx;
-    FolderROMsButtonDelete: TBitBtnEx;
-    FolderROMsButtonClear: TBitBtnEx;
-    FolderSamples: TEditEx;
-    FolderSamplesButtonSelect: TBitBtnEx;
-    FolderGameSnapshotsLabel: TShadowLabel;
-    FolderGameSnapshots: TEditEx;
-    FolderGameSnapshotsButtonSelect: TBitBtnEx;
-    FolderNVRAMLabel: TShadowLabel;
-    FolderNVRAM: TEditEx;
-    FolderNVRAMButtonSelect: TBitBtnEx;
-    FolderArtworksLabel: TShadowLabel;
-    FolderArtworks: TEasyListview;
-    FolderArtworksButtonUp: TBitBtnEx;
-    FolderArtworksButtonDown: TBitBtnEx;
-    FolderArtworksButtonSelect: TBitBtnEx;
-    FolderArtworksButtonEdit: TBitBtnEx;
-    FolderArtworksButtonDelete: TBitBtnEx;
-    FolderArtworksButtonClear: TBitBtnEx;
-    FolderSamplesLabel: TShadowLabel;
-    FolderInputDeviceLogsLabel: TShadowLabel;
-    FolderInputDeviceLogs: TEditEx;
-    FolderInputDeviceLogsButtonSelect: TBitBtnEx;
-    VectorBeamWidthLabel: TShadowLabel;
-    VectorBeamWidth: TGaugeBar2;
-    VectorFlickerEffectLabel: TShadowLabel;
-    VectorFlickerEffect: TGaugeBar2;
     LabelGameTitle: TShadowLabel;
     LabelEmulatorVersion: TShadowLabel;
     SystemIcon: TImage;
     GameIcon: TImage;
     LabelGameStatus: TShadowLabel;
-    ButtonResetToDefault: TBitBtnEx;
+    Panel1_Folders: TPanelEx;
+    ButtonPageVideo1: TSpeedButtonEx;
+    ButtonPageFolders: TSpeedButtonEx;
+    PanelBottom: TPanelEx;
+    ButtonCancel: TBitBtnEx;
+    ButtonOk: TBitBtnEx;
     ButtonReadFileHelp: TBitBtnEx;
-    PerformanceGroupBox: TAdvGroupBoxEx;
-    AutoFrameskip: TAdvOfficeCheckBoxEx;
-    Throttle: TAdvOfficeCheckBoxEx;
-    SyncronizeRefreshRate: TAdvOfficeCheckBoxEx;
-    FullScreenGroupBox: TAdvGroupBoxEx;
-    TripleBuffer: TAdvOfficeCheckBoxEx;
-    SwitchResolution: TAdvOfficeCheckBoxEx;
-    AudioGroupBox: TAdvGroupBoxEx;
-    SampleRateLabel: TShadowLabel;
-    VolumeLabel: TShadowLabel;
-    Samples: TAdvOfficeCheckBoxEx;
-    SampleRate: TComboBox2Ex;
-    Volume: TGaugeBar;
+    ButtonResetToDefault: TBitBtnEx;
+    ButtonReadFile: TBitBtnEx;
+    ButtonHelpSaveValidateAllCustomFiles: TBitBtnEx;
+    SaveValidateAllCustomFiles: TAdvOfficeCheckBoxEx;
+    Panel2_VideoAudioInput: TPanelEx;
     Mouse: TAdvOfficeCheckBoxEx;
     Joystick: TAdvOfficeCheckBoxEx;
     SkipGameInfo: TAdvOfficeCheckBoxEx;
     Cheat: TAdvOfficeCheckBoxEx;
-    ScreenResolution: TComboBox2Ex;
-    ScreenResolutionLabel: TShadowLabel;
-    ScreenRefreshRate: TComboBox2Ex;
-    ScreenRefreshRateLabel: TShadowLabel;
-    FolderIniFilesLabel: TShadowLabel;
+    ReadConfigFiles: TAdvOfficeCheckBoxEx;
+    FolderGameSnapshotsGroupBox: TPanelEx;
+    FolderGameSnapshotsGroupBoxLabel: TShadowLabel;
+    FolderArtworksGroupBox: TPanelEx;
+    FolderArtworksGroupBoxLabel: TShadowLabel;
+    FolderIniFilesGroupBox: TPanelEx;
+    FolderIniFilesGroupBoxLabel: TShadowLabel;
+    FolderInputDeviceLogsGroupBox: TPanelEx;
+    FolderInputDeviceLogsGroupBoxLabel: TShadowLabel;
+    FolderNVRAMGroupBox: TPanelEx;
+    FolderNVRAMGroupBoxLabel: TShadowLabel;
+    FolderSamplesGroupBox: TPanelEx;
+    FolderSamplesGroupBoxLabel: TShadowLabel;
+    FolderROMsGroupBox: TPanelEx;
+    FolderROMsGroupBoxLabel: TShadowLabel;
+    FolderInputDeviceLogs: TEditEx;
+    FolderInputDeviceLogsButtonSelect: TBitBtnEx;
+    FolderNVRAM: TEditEx;
+    FolderNVRAMButtonSelect: TBitBtnEx;
+    FolderSamplesButtonSelect: TBitBtnEx;
+    FolderSamples: TEditEx;
+    FolderGameSnapshotsButtonSelect: TBitBtnEx;
+    FolderGameSnapshots: TEditEx;
     FolderIniFiles: TEasyListview;
     FolderIniFilesButtonUp: TBitBtnEx;
     FolderIniFilesButtonDown: TBitBtnEx;
@@ -92,20 +63,63 @@ type
     FolderIniFilesButtonEdit: TBitBtnEx;
     FolderIniFilesButtonDelete: TBitBtnEx;
     FolderIniFilesButtonClear: TBitBtnEx;
-    ScreenRotationGroupBox: TAdvGroupBoxEx;
+    FolderArtworks: TEasyListview;
+    FolderArtworksButtonUp: TBitBtnEx;
+    FolderArtworksButtonDown: TBitBtnEx;
+    FolderArtworksButtonSelect: TBitBtnEx;
+    FolderArtworksButtonEdit: TBitBtnEx;
+    FolderArtworksButtonDelete: TBitBtnEx;
+    FolderArtworksButtonClear: TBitBtnEx;
+    FolderROMs: TEasyListview;
+    FolderROMsButtonUp: TBitBtnEx;
+    FolderROMsButtonDown: TBitBtnEx;
+    FolderROMsButtonSelect: TBitBtnEx;
+    FolderROMsButtonEdit: TBitBtnEx;
+    FolderROMsButtonDelete: TBitBtnEx;
+    FolderROMsButtonClear: TBitBtnEx;
+    AudioGroupBox: TPanelEx;
+    AudioGroupBoxLabel: TShadowLabel;
+    SampleRateLabel: TShadowLabel;
+    VolumeLabel: TShadowLabel;
+    Samples: TAdvOfficeCheckBoxEx;
+    SampleRate: TComboBox2Ex;
+    Volume: TGaugeBar;
+    EnableSound: TAdvOfficeCheckBoxEx;
+    VectorGroupBox: TPanelEx;
+    VectorGroupBoxLabel: TShadowLabel;
+    VectorBeamWidthLabel: TShadowLabel;
+    VectorFlickerEffectLabel: TShadowLabel;
+    Antialias: TAdvOfficeCheckBoxEx;
+    VectorBeamWidth: TGaugeBar2;
+    VectorFlickerEffect: TGaugeBar2;
+    VideoOutputModeGroupBox: TPanelEx;
+    VideoOutputModeGroupBoxLabel: TShadowLabel;
+    ScreenResolutionLabel: TShadowLabel;
+    ScreenRefreshRateLabel: TShadowLabel;
+    WindowMode: TAdvOfficeCheckBoxEx;
+    MaximizeWindow: TAdvOfficeCheckBoxEx;
+    KeepAspectRatio: TAdvOfficeCheckBoxEx;
+    WaitVerticalSync: TAdvOfficeCheckBoxEx;
+    HardwareStretch: TAdvOfficeCheckBoxEx;
+    ScreenResolution: TComboBox2Ex;
+    ScreenRefreshRate: TComboBox2Ex;
+    PerformanceGroupBox: TPanelEx;
+    PerformanceGroupBoxLabel: TShadowLabel;
+    ScreenRotationGroupBox: TPanelEx;
+    ScreenRotationGroupBoxLabel: TShadowLabel;
+    RotateLeft: TAdvOfficeCheckBoxEx;
+    RotateRight: TAdvOfficeCheckBoxEx;
     FlipX: TAdvOfficeCheckBoxEx;
     FlipY: TAdvOfficeCheckBoxEx;
-    RotateRight: TAdvOfficeCheckBoxEx;
-    RotateLeft: TAdvOfficeCheckBoxEx;
-    ReadConfigFiles: TAdvOfficeCheckBoxEx;
-    SaveValidateAllCustomFiles: TAdvOfficeCheckBoxEx;
-    ButtonHelpSaveValidateAllCustomFiles: TBitBtnEx;
-    EnableSound: TAdvOfficeCheckBoxEx;
+    FullScreenGroupBox: TPanelEx;
+    FullScreenGroupBoxLabel: TShadowLabel;
+    AutoFrameskip: TAdvOfficeCheckBoxEx;
+    SyncronizeRefreshRate: TAdvOfficeCheckBoxEx;
+    Throttle: TAdvOfficeCheckBoxEx;
     Frameskip: TGaugeBar;
     FrameskipLabel: TShadowLabel;
-    ButtonPagePanel: TPanelEx;
-    ButtonPageFolders: TSpeedButtonEx;
-    ButtonPageVideo1: TSpeedButtonEx;
+    TripleBuffer: TAdvOfficeCheckBoxEx;
+    SwitchResolution: TAdvOfficeCheckBoxEx;
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure FormKeyPress(Sender: TObject; var Key: Char);
     procedure ButtonReadFileClick(Sender: TObject);
@@ -149,6 +163,8 @@ type
     procedure FormActivate(Sender: TObject);
     procedure FrameskipChange(Sender: TObject);
     procedure ButtonPageFoldersClick(Sender: TObject);
+    procedure FolderROMsItemPaintText(Sender: TCustomEasyListview;
+      Item: TEasyItem; Position: Integer; ACanvas: TCanvas);
   private
     { Private declarations }
     IsSDLMAME, IsOldResolutionEntry: Boolean;
@@ -162,6 +178,7 @@ type
     procedure CheckOldResolutionEntry;
     procedure ReadMAMEIniFile(const IniFile: String; EmuDefaultSettings: Boolean = False);
     procedure WriteMAMEIniFile(const customIni: String; CustomGameOption: Boolean);
+    procedure Resize4K;
   public
     { Public declarations }
     emuIni,
@@ -196,6 +213,238 @@ begin
   if Result = '' then
      Result:= 'Lucida Console';
 end;}
+
+procedure TFormMAMESettings_SimpleMode.Resize4K;
+var
+  iTopValue: Integer;
+
+  function GetTopPos(iPos: Integer): Integer;
+  begin
+    if iPos = -1 then
+       Result:= iTopValue
+    else
+       Result:= iPos;
+  end;
+  
+  function SetPageButton(iButton, iPrevButton: TSpeedButtonEx; iWidth: Integer; iLeft: Integer = -1): Boolean;
+  var
+    iPos: Integer;
+  begin
+    Result:= True;
+    if iPrevButton <> nil then
+       iPos:= iPrevButton.Left+iPrevButton.Width+2
+    else
+       iPos:= iLeft;
+
+    FormMain.Set4KButtonSpecs(iButton, iPos, 160, iWidth, 36, 16);
+  end;
+
+  function SetBoxFolder(iPanel: TPanelEx; iTitleLabel: TShadowLabel; iPrevPanel: TPanelEx; iEdit: TEditEx; iSelectButton: TBitBtnEx; iTop: Integer = -1): Boolean;
+  var
+    bLeft, bTop: Integer;
+  begin
+    Result:= True;
+    if iPrevPanel <> nil then
+       bTop:= iPrevPanel.Top+iPrevPanel.Height+25
+    else
+       bTop:= iTop;
+
+    bLeft:=  573;
+    FormMain.Set4KBoxLabel(iPanel, iTitleLabel, bLeft, bTop, 93, 532);
+
+    FormMain.Set4KEditSpecs(iEdit, 10, 45, 430, 36, 16);
+    FormMain.Set4KButtonSpecs(iSelectButton, iEdit.Left+iEdit.Width+5, iEdit.Top, 75, 36);
+  end;
+
+  function MoveCheckBox(iCheckBox: TAdvOfficeCheckBoxEx; iTop: Integer = -1; iLeft: Integer = 10;  iWidth: Integer = 287): Boolean;
+  begin
+    Result:= True;
+    iTopValue:= GetTopPos(iTop);
+    FormMain.Set4KCheckBoxSpecs(iCheckBox, iLeft, iTopValue, iWidth, 36, 16);
+    iTopValue:= iTopValue+47;
+  end;
+
+  function MoveComboBox(iComboBox: TComboBox2Ex; iLabelTitle: TShadowLabel; iTop: Integer = -1; iLeft: Integer = 10; iWidth: Integer = 287): Boolean;
+  begin
+    Result:= True;
+    iTopValue:= GetTopPos(iTop);
+    if iLabelTitle <> nil then
+       FormMain.Set4KLabelSpecs(iLabelTitle, iLeft, iTopValue, -1, -1, 16);
+    FormMain.Set4KComboBoxSpecs(iComboBox, iLeft, iTopValue+36, iWidth, 16);
+    iTopValue:= iTopValue+82;
+  end;
+
+  function MoveGaugeBar(iGaugeBar: TGaugeBar;  iLabelTitle: TShadowLabel; iTop: Integer = -1; iLeft: Integer = 10; iWidth: Integer = 287): Boolean; overload;
+  var
+    iSize: Integer;
+  begin
+    Result:= True;
+    iTopValue:= GetTopPos(iTop);
+    if iLabelTitle <> nil then
+    begin
+      if iLabelTitle.AutoSize then
+         iSize:= -1
+      else
+         iSize:= iWidth;
+      FormMain.Set4KLabelSpecs(iLabelTitle, iLeft, iTopValue, iSize, 31, 16);
+    end;
+
+    FormMain.Set4KGaugeBarSpecs(iGaugeBar, iLeft, iTopValue+36, iWidth, 36);
+    iTopValue:= iTopValue+82;
+  end;
+
+  function MoveGaugeBar(iGaugeBar: TGaugeBar2; iLabelTitle: TShadowLabel; iTop: Integer = -1; iLeft: Integer = 10; iWidth: Integer = 287): Boolean; overload;
+  var
+    iSize: Integer;
+  begin
+    Result:= True;
+    iTopValue:= GetTopPos(iTop);
+    if iLabelTitle.AutoSize then
+       iSize:= -1
+    else
+       iSize:= iWidth;
+    FormMain.Set4KLabelSpecs(iLabelTitle, iLeft, iTopValue, iSize, 31, 16);
+    FormMain.Set4KGaugeBarSpecs(iGaugeBar, iLeft, iTopValue+36, iWidth, 36);
+    iTopValue:= iTopValue+82;
+  end;
+
+
+begin
+  if not Is4KMode then
+     Exit;
+
+  with FormMAMESettings_SimpleMode do
+  begin
+    FormMain.Set4KEmuGameTopPanel(TopBar, SystemIcon, GameIcon, LabelGameTitle, 1515, LabelEmulatorVersion, 1245, LabelGameStatus, 1460);
+    FormMain.Set4KPanelSpecs(Panel1_Folders, 0, 201, 1121, 833);
+    FormMain.Set4KPanelSpecs(Panel2_VideoAudioInput, 0, Panel1_Folders.Top, Panel1_Folders.Width, Panel1_Folders.Height);
+
+    FormMain.Set4KPanelSpecs(PanelBottom, 0, Panel1_Folders.Top+Panel1_Folders.Height, Panel1_Folders.Width, 71);
+    FormMain.Set4KButtonSpecs(ButtonCancel, PanelBottom.Width-16-128, 16, 128, 45, 16);
+    FormMain.Set4KButtonSpecs(ButtonOk,     ButtonCancel.Left-10-128, 16, 128, 45, 16);
+
+    FormMain.Set4KButtonSpecs(ButtonReadFile, 16, ButtonOk.Top, 168, 45, 16);
+    FormMain.Set4KButtonSpecs(ButtonResetToDefault, ButtonReadFile.Left+ButtonReadFile.Width+10, ButtonOk.Top, 168, 45, 16);
+    FormMain.Set4KButtonSpecs(ButtonReadFileHelp, ButtonResetToDefault.Left+ButtonResetToDefault.Width+10, ButtonOk.Top, 45, 45, 16);
+
+    FormMain.Set4KButtonSpecs(ButtonHelpSaveValidateAllCustomFiles, 437, 21, 35, 35, 16);
+    FormMain.Set4KCheckBoxSpecs(SaveValidateAllCustomFiles, 478, 20, 355, 36, 16);
+    FormMain.Set4KCheckBoxFontNameSpecs(SaveValidateAllCustomFiles);
+
+    ClientWidth:=  Panel1_Folders.Width;
+    ClientHeight:= PanelBottom.Top+PanelBottom.Height;
+    Font.Size:= 16;
+
+    SetPageButton(ButtonPageFolders, nil,  90, 798);
+    SetPageButton(ButtonPageVideo1 , ButtonPageFolders, 215);
+
+    // ---------------------- Page "Folders" ----------------------
+
+    // Path to ROM Sets and CHD Files
+    FormMain.Set4KBoxLabel(FolderROMsGroupBox, FolderROMsGroupBoxLabel, 16, 16, 329, 1089);
+    FormMain.Set4KListViewSpecs(FolderROMs, 10, 45, 982, 272, 16);
+    FolderROMs.CellSizes.Report.Height:= 32;
+
+    FormMain.Set4KButtonSpecs(FolderROMsButtonUp    , FolderROMsGroupBox.Width-12-75, 45,                     75, 36, 16);
+    FormMain.Set4KButtonSpecs(FolderROMsButtonDown  , FolderROMsButtonUp.Left, FolderROMsButtonUp.Top+41,     75, 36, 16);
+    FormMain.Set4KButtonSpecs(FolderROMsButtonSelect, FolderROMsButtonUp.Left, 158,                           75, 36, 16);
+    FormMain.Set4KButtonSpecs(FolderROMsButtonEdit  , FolderROMsButtonUp.Left, FolderROMsButtonSelect.Top+41, 75, 36, 16);
+    FormMain.Set4KButtonSpecs(FolderROMsButtonDelete, FolderROMsButtonUp.Left, FolderROMsButtonEdit.Top+41,   75, 36, 16);
+    FormMain.Set4KButtonSpecs(FolderROMsButtonClear , FolderROMsButtonUp.Left, FolderROMsButtonDelete.Top+41, 75, 36, 16);
+
+    // Path to Ini Files
+    FormMain.Set4KBoxLabel(FolderIniFilesGroupBox, FolderIniFilesGroupBoxLabel, 16, 370, 211, 532);
+    FormMain.Set4KListViewSpecs(FolderIniFiles, 10, 45, 510, 108, 16);
+    FolderIniFiles.CellSizes.Report.Height:= 32;
+
+    FormMain.Set4KButtonSpecs(FolderIniFilesButtonUp    , 10,                        FolderIniFilesGroupBox.Height-10-36,     75, 36, 16);
+    FormMain.Set4KButtonSpecs(FolderIniFilesButtonDown  , FolderIniFilesButtonUp.Left+80,     FolderIniFilesButtonUp.Top,     75, 36, 16);
+    FormMain.Set4KButtonSpecs(FolderIniFilesButtonSelect, 205,                                FolderIniFilesButtonUp.Top,     75, 36, 16);
+    FormMain.Set4KButtonSpecs(FolderIniFilesButtonEdit  , FolderIniFilesButtonSelect.Left+80, FolderIniFilesButtonSelect.Top, 75, 36, 16);
+    FormMain.Set4KButtonSpecs(FolderIniFilesButtonDelete, FolderIniFilesButtonEdit.Left+80,   FolderIniFilesButtonEdit.Top,   75, 36, 16);
+    FormMain.Set4KButtonSpecs(FolderIniFilesButtonClear , FolderIniFilesButtonDelete.Left+80, FolderIniFilesButtonDelete.Top, 75, 36, 16);
+
+    // Path to Artwork Files / Effect Overlay Files
+    FormMain.Set4KBoxLabel(FolderArtworksGroupBox, FolderArtworksGroupBoxLabel, 16, 606, 211, 532);
+    FormMain.Set4KListViewSpecs(FolderArtworks, 10, 45, 510, 108, 16);
+    FolderArtworks.CellSizes.Report.Height:= 32;
+
+    FormMain.Set4KButtonSpecs(FolderArtworksButtonUp    , 10,                        FolderArtworksGroupBox.Height-10-36,     75, 36, 16);
+    FormMain.Set4KButtonSpecs(FolderArtworksButtonDown  , FolderArtworksButtonUp.Left+80,     FolderArtworksButtonUp.Top,     75, 36, 16);
+    FormMain.Set4KButtonSpecs(FolderArtworksButtonSelect, 205,                                FolderArtworksButtonUp.Top,     75, 36, 16);
+    FormMain.Set4KButtonSpecs(FolderArtworksButtonEdit  , FolderArtworksButtonSelect.Left+80, FolderArtworksButtonSelect.Top, 75, 36, 16);
+    FormMain.Set4KButtonSpecs(FolderArtworksButtonDelete, FolderArtworksButtonEdit.Left+80,   FolderArtworksButtonEdit.Top,   75, 36, 16);
+    FormMain.Set4KButtonSpecs(FolderArtworksButtonClear , FolderArtworksButtonDelete.Left+80, FolderArtworksButtonDelete.Top, 75, 36, 16);
+
+    // Directory to Save Screenshots
+    SetBoxFolder(FolderGameSnapshotsGroupBox, FolderGameSnapshotsGroupBoxLabel, FolderROMsGroupBox, FolderGameSnapshots, FolderGameSnapshotsButtonSelect);
+
+    // Path Audio Sample Sets
+    SetBoxFolder(FolderSamplesGroupBox, FolderSamplesGroupBoxLabel, FolderGameSnapshotsGroupBox, FolderSamples, FolderSamplesButtonSelect);
+
+    // Directory to Save NVRAM Contents
+    SetBoxFolder(FolderNVRAMGroupBox, FolderNVRAMGroupBoxLabel, FolderSamplesGroupBox, FolderNVRAM, FolderNVRAMButtonSelect);
+
+    // Directory to Save Input Device Logs
+    SetBoxFolder(FolderInputDeviceLogsGroupBox, FolderInputDeviceLogsGroupBoxLabel, FolderNVRAMGroupBox, FolderInputDeviceLogs, FolderInputDeviceLogsButtonSelect);
+
+    // ---------------------- Page "Video / Audio / Input" ----------------------
+
+    // Video Options
+    FormMain.Set4KBoxLabel(VideoOutputModeGroupBox, VideoOutputModeGroupBoxLabel, 16, 16, 363, 309);
+    MoveCheckBox(WindowMode, 44); // 44 is the initial top value in the box panel
+    MoveCheckBox(MaximizeWindow);
+    MoveCheckBox(KeepAspectRatio);
+    MoveCheckBox(HardwareStretch);
+    MoveCheckBox(WaitVerticalSync);
+
+    MoveComboBox(ScreenResolution,  ScreenResolutionLabel, -1,                          10, 145);
+    MoveComboBox(ScreenRefreshRate, ScreenRefreshRateLabel, ScreenResolutionLabel.Top, 180, 117);
+
+    // Performance Options
+    FormMain.Set4KBoxLabel(PerformanceGroupBox, PerformanceGroupBoxLabel, 350, 16, 215, 309);
+    MoveCheckBox(AutoFrameskip, 44,  10, 175);
+    MoveCheckBox(Throttle,      44, 201, 104);
+
+    MoveGaugeBar(Frameskip, FrameskipLabel);
+    FrameskipLabel.Caption:= 'Frameskip 0 (Default)';
+    MoveCheckBox(SyncronizeRefreshRate);
+
+    // Screen Rotation Options
+    FormMain.Set4KBoxLabel(ScreenRotationGroupBox, ScreenRotationGroupBoxLabel, 350, 256, 180, 309);
+    MoveCheckBox(RotateLeft, 44, 10, 70);
+    MoveCheckBox(RotateRight, 44, 175, 85);
+    MoveCheckBox(FlipX);
+    MoveCheckBox(FlipY);
+
+    // Full Screen Otions
+    FormMain.Set4KBoxLabel(FullScreenGroupBox, FullScreenGroupBoxLabel, 684, 16, 133, 309);
+    MoveCheckBox(TripleBuffer, 44);
+    MoveCheckBox(SwitchResolution);
+
+    // Vector Options
+    FormMain.Set4KBoxLabel(VectorGroupBox, VectorGroupBoxLabel, 16, 688, 129, 1089);
+    MoveCheckBox(Antialias, -1, 290, 115);
+    MoveGaugeBar(VectorBeamWidth,     VectorBeamWidthLabel,     45,  10, 521);
+    MoveGaugeBar(VectorFlickerEffect, VectorFlickerEffectLabel, 45, 556, 521);
+
+    // Input Options
+    MoveCheckBox(Mouse,   396, 16, 175);
+    MoveCheckBox(Joystick, -1, 16, 175);
+
+    // General Settings
+    MoveCheckBox(ReadConfigFiles, 201, 684, 195);
+    MoveCheckBox(SkipGameInfo,     -1, 684, 195);
+    MoveCheckBox(Cheat,            -1, 684, 195);
+
+    // Audio Settings
+    FormMain.Set4KBoxLabel(AudioGroupBox, AudioGroupBoxLabel, 796, 406, 257, 309);
+    MoveCheckBox(EnableSound, 44,  10,  95);
+    MoveCheckBox(Samples,     44, 146, 150);
+    MoveGaugeBar(Volume, VolumeLabel);
+    MoveComboBox(SampleRate, SampleRateLabel);
+  end;
+end;
 
 procedure TFormMAMESettings_SimpleMode.CheckOldResolutionEntry;
 var
@@ -242,7 +491,8 @@ begin
   FreeAndNil(MAMEIniFile);
   if ButtonPageFolders.Visible and (not FoundIniPath) then
      begin
-       FolderIniFilesLabel.Enabled:= False;
+       FolderIniFilesGroupBox.Enabled:= False;
+       //FolderIniFilesLabel.Enabled:= False;
        FolderIniFiles.Enabled:= False;
        FolderIniFilesButtonUp.Enabled:= False;
        FolderIniFilesButtonDown.Enabled:= False;
@@ -805,7 +1055,7 @@ var
 begin
   if emuIni = '' then
      begin
-       GenerateMessage('Error', 'Failed to update settings.', '    Emulator .ini filename is blank. '+
+       FormMain.ShowMessageBox('Error', 'Failed to update settings.', '    Emulator .ini filename is blank. '+
                        'Please try selecting an emulator again in Emulators Setup screen. Aborting...', 2, False, 1);
        Exit;
      end;
@@ -814,7 +1064,7 @@ begin
       begin
         if customIni = '' then
            begin
-             GenerateMessage('Error', 'Failed to update settings.', '    Custom .ini filename is blank. '+
+             FormMain.ShowMessageBox('Error', 'Failed to update settings.', '    Custom .ini filename is blank. '+
                              'Please make sure that a game or a system is selected in the main screen. Aborting...', 2, False, 1);
              Exit;
            end
@@ -830,7 +1080,7 @@ begin
       end;
     False:
       begin
-        if FormMain.CheckReadOnly(emuIni) then
+        if CheckReadOnly(emuIni) then
            Exit;
       end;
   end;
@@ -1057,7 +1307,7 @@ begin
             FormMain.PopupCustomMAME.Tag:= Ord(SaveValidateAllCustomFiles.Checked);
             WriteMAMEIniFile(GameIni, Boolean(Tag));// update all mame.ini options
           end;
-       SetCurrentDir(FormMain.FrontendPath);
+       SetCurrentDir(FrontendPath);
      end;
 end;
 
@@ -1263,11 +1513,14 @@ var
   iStr: String;
   Loop: Integer;
 begin
-  VectorGroupBox.DoubleBuffered:= True;
-  PerformanceGroupBox.DoubleBuffered:= True;
-  AudioGroupBox.DoubleBuffered:= True;
-  FullScreenGroupBox.DoubleBuffered:= True;
+  FormMAMESettings_SimpleMode.Color:= $00f1f1f1; // reset to normal color just in case
+  Panel2_VideoAudioInput.Top:= Panel1_Folders.Top;
+  Panel2_VideoAudioInput.Visible:= False;
 
+  if not Is4KMode then
+     ClientHeight:= PanelBottom.Top+PanelBottom.Height;
+
+  Resize4K;
   FormMain.ELV_ResetNormalColors(FolderROMs);
   FormMain.ELV_ResetNormalColors(FolderIniFiles);
   FormMain.ELV_ResetNormalColors(FolderArtworks);
@@ -1275,8 +1528,21 @@ begin
   if IsNightMode then
   begin
     FormMAMESettings_SimpleMode.Color:= menu_background_color[1];
+    SetPanelNightColors(PanelBottom, menu_background_color[1], clrDarkGray, clrLightBlue);
+    Panel1_Folders.Color1:= menu_background_color[1];
+    Panel2_VideoAudioInput.Color1:= menu_background_color[1];
     for Loop:= 0 to FormMAMESettings_SimpleMode.ComponentCount-1 do
      begin
+       if FormMAMESettings_SimpleMode.Components[Loop] is TPanelEx then
+         begin
+           iStr:= TPanelEx(FormMAMESettings_SimpleMode.Components[Loop]).Name;
+           if PosEx('GroupBox', iStr) <> 0 then
+              begin
+                SetPanelColors(TPanelEx(FormMAMESettings_SimpleMode.Components[Loop]), clrMedDarkGray, -1, True);
+                SetPanelBorderColors(TPanelEx(FormMAMESettings_SimpleMode.Components[Loop]), clrLightGrayFrame, clrBorderGroupBoxGrayBk);
+              end
+         end
+      else
        if FormMAMESettings_SimpleMode.Components[Loop] is TBitBtnEx then
           FormMain.SetButtonExColors(TBitBtnEx(FormMAMESettings_SimpleMode.Components[Loop]))
        else
@@ -1310,18 +1576,28 @@ begin
             TAdvOfficeCheckBoxEx(FormMAMESettings_SimpleMode.Components[Loop]).DisabledFontColor:= clGray;
             TAdvOfficeCheckBoxEx(FormMAMESettings_SimpleMode.Components[Loop]).DisabledFontShadowColor:= clrMedDarkGray;
             FormMain.SetCheckBoxExCustomIcon(TAdvOfficeCheckBoxEx(FormMAMESettings_SimpleMode.Components[Loop]));
-          end;
+          end
+       else
        if FormMAMESettings_SimpleMode.Components[Loop] is TShadowLabel then
           begin
-            SetLabelColors(TShadowLabel(FormMAMESettings_SimpleMode.Components[Loop]), item_caption_active_color[1], item_caption_active_shadow_color[1]);
-            if not TShadowLabel(FormMAMESettings_SimpleMode.Components[Loop]).Transparent then
-               TShadowLabel(FormMAMESettings_SimpleMode.Components[Loop]).Color:= FormMAMESettings_SimpleMode.Color;
+            iStr:= TPanelEx(FormMAMESettings_SimpleMode.Components[Loop]).Name;
+           if PosEx('GroupBoxLabel', iStr) <> 0 then
+              begin
+                SetLabelBkFrameColors(TShadowLabel(FormMAMESettings_SimpleMode.Components[Loop]), clrBorderGroupBoxGrayBk, $00404040, clBlack);
+                SetLabelColors(TShadowLabel(FormMAMESettings_SimpleMode.Components[Loop]), clCream);
+              end
+           else
+              begin
+                SetLabelColors(TShadowLabel(FormMAMESettings_SimpleMode.Components[Loop]), item_caption_active_color[1], item_caption_active_shadow_color[1]);
+                if not TShadowLabel(FormMAMESettings_SimpleMode.Components[Loop]).Transparent then
+                       TShadowLabel(FormMAMESettings_SimpleMode.Components[Loop]).Color:= clrMedDarkGray; //FormMAMESettings_SimpleMode.Color;
+              end;
           end
        else
        if FormMAMESettings_SimpleMode.Components[Loop] is TEasyListView then
           begin
             FormMain.SetEasyListViewColors(TEasyListView(FormMAMESettings_SimpleMode.Components[Loop]), FormMAMESettings_SimpleMode.Color, clWhite, -1, clGray);
-            FormMain.SetEasyListViewHeaderColors(TEasyListView(FormMAMESettings_SimpleMode.Components[Loop]), True);
+            FormMain.SetEasyListViewHeaderColors(TEasyListView(FormMAMESettings_SimpleMode.Components[Loop]), True, False, False);
             FormMain.ELV_SetCheckRadioCustomIcon(TEasyListView(FormMAMESettings_SimpleMode.Components[Loop]));
             FormMain.ELV_SetEditBkColor(TEasyListView(FormMAMESettings_SimpleMode.Components[Loop]));
             FormMain.ELV_SetRibbonNightColors(0, TEasyListView(FormMAMESettings_SimpleMode.Components[Loop]), True);
@@ -1340,9 +1616,10 @@ begin
     FormMain.SetWin10DarkScrollBar(FolderROMs);
     FormMain.SetWin10DarkScrollBar(FolderIniFiles);
     FormMain.SetWin10DarkScrollBar(FolderArtworks);
+
+    FormMain.SetWin10DarkScrollBar(ScreenResolution);
   end;
 
-  ButtonPagePanel.Color1:= FormMAMESettings_SimpleMode.Color;
   SaveValidateAllCustomFiles.Checked:= Boolean(FormMain.PopupCustomMAME.Tag);
 
   IsSDLMAME:= False;
@@ -1361,7 +1638,8 @@ begin
        //  idMAME  : TopBar.Color1:= clSkyBlue; // MAME
        //  idHBMAME: TopBar.Color1:= $00b4bf8f;//$00bfb490; // HBMAME
        //end;
-       FormMain.IL_ArcadeSystem_ExtraLarge.GetIcon(sysID, SystemIcon.Picture.Icon);
+       FormMain.LoadSystemIcon(sysID, SystemIcon, False);
+       //FormMain.IL_ArcadeSystem_ExtraLarge.GetIcon(sysID, SystemIcon.Picture.Icon);
        FormMain.LoadMessageIcon(GameIcon, 'info.ico');
 
        LabelGameStatus.Visible:= False;
@@ -1393,8 +1671,10 @@ begin
 
        LabelGameStatus.Caption:= LabelGameStatus.Hint+#13#10+FormMain.GetGameStatusText(FormMain.MemGameInfo.eGameSetStatus, FormMain.MemGameInfo.eROMIdentification);
 
-       FormMain.IL_StandardIconsExtraLarge.GetIcon(FormMain.MemGameInfo.eROMIdentification, SystemIcon.Picture.Icon);
-       FormMain.IL_ArcadeSystem_Small.GetIcon(FormMain.MemGameInfo.eSystemID, GameIcon.Picture.Icon);
+       FormMain.LoadSystemROMIdIcon(FormMain.MemGameInfo.eSystemID, FormMain.MemGameInfo.eCustomSystemID, FormMain.MemGameInfo.eROMIdentification,
+                                    SystemIcon, FormMain.MemGameInfo.eSoftwareName, FormMain.MemGameInfo.eGameSetStatus, False);
+       //FormMain.IL_StandardIconsExtraLarge.GetIcon(FormMain.MemGameInfo.eROMIdentification, SystemIcon.Picture.Icon);
+       FormMain.LoadSystemIcon(FormMain.MemGameInfo.eSystemID, GameIcon, False);
 
        SetColorsGameTopBar(FormMain.MemGameInfo.eGameSetStatus, TopBar);
        //case FormMain.MemGameInfo.eGameSetStatus of
@@ -1505,7 +1785,7 @@ end;
 
 procedure TFormMAMESettings_SimpleMode.ButtonReadFileHelpClick(Sender: TObject);
 begin
-  FormMain.InitMessageBox; //CallMessageBox;
+  FormMain.InitMessageBox;
   FormMain.AddMsgText('    Button ');
   FormMain.AddMsgText('Reload Settings', MsgTxtColors.colorKeyTitle, [fsBold]);
   FormMain.AddMsgText(' will load a list of custom files one by one, overwriting settings from the previous one.'+
@@ -1542,7 +1822,7 @@ begin
   FormMain.AddMsgText(#13#10+'    Button ');
   FormMain.AddMsgText('Reset to Default', MsgTxtColors.colorKeyTitle, [fsBold]);
   FormMain.AddMsgText(' will only load emulator default settings: mame.ini; ume.ini; hbmame.ini; ignoring everything else.');
-  GenerateMessage('Help', 'What each button does ?');
+  FormMain.ShowMessageBox('Help', 'What each button does ?');
 end;
 
 procedure TFormMAMESettings_SimpleMode.FolderIniFilesButtonUpClick(
@@ -1607,7 +1887,7 @@ end;
 procedure TFormMAMESettings_SimpleMode.ButtonHelpSaveValidateAllCustomFilesClick(
   Sender: TObject);
 begin
-  FormMain.InitMessageBox; //CallMessageBox;
+  FormMain.InitMessageBox;
   FormMain.AddMsgText('    This feature is used only when saving custom settings.'+#13#10+#13#10);
   FormMain.AddMsgText('Disabled / Unchecked'+#13#10+#13#10, MsgTxtColors.colorKeyTitle, [fsBold], taCenter);
   FormMain.AddMsgText('    Custom settings are validated only against emulator default settings ');
@@ -1630,11 +1910,15 @@ begin
   FormMain.AddMsgText('.'+#13#10+#13#10+'In doubt, keep this feature ');
   FormMain.AddMsgText('disabled/unchecked.', MsgTxtColors.colorKeyValue);
 
-  GenerateMessage('Help', 'Validate All Custom Files on Save');
+  FormMain.ShowMessageBox('Help', 'Validate All Custom Files on Save');
 end;
 
 procedure TFormMAMESettings_SimpleMode.FormActivate(Sender: TObject);
 begin
+  if FormMAMESettings_SimpleMode.HelpContext = 1 then
+     Exit;
+  FormMAMESettings_SimpleMode.HelpContext:= 1;
+  
   SaveValidateAllCustomFiles.Visible:= not ButtonPageFolders.Visible;
   ButtonHelpSaveValidateAllCustomFiles.Visible:= SaveValidateAllCustomFiles.Visible;
   if not ButtonPageFolders.Visible then
@@ -1642,18 +1926,47 @@ begin
        ButtonPageVideo1.Down:= True;
        ButtonPageVideo1.Click;
      end;
+
+  FormMain.HideFilterMsgBox;
 end;
 
 procedure TFormMAMESettings_SimpleMode.FrameskipChange(Sender: TObject);
 begin
-  FrameskipLabel.Caption:= IntToStr(Frameskip.Position);
+  if Is4KMode then
+     begin
+       FrameskipLabel.Caption:= 'Frameskip '+IntToStr(Frameskip.Position);
+       if Frameskip.Position = 0 then
+          FrameskipLabel.Caption:= FrameskipLabel.Caption+' (Default)';
+     end
+  else
+     FrameskipLabel.Caption:= IntToStr(Frameskip.Position);
 end;
 
 procedure TFormMAMESettings_SimpleMode.ButtonPageFoldersClick(
   Sender: TObject);
+
+  procedure SetPanel(IsVisible: Boolean);
+  begin
+    case PanelBottom.Tag of
+      1: Panel1_Folders.Visible:=         IsVisible;
+      2: Panel2_VideoAudioInput.Visible:= IsVisible;
+    end;
+  end;
+
 begin
-  if NotebookPages.PageIndex <> TSpeedButtonEx(Sender).Tag then
-     NotebookPages.PageIndex:= TSpeedButtonEx(Sender).Tag;
+  if TSpeedButtonEx(Sender).Tag = PanelBottom.Tag then
+     Exit;
+
+  SetPanel(False);
+  PanelBottom.Tag:= TSpeedButtonEx(Sender).Tag;
+  SetPanel(True);
+end;
+
+procedure TFormMAMESettings_SimpleMode.FolderROMsItemPaintText(
+  Sender: TCustomEasyListview; Item: TEasyItem; Position: Integer;
+  ACanvas: TCanvas);
+begin
+  FormMain.ELV_ItemPaintText_General(Sender, Item, ACanvas);
 end;
 
 end.

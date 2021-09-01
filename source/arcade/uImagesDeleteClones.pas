@@ -156,7 +156,7 @@ begin
   if not ImageParentScr1.Bitmap.Empty then
      LabelTextInfoParentScr1.Caption:= 'PARENT GAME -- '+UpperCase(ExtractFileName(FileStr));
 
-  SetCurrentDir(FormMain.FrontendPath);
+  SetCurrentDir(FrontendPath);
 end;
 
 procedure TFormImagesDeleteClones.DeleteFiles(SelectedOnly: Boolean = False);
@@ -169,7 +169,7 @@ begin
   if not FormMain.CheckTotal(DeleteClonesList) then
      Exit;
   if not SelectedOnly then
-     if GenerateMessage('Delete Files', 'Delete clone images.', '    You are about to delete all files in the list. '+
+     if FormMain.ShowMessageBox('Delete Files', 'Delete clone images.', '    You are about to delete all files in the list. '+
                      'Images of parent games will not be deleted.'+#13#10+
                      '    Recycle bin is not supported. Are you sure ? Click No button to cancel.', 1) = mrNo then
         Exit;
@@ -355,7 +355,7 @@ begin
      Exit;
   ImageCategoryIcon.Tag:= selCat;
   LabelImageCategory.Caption:= GetImageCategoryTitle(ImageCategoryIcon.Tag);
-  FormMain.LoadIconIntoImage(ImageCategoryArray[ImageCategoryIcon.Tag, 0], ImageCategoryIcon, 2);
+  FormMain.AddDefaultIcons(ImageCategoryArray[ImageCategoryIcon.Tag, 0], '', nil, 2, ImageCategoryIcon);
 end;
 
 procedure TFormImagesDeleteClones.SelectSystem;
@@ -367,7 +367,7 @@ begin
      Exit;
   SystemIcon.Tag:= selSys;
   LabelSystem.Caption:= FormMain.GetArcadeSystemShortTitle(selSys);
-  FormMain.IL_ArcadeSystem_Small.GetIcon(SystemIcon.Tag, SystemIcon.Picture.Icon);
+  FormMain.LoadSystemIcon(SystemIcon.Tag, SystemIcon, False);
 end;
 
 procedure TFormImagesDeleteClones.BuildGamesList;
@@ -511,8 +511,9 @@ var
        Exit;
 
     addItem:= DeleteClonesList.Items.AddCustom(TEasyGameInfo_dc, nil);
-    addItem.ImageIndex:= FormMain.GetMAMEImageIndex(FormMain.TempGameVars.eROMIdentification, FormMain.TempGameVars.eSoftwareName);
-    addItem.StateImageIndexes[0]:= FormMain.TempGameVars.eSystemID;
+    addItem.ImageIndex:= FormMain.GetMAMEImageIndex(FormMain.TempGameVars.eROMIdentification, FormMain.TempGameVars.eSoftwareName, FormMain.TempGameVars.eGameSetStatus);
+
+    addItem.StateImageIndexes[0]:= FormMain.GetImageIndexSystemID(FormMain.TempGameVars.eSystemID);
     TEasyGameInfo_dc(addItem).eIsFavorite:= FormMain.TempGameVars.eIsFavorite;
     TEasyGameInfo_dc(addItem).eTitle:= FormMain.TempGameVars.eTitle;
     TEasyGameInfo_dc(addItem).eName:= FormMain.TempGameVars.eName;
@@ -646,8 +647,8 @@ end;
 procedure TFormImagesDeleteClones.FormShow(Sender: TObject);
 begin
   ReadSettings;
-  FormMain.IL_ArcadeSystem_Small.GetIcon(SystemIcon.Tag, SystemIcon.Picture.Icon);
-  FormMain.LoadIconIntoImage(ImageCategoryArray[ImageCategoryIcon.Tag, 0], ImageCategoryIcon, 2);
+  FormMain.LoadSystemIcon(SystemIcon.Tag, SystemIcon, False);
+  FormMain.AddDefaultIcons(ImageCategoryArray[ImageCategoryIcon.Tag, 0], '', nil, 2, ImageCategoryIcon);
 
   LabelSystem.Caption:= FormMain.GetArcadeSystemShortTitle(SystemIcon.Tag);
   LabelImageCategory.Caption:= GetImageCategoryTitle(ImageCategoryIcon.Tag);
@@ -693,7 +694,7 @@ begin
        FormMain.SetButtonExColors(ButtonHelp);
 
        FormMain.SetEasyListViewColors(DeleteClonesList, -1, -1, clrOrangeBarTop);
-       FormMain.SetEasyListViewHeaderColors(DeleteClonesList, True);
+       FormMain.SetEasyListViewHeaderColors(DeleteClonesList, True, False, False);
        FormMain.SetWin10DarkScrollBar(DeleteClonesList);
      end;
      
@@ -756,7 +757,7 @@ end;
 
 procedure TFormImagesDeleteClones.ButtonHelpClick(Sender: TObject);
 begin
-  GenerateMessage('Help', 'How to use this feature ?',
+  FormMain.ShowMessageBox('Help', 'How to use this feature ?',
                   '    Select an image category and a system, then hit the "Scan" button at the top bar.'+#13#10+
                   'If a valid folder for the category + system selected is found, all clone games will be scanned for '+
                   'valid screenshots (list is always cleaned on a new scan).'+#13#10+

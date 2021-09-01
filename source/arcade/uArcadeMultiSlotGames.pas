@@ -44,6 +44,8 @@ type
     procedure MultiSlotMachinesKeyAction(Sender: TCustomEasyListview;
       var CharCode: Word; var Shift: TShiftState; var DoDefault: Boolean);
     procedure ButtonCancelMultiSlotMachinesClick(Sender: TObject);
+    procedure MultiSlotMachinesItemPaintText(Sender: TCustomEasyListview;
+      Item: TEasyItem; Position: Integer; ACanvas: TCanvas);
   private
     { Private declarations }
     LastSelectedMachine: TEasyItem;
@@ -52,6 +54,7 @@ type
     procedure UpdateSlotIndex;
     procedure AddMultiGames;
     procedure MoveToSlot(MoveUp: Boolean);
+    procedure Resize4K;
   public
     { Public declarations }
   end;
@@ -114,6 +117,81 @@ uses uMain, uCommon;
     |MV-6   | B0 |  6  | MVS |  4  |   2    |   2    |   2   | no  |header | both  |header| yes |yes| socket |  no   | vert |
     +-------+----+-----+-----+-----+--------+--------+-------+-----+-------+-------+------+-----+---+--------+-------+------+
 }
+
+procedure TFormArcadeMultiSlotGames.Resize4K;
+begin
+  if not Is4KMode then
+     Exit;
+
+  with FormArcadeMultiSlotGames do
+  begin
+    FormMain.Set4KListViewSpecs(GamesList, 10, 10, 1975, 419, 16);
+    FormMain.Set4KListViewHeaderFontSizeSpecs(GamesList);
+    //FormMain.Set4KListViewCheckBoxHDSpecs(GamesList);
+    GamesList.CellSizes.Report.Height:= 37;
+
+    FormMain.Set4KListViewColumnSizeSpecs(GamesList, 0,  35);
+    FormMain.Set4KListViewColumnSizeSpecs(GamesList, 1, 950);
+    FormMain.Set4KListViewColumnSizeSpecs(GamesList, 2, 250);
+    FormMain.Set4KListViewColumnSizeSpecs(GamesList, 3, 250);
+    FormMain.Set4KListViewColumnSizeSpecs(GamesList, 4, 180);
+    FormMain.Set4KListViewColumnSizeSpecs(GamesList, 5, 150);
+    FormMain.Set4KListViewColumnSizeSpecs(GamesList, 6, 100);
+    FormMain.Set4KListViewColumnSizeSpecs(GamesList, 7,  34);
+
+    GamesList.ImagesSmall:= FormMain.IL_StandardIconsLarge;
+    GamesList.PaintInfoColumn.CaptionIndent:= 4; // reset to default value
+    // ??? GamesList.PaintInfoItem.ImageIndent:= 4; // reset to default value (must increase first/last column width)
+
+    FormMain.Set4KButtonSpecs(ButtonUp,             10,             GamesList.Top+GamesList.Height+10, 168, 36, 16);
+    FormMain.Set4KButtonSpecs(ButtonDown,           ButtonUp.Left+ButtonUp.Width+10,     ButtonUp.Top, 168, 36, 16);
+    FormMain.Set4KButtonSpecs(ButtonRemoveFromList, ButtonDown.Left+ButtonDown.Width+10, ButtonUp.Top, 168, 36, 16);
+
+    FormMain.Set4KLabelSpecs(LabelHelpText, 1002, ButtonUp.Top, 522, 47, 14); // Verdana
+
+    FormMain.Set4KPanelSpecs(PanelNeoGeoMVS, 10, ButtonUp.Top+ButtonUp.Height+70, GamesList.Width, 44);
+    FormMain.Set4KLabelSpecs(LabelMultiSlotMachines, 10, 10, 1862, 25, 16);
+    FormMain.Set4KButtonSpecs(ButtonChangePanelNeoGeoMVS, PanelNeoGeoMVS.Width-89-4, 4, 89, 36, 16);
+
+    PanelBottom.Height:= 71;
+
+    ClientWidth:=  GamesList.Width+20;
+    ClientHeight:= PanelNeoGeoMVS.Top+PanelNeoGeoMVS.Height+10+PanelBottom.Height;
+
+    FormMain.Set4KButtonsOkCancelPanel(PanelBottom, ButtonOk, ButtonNo);
+
+    FormMain.Set4KPanelSpecs(PanelMultiSlotMachines, 26, 100, 1943, 378);
+
+    FormMain.Set4KListViewSpecs(MultiSlotMachines, 23, 23, 1895, 271, 16);
+    FormMain.Set4KListViewHeaderFontSizeSpecs(MultiSlotMachines);
+    MultiSlotMachines.CellSizes.Report.Height:= 37;
+
+    FormMain.Set4KListViewColumnSizeSpecs(MultiSlotMachines, 0, 488);
+    FormMain.Set4KListViewColumnSizeSpecs(MultiSlotMachines, 1, 100);
+    FormMain.Set4KListViewColumnSizeSpecs(MultiSlotMachines, 2, 150);
+    FormMain.Set4KListViewColumnSizeSpecs(MultiSlotMachines, 3, 400);
+    FormMain.Set4KListViewColumnSizeSpecs(MultiSlotMachines, 4, 250);
+    FormMain.Set4KListViewColumnSizeSpecs(MultiSlotMachines, 5, 500);
+
+    MultiSlotMachines.ImagesSmall:= FormMain.IL_StandardIconsLarge;
+    //MultiSlotMachines.ImagesState:= ???
+    MultiSlotMachines.PaintInfoColumn.CaptionIndent:= 4; // reset to default value
+    // ??? MultiSlotMachines.PaintInfoItem.ImageIndent:= 4; // reset to default value (must increase first/last column width)
+
+    FormMain.Set4KLabelSpecs(LabelMultiSlotMachinesChooseMachineToRun, 23,
+                             MultiSlotMachines.Top+MultiSlotMachines.Height+30, -1, -1, 14);
+
+    FormMain.Set4KLabelSpecs(LabelMultiSlotMachinesBoldDefaultMachine, 992, LabelMultiSlotMachinesChooseMachineToRun.Top, -1, -1, 14);
+
+    FormMain.Set4KButtonSpecs(ButtonCancelMultiSlotMachines,
+                              MultiSlotMachines.Left+MultiSlotMachines.Width-89,
+                              MultiSlotMachines.Top+MultislotMachines.Height+23, 89, 36, 16);
+
+    FormMain.Set4KButtonSpecs(ButtonOkMultiSlotMachines,
+                              ButtonCancelMultiSlotMachines.Left-89-10,
+                              ButtonCancelMultiSlotMachines.Top, 89, 36, 16);
+  end;
+end;
 
 procedure TFormArcadeMultiSlotGames.UpdateLabelSelectedMachine(Item: TEasyItem);
 begin
@@ -187,6 +265,7 @@ begin
         Item.Captions[5]:= SoftListGetEntryValue(iName, 'notes'); // notes
         if SameText(MachinesList[iLoop], SectionStr) then
            Item.Bold:= True;
+
         if MachinesList[iLoop] = LastUsedName then
            begin
              UpdateLabelSelectedMachine(Item);
@@ -246,13 +325,27 @@ var
     if not GamesList.Header.Columns[ColumnIndex].Visible then
        Exit;
     GamesList.Header.Columns[ColumnIndex].AutoSizeToFit;
-    GamesList.Header.Columns[ColumnIndex].Width:= GamesList.Header.Columns[ColumnIndex].Width-GamesList.ImagesSmall.Width;
-    case ColumnIndex of
-      2: MinSize:= 44;
-      3: MinSize:= 57;
-      4: MinSize:= 47;
-      5: MinSize:= 49;
-      6: MinSize:= 35;
+    if not Is4KMode then
+       GamesList.Header.Columns[ColumnIndex].Width:= GamesList.Header.Columns[ColumnIndex].Width-GamesList.ImagesSmall.Width;
+    if Is4KMode then
+    begin
+      case ColumnIndex of
+        2: MinSize:= 75;
+        3: MinSize:= 100;
+        4: MinSize:= 80;
+        5: MinSize:= 85;
+        6: MinSize:= 60;
+      end;
+    end
+    else
+    begin
+      case ColumnIndex of
+        2: MinSize:= 44;
+        3: MinSize:= 57;
+        4: MinSize:= 47;
+        5: MinSize:= 49;
+        6: MinSize:= 35;
+      end;
     end;
     if GamesList.Header.Columns[ColumnIndex].Width < MinSize then
        GamesList.Header.Columns[ColumnIndex].Width:= MinSize;
@@ -304,26 +397,41 @@ end;
 
 procedure TFormArcadeMultiSlotGames.FormShow(Sender: TObject);
 begin
+  Resize4K;
   FormMain.ELV_ResetNormalColors(GamesList);
   FormMain.ELV_ResetNormalColors(MultiSlotMachines);
 
-  PanelMultiSlotMachines.Top:= 60; // place panel at correct position
-
-  if PanelNeoGeoMVS.Visible then
-     FormArcadeMultiSlotGames.Height:= 440 // default form height at runtime; it's bigger at design mode
+  if Is4KMode then
+     begin
+       if not PanelNeoGeoMVS.Visible then
+          FormArcadeMultiSlotGames.ClientHeight:= ClientHeight-(PanelNeoGeoMVS.Height+10);
+     end
   else
-     FormArcadeMultiSlotGames.Height:= 440-PanelNeoGeoMVS.Height;
+     begin
+       PanelMultiSlotMachines.Top:= 60; // place panel at correct position
+
+       if PanelNeoGeoMVS.Visible then
+          FormArcadeMultiSlotGames.Height:= 440 // default form height at runtime; it's bigger at design mode
+       else
+          FormArcadeMultiSlotGames.Height:= 440-PanelNeoGeoMVS.Height;
+     end;
 
   SetFormColors(FormArcadeMultiSlotGames, nil, PanelBottom, nil, nil, nil, -1, True);
   if IsNightMode then
      begin
-       SetPanelBorderColors(PanelNeoGeoMVS, clrBorderGroupBoxGrayBk, clrInnerBorderGroupBoxGrayBk);
-       FormMain.SetEasyListViewColors(GamesList, menu_background_color[1], clWhite);
-       GamesList.ShowThemedBorderColor:= PanelNeoGeoMVS.ColorFrame;
-       PanelNeoGeoMVS.Color1:= clrLightBlack;
+       FormMain.SetEasyListViewColors(GamesList,         menu_background_color[1], clWhite, -1, clrBorderGroupBoxGrayBk);
+       FormMain.SetEasyListViewColors(MultiSlotMachines, menu_background_color[1], clWhite, -1, clrBorderGroupBoxGrayBk);
 
-       MultiSlotMachines.Color:= GamesList.Color;
-       MultiSlotMachines.Font.Color:= clWhite;
+       FormMain.SetEasyListViewHeaderColors(GamesList,         True, False, Is4KMode, True);
+       FormMain.SetEasyListViewHeaderColors(MultiSlotMachines, True, False, Is4KMode, True);
+
+       FormMain.ELV_SetRibbonNightColors(0, GamesList, True);
+       FormMain.ELV_SetRibbonNightColors(0, MultiSlotMachines, True);
+       FormMain.SetWin10DarkScrollBar(GamesList);
+       FormMain.SetWin10DarkScrollBar(MultiSlotMachines);
+
+       SetPanelBorderColors(PanelNeoGeoMVS, clrBorderGroupBoxGrayBk, clrInnerBorderGroupBoxGrayBk);
+       PanelNeoGeoMVS.Color1:= clrLightBlack;
 
        SetLabelColors(LabelMultiSlotMachines, clCream, item_caption_active_shadow_color[1]);
        SetLabelColors(LabelHelpText,          clrLightRed, clMaroon);
@@ -337,7 +445,6 @@ begin
                            clrDarkGray,
                            clrBorderGroupBoxGrayBk,
                            clrInnerBorderGroupBoxGrayBk);
-       MultiSlotMachines.ShowThemedBorderColor:= PanelNeoGeoMVS.ColorFrame;
 
        FormMain.SetButtonExColors(ButtonOk);
        FormMain.SetButtonExColors(ButtonNo);
@@ -347,14 +454,6 @@ begin
        FormMain.SetButtonExColors(ButtonChangePanelNeoGeoMVS);
        FormMain.SetButtonExColors(ButtonOkMultiSlotMachines);
        FormMain.SetButtonExColors(ButtonCancelMultiSlotMachines);
-
-       FormMain.SetEasyListViewHeaderColors(GamesList, True);
-       FormMain.SetEasyListViewHeaderColors(MultiSlotMachines, True);
-
-       FormMain.ELV_SetRibbonNightColors(0, GamesList, True);
-       FormMain.ELV_SetRibbonNightColors(0, MultiSlotMachines, True);
-       FormMain.SetWin10DarkScrollBar(GamesList);
-       FormMain.SetWin10DarkScrollBar(MultiSlotMachines);
      end;
 
   LastSelectedMachine:= nil;
@@ -367,15 +466,11 @@ procedure TFormArcadeMultiSlotGames.GamesListItemPaintText(
   Sender: TCustomEasyListview; Item: TEasyItem; Position: Integer;
   ACanvas: TCanvas);
 begin
-  //ACanvas.Font.Name:= 'Segoe UI';
-  //ACanvas.Font.Size:= 9;
   Item.Ghosted:= Item.Index > (LabelMultiSlotMachines.Tag-1);
 
   case Position of
     0:
      begin
-       //ACanvas.Font.Name:= 'Tahoma';
-       //ACanvas.Font.Size:= 8;
        ACanvas.Font.Style:= [fsBold];
        if not Item.Ghosted then
           begin
@@ -387,9 +482,8 @@ begin
      end;
     1:
      begin
-       FormMain.GetCanvasDefaultFont(ACanvas, Item.Tag, Item.StateImageIndexes[7], IsNightMode);
+       FormMain.GetCanvasDefaultFont(ACanvas, Item.Tag, Item.StateImageIndexes[7], IsNightMode, Is4KMode);
      end;
-    //4: ACanvas.Font.Size:= 7;
   end;
   FormMain.ELV_ItemPaintText_General(Sender, Item, ACanvas);
   if Item.Ghosted then
@@ -486,6 +580,17 @@ begin
   LastSelectedMachine.Selected:= True;
   PanelMultiSlotMachines.Visible:= False;
   ButtonOk.Enabled:= True;
+end;
+
+procedure TFormArcadeMultiSlotGames.MultiSlotMachinesItemPaintText(
+  Sender: TCustomEasyListview; Item: TEasyItem; Position: Integer;
+  ACanvas: TCanvas);
+begin
+  if Item.Bold then
+     begin
+       ACanvas.Font.Name:=  FormMain.Get4KFontBold;
+       ACanvas.Font.Color:= item_caption_active_color[1];
+     end;
 end;
 
 end.

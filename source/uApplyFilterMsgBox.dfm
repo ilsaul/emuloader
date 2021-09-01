@@ -61,7 +61,7 @@ object FormApplyFilterMsgBox: TFormApplyFilterMsgBox
     object LabelBoxMessage: TShadowLabel
       Left = 46
       Top = 44
-      Width = 451
+      Width = 452
       Height = 17
       AutoSize = False
       Caption = 'Applying filters, please wait...'

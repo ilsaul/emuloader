@@ -21,7 +21,7 @@ object FormNightModeRGBQuickEdit: TFormNightModeRGBQuickEdit
   object NightModeRGBQuickEdit_RedLabel: TShadowLabel
     Left = 16
     Top = 81
-    Width = 23
+    Width = 21
     Height = 16
     Caption = 'Red'
     Color = 5787720
@@ -44,7 +44,7 @@ object FormNightModeRGBQuickEdit: TFormNightModeRGBQuickEdit
   object NightModeRGBQuickEdit_GreenLabel: TShadowLabel
     Left = 16
     Top = 112
-    Width = 34
+    Width = 32
     Height = 16
     Caption = 'Green'
     Color = 5787720
@@ -67,7 +67,7 @@ object FormNightModeRGBQuickEdit: TFormNightModeRGBQuickEdit
   object NightModeRGBQuickEdit_BlueLabel: TShadowLabel
     Left = 16
     Top = 143
-    Width = 26
+    Width = 24
     Height = 16
     Caption = 'Blue'
     Color = 5787720
@@ -90,9 +90,11 @@ object FormNightModeRGBQuickEdit: TFormNightModeRGBQuickEdit
   object NightModeKeysHintLabel: TShadowLabel
     Left = 16
     Top = 216
-    Width = 261
-    Height = 16
-    Caption = 'TAB : Change Focus   ENTER : Apply   ESC : Abort'
+    Width = 259
+    Height = 31
+    Caption = 
+      'TAB : Change Focus   ENTER : Apply   ESC : Abort Mouse Left-Clic' +
+      'k on Current Color To Reset'
     Color = 5787720
     Font.Charset = ANSI_CHARSET
     Font.Color = clSilver
@@ -109,6 +111,7 @@ object FormNightModeRGBQuickEdit: TFormNightModeRGBQuickEdit
     ColorInnerFrame = clBlack
     Frames = []
     Transparent = True
+    WordWrap = True
   end
   object NightModeColorBoxExHint: TShadowLabel
     Left = 14
@@ -138,7 +141,7 @@ object FormNightModeRGBQuickEdit: TFormNightModeRGBQuickEdit
   object NightModeRGBQuickEdit_HexLabel2: TShadowLabel
     Left = 16
     Top = 174
-    Width = 23
+    Width = 22
     Height = 16
     Caption = 'Hex'
     Color = 5787720
@@ -161,35 +164,12 @@ object FormNightModeRGBQuickEdit: TFormNightModeRGBQuickEdit
   object NightModeRGBQuickEdit_ColorSampleLabel: TShadowLabel
     Left = 377
     Top = 57
-    Width = 127
+    Width = 125
     Height = 16
     Caption = 'New                    Current'
     Color = 5787720
     Font.Charset = ANSI_CHARSET
     Font.Color = 12574688
-    Font.Height = -12
-    Font.Name = 'Segoe UI'
-    Font.Style = []
-    ParentColor = False
-    ParentFont = False
-    ShowAccelChar = False
-    ShadowColor = 5588805
-    ShadowEnabled = False
-    EllipsType = etNone
-    ColorFrame = 4210752
-    ColorInnerFrame = clBlack
-    Frames = []
-    Transparent = True
-  end
-  object NightModeKeysHint2Label: TShadowLabel
-    Left = 16
-    Top = 234
-    Width = 233
-    Height = 16
-    Caption = 'Mouse Left-Click on Current Color To Reset'
-    Color = 5787720
-    Font.Charset = ANSI_CHARSET
-    Font.Color = clSilver
     Font.Height = -12
     Font.Name = 'Segoe UI'
     Font.Style = []
@@ -211,7 +191,7 @@ object FormNightModeRGBQuickEdit: TFormNightModeRGBQuickEdit
     Height = 16
     Alignment = taCenter
     AutoSize = False
-    Caption = '255, 255 255'
+    Caption = '255, 255, 255'
     Color = 5787720
     Font.Charset = ANSI_CHARSET
     Font.Color = 12574688
@@ -229,101 +209,12 @@ object FormNightModeRGBQuickEdit: TFormNightModeRGBQuickEdit
     Frames = []
     Transparent = True
   end
-  object TrackBarColorR_ButtonDec: TSpeedButtonEx
-    Tag = -1
-    Left = 51
-    Top = 78
-    Width = 22
-    Height = 21
-    Caption = #231
-    Font.Charset = SYMBOL_CHARSET
-    Font.Color = clBlack
-    Font.Height = -15
-    Font.Name = 'Wingdings'
-    Font.Style = []
-    ParentFont = False
-    OnClick = TrackBarColorR_ButtonDecClick
-  end
-  object TrackBarColorR_ButtonInc: TSpeedButtonEx
-    Tag = 1
-    Left = 277
-    Top = 78
-    Width = 22
-    Height = 21
-    Caption = #232
-    Font.Charset = SYMBOL_CHARSET
-    Font.Color = clBlack
-    Font.Height = -15
-    Font.Name = 'Wingdings'
-    Font.Style = []
-    ParentFont = False
-    OnClick = TrackBarColorR_ButtonDecClick
-  end
-  object TrackBarColorG_ButtonDec: TSpeedButtonEx
-    Tag = -1
-    Left = 51
-    Top = 109
-    Width = 22
-    Height = 21
-    Caption = #231
-    Font.Charset = SYMBOL_CHARSET
-    Font.Color = clBlack
-    Font.Height = -15
-    Font.Name = 'Wingdings'
-    Font.Style = []
-    ParentFont = False
-    OnClick = TrackBarColorG_ButtonDecClick
-  end
-  object TrackBarColorG_ButtonInc: TSpeedButtonEx
-    Tag = 1
-    Left = 277
-    Top = 109
-    Width = 22
-    Height = 21
-    Caption = #232
-    Font.Charset = SYMBOL_CHARSET
-    Font.Color = clBlack
-    Font.Height = -15
-    Font.Name = 'Wingdings'
-    Font.Style = []
-    ParentFont = False
-    OnClick = TrackBarColorG_ButtonDecClick
-  end
-  object TrackBarColorB_ButtonDec: TSpeedButtonEx
-    Tag = -1
-    Left = 51
-    Top = 140
-    Width = 22
-    Height = 21
-    Caption = #231
-    Font.Charset = SYMBOL_CHARSET
-    Font.Color = clBlack
-    Font.Height = -15
-    Font.Name = 'Wingdings'
-    Font.Style = []
-    ParentFont = False
-    OnClick = TrackBarColorB_ButtonDecClick
-  end
-  object TrackBarColorB_ButtonInc: TSpeedButtonEx
-    Tag = 1
-    Left = 277
-    Top = 140
-    Width = 22
-    Height = 21
-    Caption = #232
-    Font.Charset = SYMBOL_CHARSET
-    Font.Color = clBlack
-    Font.Height = -15
-    Font.Name = 'Wingdings'
-    Font.Style = []
-    ParentFont = False
-    OnClick = TrackBarColorB_ButtonDecClick
-  end
   object NightModeRGBQuickEdit_HexLabel: TShadowLabel
     Left = 51
     Top = 174
-    Width = 39
+    Width = 43
     Height = 16
+    AutoSize = False
     Caption = '000000'
     Color = 5787720
     Font.Charset = ANSI_CHARSET
@@ -342,10 +233,106 @@ object FormNightModeRGBQuickEdit: TFormNightModeRGBQuickEdit
     Frames = []
     Transparent = True
   end
-  object NightModeRGBQuickEdit_Red: TEditEx
-    Left = 305
+  object TrackBarColorR_ButtonDec: TBitBtnEx
+    Tag = -1
+    Left = 51
     Top = 78
-    Width = 30
+    Width = 22
+    Height = 21
+    Caption = #231
+    Font.Charset = SYMBOL_CHARSET
+    Font.Color = clBlack
+    Font.Height = -15
+    Font.Name = 'Wingdings'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 5
+    OnClick = TrackBarColorR_ButtonDecClick
+  end
+  object TrackBarColorR_ButtonInc: TBitBtnEx
+    Tag = 1
+    Left = 277
+    Top = 78
+    Width = 22
+    Height = 21
+    Caption = #232
+    Font.Charset = SYMBOL_CHARSET
+    Font.Color = clBlack
+    Font.Height = -15
+    Font.Name = 'Wingdings'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 6
+    OnClick = TrackBarColorR_ButtonDecClick
+  end
+  object TrackBarColorG_ButtonDec: TBitBtnEx
+    Tag = -1
+    Left = 51
+    Top = 109
+    Width = 22
+    Height = 21
+    Caption = #231
+    Font.Charset = SYMBOL_CHARSET
+    Font.Color = clBlack
+    Font.Height = -15
+    Font.Name = 'Wingdings'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 7
+    OnClick = TrackBarColorG_ButtonDecClick
+  end
+  object TrackBarColorG_ButtonInc: TBitBtnEx
+    Tag = 1
+    Left = 277
+    Top = 109
+    Width = 22
+    Height = 21
+    Caption = #232
+    Font.Charset = SYMBOL_CHARSET
+    Font.Color = clBlack
+    Font.Height = -15
+    Font.Name = 'Wingdings'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 8
+    OnClick = TrackBarColorG_ButtonDecClick
+  end
+  object TrackBarColorB_ButtonDec: TBitBtnEx
+    Tag = -1
+    Left = 51
+    Top = 140
+    Width = 22
+    Height = 21
+    Caption = #231
+    Font.Charset = SYMBOL_CHARSET
+    Font.Color = clBlack
+    Font.Height = -15
+    Font.Name = 'Wingdings'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 9
+    OnClick = TrackBarColorB_ButtonDecClick
+  end
+  object TrackBarColorB_ButtonInc: TBitBtnEx
+    Tag = 1
+    Left = 277
+    Top = 140
+    Width = 22
+    Height = 21
+    Caption = #232
+    Font.Charset = SYMBOL_CHARSET
+    Font.Color = clBlack
+    Font.Height = -15
+    Font.Name = 'Wingdings'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 10
+    OnClick = TrackBarColorB_ButtonDecClick
+  end
+  object NightModeRGBQuickEdit_Red: TEditEx
+    Left = 306
+    Top = 78
+    Width = 29
     Height = 21
     AutoSize = False
     Ctl3D = True
@@ -357,9 +344,9 @@ object FormNightModeRGBQuickEdit: TFormNightModeRGBQuickEdit
     UseCustomBorder = True
   end
   object NightModeRGBQuickEdit_Green: TEditEx
-    Left = 305
+    Left = 306
     Top = 109
-    Width = 30
+    Width = 29
     Height = 21
     AutoSize = False
     Ctl3D = True
@@ -371,9 +358,9 @@ object FormNightModeRGBQuickEdit: TFormNightModeRGBQuickEdit
     UseCustomBorder = True
   end
   object NightModeRGBQuickEdit_Blue: TEditEx
-    Left = 305
+    Left = 306
     Top = 140
-    Width = 30
+    Width = 29
     Height = 21
     AutoSize = False
     Ctl3D = True
@@ -434,7 +421,6 @@ object FormNightModeRGBQuickEdit: TFormNightModeRGBQuickEdit
     DownThumbGradColor = 3750201
     SmoothCorners = True
     ColorScheme = csDark
-    Min = 0
     Max = 255
     Frequency = 16
     TickStyle = tsAuto
@@ -471,7 +457,6 @@ object FormNightModeRGBQuickEdit: TFormNightModeRGBQuickEdit
     DownThumbGradColor = 3750201
     SmoothCorners = True
     ColorScheme = csDark
-    Min = 0
     Max = 255
     Frequency = 16
     TickStyle = tsAuto
@@ -508,7 +493,6 @@ object FormNightModeRGBQuickEdit: TFormNightModeRGBQuickEdit
     DownThumbGradColor = 3750201
     SmoothCorners = True
     ColorScheme = csDark
-    Min = 0
     Max = 255
     Frequency = 16
     TickStyle = tsAuto
@@ -536,7 +520,7 @@ object FormNightModeRGBQuickEdit: TFormNightModeRGBQuickEdit
     Top = 78
     Width = 93
     Height = 83
-    Hint = 'Click to restore color'
+    Hint = 'Click to restore color all colors'
     Color1 = clWhite
     Color2 = clSilver
     Color3 = clYellow
@@ -548,5 +532,26 @@ object FormNightModeRGBQuickEdit: TFormNightModeRGBQuickEdit
     ShowHint = True
     Style = vgSolid
     OnMouseUp = NightModeRGBQuickEdit_ColorSample_CurrentMouseUp
+  end
+  object LockSliders: TAdvOfficeCheckBoxEx
+    Left = 196
+    Top = 172
+    Width = 80
+    Height = 20
+    Hint = 'One slider to move them all!'
+    Font.Charset = ANSI_CHARSET
+    Font.Color = 12574688
+    Font.Height = -12
+    Font.Name = 'Segoe UI'
+    Font.Style = []
+    ParentFont = False
+    ShowHint = True
+    TabOrder = 16
+    Alignment = taRightJustify
+    Caption = 'Lock Sliders'
+    ReturnIsTab = False
+    Themed = True
+    CustomIconsEnabled = False
+    CustomEnableIconHD = False
   end
 end

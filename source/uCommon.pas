@@ -5,19 +5,19 @@ unit uCommon;
 interface
 
 uses
-  Windows, RTLConsts, Classes, StdCtrls, ExtCtrls, ComCtrls,
+  Windows, RTLConsts, Classes, StdCtrls, ExtCtrls, ComCtrls, CommCtrl,
   Graphics, SysUtils, ShlObj, Forms, Menus, Controls, IniFiles, ShellAPI,
   MessageDigests, MessageAuthenticationCodes, Consts, CommDlg, Registry,
   uMessageBox, uMessageBox_4K, uSelectDirectory, Math, MPCommonUtilities,
   ShadowLabel, AdvOfficeButtons, AdvGroupBox, PanelEx, EditEx, ButtonsEx,
-  BevelEx, ColorBoxEx, GR32_RangeBars, uGR32Extra, XiTrackBar;//, uGetWindowsVersion;
+  BevelEx, ColorBoxEx, TntEditEx, GR32_RangeBars, uGR32Extra, XiTrackBar;//, uGetWindowsVersion;
 
 const
   MaxArcadeSystems = 8;
   MaxIniCountMAME: Byte = 12; // MAME .ini files array - see more in uMain.GetCustomIniFileMAME() function
-  MaxImagePerCategory = 30;
-  MaxImageLayouts     = 26; // single, dual, triple, quad
-  MaxImagePanels      = 4;
+  MaxImagePerCategory   = 30;
+  MaxImageLayouts       = 26; // single, dual, triple, quad
+  MaxImagePanels        = 4;
 
   idMAME       = 1;
   idSupermodel = 2;
@@ -33,16 +33,16 @@ const
   //idFontClone       = 1;
   //idFontMissingROMs = 2;
 
-  aScreenType:  packed array[-1..4] of String = ('', 'Raster', 'Vector', 'LCD', 'SVG', 'Unknown');
-  aOrientation: packed array[-1..1] of String = ('', 'Horizontal', 'Vertical');
-  aStatus:      packed array[-1..2] of String = ('', 'Good', 'Imperfect', 'Preliminary');
-  aSaveState:   packed array[-1..1] of String = ('', 'Unsupported', 'Supported');
-  aMediaType:   packed array[-1..1] of packed array[0..1] of String =
+  aScreenType:  array[-1..4] of String = ('', 'Raster', 'Vector', 'LCD', 'SVG', 'Unknown');
+  aOrientation: array[-1..1] of String = ('', 'Horizontal', 'Vertical');
+  aStatus:      array[-1..2] of String = ('', 'Good', 'Imperfect', 'Preliminary');
+  aSaveState:   array[-1..1] of String = ('', 'Unsupported', 'Supported');
+  aMediaType:   array[-1..1] of array[0..1] of String =
     (('', ''),
      ('ROM', 'zipfile'),
      ('Compressed Hunks of Data', 'chd'));
 
-  aScanMode: packed array[0..2] of String = ('Full Scan', 'Quick Scan', 'Force Game Available');
+  aScanMode: array[0..2] of String = ('Full Scan', 'Quick Scan', 'Force Available');
 
   SystemStr: String[1] = '"';
   CommandPromptStr: String = 'cmd.exe /c ';
@@ -101,16 +101,16 @@ const
      ('SoftwareName',    'Software Name'),    // 22
      ('Special',         'Special'));         // 23
 
-  aColumnsWidth: packed array[0..23] of Integer = ( //           13  14  15  16           19   20   21   22
+  aColumnsWidth: packed array[0..23] of Integer = (//10          13  14  15  16           19   20   21   22
     400, 65, 180, 100, 90, 100, 180, 100, 100, 100, 105, 80, 90, 90, 90, 90, 90, 60, 100, 115, 130, 110, 130, 65);
 
   aColumnsMachinesList: packed array[0..6] of String =
      ('Machine', 'Year', 'Manufacturer', 'Name', 'Clone', 'Driver', 'SaveState'); // MAME Machines Filter Panel
 
-  aColumnsWidthMachinesList: packed array[0..6] of Integer =  // MAME Machines Filter Panel
+  aColumnsWidthMachinesList: array[0..6] of Integer =  // MAME Machines Filter Panel
      (250, 45, 120, 85, 85, 95, 90);
 
-  aColumnsSoftwareListOrder: packed array[0..11] of Integer = // MAME Machines Filter Panel
+  aColumnsSoftwareListOrder: array[0..11] of Integer = // MAME Machines Filter Panel
      ( 0,  // 00 -> title
        1,  // 01 -> year
        2,  // 02 -> manufacturer
@@ -185,7 +185,7 @@ const
     'LegalCopyRight', 'OriginalFileName', 'ProductName', 'ProductVersion',
     'SpecialBuild');
 
-  Model3PowerPCFrequency: packed array [0..8] of Byte = (16, 20, 25, 33, 40, 50, 60, 66, 75); // for Supermodel 3 emulator
+  Model3PowerPCFrequency: array [0..8] of Byte = (16, 20, 25, 33, 40, 50, 60, 66, 75); // for Supermodel 3 emulator
 
   CRC32Table: array[0..255] of DWORD =
    ($00000000, $77073096, $EE0E612C, $990951BA,
@@ -265,6 +265,7 @@ const
   clrDarkSilver  = TColor($004c4c4c); // desaturated green RGB(76, 76, 76) /// $00595959 (89, 89, 89) darker silver
   clrDarkOrange  = TColor($00005a82); // RGB(130, 90, 0)
   clrDarkGray    = TColor($00323232); // RGB(50, 50 ,50) -> for unchecked checkboxes (also used in TShadowLabel)
+  clrDarkGray2   = TColor($00373737); // RGB(55, 55 ,55) -> for GaugeBar / GaugeBar2 "pressed" background state
 
   clrMedSilver   = TColor($00e6e6e6); // RGB(230, 230, 230) -> for system title bar
 
@@ -303,6 +304,10 @@ const
   clrGameBarYellow = TColor($00008282); // RGB(130, 130, 0)
   clrGameBarGray   = TColor($00646464); // RGB(100, 100, 100)
 
+  // disabled button colors, night mode
+  clrButtonDisabledTop    = TColor($00303030); // RGB(48, 48, 48) - also used by disabled font "shadow color"
+  clrButtonDisabledBottom = TColor($001e1e1e); // RGB(30, 30, 30)
+  
   // position 0 -> light mode; position 1 -> night mode
   menu_background_color: array[0..1] of Integer = ($00fafafa, $00272727);
 
@@ -333,8 +338,10 @@ const
   selection_gradient_outerframecolor: array[0..1] of Integer = ($00f4f9fe, $00d2deee);  // RGB(238, 232, 210) - night mode
   selection_frame_round_ish_pixels:   array[0..1] of Integer = ($0000dcff, $0000a7f0);  // RGB(240, 167, 0)   - night mode
 
+  selection_checked_framecolor:       array[0..1] of Integer = ($006e1500, $00404b4c);// ($00399bf7, $00399bf7);
+
 type
-  TMsgBoxColors = packed record
+  TMsgBoxColors = record
     colorKeyTitle,
     colorKeyValue,
     colorFileName,
@@ -384,7 +391,7 @@ type
   end;
 
   PRGB = ^TRGB;
-  TRGB = record B, G, R: Byte;
+  TRGB = record Red, Green, Blue: Byte; //B, G, R: Byte;
   end;
   PRGBArray = ^TRGBArray;
   TRGBARRAY = array[0..0] of TRGB;
@@ -395,8 +402,9 @@ type
   end;
 
 var
-  IsNightMode:  Boolean;//, ShowDarkPopupMenu: Boolean;
+  IsNightMode, Is4KMode:  Boolean;//, ShowDarkPopupMenu: Boolean;
   MsgTxtColors: TMsgBoxColors;
+  FrontendPath, FrontendVersion: String;
 
 function GradientFill(DC: hDC; pVertex: Pointer; dwNumVertex: DWORD;
                       pMesh: Pointer; dwNumMesh, dwMode: DWORD): DWord; stdcall;
@@ -432,7 +440,6 @@ function  PosEx(const SubStr, S: String; Offset: Integer = 1): Integer;
 function  LowerCase(const S: String): String; overload;
 function  UpperCase(const S: String): String; overload;
 procedure Move(const Source; var Dest; count: Integer); overload;
-// end of file functions (from the old uFilesUtil.pas)
 
 procedure CallShellExecute(Sender: TObject; const FileToOpen: WideString = ''; Visibility: Word = SW_SHOWNORMAL);
 
@@ -440,6 +447,7 @@ procedure CallShellExecute(Sender: TObject; const FileToOpen: WideString = ''; V
 procedure SetLabelColors(LabelSource: TShadowLabel; iColor: TColor; iShadowColor: TColor = -1; iShadowEnabled: Boolean = False);
 procedure SetLabelBkFrameColors(LabelSource: TShadowLabel; iBackgroundColor: TColor; iFrameColor: TColor; iFrameInnerColor: TColor = -1);
 procedure SetTabButtonLineColors(BevelExSource: TBevelEx);
+procedure AdjustComboBoxStyle(iComboBox: TComboBox2Ex; ForceOwnerDraw: Boolean = False);
 procedure SetColorBoxColors(ColorBoxExSource: TColorBoxEx; UpdateColors: Boolean; ForceNightColors: Boolean = False);
 procedure SetComboBox2ExColors(ComboBox2ExSource: TComboBox2Ex; UpdateColors: Boolean; EditColors: TEditEx = nil; ForceNightColors: Boolean = False);
 procedure SetGaugeBarColors(GaugeBarSource: TGaugeBar; ForceNightColors: Boolean = False); overload;
@@ -455,7 +463,8 @@ procedure SetBottomPanelColors(PanelSource: TPanelEx);
 procedure SetPanelBorderColors(PanelSource: TPanelEx; iBorderColor: TColor = -1; iBorderInnerColor: TColor = -1);
 
 procedure SetPanelNightColors(PanelSource: TPanelEx; iColor1: TColor = -1; iColor2: TColor = -1; iBorderColor: TColor = -1; iBorderInnerColor: TColor = -1; ForceNightColors: Boolean = False);
-procedure SetEditNightColors(EditSource: TEditEx);
+procedure SetEditNightColors(EditSource: TEditEx); overload;
+procedure SetEditNightColors(EditSource: TTntEditEx); overload;
 procedure SetEditColors(EditSource: TEditEx; BackgroundColor: TColor; FontColor: TColor; FrameColor: TColor; FrameFocusedColor: TColor; FrameDisabledColor: TColor = -1; EnableCustomBorder: Boolean = True);
 
 procedure PopulateMsgColors;
@@ -464,6 +473,7 @@ procedure SetColorsGameTopBar(GameSetStatus: Integer; PanelSource: TPanelEx; IsB
 procedure SetColorEmulatorTopBar(PanelExSource: TPanelEx; EmulatorID: Integer; IsBottomColorSilver: Boolean = False);
 procedure SetFormColors(FormSource: TForm; PanelTopSource, PanelBottomSource: TPanelEx; LabelGameTitle, LabelGameName, LabelGameStatus: TShadowLabel; GameStatus: Integer; IsBottomColorSilver: Boolean = False);
 procedure SetSystemTitleBarNightColors(sysBarSource, sysBottomBarSource: TPanelEx; IsBlackBackground: Boolean = True);
+procedure SetSystemTitleBottomBarNightColors(sysBottomBarSource: TPanelEx);
 
 function  GenerateZipErrorsMessage(const TitleMessage: String; ZipFilesList: TStrings): Integer;
 function  GenerateMessage(const WindowMessage, TitleMessage: WideString; const DescriptionMessage: WideString = ''; MessageType: Integer = 2; DefaultButtonNo: Boolean = False;
@@ -507,8 +517,9 @@ function  CompareIntValue(const A, B: Int64): ShortInt;
 function  CompareFloatValue(const A, B: Extended): ShortInt;
 function  CompareTDateTime(const A, B: TDateTime): Integer;
 
+procedure SetSelectedColorBox(ColorBoxHolder: TColorBoxEx; Color: TColor; SetSelectedColor: Boolean = True);
 procedure SetSelectedComboBox(sIndex: ShortInt; ComboBoxHolder: TComboBox2Ex);
-procedure SetSelectedGaugeBar(iPosition: Integer; GaugeBarSource: TGaugeBar); overload;
+procedure SetSelectedGaugeBar(iPosition: Integer; GaugeBarSource: TGaugeBar);  overload;
 procedure SetSelectedGaugeBar(iPosition: Integer; GaugeBarSource: TGaugeBar2); overload;
 
 function  XML_CheckData(const strLine, FieldEntry: String): Boolean;
@@ -529,8 +540,10 @@ function  GetScrLayoutDefaultType(LayoutIndex, ImageIndex: Byte): ShortInt;
 function  GetScrLayoutAltVerticalDefault(LayoutIndex: Byte): ShortInt;
 
 //function  Is64BitOS: Boolean;
-function  GetWindowsVersion: String;
+//function  GetWindowsVersion: String;
 function  IsWin10: Boolean;
+
+function  CheckReadOnly(const FileString: WideString): Boolean;
 
 function  FileExists(const FileName: String): Boolean;
 function  FileExists2(const FileName: WideString): Boolean; // Unicode version for Windows 10 ?? (May 25, 2020)
@@ -543,11 +556,13 @@ procedure SetDefaultColorBox(const ColorHolder: TColorBoxEx);
 
 function  SelectDirectoryShell(const Caption: String; RecursiveSubFolders: Boolean; out Directory: String; out AddSubFolders: Boolean; RootFolder: WideString = ''): Boolean;
 
-procedure CallMaximizeWindow(FormHolder: TForm);
+procedure CallMaximizeWindow(FormSource: TForm);
+procedure CallCenterWindow(FormSource: TForm; IgnoreWindowsTaskBar: Boolean = False);
 
-procedure SetEditBkColor(EditHolder: TEditEx);
-function  IsEditEditing(EditHolder: TEditEx): Boolean;
-//procedure BrowseEditBkColor(EditHolder: TEdit);
+procedure SetEditBkColor(EditHolder: TEditEx); overload;
+procedure SetEditBkColor(EditHolder: TTntEditEx); overload;
+function  IsEditEditing(EditHolder: TEditEx): Boolean; overload;
+function  IsEditEditing(EditHolder: TTntEditEx): Boolean; overload;
 
 function  ShortDirString(const FileFullPath: String; MaxLength: Integer): String;
 
@@ -557,16 +572,20 @@ function  ShortDirStringW(const FileFullPath: WideString; MaxLength: Integer): W
 function  OpenSaveFileDialog(Parent: TWinControl; const DefExt, Filter, InitialDir, Title: String; var FileName: String;
                              MustExist, OverwritePrompt, NoChangeDir, DoOpen: Boolean): Boolean;
 
-function  GetAppIcon(const appEmuFile: String; ImageListHolder: TImageList; ReplaceIndex: Integer = -1): Integer;
-//function  GetAppIcon(const appEmuFile: String; IconHolder: TIcon; ImageListHolder: TImageList; ReplaceIndex: Integer = -1): Integer;
+function  PrivateExtractIcons (lpszFile: PChar;     nIconIndex, cxIcon, cyIcon: integer; phicon: PHANDLE; pIconId: PDWORD; nIcon, flags: DWORD): DWORD; stdcall ; external 'user32.dll' name 'PrivateExtractIconsA';
+function  PrivateExtractIconsW(lpszFile: PWideChar; nIconIndex, cxIcon, cyIcon: integer; phicon: PHANDLE; pIconId: PDWORD; nIcon, flags: DWORD): DWORD; stdcall ; external 'user32.dll' name 'PrivateExtractIconsW';
+
+procedure GetIconToImage(IconSource: HIcon; IconImageSource: TImage; iWidth, iHeight: Integer);
+function  ExtractIcon(const iFileName: String; var iHandleIcon: THandle; var iIconId: DWORD; IconWidth, IconHeight: Integer): Boolean;
+function  GetAppIcon(const appEmuFile: String; ImageListHolder: TImageList; AlternateIconSize: Integer; ReplaceIndex: Integer = -1; IconImage: TImage = nil): Integer;
 function  GetExtIcon(const FileExtension: String; ImageListHolder: TImageList): Integer;
 function  GetAssociatedApp(fileExtension: String; ReturnExeFileOnly: Boolean = False): String;
 
 function  GetFileTypeStr(const strFilename: String): String;
 
-function  GetWinTempDir: String;
-function  GetWindowsDir: String;
-function  GetSystemDir: String;
+function  GetWinTempDir:  String;
+function  GetWindowsDir:  String;
+function  GetSystemDir:   String;
 function  GetMyDocuments: String;
 
 procedure PopulateScreenResolution(DestList: TComboBox2Ex; AddAutoText: Boolean = False);
@@ -581,7 +600,7 @@ function  ExtractFileExtW(const FileName: WideString): WideString;
 function  ExtractFileNameW(const FileName: WideString): WideString;
 function  ExtractFilePathW(const FileName: WideString): WideString;
 
-// unicode function to search files correctly!!! June 24, 2014 TSearchRecUnicode
+// unicode function to search files correctly TSearchRecUnicode
 function  FindMatchingFileW(var F: TSearchRecW): Integer;
 function  FindFirstW(const Path: WideString; Attr: Integer; var  F: TSearchRecW): Integer;
 function  FindNextW(var F: TSearchRecW): Integer;
@@ -614,9 +633,10 @@ function  IsWideCharAlphaNumeric(WC: WideChar): Boolean;
 function  StringReplaceW(const S, OldPattern, NewPattern: WideString;
                          Flags: TReplaceFlags; WholeWord: Boolean = False): WideString;
 
-procedure GetGamesFilesListW(Folder: String; const FileType: String; ListHolder: THashedStringList; SubDirectories: Boolean; MediaTypeID: Integer);
+function  GetCharLastPosition(const iStr: WideString; iChar: WideChar): Integer; overload;
+function  GetCharLastPosition(const iStr: String    ; iChar: Char    ): Integer; overload;
 
-//function  ProcessExists(const exeFileName: string): Boolean;
+procedure GetGamesFilesListW(Folder: String; const FileType: String; ListHolder: THashedStringList; SubDirectories: Boolean; MediaTypeID: Integer);
 
 function  CheckAppOneInstance: Boolean;
 
@@ -627,22 +647,29 @@ procedure CalcCRC32(p: Pointer; ByteCount: DWORD; var CRCValue: DWORD);
 function  CalcStringCRC32(s: String; out CRC32: DWORD): Boolean;
 function  CalcFileCRC32(FromName: WideString): String;
 
-//var
-//  IsNightMode: Boolean;
-//  MsgTxtColors: TMsgBoxColors;
+function  Validate4KResolution: Boolean;
+function  Read4KSetting: Boolean;
+
+procedure CreateSplashIniFile;
+procedure CreateGamesFiltersIniFile;
 
 implementation
+
+function GetCheckBoxThemeFolder: String;
+begin
+  Result:= FrontendPath+'resources\checkbox_radiobutton\';
+end;
 
 procedure SetLabelColors(LabelSource: TShadowLabel; iColor: TColor; iShadowColor: TColor = -1; iShadowEnabled: Boolean = False);
 begin
   if LabelSource.Font.Color <> iColor then
-     LabelSource.Font.Color:= iColor;
+     LabelSource.Font.Color:=  iColor;
   if iShadowColor <> -1 then
      LabelSource.ShadowColor:= iShadowColor;
   if LabelSource.ShadowEnabled <> iShadowEnabled  then
-     LabelSource.ShadowEnabled:= iShadowEnabled;
+     LabelSource.ShadowEnabled:=  iShadowEnabled;
   if LabelSource.UseCustomDisabledFontColor <> IsNightMode then
-     LabelSource.UseCustomDisabledFontColor:= IsNightMode;
+     LabelSource.UseCustomDisabledFontColor:=  IsNightMode;
 end;
 
 procedure SetLabelBkFrameColors(LabelSource: TShadowLabel; iBackgroundColor: TColor; iFrameColor: TColor; iFrameInnerColor: TColor = -1);
@@ -669,32 +696,34 @@ procedure SetColorBoxColors(ColorBoxExSource: TColorBoxEx; UpdateColors: Boolean
 begin
   if UpdateColors then
   begin
-    ColorBoxExSource.SelectionBarCustomColor_Top:= clrOrangeBarTop;
+    ColorBoxExSource.SelectionBarCustomColor_Top:=    clrOrangeBarTop;
     ColorBoxExSource.SelectionBarCustomColor_Bottom:= clrOrangeBarBottom;
-    ColorBoxExSource.SelectionShowFrameColor:= clrOrangeBarBorder;
+    ColorBoxExSource.SelectionShowFrameColor:=        clrOrangeBarBorder;
     ColorBoxExSource.SelectionShowFrame:= True;
 
     ColorBoxExSource.SelectionFontCustomColor:= clrBlackBk;
-    ColorBoxExSource.CustomColorBk:= clrDarkGray;
+    ColorBoxExSource.CustomColorBk:=   clrDarkGray;
     ColorBoxExSource.CustomColorFont:= clCream;
 
-    //ColorBoxExSource.ButtonColorHover:= clrMedDarkGray;
+    ColorBoxExSource.FrameColor:=         clGray;
+    ColorBoxExSource.FrameColorFocused:=  clSilver;
+    ColorBoxExSource.FrameColorDisabled:= clrMedDarkGray;
   end;
-  
+
   if ForceNightColors then
      ColorBoxExSource.CustomColorsEnabled:= True
   else
   if ColorBoxExSource.CustomColorsEnabled <> IsNightMode then
-     ColorBoxExSource.CustomColorsEnabled:= IsNightMode;
+     ColorBoxExSource.CustomColorsEnabled:=  IsNightMode;
 end;
 
 procedure SetComboBox2ExColors(ComboBox2ExSource: TComboBox2Ex; UpdateColors: Boolean; EditColors: TEditEx = nil; ForceNightColors: Boolean = False);
 begin
   if UpdateColors then
   begin
-    ComboBox2ExSource.SelectionBarCustomColor_Top:= clrOrangeBarTop;
+    ComboBox2ExSource.SelectionBarCustomColor_Top:=    clrOrangeBarTop;
     ComboBox2ExSource.SelectionBarCustomColor_Bottom:= clrOrangeBarBottom;
-    ComboBox2ExSource.SelectionShowFrameColor:= clrOrangeBarBorder;
+    ComboBox2ExSource.SelectionShowFrameColor:=        clrOrangeBarBorder;
     ComboBox2ExSource.SelectionShowFrame:= True;
 
     //ComboBox2ExSource.ButtonColorHover:= clrMedDarkGray;
@@ -702,20 +731,20 @@ begin
     ComboBox2ExSource.SelectionFontCustomColor:= clrBlackBk;
     if EditColors = nil then
     begin
-      ComboBox2ExSource.CustomColorBk:= clrDarkGray;
+      ComboBox2ExSource.CustomColorBk:=   clrDarkGray;
       ComboBox2ExSource.CustomColorFont:= clCream;
 
-      ComboBox2ExSource.FrameColor:= clGray;
-      ComboBox2ExSource.FrameColorFocused:= clSilver;
+      ComboBox2ExSource.FrameColor:=         clGray;
+      ComboBox2ExSource.FrameColorFocused:=  clSilver;
       ComboBox2ExSource.FrameColorDisabled:= clrMedDarkGray;
     end
     else
     begin
-      ComboBox2ExSource.CustomColorBk:= EditColors.Color;
+      ComboBox2ExSource.CustomColorBk:=   EditColors.Color;
       ComboBox2ExSource.CustomColorFont:= EditColors.Font.Color;
 
       ComboBox2ExSource.FrameColor:= EditColors.ColorFrame;
-      ComboBox2ExSource.FrameColorFocused:= EditColors.ColorFrameFocused;
+      ComboBox2ExSource.FrameColorFocused:=  EditColors.ColorFrameFocused;
       ComboBox2ExSource.FrameColorDisabled:= EditColors.ColorFrameDisabled;
     end;
   end;
@@ -723,60 +752,96 @@ begin
      ComboBox2ExSource.CustomColorsEnabled:= True
   else
   if ComboBox2ExSource.CustomColorsEnabled <> IsNightMode then
-     ComboBox2ExSource.CustomColorsEnabled:= IsNightMode;
-  //if IsNightMode and ComboBox2ExSource.CustomColorsEnabled then
-  if ComboBox2ExSource.CustomColorsEnabled then
-     begin
+     ComboBox2ExSource.CustomColorsEnabled:=  IsNightMode;
+
+  if ComboBox2ExSource.Style = csOwnerDrawFixed then // if ComboBox2ExSource.CustomColorsEnabled then
+     begin // 4K mode in "light mode" also uses this
+       if ComboBox2ExSource.ItemHeight > 25 then
+          begin
+            if ComboBox2ExSource.ItemHeight <> 30 then
+               ComboBox2ExSource.ItemHeight:=  30;
+          end
+       else
        if ComboBox2ExSource.ItemHeight <> 16 then
-          ComboBox2ExSource.ItemHeight:= 16; // fix for the control height... should always be one more pixel in "OwnerDraw" mode
+          ComboBox2ExSource.ItemHeight:=  16; // fix for the control height... should always be one more pixel in "OwnerDraw" mode
      end;
 end;
 
+procedure AdjustComboBoxStyle(iComboBox: TComboBox2Ex; ForceOwnerDraw: Boolean = False);
+var
+  iStyle: TComboBoxStyle;
+begin
+  if Is4KMode or IsNightMode or ForceOwnerDraw then
+     iStyle:= csOwnerDrawFixed
+  else
+     iStyle:= csDropDownList;
+
+  if iComboBox.Style <> iStyle then
+     iComboBox.Style:=  iStyle;
+end;
+
 procedure SetGaugeBarColors(GaugeBarSource: TGaugeBar; ForceNightColors: Boolean = False);
+var
+  iSize: Integer;
 begin
   if IsNightMode or ForceNightColors then
      begin
        if GaugeBarSource.Style <> rbsMac then
-          GaugeBarSource.Style:= rbsMac;
+          GaugeBarSource.Style:=  rbsMac;
 
-       GaugeBarSource.Backgnd:= bgSolid;
+       GaugeBarSource.Backgnd:=     bgSolid;
        GaugeBarSource.BorderStyle:= bsNone;
        GaugeBarSource.BorderColor:= clGray;
-       GaugeBarSource.ArrowColor:= clCream;
+       GaugeBarSource.ArrowColor:=  clCream;
        GaugeBarSource.ButtonColor:= clrDarkSilver;
-       GaugeBarSource.ButtonSize:= 17;
-       GaugeBarSource.Color:= clrDarkGray;
-       GaugeBarSource.HandleColor:= clGray;
+       if Is4KMode and (GaugeBarSource.Height > 30) then
+          iSize:= 30
+       else
+          iSize:= 17;
+       GaugeBarSource.Color:=          clrDarkGray;
+       GaugeBarSource.HandleColor:=    clGray;
        GaugeBarSource.HighLightColor:= clrDarkGray;
-       GaugeBarSource.ShadowColor:= clrBlackBk;
+       GaugeBarSource.ShadowColor:=    clrBlackBk;
+       GaugeBarSource.BkColorPushed:=  clrDarkGray2;
        GaugeBarSource.ShowHandleGrip:= True;
      end
   else
      begin
        if GaugeBarSource.Style <> rbsDefault then
-          GaugeBarSource.Style:= rbsDefault;
-       GaugeBarSource.Backgnd:= bgPattern;
-       GaugeBarSource.ButtonSize:= 12;
+          GaugeBarSource.Style:=  rbsDefault;
+       GaugeBarSource.Backgnd:=   bgPattern;
+       if Is4KMode then
+          iSize:= 30
+       else
+          iSize:= 12;
      end;
+  if GaugeBarSource.ButtonSize <> iSize then
+     GaugeBarSource.ButtonSize:=  iSize;
 end;
 
 procedure SetGaugeBarColors(GaugeBar2Source: TGaugeBar2; ForceNightColors: Boolean = False);
+var
+  iSize: Integer;
 begin
   if IsNightMode or ForceNightColors then
      begin
        if GaugeBar2Source.Style <> rbsMac then
-          GaugeBar2Source.Style:= rbsMac;
+          GaugeBar2Source.Style:=  rbsMac;
 
-       GaugeBar2Source.Backgnd:= bgSolid;
+       GaugeBar2Source.Backgnd:=     bgSolid;
        GaugeBar2Source.BorderStyle:= bsNone;
        GaugeBar2Source.BorderColor:= clGray;
-       GaugeBar2Source.ArrowColor:= clCream;
+       GaugeBar2Source.ArrowColor:=  clCream;
        GaugeBar2Source.ButtonColor:= clrDarkSilver;
-       GaugeBar2Source.ButtonSize:= 17;
-       GaugeBar2Source.Color:= clrDarkGray;
-       GaugeBar2Source.HandleColor:= clGray;
+       if Is4KMode then
+          iSize:= 30
+       else
+          iSize:= 17;
+       GaugeBar2Source.Color:=          clrDarkGray;
+       GaugeBar2Source.HandleColor:=    clGray;
        GaugeBar2Source.HighLightColor:= clrDarkGray;
-       GaugeBar2Source.ShadowColor:= clrBlackBk;
+       GaugeBar2Source.ShadowColor:=    clrBlackBk;
+       GaugeBar2Source.BkColorPushed:=  clrDarkGray2;
        GaugeBar2Source.ShowHandleGrip:= True;
      end
   else
@@ -784,8 +849,13 @@ begin
        if GaugeBar2Source.Style <> rbsDefault then
           GaugeBar2Source.Style:= rbsDefault;
        GaugeBar2Source.Backgnd:= bgPattern;
-       GaugeBar2Source.ButtonSize:= 12;
+       if Is4KMode then
+          iSize:= 30
+       else
+          iSize:= 12;
      end;
+  if GaugeBar2Source.ButtonSize <> iSize then
+     GaugeBar2Source.ButtonSize:=  iSize;
 end;
 
 procedure SetXiTrackBarColors(TrackBarSource: TXiTrackBar);
@@ -793,12 +863,12 @@ begin
   if IsNightMode then
      begin
        if TrackBarSource.ColorScheme <> csDark then
-          TrackBarSource.ColorScheme:= csDark;
+          TrackBarSource.ColorScheme:=  csDark;
      end
   else
      begin
        if TrackBarSource.ColorScheme <> csWhite then
-          TrackBarSource.ColorScheme:= csWhite;
+          TrackBarSource.ColorScheme:=  csWhite;
      end;
 end;
 
@@ -806,9 +876,9 @@ procedure SetCheckBoxColors(CheckBoxSource: TAdvOfficeCheckBoxEx; iColor: TColor
 begin
   CheckBoxSource.Font.Color:= iColor;
   if CheckBoxSource.ShadowColor <> -1 then
-     CheckBoxSource.ShadowColor:= iShadowColor;
+     CheckBoxSource.ShadowColor:=  iShadowColor;
   if CheckBoxSource.ShadowEnabled <> iShadowEnabled then
-     CheckBoxSource.ShadowEnabled:= iShadowEnabled;
+     CheckBoxSource.ShadowEnabled:=  iShadowEnabled;
   if iDisabledColor <> -1 then
      CheckBoxSource.DisabledFontColor:= iDisabledColor;
   if iDisabledShadowColor <> -1 then
@@ -819,9 +889,9 @@ procedure SetRadioButtonColors(RadioButtonSource: TAdvOfficeRadioButtonEx; iColo
 begin
   RadioButtonSource.Font.Color:= iColor;
   if RadioButtonSource.ShadowColor <> -1 then
-     RadioButtonSource.ShadowColor:= iShadowColor;
+     RadioButtonSource.ShadowColor:=  iShadowColor;
   if RadioButtonSource.ShadowEnabled <> iShadowEnabled then
-     RadioButtonSource.ShadowEnabled:= iShadowEnabled;
+     RadioButtonSource.ShadowEnabled:=  iShadowEnabled;
   if iDisabledColor <> -1 then
      RadioButtonSource.DisabledFontColor:= iDisabledColor;
   if iDisabledShadowColor <> -1 then
@@ -845,9 +915,9 @@ begin
   GroupBoxSource.BorderInnerColor:= iBorderInnerColor;
   GroupBoxSource.Font.Color:= iColor;
   if GroupBoxSource.ShadowColor <> -1 then
-     GroupBoxSource.ShadowColor:= iShadowColor;
+     GroupBoxSource.ShadowColor:=  iShadowColor;
   if GroupBoxSource.ShadowEnabled <> iShadowEnabled then
-     GroupBoxSource.ShadowEnabled:= iShadowEnabled;
+     GroupBoxSource.ShadowEnabled:=  iShadowEnabled;
 
   if iDisabledColor <> -1 then
      GroupBoxSource.DisabledFontColor:= iDisabledColor;
@@ -861,7 +931,7 @@ begin
   if iShadowFontColor <> -1 then
      GroupBoxSource.ShadowColor:= iShadowFontColor;
   if GroupBoxSource.ShadowEnabled <> iShadowEnabled then
-     GroupBoxSource.ShadowEnabled:= iShadowEnabled;
+     GroupBoxSource.ShadowEnabled:=  iShadowEnabled;
 end;
 
 procedure SetBottomPanelColors(PanelSource: TPanelEx);
@@ -874,15 +944,15 @@ procedure SetPanelColors(PanelSource: TPanelEx; iColor1: TColor = -1; iColor2: T
 var
   iDrawStyle: TvgStyle;
 begin
-  if iColor1 <> -1 then// PanelSource.Color1 <> -1 then
+  if iColor1 <> -1 then
      begin
        if PanelSource.Color1 <> iColor1 then
-          PanelSource.Color1:= iColor1;
+          PanelSource.Color1:=  iColor1;
      end;
-  if iColor2 <> -1 then// PanelSource.Color2 <> -1 then
+  if iColor2 <> -1 then
      begin
        if PanelSource.Color2 <> iColor2 then
-          PanelSource.Color2:= iColor2;
+          PanelSource.Color2:=  iColor2;
      end;
   if IsSolidDrawStyle then
      iDrawStyle:= vgSolid
@@ -890,7 +960,7 @@ begin
      iDrawStyle:= vgSimple;
 
   if PanelSource.Style <> iDrawStyle then
-     PanelSource.Style:= iDrawStyle;
+     PanelSource.Style:=  iDrawStyle;
 end;
 
 procedure SetPanelBorderColors(PanelSource: TPanelEx; iBorderColor: TColor = -1; iBorderInnerColor: TColor = -1);
@@ -898,12 +968,12 @@ begin
   if iBorderColor <> -1 then
      begin
        if PanelSource.ColorFrame <> iBorderColor then
-          PanelSource.ColorFrame:= iBorderColor;
+          PanelSource.ColorFrame:=  iBorderColor;
      end;
   if iBorderInnerColor <> -1 then
      begin
        if PanelSource.ColorInnerFrame <> iBorderInnerColor then
-          PanelSource.ColorInnerFrame:= iBorderInnerColor;
+          PanelSource.ColorInnerFrame:=  iBorderInnerColor;
      end;
 end;
 
@@ -925,7 +995,7 @@ begin
   if ColorToApply <> clNone then
      begin
        if PanelSource.ColorFrame <> ColorToApply then
-          PanelSource.ColorFrame:= ColorToApply;
+          PanelSource.ColorFrame:=  ColorToApply;
      end;
 
   ColorToApply:= clNone;
@@ -942,7 +1012,7 @@ begin
   if ColorToApply <> clNone then
      begin
        if PanelSource.ColorInnerFrame <> ColorToApply then
-          PanelSource.ColorInnerFrame:= ColorToApply;
+          PanelSource.ColorInnerFrame:=  ColorToApply;
      end;
 
   ColorToApply:= clNone;
@@ -961,7 +1031,7 @@ begin
        if ColorToApply <> clNone then
           begin
             if PanelSource.Color1 <> ColorToApply then
-               PanelSource.Color1:= ColorToApply;
+               PanelSource.Color1:=  ColorToApply;
           end;
      end
   else
@@ -981,7 +1051,7 @@ begin
        if ColorToApply <> clNone then
           begin
             if PanelSource.Color1 <> ColorToApply then
-               PanelSource.Color1:= ColorToApply;
+               PanelSource.Color1:=  ColorToApply;
           end;
 
        ColorToApply:= clNone; // bottom color
@@ -998,15 +1068,26 @@ begin
        if ColorToApply <> clNone then
           begin
             if PanelSource.Color2 <> ColorToApply then
-               PanelSource.Color2:= ColorToApply;
+               PanelSource.Color2:=  ColorToApply;
           end;
      end;
+end;
+
+procedure SetEditNightColors(EditSource: TTntEditEx);
+begin
+  EditSource.Color:= clrDarkGray;
+  EditSource.ColorFrame:= clGray; // set to default TEditEx frame color just in case
+  EditSource.ColorFrameFocused:= clSilver;
+  EditSource.ColorFrameDisabled:= clrMedDarkGray;
+  EditSource.ColorDisabled:= menu_background_color[1];
+  EditSource.Font.Color:= clCream; //item_caption_active_color[1]
+  EditSource.UseCustomBorder:= True;
 end;
 
 procedure SetEditNightColors(EditSource: TEditEx);
 begin
   EditSource.Color:= clrDarkGray;
-  EditSource.ColorFrame:= clGray; // set to default TEditEx frame color just in case 
+  EditSource.ColorFrame:= clGray; // set to default TEditEx frame color just in case
   EditSource.ColorFrameFocused:= clSilver;
   EditSource.ColorFrameDisabled:= clrMedDarkGray;
   EditSource.ColorDisabled:= menu_background_color[1];
@@ -1020,14 +1101,14 @@ begin
   if FrameColor <> -1 then
      EditSource.ColorFrame:= FrameColor;
   if FrameFocusedColor <> -1 then
-     EditSource.ColorFrameFocused:= FrameFocusedColor;
+     EditSource.ColorFrameFocused:=  FrameFocusedColor;
   if FrameDisabledColor <> -1 then
      EditSource.ColorFrameDisabled:= FrameDisabledColor;
 
   EditSource.Font.Color:= FontColor;
 
   if EditSource.UseCustomBorder <> EnableCustomBorder then
-     EditSource.UseCustomBorder:= True;
+     EditSource.UseCustomBorder:=  True;
 end;
 
 procedure PopulateMsgColors;
@@ -1093,14 +1174,13 @@ end;
 
 procedure SetColorsGameTopBar(GameSetStatus: Integer; PanelSource: TPanelEx; IsBottomColorSilver: Boolean = True);
 begin
-  //PanelSource.Canvas.Lock;
   if IsNightMode then
   begin
     PanelSource.Canvas.Lock;
     case GameSetStatus of
      -1: PanelSource.Color1:= clrDarkBlue;   // blue -> -1 is for message box and unknown game set state
       0: PanelSource.Color1:= clrDarkGreen;  // green
-      1: PanelSource.Color1:= clrDarkRed;     // red
+      1: PanelSource.Color1:= clrDarkRed;    // red
       2: PanelSource.Color1:= clrDarkSilver; // silver
     end;
 
@@ -1217,7 +1297,7 @@ begin
     if PanelBottomSource <> nil then
     begin
       if IsBottomColorSilver then
-         SetPanelNightColors(PanelBottomSource, menu_background_color[1], clrDarkGray{clrMedDarkGray}, clrLightBlue)
+         SetPanelNightColors(PanelBottomSource, menu_background_color[1], clrDarkGray, clrLightBlue)
       else
          SetPanelNightColors(PanelBottomSource, clrBlackBk, clrDarkGray, clrLightBlue);
     end;
@@ -1260,12 +1340,9 @@ begin
 
     if LabelGameStatus <> nil then
     begin
-      SetLabelColors(LabelGameStatus, clrMedSilver{clrLightBlue}, clrLightBlack);
+      SetLabelColors(LabelGameStatus, clrMedSilver, clrLightBlack);
     end;
   end;
-  //else
-  //begin
-  //end;
 end;
 
 procedure SetSystemTitleBarNightColors(sysBarSource, sysBottomBarSource: TPanelEx; IsBlackBackground: Boolean = True);
@@ -1281,22 +1358,28 @@ begin
      sysBottomBarSource.Visible:= True;
 end;
 
+procedure SetSystemTitleBottomBarNightColors(sysBottomBarSource: TPanelEx);
+begin
+  SetPanelColors(sysBottomBarSource, clrBlackBk, menu_background_color[1]);
+  if not sysBottomBarSource.Visible then
+     sysBottomBarSource.Visible:= True;
+end;
+
 function WideLibraryErrorMessage(const LibName: WideString; Dll: THandle; ErrorCode: Integer): WideString;
 var
   Len: Integer;
-  //AnsiResult: AnsiString;
   Flags: Cardinal;
 begin
-  Flags := FORMAT_MESSAGE_FROM_SYSTEM or FORMAT_MESSAGE_IGNORE_INSERTS or FORMAT_MESSAGE_ARGUMENT_ARRAY;
+  Flags:= FORMAT_MESSAGE_FROM_SYSTEM or FORMAT_MESSAGE_IGNORE_INSERTS or FORMAT_MESSAGE_ARGUMENT_ARRAY;
   if Dll <> 0 then
-     Flags := Flags or FORMAT_MESSAGE_FROM_HMODULE;
+     Flags:= Flags or FORMAT_MESSAGE_FROM_HMODULE;
 
   SetLength(Result, 256);
-  Len := FormatMessageW(Flags, Pointer(Dll), ErrorCode, 0, PWideChar(Result), Length(Result), nil);
+  Len:= FormatMessageW(Flags, Pointer(Dll), ErrorCode, 0, PWideChar(Result), Length(Result), nil);
   SetLength(Result, Len);
 
   if Trim(Result) = '' then
-     Result := WideFormat('Unspecified error (%d) from %s.', [ErrorCode, LibName]);
+     Result:= WideFormat('Unspecified error (%d) from %s.', [ErrorCode, LibName]);
 end;
 
 function WideSysErrorMessage(ErrorCode: Integer): WideString;
@@ -1331,9 +1414,9 @@ const
     FILE_SHARE_WRITE,
     FILE_SHARE_READ or FILE_SHARE_WRITE);
 begin
-  Result := Integer(CreateFileW(PWideChar(FileName), AccessMode[Mode and 3],
-            ShareMode[(Mode and $F0) shr 4], nil, OPEN_EXISTING,
-            FILE_ATTRIBUTE_NORMAL, 0));
+  Result:= Integer(CreateFileW(PWideChar(FileName), AccessMode[Mode and 3],
+           ShareMode[(Mode and $F0) shr 4], nil, OPEN_EXISTING,
+           FILE_ATTRIBUTE_NORMAL, 0));
 end;
 
 // WideFileStream
@@ -1344,18 +1427,18 @@ var
 begin
   if Mode = fmCreate then
   begin
-    CreateHandle := WideFileCreate(FileName);
+    CreateHandle:= WideFileCreate(FileName);
     if CreateHandle < 0 then
        begin
-         ErrorMessage := WideSysErrorMessage(GetLastError);
+         ErrorMessage:= WideSysErrorMessage(GetLastError);
          raise EFCreateError.CreateFmt(SFCreateErrorEx, [WideExpandFileName(FileName), ErrorMessage]);
        end;
   end else
   begin
-    CreateHandle := WideFileOpen(FileName, Mode);
+    CreateHandle:= WideFileOpen(FileName, Mode);
     if CreateHandle < 0 then
        begin
-         ErrorMessage := WideSysErrorMessage(GetLastError);
+         ErrorMessage:= WideSysErrorMessage(GetLastError);
          raise EFOpenError.CreateFmt(SFOpenErrorEx, [WideExpandFileName(FileName), ErrorMessage]);
        end;
   end;
@@ -1364,7 +1447,8 @@ end;
 
 destructor TWideFileStream.Destroy;
 begin
-  if Handle >= 0 then FileClose(Handle);
+  if Handle >= 0 then
+     FileClose(Handle);
 end;
 
 // TWideMemoryStream
@@ -1373,7 +1457,7 @@ procedure TWideMemoryStream.LoadFromFile(const FileName: WideString);
 var
   Stream: TStream;
 begin
-  Stream := TWideFileStream.Create(FileName, fmOpenRead or fmShareDenyWrite);
+  Stream:= TWideFileStream.Create(FileName, fmOpenRead or fmShareDenyWrite);
   try
     LoadFromStream(Stream);
   finally
@@ -1385,7 +1469,7 @@ procedure TWideMemoryStream.SaveToFile(const FileName: WideString);
 var
   Stream: TStream;
 begin
-  Stream := TWideFileStream.Create(FileName, fmCreate);
+  Stream:= TWideFileStream.Create(FileName, fmCreate);
   try
     SaveToStream(Stream);
   finally
@@ -1417,10 +1501,10 @@ procedure TWideResourceStream.Initialize(Instance: THandle; Name, ResType: PWide
   end;
 
 begin
-  HResInfo := FindResourceW(Instance, Name, ResType);
+  HResInfo:= FindResourceW(Instance, Name, ResType);
   if HResInfo = 0 then
      Error;
-  HGlobal := LoadResource(Instance, HResInfo);
+  HGlobal:= LoadResource(Instance, HResInfo);
   if HGlobal = 0 then
      Error;
   SetPointer(LockResource(HGlobal), SizeOfResource(Instance, HResInfo));
@@ -1442,7 +1526,7 @@ procedure TWideResourceStream.SaveToFile(const FileName: WideString);
 var
   Stream: TStream;
 begin
-  Stream := TWideFileStream.Create(FileName, fmCreate);
+  Stream:= TWideFileStream.Create(FileName, fmCreate);
   try
     SaveToStream(Stream);
   finally
@@ -1559,7 +1643,7 @@ var
 begin
   if FindFirst(aFileName, faAnyfile, SearchRec) = 0 then
      begin
-       Converter.Low:= SearchRec.FindData.nFileSizeLow;
+       Converter.Low:=  SearchRec.FindData.nFileSizeLow;
        Converter.High:= SearchRec.FindData.nFileSizeHigh;
        Result:= Converter.n;
      end
@@ -1652,14 +1736,14 @@ var
   Len: Integer;
 begin
   // param "FileName" can be only path (with or without "\") or with a filename at the end
-  Len := GetShortPathName(PChar(FileName), Buffer, Length(Buffer));
+  Len:= GetShortPathName(PChar(FileName), Buffer, Length(Buffer));
   if Len <= Length(Buffer) then
      SetString(Result, Buffer, Len)
   else
     if Len > 0 then
     begin
       SetLength(Result, Len);
-      Len := GetShortPathName(PChar(FileName), PChar(Result), Len);
+      Len:= GetShortPathName(PChar(FileName), PChar(Result), Len);
       if Len < Length(Result) then
          SetLength(Result, Len);
     end;
@@ -2130,19 +2214,47 @@ end;
 
 function GenerateZipErrorsMessage(const TitleMessage: String; ZipFilesList: TStrings): Integer;
 begin
-  CallMessageBox;
-  FormMessageBox.PanelBottom.Tag:= 1;
-  FormMessageBox.Caption:= 'Error: Zip File';
-  FormMessageBox.LabelMessageTitle:= TitleMessage;
-  FormMessageBox.LabelMessageW.Clear;
-  FormMessageBox.LabelMessageW.Lines.AddStrings(ZipFilesList);
+  if Is4KMode then
+     begin
+       CallMessageBox4K;
+       FormMessageBox4K.PanelBottom.Tag:= 1;
+       FormMessageBox4K.Caption:= 'Error: Zip File';
+       FormMessageBox4K.LabelMessageTitle:= TitleMessage;
+       FormMessageBox4K.LabelMessageW.Clear;
 
-  FormMessageBox.ButtonYes.Caption:= 'Close';
-  FormMessageBox.ButtonYes.Left:= (FormMessageBox.PanelBottom.Width div 2) - (FormMessageBox.ButtonYes.Width div 2); //262;
-  FormMessageBox.ButtonNo.Visible:= False;
+       FormMessageBox4K.LabelMessageW.SelStart:= FormMessageBox4K.LabelMessageW.GetTextLen;
+       FormMessageBox4K.LabelMessageW.SelLength:= 0;
+       FormMessageBox4K.LabelMessageW.SelText:= ZipFilesList.Text;
+       //FormMessageBox4K.LabelMessageW.Lines.AddStrings(ZipFilesList);
 
-  Result:= FormMessageBox.ShowModal;
-  FreeMessageBox;
+       FormMessageBox4K.ButtonYes.Caption:= 'Close';
+       FormMessageBox4K.ButtonYes.Left:= (FormMessageBox4K.PanelBottom.Width div 2) - (FormMessageBox4K.ButtonYes.Width div 2);
+       FormMessageBox4K.ButtonNo.Visible:= False;
+
+       FormMessageBox4K.LabelMessageW.ReadOnly:= True;
+       Result:= FormMessageBox4K.ShowModal;
+       FreeMessageBox4K;
+     end
+  else
+     begin
+       CallMessageBox;
+       FormMessageBox.PanelBottom.Tag:= 1;
+       FormMessageBox.Caption:= 'Error: Zip File';
+       FormMessageBox.LabelMessageTitle:= TitleMessage;
+       FormMessageBox.LabelMessageW.Clear;
+
+       FormMessageBox.LabelMessageW.SelStart:= FormMessageBox.LabelMessageW.GetTextLen;
+       FormMessageBox.LabelMessageW.SelLength:= 0;
+       FormMessageBox.LabelMessageW.SelText:= ZipFilesList.Text;
+       //FormMessageBox.LabelMessageW.Lines.AddStrings(ZipFilesList);
+
+       FormMessageBox.ButtonYes.Caption:= 'Close';
+       FormMessageBox.ButtonYes.Left:= (FormMessageBox.PanelBottom.Width div 2) - (FormMessageBox.ButtonYes.Width div 2); //262;
+       FormMessageBox.ButtonNo.Visible:= False;
+
+       Result:= FormMessageBox.ShowModal;
+       FreeMessageBox;
+     end;
 end;
 
 function GenerateMessage(const WindowMessage, TitleMessage: WideString; const DescriptionMessage: WideString = ''; MessageType: Integer = 2; DefaultButtonNo: Boolean = False;
@@ -2154,15 +2266,15 @@ begin
   // 01 -> Error
   // 02 -> Question
   // 03 -> Command Line
-  if not Assigned(FormMessageBox4K) then
-     CallMessageBox
-  else
-     begin
-       CallMessageBox4K;
-       Result:= GenerateMessage4K(WindowMessage, TitleMessage, DescriptionMessage, MessageType, DefaultButtonNo,
-                                  IconIndex, GameSetStatus);
-       Exit;
-     end;
+  //if not Assigned(FormMessageBox4K) then
+     CallMessageBox;
+  //else
+  //   begin
+  //     CallMessageBox4K;
+  //     Result:= GenerateMessage4K(WindowMessage, TitleMessage, DescriptionMessage, MessageType, DefaultButtonNo,
+  //                                IconIndex, GameSetStatus);
+  //     Exit;
+  //   end;
 
   FormMessageBox.PanelBottom.Tag:= IconIndex;
   FormMessageBox.Caption:= WindowMessage;
@@ -2210,7 +2322,8 @@ begin
       SetFormColors(FormMessageBox, FormMessageBox.PanelTop, FormMessageBox.PanelBottom, FormMessageBox.LabelGameTitle, FormMessageBox.LabelGameName, nil, -1, True);
       FormMessageBox.LabelMessageW.Color:= FormMessageBox.Color;
       FormMessageBox.LabelMessageW.Font.Color:= $00f1f1f1;
-      FormMessageBox.NightMode.Font.Color:= $00f1f1f1;
+      //FormMessageBox.NightMode.Font.Color:= $00f1f1f1;
+      //FormMessageBox.HideCommandLineRunConfirm.Font.Color:= $00f1f1f1;
     end;
   end;
 end;
@@ -2277,7 +2390,8 @@ begin
       SetFormColors(FormMessageBox4K, FormMessageBox4K.PanelTop, FormMessageBox4K.PanelBottom, FormMessageBox4K.LabelGameTitle, FormMessageBox4K.LabelGameName, nil, -1, True);
       FormMessageBox4K.LabelMessageW.Color:= FormMessageBox4K.Color;
       FormMessageBox4K.LabelMessageW.Font.Color:= $00f1f1f1;
-      FormMessageBox4K.NightMode.Font.Color:= $00f1f1f1;
+      //FormMessageBox4K.NightMode.Font.Color:= $00f1f1f1;
+      //FormMessageBox4K.HideCommandLineRunConfirm.Font.Color:= $00f1f1f1;
     end;
   end;
 end;
@@ -2286,7 +2400,6 @@ procedure FreeMessageBox4K;
 begin
   FreeAndNil(FormMessageBox4K);
 end;
-
 
 function GetSystemFileName(SystemID: Byte; FileID: Byte = 0; const SoftwareList: String = ''): String;
 begin
@@ -2300,6 +2413,7 @@ begin
   //  6 -> softlist requirement   "system_name.elsoftlistreq"
   //  9 -> CRC32 collisions list  "system_name_crc32collision.txt"
   // 10 -> set with "NoDump"      "system_name_romsnodump.txt"
+  // 11 -> MAME multi-ramsize     "system_name_ramsize
   Result:= '';
   case SystemID of
     idMAME, idHBMAME:
@@ -2559,6 +2673,7 @@ var
   Loop, StringSize: Integer;
   HistoryName: String;
 begin
+  // for history.dat (not used by history.xml)
   Result:= False;
   HistoryName:= '';
   StringSize:= Length(StringLine);
@@ -2774,6 +2889,14 @@ begin
      Result:= 1;
 end;
 
+procedure SetSelectedColorBox(ColorBoxHolder: TColorBoxEx; Color: TColor; SetSelectedColor: Boolean = True);
+begin
+  if SetSelectedColor then
+     ColorBoxHolder.Selected:= Color;
+  if Assigned(ColorBoxHolder.OnSelect) then
+     ColorBoxHolder.OnSelect(ColorBoxHolder);
+end;
+
 procedure SetSelectedComboBox(sIndex: ShortInt; ComboBoxHolder: TComboBox2Ex);
 begin
   if sIndex = -1 then
@@ -2868,26 +2991,13 @@ begin
   if strLine <> '' then
      begin
        // <title>3D Mine Storm</title>
-       {strPosition:= Pos('<'+EntryName+'>', strLine);
-       if strPosition <> 0 then
-          begin
-            strPosition2:= PosEx('</'+EntryName+'>', strLine, StrPosition);
-            if strPosition2 = 0 then
-               Exit;
-            strPosition:= strPosition+Length(EntryName)+2;
-            //strPosition2:= strPosition21;
-            Result:= Copy(strLine, strPosition, (strPosition2-strPosition));
-          end;}
-
        strPosition:= PosEx('<'+EntryName+'>', strLine);
        if strPosition <> 0 then
           begin
-            //strPosition2:= PosEx('</'+EntryName+'>', strLine, StrPosition);
             strPosition2:= PosEx('/>', strLine, StrPosition);
             if strPosition2 = 0 then
                Exit;
             strPosition:= strPosition+Length(EntryName)+2;
-            //strPosition2:= strPosition21;
             Result:= Copy(strLine, strPosition, (strPosition2-strPosition));
           end;
      end;
@@ -2922,11 +3032,10 @@ begin
     Inc(n);
   end;
   ListHolder.EndUpdate;
-  {
-  IntToStr(Mode.dmPelsWidth)+'x'+IntToStr(Mode.dmPelsHeight)+'@'+
-  IntToStr(Mode.dmDisplayFrequency)+'Hz '+
-  IntToStr(Mode.dmBitsPerPel)+' bits');
-  }
+
+  //IntToStr(Mode.dmPelsWidth)+'x'+IntToStr(Mode.dmPelsHeight)+'@'+
+  //IntToStr(Mode.dmDisplayFrequency)+'Hz '+
+  //IntToStr(Mode.dmBitsPerPel)+' bits');
 end;
 
 function GetImageCategoryTitle(CategoryIndex: Byte): String;
@@ -3171,61 +3280,6 @@ begin
   end;
 end;
 
-//function Is64BitOS: Boolean;
-//begin
-//  Result:= SizeOf(Pointer) = 8; // this validation does NOT work!!!
-//end;
-
-
-function GetWindowsVersion: String;
-var
-   WindowsInfo: TOSVersionInfo;
-begin
-  WindowsInfo.dwOSVersionInfoSize:= SizeOf(OSVERSIONINFO);
-  GetVersionEx(WindowsInfo);
-  case WindowsInfo.dwPlatformId of
-    VER_PLATFORM_WIN32_NT:
-       begin
-         case WindowsInfo.dwMajorVersion of
-           4: Result:=  'Microsoft Windows NT';
-           5:
-             begin
-               case WindowsInfo.dwMinorVersion of
-                 0: Result:= 'Microsoft Windows 2000';
-                 1: Result:= 'Microsoft Windows XP';
-                 2: Result:= 'Microsoft Windows 2003';
-               end;
-             end;
-           6:
-             begin
-               case WindowsInfo.dwMinorVersion of
-                 0: Result:= 'Microsoft Windows Vista';
-                 1: Result:= 'Microsoft Windows 7';
-                 2: Result:= 'Microsoft Windows 8.0'; // Win8.1 is unknown
-                 // 3: Result:= 'Microsoft Windows 10'; // taken from registry
-               end;
-             end;
-           else
-             Result:= 'MajorVersion: '+IntToStr(WindowsInfo.dwMajorVersion)+#13#10+'Minor Version: '+IntToStr(WindowsInfo.dwMinorVersion);
-         end;
-       end;
-    VER_PLATFORM_WIN32_WINDOWS:
-       begin
-         // no need to check for dwMajorVersion... it's always 4
-         case WindowsInfo.dwMajorVersion of
-           4:
-             begin
-               case WindowsInfo.dwMinorVersion of
-                  0: Result:= 'Microsoft Windows 95';
-                 10: Result:= 'Microsoft Windows 98';
-                 90: Result:= 'Microsoft Windows ME';
-               end;
-             end;
-         end;
-       end;
-  end;
-end;
-
 function IsWin10: Boolean;
 var
   //VerInfo: TOSVersionInfo;
@@ -3247,8 +3301,7 @@ begin
       begin
         if ValueExists('CurrentMajorVersionNumber') then
            iMajorVersion:= ReadInteger('CurrentMajorVersionNumber');
-        //if iStr <> '' then
-        //   iMajorVersion:= StrToInt64(iStr);
+
         CloseKey;
 
         //if OpenKey('\SOFTWARE\Microsoft\Windows NT\CurrentVersion', False) then
@@ -3317,12 +3370,27 @@ begin
      Result:= SameText(VersionStr, '6.3');
 
   if Result then
-     Result:= (iBuildNumber >= 1809); // only Win10 build 1809 or never have support dark mode for "Windows Explorer"
+     Result:= (iBuildNumber >= 1809); // only Win10 build 1809 or never have dark mode support for "Windows Explorer"
 
   // for debugging only, do not enable
   //ShowMessageW('Major Version: '+IntToStr(iMajorVersion)+#13#10+
   //             'Minor Version: '+IntToStr(iMinorVersion)+#13#10+
   //             'Current Build: '+IntToStr(iBuildNumber));
+end;
+
+function CheckReadOnly(const FileString: WideString): Boolean;
+var
+  FileAttributes: Word;
+begin
+  //FileIsReadOnly(FileString); ????????
+  Result:= FileExistsW(FileString);
+  if not Result then
+     Exit;
+  FileAttributes:= FileGetAttr(FileString);
+  Result:= (FileAttributes and faReadOnly) = faReadOnly;
+  //Result:= (FileAttributes and faArchive) = faArchive;
+  //Result:= (FileAttributes and faSysFile) = faSysFile;
+  //Result:= (FileAttributes and faHidden) = faHidden;
 end;
 
 // FileExists need fix for Delphi 7... for Delphi 2007 they are already fixed!!!!!
@@ -3418,14 +3486,49 @@ begin
   FreeAndNil(FormSelectDirectory);
 end;
 
-procedure CallMaximizeWindow(FormHolder: TForm);
+procedure CallMaximizeWindow(FormSource: TForm);
 begin
-  FormHolder.Left:= (Screen.Width shr 1)-(FormHolder.Width shr 1)-1;
-  FormHolder.Top:= 30;
-  FormHolder.Height:= Screen.Height-95;
+  FormSource.Left:= (Screen.Width shr 1)-(FormSource.Width shr 1)-1;
+  if Is4KMode then
+     begin
+       FormSource.Top:= 100;
+       FormSource.Height:= Screen.Height-200;
+     end
+  else
+     begin
+       FormSource.Top:= 50;
+       FormSource.Height:= Screen.Height-120;
+     end;
+end;
+
+procedure CallCenterWindow(FormSource: TForm; IgnoreWindowsTaskBar: Boolean = False);
+var
+  iScreenW, iScreenH: Integer;
+begin
+  iScreenW:= Screen.Width;
+  if IgnoreWindowsTaskBar then
+     iScreenH:= Screen.Height
+  else
+     iScreenH:= Screen.WorkAreaHeight;
+
+  if iScreenW > FormSource.Width then
+     FormSource.Left:= (iScreenW-FormSource.Width) div 2
+  else
+     FormSource.Left:= (Screen.Width shr 1)-(FormSource.Width shr 1)-1;
+
+  if iScreenH > FormSource.Height then
+     FormSource.Top:= (iScreenH-FormSource.Height) div 2
+  else
+     FormSource.Top:=  (iScreenH shr 1)-(FormSource.Height shr 1)-1;
 end;
 
 procedure SetEditBkColor(EditHolder: TEditEx);
+begin
+  EditHolder.Color:= $e67878; // -> 15104120; RGB(120, 120, 255)
+  EditHolder.SetFocus;
+end;
+
+procedure SetEditBkColor(EditHolder: TtntEditEx);
 begin
   EditHolder.Color:= $e67878; // -> 15104120; RGB(120, 120, 255)
   EditHolder.SetFocus;
@@ -3436,10 +3539,10 @@ begin
   Result:= EditHolder.Color = $e67878;
 end;
 
-//procedure BrowseEditBkColor(EditHolder: TEdit);
-//begin
-//  EditHolder.Color:= $00fafafa;
-//end;
+function IsEditEditing(EditHolder: TTntEditEx): Boolean;
+begin
+  Result:= EditHolder.Color = $e67878;
+end;
 
 function ShortDirString(const FileFullPath: String; MaxLength: Integer): String;
 var
@@ -3752,7 +3855,7 @@ end;}
 
 function Blend(Color1, Color2: TColor; A: Byte): TColor;
 var
-  c1, c2: Integer; //LongInt;
+  c1, c2: Integer;
   R, G, B, v1, v2: Byte;
 begin
   A  := Round(2.55 * A);
@@ -3778,13 +3881,13 @@ begin
   if ABGColor <= 0 then
   begin
     Result := clWhite;
-    Exit; // *** EXIT RIGHT HERE ***
+    Exit;
   end;
 
   if ABGColor = clWhite then
   begin
     Result := clBlack;
-    Exit; // *** EXIT RIGHT HERE ***
+    Exit;
   end;
 
   // Get RGB from Color
@@ -3801,62 +3904,93 @@ begin
     Result := clWhite;  // dark colors - white font
 end;
 
-function GetAppIcon(const appEmuFile: String; ImageListHolder: TImageList; ReplaceIndex: Integer = -1): Integer;
+procedure GetIconToImage(IconSource: HIcon; IconImageSource: TImage; iWidth, iHeight: Integer);
+const
+  Mask: array[Boolean] of Longint = (0, ILC_MASK);
 var
-  appIcon: TIcon;
-  //wIc: Word;
+  ImgList: HIMAGELIST;
+  Index: Integer;
 begin
-  Result:= -1;
-
-  appIcon:= TIcon.Create;
-  appIcon.Width:= ImageListHolder.Width;
-  appIcon.Height:= ImageListHolder.Height;
-
-  appIcon.Handle:= ExtractIcon(Application.Handle, PChar(appEmuFile), 0);
-  if not appIcon.Empty then
-     begin
-       if ReplaceIndex <> -1 then
-          begin
-            Result:= ReplaceIndex;
-            ImageListHolder.ReplaceIcon(ReplaceIndex{3}, appIcon);
-          end
-       else
-          Result:= ImageListHolder.AddIcon(appIcon);
-     end;
-   appIcon.ReleaseHandle;
-   FreeAndNil(appIcon);
+  // this is used by GetAppIconW()
+  ImgList:= ImageList_Create(iWidth, iHeight, ILC_COLOR32 or Mask[True], 1, 1);
+  try
+    Index := ImageList_AddIcon(ImgList, IconSource);
+    IconImageSource.Picture.Icon.Handle:= ImageList_GetIcon(ImgList, Index, ILD_NORMAL);
+  finally
+    ImageList_Destroy(ImgList);
+  end;
 end;
 
-{function GetAppIcon(const appEmuFile: String; IconHolder: TIcon; ImageListHolder: TImageList; ReplaceIndex: Integer = -1): Integer;
+function ExtractIcon(const iFileName: String; var iHandleIcon: THandle; var iIconId: DWORD; IconWidth, IconHeight: Integer): Boolean;
+begin
+  Result:= PrivateExtractIcons(PChar(iFileName), 0, IconWidth, IconHeight, @iHandleIcon, @iIconId, 1, LR_LOADFROMFILE) <> 0; // <> 0 is success
+end;
+
+function GetAppIcon(const appEmuFile: String; ImageListHolder: TImageList; AlternateIconSize: Integer; ReplaceIndex: Integer = -1; IconImage: TImage = nil): Integer;
 var
+  hIcon  : THandle;
+  nIconId: DWORD;
   appIcon: TIcon;
-  //wIc: Word;
+  ExtractResult: Boolean; // Cardinal;
+  IsAltSize: Boolean;
+  iSize: Integer;
 begin
   Result:= -1;
-  appIcon:= TIcon.Create;
-  appIcon.Width:= ImageListHolder.Width;
-  appIcon.Height:= ImageListHolder.Height;
-  appIcon.Handle:= ExtractIcon(Application.Handle, PChar(appEmuFile), 0);
-  if not appIcon.Empty then
+  if not FileExistsW(appEmuFile) then
+     Exit;
+
+  //Extract a 48x48 icon ////////128x128 icon
+  ExtractResult:= ExtractIcon(appEmuFile, hIcon, nIconId, ImageListHolder.Width, ImageListHolder.Height);
+  //ExtractResult:= PrivateExtractIcons(PChar(appEmuFile), 0, ImageListHolder.Width, ImageListHolder.Height, @hIcon, @nIconId, 1, LR_LOADFROMFILE);
+  IsAltSize:= not ExtractResult; //(ExtractResult <> 0);
+  if IsAltSize then
+     IsAltSize:= AlternateIconSize <> ImageListHolder.Width;
+  if IsAltSize then
+     ExtractResult:= ExtractIcon(appEmuFile, hIcon, nIconId, AlternateIconSize, AlternateIconSize);
+     //ExtractResult:= PrivateExtractIcons(PChar(appEmuFile), 0, AlternateIconSize, AlternateIconSize, @hIcon, @nIconId, 1, LR_LOADFROMFILE);
+
+  if not ExtractResult then // ExtractResult = 0 then // failed to extract icon
      begin
-       if IconHolder <> nil then
-          begin
-            IconHolder.Assign(appIcon);
-          end
-       else
-          begin
-            if ReplaceIndex <> -1 then
-               begin
-                 Result:= ReplaceIndex;
-                 ImageListHolder.ReplaceIcon(ReplaceIndex, appIcon);
-               end
-            else
-               Result:= ImageListHolder.AddIcon(appIcon);
-          end;
+       DestroyIcon(hIcon);
+       Exit;
      end;
-   appIcon.ReleaseHandle;
-   FreeAndNil(appIcon);
-end;}
+     
+  case IsAltSize of
+    True : iSize:= AlternateIconSize;
+    False: iSize:= ImageListHolder.Width;
+  end;
+  try
+    appIcon:= TIcon.Create;
+    //appIcon.Width:=  iSize; // no need for this
+    //appIcon.Height:= iSize;
+    appIcon.Handle:= hIcon;
+
+
+    if ReplaceIndex <> -1 then
+       begin
+         Result:= ReplaceIndex;
+         //ImageList_ReplaceIcon(ImageListHolder.Handle, ReplaceIndex, appIcon.Handle);
+         ImageListHolder.ReplaceIcon(ReplaceIndex, appIcon); // ReplaceIndex = 3 ?
+       end
+    else
+       Result:= ImageListHolder.AddIcon(appIcon);
+
+    if IconImage <> nil then
+       begin
+         // this is not used anywhere, why keep it ? (May 12, 2021)
+         if not IsAltSize then
+            GetIconToImage(appIcon.Handle, IconImage, IconImage.Width, IconImage.Height)
+         else
+            GetIconToImage(appIcon.Handle, IconImage, AlternateIconSize, AlternateIconSize);
+            //IconImage.Picture.Icon.Assign(appIcon); // doesn't work! :_((
+            // IconImage.Picture.Icon.Handle:= appIcon.Handle; // doesn't work! :_((
+       end;
+  finally
+    appIcon.ReleaseHandle;
+    FreeAndNil(appIcon);
+    DestroyIcon(hIcon);
+  end;
+end;
 
 function GetExtIcon(const FileExtension: String; ImageListHolder: TImageList): Integer;
 var
@@ -3869,7 +4003,7 @@ begin
   appIcon.Height:= ImageListHolder.Height;
 
   if SHGetFileInfo(PChar(FileExtension), FILE_ATTRIBUTE_NORMAL, AInfo, SizeOf(AInfo),
-                   SHGFI_SYSICONINDEX or SHGFI_ICON or SHGFI_LARGEICON or SHGFI_USEFILEATTRIBUTES) <> 0 then
+                   SHGFI_SYSICONINDEX or SHGFI_ICON or SHGFI_LARGEICON or SHGFI_SHELLICONSIZE or SHGFI_USEFILEATTRIBUTES) <> 0 then
      begin
        try
          appIcon.Handle:= AInfo.hIcon;
@@ -4407,8 +4541,7 @@ end;
 
 function _WideCharType(WC: WideChar; dwInfoType: Cardinal): Word;
 begin
-  //Win32Check(GetStringTypeExW(GetThreadLocale, dwInfoType, PWideChar(@WC), 1, Result);
-  Win32Check(GetStringTypeExW(GetThreadLocale, dwInfoType, PWideChar(@WC), 1, Result))
+  Win32Check(GetStringTypeExW(GetThreadLocale, dwInfoType, PWideChar(@WC), 1, Result));
 end;
 
 function IsWideCharUpper(WC: WideChar): Boolean;
@@ -4478,69 +4611,105 @@ var
 begin
   if rfIgnoreCase in Flags then
   begin
-    SearchStr := WideUpperCase(S);
-    Patt := WideUpperCase(OldPattern);
+    SearchStr:= WideUpperCase(S);
+    Patt:= WideUpperCase(OldPattern);
   end else
   begin
-    SearchStr := S;
-    Patt := OldPattern;
+    SearchStr:= S;
+    Patt:= OldPattern;
   end;
-  NewStr := S;
-  Result := '';
+  NewStr:= S;
+  Result:= '';
   while SearchStr <> '' do
   begin
-    Offset := Pos(Patt, SearchStr);
+    Offset:= Pos(Patt, SearchStr);
     if Offset = 0 then
     begin
-      Result := Result + NewStr;
+      Result:= Result + NewStr;
       Break;
     end; // done
 
     if (WholeWord) then
     begin
       if (Offset = 1) then
-        PrevChar := LastCharW(Result)
+        PrevChar:= LastCharW(Result)
       else
-        PrevChar := NewStr[Offset - 1];
+        PrevChar:= NewStr[Offset - 1];
 
-      if Offset + Length(OldPattern) <= Length(NewStr) then
-        NextChar := NewStr[Offset + Length(OldPattern)]
+      if Offset+Length(OldPattern) <= Length(NewStr) then
+        NextChar:= NewStr[Offset + Length(OldPattern)]
       else
-        NextChar := WideChar(#0);
+        NextChar:= WideChar(#0);
 
       if (not IsWordSeparator(PrevChar))
       or (not IsWordSeparator(NextChar)) then
       begin
-        Result := Result + Copy(NewStr, 1, Offset + Length(OldPattern) - 1);
-        NewStr := Copy(NewStr, Offset + Length(OldPattern), MaxInt);
-        SearchStr := Copy(SearchStr, Offset + Length(Patt), MaxInt);
+        Result:= Result + Copy(NewStr, 1, Offset + Length(OldPattern) - 1);
+        NewStr:= Copy(NewStr, Offset + Length(OldPattern), MaxInt);
+        SearchStr:= Copy(SearchStr, Offset + Length(Patt), MaxInt);
         Continue;
       end;
     end;
 
-    Result := Result + Copy(NewStr, 1, Offset - 1) + NewPattern;
-    NewStr := Copy(NewStr, Offset + Length(OldPattern), MaxInt);
+    Result:= Result + Copy(NewStr, 1, Offset - 1) + NewPattern;
+    NewStr:= Copy(NewStr, Offset + Length(OldPattern), MaxInt);
     if not (rfReplaceAll in Flags) then
     begin
-      Result := Result + NewStr;
+      Result:= Result + NewStr;
       Break;
     end;
-    SearchStr := Copy(SearchStr, Offset + Length(Patt), MaxInt);
+    SearchStr:= Copy(SearchStr, Offset + Length(Patt), MaxInt);
   end;
 end;
 
 function StrDupW(var dst: PWideChar; src: PWideChar; len: integer = 0): PWideChar;
 begin
-  if (src=nil) or (src^=#0) then
-    dst:=nil
+  if (src = nil) or (src^ = #0) then
+    dst:= nil
   else
   begin
-    if len=0 then
-      len:=lstrlenw(src);
-    GetMem(dst,(len+1)*SizeOf(WideChar));
-    lstrcpynw(dst,src,len+1);
+    if len = 0 then
+      len:= lstrlenw(src);
+    GetMem(dst, (len+1)*SizeOf(WideChar));
+    lstrcpynw(dst, src, len+1);
   end;
-  result:=dst;
+  Result:= dst;
+end;
+
+function GetCharLastPosition(const iStr: WideString; iChar: WideChar): Integer;
+var
+  iLoop: Integer;
+begin
+  Result:= -1;
+  if iStr = '' then
+     Exit;
+
+  for iLoop:= LengthW(iStr) downto 1 do
+  begin
+    if iStr[iLoop] = iChar then
+       begin
+         Result:= iLoop;
+         Break;
+       end;
+  end;
+end;
+
+function GetCharLastPosition(const iStr: String; iChar: Char): Integer;
+var
+  iLoop: Integer;
+begin
+  Result:= -1;
+  if iStr = '' then
+     Exit;
+
+  for iLoop:= Length(iStr) downto 1 do
+  begin
+    if iStr[iLoop] = iChar then
+       begin
+         Result:= iLoop;
+         Break;
+       end;
+  end;
 end;
 
 procedure GetGamesFilesListW(Folder: String; const FileType: String; ListHolder: THashedStringList; SubDirectories: Boolean; MediaTypeID: Integer);
@@ -4550,8 +4719,10 @@ var
   UnicodeStr: Boolean;
 begin
   // list format
-  //MediaType filename_fullPath
-  // this is for console/computer games (EmuCon), NOT to be used by arcade systems!
+  // MediaType ' ' filename_fullPath<DOS>Ansi_filename
+  //   0 fullpath\UTF8Encode(gamefilename.zip)<DOS>ansi_filename.zip/>
+  
+  // this is for console/computer/handheld games (EmuCon), NOT to be used by arcade systems!
   if Folder = '' then
      Exit;
   ListHolder.BeginUpdate;
@@ -4571,23 +4742,22 @@ begin
                  begin
                    if (SearchW.Attr and $10 <> $10) then
                       begin
-                        iStrDOS:= '';
                         iName:= SearchW.Name;
+                        iStrDOS:= '';
                         UnicodeStr:= iName <> SearchW.Name;
                         if UnicodeStr then
                            begin
                              iName:= UTF8Encode(SearchW.Name);
-                             iStrDOS:= '='+SearchW.DOSName;
+                             iStrDOS:= '<DOS>'+SearchW.DOSName+'/>';
                            end;
-                        if (FileType <> '') then
+                        if FileType <> '' then
                            begin
-                             if SameText(ExtractFileExtW(iName), FileType) then
-                                ListHolder.Add(IntToStr(MediaTypeID)+IntToStr(Ord(UnicodeStr))+Folder+iName+iStrDOS);
+                             if SameText(ExtractFileExtW(SearchW.Name), FileType) then // iName might be encrypted with UTF8Encode (April 26, 2021)
+                                ListHolder.Add(IntToStr(MediaTypeID)+' '+Folder+iName+iStrDOS);
                            end
                         else
                            begin
-                             ListHolder.Add(IntToStr(MediaTypeID)+IntToStr(Ord(UnicodeStr))+Folder+iName+iStrDOS);
-                             //ListHolder.Add(IntToStr(MediaTypeID)+Folder+iName);
+                             ListHolder.Add(IntToStr(MediaTypeID)+' '+Folder+iName+iStrDOS);
                            end;
                         // for debugging only, do not enable
                         //if UnicodeStr then
@@ -4637,6 +4807,9 @@ begin
                             #13#10+#13#10+'Aborting...', '', mb_Ok+mb_IconExclamation)
   else
      Result:= False;
+
+  if not Result then
+     Screen.Cursor:= crHourGlass; // for application's startup until FormStatus shows up
 end;
 
 procedure ShowDropdownMenu(ButtonExSource: TBitBtnEx; PopupMenuSource: TPopupMenu);
@@ -4645,8 +4818,8 @@ var
   iLeft, iTop: Integer;
 begin
   iPoint:= ButtonExSource.ClientToScreen(Point(0, 0));
-  iLeft:= iPoint.X;
-  iTop:= iPoint.Y+ButtonExSource.Height+1;
+  iLeft:=  iPoint.X;
+  iTop:=   iPoint.Y+ButtonExSource.Height+1;
   PopupMenuSource.Popup(iLeft, iTop);
 end;
 
@@ -4734,6 +4907,261 @@ begin
     Stream.Free;
   end;
   Result:= LowerCase(IntToHex(CRCvalue, 8));
+end;
+
+function Validate4KResolution: Boolean;
+begin
+  Result:= (Screen.Width >= 3840) and (Screen.Height >= 2160);
+end;
+
+function Read4KSetting: Boolean;
+var
+  iniFile: TMemIniFile;
+begin
+  FrontendPath:= ExtractFilePath(Application.ExeName);
+  Result:= Validate4KResolution;
+  if Result then
+     if FileExists(FrontendPath+'EmuLoader.ini') then
+     begin
+       iniFile:= TMemIniFile.Create(FrontendPath+'EmuLoader.ini');
+       Result:= not Boolean(iniFile.ReadInteger('Preferences', '4KModeDisable', Ord(not Result))); // default TRUE if screen resolution is 3840x2160 or higher
+       FreeAndNil(iniFile);
+     end;
+end;
+
+procedure CreateSplashIniFile; // this function will be removed in a future frontend version
+const
+  iFolder: String = 'ini_files\';
+  iFile  : String = 'lightmode.ini';
+  iSplash: String = 'splash.ini';
+var
+  iniFile: TMemIniFile;
+  newFile: TStringList;
+begin
+  if FileExists(FrontendPath+iFolder+iSplash) then
+     Exit;
+
+  if not FileExists(FrontendPath+iFolder+iFile) then
+     Exit;
+
+  iniFile:= TMemIniFile.Create(FrontendPath+iFolder+iFile);
+  newFile:= TStringList.Create;
+
+  iniFile.ReadSectionValues('Splash', newFile);
+  if newFile.Count > 0 then
+     begin
+       iniFile.EraseSection('Splash');
+       iniFile.UpdateFile;
+       newFile.Insert(0, '[Splash]');
+       newFile.SaveToFile(FrontendPath+iFolder+iSplash);
+     end;
+  FreeAndNil(iniFile);
+  FreeAndNil(newFile);
+end;
+
+procedure CreateGamesFiltersIniFile; // this function will be removed in a future frontend version
+const
+  iFolder: String = 'ini_files\';
+  iFile  : String = 'EmuLoader.ini';
+  iFilter: String = 'games_filters.ini';
+var
+  iniFile: TMemIniFile;
+  newFile, currentList, FiltersSection: TStringList;
+  iIndex: Integer;
+
+  function AddSetting(const NameStr: String; NewNameStr: String = ''): Boolean;
+  var
+    iPos: Integer;
+    iValue: String;
+  begin
+    iPos:= FiltersSection.IndexOfName(NameStr);
+    Result:= iPos <> -1;
+    if Result then
+       begin
+         if NewNameStr <> '' then
+            iValue:= NewNameStr+'='+FiltersSection.ValueFromIndex[iPos]
+         else
+            iValue:= FiltersSection[iPos];
+         newFile.Add(iValue);
+       end;
+  end;
+
+  function AddSection(const SectionName: String; AddEmptyLine: Boolean = True): Boolean;
+  var
+    iName: String;
+  begin
+    Result:= iniFile.SectionExists(SectionName);
+    if Result then
+    begin
+      iName:= '['+SectionName+']';
+      if AddEmptyLine then
+         iName:= #13#10+iName;
+
+      iniFile.ReadSectionValues(SectionName, currentList);
+      newFile.Add(iName);
+      newFile.AddStrings(currentList);
+    end;
+  end;
+
+begin
+  if FileExists(FrontendPath+iFolder+iFilter) then
+     Exit;
+
+  if not FileExists(FrontendPath+iFile) then
+     Exit;
+
+  iniFile:= TMemIniFile.Create(FrontendPath+iFile);
+  newFile:= TStringList.Create;
+  newFile.BeginUpdate;
+  currentList:= TStringList.Create;
+
+  FiltersSection:= TStringList.Create;
+  iniFile.ReadSectionValues('ListFilter', FiltersSection);
+
+  AddSection('Thumbnails', False);
+
+  newFile.Add(#13#10+'[MachineType]');
+  AddSetting('MachineTypeArcadeSystems',                   'ArcadeSystems');
+  AddSetting('MachineTypeConsoleSystems',                  'ConsoleSystems');
+  AddSetting('MachineTypeComputerSystems',                 'ComputerSystems');
+  AddSetting('MachineTypeHandheldSystems',                 'HandheldSystems');
+  AddSetting('MachineTypeMAMEMachinesWithSoftwareList',    'MAMEMachinesWithSoftwareList');
+  AddSetting('MachineTypeMAMEMachinesWithoutSoftwareList', 'MAMEMachinesWithoutSoftwareList');
+  AddSetting('MachineTypeMAMESoftwareListGames',           'MAMESoftwareListGames');
+  AddSetting('EnableMAMEMachinesFilterPanel');
+
+  AddSection('ListFilter_Arcade');
+  AddSection('ListFilter_ConsoleComputer');
+  AddSection('ListFilter_ArcadeQuick');
+  AddSection('ListFilter_ConsoleComputerQuick');
+
+  // misc filters
+  newFile.Add(#13#10+'[Miscellaneous]');
+  AddSetting('BiosNoBios');
+  AddSetting('HideBiosSets');
+  AddSetting('InterfaceType');
+  AddSetting('AudioType');
+  AddSetting('DevicesNoDevices');
+  AddSetting('HideDeviceSets');
+
+  AddSetting('GamesROMs');
+
+  AddSetting('CategoryCasino');
+  AddSetting('CategoryFruitMachines');
+  AddSetting('CategorySlotMachines');
+  AddSetting('CategoryRhythm');
+  AddSetting('CategoryMature');
+  AddSetting('CategoryMahjong');
+  AddSetting('CategoryTabletop');
+  AddSetting('CategoryPinMAME');
+  AddSetting('CategoryBoardGame');
+
+  AddSetting('CategoryQuiz');
+
+  AddSetting('CategoryUtilities');
+  AddSetting('CategoryCalculator');
+  AddSetting('CategoryEducational');
+  AddSetting('CategoryElectronic');
+  AddSetting('CategoryPrinters');
+  AddSetting('CategoryPhones');
+  AddSetting('CategoryMusic');
+
+  AddSetting('CategoryMAMEConsoleMachines');
+  AddSetting('CategoryMAMEComputerMachines');
+  AddSetting('CategoryMAMEHandheldMachines');
+
+  AddSetting('HideGamesWithCHDFiles');
+  AddSetting('HideNoDumpROMsGames');
+  AddSetting('ScreenOrientation');
+  AddSetting('SaveState');
+
+  AddSetting('OnlyNeoGeoMVS');
+  AddSetting('OnlySTVMultiSlot');
+
+  AddSetting('ShowMergedSetsOnly');
+  AddSetting('ShowOnlySetsCRC32Collision');
+  AddSetting('HideMAMESoftlist_vgmplay');
+
+  AddSetting('SpecialList');
+  AddSetting('FilterMAMEGamesMainCPU');
+
+
+  // remove sections and settings from "EmuLoader.ini"
+  iniFile.EraseSection('Thumbnails');
+  iniFile.EraseSection('ListFilter_Arcade');
+  iniFile.EraseSection('ListFilter_ConsoleComputer');
+  iniFile.EraseSection('ListFilter_ArcadeQuick');
+  iniFile.EraseSection('ListFilter_ConsoleComputerQuick');
+
+  // remove settings from "[ListFilter]" section
+
+  IniFile.DeleteKey('ListFilter', 'MachineTypeArcadeSystems');
+  IniFile.DeleteKey('ListFilter', 'MachineTypeConsoleSystems');
+  IniFile.DeleteKey('ListFilter', 'MachineTypeComputerSystems');
+  IniFile.DeleteKey('ListFilter', 'MachineTypeHandheldSystems');
+  IniFile.DeleteKey('ListFilter', 'MachineTypeMAMEMachinesWithSoftwareList');
+  IniFile.DeleteKey('ListFilter', 'MachineTypeMAMEMachinesWithoutSoftwareList');
+  IniFile.DeleteKey('ListFilter', 'MachineTypeMAMESoftwareListGames');
+  IniFile.DeleteKey('ListFilter', 'EnableMAMEMachinesFilterPanel');
+
+  IniFile.DeleteKey('ListFilter', 'BiosNoBios');
+  IniFile.DeleteKey('ListFilter', 'HideBiosSets');
+  IniFile.DeleteKey('ListFilter', 'InterfaceType');
+  IniFile.DeleteKey('ListFilter', 'AudioType');
+  IniFile.DeleteKey('ListFilter', 'DevicesNoDevices');
+  IniFile.DeleteKey('ListFilter', 'HideDeviceSets');
+
+  IniFile.DeleteKey('ListFilter', 'GamesROMs');
+
+  IniFile.DeleteKey('ListFilter', 'CategoryCasino');
+  IniFile.DeleteKey('ListFilter', 'CategoryFruitMachines');
+  IniFile.DeleteKey('ListFilter', 'CategorySlotMachines');
+  IniFile.DeleteKey('ListFilter', 'CategoryRhythm');
+  IniFile.DeleteKey('ListFilter', 'CategoryMature');
+  IniFile.DeleteKey('ListFilter', 'CategoryMahjong');
+  IniFile.DeleteKey('ListFilter', 'CategoryTabletop');
+  IniFile.DeleteKey('ListFilter', 'CategoryPinMAME');
+  IniFile.DeleteKey('ListFilter', 'CategoryBoardGame');
+
+  IniFile.DeleteKey('ListFilter', 'CategoryQuiz');
+
+  IniFile.DeleteKey('ListFilter', 'CategoryUtilities');
+  IniFile.DeleteKey('ListFilter', 'CategoryCalculator');
+  IniFile.DeleteKey('ListFilter', 'CategoryEducational');
+  IniFile.DeleteKey('ListFilter', 'CategoryElectronic');
+  IniFile.DeleteKey('ListFilter', 'CategoryPrinters');
+  IniFile.DeleteKey('ListFilter', 'CategoryPhones');
+  IniFile.DeleteKey('ListFilter', 'CategoryMusic');
+
+  IniFile.DeleteKey('ListFilter', 'CategoryMAMEConsoleMachines');
+  IniFile.DeleteKey('ListFilter', 'CategoryMAMEComputerMachines');
+  IniFile.DeleteKey('ListFilter', 'CategoryMAMEHandheldMachines');
+
+  IniFile.DeleteKey('ListFilter', 'HideGamesWithCHDFiles');
+  IniFile.DeleteKey('ListFilter', 'HideNoDumpROMsGames');
+  IniFile.DeleteKey('ListFilter', 'ScreenOrientation');
+  IniFile.DeleteKey('ListFilter', 'SaveState');
+
+  IniFile.DeleteKey('ListFilter', 'OnlyNeoGeoMVS');
+  IniFile.DeleteKey('ListFilter', 'OnlySTVMultiSlot');
+
+  IniFile.DeleteKey('ListFilter', 'ShowMergedSetsOnly');
+  IniFile.DeleteKey('ListFilter', 'ShowOnlySetsCRC32Collision');
+  IniFile.DeleteKey('ListFilter', 'HideMAMESoftlist_vgmplay');
+
+  IniFile.DeleteKey('ListFilter', 'SpecialList');
+  IniFile.DeleteKey('ListFilter', 'FilterMAMEGamesMainCPU');
+
+  // update EmuLoader.ini
+  iniFile.UpdateFile;
+  FreeAndNil(iniFile);
+  FreeAndNil(currentList);
+  FreeAndNil(FiltersSection);
+
+  // update new "games_filters.ini"
+  newFile.EndUpdate;
+  newFile.SaveToFile(FrontendPath+iFolder+iFilter); // save the new file
+  FreeAndNil(newFile);
 end;
 
 

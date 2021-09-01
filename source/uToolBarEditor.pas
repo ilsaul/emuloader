@@ -33,6 +33,7 @@ type
     procedure IconSizeLargeClick(Sender: TObject);
   private
     { Private declarations }
+    procedure Resize4K;
   public
     { Public declarations }
   end;
@@ -46,15 +47,48 @@ uses uMain, uCommon;
 
 {$R *.dfm}
 
-// form with 3 columns and 5 lines (if more tool bar icons are added in future EL builds)
-// Form -> 706x570
-// EasyListView -> 710x482
+procedure TFormToolBarEditor.Resize4K;
+begin
+  if not Is4KMode then
+     Exit;
+
+  with FormToolBarEditor do
+  begin
+    ToolBarListView.CellSizes.Tile.Width:= 425;
+    ToolBarListView.CellSizes.Tile.Height:= 156;
+    Font.Size:= 16;
+
+    ToolBarListView.BorderWidth:= 8;
+    ToolBarListView.PaintInfoItem.Border:= 4;
+    ToolBarListView.PaintInfoItem.CaptionIndent:= 4;
+
+    FormMain.Set4KListViewSpecs(ToolBarListView, 0, 0, (ToolBarListView.CellSizes.Tile.Width*4)+(ToolBarListView.BorderWidth*2)+20, (ToolBarListView.CellSizes.Tile.Height*4)+(ToolBarListView.BorderWidth*2), 16); // 4x4
+    ToolBarListView.PaintInfoItem.CheckIndent:= 3;
+    ToolBarListView.PaintInfoItem.ImageIndent:= 0;
+    FormMain.Set4KListViewCheckBoxHDSpecs(ToolBarListView);
+
+    PanelBottom.Height:= 71;
+
+    ClientWidth:= ToolBarListView.Width-20;
+    ClientHeight:= ToolBarListView.Height+PanelBottom.Height;
+
+    FormMain.Set4KCheckBoxSpecs(BoundToGamesPanel, 17, 24, 245, 36, 16);
+    FormMain.Set4KCheckBoxSpecs(ShowHideToolBar,   17+BoundToGamesPanel.Width+32, 24, 210, 36, 16);
+    FormMain.Set4KButtonsOkCancelPanel(PanelBottom, ButtonDefault, ButtonClose, False);
+
+    LabelToolBarIconSize.Visible:= False;
+    IconSizeExtraLarge.Visible:= False;
+    IconSizeLarge.Visible:= False;
+    IconSizeSmall.Visible:= False;
+    LabelIconSizeValue.Visible:= False;
+  end;
+end;
 
 procedure TFormToolBarEditor.ButtonDefaultClick(Sender: TObject);
 var
   Loop: ShortInt;
 begin
-  for Loop:=0 to FormMain.ToolBarButtons.ButtonCount-1 do
+  for Loop:=0 to FormMain.ToolBarButtons.ButtonCount do
       ToolBarListView.Items[Loop].Checked:= True;
   ToolBarListView.SetFocus;
 end;
@@ -69,15 +103,17 @@ procedure TFormToolBarEditor.ToolBarListViewItemPaintText(
   Sender: TCustomEasyListview; Item: TEasyItem; Position: Integer;
   ACanvas: TCanvas);
 begin
-  if Item.Ghosted then
-     ACanvas.Font.Color:= clGray;
   if Position = 1 then
      begin
        ACanvas.Font.Name:= 'Verdana';
-       ACanvas.Font.Size:= 7;
-       ACanvas.Font.Color:= clGray;
-       ACanvas.Font.Style:= [fsItalic];
+       if Is4KMode then
+          ACanvas.Font.Size:= 14
+       else
+          ACanvas.Font.Size:= 7;
+       FormMain.ELV_SetSelecionFontColors(ToolBarListView, Item, ACanvas, True);
      end;
+
+  FormMain.ELV_SetGhostedIconText(Item, ToolBarListView, ACanvas);
 end;
 
 procedure TFormToolBarEditor.ToolBarListViewItemCheckChange(
@@ -95,15 +131,8 @@ procedure TFormToolBarEditor.ToolBarListViewItemCheckChange(
 begin
   if Item <> nil then
      begin
-       if Item.Index = (FormMain.ToolBarButtons.ButtonCount-1) then
-          begin
-            // "Search Games" button / filter
-            FormMain.ButtonFilterSearchGames.Tag:= Ord(Item.Checked);
-            if FormMain.ButtonFilterTitlePanelMode.Tag = 0 then
-               FormMain.PanelSearchGames_ToolBar.Visible:= Item.Checked
-            else
-               FormMain.ToolBarButtons.Buttons[Item.Index].Visible:= Item.Checked;
-          end
+       if Item.Index > (FormMain.ToolBarButtons.ButtonCount-1) then
+          FormMain.PanelSearchGames_ToolBar.Visible:= Item.Checked // "Search Games" button / filter
        else
           FormMain.ToolBarButtons.Buttons[Item.Index].Visible:= Item.Checked;
        SetGhostItem;
@@ -116,10 +145,28 @@ var
   Loop: ShortInt;
   iPos: Integer;
   iTitle, iDetail: String;
-begin
-  // must call FormMain.ButtonFilterTitleClose.Click to close all search panels, and also hide the tool bar attached panel
-  // if user uncheck "Search Games"
 
+  procedure AddItem(Index: Integer; IsSearchGamesPanel: Boolean = False);
+  var
+    Item: TEasyItem;
+  begin
+    Item:= ToolBarListView.Items.Add;
+    Item.ImageIndex:= Index;
+    Item.Caption:= iTitle;
+    Item.Captions[1]:= iDetail;
+    if IsSearchGamesPanel then
+       Item.Checked:= FormMain.PanelSearchGames_ToolBar.Visible
+    else
+       Item.Checked:= FormMain.ToolBarButtons.Buttons[Index].Visible;
+
+    if not Item.Checked then
+       Item.State:= Item.State+[esosGhosted];
+
+    Item.Details[1]:= 1;
+  end;
+
+begin
+  Resize4K;
   FormMain.ELV_ResetNormalColors(ToolBarListView);
   if IsNightMode then
      begin
@@ -128,8 +175,9 @@ begin
        SetLabelColors(LabelToolBarIconSize, item_caption_active_color[1], item_caption_active_shadow_color[1]);
        SetLabelColors(LabelIconSizeValue, item_caption_active_color[1], item_caption_active_shadow_color[1]);
 
-       FormMain.SetEasyListViewColors(ToolBarListView, menu_background_color[1], item_caption_active_color[1], item_caption_active_color[1]);
        FormMain.ELV_SetNightModeColors(ToolBarListView);
+       FormMain.SetEasyListViewColors(ToolBarListView, menu_background_color[1], item_caption_active_color[1]);
+
        FormMain.ELV_SetCheckRadioCustomIcon(ToolBarListView);
 
        SetCheckBoxColors(BoundToGamesPanel, item_caption_active_color[1], item_caption_active_shadow_color[1]);
@@ -147,10 +195,11 @@ begin
      end;
 
   ToolBarListView.BeginUpdate;
+  ToolBarListView.Groups.ReIndexDisable:= True;
   for Loop:=0 to FormMain.ToolBarButtons.ButtonCount-1 do
   begin
-    iTitle:= FormMain.ToolBarButtons.Buttons[Loop].Caption;
     iDetail:= '';
+    iTitle:= FormMain.ToolBarButtons.Buttons[Loop].Caption;
     iPos:= PosEx('-', iTitle);
     if iPos <> 0 then
        begin
@@ -158,23 +207,14 @@ begin
          Delete(iTitle, iPos, Length(iTitle));
        end;
 
-    with ToolBarListView.Items.Add do
-    begin
-      ImageIndex:= Loop;
-      Caption:= iTitle;
-      Captions[1]:= iDetail;
-
-      if (Loop = (FormMain.ToolBarButtons.ButtonCount-1)) and (FormMain.ButtonFilterTitlePanelMode.Tag = 0) then
-         Checked:= FormMain.PanelSearchGames_ToolBar.Visible
-      else
-         Checked:= FormMain.ToolBarButtons.Buttons[Loop].Visible;
-      if not Checked then
-         State:= State+[esosGhosted];
-
-      Details[1]:= 1;
-    end;
+    AddItem(Loop);
   end;
 
+  iTitle:= 'Search Games';
+  iDetail:= '';
+  AddItem(FormMain.ToolBarButtons.ButtonCount, True);
+
+  ToolBarListView.Groups.ReIndexDisable:= False;
   ToolBarListView.EndUpdate;
   FormMain.ELV_SelectItem(ToolBarListView, 0);
   BoundToGamesPanel.Tag:= 1;

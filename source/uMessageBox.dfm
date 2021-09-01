@@ -3,8 +3,8 @@ object FormMessageBox: TFormMessageBox
   Top = 341
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
-  ClientHeight = 427
-  ClientWidth = 684
+  ClientHeight = 561
+  ClientWidth = 884
   Color = clWhite
   DefaultMonitor = dmMainForm
   Font.Charset = ANSI_CHARSET
@@ -16,6 +16,7 @@ object FormMessageBox: TFormMessageBox
   OldCreateOrder = False
   Position = poScreenCenter
   Scaled = False
+  OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
   OnKeyPress = FormKeyPress
   OnShow = FormShow
@@ -24,7 +25,7 @@ object FormMessageBox: TFormMessageBox
   object PanelTop: TPanelEx
     Left = 0
     Top = 0
-    Width = 684
+    Width = 884
     Height = 80
     Align = alTop
     Color1 = 16445669
@@ -48,7 +49,7 @@ object FormMessageBox: TFormMessageBox
     object LabelGameTitle: TShadowLabel
       Left = 79
       Top = 4
-      Width = 599
+      Width = 799
       Height = 33
       AutoSize = False
       Caption = 
@@ -74,7 +75,7 @@ object FormMessageBox: TFormMessageBox
     object LabelGameName: TShadowLabel
       Left = 106
       Top = 46
-      Width = 570
+      Width = 770
       Height = 27
       AutoSize = False
       Caption = 'name: gamename [clone of gamename] [bios: biosname]'
@@ -107,8 +108,8 @@ object FormMessageBox: TFormMessageBox
   end
   object PanelBottom: TPanelEx
     Left = 0
-    Top = 386
-    Width = 684
+    Top = 520
+    Width = 884
     Height = 41
     Align = alBottom
     Color1 = clWhite
@@ -121,29 +122,29 @@ object FormMessageBox: TFormMessageBox
     ParentBackground = False
     Style = vgSimple
     object ButtonYes: TBitBtnEx
-      Left = 233
+      Left = 341
       Top = 8
       Width = 89
       Height = 25
       Caption = 'Yes'
       ModalResult = 6
       ParentShowHint = False
-      ShowHint = True
+      ShowHint = False
       TabOrder = 0
     end
     object ButtonNo: TBitBtnEx
-      Left = 336
+      Left = 436
       Top = 8
       Width = 89
       Height = 25
       Caption = 'No'
       ModalResult = 7
       ParentShowHint = False
-      ShowHint = True
+      ShowHint = False
       TabOrder = 1
     end
     object ButtonYestoAll: TBitBtnEx
-      Left = 151
+      Left = 251
       Top = 8
       Width = 89
       Height = 25
@@ -158,7 +159,7 @@ object FormMessageBox: TFormMessageBox
       Visible = False
     end
     object ButtonAbort: TBitBtnEx
-      Left = 443
+      Left = 543
       Top = 8
       Width = 89
       Height = 25
@@ -176,21 +177,46 @@ object FormMessageBox: TFormMessageBox
       Width = 87
       Height = 20
       Hint = 'Check to use a dark theme'
+      Checked = True
       ShowHint = True
       TabOrder = 4
       OnClick = NightModeClick
       Alignment = taLeftJustify
       Caption = 'Night Mode'
       ReturnIsTab = False
+      State = cbChecked
       Themed = True
       CustomIconsEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
+    end
+    object HideCommandLineRunConfirm: TAdvOfficeCheckBoxEx
+      Left = 735
+      Top = 11
+      Width = 140
+      Height = 20
+      Hint = 
+        'To view the full command line again'#13#10'enable "Run Game Confirmati' +
+        'on Dialog" in main menu'
+      ShowHint = True
+      TabOrder = 5
+      Visible = False
+      Alignment = taLeftJustify
+      Caption = 'Don'#39't Show This Again'
+      ReturnIsTab = False
+      Themed = True
+      CustomIconsEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
   end
   object LabelMessageW: TTntRichEdit
     Left = 8
     Top = 80
-    Width = 667
-    Height = 305
+    Width = 867
+    Height = 439
     OnURLClick = LabelMessageWURLClick
     BorderStyle = bsNone
     Color = clWhite

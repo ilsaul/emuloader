@@ -60,7 +60,6 @@ type
     procedure ButtonSnaplDirAutoSearchHelpClick(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure FormShow(Sender: TObject);
-    procedure FormCreate(Sender: TObject);
     procedure ButtonResetVideoPreviewDummyVideoParametersClick(
       Sender: TObject);
     procedure ButtonResetVideoPreviewMediaPlayerParametersClick(
@@ -69,11 +68,22 @@ type
     procedure ButtonResetVideoPreviewFolderClick(Sender: TObject);
     procedure SystemsVideoPreviewItemPaintText(Sender: TCustomEasyListview;
       Item: TEasyItem; Position: Integer; ACanvas: TCanvas);
+    procedure SystemsVideoPreviewItemImageDraw(Sender: TCustomEasyListview;
+      Item: TEasyItem; Column: TEasyColumn; ACanvas: TCanvas;
+      const RectArray: TEasyRectArrayObject;
+      AlphaBlender: TEasyAlphaBlender);
+    procedure SystemsVideoPreviewItemImageDrawIsCustom(
+      Sender: TCustomEasyListview; Item: TEasyItem; Column: TEasyColumn;
+      var IsCustom: Boolean);
+    procedure SystemsVideoPreviewItemImageGetSize(
+      Sender: TCustomEasyListview; Item: TEasyItem; Column: TEasyColumn;
+      var ImageWidth, ImageHeight: Integer);
   private
     { Private declarations }
     temp_ArcadeVideoPreviewDir: packed array[1..MaxArcadeSystems] of String;
     temp_ConsoleComputerVideoPreviewDir: packed array[1..MaxConsoleComputerSystems] of String;
     procedure UpdateSettingsVars;
+    procedure Resize4K;
   public
     { Public declarations }
   end;
@@ -87,6 +97,69 @@ uses uMain;
 
 
 {$R *.dfm}
+
+procedure TFormVideoPreviewSettings.Resize4K;
+
+  procedure SetControls(iLeft, iTop: Integer; iLabel: TShadowLabel; iEdit: TEditEx; iButtonSelect, iButtonReset: TBitBtnEx);
+  begin
+    FormMain.Set4KLabelSpecs(iLabel, iLeft+8, iTop, -1, -1, 16);
+    FormMain.Set4KEditSpecs(iEdit, iLeft, iLabel.Top+35, 1059, 36, 16);
+    FormMain.Set4KButtonSpecs(iButtonSelect, iEdit.Left+iEdit.Width+5, iEdit.Top, 89, 36, 16);
+    if iButtonReset <> nil then
+       FormMain.Set4KButtonSpecs(iButtonReset, iButtonSelect.Left+iButtonSelect.Width+3, iEdit.Top, 89, 36, 16);
+  end;
+
+begin
+  if not Is4KMode then
+     Exit;
+
+  with FormVideoPreviewSettings do
+  begin
+    ClientWidth:= (156*15)+16; // 2340 + 16 = 2356; (15 system columns)
+    Font.Size:= 16;
+
+    FormMain.Set4KImageListSpecs(IL_Systems, 128);
+
+    SystemsVideoPreview.Font.Name:= FormMain.Get4KSystemFont;
+    SystemsVideoPreview.PaintInfoItem.IconViewRemoveIconTopBorder:= True;
+    SystemsVideoPreview.CellSizes.Icon.Width:=  156;
+    SystemsVideoPreview.CellSizes.Icon.Height:= 207+32+4;// // 32+4 (systype icon + border)
+
+    FormMain.Set4KListViewSpecs(SystemsVideoPreview, 8, 8, (SystemsVideoPreview.CellSizes.Icon.Width*15)+20, (SystemsVideoPreview.CellSizes.Icon.Height*5), 16); // 15 columns, 5 lines
+    FormMain.Set4KSystemTitleBottomPanel(nil, PanelSystemsTitle, PanelSystemsTitleBottom, SystemsVideoPreview);
+
+    FormMain.Set4KPanelSpecs(PanelSettings, -1, PanelSystemsTitleBottom.Top+PanelSystemsTitleBottom.Height, ClientWidth, 306);
+
+    SetControls(10, 4, LabelVideoPreviewFolder, VideoPreviewFolder, ButtonSelectVideoPreviewFolder, ButtonResetVideoPreviewFolder);
+    FormMain.Set4KLabelSpecs(LabelSnapDirAutoSearch, 14, VideoPreviewFolder.Top+42, -1, -1, 16);
+    FormMain.Set4KButtonSpecs(ButtonSnaplDirAutoSearchHelp, ButtonSelectVideoPreviewFolder.Left-40, LabelSnapDirAutoSearch.Top, 29, 29, 16);
+
+    SetControls(10, LabelSnapDirAutoSearch.Top+42, LabelVideoPreviewMediaPlayerExecutable, VideoPreviewMediaPlayerExecutable, ButtonSelectVideoPreviewMediaPlayer, ButtonResetVideoPreviewMediaPlayer);
+
+    LabelVideoPreviewMediaPlayerParameters.Caption:= 'Media Player Parameters          (%1 tag required for filename)';
+    SetControls(10, VideoPreviewMediaPlayerExecutable.Top+60, LabelVideoPreviewMediaPlayerParameters, VideoPreviewMediaPlayerParameters, ButtonResetVideoPreviewMediaPlayerParameters, nil);
+    FormMain.Set4KButtonSpecs(ButtonHelpVideoPreviewMediaPlayerParameters, 263, LabelVideoPreviewMediaPlayerParameters.Top+2, 29, 29, 16);
+
+    SetControls(1193, LabelVideoPreviewMediaPlayerParameters.Top, LabelVideoPreviewDummyVideoParameters, VideoPreviewDummyVideoParameters, ButtonResetVideoPreviewDummyVideoParameters, nil);
+
+    PanelBottom.Height:= 71;
+    FormMain.Set4KCheckBoxFontNameSpecs(VideoPreviewEnabled);
+    FormMain.Set4KCheckBoxSpecs(VideoPreviewEnabled, 1592, 2, 110, 36, 16);
+    FormMain.Set4KCheckBoxSpecs(VideoPreviewParentGameVideo, 1592, VideoPreviewEnabled.Top+54, 210, 36, 16);
+
+    FormMain.Set4KCheckBoxSpecs(VideoPreviewAutoPlay, 1592, VideoPreviewParentGameVideo.Top+54, 115, 36 ,16);
+    FormMain.Set4KButtonSpecs(ButtonVideoPreviewAutoPlayHelp, VideoPreviewAutoPlay.Left-38, VideoPreviewAutoPlay.Top+4, 29, 29, 16);
+    FormMain.Set4KLabelSpecs(LabelVideoPreviewAutoPlay, 1710, VideoPreviewAutoPlay.Top+1, -1, -1, 16);
+
+    FormMain.Set4KCheckBoxSpecs(VideoPreviewPlayDummyVideo, 1592, VideoPreviewAutoPlay.Top+54, 445, 36, 16);
+    FormMain.Set4KButtonSpecs(ButtonHelpVideoPreviewPlayDummyVideo, VideoPreviewPlayDummyVideo.Left-38, VideoPreviewPlayDummyVideo.Top+4, 29, 29, 16);
+
+    FormMain.Set4KButtonSpecs(ButtonVideoPreviewHelp, 10, 16, 89, 45, 16);
+    FormMain.Set4KButtonsOkCancelPanel(PanelBottom, ButtonOk, ButtonCancel);
+
+    ClientHeight:=PanelSettings.Top+PanelSettings.Height+PanelBottom.Height;
+  end;
+end;
 
 procedure TFormVideoPreviewSettings.UpdateSettingsVars;
 var
@@ -113,8 +186,11 @@ begin
   if Item.Selected then
      begin
        SystemsVideoPreview.Tag:= FormMain.ELV_GetSystemTagMulti(SystemsVideoPreview);
-       FormMain.ELV_GetSystemTitle(SystemsVideoPreview, Item, LabelSystemTitle, LabelSystemType);
-       LabelSystemNotAvailable.Visible:= Item.Ghosted;
+       if PanelSystemsTitle.Visible then
+          begin
+            FormMain.ELV_GetSystemTitle(SystemsVideoPreview, Item, LabelSystemTitle, LabelSystemType);
+            LabelSystemNotAvailable.Visible:= Item.Ghosted;
+          end;
        if FormMain.ELV_IsArcadeSystemSelected(SystemsVideoPreview) then
           VideoPreviewFolder.Text:= FormMain.ArcadeVideoPreviewDir[Sender.Tag]
        else
@@ -154,7 +230,7 @@ end;
 procedure TFormVideoPreviewSettings.ButtonSnaplDirAutoSearchHelpClick(
   Sender: TObject);
 begin
-  FormMain.InitMessageBox; //CallMessageBox;
+  FormMain.InitMessageBox;
   FormMain.AddMsgText('    You can place your video files in emulator''s folder or game snapshot folders. By doing this you don''t need '+
                       'to select custom folders for video files. All systems are supported, not just MAME. You have three choices:'+#13#10+#13#10);
   FormMain.AddMsgText('1.', MsgTxtColors.colorWarning, [fsBold]);
@@ -175,7 +251,7 @@ begin
   FormMain.AddMsgText(' root folder (not recommended!).'+#13#10#13#10+
                       '    Note that even if you select a custom folder for your video files, if not '+
                       'found, the files will also be searched in these folders!');
-  GenerateMessage('Help', 'What is Snap Dir Auto-Search ?');
+  FormMain.ShowMessageBox('Help', 'What is Snap Dir Auto-Search ?');
 end;
 
 procedure TFormVideoPreviewSettings.ButtonSelectVideoPreviewMediaPlayerClick(
@@ -188,7 +264,7 @@ end;
 procedure TFormVideoPreviewSettings.ButtonHelpVideoPreviewMediaPlayerParametersClick(
   Sender: TObject);
 begin
-  FormMain.InitMessageBox; //CallMessageBox;
+  FormMain.InitMessageBox;
   FormMain.AddMsgText('    The ');
   FormMain.AddMsgText('%1', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' tag is required so Emu Loader can replace it by the video/audio filename.'+#13#10+
@@ -206,13 +282,13 @@ begin
   FormMain.AddMsgText('auto close', MsgTxtColors.colorKeyTitle, [fsBold]);
   FormMain.AddMsgText(' parameter so the media player closes itself after the playback is finished!');
 
-  GenerateMessage('Info', 'Required parameter.');
+  FormMain.ShowMessageBox('Info', 'Required parameter.');
 end;
 
 procedure TFormVideoPreviewSettings.ButtonHelpVideoPreviewPlayDummyVideoClick(
   Sender: TObject);
 begin
-  FormMain.InitMessageBox; //CallMessageBox;
+  FormMain.InitMessageBox;
   FormMain.AddMsgText('    If a video from previous selected game is still playing and you select a new game that have '+
                       'no video to play, the previous video keeps playing until it finishes or you manually close the media player.'+#13#10+
                       'You can use this setting to force Emu Loader to load and play a "100 ms" video for games without a video file.'+#13#10+#13#10+
@@ -228,7 +304,7 @@ begin
   //FormMain.AddMsgText('resources\images\no_image\novideo.avi', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' exists or the dummy video will not load.');
 
-  GenerateMessage('Help', 'Play Dummy Video to Stop Current Playback');
+  FormMain.ShowMessageBox('Help', 'Play Dummy Video to Stop Current Playback');
 end;
 
 procedure TFormVideoPreviewSettings.LabelVideoPreviewAutoPlayHelpMouseEnter(
@@ -248,7 +324,7 @@ end;
 procedure TFormVideoPreviewSettings.ButtonVideoPreviewHelpClick(
   Sender: TObject);
 begin
-  FormMain.InitMessageBox; //CallMessageBox;
+  FormMain.InitMessageBox;
   FormMain.AddMsgText('    It''s very simple and easy to setup. First, get a media player of your choice. I use and recommend the awesome ');
   FormMain.AddMsgText('Media Player Classic Home Cinema ', MsgTxtColors.colorKeyTitle, [fsBold]);
   FormMain.AddMsgText('http://mpc-hc.org', MsgTxtColors.colorFileName);
@@ -295,7 +371,7 @@ begin
   FormMain.AddMsgText('Play Video Preview', MsgTxtColors.colorKeyTitle, [fsBold]);
   FormMain.AddMsgText(' in images tool bar buttons / games popup menu. There''s a button assigned for arcade controllers as well.');
 
-  GenerateMessage('Help', 'How to watch game video previews.');
+  FormMain.ShowMessageBox('Help', 'How to watch game video previews.');
 end;
 
 procedure TFormVideoPreviewSettings.FormCloseQuery(Sender: TObject;
@@ -316,9 +392,31 @@ procedure TFormVideoPreviewSettings.FormShow(Sender: TObject);
 var
   Loop: Integer;
 begin
+  Resize4K;
+
+  Tag:= 1;
+  FormMain.LoadSystemsIcons(IL_Systems, False);
+  FormMain.LoadNonArcadeSystemIcons(IL_Systems, False, False);
+
+  FormMain.ELV_ResetNormalColors(SystemsVideoPreview);
+  if IsNightMode then
+     FormMain.ELV_SetNightModeColors(SystemsVideoPreview);
+  LabelSystemTitle.Caption:= '';
+
+  for Loop:= 1 to MaxArcadeSystems do //Low(FormMain.ArcadeVideoPreviewDir) to High(FormMain.ArcadeVideoPreviewDir) do
+      temp_ArcadeVideoPreviewDir[Loop]:= FormMain.ArcadeVideoPreviewDir[Loop];
+
+  for Loop:= 1 to MaxConsoleComputerSystems do // Low(FormMain.ConsoleComputerVideoPreviewDir) to High(FormMain.ConsoleComputerVideoPreviewDir) do
+      temp_ConsoleComputerVideoPreviewDir[Loop]:= FormMain.ConsoleComputerVideoPreviewDir[Loop];
+
+  FormMain.ELV_PopulateSystemsMulti(SystemsVideoPreview, 1, False, True, True); // MAME/arcade/console/computer systems
+
   if IsNightMode then
      begin
-       FormVideoPreviewSettings.Color:= menu_background_color[1];
+       if Is4KMode then
+          FormVideoPreviewSettings.Color:= clrBlackBk
+       else
+          FormVideoPreviewSettings.Color:= menu_background_color[1];
        SetBottomPanelColors(PanelBottom);
 
        FormMain.SetEasyListViewColors(SystemsVideoPreview, clrBlackBk, clWhite);
@@ -329,7 +427,10 @@ begin
        FormMain.SetSystemTypeLabelColors(LabelSystemType);
        SetLabelColors(LabelSystemNotAvailable, clSilver, clNavy);
 
-       SetSystemTitleBarNightColors(PanelSystemsTitle, PanelSystemsTitleBottom);
+       if PanelSystemsTitle.Visible then
+          SetSystemTitleBarNightColors(PanelSystemsTitle, PanelSystemsTitleBottom)
+       else
+          SetSystemTitleBottomBarNightColors(PanelSystemsTitleBottom);
 
        for Loop:= 0 to FormVideoPreviewSettings.ComponentCount-1 do
        begin
@@ -360,31 +461,6 @@ begin
   Tag:= 0;
 end;
 
-procedure TFormVideoPreviewSettings.FormCreate(Sender: TObject);
-var
-  Loop: Integer;
-begin
-  Tag:= 1;
-  FormMain.LoadSystemsIcons(IL_Systems, False);
-  FormMain.LoadNonArcadeSystemIcons(IL_Systems, False, False);
-
-  FormMain.ELV_ResetNormalColors(SystemsVideoPreview);
-  if IsNightMode then
-     FormMain.ELV_SetNightModeColors(SystemsVideoPreview);
-  LabelSystemTitle.Caption:= '';
-
-  for Loop:= 1 to MaxArcadeSystems do //Low(FormMain.ArcadeVideoPreviewDir) to High(FormMain.ArcadeVideoPreviewDir) do
-      temp_ArcadeVideoPreviewDir[Loop]:= FormMain.ArcadeVideoPreviewDir[Loop];
-
-  for Loop:= 1 to MaxConsoleComputerSystems do // Low(FormMain.ConsoleComputerVideoPreviewDir) to High(FormMain.ConsoleComputerVideoPreviewDir) do
-      temp_ConsoleComputerVideoPreviewDir[Loop]:= FormMain.ConsoleComputerVideoPreviewDir[Loop];
-
-  FormMain.ELV_PopulateSystemsMulti(SystemsVideoPreview, 1, False, True, True); // MAME/arcade/console/computer systems
-  //FormMain.ELV_PopulateSystems(SystemsVideoPreview, True, True, 1);
-  //SystemsVideoPreview.Items.Items[1].Caption:= 'Supmod3l';
-  //SystemsVideoPreview.Items.Items[6].Caption:= 'Model 2';
-end;
-
 procedure TFormVideoPreviewSettings.ButtonResetVideoPreviewDummyVideoParametersClick(
   Sender: TObject);
 begin
@@ -400,7 +476,7 @@ end;
 procedure TFormVideoPreviewSettings.ButtonVideoPreviewAutoPlayHelpClick(
   Sender: TObject);
 begin
-  FormMain.InitMessageBox; //CallMessageBox;
+  FormMain.InitMessageBox;
   FormMain.AddMsgText('    This option play videos automatically when selecting games but, depending on how '+
                       'you setup the media player, it might crash the frontend or even Windows if you select different games while a '+
                       'video is playing.'+#13#10+#13#10+
@@ -415,7 +491,7 @@ begin
   FormMain.AddMsgText('Play Video Preview', MsgTxtColors.colorKeyTitle, [fsBold]);
   FormMain.AddMsgText(' menu option in games popup menu (mouse right click)'+#13#10+
                       'If browsing games with an arcade controller, there''s a button assigned for this task.');
-  GenerateMessage('Info', 'AutoPlay video previews.');
+  FormMain.ShowMessageBox('Info', 'AutoPlay video previews.');
 end;
 
 procedure TFormVideoPreviewSettings.ButtonResetVideoPreviewFolderClick(
@@ -437,5 +513,41 @@ begin
   FormMain.ELV_SetGhostedIconText(Item, SystemsVideoPreview, ACanvas);
 end;
 
+procedure TFormVideoPreviewSettings.SystemsVideoPreviewItemImageDraw(
+  Sender: TCustomEasyListview; Item: TEasyItem; Column: TEasyColumn;
+  ACanvas: TCanvas; const RectArray: TEasyRectArrayObject;
+  AlphaBlender: TEasyAlphaBlender);
+begin
+  //Exit; // debugging
+  if not Is4KMode then
+     Exit;
+
+  FormMain.ELV_DrawIconSystem_CustomSysType(Sender, Item, Column, ACanvas, RectArray, IL_Systems, True);
+end;
+
+procedure TFormVideoPreviewSettings.SystemsVideoPreviewItemImageDrawIsCustom(
+  Sender: TCustomEasyListview; Item: TEasyItem; Column: TEasyColumn;
+  var IsCustom: Boolean);
+begin
+  //Exit; // debugging
+  if Is4KMode then
+     IsCustom:= True;
+end;
+
+procedure TFormVideoPreviewSettings.SystemsVideoPreviewItemImageGetSize(
+  Sender: TCustomEasyListview; Item: TEasyItem; Column: TEasyColumn;
+  var ImageWidth, ImageHeight: Integer);
+begin
+  //Exit; // debugging
+  if Is4KMode then
+     begin
+       ImageWidth:=  IL_Systems.Width;            // 4K mode = 32x32  - normal mode = 16x16
+       ImageHeight:= IL_Systems.Height+FormMain.IL_GroupedMode.Width;
+       //if Is4KMode then
+          ImageHeight:= ImageHeight+4; // 4 -> space between sys icon / sys type icon
+       //else
+       //   ImageHeight:= ImageHeight+2;
+     end;
+end;
 
 end.

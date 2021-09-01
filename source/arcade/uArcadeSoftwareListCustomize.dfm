@@ -12,17 +12,19 @@ object FormArcadeSoftwareListCustomize: TFormArcadeSoftwareListCustomize
   Font.Height = -12
   Font.Name = 'Segoe UI'
   Font.Style = []
+  KeyPreview = True
   OldCreateOrder = False
   Position = poScreenCenter
   Scaled = False
   OnCloseQuery = FormCloseQuery
+  OnKeyPress = FormKeyPress
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 15
   object LabelTotalSoftwareList: TShadowLabel
-    Left = 965
+    Left = 969
     Top = 91
-    Width = 157
+    Width = 155
     Height = 15
     Alignment = taRightJustify
     Caption = 'Checked 00000 of 00000'
@@ -42,7 +44,7 @@ object FormArcadeSoftwareListCustomize: TFormArcadeSoftwareListCustomize
     Transparent = True
     Layout = tlCenter
   end
-  object BottomBar: TPanelEx
+  object PanelBottom: TPanelEx
     Left = 0
     Top = 601
     Width = 1134
@@ -107,6 +109,9 @@ object FormArcadeSoftwareListCustomize: TFormArcadeSoftwareListCustomize
       ReturnIsTab = False
       Themed = True
       CustomIconsEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
     object UseBiggerFontIconSize: TAdvOfficeCheckBoxEx
       Left = 252
@@ -121,6 +126,9 @@ object FormArcadeSoftwareListCustomize: TFormArcadeSoftwareListCustomize
       ReturnIsTab = False
       Themed = True
       CustomIconsEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
   end
   object CheckAll: TAdvOfficeCheckBoxEx
@@ -138,6 +146,9 @@ object FormArcadeSoftwareListCustomize: TFormArcadeSoftwareListCustomize
     State = cbChecked
     Themed = True
     CustomIconsEnabled = False
+    CustomEnableIconHD = False
+    CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+    CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
   end
   object TopBar: TPanelEx
     Left = 0
@@ -221,98 +232,84 @@ object FormArcadeSoftwareListCustomize: TFormArcadeSoftwareListCustomize
       WordWrap = True
     end
   end
-  object FrameSoftwareList: TPanelEx
+  object SoftwareLists: TEasyListview
     Left = 8
     Top = 112
     Width = 1117
     Height = 473
-    Color1 = clWhite
-    Color2 = 1
-    Color3 = 7891291
-    Color4 = 16750899
-    ColorFrame = clSilver
-    ColorInnerFrame = 7891291
-    EnableCustomBorder = ecbSingle
-    Frames = []
-    ParentBackground = False
-    Style = vgSolid
-    object SoftwareLists: TEasyListview
-      Left = 0
-      Top = 0
-      Width = 1115
-      Height = 471
-      Align = alClient
-      AllowHiddenCheckedItems = True
-      CellSizes.Report.Height = 22
-      Color = clWhite
-      DisabledBlendAlpha = 0
-      EditManager.Font.Charset = ANSI_CHARSET
-      EditManager.Font.Color = clBlack
-      EditManager.Font.Height = -12
-      EditManager.Font.Name = 'Segoe UI'
-      EditManager.Font.Style = []
-      UseDockManager = False
-      Groups.Items = {
-        060000000100000010000000544561737947726F757053746F726564FFFECE00
-        060000008108060000000000000000000000000000000000000000000000}
-      HintType = ehtToolTip
-      Header.Columns.Items = {
-        0600000003000000110000005445617379436F6C756D6E53746F726564FFFECE
-        00060000008008000101000100000000010001CB020000FFFFFF1F0001000000
-        01000000050000005400690074006C0065000000000000000000000000001100
-        00005445617379436F6C756D6E53746F726564FFFECE00060000008008000101
-        000101000000000001E9000000FFFFFF1F0001000000010000000D0000005300
-        6F0066007400770061007200650020004E0061006D0065000000000000000000
-        00000000110000005445617379436F6C756D6E53746F726564FFFECE00060000
-        00800800010100010200000000000196000000FFFFFF1F000100000001000000
-        050000004D006500640069006100000000000000000000000000}
-      Header.Draggable = False
-      Header.Height = 23
-      Header.Sizeable = False
-      Header.Visible = True
-      IncrementalSearch.Enabled = True
-      IncrementalSearch.ResetTime = 1000
-      IncrementalSearch.StartType = eissFocusedNode
-      ImagesSmall = IL_MediaType
-      PaintInfoColumn.CaptionIndent = 0
-      PaintInfoGroup.BandBlended = False
-      PaintInfoGroup.BandEnabled = False
-      PaintInfoGroup.Expandable = False
-      PaintInfoGroup.MarginBottom.Size = 0
-      PaintInfoGroup.MarginBottom.Visible = True
-      PaintInfoGroup.MarginBottom.CaptionIndent = 4
-      PaintInfoGroup.MarginTop.Size = 20
-      PaintInfoItem.BorderColor = 16370824
-      PaintInfoItem.CheckType = ectBox
-      PaintInfoItem.ShowBorder = False
-      ParentShowHint = False
-      ShowThemedBorder = False
-      ShowHint = True
-      Selection.BlendAlphaImage = 0
-      Selection.BlendColorSelRect = 10902593
-      Selection.BlendIcon = False
-      Selection.BorderColor = 10902593
-      Selection.BorderColorSelRect = 10902593
-      Selection.Color = 10902593
-      Selection.FullCellPaint = True
-      Selection.FullItemPaint = True
-      Selection.FullRowSelect = True
-      Selection.GradientColorBottom = 16506264
-      Selection.GradientColorTop = 15582647
-      Selection.InactiveBorderColor = 10902593
-      Selection.InactiveColor = 15582647
-      Selection.MouseButton = [cmbLeft, cmbRight]
-      Selection.RoundRectRadius = 2
-      Selection.TextColor = clBlack
-      Selection.UseFocusRect = False
-      TabOrder = 0
-      View = elsReport
-      CustomCheckRadioEnabled = False
-      OnColumnClick = SoftwareListsColumnClick
-      OnItemCheckChange = SoftwareListsItemCheckChange
-      OnItemCheckChanging = SoftwareListsItemCheckChanging
-      OnItemPaintText = SoftwareListsItemPaintText
-    end
+    AllowHiddenCheckedItems = True
+    CellSizes.Report.Height = 22
+    Color = clWhite
+    DisabledBlendAlpha = 0
+    EditManager.Font.Charset = ANSI_CHARSET
+    EditManager.Font.Color = clBlack
+    EditManager.Font.Height = -12
+    EditManager.Font.Name = 'Segoe UI'
+    EditManager.Font.Style = []
+    UseDockManager = False
+    Groups.Items = {
+      060000000100000010000000544561737947726F757053746F726564FFFECE00
+      060000008108060000000000000000000000000000000000000000000000}
+    HintType = ehtToolTip
+    Header.Columns.Items = {
+      0600000003000000110000005445617379436F6C756D6E53746F726564FFFECE
+      00060000008008000101000100000000010001CB020000FFFFFF1F0001000000
+      01000000050000005400690074006C0065000000000000000000000000001100
+      00005445617379436F6C756D6E53746F726564FFFECE00060000008008000101
+      000101000000000001E9000000FFFFFF1F0001000000010000000D0000005300
+      6F0066007400770061007200650020004E0061006D0065000000000000000000
+      00000000110000005445617379436F6C756D6E53746F726564FFFECE00060000
+      00800800010100010200000000000196000000FFFFFF1F000100000001000000
+      050000004D006500640069006100000000000000000000000000}
+    Header.Draggable = False
+    Header.Height = 23
+    Header.Sizeable = False
+    Header.Visible = True
+    IncrementalSearch.Enabled = True
+    IncrementalSearch.ResetTime = 1000
+    IncrementalSearch.StartType = eissFocusedNode
+    ImagesSmall = IL_MediaType
+    PaintInfoColumn.CaptionIndent = 0
+    PaintInfoGroup.BandBlended = False
+    PaintInfoGroup.BandEnabled = False
+    PaintInfoGroup.Expandable = False
+    PaintInfoGroup.MarginBottom.Size = 0
+    PaintInfoGroup.MarginBottom.Visible = True
+    PaintInfoGroup.MarginBottom.CaptionIndent = 4
+    PaintInfoGroup.MarginTop.Size = 20
+    PaintInfoItem.BorderColor = 16370824
+    PaintInfoItem.CheckType = ectBox
+    PaintInfoItem.ShowBorder = False
+    ParentShowHint = False
+    ShowThemedBorderColor = clSilver
+    ShowHint = True
+    Selection.BlendAlphaImage = 0
+    Selection.BlendColorSelRect = 10902593
+    Selection.BlendIcon = False
+    Selection.BorderColor = 10902593
+    Selection.BorderColorSelRect = 10902593
+    Selection.Color = 10902593
+    Selection.FullCellPaint = True
+    Selection.FullItemPaint = True
+    Selection.FullRowSelect = True
+    Selection.GradientColorBottom = 16506264
+    Selection.GradientColorTop = 15582647
+    Selection.InactiveBorderColor = 10902593
+    Selection.InactiveColor = 15582647
+    Selection.MouseButton = [cmbLeft, cmbRight]
+    Selection.RoundRectRadius = 2
+    Selection.TextColor = clBlack
+    Selection.UseFocusRect = False
+    TabOrder = 3
+    View = elsReport
+    CustomCheckRadioEnabled = False
+    CustomEnableIconHD = False
+    CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+    CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
+    OnColumnClick = SoftwareListsColumnClick
+    OnItemCheckChange = SoftwareListsItemCheckChange
+    OnItemCheckChanging = SoftwareListsItemCheckChanging
+    OnItemPaintText = SoftwareListsItemPaintText
   end
   object IL_MediaType: TImageList
     Left = 264

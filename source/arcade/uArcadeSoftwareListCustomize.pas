@@ -34,7 +34,7 @@ type
 
 type
   TFormArcadeSoftwareListCustomize = class(TForm)
-    BottomBar: TPanelEx;
+    PanelBottom: TPanelEx;
     ButtonYes: TBitBtnEx;
     ButtonNo: TBitBtnEx;
     ButtonResetToCurrent: TBitBtnEx;
@@ -47,9 +47,8 @@ type
     LabelSystemTitle: TShadowLabel;
     EmulatorIcon: TImage;
     LabelEmulatorVersion: TShadowLabel;
-    FrameSoftwareList: TPanelEx;
-    SoftwareLists: TEasyListview;
     UseBiggerFontIconSize: TAdvOfficeCheckBoxEx;
+    SoftwareLists: TEasyListview;
     procedure FormShow(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure CheckAllClick(Sender: TObject);
@@ -66,8 +65,10 @@ type
       Item: TEasyItem; var Allow: Boolean);
     procedure ButtonYesClick(Sender: TObject);
     procedure UseBiggerFontIconSizeClick(Sender: TObject);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
   private
     { Private declarations }
+    procedure Resize4K;
     procedure ResizeForm;
     procedure GetMAME_SoftListFiles;
     function  GetSoftListFileTitle(const FileXML: String; out MediaTypeIndex: Integer): WideString;
@@ -102,8 +103,61 @@ begin
      Result:= -1;
 end;
 
+procedure TFormArcadeSoftwareListCustomize.Resize4K;
+begin
+  if not Is4KMode then
+     Exit;
+
+  with FormArcadeSoftwareListCustomize do
+  begin
+    ClientWidth:=  2184;
+    ClientHeight:= 1211;
+    Font.Size:= 16;
+
+    FormMain.Set4KEmuGameTopPanel(TopBar, SystemIcon, EmulatorIcon, LabelSystemTitle, 1380, LabelEmulatorVersion, 1960);
+
+    TopBar.Height:= 150;
+
+    FormMain.Set4KImageIconSpecs(SystemIcon, 128);
+    FormMain.Set4KImageIconSpecs(EmulatorIcon, 48, 143, 84);
+    FormMain.Set4KImageListSpecs(IL_MediaType, 32);
+
+    FormMain.Set4KLabelSpecs(LabelEmulatorVersion,  199, 84,   -1, -1, 14);
+    FormMain.Set4KLabelSpecs(LabelSystemTitle, 144,  4, 1650, 59, 18);
+
+    FormMain.Set4KCheckBoxSpecs(CheckAll, 10, 153, 140, 36, 16);
+    FormMain.Set4KLabelSpecs(LabelTotalSoftwareList, -1, 160, -1, -1, 16);
+    LabelTotalSoftwareList.Left:= ClientWidth-LabelTotalSoftwareList.Width-10;
+
+    PanelBottom.Height:= 71;
+
+    FormMain.Set4KButtonSpecs(ButtonResetToCurrent, 10, 16, 168, 45, 16);
+    FormMain.Set4KCheckBoxSpecs(FilterShowUncheckedOnly, ButtonResetToCurrent.Left+ButtonResetToCurrent.Width+10, 20, 250, 36, 16);
+    FormMain.Set4KCheckBoxSpecs(UseBiggerFontIconSize, 444, 20, 250, 36, 16);
+
+    FormMain.Set4KButtonsOkCancelPanel(PanelBottom, ButtonYes, ButtonNo, False);
+    //FormMain.Set4KButtonSpecs(ButtonNo, PanelBottom.Width-168-10, 16, 168, 45, 16);
+    //FormMain.Set4KButtonSpecs(ButtonYes, ButtonNo.Left-168-10, 16, 168, 45, 16);
+
+    FormMain.Set4KListViewSpecs(SoftwareLists, 10, CheckAll.Top+40, 2164, 937, 16);
+    FormMain.Set4KListViewCheckBoxHDSpecs(SoftwareLists);
+    SoftwareLists.CellSizes.Report.Height:= 37;
+
+    FormMain.Set4KListViewColumnSizeSpecs(SoftwareLists, 0, 1600);
+    FormMain.Set4KListViewColumnSizeSpecs(SoftwareLists, 1, 378);
+    FormMain.Set4KListViewColumnSizeSpecs(SoftwareLists, 2, 185);
+
+    SoftwareLists.ImagesSmall:= FormMain.IL_StandardIconsLarge;
+    SoftwareLists.PaintInfoColumn.CaptionIndent:= 4; // reset to default value
+
+    UseBiggerFontIconSize.Visible:= False; // no need to show this setting
+  end;
+end;
+
 procedure TFormArcadeSoftwareListCustomize.ResizeForm;
 begin
+  if Is4KMode then
+     Exit;
   if Screen.Width >= 1280 then
      Exit;
 
@@ -117,7 +171,8 @@ begin
   SoftwareLists.Header.Columns[0].Width:= 672;
   SoftwareLists.Header.Columns[1].Width:= 165;
   SoftwareLists.Header.Columns[2].Width:= 125;
-  FrameSoftwareList.Width:= FrameSoftwareList.Width-200;
+  SoftwareLists.Width:= SoftwareLists.Width-200;
+  //FrameSoftwareList.Width:= FrameSoftwareList.Width-200;
 end;
 
 function TFormArcadeSoftwareListCustomize.GetSoftListFileTitle(const FileXML: String; out MediaTypeIndex: Integer): WideString;
@@ -283,7 +338,7 @@ begin
     SoftwareLists.Header.Columns[0].Width:= SoftwareLists.Header.Columns[0].Width-GetSystemMetrics(SM_CXVSCROLL);
 
     SoftwareLists.Items.ReIndexDisable:= False;
-    SoftwareLists.EndUpdate(False);
+    SoftwareLists.EndUpdate;
     LabelTotalSoftwareList.Tag:= SoftwareLists.Items.Count;
 
     FreeAndNil(ExcludeFiles);
@@ -298,24 +353,24 @@ end;
 
 procedure TFormArcadeSoftwareListCustomize.FormShow(Sender: TObject);
 begin
+  Resize4K;
   ResizeForm;
   FormMain.ELV_ResetNormalColors(SoftwareLists);
-  FormMain.LoadMediaTypeIcons(IL_MediaType, True);
-  FormMain.LoadIconIntoImage('emu_ume', SystemIcon);
-  FormMain.LoadIconIntoImage('play_standard', EmulatorIcon);
+  FormMain.LoadMediaTypeIcons2(IL_MediaType, True);
+  FormMain.LoadSystemIcon(-1, SystemIcon, False);
+  FormMain.AddDefaultIcons('play_standard', '', nil, -1, EmulatorIcon);
+  FormMain.ShowIconErrorMessage;
+
+  FormMain.SetEasyListViewHeaderColors(SoftwareLists, True, False, Is4KMode);
 
   LabelEmulatorVersion.Caption:= FormMain.EmulatorVersion[idMAME]+#13#10+FormMain.EmulatorFile[idMAME];
 
-  GetMAME_SoftListFiles; // first, read all files from mamedir\hash\ folder and create the NotAssignedSoftListFiles() list
-  
   if IsNightMode then
      begin
-       SetFormColors(FormArcadeSoftwareListCustomize, TopBar, BottomBar, LabelSystemTitle, LabelEmulatorVersion, nil, -1, IsNightMode);
+       SetFormColors(FormArcadeSoftwareListCustomize, TopBar, PanelBottom, LabelSystemTitle, LabelEmulatorVersion, nil, -1, IsNightMode);
        SetLabelColors(LabelTotalSoftwareList, clCream, item_caption_active_shadow_color[1]);
 
-       FrameSoftwareList.Color1:= FormArcadeSoftwareListCustomize.Color;
-
-       FormMain.SetEasyListViewColors(SoftwareLists, menu_background_color[1], clWhite);
+       FormMain.SetEasyListViewColors(SoftwareLists, menu_background_color[1], clWhite, -1, clrBorderGroupBoxGrayBk);
 
        SetCheckBoxColors(CheckAll,                item_caption_active_color[1], item_caption_active_shadow_color[1]);
        SetCheckBoxColors(FilterShowUncheckedOnly, item_caption_active_color[1], item_caption_active_shadow_color[1]);
@@ -325,21 +380,22 @@ begin
        FormMain.SetCheckBoxExCustomIcon(FilterShowUncheckedOnly);
        FormMain.SetCheckBoxExCustomIcon(UseBiggerFontIconSize);
 
-       FormMain.SetEasyListViewHeaderColors(SoftwareLists, True);
+       FormMain.SetEasyListViewHeaderColors(SoftwareLists, True, False, Is4KMode);
        FormMain.ELV_SetRibbonNightColors(0, SoftwareLists, True);
        FormMain.ELV_SetCheckRadioCustomIcon(SoftwareLists);
        FormMain.SetWin10DarkScrollBar(SoftwareLists);
 
-       SoftwareLists.Align:= alNone;
-       SoftwareLists.Height:= SoftwareLists.Height-2;
-       SoftwareLists.Top:= SoftwareLists.Top+1;
+       //SoftwareLists.Align:= alNone;
+       //SoftwareLists.Height:= SoftwareLists.Height-2;
+       //SoftwareLists.Top:= SoftwareLists.Top+1;
 
-       SetPanelBorderColors(FrameSoftwareList, clrBorderGroupBoxGrayBk, clrInnerBorderGroupBoxGrayBk);
+       //SetPanelBorderColors(FrameSoftwareList, clrBorderGroupBoxGrayBk, clrInnerBorderGroupBoxGrayBk);
        FormMain.SetButtonExColors(ButtonYes);
        FormMain.SetButtonExColors(ButtonNo);
        FormMain.SetButtonExColors(ButtonResetToCurrent);
      end;
 
+  GetMAME_SoftListFiles; // first, read all files from mamedir\hash\ folder and create the NotAssignedSoftListFiles() list
   FormMain.HideFilterMsgBox;
 end;
 
@@ -435,6 +491,7 @@ procedure TFormArcadeSoftwareListCustomize.SoftwareListsItemPaintText(
 begin
   if not Item.Checked then
      ACanvas.Font.Color:= clGray;
+  Item.Ghosted:= (not Item.Checked) and (not FilterShowUncheckedOnly.Checked);
 end;
 
 procedure TFormArcadeSoftwareListCustomize.SoftwareListsItemCheckChange(
@@ -540,13 +597,15 @@ end;
 procedure TFormArcadeSoftwareListCustomize.UseBiggerFontIconSizeClick(
   Sender: TObject);
 begin
+  if Is4KMode then
+     Exit;
   if Screen.Width < 1280 then
      Exit; // this feature is for high resolutions only
+
   SoftwareLists.BeginUpdate;
   if UseBiggerFontIconSize.Checked then
      begin
-       IL_MediaType.Width:= 24;
-       IL_MediaType.Height:= 24;
+       FormMain.Set4KImageListSpecs(IL_MediaType, 24);
        SoftwareLists.Font.Size:= 14;
        SoftwareLists.CellSizes.Report.Height:= 30;
        //SoftwareLists.Header.Columns[0].Width:= 687;
@@ -555,8 +614,7 @@ begin
      end
   else
      begin
-       IL_MediaType.Width:= 16;
-       IL_MediaType.Height:= 16;
+       FormMain.Set4KImageListSpecs(IL_MediaType, 16);
        SoftwareLists.Font.Size:= 9;
        SoftwareLists.CellSizes.Report.Height:= 22;
        //SoftwareLists.Header.Columns[0].Width:= 672;
@@ -564,11 +622,18 @@ begin
        //SoftwareLists.Header.Columns[2].Width:= 125;
      end;
   if FormMain.CheckTotal(SoftwareLists) then
-     FormMain.LoadMediaTypeIcons(IL_MediaType, True)
+     FormMain.LoadMediaTypeIcons2(IL_MediaType, True)
   else
      SoftwareLists.Header.Columns[0].Width:= SoftwareLists.Header.Columns[0].Width+GetSystemMetrics(SM_CXVSCROLL);
   SoftwareLists.EndUpdate(False);
   FormMain.MenuCustomizeMAMESoftwareList.Tag:= Ord(UseBiggerFontIconSize.Checked);
+end;
+
+procedure TFormArcadeSoftwareListCustomize.FormKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if Key = #27 then
+     ButtonNo.Click;
 end;
 
 end.

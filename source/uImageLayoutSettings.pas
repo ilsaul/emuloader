@@ -27,11 +27,9 @@ type
 type
   TFormImageLayoutSettings = class(TForm)
     IL_Layouts: TImageList;
-    IL_ImageCategory: TImageList;
     PanelBottom: TPanelEx;
     ButtonHelp: TBitBtnEx;
     ButtonClose: TBitBtnEx;
-    IL_ImageCategory_ExtraLarge: TImageList;
     ButtonAbort: TBitBtnEx;
     ImageScrLayoutFrame: TBevelEx;
     PanelLayoutsSelector: TPanelEx;
@@ -57,7 +55,7 @@ type
     LabelPanel3: TShadowLabel;
     PanelEnabledScr2: TAdvOfficeCheckBoxEx;
     PanelEnabledScr3: TAdvOfficeCheckBoxEx;
-    ButtonLayoutResetPanelsIndex: TBitBtnEx;
+    ButtonLayoutResetPanelsIndex: TSpeedButtonEx;
     FrameIconLayScr2_ConsComp: TShape;
     FrameIconLayScr3_ConsComp: TShape;
     FrameIconLayScr1_ConsComp: TShape;
@@ -73,16 +71,17 @@ type
     IconLayScr4_ConsComp: TImage;
     LabelPanel4_ConsComp: TShadowLabel;
     LabelPanel3_ConsComp: TShadowLabel;
-    ButtonLayoutResetPanelsIndex_ConsComp: TBitBtnEx;
+    ButtonLayoutResetPanelsIndex_ConsComp: TSpeedButtonEx;
     LabelPanel2_ConsComp: TShadowLabel;
-    ButtonHelp_CustomCategoryConsComp: TBitBtnEx;
-    ButtonLayoutCopyCatAllSystems_ConsComp: TBitBtnEx;
+    ButtonHelp_CustomCategoryConsComp: TSpeedButtonEx;
+    ButtonLayoutCopyCatAllSystems_ConsComp: TSpeedButtonEx;
     PanelSystemTitle: TPanelEx;
     LabelLayoutTitle: TShadowLabel;
     PanelSystemTitleBottom: TPanelEx;
     ShowHideLayoutsPanel: TPanelEx;
     ShowHideLayoutsLabel: TShadowLabel;
     LayoutsRightFrame: TBevelEx;
+    IL_ImageCategory: TImageList;
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure LayoutListViewItemCheckChange(
       Sender: TCustomEasyListview; Item: TEasyItem);
@@ -116,6 +115,7 @@ type
     procedure ButtonHelp_CustomCategoryConsCompClick(Sender: TObject);
   private
     { Private declarations }
+    iFolder, iFolder4K: String;
     LayoutSelectedItem: TEasyItem;
     LayoutInfo: packed array[0..MaxImageLayouts] of TLayoutInfo;
 
@@ -124,9 +124,10 @@ type
 
     procedure LoadLayouts;
     procedure UpdateLayouts;
-    procedure LoadLayoutImage(Index: ShortInt);
+    //procedure LoadLayoutImage(Index: ShortInt);
     procedure PopulateLayoutsList;
     procedure LoadLayoutIcon(LayoutImgHolder: TImage; ImgCategory: ShortInt);
+    procedure Resize4K;
   public
     { Public declarations }
   end;
@@ -140,6 +141,84 @@ uses uMain;
 
 {$R *.dfm}
 
+procedure TFormImageLayoutSettings.Resize4K;
+var
+  iPos: Integer;
+
+  procedure MoveCategory(iLabelPanel: TShadowLabel; iLabelPanelPos: Integer; iFrameIconLayScr: TShape; iFrameIconLayScrPos: Integer; iIconLayScr: TImage; iLabelLayScr: TShadowLabel);
+  begin
+    FormMain.Set4KShapeSpecs(iFrameIconLayScr, iFrameIconLayScrPos, 74, 156, 156);
+    FormMain.Set4KImageIconSpecs(iIconLayScr,  128, iFrameIconLayScr.Left+14, iFrameIconLayScr.Top+14);
+    FormMain.Set4KLabelSpecs(iLabelLayScr, iFrameIconLayScr.Left, iFrameIconLayScr.Top+168, iFrameIconLayScr.Width, 24, 14);
+    FormMain.Set4KLabelSpecs(iLabelPanel,  iLabelPanelPos,        iFrameIconLayScr.Top-35,                      -1, -1, 16);
+  end;
+
+begin
+  if not Is4KMode then
+     Exit;
+
+  with FormImageLayoutSettings do
+  begin
+    PanelSystemTitle.Height:= 27;
+    LabelLayoutTitle.Font.Size:= 16;
+
+    LayoutListView.PaintInfoItem.ImageIndent:= 0; // adjust this in the regular res version ?
+    LayoutListView.CellSizes.Tile.Width:= 156+22+LayoutListView.PaintInfoItem.CheckIndent+LayoutListView.PaintInfoItem.ImageIndent;
+    LayoutListView.CellSizes.Tile.Height:= 156;
+    FormMain.Set4KListViewSpecs(LayoutListView, 8, PanelSystemTitleBottom.Top+PanelSystemTitleBottom.Height+8, (LayoutListView.CellSizes.Tile.Width*4)+20,
+                                (LayoutListView.CellSizes.Tile.Height*7), 16);
+
+    FormMain.Set4KPanelSpecs(PanelLayoutsSelector, -1, -1, LayoutListView.Width-4, LayoutListView.Top+LayoutListView.Height+8);
+
+    FormMain.Set4KPanelSpecs(ShowHideLayoutsPanel, 580, 1022, 115, 70);
+    FormMain.Set4KLabelSpecs(ShowHideLayoutsLabel,  14,    8,  88, 55, 16);
+
+    ClientWidth:= PanelLayoutsSelector.Width+20+725+20;
+    ClientHeight:= PanelLayoutsSelector.Height;
+    Font.Size:= 16;
+
+    LayoutListView.PaintInfoItem.CheckIndent:= 3; // ImageCategory_Selector.PaintInfoItem.ImageIndent:= 2;
+    FormMain.Set4KListViewCheckBoxHDSpecs(LayoutListView);
+    LayoutListView.Font.Name:= FormMain.Get4KSystemFont;
+
+    FormMain.Set4KImageListSpecs(IL_Layouts, 128);
+    FormMain.Set4KImageListSpecs(IL_ImageCategory, 128);
+
+    FormMain.Set4KGroupBoxSpecs(GroupBoxCategoryAllSystems, PanelLayoutsSelector.Width+20, 19, 725, 282, 16);
+    FormMain.Set4KButtonSpecs(ButtonLayoutResetPanelsIndex, GroupBoxCategoryAllSystems.Width-10-82, 0, 82, 30, 16, -3);
+
+    FormMain.Set4KCheckBoxSpecs(PanelEnabledScr2, 227, 37, 100, 30, 16);
+    FormMain.Set4KCheckBoxSpecs(PanelEnabledScr3, 404, 37, 100, 30, 16);
+
+    MoveCategory(LabelPanel1,  65, FrameIconLayScr1,  20, IconLayScr1, LabelLayScr1);
+    MoveCategory(LabelPanel2, 240, FrameIconLayScr2, 196, IconLayScr2, LabelLayScr2);
+    MoveCategory(LabelPanel3, 416, FrameIconLayScr3, 372, IconLayScr3, LabelLayScr3);
+    MoveCategory(LabelPanel4, 592, FrameIconLayScr4, 548, IconLayScr4, LabelLayScr4);
+
+    FormMain.Set4KButtonSpecs(ButtonHelp_CustomCategoryConsComp, 36, 3, 24, 24, 16, -2);
+
+    FormMain.Set4KGroupBoxSpecs(GroupBoxCategoryConsoleComputer, PanelLayoutsSelector.Width+20, 326, 725, 282, 16);
+    FormMain.Set4KButtonSpecs(ButtonLayoutResetPanelsIndex_ConsComp,  GroupBoxCategoryConsoleComputer.Width-10-82,   0, 82, 30, 16, -3);
+    FormMain.Set4KButtonSpecs(ButtonLayoutCopyCatAllSystems_ConsComp, ButtonLayoutResetPanelsIndex_ConsComp.Left-61, 0, 61, 30, 16, -3);
+
+    MoveCategory(LabelPanel1_ConsComp,  65, FrameIconLayScr1_ConsComp,  20, IconLayScr1_ConsComp, LabelLayScr1_ConsComp);
+    MoveCategory(LabelPanel2_ConsComp, 240, FrameIconLayScr2_ConsComp, 196, IconLayScr2_ConsComp, LabelLayScr2_ConsComp);
+    MoveCategory(LabelPanel3_ConsComp, 416, FrameIconLayScr3_ConsComp, 372, IconLayScr3_ConsComp, LabelLayScr3_ConsComp);
+    MoveCategory(LabelPanel4_ConsComp, 592, FrameIconLayScr4_ConsComp, 548, IconLayScr4_ConsComp, LabelLayScr4_ConsComp);
+
+    PanelBottom.Frames:= [];
+    FormMain.Set4KPanelSpecs(PanelBottom, PanelLayoutsSelector.Width, ClientHeight-71, ClientWidth-PanelLayoutsSelector.Width, 71);
+    FormMain.Set4KButtonsOkCancelPanel(PanelBottom, ButtonClose, ButtonAbort, False);
+    FormMain.Set4KButtonSpecs(ButtonHelp, ButtonClose.Left-10-68, ButtonClose.Top, 68, 45, 16);
+
+    iPos:= GroupBoxCategoryConsoleComputer.Top+GroupBoxCategoryConsoleComputer.Height;
+    iPos:= iPos+(((PanelBottom.Top-iPos)-(ImageScrLayout.Height*2)) div 2);
+
+    FormMain.Set4KImageSpecs(ImageScrLayout, ImageScrLayout.Width*2, ImageScrLayout.Height*2, PanelBottom.Left+((PanelBottom.Width-(ImageScrLayout.Width*2)) div 2), iPos);
+    FormMain.Set4KBevelSpecs(ImageScrLayoutFrame, ImageScrLayout.Left-2, ImageScrLayout.Top-2, ImageScrLayout.Width+4, ImageScrLayout.Height+4);
+  end;
+end;
+
 procedure TFormImageLayoutSettings.LoadLayoutIcons;
 var
   Loop: Byte;
@@ -147,7 +226,7 @@ var
 begin
   tmpFolder:= FormMain.GetFolderFull(32);
   for Loop:=0 to MaxImageLayouts do
-      FormMain.AddDefaultIcons(GetScrLayoutImageFile(Loop, False), tmpFolder, IL_Layouts, 3); // 3 -> layout white titles overlay
+      FormMain.AddDefaultIcons(GetScrLayoutImageFile(Loop, False), tmpFolder, IL_Layouts, 3); // 3 -> layout (not overlay, but with black titles repaint for light mode)
 end;
 
 procedure TFormImageLayoutSettings.LoadLayouts;
@@ -264,15 +343,29 @@ begin
   FreeAndNil(layoutIni);
 end;
 
-procedure TFormImageLayoutSettings.LoadLayoutImage(Index: ShortInt);
+{procedure TFormImageLayoutSettings.LoadLayoutImage(Index: ShortInt);
 var
   layFile: String;
+  Continue: Boolean;
 begin
   layFile:= GetScrLayoutImageFile(Index);
+  Continue:= not Is4KMode;
+  ImageScrLayout.BeginUpdate;
   ImageScrLayout.Bitmap:= nil;
-  if FileExists(FormMain.GetFolderFull(35)+'img_layouts\'+layFile) then
-     ImageScrLayout.Bitmap.LoadFromFile(FormMain.GetFolderFull(35)+'img_layouts\'+layFile);
-end;
+
+  if Is4KMode then
+     begin
+       if FileExists(iFolder+iFolder4K+layFile) then
+          ImageScrLayout.Bitmap.LoadFromFile(iFolder+iFolder4K+layFile)
+       else
+          Continue:= True;
+     end;
+
+  if Continue then
+     if FileExists(iFolder+layFile) then
+        ImageScrLayout.Bitmap.LoadFromFile(iFolder+layFile);
+  ImageScrLayout.EndUpdate;
+end;}
 
 procedure TFormImageLayoutSettings.PopulateLayoutsList;
 var
@@ -318,7 +411,10 @@ end;
 
 procedure TFormImageLayoutSettings.LoadLayoutIcon(LayoutImgHolder: TImage; ImgCategory: ShortInt);
 begin
-  FormMain.LoadIconIntoImage(ImageCategoryArray[ImgCategory, 0], LayoutImgHolder, 2); // 2 -> image category overlay
+  if LayoutImgHolder.Picture.Icon <> nil then
+     LayoutImgHolder.Picture.Icon:=  nil;
+  IL_ImageCategory.GetIcon(ImgCategory, LayoutImgHolder.Picture.Icon);
+  //FormMain.AddDefaultIcons(ImageCategoryArray[ImgCategory, 0], '', nil, 2, LayoutImgHolder); // 2 -> image category overlay
 end;
 
 procedure TFormImageLayoutSettings.FormCloseQuery(Sender: TObject;
@@ -370,6 +466,13 @@ end;
 
 procedure TFormImageLayoutSettings.LayoutListViewItemSelectionChanged(
   Sender: TCustomEasyListview; Item: TEasyItem);
+
+  procedure ClearIconImg(ImageSource: TImage);
+  begin
+    if not ImageSource.Visible then
+       ImageSource.Picture.Icon:= nil;
+  end;
+
 begin
   if not Item.Selected then
      Exit;
@@ -377,17 +480,8 @@ begin
      LayoutSelectedItem:= Item;
 
   LabelLayoutTitle.Caption:= UpperCase(GetScrLayoutSection(Item.ImageIndex));
-  IconLayScr1.Picture.Icon:= nil;
-  IconLayScr2.Picture.Icon:= nil;
-  IconLayScr3.Picture.Icon:= nil;
-  IconLayScr4.Picture.Icon:= nil;
 
-  IconLayScr1_ConsComp.Picture.Icon:= nil;
-  IconLayScr2_ConsComp.Picture.Icon:= nil;
-  IconLayScr3_ConsComp.Picture.Icon:= nil;
-  IconLayScr4_ConsComp.Picture.Icon:= nil;
-
-  LoadLayoutImage(LayoutSelectedItem.ImageIndex);
+  FormMain.LoadImageLayoutPreview(LayoutSelectedItem.ImageIndex, ImageScrLayout);
 
   LoadLayoutIcon(IconLayScr1, LayoutInfo[LayoutSelectedItem.ImageIndex].lImage1_imgCategory);
 
@@ -544,6 +638,16 @@ begin
   IconLayScr4_ConsComp.Visible:= IconLayScr4.Visible;
   LabelLayScr4_ConsComp.Visible:= LabelLayScr4.Visible;
   // console/computer systems
+
+  ClearIconImg(IconLayScr1);
+  ClearIconImg(IconLayScr2);
+  ClearIconImg(IconLayScr3);
+  ClearIconImg(IconLayScr4);
+
+  ClearIconImg(IconLayScr1_ConsComp);
+  ClearIconImg(IconLayScr2_ConsComp);
+  ClearIconImg(IconLayScr3_ConsComp);
+  ClearIconImg(IconLayScr4_ConsComp);
 end;
 
 procedure TFormImageLayoutSettings.PanelEnabledScr2Click(Sender: TObject);
@@ -703,7 +807,7 @@ end;
 
 procedure TFormImageLayoutSettings.ButtonHelpClick(Sender: TObject);
 begin
-  FormMain.InitMessageBox; //CallMessageBox;
+  FormMain.InitMessageBox;
   FormMain.AddMsgText('    Customize image categories for each layout'+#13#10+#13#10);
   FormMain.AddMsgText('1.', MsgTxtColors.colorWarning, [fsBold]);
   FormMain.AddMsgText(' Select a layout to setup.'+#13#10);
@@ -726,11 +830,14 @@ begin
   FormMain.AddMsgText(' button to save and apply changes or click ');
   FormMain.AddMsgText('Abort', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' button to cancel any changes you''ve made.');
-  GenerateMessage('Help', 'How to setup image layouts.', '', 2);
+  FormMain.ShowMessageBox('Help', 'How to setup image layouts.', '', 2);
 end;
 
 procedure TFormImageLayoutSettings.FormShow(Sender: TObject);
 begin
+  Resize4K;
+  FormMain.ELV_ResetNormalColors(LayoutListView);
+
   if IsNightMode then
      begin
        FormImageLayoutSettings.Color:= menu_background_color[1];
@@ -807,18 +914,26 @@ begin
        FormMain.SetButtonExColors(ButtonHelp_CustomCategoryConsComp);
 
        SetBottomPanelColors(PanelBottom);
+
+       FormMain.ELV_SetNightModeColors(LayoutListView);
      end;
 
-  LabelPanel2.Top:= LabelPanel1.Top;
-  LabelPanel3.Top:= LabelPanel1.Top;
-  FormMain.ELV_ResetNormalColors(LayoutListView);
+  if not Is4KMode then
+     begin
+       LabelPanel2.Top:= LabelPanel1.Top;
+       LabelPanel3.Top:= LabelPanel1.Top;
+     end;
+  //FormMain.ELV_ResetNormalColors(LayoutListView);
 
-  if IsNightMode then
-     FormMain.ELV_SetNightModeColors(LayoutListView);
+  //if IsNightMode then
+  //   FormMain.ELV_SetNightModeColors(LayoutListView);
 
   FormMain.LoadCategoriesIcons(IL_ImageCategory);
-  FormMain.LoadCategoriesIcons(IL_ImageCategory_ExtraLarge);
+  //FormMain.LoadCategoriesIcons(IL_ImageCategory_ExtraLarge);
   LoadLayoutIcons;
+
+  iFolder4K:= '4K\';
+  iFolder:= FormMain.GetFolderFull(35)+'img_layouts\';
 end;
 
 procedure TFormImageLayoutSettings.ShowHideLayoutsLabelClick(
@@ -979,7 +1094,7 @@ end;
 procedure TFormImageLayoutSettings.ButtonHelp_CustomCategoryConsCompClick(
   Sender: TObject);
 begin
-  FormMain.InitMessageBox; //CallMessageBox;
+  FormMain.InitMessageBox;
   FormMain.AddMsgText('    You can use alternate categories for console/computer systems and MAME software lists.'+#13#10+#13#10);
   FormMain.AddMsgText('1.', MsgTxtColors.colorWarning, [fsBold]);
   FormMain.AddMsgText(' Click panel icons to select an image category.'+#13#10);
@@ -992,7 +1107,7 @@ begin
   FormMain.AddMsgText('3.', MsgTxtColors.colorWarning, [fsBold]);
   FormMain.AddMsgText(' Repeat the process from step ');
   FormMain.AddMsgText('#1', MsgTxtColors.colorExitCode, [fsBold]);
-  FormMain.AddMsgText(' for other layouts.');
+  FormMain.AddMsgText(' for other layouts.'+#13#10);
   FormMain.AddMsgText('4.', MsgTxtColors.colorWarning, [fsBold]);
   FormMain.AddMsgText(' To hide/disable a layout, clear the checkbox in the layouts list.'+#13#10+#13#10+
                       '    When you''re done, click ');
@@ -1000,7 +1115,7 @@ begin
   FormMain.AddMsgText(' button to save and apply changes or click ');
   FormMain.AddMsgText('Abort', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' button to cancel any changes you''ve made.');
-  GenerateMessage('Help', 'Use Custom Category for Console/Computer.', '', 2);
+  FormMain.ShowMessageBox('Help', 'Use Custom Category for Console/Computer.', '', 2);
 end;
 
 

@@ -9,7 +9,7 @@ uses
 
 type
   TFormArcadeExportGamesList = class(TForm)
-    BottomBar: TPanelEx;
+    PanelBottom: TPanelEx;
     ButtonApplyAndExit: TBitBtnEx;
     ButtonCancel: TBitBtnEx;
     GroupExportOptionsAllGames: TAdvGroupBoxEx;
@@ -67,6 +67,7 @@ type
     procedure ReadSettings(LoadGameInfoColumnsOnly: Boolean = False);
     procedure WriteSettings;
     function  GenerateFile: Boolean;
+    procedure Resize4K;
   public
     { Public declarations }
   end;
@@ -79,6 +80,85 @@ implementation
 uses uMain, uCommon, uApplyFilterMsgBox;
 
 {$R *.dfm}
+
+procedure TFormArcadeExportGamesList.Resize4K;
+
+  procedure MoveCheckBox(iCheckBox, iPrevCheckBox: TAdvOfficeCheckBoxEx);
+  var
+    iTop: Integer;
+  begin
+    if iPrevCheckBox <> nil then
+       iTop:= iPrevCheckBox.Top+44
+    else
+       iTop:= 36;
+    FormMain.Set4KCheckBoxSpecs(iCheckBox, 10, iTop, 305, 36, 16);
+  end;
+
+begin
+  if not Is4KMode then
+     Exit;
+
+  with FormArcadeExportGamesList do
+  begin
+    ClientWidth:=  1057;
+    ClientHeight:= 730;
+    Font.Size:= 16;
+
+    TopBar.Height:= 90;
+    FormMain.Set4KLabelSpecs(LabelSelectMode, 21, 8, 1015, 61, 16);
+
+    // Export List
+    FormMain.Set4KPanelSpecs(PanelExportList, 10, 108, 355, 451);
+    FormMain.Set4KListViewSpecs(ExportList, -1, -1, PanelExportList.Width-4, PanelExportList.Height-4, 16, False, 16);
+    ExportList.PaintInfoGroup.BandLength:= 340;
+    ExportList.PaintInfoGroup.CaptionIndent:= 25;
+    ExportList.PaintInfoGroup.MarginTop.Size:= 36;
+    ExportList.CellSizes.Report.Height:= 37;
+
+    // MAME Content Manager Plus
+    FormMain.Set4KGroupBoxSpecs(GroupMAMEContentManagerPlus, 10, 577, 355, 72, 16);
+    FormMain.Set4KCheckBoxSpecs(MCMPlus_MAME,    10, 32, 125, 36, 16);
+    FormMain.Set4KCheckBoxSpecs(MCMPlus_HBMAME, 160, 32, 125, 36, 16);
+
+    // Export All Games
+    FormMain.Set4KGroupBoxSpecs(GroupExportOptionsAllGames, PanelExportList.Left+PanelExportList.Width+20, 100, 323, 549, 16);
+    MoveCheckBox(ExportOption_ArcadeGames, nil);
+    MoveCheckBox(ExportOption_NonArcadeMAMEMachines, ExportOption_ArcadeGames);
+    MoveCheckBox(ExportOption_MAMESoftwareListGames, ExportOption_NonArcadeMAMEMachines);
+    FormMain.Set4KLabelSpecs(LabelExportOption_MAMESoftwareListGames, 37, ExportOption_MAMESoftwareListGames.Top+36, -1, -1, 16);
+
+    MoveCheckBox(ExportOption_MAME, ExportOption_MAMESoftwareListGames);
+    ExportOption_MAME.Top:= LabelExportOption_MAMESoftwareListGames.Top+41;
+
+    MoveCheckBox(ExportOption_Supermodel3, ExportOption_MAME);
+    MoveCheckBox(ExportOption_Daphne, ExportOption_Supermodel3);
+    MoveCheckBox(ExportOption_Demul, ExportOption_Daphne);
+    MoveCheckBox(ExportOption_HBMAME, ExportOption_Demul);
+    MoveCheckBox(ExportOption_DICE, ExportOption_HBMAME);
+    MoveCheckBox(ExportOption_SegaModel2, ExportOption_DICE);
+    MoveCheckBox(ExportOption_ZiNc, ExportOption_SegaModel2);
+
+    // Game Info To Export
+    FormMain.Set4KGroupBoxSpecs(GroupExportOptionsGameColumnsFullFormat, GroupExportOptionsAllGames.Left+GroupExportOptionsAllGames.Width+20, 100, 319, 549, 16);
+    FormMain.Set4KListViewSpecs(GameInfoListToExport, 10, 36, GroupExportOptionsGameColumnsFullFormat.Width-20, 379, 16);
+    GameInfoListToExport.CellSizes.Report.Height:= 37;
+    FormMain.Set4KListViewCheckBoxHDSpecs(GameInfoListToExport);
+
+    FormMain.Set4KButtonSpecs(GameInfoListToExport_MoveUp,   10,  417, 70, 36, 16);
+    FormMain.Set4KButtonSpecs(GameInfoListToExport_MoveDown, 83,  417, 70, 36, 16);
+    FormMain.Set4KButtonSpecs(GameInfoListToExport_Reset,    156, 417, 70, 36, 16);
+    FormMain.Set4KButtonSpecs(GameInfoListToExport_Default,  229, 417, 80, 36, 16);
+
+    FormMain.Set4KCheckBoxSpecs(GameInfoToExport_UseGamesListVisibleColumns, 10, 465, 260, 36, 16);
+    FormMain.Set4KCheckBoxSpecs(GameInfoToExport_MicrosoftExcelFormat,       10, 509, 245, 36, 16);
+    FormMain.Set4KButtonSpecs(ButtonHelp_GameInfoToExport_MicrosoftExcelFormat, 273, 503, 36, 36, 16);
+
+    PanelBottom.Height:= 71;
+    FormMain.Set4KButtonSpecs(ButtonHelp, 10, 16, 89, 45, 16);
+    FormMain.Set4KButtonSpecs(ButtonCancel, PanelBottom.Width-168-10, 16, 168, 45, 16);
+    FormMain.Set4KButtonsOkCancelPanel(PanelBottom, ButtonApplyAndExit, ButtonApply);
+  end;
+end;
 
 procedure TFormArcadeExportGamesList.ReadSettings(LoadGameInfoColumnsOnly: Boolean = False);
 var
@@ -165,7 +245,7 @@ var
   Item: TEasyItem;
   TempStr: String;
 begin
-  if FormMain.CheckReadOnly(FormMain.GetFrontendExtraIniFile) then
+  if CheckReadOnly(FormMain.GetFrontendExtraIniFile) then
      Exit;
 
   try
@@ -516,27 +596,28 @@ begin
      end;
   FreeAndNil(ExportGames);
   FormMain.ClearMemGameInfo(FormMain.TempGameVars);
-  SetCurrentDir(FormMain.FrontendPath);
+  SetCurrentDir(FrontendPath);
 end;
 
 procedure TFormArcadeExportGamesList.FormShow(Sender: TObject);
 var
   Loop: Integer;
 begin
+  Resize4K;
   FormMain.ELV_ResetNormalColors(ExportList);
   FormMain.ELV_ResetNormalColors(GameInfoListToExport);
 
   if IsNightMode then
      begin
-       SetFormColors(FormArcadeExportGamesList, TopBar, BottomBar, LabelSelectMode, nil, nil, -1, True);
+       SetFormColors(FormArcadeExportGamesList, TopBar, PanelBottom, LabelSelectMode, nil, nil, -1, True);
 
        SetPanelBorderColors(PanelExportList, clrBorderGroupBoxGrayBk, clrInnerBorderGroupBoxGrayBk);
 
        FormMain.SetEasyListViewColors(ExportList, FormArcadeExportGamesList.Color, clWhite, clrLightRed, clGray);
-       FormMain.SetEasyListViewHeaderColors(ExportList, True);
+       FormMain.SetEasyListViewHeaderColors(ExportList, True, False, False);
 
        FormMain.SetEasyListViewColors(GameInfoListToExport, FormArcadeExportGamesList.Color, item_caption_active_color[1], clRed);
-       FormMain.SetEasyListViewHeaderColors(GameInfoListToExport, True);
+       FormMain.SetEasyListViewHeaderColors(GameInfoListToExport, True, False, False);
 
        FormMain.ELV_SetNightModeColors(ExportList);
        FormMain.ELV_SetNightModeColors(GameInfoListToExport);
@@ -615,7 +696,7 @@ end;
 
 procedure TFormArcadeExportGamesList.ButtonHelpClick(Sender: TObject);
 begin
-  FormMain.InitMessageBox;// CallMessageBox;
+  FormMain.InitMessageBox;
   FormMain.AddMsgText('    Use this feature to create a ');
   FormMain.AddMsgText('.txt', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' file of the current games list. There are three output formats to choose from:'+#13#10+#13#10);
@@ -657,13 +738,13 @@ begin
   FormMain.AddMsgText(FormMain.GetFrontendExtraIniFile, MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' file and are restored later so you won''t have to customize this feature all over again.');
 
-  GenerateMessage('Help', 'How to watch game video previews.');
+  FormMain.ShowMessageBox('Help', 'How to watch game video previews.');
 end;
 
 procedure TFormArcadeExportGamesList.ButtonHelp_GameInfoToExport_MicrosoftExcelFormatClick(
   Sender: TObject);
 begin
-  FormMain.InitMessageBox;// CallMessageBox;
+  FormMain.InitMessageBox;
   FormMain.AddMsgText('    You can use this setting to create a games list compatible with the ');
   FormMain.AddMsgText('Import', MsgTxtColors.colorKeyTitle, [fsBold]);
   FormMain.AddMsgText(' feature in ');
@@ -685,7 +766,7 @@ begin
                       '"Ragnagard / Shin-Oh-Ken","1996","ragnagrd","Saurus"'+#13#10+
                       '"Raiden (Rev. A)","1994","raiden","Atari"', MsgTxtColors.colorCmdLine, [], taLeftJustify, -1, 'Consolas');
 
-  GenerateMessage('Help', 'Microsoft Excel Format.');
+  FormMain.ShowMessageBox('Help', 'Microsoft Excel Format.');
 end;
 
 procedure TFormArcadeExportGamesList.GameInfoListToExport_ResetClick(Sender: TObject);
@@ -755,3 +836,4 @@ begin
 end;
 
 end.
+

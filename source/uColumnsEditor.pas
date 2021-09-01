@@ -35,7 +35,6 @@ type
     LabelTips: TShadowLabel;
     ButtonCustomizeColumnHeaderFont: TBitBtnEx;
     ButtonCustomizeColumnHeaderFontSetDefault: TBitBtnEx;
-    PanelColumnsList: TPanelEx;
     ColumnsListView: TEasyListview;
     procedure FormKeyPress(Sender: TObject; var Key: Char);
     procedure FormShow(Sender: TObject);
@@ -68,6 +67,7 @@ type
     procedure SetDefaultProfile;
     //procedure LoadProfile;
     function  SaveProfile: Boolean;
+    procedure Resize4K;
     { Private declarations }
   public
     { Public declarations }
@@ -81,6 +81,63 @@ implementation
 uses uMain, uCommon, uPreferences;
 
 {$R *.DFM}
+
+procedure TFormColumnsEditor.Resize4K;
+
+  procedure MoveButton(iButton, iPrevButton: TBitBtnEx; nButtons: Integer = 1);
+  begin
+    FormMain.Set4KButtonSpecs(iButton, 420, iPrevButton.Top+(iPrevButton.Height*nButtons)+(10*nButtons), 168, 36, 16);
+  end;
+
+begin
+  if not Is4KMode then
+     Exit;
+
+  with FormColumnsEditor do
+  begin
+    ColumnsListView.CellSizes.Report.Height:= 37;
+    ColumnsListView.PaintInfoItem.CheckIndent:= 2;
+    ColumnsListView.BorderWidth:= 8;
+    ColumnsListView.Header.Columns[0].Width:= 324;
+    ColumnsListView.Header.Columns[1].Width:= 70;
+    FormMain.Set4KListViewCheckBoxHDSpecs(ColumnsListView);
+
+    FormMain.Set4KListViewSpecs(ColumnsListView, 0, -2, 410, 910, 16, False); // "Consolas", size 16 - no vert text adjustment needed
+
+    FormMain.Set4KPanelSpecs(PanelTitleTip, ColumnsListView.Left+ColumnsListView.Width, 0, 455, 90);
+    FormMain.Set4KLabelSpecs(LabelTitleTip, 31, 6, 393, 47, 14);
+    ClientWidth:= ColumnsListView.Width+PanelTitleTip.Width;
+    ClientHeight:= ColumnsListView.Height-5;
+    Font.Size:= 16;
+
+    FormMain.Set4KPanelSpecs(PanelBottom, PanelTitleTip.Left, ClientHeight-71, PanelTitleTip.Width, 71);
+    FormMain.Set4KButtonsOkCancelPanel(PanelBottom, ButtonOk, ButtonCancel);
+
+    FormMain.Set4KLabelSpecs(LabelTips, 420, 653, 432, 116, 14);
+
+    FormMain.Set4KButtonSpecs(ButtonUp,   420,                             100, 79, 36, 16);
+    FormMain.Set4KButtonSpecs(ButtonDown, ButtonUp.Left+ButtonUp.Width+10, 100, 79, 36, 16);
+    MoveButton(ButtonEditWidth, ButtonUp);
+    FormMain.Set4KButtonSpecs(ButtonSizeDecrease, 420,                                                 ButtonEditWidth.Top+ButtonEditWidth.Height+10, 79, 36, 16);
+    FormMain.Set4KButtonSpecs(ButtonSizeIncrease, ButtonSizeDecrease.Left+ButtonSizeDecrease.Width+10, ButtonSizeDecrease.Top,                        79, 36, 16);
+    MoveButton(ButtonResetSize,     ButtonSizeDecrease);
+    MoveButton(ButtonDefaultSize,   ButtonResetSize);
+    MoveButton(ButtonReloadProfile, ButtonDefaultSize, 2);
+    MoveButton(ButtonDefault,       ButtonReloadProfile);
+    MoveButton(ButtonCustomizeColumnHeaderFont, ButtonDefault, 2);
+    ButtonCustomizeColumnHeaderFont.Width:= 235;
+    FormMain.Set4KButtonSpecs(ButtonCustomizeColumnHeaderFontSetDefault, ClientWidth-168-10, ButtonCustomizeColumnHeaderFont.Top, 168, 36, 16);
+
+    FormMain.Set4KLabelSpecs(LabelButtonUpDown,      597, ButtonUp.Top+1, -1, -1, 16);
+    FormMain.Set4KLabelSpecs(LabelButtonEditWidth,   597, ButtonEditWidth.Top+1, -1, -1, 16);
+    FormMain.Set4KLabelSpecs(LabelButtonSize,        597, ButtonSizeDecrease.Top+1, -1, -1, 16);
+    FormMain.Set4KLabelSpecs(LabelButtonResetSize,   597, ButtonResetSize.Top+1, -1, -1, 16);
+    FormMain.Set4KLabelSpecs(LabelButtonDefaultSize, 597, ButtonDefaultSize.Top+1, -1, -1, 16);
+    FormMain.Set4KLabelSpecs(LabelToggleVisibility,  597, ButtonDefaultSize.Top+ButtonDefaultSize.Height+10+1, -1, -1, 16);
+    FormMain.Set4KLabelSpecs(LabelButtonReloadProfileDefaultSettings, 597, ButtonReloadProfile.Top+1, -1, -1, 16);
+    FormMain.Set4KLabelSpecs(LabelButtonSetDefaultAll, 597, ButtonDefault.Top+1, -1, -1, 16);
+  end;
+end;
 
 procedure TFormColumnsEditor.MoveColumn(MoveUp: Boolean);
 var
@@ -245,6 +302,7 @@ procedure TFormColumnsEditor.FormShow(Sender: TObject);
 var
   Loop: Integer;
 begin
+  Resize4K;
   FormMain.ELV_ResetNormalColors(ColumnsListView);
   if FormMain.PanelMachinesList.Visible then
      FormColumnsEditor.Caption:= 'Customize Software List Columns';
@@ -258,7 +316,7 @@ begin
        FormColumnsEditor.Color:= menu_background_color[1];
        SetBottomPanelColors(PanelBottom);
 
-       PanelColumnsList.Color1:= clrLightBlack;
+       //PanelColumnsList.Color1:= clrLightBlack;
        FormMain.SetEasyListViewColors(ColumnsListView, clrLightBlack, clCream);
        FormMain.ELV_SetEditBkColor(ColumnsListView);
 

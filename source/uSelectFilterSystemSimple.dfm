@@ -17,7 +17,6 @@ object FormSelectFilterSystemSimple: TFormSelectFilterSystemSimple
   KeyPreview = True
   OldCreateOrder = False
   Scaled = False
-  OnActivate = FormActivate
   OnCloseQuery = FormCloseQuery
   OnKeyPress = FormKeyPress
   OnShow = FormShow
@@ -41,7 +40,7 @@ object FormSelectFilterSystemSimple: TFormSelectFilterSystemSimple
     object LabelMultiSelect: TShadowLabel
       Left = 300
       Top = 2
-      Width = 212
+      Width = 210
       Height = 16
       Caption = 'Hold Ctrl or Shift for multiple selections'
       Font.Charset = ANSI_CHARSET
@@ -53,6 +52,21 @@ object FormSelectFilterSystemSimple: TFormSelectFilterSystemSimple
       ShowAccelChar = False
       ShadowColor = 15856113
       ShadowEnabled = True
+      EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
+      Transparent = True
+    end
+    object LabelSysTotalSelected: TShadowLabel
+      Left = 235
+      Top = 26
+      Width = 112
+      Height = 16
+      Caption = '100 Systems Selected'
+      ShowAccelChar = False
+      ShadowColor = 15856113
+      ShadowEnabled = False
       EllipsType = etNone
       ColorFrame = clBlack
       ColorInnerFrame = clBlack
@@ -116,7 +130,7 @@ object FormSelectFilterSystemSimple: TFormSelectFilterSystemSimple
       Hint = 
         'Disable quick filter and reset to machine type / systems full fi' +
         'lter'
-      Caption = 'Reset To Default'
+      Caption = 'Disable Quick Filter'
       ParentShowHint = False
       ShowHint = True
       TabOrder = 4
@@ -131,7 +145,7 @@ object FormSelectFilterSystemSimple: TFormSelectFilterSystemSimple
     Height = 296
     BorderStyle = bsNone
     CellSizes.Tile.Height = 42
-    CellSizes.Tile.Width = 186
+    CellSizes.Tile.Width = 192
     CellSizes.Report.Height = 28
     Color = clWhite
     EditManager.Font.Charset = ANSI_CHARSET
@@ -199,6 +213,7 @@ object FormSelectFilterSystemSimple: TFormSelectFilterSystemSimple
     TabOrder = 1
     View = elsTile
     CustomCheckRadioEnabled = False
+    CustomEnableIconHD = False
     OnDblClick = ConsCompSystemsListViewDblClick
     OnItemImageDraw = ConsCompSystemsListViewItemImageDraw
     OnItemImageGetSize = ConsCompSystemsListViewItemImageGetSize

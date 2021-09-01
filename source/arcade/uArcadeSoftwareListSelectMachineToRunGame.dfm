@@ -18,7 +18,6 @@ object FormArcadeSoftwareListMachineToRunGame: TFormArcadeSoftwareListMachineToR
   Position = poScreenCenter
   Scaled = False
   OnCloseQuery = FormCloseQuery
-  OnCreate = FormCreate
   OnKeyPress = FormKeyPress
   OnShow = FormShow
   PixelsPerInch = 96
@@ -26,7 +25,7 @@ object FormArcadeSoftwareListMachineToRunGame: TFormArcadeSoftwareListMachineToR
   object LabelSoftwarelistTitleW: TShadowLabel
     Left = 79
     Top = 83
-    Width = 882
+    Width = 821
     Height = 14
     Alignment = taCenter
     AutoSize = False
@@ -50,7 +49,7 @@ object FormArcadeSoftwareListMachineToRunGame: TFormArcadeSoftwareListMachineToR
   object LabelTotalMachines: TShadowLabel
     Left = 8
     Top = 83
-    Width = 66
+    Width = 64
     Height = 15
     Caption = 'Total 000'
     Font.Charset = ANSI_CHARSET
@@ -69,7 +68,7 @@ object FormArcadeSoftwareListMachineToRunGame: TFormArcadeSoftwareListMachineToR
     Transparent = True
     Layout = tlCenter
   end
-  object BottomBar: TPanelEx
+  object PanelBottom: TPanelEx
     Left = 0
     Top = 521
     Width = 977
@@ -132,6 +131,9 @@ object FormArcadeSoftwareListMachineToRunGame: TFormArcadeSoftwareListMachineToR
       ReturnIsTab = False
       Themed = True
       CustomIconsEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
     object HidePreliminaryMachines: TAdvOfficeCheckBoxEx
       Left = 247
@@ -147,6 +149,9 @@ object FormArcadeSoftwareListMachineToRunGame: TFormArcadeSoftwareListMachineToR
       ReturnIsTab = False
       Themed = True
       CustomIconsEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
   end
   object TopBar: TPanelEx
@@ -229,119 +234,106 @@ object FormArcadeSoftwareListMachineToRunGame: TFormArcadeSoftwareListMachineToR
       Transparent = True
     end
   end
-  object FrameMachinesList: TPanelEx
+  object MachinesListView: TEasyListview
     Left = 8
     Top = 99
     Width = 961
     Height = 413
-    Color1 = clBlue
-    Color2 = 1
-    Color3 = 7891291
-    Color4 = 16750899
-    ColorFrame = clSilver
-    ColorInnerFrame = 7891291
-    Frames = [frLeft, frTop, frRight, frBottom]
-    ParentBackground = False
-    Style = vgSolid
-    object MachinesListView: TEasyListview
-      Left = 1
-      Top = 2
-      Width = 958
-      Height = 409
-      CellSizes.Report.Height = 20
-      Color = clWhite
-      DisabledBlendAlpha = 0
-      EditManager.Font.Charset = ANSI_CHARSET
-      EditManager.Font.Color = clBlack
-      EditManager.Font.Height = -12
-      EditManager.Font.Name = 'Segoe UI'
-      EditManager.Font.Style = []
-      ImagesState = FormMain.IL_GroupedMode
-      UseDockManager = False
-      Font.Charset = ANSI_CHARSET
-      Font.Color = clBlack
-      Font.Height = -12
-      Font.Name = 'Segoe UI'
-      Font.Style = []
-      GroupFont.Charset = ANSI_CHARSET
-      GroupFont.Color = clBlack
-      GroupFont.Height = -12
-      GroupFont.Name = 'Segoe UI'
-      GroupFont.Style = []
-      HintType = ehtToolTip
-      Header.Columns.Items = {
-        0600000007000000110000005445617379436F6C756D6E53746F726564FFFECE
-        0006000000800800010100010000000000000169010000FFFFFF1F0001000000
-        01000000070000004D0061006300680069006E00650000000000000000000000
-        0000110000005445617379436F6C756D6E53746F726564FFFECE000600000080
-        080001010001010000000000016E000000FFFFFF1F0001000000010000000400
-        00004E0061006D00650000000000000000000000000011000000544561737943
-        6F6C756D6E53746F726564FFFECE000600000080080001010001020000000000
-        01E6000000FFFFFF1F0001000000010000000C0000004D0061006E0075006600
-        6100630074007500720065007200000000000000000000000000110000005445
-        617379436F6C756D6E53746F726564FFFECE0006000000800800010100010300
-        00000000012D000000FFFFFF1F0001000000010000000200000048007A000000
-        00000000000000000000110000005445617379436F6C756D6E53746F726564FF
-        FECE000600000080080001010001040000000000016E000000FFFFFF1F000100
-        0000010000000800000043006C006F006E00650020006F006600000000000000
-        000000000000110000005445617379436F6C756D6E53746F726564FFFECE0006
-        000000800800010100010500000000000155000000FFFFFF1F00010000000100
-        00000A0000005300610076006500200053007400610074006500000000000000
-        000000000000110000005445617379436F6C756D6E53746F726564FFFECE0006
-        000000800800010100010600000000000011000000FFFFFF1F00010000000000
-        0000000000000000000000000000}
-      Header.Draggable = False
-      Header.Font.Charset = ANSI_CHARSET
-      Header.Font.Color = clBlack
-      Header.Font.Height = -12
-      Header.Font.Name = 'Segoe UI'
-      Header.Font.Style = []
-      Header.Height = 23
-      Header.Sizeable = False
-      Header.Visible = True
-      IncrementalSearch.Enabled = True
-      IncrementalSearch.ResetTime = 1000
-      IncrementalSearch.StartType = eissFocusedNode
-      ImagesSmall = FormMain.IL_StandardIconsSmall
-      PaintInfoColumn.CaptionIndent = 0
-      PaintInfoGroup.BandBlended = False
-      PaintInfoGroup.BandEnabled = False
-      PaintInfoGroup.Expandable = False
-      PaintInfoGroup.MarginBottom.Size = 0
-      PaintInfoGroup.MarginBottom.Visible = True
-      PaintInfoGroup.MarginBottom.CaptionIndent = 4
-      PaintInfoGroup.MarginTop.Size = 20
-      PaintInfoItem.BorderColor = 16370824
-      PaintInfoItem.ImageIndent = 0
-      PaintInfoItem.ShowBorder = False
-      ParentFont = False
-      ParentShowHint = False
-      ShowThemedBorder = False
-      ShowHint = True
-      Selection.BlendAlphaImage = 0
-      Selection.BlendColorSelRect = 10902593
-      Selection.BlendIcon = False
-      Selection.BorderColor = 10902593
-      Selection.BorderColorSelRect = 10902593
-      Selection.Color = 10902593
-      Selection.FullCellPaint = True
-      Selection.FullItemPaint = True
-      Selection.FullRowSelect = True
-      Selection.GradientColorBottom = 16506264
-      Selection.GradientColorTop = 15582647
-      Selection.InactiveBorderColor = 10902593
-      Selection.InactiveColor = 15582647
-      Selection.MouseButton = [cmbLeft, cmbRight]
-      Selection.RoundRectRadius = 2
-      Selection.TextColor = clBlack
-      Selection.UseFocusRect = False
-      TabOrder = 0
-      View = elsReport
-      CustomCheckRadioEnabled = False
-      OnColumnClick = MachinesListViewColumnClick
-      OnDblClick = MachinesListViewDblClick
-      OnItemPaintText = MachinesListViewItemPaintText
-      OnItemSelectionChanged = MachinesListViewItemSelectionChanged
-    end
+    CellSizes.Report.Height = 20
+    Color = clWhite
+    DisabledBlendAlpha = 0
+    EditManager.Font.Charset = ANSI_CHARSET
+    EditManager.Font.Color = clBlack
+    EditManager.Font.Height = -12
+    EditManager.Font.Name = 'Segoe UI'
+    EditManager.Font.Style = []
+    ImagesState = FormMain.IL_GroupedMode
+    UseDockManager = False
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clBlack
+    Font.Height = -12
+    Font.Name = 'Segoe UI'
+    Font.Style = []
+    GroupFont.Charset = ANSI_CHARSET
+    GroupFont.Color = clBlack
+    GroupFont.Height = -12
+    GroupFont.Name = 'Segoe UI'
+    GroupFont.Style = []
+    HintType = ehtToolTip
+    Header.Columns.Items = {
+      0600000007000000110000005445617379436F6C756D6E53746F726564FFFECE
+      0006000000800800010100010000000000000169010000FFFFFF1F0001000000
+      01000000070000004D0061006300680069006E00650000000000000000000000
+      0000110000005445617379436F6C756D6E53746F726564FFFECE000600000080
+      080001010001010000000000016E000000FFFFFF1F0001000000010000000400
+      00004E0061006D00650000000000000000000000000011000000544561737943
+      6F6C756D6E53746F726564FFFECE000600000080080001010001020000000000
+      01E6000000FFFFFF1F0001000000010000000C0000004D0061006E0075006600
+      6100630074007500720065007200000000000000000000000000110000005445
+      617379436F6C756D6E53746F726564FFFECE0006000000800800010100010300
+      00000000012D000000FFFFFF1F0001000000010000000200000048007A000000
+      00000000000000000000110000005445617379436F6C756D6E53746F726564FF
+      FECE000600000080080001010001040000000000016E000000FFFFFF1F000100
+      0000010000000800000043006C006F006E00650020006F006600000000000000
+      000000000000110000005445617379436F6C756D6E53746F726564FFFECE0006
+      000000800800010100010500000000000155000000FFFFFF1F00010000000100
+      00000A0000005300610076006500200053007400610074006500000000000000
+      000000000000110000005445617379436F6C756D6E53746F726564FFFECE0006
+      000000800800010100010600000000000011000000FFFFFF1F00010000000000
+      0000000000000000000000000000}
+    Header.Draggable = False
+    Header.Font.Charset = ANSI_CHARSET
+    Header.Font.Color = clBlack
+    Header.Font.Height = -12
+    Header.Font.Name = 'Segoe UI'
+    Header.Font.Style = []
+    Header.Height = 23
+    Header.Sizeable = False
+    Header.Visible = True
+    IncrementalSearch.Enabled = True
+    IncrementalSearch.ResetTime = 1000
+    IncrementalSearch.StartType = eissFocusedNode
+    ImagesSmall = FormMain.IL_StandardIconsSmall
+    PaintInfoColumn.CaptionIndent = 0
+    PaintInfoGroup.BandBlended = False
+    PaintInfoGroup.BandEnabled = False
+    PaintInfoGroup.Expandable = False
+    PaintInfoGroup.MarginBottom.Size = 0
+    PaintInfoGroup.MarginBottom.Visible = True
+    PaintInfoGroup.MarginBottom.CaptionIndent = 4
+    PaintInfoGroup.MarginTop.Size = 20
+    PaintInfoItem.BorderColor = 16370824
+    PaintInfoItem.ImageIndent = 0
+    PaintInfoItem.ShowBorder = False
+    ParentFont = False
+    ParentShowHint = False
+    ShowThemedBorderColor = 14671839
+    ShowHint = True
+    Selection.BlendAlphaImage = 0
+    Selection.BlendColorSelRect = 10902593
+    Selection.BlendIcon = False
+    Selection.BorderColor = 10902593
+    Selection.BorderColorSelRect = 10902593
+    Selection.Color = 10902593
+    Selection.FullCellPaint = True
+    Selection.FullItemPaint = True
+    Selection.FullRowSelect = True
+    Selection.GradientColorBottom = 16506264
+    Selection.GradientColorTop = 15582647
+    Selection.InactiveBorderColor = 10902593
+    Selection.InactiveColor = 15582647
+    Selection.MouseButton = [cmbLeft, cmbRight]
+    Selection.RoundRectRadius = 2
+    Selection.TextColor = clBlack
+    Selection.UseFocusRect = False
+    TabOrder = 2
+    View = elsReport
+    CustomCheckRadioEnabled = False
+    CustomEnableIconHD = False
+    OnColumnClick = MachinesListViewColumnClick
+    OnDblClick = MachinesListViewDblClick
+    OnItemCompare = MachinesListViewItemCompare
+    OnItemPaintText = MachinesListViewItemPaintText
+    OnItemSelectionChanged = MachinesListViewItemSelectionChanged
   end
 end

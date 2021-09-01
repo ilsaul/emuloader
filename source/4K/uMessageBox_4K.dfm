@@ -16,6 +16,7 @@ object FormMessageBox4K: TFormMessageBox4K
   OldCreateOrder = False
   Position = poScreenCenter
   Scaled = False
+  OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
   OnKeyPress = FormKeyPress
   OnShow = FormShow
@@ -39,16 +40,16 @@ object FormMessageBox4K: TFormMessageBox4K
     Steps = 80
     object MessageIcon: TImage
       Tag = -1
-      Left = 4
-      Top = 4
+      Left = 10
+      Top = 10
       Width = 128
       Height = 128
       Transparent = True
     end
     object LabelGameTitle: TShadowLabel
-      Left = 144
-      Top = 4
-      Width = 1125
+      Left = 150
+      Top = 10
+      Width = 1119
       Height = 59
       AutoSize = False
       Caption = 
@@ -72,12 +73,14 @@ object FormMessageBox4K: TFormMessageBox4K
       WordWrap = True
     end
     object LabelGameName: TShadowLabel
-      Left = 199
-      Top = 84
+      Left = 205
+      Top = 90
       Width = 1069
       Height = 47
       AutoSize = False
-      Caption = 'name: gamename [clone of gamename] [bios: biosname]'
+      Caption = 
+        'name: gamename [clone of gamename] [bios: biosname]'#13#10'emulator ve' +
+        'rsion'
       Font.Charset = ANSI_CHARSET
       Font.Color = 3289650
       Font.Height = -19
@@ -96,8 +99,8 @@ object FormMessageBox4K: TFormMessageBox4K
       Visible = False
     end
     object IconMediaType: TImage
-      Left = 143
-      Top = 84
+      Left = 149
+      Top = 90
       Width = 48
       Height = 48
       IncrementalDisplay = True
@@ -128,8 +131,9 @@ object FormMessageBox4K: TFormMessageBox4K
       Caption = 'Yes'
       ModalResult = 6
       ParentShowHint = False
-      ShowHint = True
+      ShowHint = False
       TabOrder = 0
+      CaptionVertIndent = -1
     end
     object ButtonNo: TBitBtnEx
       Left = 640
@@ -139,8 +143,9 @@ object FormMessageBox4K: TFormMessageBox4K
       Caption = 'No'
       ModalResult = 7
       ParentShowHint = False
-      ShowHint = True
+      ShowHint = False
       TabOrder = 1
+      CaptionVertIndent = -1
     end
     object ButtonYestoAll: TBitBtnEx
       Left = 281
@@ -156,6 +161,7 @@ object FormMessageBox4K: TFormMessageBox4K
       ShowHint = True
       TabOrder = 2
       Visible = False
+      CaptionVertIndent = -1
     end
     object ButtonAbort: TBitBtnEx
       Left = 831
@@ -169,21 +175,47 @@ object FormMessageBox4K: TFormMessageBox4K
       ShowHint = True
       TabOrder = 3
       Visible = False
+      CaptionVertIndent = -1
     end
     object NightMode: TAdvOfficeCheckBoxEx
       Left = 24
-      Top = 17
+      Top = 22
       Width = 157
-      Height = 38
+      Height = 36
       Hint = 'Check to use a dark theme'
       ShowHint = True
       TabOrder = 4
       OnClick = NightModeClick
       Alignment = taLeftJustify
+      ButtonVertAlign = tlCenter
       Caption = 'Night Mode'
       ReturnIsTab = False
       Themed = True
       CustomIconsEnabled = False
+      CustomEnableIconHD = True
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
+    end
+    object HideCommandLineRunConfirm: TAdvOfficeCheckBoxEx
+      Left = 1023
+      Top = 22
+      Width = 245
+      Height = 36
+      Hint = 
+        'To view the full command line again'#13#10'enable "Run Game Confirmati' +
+        'on Dialog" in main menu'
+      ShowHint = True
+      TabOrder = 5
+      Visible = False
+      Alignment = taLeftJustify
+      ButtonVertAlign = tlCenter
+      Caption = 'Don'#39't Show This Again'
+      ReturnIsTab = False
+      Themed = True
+      CustomIconsEnabled = False
+      CustomEnableIconHD = True
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
   end
   object LabelMessageW: TTntRichEdit

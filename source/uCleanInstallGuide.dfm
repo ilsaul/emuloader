@@ -16,7 +16,7 @@ object FormCleanInstallGuide: TFormCleanInstallGuide
   OldCreateOrder = False
   Position = poScreenCenter
   Scaled = False
-  OnCreate = FormCreate
+  OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 15
   object ImageCleanInstall: TImage32
@@ -32,6 +32,50 @@ object FormCleanInstallGuide: TFormCleanInstallGuide
     Scale = 1.000000000000000000
     ScaleMode = smNormal
     TabOrder = 0
+    object LabelOption_SelectArcadeEmulators_FileStatus: TShadowLabel
+      Left = 351
+      Top = 154
+      Width = 137
+      Height = 13
+      Hint = '[config file'
+      Caption = 'config file found'
+      Font.Charset = OEM_CHARSET
+      Font.Color = clLime
+      Font.Height = -12
+      Font.Name = 'Terminal'
+      Font.Style = []
+      ParentFont = False
+      ShowAccelChar = False
+      ShadowColor = clGreen
+      ShadowEnabled = True
+      EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
+      Transparent = True
+    end
+    object LabelOption_SelectConsoleComputerGamesFolders_FileStatus: TShadowLabel
+      Left = 346
+      Top = 241
+      Width = 201
+      Height = 13
+      Hint = '[folders config file'
+      Caption = 'folders config file found'
+      Font.Charset = OEM_CHARSET
+      Font.Color = clLime
+      Font.Height = -12
+      Font.Name = 'Terminal'
+      Font.Style = []
+      ParentFont = False
+      ShowAccelChar = False
+      ShadowColor = clGreen
+      ShadowEnabled = True
+      EllipsType = etNone
+      ColorFrame = clBlack
+      ColorInnerFrame = clBlack
+      Frames = []
+      Transparent = True
+    end
     object LabelQuickSetupGuide: TShadowLabel
       Left = 153
       Top = 309
@@ -58,50 +102,6 @@ object FormCleanInstallGuide: TFormCleanInstallGuide
       OnMouseEnter = LabelQuickSetupGuideMouseEnter
       OnMouseLeave = LabelQuickSetupGuideMouseLeave
     end
-    object LabelOption_SelectArcadeEmulators_FileStatus: TShadowLabel
-      Left = 351
-      Top = 154
-      Width = 155
-      Height = 13
-      Hint = '[config file'
-      Caption = '[config file found]'
-      Font.Charset = OEM_CHARSET
-      Font.Color = clLime
-      Font.Height = -12
-      Font.Name = 'Terminal'
-      Font.Style = []
-      ParentFont = False
-      ShowAccelChar = False
-      ShadowColor = clGreen
-      ShadowEnabled = True
-      EllipsType = etNone
-      ColorFrame = clBlack
-      ColorInnerFrame = clBlack
-      Frames = []
-      Transparent = True
-    end
-    object LabelOption_SelectConsoleComputerGamesFolders_FileStatus: TShadowLabel
-      Left = 346
-      Top = 241
-      Width = 219
-      Height = 13
-      Hint = '[folders config file'
-      Caption = '[folders config file found]'
-      Font.Charset = OEM_CHARSET
-      Font.Color = clLime
-      Font.Height = -12
-      Font.Name = 'Terminal'
-      Font.Style = []
-      ParentFont = False
-      ShowAccelChar = False
-      ShadowColor = clGreen
-      ShadowEnabled = True
-      EllipsType = etNone
-      ColorFrame = clBlack
-      ColorInnerFrame = clBlack
-      Frames = []
-      Transparent = True
-    end
     object Option_SelectArcadeEmulators: TAdvOfficeCheckBoxEx
       Left = 10
       Top = 150
@@ -121,6 +121,9 @@ object FormCleanInstallGuide: TFormCleanInstallGuide
       State = cbChecked
       Themed = True
       CustomIconsEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
     object Option_CreateArcadeGamesList: TAdvOfficeCheckBoxEx
       Left = 10
@@ -141,6 +144,9 @@ object FormCleanInstallGuide: TFormCleanInstallGuide
       State = cbChecked
       Themed = True
       CustomIconsEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
     object Option_SelectConsoleComputerEmulators: TAdvOfficeCheckBoxEx
       Left = 10
@@ -161,6 +167,9 @@ object FormCleanInstallGuide: TFormCleanInstallGuide
       State = cbChecked
       Themed = True
       CustomIconsEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
     object Option_SelectConsoleComputerGamesFolders: TAdvOfficeCheckBoxEx
       Left = 10
@@ -181,6 +190,9 @@ object FormCleanInstallGuide: TFormCleanInstallGuide
       State = cbChecked
       Themed = True
       CustomIconsEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
     object Option_CreateConsoleComputerGamesList: TAdvOfficeCheckBoxEx
       Left = 10
@@ -201,6 +213,9 @@ object FormCleanInstallGuide: TFormCleanInstallGuide
       State = cbChecked
       Themed = True
       CustomIconsEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
     object NightMode: TAdvOfficeCheckBoxEx
       Left = 8
@@ -208,6 +223,7 @@ object FormCleanInstallGuide: TFormCleanInstallGuide
       Width = 169
       Height = 20
       Hint = 'Check to use a dark theme'
+      Checked = True
       Font.Charset = ANSI_CHARSET
       Font.Color = 12574688
       Font.Height = -12
@@ -221,14 +237,19 @@ object FormCleanInstallGuide: TFormCleanInstallGuide
       ReturnIsTab = False
       ShadowEnabled = True
       ShadowColor = 4213580
+      State = cbChecked
       Themed = True
       CustomIconsEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
     object UseAlternateFrontendIcons: TAdvOfficeCheckBoxEx
       Left = 8
       Top = 365
       Width = 257
       Height = 20
+      Hint = 'Use frontend icons from the "alternate" folders'
       Font.Charset = ANSI_CHARSET
       Font.Color = 12574688
       Font.Height = -12
@@ -243,6 +264,9 @@ object FormCleanInstallGuide: TFormCleanInstallGuide
       ShadowColor = 4213580
       Themed = True
       CustomIconsEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
     object ButtonSkip: TBitBtnEx
       Left = 339
@@ -278,6 +302,34 @@ object FormCleanInstallGuide: TFormCleanInstallGuide
       ShowHint = True
       TabOrder = 8
       OnClick = ButtonCancelClick
+    end
+    object UltraHD_4KModeDisable: TAdvOfficeCheckBoxEx
+      Left = 8
+      Top = 324
+      Width = 169
+      Height = 20
+      Hint = 
+        'Frontend elements scale to a 4K resolution (check to disable tha' +
+        't)'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = 12574688
+      Font.Height = -12
+      Font.Name = 'Segoe UI'
+      Font.Style = []
+      ParentFont = False
+      ShowHint = True
+      TabOrder = 10
+      Visible = False
+      OnClick = UltraHD_4KModeDisableClick
+      Alignment = taLeftJustify
+      ReturnIsTab = False
+      ShadowEnabled = True
+      ShadowColor = 4213580
+      Themed = True
+      CustomIconsEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
   end
 end

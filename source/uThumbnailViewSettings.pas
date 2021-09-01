@@ -6,10 +6,10 @@ uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, ComCtrls,
   StdCtrls, ExtCtrls, Buttons, GraphicEx, AdvOfficeButtons,
   MPCommonObjects, EasyListview, MPCommonUtilities, ShadowLabel, ImgList, PanelEx,
-  uMain, uCommon, ButtonsEx, AdvGroupBox, ColorBoxEx, XiTrackBar;
+  uMain, uCommon, uCommonCustom, ButtonsEx, AdvGroupBox, ColorBoxEx, XiTrackBar;
 
 type
-  TFormThumbnailView = class(TForm)
+  TFormThumbnailViewSettings = class(TForm)
     LabelGridWidthSize: TShadowLabel;
     BorderColor: TColorBoxEx;
     ShowBorder: TAdvOfficeCheckBoxEx;
@@ -20,7 +20,6 @@ type
     LabelGridHeightSize: TShadowLabel;
     LabelImageSize: TShadowLabel;
     ELV_ThumbnailPreview: TEasyListview;
-    IL_Thumbnail: TImageList;
     ButtonGridWidthSize_Decrease: TBitBtnEx;
     ButtonGridWidthSize_Increase: TBitBtnEx;
     ButtonGridHeightSize_Decrease: TBitBtnEx;
@@ -33,7 +32,7 @@ type
     LabelImageSizeValue: TShadowLabel;
     LabelGridWidthSizeValue: TShadowLabel;
     LabelGridHeightSizeValue: TShadowLabel;
-    IconsGroupBox: TAdvGroupBoxEx;
+    OverlayIconsGroupBox: TAdvGroupBoxEx;
     ShowSystemIcon: TAdvOfficeCheckBoxEx;
     ShowFavoriteIcon: TAdvOfficeCheckBoxEx;
     ShowMediaTypeIcon: TAdvOfficeCheckBoxEx;
@@ -46,8 +45,9 @@ type
     ShowSpecialIcon: TAdvOfficeCheckBoxEx;
     GridWidthSize: TXiTrackBar;
     GridWidthSizeLabelBottom: TShadowLabel;
-    ShadowLabel1: TShadowLabel;
+    GridHeightSizeLabelBottom: TShadowLabel;
     GridHeightSize: TXiTrackBar;
+    HideThumbnailImages: TAdvOfficeCheckBoxEx;
     procedure FormKeyPress(Sender: TObject; var Key: Char);
     procedure ButtonGridDefaultClick(Sender: TObject);
     procedure ButtonApplyClick(Sender: TObject);
@@ -79,8 +79,10 @@ type
     procedure ShowSpecialIconClick(Sender: TObject);
     procedure GridWidthSizeChange(Sender: TObject);
     procedure GridHeightSizeChange(Sender: TObject);
+    procedure HideThumbnailImagesClick(Sender: TObject);
   private
     { Private declarations }
+    sysIconIndex1, sysIconIndex2: Integer;
     tImageWidth, tImageHeight: Integer; // this is the maximum width x height bounds of the thumb image
     ThumbImageOriginal, ThumbImageResized: array[1..2] of TPNGGraphic; // 1 -> horizontal image; 2 -> vertical image
     ThumbnailLeftMargin, ThumbnailTopMargin: array[1..2] of Byte;
@@ -108,25 +110,109 @@ type
 
     procedure UpdateImageSize(UpdateWidth, UpdateHeight: Boolean; ForceUpdate: Boolean = False);
     procedure UpdateImageListSize;
-    function  MakeThumbnailPreview(abmp: TPNGGraphic; NuWidth, NuHeight: Integer; ThumbnailIndex: Byte): Boolean; // using Scanline mode... fastest :)
+    function  MakeThumbnailPreview(abmp: TPNGGraphic; NuWidth, NuHeight: Integer; ThumbnailIndex: Byte): Boolean; // using Scanline mode, fastest :)
     procedure LoadThumbImage;
     procedure UpdateThumbnail(ThumbnailIndex: Byte);
     procedure ItemThumbnailShowIcons(Item: TEasyItem; ACanvas: TCanvas; ARect: TRect);
     procedure UpdateIcons;
     procedure ELV_Update;
+    procedure Resize4K;
   public
     { Public declarations }
     iModalResult: Integer;
   end;
 
 var
-  FormThumbnailView: TFormThumbnailView;
+  FormThumbnailViewSettings: TFormThumbnailViewSettings;
 
 implementation
 
 {$R *.dfm}
 
-procedure TFormThumbnailView.FormKeyPress(Sender: TObject; var Key: Char);
+procedure TFormThumbnailViewSettings.Resize4K;
+
+  function MoveGridButtons(iButtonDecrease, iButtonIncrease: TBitBtnEx; iLabel: TShadowLabel): Boolean;
+  begin
+    Result:= True;
+    FormMain.Set4KButtonSpecs(iButtonDecrease, 10, iLabel.Top+30, 39, 39, 16);
+    FormMain.Set4KButtonSpecs(iButtonIncrease, ClientWidth-39-10, iLabel.Top+30, 39, 39, 16);
+  end;
+
+  function MoveGridSizeControls(iGrid: TXiTrackBar; iGridLabel: TShadowLabel; iButtonDecrease: TBitBtnEx): Boolean;
+  begin
+    Result:= True;
+    FormMain.Set4KTrackBarSpecs(iGrid, iButtonDecrease.Left+iButtonDecrease.Width+4, iButtonDecrease.Top-3, 734, 45);
+    FormMain.Set4KLabelSpecs(iGridLabel, iGrid.Left, iGrid.Top+49, -1, -1, 16);
+    iGridLabel.Caption:= '120           190            260            330           400';
+  end;
+
+begin
+  if not Is4KMode then
+     Exit;
+
+  with FormThumbnailViewSettings do
+  begin
+    ClientWidth:=   840;
+    ClientHeight:= 1075;
+    Font.Size:= 16;
+    FormMain.Set4KListViewSpecs(ELV_ThumbnailPreview, 10, 10, -1, -1, 16);
+
+    FormMain.Set4KLabelSpecs(LabelImageSize, 273, 418, 295, 33, 16);
+    LabelImageSize.Caption:= 'Image Size:               pixels';
+    FormMain.Set4KLabelSpecs(LabelImageSizeValue, 403, LabelImageSize.Top, 93, 33, 16);
+
+    FormMain.Set4KCheckBoxSpecs(HideThumbnailImages, 10, LabelImageSize.Top-2, 250, 36, 16);
+
+    // horizontal grid
+    FormMain.Set4KLabelSpecs(LabelGridWidthSize, 10, LabelImageSize.Top+50, 287, 31, 16);
+    FormMain.Set4KLabelSpecs(LabelGridWidthSizeValue, 200, LabelGridWidthSize.Top, 37, 31, 16);
+
+    MoveGridButtons(ButtonGridWidthSize_Decrease, ButtonGridWidthSize_Increase, LabelGridWidthSize);
+    MoveGridSizeControls(GridWidthSize, GridWidthSizeLabelBottom, ButtonGridWidthSize_Decrease);
+
+    // vertical grid
+    FormMain.Set4KLabelSpecs(LabelGridHeightSize, 10, GridWidthSizeLabelBottom.Top+44, 259, 31, 16);
+    FormMain.Set4KLabelSpecs(LabelGridHeightSizeValue, 172, LabelGridHeightSize.Top, 37, 31, 16);
+
+    MoveGridButtons(ButtonGridHeightSize_Decrease, ButtonGridHeightSize_Increase, LabelGridHeightSize);
+    MoveGridSizeControls(GridHeightSize, GridHeightSizeLabelBottom, ButtonGridHeightSize_Decrease);
+
+    // CheckBox
+    FormMain.Set4KCheckBoxSpecs(ShowBorder,           10, GridHeightSizeLabelBottom.Top+44, 150, 36, 16);
+    FormMain.Set4KCheckBoxSpecs(ShowGameTitles,      233, ShowBorder.Top, 185, 36, 16);
+    FormMain.Set4KCheckBoxSpecs(MaintainAspectRatio, 582, ShowBorder.Top, 240, 36, 16);
+
+    FormMain.Set4KColorBoxSpecs(BorderColor, 10, ShowBorder.Top+46);
+    FormMain.Set4KButtonSpecs(BorderColorDefault, BorderColor.Left+BorderColor.Width+5, BorderColor.Top, 89, 36, 16);
+
+    FormMain.Set4KCheckBoxSpecs(ShowPreviewScreenshotsPanel, MaintainAspectRatio.Left, MaintainAspectRatio.Top+46, 255, 36, 16);
+
+    FormMain.Set4KGroupBoxSpecs(OverlayIconsGroupBox, 10, BorderColor.Top+64, ClientWidth-20, 175, 16);
+    FormMain.Set4KCheckBoxSpecs(ShowIconsWithNoThumbnail, 10, 36, 325, 36, 16);
+
+    FormMain.Set4KCheckBoxSpecs(ShowSystemIcon, 10, ShowIconsWithNoThumbnail.Top+46, 95, 36, 16);
+    FormMain.Set4KComboBoxSpecs(SystemIconSize, 112, ShowSystemIcon.Top, 217);
+
+    FormMain.Set4KCheckBoxSpecs(ShowMediaTypeIcon, 10, ShowSystemIcon.Top+46, 95, 36, 16);
+    FormMain.Set4KComboBoxSpecs(MediaTypeIconSize, 112, ShowMediaTypeIcon.Top, 217);
+
+    FormMain.Set4KCheckBoxSpecs(ShowGameIcon,     442, ShowIconsWithNoThumbnail.Top, 135, 36, 16);
+    FormMain.Set4KCheckBoxSpecs(ShowFavoriteIcon, 442, ShowSystemIcon.Top,           135, 36, 16);
+    FormMain.Set4KCheckBoxSpecs(ShowSpecialIcon,  442, ShowMediaTypeIcon.Top,        135, 36, 16);
+
+    FormMain.Set4KRadioButtonSpecs(ThumbLeftAlignIcons,  681, ShowFavoriteIcon.Top, 135, 36, 16);
+    FormMain.Set4KRadioButtonSpecs(ThumbRightAlignIcons, 681, ShowSpecialIcon.Top,  135, 36, 16);
+
+    PanelBottom.Height:= 71;
+    FormMain.Set4KButtonSpecs(ButtonGridDefault, 10, 16, 180, 45, 16);
+
+    FormMain.Set4KButtonSpecs(ButtonAbort, ClientWidth-10-168, 16, 168, 45, 16);
+    FormMain.Set4KButtonSpecs(ButtonConfirm, ButtonAbort.Left-10-168, 16, 168, 45, 16);
+    FormMain.Set4KButtonSpecs(ButtonApply, ButtonConfirm.Left-10-168, 16, 168, 45, 16);
+  end;
+end;
+
+procedure TFormThumbnailViewSettings.FormKeyPress(Sender: TObject; var Key: Char);
 begin
   case Key of
     #13: ButtonApply.Click;
@@ -134,19 +220,27 @@ begin
   end;
 end;
 
-procedure TFormThumbnailView.ButtonGridDefaultClick(Sender: TObject);
+procedure TFormThumbnailViewSettings.ButtonGridDefaultClick(Sender: TObject);
 begin
-  GridWidthSize.Position:= 144;
-  GridHeightSize.Position:= 178;
+  if Is4KMode then
+     begin
+       GridWidthSize.Position:=  272; // 256 icon width
+       GridHeightSize.Position:= 332; // 256 icon height
+     end
+  else
+     begin
+       GridWidthSize.Position:=  144; // 128 icon width
+       GridHeightSize.Position:= 178; // 128 icon height
+     end;
   ELV_ThumbnailPreview.Invalidate;
 end;
 
-procedure TFormThumbnailView.ButtonApplyClick(Sender: TObject);
+procedure TFormThumbnailViewSettings.ButtonApplyClick(Sender: TObject);
 var
   UpdateSettings, UpdateCellGrid: Boolean;
 begin
   iModalResult:= TBitBtnEx(Sender).ModalResult;
-  FormThumbnailView.ModalResult:= TBitBtnEx(Sender).ModalResult;
+  FormThumbnailViewSettings.ModalResult:= TBitBtnEx(Sender).ModalResult;
   UpdateSettings:= False;
   UpdateCellGrid:= False;
 
@@ -194,10 +288,10 @@ begin
      end;
 
   if FormMain.GamesListView.PaintInfoItem.BorderColor <> BorderColor.Selected then
-     FormMain.GamesListView.PaintInfoItem.BorderColor:= BorderColor.Selected;
+     FormMain.GamesListView.PaintInfoItem.BorderColor:=  BorderColor.Selected;
 
   if FormMain.GamesListView.PaintInfoItem.ShowBorder <> ShowBorder.Checked then
-     FormMain.GamesListView.PaintInfoItem.ShowBorder:= ShowBorder.Checked;
+     FormMain.GamesListView.PaintInfoItem.ShowBorder:=  ShowBorder.Checked;
 
   if FormMain.GamesListView.PaintInfoItem.HideCaption <> not ShowGameTitles.Checked then
      begin
@@ -254,7 +348,7 @@ begin
      begin
        if not UpdateCellGrid then
           FormMain.GamesListView.BeginUpdate;
-       FormMain.ThumbnailSettings.ArcadeCalculateIconPos:= True;
+       FormMain.ThumbnailSettings.ArcadeCalculateIconPos:=   True;
        FormMain.ThumbnailSettings.ConsCompCalculateIconPos:= True;
        if not UpdateCellGrid then
           FormMain.GamesListView.EndUpdate(False);
@@ -272,7 +366,7 @@ begin
      Close;
 end;
 
-function TFormThumbnailView.MakeThumbnailPreview(abmp: TPNGGraphic; NuWidth, NuHeight: Integer; ThumbnailIndex: Byte): Boolean; // using Scanline mode... fastest :)
+function TFormThumbnailViewSettings.MakeThumbnailPreview(abmp: TPNGGraphic; NuWidth, NuHeight: Integer; ThumbnailIndex: Byte): Boolean; // using Scanline mode... fastest :)
 type
   TRGBArray = array[0..32767] of TRGBTriple;
   pRGBArray = ^TRGBArray;
@@ -361,20 +455,20 @@ begin
   FreeAndNil(bTmp);
 end;
 
-procedure TFormThumbnailView.LoadThumbImage;
+procedure TFormThumbnailViewSettings.LoadThumbImage;
 var
   FoundImg_Hor, FoundImg_Vert: Boolean;
   FileHor, FileVert: String;
   //iType: TImageType;
 begin
-  FileHor:= FormMain.GetFolderFull(35)+'thumbnail_preview-hor.png';
+  FileHor:=  FormMain.GetFolderFull(35)+'thumbnail_preview-hor.png';
   FileVert:= FormMain.GetFolderFull(35)+'thumbnail_preview-vert.png';
   FoundImg_Hor:= FileExists(FileHor);
   FoundImg_Vert:= FileExists(FileVert);
 
   if (not FoundImg_Hor) or (not FoundImg_Vert) then
      begin
-       FormMain.InitMessageBox; //CallMessageBox;
+       FormMain.InitMessageBox;
        if (not FoundImg_Hor) then
           begin
             FormMain.AddMsgText('File ');
@@ -393,7 +487,7 @@ begin
        FormMain.AddMsgText(#13#10+'    You can''t customize thumbnails appearance without them.'+#13#10+
                            'Make sure the files are there and click OK button to continue. The frontend will atempt to load them again.');
 
-       GenerateMessage('Error', 'File not found.');
+       FormMain.ShowMessageBox('Error', 'File not found.');
      end;
 
   ThumbnailImageFound[1]:= FileExists(FileHor);
@@ -416,7 +510,7 @@ begin
      end;
 end;
 
-procedure TFormThumbnailView.UpdateThumbnail(ThumbnailIndex: Byte);
+procedure TFormThumbnailViewSettings.UpdateThumbnail(ThumbnailIndex: Byte);
 var
   newWidth, newHeight: Integer;
 begin
@@ -470,53 +564,57 @@ begin
   ThumbImageResized[ThumbnailIndex].Canvas.Unlock;
 end;
 
-procedure TFormThumbnailView.FormShow(Sender: TObject);
+procedure TFormThumbnailViewSettings.FormShow(Sender: TObject);
 var
   Item: TEasyItem;
   Loop: Integer;
 begin
+  Resize4K;
   ButtonApply.Enabled:= FormMain.IsThumbnailView;
   FormMain.ELV_ResetNormalColors(ELV_ThumbnailPreview);
   FormMain.ELV_SetBackgroundColor(ELV_ThumbnailPreview);
 
+  sysIconIndex1:= 22; // HBMAME (Have)
+  sysIconIndex2:= MaxGameID+44; // Amiga
+  ELV_ThumbnailPreview.ImagesExLarge:= FormMain.IL_StandardIconsUltraLarge;
+
   if IsNightMode then
      begin
-       FormThumbnailView.Color:= menu_background_color[1];
+       FormThumbnailViewSettings.Color:= menu_background_color[1];
        SetBottomPanelColors(PanelBottom);
 
        SetXiTrackBarColors(GridWidthSize);
        SetXiTrackBarColors(GridHeightSize);
-       //GridWidthSize.Font.Color:=  item_caption_active_color[1];
-       //GridHeightSize.Font.Color:= item_caption_active_color[1];
 
-       SetGroupBoxBorderStyle(IconsGroupBox);
-       SetGroupBoxColors(IconsGroupBox, clrBorderGroupBoxGrayBk, clrInnerBorderGroupBoxGrayBk, item_caption_active_color[1], item_caption_active_shadow_color[1], -1, clrMedDarkGray, False);
+       SetGroupBoxBorderStyle(OverlayIconsGroupBox);
+       SetGroupBoxColors(OverlayIconsGroupBox, clrBorderGroupBoxGrayBk, clrInnerBorderGroupBoxGrayBk, item_caption_active_color[1], item_caption_active_shadow_color[1], -1, clrMedDarkGray, False);
 
        SetComboBox2ExColors(SystemIconSize, True);
        SetComboBox2ExColors(MediaTypeIconSize, True);
 
        SetColorBoxColors(BorderColor, True);
+       FormMain.SetWin10DarkScrollBar(BorderColor);
 
        ELV_ThumbnailPreview.ShowThemedBorderColor:= clrBorderGroupBoxGrayBk;
-       for Loop:= 0 to FormThumbnailView.ComponentCount-1 do
+       for Loop:= 0 to FormThumbnailViewSettings.ComponentCount-1 do
        begin
-         if FormThumbnailView.Components[Loop] is TShadowLabel then
-            SetLabelColors(TShadowLabel(FormThumbnailView.Components[Loop]), item_caption_active_color[1], item_caption_active_shadow_color[1])
+         if FormThumbnailViewSettings.Components[Loop] is TShadowLabel then
+            SetLabelColors(TShadowLabel(FormThumbnailViewSettings.Components[Loop]), item_caption_active_color[1], item_caption_active_shadow_color[1])
          else
-         if FormThumbnailView.Components[Loop] is TAdvOfficeCheckBoxEx then
+         if FormThumbnailViewSettings.Components[Loop] is TAdvOfficeCheckBoxEx then
             begin
-              SetCheckBoxColors(TAdvOfficeCheckBoxEx(FormThumbnailView.Components[Loop]), item_caption_active_color[1], item_caption_active_shadow_color[1]);
-              FormMain.SetCheckBoxExCustomIcon(TAdvOfficeCheckBoxEx(FormThumbnailView.Components[Loop]));
+              SetCheckBoxColors(TAdvOfficeCheckBoxEx(FormThumbnailViewSettings.Components[Loop]), item_caption_active_color[1], item_caption_active_shadow_color[1]);
+              FormMain.SetCheckBoxExCustomIcon(TAdvOfficeCheckBoxEx(FormThumbnailViewSettings.Components[Loop]));
             end
          else
-         if FormThumbnailView.Components[Loop] is TAdvOfficeRadioButtonEx then
+         if FormThumbnailViewSettings.Components[Loop] is TAdvOfficeRadioButtonEx then
             begin
-              SetRadioButtonColors(TAdvOfficeRadioButtonEx(FormThumbnailView.Components[Loop]), item_caption_active_color[1], item_caption_active_shadow_color[1]);
-              FormMain.SetRadioButtonExCustomIcon(TAdvOfficeRadioButtonEx(FormThumbnailView.Components[Loop]));
+              SetRadioButtonColors(TAdvOfficeRadioButtonEx(FormThumbnailViewSettings.Components[Loop]), item_caption_active_color[1], item_caption_active_shadow_color[1]);
+              FormMain.SetRadioButtonExCustomIcon(TAdvOfficeRadioButtonEx(FormThumbnailViewSettings.Components[Loop]));
             end
          else
-         if FormThumbnailView.Components[Loop] is TBitBtnEx then
-            FormMain.SetButtonExColors(TBitBtnEx(FormThumbnailView.Components[Loop]));
+         if FormThumbnailViewSettings.Components[Loop] is TBitBtnEx then
+            FormMain.SetButtonExColors(TBitBtnEx(FormThumbnailViewSettings.Components[Loop]));
        end;
      end;
 
@@ -533,28 +631,19 @@ begin
   Current_ShowGameTitle:= not FormMain.GamesListView.PaintInfoItem.HideCaption;
   CurrentThumbSettings:= FormMain.ThumbnailSettings;
 
-  //CurrentThumbSettings.MaintainAspectRatio:= FormMain.ThumbnailSettings.MaintainAspectRatio;
-  //CurrentThumbSettings.ShowSystemIcon:= FormMain.ThumbnailSettings.ShowSystemIcon;
-  //CurrentThumbSettings.SystemIconSize:= FormMain.ThumbnailSettings.SystemIconSize;
-  //CurrentThumbSettings.ShowGameIcon:= FormMain.ThumbnailSettings.ShowGameIcon;
-  //CurrentThumbSettings.ShowMediaTypeIcon:= FormMain.ThumbnailSettings.ShowMediaTypeIcon;
-  //CurrentThumbSettings.ShowFavoriteIcon:= FormMain.ThumbnailSettings.ShowFavoriteIcon;
-  //CurrentThumbSettings.LeftAlignIcons:= FormMain.ThumbnailSettings.LeftAlignIcons;
-  //CurrentThumbSettings.ShowIconInNoThumbnail:= FormMain.ThumbnailSettings.ShowIconInNoThumbnail;
-
   Current_ShowPreviewScreenshotsPanel:= FormMain.MenuShowImages.Checked;
 
   NewThumbSettings:= FormMain.ThumbnailSettings;
-  NewThumbSettings.ArcadeCalculateIconPos:= True;
+  NewThumbSettings.ArcadeCalculateIconPos:=   True;
   NewThumbSettings.ConsCompCalculateIconPos:= True;
 
   ELV_ThumbnailPreview.PaintInfoItem.BorderColor:= FormMain.GamesListView.PaintInfoItem.BorderColor;
-  ELV_ThumbnailPreview.PaintInfoItem.ShowBorder:= FormMain.GamesListView.PaintInfoItem.ShowBorder;
+  ELV_ThumbnailPreview.PaintInfoItem.ShowBorder:=  FormMain.GamesListView.PaintInfoItem.ShowBorder;
   ELV_ThumbnailPreview.PaintInfoItem.HideCaption:= FormMain.GamesListView.PaintInfoItem.HideCaption;
   //ELV_ThumbnailPreview.Font:= FormMain.Font_Parent;
 
   BorderColor.Selected:= FormMain.GamesListView.PaintInfoItem.BorderColor;
-  ShowBorder.Checked:= FormMain.GamesListView.PaintInfoItem.ShowBorder;
+  ShowBorder.Checked:=   FormMain.GamesListView.PaintInfoItem.ShowBorder;
   ShowGameTitles.Checked:= not FormMain.GamesListView.PaintInfoItem.HideCaption;
 
   MaintainAspectRatio.Checked:= FormMain.ThumbnailSettings.MaintainAspectRatio;
@@ -570,7 +659,7 @@ begin
 
   ShowPreviewScreenshotsPanel.Checked:= FormMain.MenuShowImages.Checked;
   case FormMain.ThumbnailSettings.LeftAlignIcons of
-    True : ThumbLeftAlignIcons.Checked:= True;
+    True : ThumbLeftAlignIcons.Checked:=  True;
     False: ThumbRightAlignIcons.Checked:= True;
   end;
 
@@ -579,11 +668,11 @@ begin
   ELV_ThumbnailPreview.BeginUpdate;
   ELV_ThumbnailPreview.Items.ReIndexDisable:= True;
   Item:= ELV_ThumbnailPreview.Items.Add;
-  Item.ImageIndex:= 0;
+  Item.ImageIndex:= sysIconIndex1;// 0; // HBMAME Have
   Item.Caption:= 'Horizontal';//'Real Bout Fatal Fury 2 - The Newcomers / Real Bout Garou Densetsu 2 - the newcomers (NGM-2400)';
 
   Item:= ELV_ThumbnailPreview.Items.Add;
-  Item.ImageIndex:= 1;
+  Item.ImageIndex:= sysIconIndex2; // 1; // Amiga
   Item.Caption:= 'Vertical';//'Real Bout Fatal Fury 2 - The Newcomers / Real Bout Garou Densetsu 2 - the newcomers (NGM-2400)';
 
   ELV_ThumbnailPreview.Items.ReIndexDisable:= False;
@@ -593,13 +682,13 @@ begin
   FormMain.GetSmallerGameFont(ELV_ThumbnailPreview);
   ELV_ThumbnailPreview.EndUpdate;
 
-  tImageWidth:= RectWidth(Item.View.ItemRect(Item, nil, ertIcon)) - (2*Item.Border);
+  tImageWidth:=  RectWidth (Item.View.ItemRect(Item, nil, ertIcon)) - (2*Item.Border);
   tImageHeight:= RectHeight(Item.View.ItemRect(Item, nil, ertIcon)) - (2*Item.Border);
 
   LabelImageSizeValue.Caption:= IntToStr(tImageWidth)+'x'+IntToStr(tImageHeight);
 
   UpdateImageListSize; // force update ImageList
-  GridWidthSize.Position:= ELV_ThumbnailPreview.CellSizes.Thumbnail.Width;
+  GridWidthSize.Position:=  ELV_ThumbnailPreview.CellSizes.Thumbnail.Width;
   GridHeightSize.Position:= ELV_ThumbnailPreview.CellSizes.Thumbnail.Height;
 
   GridWidthSize.OnChange(Self);  // force update
@@ -610,35 +699,46 @@ begin
   UpdateThumbnail(2);
   ELV_ThumbnailPreview.EndUpdate;
 
-  FormThumbnailView.Tag:= 0;
+  FormThumbnailViewSettings.Tag:= 0;
 end;
 
-procedure TFormThumbnailView.UpdateImageListSize;
+procedure TFormThumbnailViewSettings.UpdateImageListSize;
 var
   IL_NewSize: Integer;
+
+  function ValidateIL_ExtraLarge(IL_Destination: TImageList): Boolean;
+  begin
+    Result:= ELV_ThumbnailPreview.ImagesExLarge <> IL_Destination;
+    if Result then
+       ELV_ThumbnailPreview.ImagesExLarge:= IL_Destination;
+  end;
+
 begin
+  if (tImageWidth < 68) or (tImageHeight < 68) then
+     IL_NewSize:= 48
+  else
   if (tImageWidth < 128) or (tImageHeight < 128) then
      IL_NewSize:= 68
   else
      IL_NewSize:= 128;
 
-  if IL_Thumbnail.Width <> IL_NewSize then
+  if ELV_ThumbnailPreview.ImagesExLarge.Width <> IL_NewSize then
      begin
        ELV_ThumbnailPreview.BeginUpdate;
-       IL_Thumbnail.Clear;
-       IL_Thumbnail.Width:= IL_NewSize;
-       IL_Thumbnail.Height:= IL_NewSize;
-       FormMain.AddDefaultIcons('MAMEParent.ico', FormMain.GetFolderFull(33), IL_Thumbnail); // parent MAME
-       FormMain.AddDefaultIcons('44_Amiga.ico',   FormMain.GetFolderFull(34), IL_Thumbnail); // parent Amiga (EmuCon system)
+       case IL_NewSize of
+          48: ELV_ThumbnailPreview.ImagesExLarge:= FormMain.IL_StandardIconsExtraLarge;
+          68: ELV_ThumbnailPreview.ImagesExLarge:= FormMain.IL_StandardIconsMegaLarge;
+         128: ELV_ThumbnailPreview.ImagesExLarge:= FormMain.IL_StandardIconsUltraLarge;
+       end;
        ELV_ThumbnailPreview.EndUpdate;
      end;
 end;
 
-procedure TFormThumbnailView.UpdateImageSize(UpdateWidth, UpdateHeight: Boolean; ForceUpdate: Boolean = False);
+procedure TFormThumbnailViewSettings.UpdateImageSize(UpdateWidth, UpdateHeight: Boolean; ForceUpdate: Boolean = False);
 var
   Item: TEasyItem;
 begin
-  NewThumbSettings.ArcadeCalculateIconPos:= True;
+  NewThumbSettings.ArcadeCalculateIconPos:=   True;
   NewThumbSettings.ConsCompCalculateIconPos:= True;
   Item:= ELV_ThumbnailPreview.Groups.FirstItem;
   if UpdateWidth then
@@ -669,79 +769,81 @@ begin
      end;
 end;
 
-procedure TFormThumbnailView.BorderColorDefaultClick(Sender: TObject);
+procedure TFormThumbnailViewSettings.BorderColorDefaultClick(Sender: TObject);
 begin
-  FormMain.SetSelectedColorBox(BorderColor, BorderColor.DefaultColorColor);
+  SetSelectedColorBox(BorderColor, BorderColor.DefaultColorColor);
   BorderColor.Invalidate;
 end;
 
-procedure TFormThumbnailView.BorderColorSelect(Sender: TObject);
+procedure TFormThumbnailViewSettings.BorderColorSelect(Sender: TObject);
 begin
   ELV_ThumbnailPreview.PaintInfoItem.BorderColor:= BorderColor.Selected;
 end;
 
-procedure TFormThumbnailView.ShowBorderClick(Sender: TObject);
+procedure TFormThumbnailViewSettings.ShowBorderClick(Sender: TObject);
 begin
   ELV_ThumbnailPreview.BeginUpdate;
   ELV_ThumbnailPreview.PaintInfoItem.ShowBorder:= ShowBorder.Checked;
   ELV_ThumbnailPreview.EndUpdate;
 end;
 
-procedure TFormThumbnailView.ShowGameTitlesClick(Sender: TObject);
+procedure TFormThumbnailViewSettings.ShowGameTitlesClick(Sender: TObject);
 begin
   ELV_ThumbnailPreview.PaintInfoItem.HideCaption:= not ShowGameTitles.Checked;
-  if FormThumbnailView.Tag = 0 then
+  if FormThumbnailViewSettings.Tag = 0 then
      begin
        UpdateImageSize(False, True, True);
        ELV_ThumbnailPreview.Invalidate;
      end;
 end;
 
-procedure TFormThumbnailView.ButtonGridWidthSize_DecreaseClick(
+procedure TFormThumbnailViewSettings.ButtonGridWidthSize_DecreaseClick(
   Sender: TObject);
 begin
   GridWidthSize.Position:= GridWidthSize.Position+TBitBtnEx(Sender).Tag;
 end;
 
-procedure TFormThumbnailView.ButtonGridHeightSize_DecreaseClick(
+procedure TFormThumbnailViewSettings.ButtonGridHeightSize_DecreaseClick(
   Sender: TObject);
 begin
   GridHeightSize.Position:= GridHeightSize.Position+TBitBtnEx(Sender).Tag;
 end;
 
-procedure TFormThumbnailView.ItemThumbnailShowIcons(Item: TEasyItem; ACanvas: TCanvas; ARect: TRect);
+procedure TFormThumbnailViewSettings.ItemThumbnailShowIcons(Item: TEasyItem; ACanvas: TCanvas; ARect: TRect);
 var
-  xPosFav, yPosFav: Integer;
+  xPosFav, yPosFav, TypeROM: Integer;
   IsCustomGame: Boolean;
 begin
-  if (not NewThumbSettings.ShowSystemIcon) and
+  if (not NewThumbSettings.ShowSystemIcon)    and
      (not NewThumbSettings.ShowMediaTypeIcon) and
-     (not NewThumbSettings.ShowGameIcon) and
-     (not NewThumbSettings.ShowFavoriteIcon) and
-     (not NewThumbSettings.ShowSpecialIcon) then
+     (not NewThumbSettings.ShowGameIcon)      and
+     (not NewThumbSettings.ShowFavoriteIcon)  and
+     (not NewThumbSettings.ShowSpecialIcon)   then
      Exit; // nothing to do here
 
-  IsCustomGame:= Boolean(Item.ImageIndex = 1);
+  IsCustomGame:= Boolean(Item.ImageIndex = sysIconIndex2);
   FormMain.ThumbnailCalculateIconPos(NewThumbSettings, ARect, IsCustomGame); // 2nd thumbnail is for EmuCon systems
 
   if NewThumbSettings.ShowSystemIcon then
   begin
     xPosFav:= ARect.Left+NewThumbSettings.SystemIconLeft;
-    yPosFav:= ARect.Top+NewThumbSettings.SystemIconTop;
+    yPosFav:= ARect.Top+ NewThumbSettings.SystemIconTop;
     if IsCustomGame then
     begin
       case NewThumbSettings.SystemIconSize of
         0: FormMain.IL_StandardIconsStandard.Draw  (ACanvas, xPosFav, yPosFav, MaxGameID+44);
         1: FormMain.IL_StandardIconsLarge.Draw     (ACanvas, xPosFav, yPosFav, MaxGameID+44);
         2: FormMain.IL_StandardIconsExtraLarge.Draw(ACanvas, xPosFav, yPosFav, MaxGameID+44);
+        3: FormMain.IL_StandardIconsMegaLarge.Draw (ACanvas, xPosFav, yPosFav, MaxGameID+44);
       end;
     end
     else
     begin
       case NewThumbSettings.SystemIconSize of
-        0: FormMain.IL_ArcadeSystem_Small.Draw     (ACanvas, xPosFav, yPosFav, idHBMAME);
-        1: FormMain.IL_ArcadeSystem_Large.Draw     (ACanvas, xPosFav, yPosFav, idHBMAME);
-        2: FormMain.IL_ArcadeSystem_ExtraLarge.Draw(ACanvas, xPosFav, yPosFav, idHBMAME);
+        0: FormMain.IL_StandardIconsStandard.Draw  (ACanvas, xPosFav, yPosFav, MaxGameID+MaxConsoleComputerSystems+idHBMAME);
+        1: FormMain.IL_StandardIconsLarge.Draw     (ACanvas, xPosFav, yPosFav, MaxGameID+MaxConsoleComputerSystems+idHBMAME);
+        2: FormMain.IL_StandardIconsExtraLarge.Draw(ACanvas, xPosFav, yPosFav, MaxGameID+MaxConsoleComputerSystems+idHBMAME);
+        3: FormMain.IL_StandardIconsMegaLarge.Draw (ACanvas, xPosFav, yPosFav, MaxGameID+MaxConsoleComputerSystems+idHBMAME);
       end;
     end;
   end;
@@ -750,10 +852,15 @@ begin
   begin
     xPosFav:= ARect.Left+NewThumbSettings.MediaTypeIconLeft;
     yPosFav:= ARect.Top+NewThumbSettings.MediaTypeIconTop;
+    if IsCustomGame then
+       TypeROM:= 2  // floppy
+    else
+       TypeROM:= 0; // ROM
     case NewThumbSettings.MediaTypeIconSize of
-      0: FormMain.IL_MediaType.Draw           (ACanvas, xPosFav, yPosFav, 0);
-      1: FormMain.IL_MediaType_Large.Draw     (ACanvas, xPosFav, yPosFav, 0);
-      2: FormMain.IL_MediaType_ExtraLarge.Draw(ACanvas, xPosFav, yPosFav, 0);
+      0: FormMain.IL_MediaType.Draw           (ACanvas, xPosFav, yPosFav, TypeROM);
+      1: FormMain.IL_MediaType_Large.Draw     (ACanvas, xPosFav, yPosFav, TypeROM);
+      2: FormMain.IL_MediaType_ExtraLarge.Draw(ACanvas, xPosFav, yPosFav, TypeROM);
+      3: 
     end;
   end;
 
@@ -781,11 +888,10 @@ begin
       yPosFav:= ARect.Top+NewThumbSettings.ArcadeFavoriteIconTop;
     end;
     case NewThumbSettings.MediaTypeIconSize of
-      0: FormMain.IL_MediaType.Draw           (ACanvas, xPosFav, yPosFav, FormMain.IL_MediaType.Count-2);
-      1: FormMain.IL_MediaType_Large.Draw     (ACanvas, xPosFav, yPosFav, FormMain.IL_MediaType_Large.Count-2);
-      2: FormMain.IL_MediaType_ExtraLarge.Draw(ACanvas, xPosFav, yPosFav, FormMain.IL_MediaType_ExtraLarge.Count-2);
+      0: FormMain.IL_MediaType.Draw           (ACanvas, xPosFav, yPosFav, 10);
+      1: FormMain.IL_MediaType_Large.Draw     (ACanvas, xPosFav, yPosFav, 10);
+      2: FormMain.IL_MediaType_ExtraLarge.Draw(ACanvas, xPosFav, yPosFav, 10);
     end;
-    //FormMain.IL_MiscToolBarPopup.Draw(ACanvas, xPosFav, yPosFav, 13);
   end;
 
   if NewThumbSettings.ShowSpecialIcon then
@@ -801,16 +907,16 @@ begin
       yPosFav:= ARect.Top+NewThumbSettings.ArcadeSpecialIconTop;
     end;
     case NewThumbSettings.MediaTypeIconSize of
-      0: FormMain.IL_MediaType.Draw           (ACanvas, xPosFav, yPosFav, FormMain.IL_MediaType.Count-1);
-      1: FormMain.IL_MediaType_Large.Draw     (ACanvas, xPosFav, yPosFav, FormMain.IL_MediaType_Large.Count-1);
-      2: FormMain.IL_MediaType_ExtraLarge.Draw(ACanvas, xPosFav, yPosFav, FormMain.IL_MediaType_ExtraLarge.Count-1);
+      0: FormMain.IL_MediaType.Draw           (ACanvas, xPosFav, yPosFav, 11);
+      1: FormMain.IL_MediaType_Large.Draw     (ACanvas, xPosFav, yPosFav, 11);
+      2: FormMain.IL_MediaType_ExtraLarge.Draw(ACanvas, xPosFav, yPosFav, 11);
     end;
   end;
 end;
 
-procedure TFormThumbnailView.ELV_Update;
+procedure TFormThumbnailViewSettings.ELV_Update;
 begin
-  if FormThumbnailView.Tag = 0 then
+  if FormThumbnailViewSettings.Tag = 0 then
      begin
        ELV_ThumbnailPreview.BeginUpdate;
        UpdateThumbnail(1);
@@ -819,37 +925,44 @@ begin
      end;
 end;
 
-procedure TFormThumbnailView.ELV_ThumbnailPreviewItemThumbnailDraw(
+procedure TFormThumbnailViewSettings.ELV_ThumbnailPreviewItemThumbnailDraw(
   Sender: TCustomEasyListview; Item: TEasyItem; ACanvas: TCanvas;
   ARect: TRect; AlphaBlender: TEasyAlphaBlender; var DoDefault: Boolean);
 begin
-  case Item.ImageIndex of
-    0: // horizontal thumbnail
-      begin
-        if ThumbnailLoaded[1] then
-           begin
-             ACanvas.Draw(ARect.Left+ThumbnailLeftMargin[1],
-                          ARect.Top+ThumbnailTopMargin[1],
-                          ThumbImageResized[1]);
-             DoDefault:= False;
+  if Item.ImageIndex = sysIconIndex1 then
+     begin //0: horizontal thumbnail
+       if ThumbnailLoaded[1] and (not HideThumbnailImages.Checked) then
+          begin
+            ACanvas.Draw(ARect.Left+ThumbnailLeftMargin[1],
+                         ARect.Top+ThumbnailTopMargin[1],
+                         ThumbImageResized[1]);
+            DoDefault:= False;
+            ItemThumbnailShowIcons(Item, ACanvas, ARect);
+          end
+       else
+          begin
+            if ShowIconsWithNoThumbnail.Checked then
+               ItemThumbnailShowIcons(Item, ACanvas, ARect);
+          end;
+     end
+  else
+  if Item.ImageIndex = sysIconIndex2 then
+     begin // 1: vertical thumbnail
+       if ThumbnailLoaded[2] and (not HideThumbnailImages.Checked) then
+          begin
+            ACanvas.Draw(ARect.Left+ThumbnailLeftMargin[2],
+                         ARect.Top+ThumbnailTopMargin[2],
+                         ThumbImageResized[2]);
+            DoDefault:= False;
+            ItemThumbnailShowIcons(Item, ACanvas, ARect);
+          end
+       else
+          if ShowIconsWithNoThumbnail.Checked then
              ItemThumbnailShowIcons(Item, ACanvas, ARect);
-           end;
      end;
-    1: // vertical thumbnail
-      begin
-        if ThumbnailLoaded[2] then
-           begin
-             ACanvas.Draw(ARect.Left+ThumbnailLeftMargin[2],
-                          ARect.Top+ThumbnailTopMargin[2],
-                          ThumbImageResized[2]);
-             DoDefault:= False;
-             ItemThumbnailShowIcons(Item, ACanvas, ARect);
-           end;
-     end;
-  end;
 end;
 
-procedure TFormThumbnailView.FormCloseQuery(Sender: TObject;
+procedure TFormThumbnailViewSettings.FormCloseQuery(Sender: TObject;
   var CanClose: Boolean);
 begin
   FreeAndNil(ThumbImageOriginal[1]);
@@ -858,13 +971,13 @@ begin
   FreeAndNil(ThumbImageResized[2]);
 end;
 
-procedure TFormThumbnailView.MaintainAspectRatioClick(Sender: TObject);
+procedure TFormThumbnailViewSettings.MaintainAspectRatioClick(Sender: TObject);
 begin
   NewThumbSettings.MaintainAspectRatio:= MaintainAspectRatio.Checked;
   ELV_Update;
 end;
 
-procedure TFormThumbnailView.ButtonAbortClick(Sender: TObject);
+procedure TFormThumbnailViewSettings.ButtonAbortClick(Sender: TObject);
 var
   RestoreSettings, RestoreCellGrid: Boolean;
 begin
@@ -943,10 +1056,10 @@ begin
      end;
 
   if FormMain.GamesListView.PaintInfoItem.BorderColor <> Current_BorderColor then
-     FormMain.GamesListView.PaintInfoItem.BorderColor:= Current_BorderColor; // just restore setting, no need to reset thumbnails
+     FormMain.GamesListView.PaintInfoItem.BorderColor:=  Current_BorderColor; // just restore setting, no need to reset thumbnails
 
   if FormMain.GamesListView.PaintInfoItem.ShowBorder <> Current_ShowBorder then
-     FormMain.GamesListView.PaintInfoItem.ShowBorder:= Current_ShowBorder; // just restore setting, no need to reset thumbnails
+     FormMain.GamesListView.PaintInfoItem.ShowBorder:=  Current_ShowBorder; // just restore setting, no need to reset thumbnails
 
   if FormMain.MenuShowImages.Checked <> Current_ShowPreviewScreenshotsPanel then
      begin
@@ -970,7 +1083,7 @@ begin
      begin
        if not RestoreCellGrid then
           FormMain.GamesListView.BeginUpdate;
-       FormMain.ThumbnailSettings.ArcadeCalculateIconPos:= True;
+       FormMain.ThumbnailSettings.ArcadeCalculateIconPos:=   True;
        FormMain.ThumbnailSettings.ConsCompCalculateIconPos:= True;
        if not RestoreCellGrid then
           FormMain.GamesListView.EndUpdate(False);
@@ -987,7 +1100,7 @@ begin
   Close;
 end;
 
-procedure TFormThumbnailView.ELV_ThumbnailPreviewItemPaintText(
+procedure TFormThumbnailViewSettings.ELV_ThumbnailPreviewItemPaintText(
   Sender: TCustomEasyListview; Item: TEasyItem; Position: Integer;
   ACanvas: TCanvas);
 begin
@@ -995,73 +1108,73 @@ begin
      FormMain.ELV_ItemPaintText_General(ELV_ThumbnailPreview, Item, ACanvas);
 end;
 
-procedure TFormThumbnailView.UpdateIcons;
+procedure TFormThumbnailViewSettings.UpdateIcons;
 begin
-  if FormThumbnailView.Tag = 0 then
+  if FormThumbnailViewSettings.Tag = 0 then
      begin
        ELV_ThumbnailPreview.BeginUpdate;
-       NewThumbSettings.ArcadeCalculateIconPos:= True;
+       NewThumbSettings.ArcadeCalculateIconPos:=   True;
        NewThumbSettings.ConsCompCalculateIconPos:= True;
        ELV_ThumbnailPreview.EndUpdate;
      end;
 end;
 
-procedure TFormThumbnailView.ShowSystemIconClick(Sender: TObject);
+procedure TFormThumbnailViewSettings.ShowSystemIconClick(Sender: TObject);
 begin
   NewThumbSettings.ShowSystemIcon:= ShowSystemIcon.Checked;
   UpdateIcons;
 end;
 
-procedure TFormThumbnailView.ShowGameIconClick(Sender: TObject);
+procedure TFormThumbnailViewSettings.ShowGameIconClick(Sender: TObject);
 begin
   NewThumbSettings.ShowGameIcon:= ShowGameIcon.Checked;
   UpdateIcons;
 end;
 
-procedure TFormThumbnailView.ShowMediaTypeIconClick(Sender: TObject);
+procedure TFormThumbnailViewSettings.ShowMediaTypeIconClick(Sender: TObject);
 begin
   NewThumbSettings.ShowMediaTypeIcon:= ShowMediaTypeIcon.Checked;
   UpdateIcons;
 end;
 
-procedure TFormThumbnailView.ShowFavoriteIconClick(Sender: TObject);
+procedure TFormThumbnailViewSettings.ShowFavoriteIconClick(Sender: TObject);
 begin
   NewThumbSettings.ShowFavoriteIcon:= ShowFavoriteIcon.Checked;
   UpdateIcons;
 end;
 
-procedure TFormThumbnailView.ThumbLeftAlignIconsClick(Sender: TObject);
+procedure TFormThumbnailViewSettings.ThumbLeftAlignIconsClick(Sender: TObject);
 begin
   NewThumbSettings.LeftAlignIcons:= Boolean(TAdvOfficeRadioButtonEx(Sender).Tag);
   UpdateIcons;
 end;
 
-procedure TFormThumbnailView.ShowIconsWithNoThumbnailClick(
+procedure TFormThumbnailViewSettings.ShowIconsWithNoThumbnailClick(
   Sender: TObject);
 begin
   NewThumbSettings.ShowIconInNoThumbnail:= ShowIconsWithNoThumbnail.Checked;
   UpdateIcons;
 end;
 
-procedure TFormThumbnailView.SystemIconSizeSelect(Sender: TObject);
+procedure TFormThumbnailViewSettings.SystemIconSizeSelect(Sender: TObject);
 begin
   NewThumbSettings.SystemIconSize:= SystemIconSize.ItemIndex;
   UpdateIcons;
 end;
 
-procedure TFormThumbnailView.MediaTypeIconSizeSelect(Sender: TObject);
+procedure TFormThumbnailViewSettings.MediaTypeIconSizeSelect(Sender: TObject);
 begin
   NewThumbSettings.MediaTypeIconSize:= MediaTypeIconSize.ItemIndex;
   UpdateIcons;
 end;
 
-procedure TFormThumbnailView.ShowSpecialIconClick(Sender: TObject);
+procedure TFormThumbnailViewSettings.ShowSpecialIconClick(Sender: TObject);
 begin
   NewThumbSettings.ShowSpecialIcon:= ShowSpecialIcon.Checked;
   UpdateIcons;
 end;
 
-procedure TFormThumbnailView.GridWidthSizeChange(Sender: TObject);
+procedure TFormThumbnailViewSettings.GridWidthSizeChange(Sender: TObject);
 begin
   LabelGridWidthSizeValue.Caption:= IntToStr(GridWidthSize.Position);
 
@@ -1069,16 +1182,22 @@ begin
     1: ELV_ThumbnailPreview.Width:= GridWidthSize.Position+2;
     2: ELV_ThumbnailPreview.Width:= ((GridWidthSize.Position+2)*2)+16;
   end;
-  if FormThumbnailView.Tag = 0 then
+  if FormThumbnailViewSettings.Tag = 0 then
      UpdateImageSize(True, False);
 end;
 
-procedure TFormThumbnailView.GridHeightSizeChange(Sender: TObject);
+procedure TFormThumbnailViewSettings.GridHeightSizeChange(Sender: TObject);
 begin
   LabelGridHeightSizeValue.Caption:= IntToStr(GridHeightSize.Position);
   ELV_ThumbnailPreview.Height:= GridHeightSize.Position+2;
-  if FormThumbnailView.Tag = 0 then
+  if FormThumbnailViewSettings.Tag = 0 then
      UpdateImageSize(False, True);
+end;
+
+procedure TFormThumbnailViewSettings.HideThumbnailImagesClick(
+  Sender: TObject);
+begin
+  ELV_ThumbnailPreview.Invalidate;
 end;
 
 end.

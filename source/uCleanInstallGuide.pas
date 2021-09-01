@@ -23,15 +23,20 @@ type
     ButtonSkip: TBitBtnEx;
     ButtonOk: TBitBtnEx;
     ButtonCancel: TBitBtnEx;
+    UltraHD_4KModeDisable: TAdvOfficeCheckBoxEx;
     procedure LabelQuickSetupGuideMouseEnter(Sender: TObject);
     procedure LabelQuickSetupGuideMouseLeave(Sender: TObject);
     procedure LabelQuickSetupGuideClick(Sender: TObject);
-    procedure FormCreate(Sender: TObject);
     procedure NightModeClick(Sender: TObject);
     procedure ButtonCancelClick(Sender: TObject);
+    procedure UltraHD_4KModeDisableClick(Sender: TObject);
+    procedure FormShow(Sender: TObject);
   private
     { Private declarations }
-    IsNightMode_Restore: Boolean;
+    IsNightMode_Restore, Is4KMode_Restore: Boolean;
+
+    procedure SetNightMode;
+    procedure Resize4K;
   public
     { Public declarations }
   end;
@@ -45,10 +50,80 @@ uses uMain;
 
 {$R *.dfm}
 
-procedure TFormCleanInstallGuide.FormCreate(Sender: TObject);
+procedure TFormCleanInstallGuide.Resize4K;
 begin
-  IsNightMode_Restore:= IsNightMode;
-  NightMode.Checked:= IsNightMode;
+  if not Is4KMode then
+     Exit;
+
+  with FormCleanInstallGuide do
+  begin
+    ClientWidth:=  1265;
+    ClientHeight:= 1000;
+    Font.Size:= 16;
+    ImageCleanInstall.Width:=  ClientWidth;
+    ImageCleanInstall.Height:= ClientHeight;
+    FormMain.Set4KLabelSpecs(LabelOption_SelectArcadeEmulators_FileStatus,             690, 386, -1, -1, 18);
+    FormMain.Set4KLabelSpecs(LabelOption_SelectConsoleComputerGamesFolders_FileStatus, 690, 559, -1, -1, 18);
+    LabelQuickSetupGuide.Hint:= LabelQuickSetupGuide.Caption;
+    LabelQuickSetupGuide.Caption:= '';
+    LabelQuickSetupGuide.Font.Color:= clLime;
+    FormMain.Set4KLabelSpecs(LabelQuickSetupGuide, 315, 755, 640, 25, 18);
+
+    FormMain.Set4KCheckBoxSpecs(Option_SelectArcadeEmulators,             18, 379, 655,  36, 18);
+    FormMain.Set4KCheckBoxSpecs(Option_CreateArcadeGamesList,             18, 437, 530,  36, 18);
+    FormMain.Set4KCheckBoxSpecs(Option_SelectConsoleComputerEmulators,    18, 495, 1190, 36, 18);
+    FormMain.Set4KCheckBoxSpecs(Option_SelectConsoleComputerGamesFolders, 18, 552, 640,  36, 18);
+    FormMain.Set4KCheckBoxSpecs(Option_CreateConsoleComputerGamesList,    18, 610, 610,  36, 18);
+
+    FormMain.Set4KCheckBoxSpecs(NightMode,      18, 859, 215, 36, 18);
+    FormMain.Set4KCheckBoxSpecs(UseAlternateFrontendIcons, 18, 907, 440, 36, 18);
+    FormMain.Set4KCheckBoxSpecs(UltraHD_4KModeDisable, 18, 955, 295, 36, 18);
+    //UltraHD_4KModeDisable.Visible:= True;
+
+    FormMain.Set4KButtonSpecs(ButtonCancel, ImageCleanInstall.Width-168-17, 941, 168, 45, 16);
+    FormMain.Set4KButtonSpecs(ButtonOk,     ButtonCancel.Left-168-18,       941, 168, 45, 16);
+    FormMain.Set4KButtonSpecs(ButtonSkip,   ButtonOk.Left-168-18,           941, 168, 45, 16);
+  end;
+end;
+
+procedure TFormCleanInstallGuide.LabelQuickSetupGuideMouseEnter(Sender: TObject);
+begin
+  if Is4KMode then
+     TShadowLabel(Sender).Caption:= TShadowLabel(Sender).Hint
+  else
+     begin
+       TShadowLabel(Sender).Font.Color:= clLime;
+       TShadowLabel(Sender).ShadowColor:= clGreen;
+       TShadowLabel(Sender).Font.Style:= [fsUnderline];
+     end;
+end;
+
+procedure TFormCleanInstallGuide.LabelQuickSetupGuideMouseLeave(Sender: TObject);
+begin
+  if Is4KMode then
+     TShadowLabel(Sender).Caption:= ''
+  else
+     begin
+       TShadowLabel(Sender).Font.Color:= $00c2ffc2;
+       TShadowLabel(Sender).ShadowColor:= $00003d00;
+       TShadowLabel(Sender).Font.Style:= [];
+     end;
+end;
+
+procedure TFormCleanInstallGuide.LabelQuickSetupGuideClick(Sender: TObject);
+var
+  iFile: WideString;
+begin
+  iFile:= FrontendPath+'docs\el-quick-setup-quide.txt';
+  case FileExists2(iFile) of
+    True : CallShellExecute(nil, iFile);
+    False: FormMain.ShowMessageBox('Error', 'File access error.',
+                                   'File "'+FrontendPath+'docs\el-quick-setup-quide.txt" was not found. ', 2, False, 1);
+  end;
+end;
+
+procedure TFormCleanInstallGuide.SetNightMode;
+begin
   UseAlternateFrontendIcons.Checked:= FormMain.MenuUseAlternateFrontendIcons.Checked;
   FormMain.SetButtonExColors(ButtonOk);
   FormMain.SetButtonExColors(ButtonCancel);
@@ -59,61 +134,60 @@ begin
   FormMain.SetCheckBoxExCustomIcon(Option_SelectConsoleComputerGamesFolders);
   FormMain.SetCheckBoxExCustomIcon(Option_CreateConsoleComputerGamesList);
   FormMain.SetCheckBoxExCustomIcon(NightMode);
+  FormMain.SetCheckBoxExCustomIcon(UltraHD_4KModeDisable);
   FormMain.SetCheckBoxExCustomIcon(UseAlternateFrontendIcons);
-
-  if FileExists(FormMain.GetFolderFull(35)+'clean_install.png') then
-     ImageCleanInstall.Bitmap.LoadFromFile(FormMain.GetFolderFull(35)+'clean_install.png');
-end;
-
-procedure TFormCleanInstallGuide.LabelQuickSetupGuideMouseEnter(Sender: TObject);
-begin
-  TShadowLabel(Sender).Font.Color:= clLime;
-  TShadowLabel(Sender).ShadowColor:= clGreen;
-  TShadowLabel(Sender).Font.Style:= [fsUnderline];
-end;
-
-procedure TFormCleanInstallGuide.LabelQuickSetupGuideMouseLeave(Sender: TObject);
-begin
-  TShadowLabel(Sender).Font.Color:= $00c2ffc2;
-  TShadowLabel(Sender).ShadowColor:= $00003d00;
-  TShadowLabel(Sender).Font.Style:= [];
-end;
-
-procedure TFormCleanInstallGuide.LabelQuickSetupGuideClick(Sender: TObject);
-begin
-  case FileExists(FormMain.FrontendPath+'docs\el-quick-setup-quide.txt') of
-    True : CallShellExecute(nil, FormMain.FrontendPath+'docs\el-quick-setup-quide.txt'); // ShellExecute(Handle, 'open', PChar(FormMain.FrontendPath+'docs\el-quick-setup-quide.txt'), nil, nil, SW_SHOWNORMAL);
-    False: GenerateMessage('Error', 'File access error.',
-                                    'File "'+FormMain.FrontendPath+'docs\el-quick-setup-quide.txt " was not found. ', 2, False, 1);
-  end;
 end;
 
 procedure TFormCleanInstallGuide.NightModeClick(Sender: TObject);
 begin
-  IsNightMode:= NightMode.Checked;
-  FormMain.SetButtonExColors(ButtonOk);
-  FormMain.SetButtonExColors(ButtonCancel);
-  FormMain.SetButtonExColors(ButtonSkip);
-  FormMain.SetCheckBoxExCustomIcon(Option_SelectArcadeEmulators);
-  FormMain.SetCheckBoxExCustomIcon(Option_CreateArcadeGamesList);
-  FormMain.SetCheckBoxExCustomIcon(Option_SelectConsoleComputerEmulators);
-  FormMain.SetCheckBoxExCustomIcon(Option_SelectConsoleComputerGamesFolders);
-  FormMain.SetCheckBoxExCustomIcon(Option_CreateConsoleComputerGamesList);
-  FormMain.SetCheckBoxExCustomIcon(NightMode);
-  FormMain.SetCheckBoxExCustomIcon(UseAlternateFrontendIcons);
+  if NightMode.Tag = 1 then
+     Exit;
 
-  Option_SelectArcadeEmulators.CustomIconsEnabled:= IsNightMode;
-  Option_CreateArcadeGamesList.CustomIconsEnabled:= IsNightMode;
-  Option_SelectConsoleComputerEmulators.CustomIconsEnabled:= IsNightMode;
-  Option_SelectConsoleComputerGamesFolders.CustomIconsEnabled:= IsNightMode;
-  Option_CreateConsoleComputerGamesList.CustomIconsEnabled:= IsNightMode;
-  NightMode.CustomIconsEnabled:= IsNightMode;
-  UseAlternateFrontendIcons.CustomIconsEnabled:= IsNightMode;
+  IsNightMode:= NightMode.Checked;
+  SetNightMode;
 end;
 
 procedure TFormCleanInstallGuide.ButtonCancelClick(Sender: TObject);
 begin
   IsNightMode:= IsNightMode_Restore;
+  Is4KMode:= Is4KMode_Restore;
+end;
+
+procedure TFormCleanInstallGuide.UltraHD_4KModeDisableClick(Sender: TObject);
+begin
+  if UltraHD_4KModeDisable.Tag = 0 then
+     Is4KMode:= not UltraHD_4KModeDisable.Checked;
+end;
+
+procedure TFormCleanInstallGuide.FormShow(Sender: TObject);
+var
+  iFile: String;
+begin
+  Resize4K;
+  if Is4KMode then
+     iFile:= 'clean_install-4K.png'
+  else
+     iFile:= 'clean_install.png';
+
+  if FileExists(FormMain.GetFolderFull(35)+iFile) then
+     ImageCleanInstall.Bitmap.LoadFromFile(FormMain.GetFolderFull(35)+iFile);
+
+  IsNightMode_Restore:= IsNightMode; // used to restore last state on Cancel button click
+  Is4KMode_Restore:= Is4KMode;
+  if IsNightMode then
+     SetNightMode
+  else
+     begin
+       NightMode.Tag:= 1;
+       if NightMode.Checked <> IsNightMode then
+          NightMode.Checked:= IsNightMode;
+       NightMode.Tag:= 0;
+     end;
+
+  UltraHD_4KModeDisable.Tag:= 1;
+  if UltraHD_4KModeDisable.Checked <> (not Is4KMode) then
+     UltraHD_4KModeDisable.Checked:=  not Is4KMode;
+  UltraHD_4KModeDisable.Tag:= 0;
 end;
 
 

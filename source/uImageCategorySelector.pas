@@ -32,6 +32,7 @@ type
   private
     { Private declarations }
     procedure AddCategories;
+    procedure Resize4K;
   public
     { Public declarations }
     selCategoryID: ShortInt;
@@ -45,6 +46,32 @@ implementation
 uses uMain, uCommon;
 
 {$R *.dfm}
+
+procedure TFormImageCategorySelector.Resize4K;
+begin
+  if not Is4KMode then
+     Exit;
+
+  with FormImageCategorySelector do
+  begin
+    PanelBottom.Height:= 71;
+    //CategoriesListView.PaintInfoItem.IconViewRemoveIconTopBorder:= True;
+    CategoriesListView.CellSizes.Tile.Width:=  156;
+    CategoriesListView.CellSizes.Tile.Height:= 156;
+
+    ClientWidth:=  (CategoriesListView.CellSizes.Tile.Width*6) +16;
+    ClientHeight:= (CategoriesListView.CellSizes.Tile.Height*3)+16+PanelBottom.Height;
+    Font.Size:= 16;
+    FormMain.Set4KImageListSpecs(IL_ImageCategory, 128);
+
+    FormMain.Set4KListViewSpecs(CategoriesListView, 8, 8, (CategoriesListView.CellSizes.Tile.Width*6)+20, CategoriesListView.CellSizes.Tile.Height*3, 16);
+    CategoriesListView.Font.Name:= FormMain.Get4KSystemFont;
+    CategoriesListView.PaintInfoItem.ImageIndent:= 8;
+
+    FormMain.Set4KLabelSpecs(LabelSystemTitle, 23, 25, -1, -1, 16);
+    FormMain.Set4KButtonsOkCancelPanel(PanelBottom, ButtonOk, ButtonCancel, False);
+  end;
+end;
 
 procedure TFormImageCategorySelector.AddCategories;
 begin
@@ -63,6 +90,9 @@ end;
 
 procedure TFormImageCategorySelector.FormShow(Sender: TObject);
 begin
+  Resize4K;
+  FormMain.ELV_ResetNormalColors(CategoriesListView);
+
   if IsNightMode then
      begin
        FormImageCategorySelector.Color:= menu_background_color[1];
@@ -73,7 +103,6 @@ begin
        FormMain.SetButtonExColors(ButtonCancel);
      end;
 
-  FormMain.ELV_ResetNormalColors(CategoriesListView);
   FormMain.LoadCategoriesIcons(IL_ImageCategory);
 
   if IsNightMode then
@@ -109,7 +138,6 @@ begin
      begin
        LabelSystemTitle.Caption:= UpperCase(GetImageCategoryTitle(Item.ImageIndex));
        ButtonOk.Enabled:= not Item.Ghosted;
-       //FormMain.ELV_SetSelectRibbon(Ord(not ButtonOk.Enabled), CategoriesListView); // no longer used (April 04, 2019)
        Sender.Tag:= Item.ImageIndex;
      end;
 end;

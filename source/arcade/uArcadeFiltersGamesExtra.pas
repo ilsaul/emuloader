@@ -6,7 +6,7 @@ uses
   Windows, SysUtils, Classes, Graphics, Controls, Forms,
   StdCtrls, ExtCtrls, uCommon, Buttons,
   AdvOfficeButtons, PanelEx, AdvGroupBox, ShadowLabel, ButtonsEx,
-  ColorBoxEx;
+  ColorBoxEx, UxTheme;
 
 type
   TFormArcadeFiltersExtra = class(TForm)
@@ -68,15 +68,18 @@ type
     SpecialList: TComboBox2Ex;
     LabelSpecialList: TShadowLabel;
     LabelHideMAMESoftlist_vgmplay: TShadowLabel;
-    procedure FormActivate(Sender: TObject);
+    LabelCocktail: TShadowLabel;
+    Cocktail: TComboBox2Ex;
+    ArtworkRequired: TComboBox2Ex;
+    LabelArtworkRequired: TShadowLabel;
     procedure ButtonOkClick(Sender: TObject);
     procedure ButtonDefaultOptionsClick(Sender: TObject);
     procedure FormKeyPress(Sender: TObject; var Key: Char);
     procedure ButtonCategoriesToHideInfoClick(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
+    procedure FormShow(Sender: TObject);
   private
     { Private declarations }
-    procedure ELV_PopulateControlType;
     procedure UpdateSettings;
   public
     { Public declarations }
@@ -94,22 +97,6 @@ uses uMain, uStatus;
 
 {$R *.dfm}
 
-procedure TFormArcadeFiltersExtra.ELV_PopulateControlType;
-var
-  Loop: Integer;
-  cStr: String;
-begin
-  ControlType_New.Items.BeginUpdate;
-  for Loop:=0 to FormMain.ControlType.Count-1 do
-  begin
-    cStr:= FormMain.ControlType.ValueFromIndex[Loop];
-    if cStr <> '' then
-       ControlType_New.Items.Add(cStr);
-  end;
-  ControlType_New.Items.EndUpdate;
-  ControlType_New.DropDownCount:= ControlType_New.Items.Count+2;
-end;
-
 procedure TFormArcadeFiltersExtra.UpdateSettings;
 var
   ValueStr: String;
@@ -124,8 +111,8 @@ var
   function ResetFilterCheckBox(CheckBoxHolder: TAdvOfficeCheckBoxEx): Boolean;
   begin
     Result:= True;
-    if CheckBoxHolder.Checked <> (Boolean(CheckBoxHolder.Tag)) then
-       CheckBoxHolder.Checked:= Boolean(CheckBoxHolder.Tag);
+    if CheckBoxHolder.Checked <> Boolean(CheckBoxHolder.Tag) then
+       CheckBoxHolder.Checked:=  Boolean(CheckBoxHolder.Tag);
   end;
 
 begin
@@ -237,6 +224,15 @@ begin
         FilterChanged(LabelSaveState.Tag, SaveState.ItemIndex);
         LabelSaveState.Tag:= SaveState.ItemIndex;
 
+        FilterChanged(LabelSpecialList.Tag, SpecialList.ItemIndex);
+        LabelSpecialList.Tag:= SpecialList.ItemIndex;
+
+        FilterChanged(LabelCocktail.Tag, Cocktail.ItemIndex);
+        LabelCocktail.Tag:= Cocktail.ItemIndex;
+
+        FilterChanged(LabelArtworkRequired.Tag, ArtworkRequired.ItemIndex);
+        LabelArtworkRequired.Tag:= ArtworkRequired.ItemIndex;
+
         FilterChanged(NeoGeoMVS.Tag, Ord(NeoGeoMVS.Checked));
         NeoGeoMVS.Tag:= Ord(NeoGeoMVS.Checked);
 
@@ -252,10 +248,6 @@ begin
         FilterChanged(HideMAMESoftlist_vgmplay.Tag, Ord(HideMAMESoftlist_vgmplay.Checked));
         HideMAMESoftlist_vgmplay.Tag:= Ord(HideMAMESoftlist_vgmplay.Checked);
 
-        FilterChanged(LabelSpecialList.Tag, SpecialList.ItemIndex);
-        LabelSpecialList.Tag:= SpecialList.ItemIndex;
-
-        //FilterChanged(FilterGamesMainCPU.Tag, Ord(FilterGamesMainCPU.Checked));
         FilterGamesMainCPU.Tag:= Ord(FilterGamesMainCPU.Checked);
       end;
     mrCancel:
@@ -310,6 +302,10 @@ begin
         FormMain.SetExtraFilter(LabelScreenOrientation, ScreenOrientation);
 
         FormMain.SetExtraFilter(LabelSaveState, SaveState);
+        FormMain.SetExtraFilter(LabelSpecialList, SpecialList);
+
+        FormMain.SetExtraFilter(LabelCocktail, Cocktail);
+        FormMain.SetExtraFilter(LabelArtworkRequired, ArtworkRequired);
 
         ResetFilterCheckBox(NeoGeoMVS);
         ResetFilterCheckBox(STVMultiSlot);
@@ -320,23 +316,9 @@ begin
 
         ResetFilterCheckBox(HideMAMESoftlist_vgmplay);
 
-        FormMAin.SetExtraFilter(LabelSpecialList, SpecialList);
-
         ResetFilterCheckBox(FilterGamesMainCPU);
       end;
   end;
-end;
-
-procedure TFormArcadeFiltersExtra.FormActivate(Sender: TObject);
-begin
-  if Tag = 1 then
-     Exit;
-  Tag:= 1;
-  ApplyFilter_Misc:= False; // set default to FALSE; only set to TRUE if user click "Apply" button AND only if any of the filters changed
-  ELV_PopulateControlType;
-  SetSelectedComboBox(FormMain.ControlType.IndexOfName(ControlName)+1, ControlType_New);
-
-  // FormMain.SetWin10DarkScrollBar(ControlType_New); // this does NOT work :_((
 end;
 
 procedure TFormArcadeFiltersExtra.ButtonOkClick(Sender: TObject);
@@ -353,7 +335,7 @@ begin
   AudioType.ItemIndex:= 0;
   DeviceROMs.ItemIndex:= 0;
   HideDeviceSets.Checked:= False;
-  //HideDeviceSetsNoROMs.Checked:= False;
+  //HideDeviceSetsNoROMs.Checked:= False; // no longer used
   GamesROMs.ItemIndex:= 0;
   CategoryCasino.Checked:= True;
   CategoryFruitMachines.Checked:= True;
@@ -386,10 +368,12 @@ begin
   ShowMergedSetsOnly.Checked:= False;
   ShowOnlySetsCRC32Collision.Checked:= False;
   SaveState.ItemIndex:= 0;
+  SpecialList.ItemIndex:= 0;
+
+  Cocktail.ItemIndex:= 0;
+  ArtworkRequired.ItemIndex:= 0;
 
   HideMAMESoftlist_vgmplay.Checked:= False;
-
-  SpecialList.ItemIndex:= 0;
   
   FilterGamesMainCPU.Checked:= False;
 end;
@@ -403,7 +387,7 @@ end;
 procedure TFormArcadeFiltersExtra.ButtonCategoriesToHideInfoClick(
   Sender: TObject);
 begin
-  FormMain.InitMessageBox;// CallMessageBox;
+  FormMain.InitMessageBox;
   FormMain.AddMsgText('    To use these MAME/HBMAME filters you must place ');
   FormMain.AddMsgText('catver.ini', MsgTxtColors.colorFileName, [fsBold]);
   FormMain.AddMsgText(' or ');
@@ -438,7 +422,7 @@ begin
   FormMain.AddMsgText('MAME Handheld Machines', MsgTxtColors.colorKeyTitle, [fsBold]);
   FormMain.AddMsgText(' filters will show/hide MAME machines only (from -listxml output). Software lists are not included.');
 
-  GenerateMessage('Help', 'Hide categories based on an external file.', '', 2);
+  FormMain.ShowMessageBox('Help', 'Hide categories based on an external file.', '', 2);
 end;
 
 procedure TFormArcadeFiltersExtra.FormCloseQuery(Sender: TObject;
@@ -448,5 +432,14 @@ begin
      UpdateSettings;
 end;
 
+procedure TFormArcadeFiltersExtra.FormShow(Sender: TObject);
+begin
+  ApplyFilter_Misc:= False;
+  if Tag = 0 then
+     begin
+       SetSelectedComboBox(FormMain.ControlType.IndexOfName(ControlName)+1, ControlType_New);
+       Tag:= 1;
+     end;
+end;
 
 end.

@@ -31,8 +31,8 @@ object FormControllerKeysLayout: TFormControllerKeysLayout
     Align = alBottom
     Alignment = taCenter
     Caption = 
-      'Press LEFT key / mouse button to view previous layout or RIGHT k' +
-      'ey / mouse button to view next layout'
+      'Press LEFT key /  to view previous layout or RIGHT key to view n' +
+      'ext layout'
     Font.Charset = ANSI_CHARSET
     Font.Color = clBlack
     Font.Height = -12
@@ -62,5 +62,6 @@ object FormControllerKeysLayout: TFormControllerKeysLayout
     Scale = 1.000000000000000000
     ScaleMode = smNormal
     TabOrder = 0
+    OnClick = ControllerImageClick
   end
 end

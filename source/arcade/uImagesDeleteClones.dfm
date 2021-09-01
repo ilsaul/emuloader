@@ -23,7 +23,7 @@ object FormImagesDeleteClones: TFormImagesDeleteClones
     Left = 632
     Top = 0
     Width = 6
-    Height = 572
+    Height = 571
     Align = alRight
     ResizeStyle = rsUpdate
     Appearance.BorderColor = clNone
@@ -42,7 +42,7 @@ object FormImagesDeleteClones: TFormImagesDeleteClones
     Left = 638
     Top = 0
     Width = 352
-    Height = 572
+    Height = 571
     Align = alRight
     BevelOuter = bvNone
     Color1 = 15856113
@@ -138,7 +138,7 @@ object FormImagesDeleteClones: TFormImagesDeleteClones
       Left = 0
       Top = 286
       Width = 352
-      Height = 286
+      Height = 285
       Align = alClient
       BevelOuter = bvNone
       Color1 = 15856113
@@ -154,7 +154,7 @@ object FormImagesDeleteClones: TFormImagesDeleteClones
         Left = 0
         Top = 20
         Width = 352
-        Height = 266
+        Height = 265
         Align = alClient
         Bitmap.DrawMode = dmBlend
         Bitmap.ResamplerClassName = 'TKernelResampler'
@@ -219,7 +219,7 @@ object FormImagesDeleteClones: TFormImagesDeleteClones
     Left = 0
     Top = 0
     Width = 632
-    Height = 572
+    Height = 571
     Align = alClient
     BevelOuter = bvNone
     Color1 = clWhite
@@ -236,7 +236,7 @@ object FormImagesDeleteClones: TFormImagesDeleteClones
       Left = 0
       Top = 57
       Width = 632
-      Height = 515
+      Height = 514
       Align = alClient
       CellSizes.Report.Height = 28
       Color = clWhite
@@ -245,7 +245,7 @@ object FormImagesDeleteClones: TFormImagesDeleteClones
       EditManager.Font.Height = -12
       EditManager.Font.Name = 'Segoe UI'
       EditManager.Font.Style = []
-      ImagesState = FormMain.IL_ArcadeSystem_Small
+      ImagesState = FormMain.IL_StandardIconsStandard
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlack
       Font.Height = -12
@@ -296,6 +296,7 @@ object FormImagesDeleteClones: TFormImagesDeleteClones
       TabOrder = 0
       View = elsReport
       CustomCheckRadioEnabled = False
+      CustomEnableIconHD = False
       OnColumnClick = DeleteClonesListColumnClick
       OnItemCompare = DeleteClonesListItemCompare
       OnItemPaintText = DeleteClonesListItemPaintText
@@ -342,7 +343,7 @@ object FormImagesDeleteClones: TFormImagesDeleteClones
       object LabelSystem: TShadowLabel
         Left = 28
         Top = 8
-        Width = 77
+        Width = 75
         Height = 16
         Hint = 'Click here to select a system'
         Caption = 'SEGA Model 2'
@@ -361,7 +362,7 @@ object FormImagesDeleteClones: TFormImagesDeleteClones
       object LabelImageCategory: TShadowLabel
         Left = 136
         Top = 8
-        Width = 114
+        Width = 112
         Height = 16
         Hint = 'Click here to select a image category'
         Caption = 'Control Panel Layout'

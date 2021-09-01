@@ -66,8 +66,8 @@ object FormArcadeFileVersionsLarge: TFormArcadeFileVersionsLarge
     object LabelEmuFileName1: TShadowLabel
       Left = 144
       Top = 45
-      Width = 350
-      Height = 35
+      Width = 353
+      Height = 36
       AutoSize = False
       Caption = 'emulator filename with full path, panel 1'
       Font.Charset = ANSI_CHARSET

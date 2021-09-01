@@ -6,7 +6,7 @@ uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
   Dialogs, uCommon, uCommonCustom, MPCommonObjects, MPCommonUtilities, EasyListview,
   ImgList, StdCtrls, Buttons, ComCtrls, ShadowLabel, PanelEx, ExtCtrls,
-  IniFiles, GraphicEx, RichEditURL, ButtonsEx, XiProgressBar;
+  IniFiles, GraphicEx, RichEditURL, ButtonsEx, XiProgressBar, TntComCtrls;
 
 type
   TFormCopyMoveGameFiles = class(TForm)
@@ -20,7 +20,7 @@ type
     LabelGameNameCloneOf: TShadowLabel;
     LabelCopyToTitle: TShadowLabel;
     LabelCopyTo: TShadowLabel;
-    Log: TRichEditURL;
+    Log: TTntRichEdit;
     LabelCanceledByUser: TShadowLabel;
     LabelRemainingFiles: TShadowLabel;
     PanelFileInfo: TPanelEx;
@@ -38,7 +38,7 @@ type
     DestinationFullPath: String;
     MultiSystems: Boolean;
     FilesListMAME: THashedStringList;
-    procedure LoadMediaIcons;
+    procedure Resize4K;
     procedure SetProgressPos(Position: Integer);
     procedure UpdateProgressBar(Position, Total: Integer);
     procedure UpdateTotalLeftLabel(TotalFilesLeft: Integer);
@@ -56,33 +56,52 @@ var
 
 implementation
 
-uses uMain, uDeleteMultipleGamesFiles, uDeleteGamesFiles;
+uses uMain, uDeleteMultipleGamesFiles, uDeleteGameFiles;
 
 {$R *.dfm}
 
-procedure TFormCopyMoveGameFiles.LoadMediaIcons;
-var
-  Loop: ShortInt;
-  Folder: String;
+procedure TFormCopyMoveGameFiles.Resize4K;
 begin
-  Folder:= FormMain.GetFolderFull(32);
-  for Loop:=Low(aMediaType)+1 to High(aMediaType) do
-      FormMain.AddDefaultIcons(aMediaType[Loop, 1]+'.ico', Folder, IL_MediaType); // zipfile.ico and chd.ico
+  if not Is4KMode then
+     Exit;
 
-  FormMain.AddDefaultIcons('media_disc.ico', Folder, IL_MediaType);             // 2
-  FormMain.AddDefaultIcons('media_flashcard.ico', Folder, IL_MediaType);        // 3
+  with FormCopyMoveGameFiles do
+  begin
+    ClientWidth:= 1360;
+    ClientHeight:= 815;
+    Font.Size:= 16;
 
-  FormMain.AddDefaultIcons('settings.ico', Folder, IL_MediaType);               // 4
-  FormMain.AddDefaultIcons('bios_chip.ico', Folder, IL_MediaType);              // 5
-  FormMain.AddDefaultIcons('bios_chip.ico', Folder, IL_MediaType);              // 6
-  FormMain.AddDefaultIcons('bios_chip.ico', Folder, IL_MediaType);              // 7
-  FormMain.AddDefaultIcons('bios_chip.ico', Folder, IL_MediaType);              // 8
+    FormMain.Set4KRichEditSpecs(Log, -1, 447, ClientWidth-16, 361, 16);
+    FormMain.Set4KPanelSpecs(PanelProgress, -1, 259, ClientWidth, 180);
 
-  for Loop:=Low(MediaTypeCustom) to High(MediaTypeCustom) do
-      FormMain.AddDefaultIcons(MediaTypeCustom[Loop, 1], Folder, IL_MediaType); // 9..13
+    FormMain.Set4KButtonSpecs(ButtonPause,    -1, 123, 168, 45, 16);
+    FormMain.Set4KButtonSpecs(ButtonCancel, 1184, 123, 168, 45, 16);
 
-  FormMain.AddDefaultIcons('media_vhs.ico', Folder, IL_MediaType);              // 14
-  FormMain.AddDefaultIcons('media_videogamemusic.ico', Folder, IL_MediaType);   // 15
+    FormMain.Set4KLabelSpecs(LabelCanceledByUser, 697, 132, 472, 28, 16);
+    FormMain.Set4KProgressBarSpecs(ProgressBar, -1, 80, ClientWidth-16, 32);
+
+    FormMain.Set4KLabelSpecs(LabelCopyToTitle,    64,  3,   -1, -1, 16);
+    FormMain.Set4KLabelSpecs(LabelCopyTo,        294,  3, 1048, 26, 16);
+    FormMain.Set4KLabelSpecs(LabelRemainingFiles, 64, 33,  505, 26, 16);
+
+    FormMain.Set4KPanelSpecs(PanelFileInfo, 0, 159, ClientWidth, 100);
+
+    FormMain.Set4KLabelStyleSpecs(LabelFileType, []);
+    FormMain.Set4KLabelSpecs(LabelFileType,     158,  0, 1180, 30, 18);
+    FormMain.Set4KLabelSpecs(LabelGameFile,     143, 30, 1195, 25, 16);
+    FormMain.Set4KLabelSpecs(LabelFileSizeDate, 143, 55, 1195, 25, 16);
+
+    FormMain.Set4KImageIconSpecs(IconFileType, 68, 64, 5);
+
+    FormMain.Set4KEmuGameTopPanel(PanelTop, SystemIcon, nil, LabelGameTitle, 1205, LabelGameNameCloneOf, 1205);
+    PanelTop.Height:= 159;
+
+    {FormMain.Set4KImageIconSpecs(SystemIcon, 128, 10, 10);
+
+    FormMain.Set4KLabelSpecs(LabelGameTitle, 144, -1, 1205, 59, 18);
+    FormMain.Set4KLabelSpecs(LabelGameNameCloneOf, 144, 75, 1205, 47, 16);}
+    LabelGameNameCloneOf.Layout:= tlCenter;
+  end;
 end;
 
 procedure TFormCopyMoveGameFiles.SetProgressPos(Position: Integer);
@@ -109,12 +128,14 @@ var
   ActionStr: String;
   HasMAME: Boolean;
 begin
+  Resize4K;
+
   if IsNightMode then
      begin
        SetFormColors(FormCopyMoveGameFiles, PanelTop, nil, LabelGameTitle, LabelGameNameCloneOf, nil, -1, True);
 
        ProgressBar.ColorScheme:= csMetal;
-       
+
        PanelFileInfo.Color1:= FormCopyMoveGameFiles.Color;
        PanelProgress.Style:= vgSolid;
        PanelProgress.Color1:= FormCopyMoveGameFiles.Color;
@@ -138,12 +159,18 @@ begin
        FormMain.SetButtonExColors(ButtonPause);
      end;
 
-  //FormCopyMoveGameFiles.Color:= clrDarkGray; // must set TRichEdit bk color here; it crashes at .onFormCreate() event
-  //Exit; // for debugging only, do not enable
-  Left:= (Screen.Width shr 1)-(Width shr 1)-1;
-  Top:= (Screen.Height shr 1)-(Height shr 1)-1;
+  FormMain.LoadMediaIcons(IL_MediaType);
 
-  LoadMediaIcons;
+  //FormCopyMoveGameFiles.Color:= clrDarkGray; // must set TRichEdit bk color here; it crashes at .onFormCreate() event
+
+  Log.Lines.Clear; // prevent garbish text at startup
+  Log.SelStart:= 0;
+  Log.SelLength:= 0; // ensure no text is selected
+  //Log.ReadOnly:= False;
+
+  CallCenterWindow(FormCopyMoveGameFiles);
+
+  //Exit; // for debugging only, do not enable
 
   SingleSystemChanged:= False;
   for Loop:= 1 to MaxArcadeSystems do
@@ -156,32 +183,32 @@ begin
        CurrentSystem:= -1;
        CurrentCustomSystem:= -1;
        CurrentSoftwareName:= '';
-       Item:= FormDeleteMultipleGamesFiles.GamesList.Groups.FirstItem;
+       Item:= FormDeleteMultipleGamesFiles.GamesListDeleteMulti.Groups.FirstItem;
        repeat
          if CurrentSystem = -1 then
             begin
-              CurrentSystem:= uDeleteMultipleGamesFiles.TGameInfo(Item).eSystemID;
-              CurrentCustomSystem:= uDeleteMultipleGamesFiles.TGameInfo(Item).eCustomSystemID;
-              CurrentSoftwareName:= uDeleteMultipleGamesFiles.TGameInfo(Item).eSoftwareName;
+              CurrentSystem:= uDeleteMultipleGamesFiles.TGameInfoDeleteMulti(Item).eSystemID;
+              CurrentCustomSystem:= uDeleteMultipleGamesFiles.TGameInfoDeleteMulti(Item).eCustomSystemID;
+              CurrentSoftwareName:= uDeleteMultipleGamesFiles.TGameInfoDeleteMulti(Item).eSoftwareName;
             end
          else
             begin
-              if (uDeleteMultipleGamesFiles.TGameInfo(Item).eSystemID <> CurrentSystem) or
-                 (uDeleteMultipleGamesFiles.TGameInfo(Item).eSoftwareName <> CurrentSoftwareName) or
-                 (uDeleteMultipleGamesFiles.TGameInfo(Item).eCustomSystemID <> CurrentCustomSystem) then
+              if (uDeleteMultipleGamesFiles.TGameInfoDeleteMulti(Item).eSystemID <> CurrentSystem) or
+                 (uDeleteMultipleGamesFiles.TGameInfoDeleteMulti(Item).eSoftwareName <> CurrentSoftwareName) or
+                 (uDeleteMultipleGamesFiles.TGameInfoDeleteMulti(Item).eCustomSystemID <> CurrentCustomSystem) then
                  MultiSystems:= True;
             end;
-         if uDeleteMultipleGamesFiles.TGameInfo(Item).eSystemID = idMAME then
+         if uDeleteMultipleGamesFiles.TGameInfoDeleteMulti(Item).eSystemID = idMAME then
             HasMAME:= True;
-         Item:= FormDeleteMultipleGamesFiles.GamesList.Groups.NextItem(Item);
+         Item:= FormDeleteMultipleGamesFiles.GamesListDeleteMulti.Groups.NextItem(Item);
        until (Item = nil) or MultiSystems;
      end;
   
   if Assigned(FormDeleteMultipleGamesFiles) then
      DestinationFullPath:= FormDeleteMultipleGamesFiles.DestinationFolder.Text
   else
-  if Assigned(FormDeleteGamesFiles) then
-     DestinationFullPath:= FormDeleteGamesFiles.DestinationFolder.Text;
+  if Assigned(FormDeleteGameFiles) then
+     DestinationFullPath:= FormDeleteGameFiles.DestinationFolder.Text;
 
   case FormCopyMoveGameFiles.Tag of
     0: ActionStr:= 'Deleting';
@@ -228,6 +255,14 @@ var
   ErrorMsg: DWORD;
   tmpStr: String;
 
+  function AddLogText(iText: WideString; AddCarriageReturn: Boolean = True): Boolean;
+  begin
+    Result:= True;
+    Log.SelText:= iText;
+    if AddCarriageReturn then
+       Log.SelText:= #13;
+  end;
+
   function SetSysIcon(sysID: Integer; IsCustomGame: Boolean): Boolean;
   begin
     if IsCustomGame then
@@ -238,9 +273,7 @@ var
                SystemIcon.Tag:= sysID;
                SystemIcon.HelpContext:= 0;
 
-               FormMain.LoadIconIntoImage(SystemsListCustom[sysID, 1], SystemIcon, -1, True);
-               //FormMain.IL_StandardIconsLarge.GetIcon(MaxGameID+sysID, SystemIcon.Picture.Icon);
-               //FormMain.IL_ArcadeSystem_Large.GetIcon(sysID, SystemIcon.Picture.Icon);
+               FormMain.LoadSystemIcon(sysID, SystemIcon, True);
              end;
        end
     else
@@ -250,8 +283,7 @@ var
              begin
                SystemIcon.Tag:= sysID;
                SystemIcon.HelpContext:= -1;
-               FormMain.LoadIconIntoImage(FormMain.GetArcadeSystemIconFileName(sysID), SystemIcon);
-               //FormMain.IL_ArcadeSystem_Large.GetIcon(sysID, SystemIcon.Picture.Icon);
+               FormMain.LoadSystemIcon(sysID, SystemIcon, False);
              end;
        end;
   end;
@@ -314,7 +346,7 @@ var
     Result:= ButtonCancel.ModalResult = mrAbort;
     if Result then
        begin
-         if GenerateMessage(FormCopyMoveGameFiles.Caption, 'Operation is still active.',
+         if FormMain.ShowMessageBox(FormCopyMoveGameFiles.Caption, 'Operation is still active.',
                           '    Not all files have been processed. You can restart this process in the previous '+
                           'screen.'+#13#10+'Are you sure you want to abort ?', 1, False, 2) = mrNo then
             begin
@@ -333,15 +365,15 @@ var
     Result:= AddLogHeader;
     if Result then
        begin
-         Log.Lines.Add('Operation errors ['+FormCopyMoveGameFiles.Caption+']');
+         AddLogText('Operation errors ['+FormCopyMoveGameFiles.Caption+']'); //Log.Lines.Add('Operation errors ['+FormCopyMoveGameFiles.Caption+']');
          if FormCopyMoveGameFiles.Tag <> 0 then
             begin
               if OverwriteFiles then
-                 Log.Lines.Add('Overwrite files enabled.')
+                 AddLogText('Overwrite files enabled.')   // Log.Lines.Add('Overwrite files enabled.')
               else
-                 Log.Lines.Add('Overwrite files disabled.');
+                 AddLogText('Overwrite files disabled.'); // Log.Lines.Add('Overwrite files disabled.');
             end;
-         Log.Lines.Add('');
+         AddLogText(''); // Log.Lines.Add('');
          AddLogHeader:= False;
        end;
   end;
@@ -370,23 +402,23 @@ begin
         if IsCopyFiles and Assigned(FilesListMAME) then
         begin
           FilesListMAME.BeginUpdate;
-          Item:= FormDeleteMultipleGamesFiles.GamesList.Groups.FirstItem;
+          Item:= FormDeleteMultipleGamesFiles.GamesListDeleteMulti.Groups.FirstItem;
           repeat
-            if not uDeleteMultipleGamesFiles.TGameInfo(Item).eIsCustomGame then
+            if not uDeleteMultipleGamesFiles.TGameInfoDeleteMulti(Item).eIsCustomGame then
             begin
-              if uDeleteMultipleGamesFiles.TGameInfo(Item).eSystemID = idMAME then
+              if uDeleteMultipleGamesFiles.TGameInfoDeleteMulti(Item).eSystemID = idMAME then
               begin
-                if Assigned(uDeleteMultipleGamesFiles.TGameInfo(Item).eGameFiles) and (uDeleteMultipleGamesFiles.TGameInfo(Item).eGameFiles.Count > 0) then
+                if Assigned(uDeleteMultipleGamesFiles.TGameInfoDeleteMulti(Item).eGameFiles) and (uDeleteMultipleGamesFiles.TGameInfoDeleteMulti(Item).eGameFiles.Count > 0) then
                 begin
                   //ShowMessageW(uDeleteMultipleGamesFiles.TGameInfo(Item).eGameFiles.Text);
-                  for Loop:=0 to uDeleteMultipleGamesFiles.TGameInfo(Item).eGameFiles.Count-1 do
+                  for Loop:=0 to uDeleteMultipleGamesFiles.TGameInfoDeleteMulti(Item).eGameFiles.Count-1 do
                   begin
                     // 00 -> rom; 01 -> CHD; -1 -> config files
                     // media_type FileID IsParentCHD filename
                     // 01120 simpbowl.chd
                     // 00000 elvator.rom
                     // -1000 elvator.cfg
-                    tmpStr:= uDeleteMultipleGamesFiles.TGameInfo(Item).eGameFiles[Loop];
+                    tmpStr:= uDeleteMultipleGamesFiles.TGameInfoDeleteMulti(Item).eGameFiles[Loop];
                     tmpFileName:= tmpStr;
                     Delete(tmpFileName, 1, 6);
 
@@ -395,7 +427,7 @@ begin
                 end;
               end;
             end;
-            Item:= FormDeleteMultipleGamesFiles.GamesList.Groups.NextItem(Item);
+            Item:= FormDeleteMultipleGamesFiles.GamesListDeleteMulti.Groups.NextItem(Item);
           until Item = nil;
           FilesListMAME.EndUpdate;
 
@@ -403,17 +435,17 @@ begin
              FreeAndNil(FilesListMAME)
         end;
 
-        Item:= FormDeleteMultipleGamesFiles.GamesList.Groups.FirstItem;
+        Item:= FormDeleteMultipleGamesFiles.GamesListDeleteMulti.Groups.FirstItem;
         repeat
           Continue:= False;
 
-          if uDeleteMultipleGamesFiles.TGameInfo(Item).eIsCustomGame then
+          if uDeleteMultipleGamesFiles.TGameInfoDeleteMulti(Item).eIsCustomGame then
           begin
-            SetSysIcon(uDeleteMultipleGamesFiles.TGameInfo(Item).eCustomSystemID, True);
-            LabelGameTitle.Caption:= uDeleteMultipleGamesFiles.TGameInfo(Item).eTitle;
-            LabelGameNameCloneOf.Caption:= 'name: '+uDeleteMultipleGamesFiles.TGameInfo(Item).eName;
+            SetSysIcon(uDeleteMultipleGamesFiles.TGameInfoDeleteMulti(Item).eCustomSystemID, True);
+            LabelGameTitle.Caption:= uDeleteMultipleGamesFiles.TGameInfoDeleteMulti(Item).eTitle;
+            LabelGameNameCloneOf.Caption:= 'name: '+uDeleteMultipleGamesFiles.TGameInfoDeleteMulti(Item).eName;
 
-             tmpFileName:= uDeleteMultipleGamesFiles.TGameInfo(Item).eCustomGameFileFullPath;
+             tmpFileName:= uDeleteMultipleGamesFiles.TGameInfoDeleteMulti(Item).eCustomGameFileFullPath;
              // console/computer
              // media_type -> MediaTypeCustom[] array indexes 01..05
              // media_type IsUnicode filename
@@ -422,7 +454,7 @@ begin
 
              // if 4th char position is a space char, then it's a EmuCon game...
 
-             tmpMediaType:= uDeleteMultipleGamesFiles.TGameInfo(Item).eCustomMediaType;
+             tmpMediaType:= uDeleteMultipleGamesFiles.TGameInfoDeleteMulti(Item).eCustomMediaType;
              tmpFileType:= -1; // not used here...
 
              if FormCopyMoveGameFiles.Tag = 0 then // is DELETE game file mode ???
@@ -436,15 +468,15 @@ begin
                      begin
                        AllowCopyFile:= True;
                        SetMediaTypeIcon(tmpMediaType, tmpFileType, True);
-                       LabelFileType.Caption:= FormMain.GetFileTypeText(uDeleteMultipleGamesFiles.TGameInfo(Item).eCustomSystemID,
-                                                                        0{tmpMediaType}, tmpFileType, uDeleteMultipleGamesFiles.TGameInfo(Item).eIsCustomGame, uDeleteMultipleGamesFiles.TGameInfo(Item).eCustomMediaType);
+                       LabelFileType.Caption:= FormMain.GetFileTypeText(uDeleteMultipleGamesFiles.TGameInfoDeleteMulti(Item).eCustomSystemID,
+                                                                        0{tmpMediaType}, tmpFileType, uDeleteMultipleGamesFiles.TGameInfoDeleteMulti(Item).eIsCustomGame, uDeleteMultipleGamesFiles.TGameInfoDeleteMulti(Item).eCustomMediaType);
                        LabelGameFile.Caption:= tmpFileName;
                        FileNoPath:= ExtractFileNameW(tmpFileName);
 
                        SoftwareNameDir:= '';
                        CopyMoveToDir:= DestinationFullPath;
                        if MultiSystems or AddSystemFolder then
-                          CopyMoveToDir:= CopyMoveToDir+SystemsListCustom[uDeleteMultipleGamesFiles.TGameInfo(Item).eCustomSystemID, 0]+'\';
+                          CopyMoveToDir:= CopyMoveToDir+SystemsListCustom[uDeleteMultipleGamesFiles.TGameInfoDeleteMulti(Item).eCustomSystemID, 0]+'\';
 
                        if tmpMediaType > 0 then
                           CopyMoveToDir:= CopyMoveToDir+MediaTypeCustom[tmpMediaType, 2]+'\';
@@ -472,7 +504,7 @@ begin
                                False:
                                  begin
                                    CheckLogHeader;
-                                   Log.Lines.Add(GetErrorCode+'delete '+tmpFileName);
+                                   AddLogText(GetErrorCode+'delete '+tmpFileName); // Log.Lines.Add(GetErrorCode+'delete '+tmpFileName);
                                    Inc(OperationErrors);
                                  end;
                              end;
@@ -484,13 +516,14 @@ begin
                                if not DirectoryExists(CopyMoveToDir) then
                                   begin
                                     if not ForceDirectories(CopyMoveToDir) then
-                                       Log.Lines.Add(GetErrorCode+'create folder '+CopyMoveToDir);
+                                       AddLogText(GetErrorCode+'create folder '+CopyMoveToDir); // Log.Lines.Add(GetErrorCode+'create folder '+CopyMoveToDir);
                                   end;
 
                                if not CopyFileW(PWideChar(tmpFileName), PWideChar(CopyMoveToDir+FileNoPath), (not OverwriteFiles)) then
                                   begin
                                     CheckLogHeader;
-                                    Log.Lines.Add(GetErrorCode+tmpFileName+' copy to '+CopyMoveToDir+FileNoPath);
+                                    AddLogText(GetErrorCode+tmpFileName+' copy to '+CopyMoveToDir+FileNoPath);
+                                    // Log.Lines.Add(GetErrorCode+tmpFileName+' copy to '+CopyMoveToDir+FileNoPath);
                                     Inc(OperationErrors);
                                   end;
                              end;
@@ -500,12 +533,13 @@ begin
                              if not DirectoryExists(CopyMoveToDir) then
                                 begin
                                   if not ForceDirectories(CopyMoveToDir) then
-                                     Log.Lines.Add(GetErrorCode+'create folder '+CopyMoveToDir);
+                                     AddLogText(GetErrorCode+'create folder '+CopyMoveToDir); // Log.Lines.Add(GetErrorCode+'create folder '+CopyMoveToDir);
                                 end;
                              if not MoveFileW(tmpFileName, CopyMoveToDir+FileNoPath, OverwriteFiles) then
                                 begin
                                   CheckLogHeader;
-                                  Log.Lines.Add(GetErrorCode+tmpFileName+' move to '+CopyMoveToDir+FileNoPath);
+                                  AddLogText(GetErrorCode+tmpFileName+' move to '+CopyMoveToDir+FileNoPath);
+                                  // Log.Lines.Add(GetErrorCode+tmpFileName+' move to '+CopyMoveToDir+FileNoPath);
                                   Inc(OperationErrors);
                                 end;
                            end;
@@ -521,7 +555,7 @@ begin
                          1: tmpStr:= 'copy ';
                          2: tmpStr:= 'move ';
                        end;
-                       Log.Lines.Add(GetErrorCode+tmpStr+tmpFileName);
+                       AddLogText(GetErrorCode+tmpStr+tmpFileName); // Log.Lines.Add(GetErrorCode+tmpStr+tmpFileName);
                        Inc(OperationErrors);
                      end;
                 end;
@@ -536,21 +570,21 @@ begin
           end
           else
           begin
-            if Assigned(uDeleteMultipleGamesFiles.TGameInfo(Item).eGameFiles) and (uDeleteMultipleGamesFiles.TGameInfo(Item).eGameFiles.Count > 0) then
+            if Assigned(uDeleteMultipleGamesFiles.TGameInfoDeleteMulti(Item).eGameFiles) and (uDeleteMultipleGamesFiles.TGameInfoDeleteMulti(Item).eGameFiles.Count > 0) then
                begin
-                 SetSysIcon(uDeleteMultipleGamesFiles.TGameInfo(Item).eSystemID, False);
-                 LabelGameTitle.Caption:= uDeleteMultipleGamesFiles.TGameInfo(Item).eTitle;
-                 tmpFileName:= 'name: '+uDeleteMultipleGamesFiles.TGameInfo(Item).eName;
-                 if FormMain.GameIsClone(uDeleteMultipleGamesFiles.TGameInfo(Item).eClone) then
-                    tmpFileName:= tmpFileName+' [clone of '+uDeleteMultipleGamesFiles.TGameInfo(Item).eClone+']';
-                 if uDeleteMultipleGamesFiles.TGameInfo(Item).eMerged then
+                 SetSysIcon(uDeleteMultipleGamesFiles.TGameInfoDeleteMulti(Item).eSystemID, False);
+                 LabelGameTitle.Caption:= uDeleteMultipleGamesFiles.TGameInfoDeleteMulti(Item).eTitle;
+                 tmpFileName:= 'name: '+uDeleteMultipleGamesFiles.TGameInfoDeleteMulti(Item).eName;
+                 if FormMain.GameIsClone(uDeleteMultipleGamesFiles.TGameInfoDeleteMulti(Item).eClone) then
+                    tmpFileName:= tmpFileName+' [clone of '+uDeleteMultipleGamesFiles.TGameInfoDeleteMulti(Item).eClone+']';
+                 if uDeleteMultipleGamesFiles.TGameInfoDeleteMulti(Item).eMerged then
                     tmpFileName:= tmpFileName+' [merged set]';
-                 if uDeleteMultipleGamesFiles.TGameInfo(Item).eSoftwareName <> '' then
-                    tmpFileName:= tmpFileName+ '[softlist: '+uDeleteMultipleGamesFiles.TGameInfo(Item).eSoftwareName+']';
+                 if uDeleteMultipleGamesFiles.TGameInfoDeleteMulti(Item).eSoftwareName <> '' then
+                    tmpFileName:= tmpFileName+ '[softlist: '+uDeleteMultipleGamesFiles.TGameInfoDeleteMulti(Item).eSoftwareName+']';
                  LabelGameNameCloneOf.Caption:= tmpFileName;
                  tmpFileName:= '';
 
-                 for Loop:=0 to uDeleteMultipleGamesFiles.TGameInfo(Item).eGameFiles.Count-1 do
+                 for Loop:=0 to uDeleteMultipleGamesFiles.TGameInfoDeleteMulti(Item).eGameFiles.Count-1 do
                  begin
                    // 00 -> rom; 01 -> CHD; -1 -> config files
                    // media_type FileID IsParentCHD filename
@@ -558,7 +592,7 @@ begin
                    // 00000 elvator.rom
                    // -1000 elvator.cfg
 
-                   tmpStr:= uDeleteMultipleGamesFiles.TGameInfo(Item).eGameFiles[Loop];
+                   tmpStr:= uDeleteMultipleGamesFiles.TGameInfoDeleteMulti(Item).eGameFiles[Loop];
                    tmpMediaType:= StrToInt(tmpStr[1]+tmpStr[2]);
                    tmpFileType:= StrToInt(tmpStr[3]+tmpStr[4]);
 
@@ -587,15 +621,15 @@ begin
                                 end;
 
                              SetMediaTypeIcon(tmpMediaType, tmpFileType, False);
-                             LabelFileType.Caption:= FormMain.GetFileTypeText(uDeleteMultipleGamesFiles.TGameInfo(Item).eSystemID,
-                                                                              tmpMediaType, tmpFileType, uDeleteMultipleGamesFiles.TGameInfo(Item).eIsCustomGame, uDeleteMultipleGamesFiles.TGameInfo(Item).eCustomMediaType);
+                             LabelFileType.Caption:= FormMain.GetFileTypeText(uDeleteMultipleGamesFiles.TGameInfoDeleteMulti(Item).eSystemID,
+                                                                              tmpMediaType, tmpFileType, uDeleteMultipleGamesFiles.TGameInfoDeleteMulti(Item).eIsCustomGame, uDeleteMultipleGamesFiles.TGameInfoDeleteMulti(Item).eCustomMediaType);
                              LabelGameFile.Caption:= tmpFileName;
                              FileNoPath:= ExtractFileName(tmpFileName);
 
-                             SoftwareNameDir:= FormMain.GetSoftwareNameFolder(uDeleteMultipleGamesFiles.TGameInfo(Item).eSoftwareName);
+                             SoftwareNameDir:= FormMain.GetSoftwareNameFolder(uDeleteMultipleGamesFiles.TGameInfoDeleteMulti(Item).eSoftwareName);
                              CopyMoveToDir:= DestinationFullPath;
                              if MultiSystems or AddSystemFolder then
-                                CopyMoveToDir:= CopyMoveToDir+FormMain.GetArcadeSystemIniSection(uDeleteMultipleGamesFiles.TGameInfo(Item).eSystemID)+'\';
+                                CopyMoveToDir:= CopyMoveToDir+FormMain.GetArcadeSystemIniSection(uDeleteMultipleGamesFiles.TGameInfoDeleteMulti(Item).eSystemID)+'\';
                              CopyMoveToDir:= CopyMoveToDir+SoftwareNameDir;
 
                              // old code... remove it ? (February 25, 2018)
@@ -622,14 +656,14 @@ begin
                                        begin
                                          if tmpMediaType in [0, 1] then
                                             begin
-                                              if uDeleteMultipleGamesFiles.TGameInfo(Item).eSoftwareName = '' then
-                                                 ArcadeSystemChanged[uDeleteMultipleGamesFiles.TGameInfo(Item).eSystemID]:= True;
+                                              if uDeleteMultipleGamesFiles.TGameInfoDeleteMulti(Item).eSoftwareName = '' then
+                                                 ArcadeSystemChanged[uDeleteMultipleGamesFiles.TGameInfoDeleteMulti(Item).eSystemID]:= True;
                                             end;
                                        end;
                                      False:
                                        begin
                                          CheckLogHeader;
-                                         Log.Lines.Add(GetErrorCode+'delete '+tmpFileName);
+                                         AddLogText(GetErrorCode+'delete '+tmpFileName); // Lines.Add(GetErrorCode+'delete '+tmpFileName);
                                          Inc(OperationErrors);
                                        end;
                                    end;
@@ -641,14 +675,15 @@ begin
                                      if not DirectoryExists(CopyMoveToDir) then
                                         begin
                                           if not ForceDirectories(CopyMoveToDir) then
-                                             Log.Lines.Add(GetErrorCode+'create folder '+CopyMoveToDir);
+                                             AddLogText(GetErrorCode+'create folder '+CopyMoveToDir); // Log.Lines.Add(GetErrorCode+'create folder '+CopyMoveToDir);
                                         end;
 
                                      //if not CopyFile(PChar(tmpFileName), PChar(CopyMoveToDir+FileNoPath), (not OverwriteFiles)) then
                                      if not CopyFileW(PWideChar(tmpFileName), PWideChar(CopyMoveToDir+FileNoPath), (not OverwriteFiles)) then
                                         begin
                                           CheckLogHeader;
-                                          Log.Lines.Add(GetErrorCode+tmpFileName+' copy to '+CopyMoveToDir+FileNoPath);
+                                          AddLogText(GetErrorCode+tmpFileName+' copy to '+CopyMoveToDir+FileNoPath);
+                                          // Log.Lines.Add(GetErrorCode+tmpFileName+' copy to '+CopyMoveToDir+FileNoPath);
                                           Inc(OperationErrors);
                                         end;
                                    end;
@@ -658,13 +693,14 @@ begin
                                    if not DirectoryExists(CopyMoveToDir) then
                                       begin
                                         if not ForceDirectories(CopyMoveToDir) then
-                                           Log.Lines.Add(GetErrorCode+'create folder '+CopyMoveToDir);
+                                           AddLogText(GetErrorCode+'create folder '+CopyMoveToDir); // Log.Lines.Add(GetErrorCode+'create folder '+CopyMoveToDir);
                                       end;
                                    //if not MoveFile(tmpFileName, CopyMoveToDir+FileNoPath, OverwriteFiles) then
                                    if not MoveFileW(tmpFileName, CopyMoveToDir+FileNoPath, OverwriteFiles) then
                                       begin
                                         CheckLogHeader;
-                                        Log.Lines.Add(GetErrorCode+tmpFileName+' move to '+CopyMoveToDir+FileNoPath);
+                                        AddLogText(GetErrorCode+tmpFileName+' move to '+CopyMoveToDir+FileNoPath);
+                                        // Log.Lines.Add(GetErrorCode+tmpFileName+' move to '+CopyMoveToDir+FileNoPath);
                                         Inc(OperationErrors);
                                       end;
                                  end;
@@ -680,7 +716,7 @@ begin
                                1: tmpStr:= 'copy ';
                                2: tmpStr:= 'move ';
                              end;
-                             Log.Lines.Add(GetErrorCode+tmpStr+tmpFileName);
+                             AddLogText(GetErrorCode+tmpStr+tmpFileName); // Log.Lines.Add(GetErrorCode+tmpStr+tmpFileName);
                              Inc(OperationErrors);
                            end;
                       end;
@@ -695,7 +731,7 @@ begin
                  end;
                end;
           end;
-          Item:= FormDeleteMultipleGamesFiles.GamesList.Groups.NextItem(Item);
+          Item:= FormDeleteMultipleGamesFiles.GamesListDeleteMulti.Groups.NextItem(Item);
           Application.ProcessMessages;
           //sleep(3000); // for testing/debugging only
         until (Item = nil) or (ButtonCancel.ModalResult = mrCancel);
@@ -714,21 +750,21 @@ begin
            SetSysIcon(FormMain.MemGameInfo.eSystemID, False);
 
         LabelGameTitle.Caption:= FormMain.MemGameInfo.eTitle;
-        LabelGameNameCloneOf.Caption:= FormDeleteGamesFiles.LabelGameDetails.Caption;
+        LabelGameNameCloneOf.Caption:= FormDeleteGameFiles.LabelGameDetails.Caption;
         tmpFileName:= '';
 
         if FormMain.MemGameInfo.eIsCustomGame then
         begin
-          Item:= FormDeleteGamesFiles.FilesListView.Groups.FirstItem;
+          Item:= FormDeleteGameFiles.FilesListView.Groups.FirstItem;
           repeat
             Continue:= True;
             if Item.Checked then
             begin
               if Continue then
                  begin
-                   tmpMediaType:= uDeleteGamesFiles.TGameInfo(Item).eCustomMediaType;// eMediaType;
-                   tmpFileType:= -1; // uDeleteGamesFiles.TGameInfo(Item).eFileType; // this is not used here!!!
-                   tmpFileName:= uDeleteGamesFiles.TGameInfo(Item).eFileName;
+                   tmpMediaType:= uDeleteGameFiles.TGameInfoDeleteSingle(Item).eCustomMediaType;// eMediaType;
+                   tmpFileType:= -1; // uDeleteGameFiles.TGameInfo(Item).eFileType; // this is not used here!!!
+                   tmpFileName:= uDeleteGameFiles.TGameInfoDeleteSingle(Item).eFileName;
                    if FileExistsW(tmpFileName) then
                       begin
                         SetMediaTypeIcon(tmpMediaType, tmpFileType, FormMain.MemGameInfo.eIsCustomGame);
@@ -768,7 +804,7 @@ begin
                                 False:
                                   begin
                                     CheckLogHeader;
-                                    Log.Lines.Add(GetErrorCode+'delete '+tmpFileName);
+                                    AddLogText(GetErrorCode+'delete '+tmpFileName); // Log.Lines.Add(GetErrorCode+'delete '+tmpFileName);
                                     Inc(OperationErrors);
                                   end;
                               end;
@@ -778,12 +814,13 @@ begin
                               if not DirectoryExists(CopyMoveToDir) then
                                  begin
                                    if not ForceDirectories(CopyMoveToDir) then
-                                      Log.Lines.Add(GetErrorCode+'create folder '+CopyMoveToDir);
+                                      AddLogText(GetErrorCode+'create folder '+CopyMoveToDir); // Log.Lines.Add(GetErrorCode+'create folder '+CopyMoveToDir);
                                  end;
                               if not CopyFileW(PWideChar(tmpFileName), PWideChar(CopyMoveToDir+FileNoPath), (not OverwriteFiles)) then
                                  begin
                                    CheckLogHeader;
-                                   Log.Lines.Add(GetErrorCode+tmpFileName+' copy to '+CopyMoveToDir+FileNoPath);
+                                   AddLogText(GetErrorCode+tmpFileName+' copy to '+CopyMoveToDir+FileNoPath);
+                                   // Log.Lines.Add(GetErrorCode+tmpFileName+' copy to '+CopyMoveToDir+FileNoPath);
                                    Inc(OperationErrors);
                                  end;
                             end;
@@ -792,12 +829,13 @@ begin
                               if not DirectoryExists(CopyMoveToDir) then
                                  begin
                                    if not ForceDirectories(CopyMoveToDir) then
-                                      Log.Lines.Add(GetErrorCode+'create folder '+CopyMoveToDir);
+                                      AddLogText(GetErrorCode+'create folder '+CopyMoveToDir); // Log.Lines.Add(GetErrorCode+'create folder '+CopyMoveToDir);
                                  end;
                               if not MoveFileW(tmpFileName, CopyMoveToDir+FileNoPath, OverwriteFiles) then
                                  begin
                                    CheckLogHeader;
-                                   Log.Lines.Add(GetErrorCode+tmpFileName+' move to '+CopyMoveToDir+FileNoPath);
+                                   AddLogText(GetErrorCode+tmpFileName+' move to '+CopyMoveToDir+FileNoPath);
+                                   // Log.Lines.Add(GetErrorCode+tmpFileName+' move to '+CopyMoveToDir+FileNoPath);
                                    Inc(OperationErrors);
                                  end;
                             end;
@@ -813,7 +851,7 @@ begin
                           1: tmpStr:= 'copy ';
                           2: tmpStr:= 'move ';
                         end;
-                        Log.Lines.Add(GetErrorCode+tmpStr+tmpFileName);
+                        AddLogText(GetErrorCode+tmpStr+tmpFileName); // Log.Lines.Add(GetErrorCode+tmpStr+tmpFileName);
                         Inc(OperationErrors);
                      end;
                  end;
@@ -823,7 +861,7 @@ begin
               Application.ProcessMessages;
               CheckCancelButton;
             end;
-            Item:= FormDeleteGamesFiles.FilesListView.Groups.NextItem(Item);
+            Item:= FormDeleteGameFiles.FilesListView.Groups.NextItem(Item);
             Application.ProcessMessages;
             //ShowMessage('stop');
             //sleep(3000); // for testing/debugging only
@@ -834,16 +872,16 @@ begin
         else
         begin
           // for MAME and arcade systems only
-          Item:= FormDeleteGamesFiles.FilesListView.Groups.FirstItem;
+          Item:= FormDeleteGameFiles.FilesListView.Groups.FirstItem;
           repeat
             Continue:= True;
             if Item.Checked then
             begin
               if Continue then
                  begin
-                   tmpMediaType:= uDeleteGamesFiles.TGameInfo(Item).eMediaType;
-                   tmpFileType:= uDeleteGamesFiles.TGameInfo(Item).eFileType;
-                   tmpFileName:= uDeleteGamesFiles.TGameInfo(Item).eFileName;
+                   tmpMediaType:= uDeleteGameFiles.TGameInfoDeleteSingle(Item).eMediaType;
+                   tmpFileType:= uDeleteGameFiles.TGameInfoDeleteSingle(Item).eFileType;
+                   tmpFileName:= uDeleteGameFiles.TGameInfoDeleteSingle(Item).eFileName;
                    // 0 - .cfg
                    // 1 - .dat; .nv; nvram
                    // 2 - .eeprom
@@ -857,16 +895,16 @@ begin
                         LabelGameFile.Caption:= tmpFileName;
                         FileNoPath:= ExtractFileName(tmpFileName);
 
-                        SoftwareNameDir:= FormMain.GetSoftwareNameFolder(uDeleteGamesFiles.TGameInfo(Item).eSoftwareName);
+                        SoftwareNameDir:= FormMain.GetSoftwareNameFolder(uDeleteGameFiles.TGameInfoDeleteSingle(Item).eSoftwareName);
 
                         CopyMoveToDir:= DestinationFullPath;
                         if AddSystemFolder then
-                           CopyMoveToDir:= CopyMoveToDir+FormMain.GetArcadeSystemIniSection(uDeleteGamesFiles.TGameInfo(Item).eSystemID)+'\';
+                           CopyMoveToDir:= CopyMoveToDir+FormMain.GetArcadeSystemIniSection(uDeleteGameFiles.TGameInfoDeleteSingle(Item).eSystemID)+'\';
                         CopyMoveToDir:= CopyMoveToDir+SoftwareNameDir;
 
                         // old code, remove it ? (February 25, 2018)
                         //if AddSystemFolder then
-                        //   CopyMoveToDir:= DestinationFullPath+FormMain.GetArcadeSystemIniSection(uDeleteGamesFiles.TGameInfo(Item).eSystemID)+'\'+SoftwareNameDir
+                        //   CopyMoveToDir:= DestinationFullPath+FormMain.GetArcadeSystemIniSection(uDeleteGameFiles.TGameInfo(Item).eSystemID)+'\'+SoftwareNameDir
                         //else
                         //   CopyMoveToDir:= DestinationFullPath+SoftwareNameDir;
 
@@ -893,7 +931,7 @@ begin
                                 False:
                                   begin
                                     CheckLogHeader;
-                                    Log.Lines.Add(GetErrorCode+'delete '+tmpFileName);
+                                    AddLogText(GetErrorCode+'delete '+tmpFileName); // Log.Lines.Add(GetErrorCode+'delete '+tmpFileName);
                                     Inc(OperationErrors);
                                   end;
                               end;
@@ -903,13 +941,14 @@ begin
                               if not DirectoryExists(CopyMoveToDir) then
                                  begin
                                    if not ForceDirectories(CopyMoveToDir) then
-                                      Log.Lines.Add(GetErrorCode+'create folder '+CopyMoveToDir);
+                                       AddLogText(GetErrorCode+'create folder '+CopyMoveToDir); // Log.Lines.Add(GetErrorCode+'create folder '+CopyMoveToDir);
                                  end;
                               //if not CopyFile(PChar(tmpFileName), PChar(CopyMoveToDir+FileNoPath), (not OverwriteFiles)) then
                               if not CopyFileW(PWideChar(tmpFileName), PWideChar(CopyMoveToDir+FileNoPath), (not OverwriteFiles)) then
                                  begin
                                    CheckLogHeader;
-                                   Log.Lines.Add(GetErrorCode+tmpFileName+' copy to '+CopyMoveToDir+FileNoPath);
+                                   AddLogText(GetErrorCode+tmpFileName+' copy to '+CopyMoveToDir+FileNoPath);
+                                   // Log.Lines.Add(GetErrorCode+tmpFileName+' copy to '+CopyMoveToDir+FileNoPath);
                                    Inc(OperationErrors);
                                  end;
                             end;
@@ -918,13 +957,14 @@ begin
                               if not DirectoryExists(CopyMoveToDir) then
                                  begin
                                    if not ForceDirectories(CopyMoveToDir) then
-                                      Log.Lines.Add(GetErrorCode+'create folder '+CopyMoveToDir);
+                                      AddLogText(GetErrorCode+'create folder '+CopyMoveToDir); // Log.Lines.Add(GetErrorCode+'create folder '+CopyMoveToDir);
                                  end;
                               //if not MoveFile(tmpFileName, CopyMoveToDir+FileNoPath, OverwriteFiles) then
                               if not MoveFileW(tmpFileName, CopyMoveToDir+FileNoPath, OverwriteFiles) then
                                  begin
                                    CheckLogHeader;
-                                   Log.Lines.Add(GetErrorCode+tmpFileName+' move to '+CopyMoveToDir+FileNoPath);
+                                   AddLogTexT(GetErrorCode+tmpFileName+' move to '+CopyMoveToDir+FileNoPath);
+                                   // Log.Lines.Add(GetErrorCode+tmpFileName+' move to '+CopyMoveToDir+FileNoPath);
                                    Inc(OperationErrors);
                                  end;
                             end;
@@ -940,7 +980,7 @@ begin
                           1: tmpStr:= 'copy ';
                           2: tmpStr:= 'move ';
                         end;
-                        Log.Lines.Add(GetErrorCode+tmpStr+tmpFileName);
+                        AddLogText(GetErrorCode+tmpStr+tmpFileName); // Log.Lines.Add(GetErrorCode+tmpStr+tmpFileName);
                         Inc(OperationErrors);
                      end;
                  end;
@@ -950,7 +990,7 @@ begin
               Application.ProcessMessages;
               CheckCancelButton;
             end;
-            Item:= FormDeleteGamesFiles.FilesListView.Groups.NextItem(Item);
+            Item:= FormDeleteGameFiles.FilesListView.Groups.NextItem(Item);
             Application.ProcessMessages;
             //ShowMessage('stop');
             //sleep(3000); // for testing/debugging only

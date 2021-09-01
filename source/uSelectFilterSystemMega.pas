@@ -40,7 +40,6 @@ type
     PanelSystemsListView: TPanelEx;
     SystemsListView: TEasyListview;
     procedure FormKeyPress(Sender: TObject; var Key: Char);
-    procedure FormActivate(Sender: TObject);
     procedure SystemsListViewKeyAction(Sender: TCustomEasyListview;
       var CharCode: Word; var Shift: TShiftState; var DoDefault: Boolean);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
@@ -81,6 +80,7 @@ type
     procedure ShowHideSystems;
     procedure ValidateChanges;
     procedure CheckUncheckAll(SystemTypeIndex: Integer; CheckItems: Boolean);
+    procedure Resize4K;
   public
     { Public declarations }
     FiltersHaveChanged, MAMEMachinesListPanelChanged: Boolean;
@@ -98,118 +98,180 @@ var
 
 {$R *.dfm}
 
+procedure TFormSelectFilterSystemMega.Resize4K;
+begin
+  if not Is4KMode then
+     Exit;
+
+  with FormSelectFilterSystemMega do
+  begin
+    Font.Size:= 16;
+
+    FormMain.Set4KImageListSpecs(IL_Systems,         128);
+    FormMain.Set4KImageListSpecs(IL_MachinesFilters, 68);
+
+    FormMain.Set4KLabelSpecs(LabelSelectMode, -1, -1, -1, 40, 16);
+
+
+    SystemsListView.View:= elsIcon;
+    //SystemsListView.PaintInfoItem.IconViewRemoveIconTopBorder:= True; // don't use this, replaced by IconViewIconTopBorderIndent (reminder, do not remove this line)
+    SystemsListView.PaintInfoItem.IconViewIconTopBorderIndent:= 9; // 11 pixels icon border
+    SystemsListView.PaintInfoItem.IconViewCheckVertAlignMiddle:= True; // vert center align checkbox / radiobutton
+    SystemsListView.PaintInfoItem.IconViewCaptionBorder:= 7; // extra border to better center the caption, so they look the same as other screens that do not have checkbox enabled
+    SystemsListView.CellSizes.Icon.Width:= 156+22+SystemsListView.PaintInfoItem.CheckIndent;//+SystemsListView.PaintInfoItem.ImageIndent; // ImageIndent should be ZERO
+    SystemsListView.CellSizes.Icon.Height:= 207+32+4;// // 32+4 (systype icon + border)
+
+    //SystemsListView.PaintInfoItem.CaptionIndent:= 4; // does nothing for "elvIcon" view
+    //SystemsListView.PaintInfoItem.ImageIndent:= 2;   // does nothing for "elvIcon" view
+    SystemsListView.PaintInfoItem.CheckIndent:= 6;
+    FormMain.Set4KListViewCheckBoxHDSpecs(SystemsListView);
+
+    FormMain.Set4KListViewSpecs(SystemsListView, 8, 8, (SystemsListView.CellSizes.Icon.Width*16)+20, SystemsListView.CellSizes.Icon.Height*5, 16); // 15 columns, 5 lines
+    PanelSystemsListView.Height:= SystemsListView.Height+16;
+
+    MachinesTypeList.CellSizes.Tile.Width:= 720;
+    MachinesTypeList.CellSizes.Tile.Height:= 88;
+
+    MachinesTypeList.PaintInfoItem.CheckIndent:= 3;
+    FormMain.Set4KListViewCheckBoxHDSpecs(MachinesTypeList);
+
+    FormMain.Set4KListViewSpecs(MachinesTypeList, 8, 8, SystemsListView.Width, MachinesTypeList.CellSizes.Tile.Height*2, 16);
+    PanelMachinesType.Height:= (MachinesTypeList.CellSizes.Tile.Height*2)+16;
+
+    ClientWidth:= (SystemsListView.CellSizes.Icon.Width*16)+16;
+
+    PanelBottom.Height:= 71;
+    LabelCategoryIniForMESS.Font.Size:= 16;
+    LabelCategoryIniFolderForMESS.Font.Size:= 16;
+    FormMain.Set4KLabelSpecs(LabelCategoryIniForMESS,       (ClientWidth-LabelCategoryIniForMESS.Width) div 2,       4, -1, -1, 16);
+    FormMain.Set4KLabelSpecs(LabelCategoryIniFolderForMESS, (ClientWidth-LabelCategoryIniFolderForMESS.Width) div 2, LabelCategoryIniForMESS.Height+4, -1, -1, 16);
+    
+    FormMain.Set4KButtonSpecs(ButtonReset, 10, 16, 168, 45, 16);
+    FormMain.Set4KButtonSpecs(ButtonHelp, ButtonReset.Left+ButtonReset.Width+10, 16, 68, 45, 16);
+    FormMain.Set4KButtonsOkCancelPanel(PanelBottom, ButtonOk, ButtonCancel, False);
+
+    ClientHeight:= PanelSystemsListView.Top+PanelSystemsListView.Height+PanelBottom.Height;
+  end;
+end;
+
 procedure TFormSelectFilterSystemMega.ResizeForm;
 var
   HeightDiff, VisibleCount, ItemsLineCount, ColumnsCount, MaxHeight, MachineTypeColumnsCount, MachineTypeLinesCount: Integer;
   ScreenWidthTest, ScreenHeightTest: Integer;
 begin
-  ColumnsCount:= 5; // for 1920x1080
-  MachineTypeColumnsCount:= 4; // for 1920x1080
-  MachineTypeLinesCount:= 2; // for 1920x1080
+  if Is4KMode then
+     ColumnsCount:= 16
+  else
+     ColumnsCount:= 5; // for 1920x1080
+  MachineTypeColumnsCount:= 4;
+  MachineTypeLinesCount:= 2;
   VisibleCount:= SystemsListView.Groups.VisibleItemCount;
 
-  ScreenWidthTest:= Screen.Width;
+  ScreenWidthTest:=  Screen.Width;
   ScreenHeightTest:= Screen.Height;
-  MaxHeight:= (ScreenHeightTest-45)-FormSelectFilterSystemMega.Top;
+  MaxHeight:= (Screen.DesktopHeight-45)-FormSelectFilterSystemMega.Top;
 
-  case ScreenHeightTest of
-    900: // 1440x900
+  if not Is4KMode then
+  begin
+    case ScreenHeightTest of
+      900: // 1440x900
+        begin
+          ColumnsCount:= 6;
+          MachineTypeColumnsCount:= 4;
+        end;
+      864: // 1152x864
+        begin
+          ColumnsCount:= 5;
+          MachineTypeColumnsCount:= 3;
+        end;
+      768:
+        begin
+          ColumnsCount:= 4;
+          MachineTypeColumnsCount:= 2;
+          //VisibleCount:= 13; // for debugging only
+          //if VisibleCount <= 13 then
+          //   ColumnsCount:= 2;//1;
+        end;
+      720, 800, 960, 1024: // 1280x720 / 1280x800 / 1280x960 / 1280x1024
+        begin
+          if ScreenWidthTest < 1440 then
+             begin
+               ColumnsCount:= 5;
+               MachineTypeColumnsCount:= 3;
+             end
+          else
+             begin
+               // for 1600x1024
+               ColumnsCount:= 6;
+               MachineTypeColumnsCount:= 4;
+             end;
+          //VisibleCount:= 12; // for debugging only
+          //if VisibleCount <= 12 then
+          //   ColumnsCount:= 2;//1;
+        end;
+      600, 664: // 1176x664
+        begin
+          ColumnsCount:= 3;
+          MachineTypeColumnsCount:= 2;
+          MachineTypeLinesCount:= 2;
+          //VisibleCount:= 9; // for debugging only
+          //if VisibleCount <= 9 then
+          //   ColumnsCount:= 2;//1;
+        end;
+      480:
+        begin
+          ColumnsCount:= 3;
+          MachineTypeColumnsCount:= 2;
+          MachineTypeLinesCount:= 2;
+          //VisibleCount:= 6; // for debugging only
+          //if VisibleCount > 6 then
+          //   begin
+               //HeightDiff:= MachinesTypeList.Height-(MachinesTypeList.CellSizes.Tile.Height*2)-6;
+               //MachinesTypeList.Height:= HeightDiff;
+               //PanelMachinesType.Height:= MachinesTypeList.Height+1;
+               //SystemsListView.Top:= SystemsListView.Top-HeightDiff-1;
+          //   end;
+          //if VisibleCount <= 6 then
+          //   ColumnsCount:= 3;//1;
+        end;
+    else
       begin
-        ColumnsCount:= 6;
-        MachineTypeColumnsCount:= 4;
-      end;
-    864: // 1152x864
-      begin
-        ColumnsCount:= 5;
-        MachineTypeColumnsCount:= 3;
-      end;
-    768:
-      begin
-        ColumnsCount:= 4;
-        MachineTypeColumnsCount:= 2;
-        //VisibleCount:= 13; // for debugging only
-        //if VisibleCount <= 13 then
-        //   ColumnsCount:= 2;//1;
-      end;
-    720, 800, 960, 1024: // 1280x720 / 1280x800 / 1280x960 / 1280x1024
-      begin
-        if ScreenWidthTest < 1440 then
+        if ScreenHeightTest > 1048 then
            begin
-             ColumnsCount:= 5;
-             MachineTypeColumnsCount:= 3;
-           end
-        else
-           begin
-             // for 1600x1024
              ColumnsCount:= 6;
              MachineTypeColumnsCount:= 4;
+             //if VisibleCount <= 17 then
+             //   ColumnsCount:= 2;
            end;
-        //VisibleCount:= 12; // for debugging only
-        //if VisibleCount <= 12 then
-        //   ColumnsCount:= 2;//1;
       end;
-    600, 664: // 1176x664
-      begin
-        ColumnsCount:= 3;
-        MachineTypeColumnsCount:= 2;
-        MachineTypeLinesCount:= 2;
-        //VisibleCount:= 9; // for debugging only
-        //if VisibleCount <= 9 then
-        //   ColumnsCount:= 2;//1;
-      end;
-    480:
-      begin
-        ColumnsCount:= 3;
-        MachineTypeColumnsCount:= 2;
-        MachineTypeLinesCount:= 2;
-        //VisibleCount:= 6; // for debugging only
-        //if VisibleCount > 6 then
-        //   begin
-             //HeightDiff:= MachinesTypeList.Height-(MachinesTypeList.CellSizes.Tile.Height*2)-6;
-             //MachinesTypeList.Height:= HeightDiff;
-             //PanelMachinesType.Height:= MachinesTypeList.Height+1;
-             //SystemsListView.Top:= SystemsListView.Top-HeightDiff-1;
-        //   end;
-        //if VisibleCount <= 6 then
-        //   ColumnsCount:= 3;//1;
-      end;
-  else
-    begin
-      if ScreenHeightTest > 1048 then
-         begin
-           ColumnsCount:= 6;
-           MachineTypeColumnsCount:= 4;
-           //if VisibleCount <= 17 then
-           //   ColumnsCount:= 2;
-         end;
     end;
+
+    case ScreenWidthTest of
+      1920..3000:
+        begin
+          ColumnsCount:= 5;
+          MachineTypeColumnsCount:= 4;
+          MachineTypeLinesCount:= 2;
+          SystemsListView.CellSizes.Tile.Width:= 240;
+        end;
+      960:
+        begin
+          ColumnsCount:= 4;
+          MachineTypeColumnsCount:= 2;
+          MachineTypeLinesCount:= 2;
+        end;
+      1360, 1366:
+        begin
+          ColumnsCount:= 5;
+          MachineTypeColumnsCount:= 3;
+        end;
+    end;
+
+    MachinesTypeList.Width:= (MachinesTypeList.CellSizes.Tile.Width*MachineTypeColumnsCount)+MachinesTypeList.PaintInfoItem.Border+GetSystemMetrics(SM_CXVSCROLL);
+    MachinesTypeList.Height:= (MachinesTypeList.CellSizes.Tile.Height*MachineTypeLinesCount)+MachinesTypeList.PaintInfoItem.Border;
+
+    PanelMachinesType.Height:= MachinesTypeList.Height+1;
   end;
-
-  case ScreenWidthTest of
-    1920..3840:
-      begin
-        ColumnsCount:= 5;
-        MachineTypeColumnsCount:= 4;
-        MachineTypeLinesCount:= 2;
-        SystemsListView.CellSizes.Tile.Width:= 240;
-      end;
-    960:
-      begin
-        ColumnsCount:= 4;
-        MachineTypeColumnsCount:= 2;
-        MachineTypeLinesCount:= 2;
-      end;
-    1360, 1366:
-      begin
-        ColumnsCount:= 5;
-        MachineTypeColumnsCount:= 3;
-      end;
-  end;
-
-  MachinesTypeList.Width:= (MachinesTypeList.CellSizes.Tile.Width*MachineTypeColumnsCount)+MachinesTypeList.PaintInfoItem.Border+GetSystemMetrics(SM_CXVSCROLL);
-  MachinesTypeList.Height:= (MachinesTypeList.CellSizes.Tile.Height*MachineTypeLinesCount)+MachinesTypeList.PaintInfoItem.Border;
-
-  PanelMachinesType.Height:= MachinesTypeList.Height+1;
 
   //SystemsListView.Top:= (PanelMachinesType.Top+PanelMachinesType.Height)+3;
 
@@ -222,45 +284,55 @@ begin
           Inc(ItemsLineCount);
      end;
 
-  SystemsListView.Height:= (ItemsLineCount*SystemsListView.CellSizes.Tile.Height)+SystemsListView.PaintInfoItem.Border;
 
-  SystemsListView.Width:= (SystemsListView.CellSizes.Tile.Width*ColumnsCount)+SystemsListView.PaintInfoItem.Border+GetSystemMetrics(SM_CXVSCROLL);
-  PanelSystemsListView.Height:= SystemsListView.Height+SystemsListView.Top;
-  FormSelectFilterSystemMega.ClientWidth:= (SystemsListView.CellSizes.Tile.Width*ColumnsCount)+SystemsListView.PaintInfoItem.Border+SystemsListView.Left;
-  FormSelectFilterSystemMega.ClientHeight:= LabelSelectMode.Height+PanelMachinesType.Height+PanelSystemsListView.Height+PanelBottom.Height;
 
-  //FormSelectFilterSystemMega.ClientHeight:= PanelSystemsListView.Top+PanelSystemsListView.Height+PanelBottom.Height;
-
-  if (FormSelectFilterSystemMega.Top+FormSelectFilterSystemMega.Height) > MaxHeight then //ScreenHeightTest-68) then
-  //if FormSelectFilterSystemMega.Height > MaxHeight then
+  if Is4KMode then
      begin
-       HeightDiff:= (FormSelectFilterSystemMega.Top+FormSelectFilterSystemMega.Height)-MaxHeight;//(ScreenHeightTest-68); //// FormSelectFilterSystemMega.Height-MaxHeight;//+GetSystemMetrics(SM_CYCAPTION);//+SystemsListView.PaintInfoItem.Border;
-       SystemsListView.Height:= SystemsListView.Height-HeightDiff;//+SystemsListView.PaintInfoItem.Border;
-       PanelSystemsListView.Height:= SystemsListView.Height;//+SystemsListView.Top;
-       FormSelectFilterSystemMega.ClientHeight:= LabelSelectMode.Height+PanelMachinesType.Height+PanelSystemsListView.Height+PanelBottom.Height;
-       //FormSelectFilterSystemMega.Height:= FormSelectFilterSystemMega.Height-HeightDiff;// MaxHeight-GetSystemMetrics(SM_CYCAPTION);
-     end;
-  if (FormSelectFilterSystemMega.Left+FormSelectFilterSystemMega.Width) >= ScreenWidthTest then
-     FormSelectFilterSystemMega.Left:= 0;
+       SystemsListView.Height:= (ItemsLineCount*SystemsListView.CellSizes.Icon.Height);//+SystemsListView.PaintInfoItem.Border;
+       PanelSystemsListView.Height:= SystemsListView.Top+SystemsListView.Height+16;
+       //FormSelectFilterSystemMega.ClientWidth:= (SystemsListView.CellSizes.Tile.Width*ColumnsCount)+SystemsListView.PaintInfoItem.Border+SystemsListView.Left;
+       FormSelectFilterSystemMega.ClientHeight:= PanelSystemsListView.Top+PanelSystemsListView.Height+PanelBottom.Height;//  LabelSelectMode.Height+PanelMachinesType.Height+PanelSystemsListView.Height+PanelBottom.Height;
+     end
+  else
+  begin
+    SystemsListView.Height:= (ItemsLineCount*SystemsListView.CellSizes.Tile.Height)+SystemsListView.PaintInfoItem.Border;
+    SystemsListView.Width:= (SystemsListView.CellSizes.Tile.Width*ColumnsCount)+SystemsListView.PaintInfoItem.Border+GetSystemMetrics(SM_CXVSCROLL);
 
-  if MachinesTypeList.Scrollbars.VertBarVisible then
-     MachinesTypeList.HotTrack.Enabled:= False;
+    PanelSystemsListView.Height:= SystemsListView.Height+SystemsListView.Top;
+    FormSelectFilterSystemMega.ClientWidth:= (SystemsListView.CellSizes.Tile.Width*ColumnsCount)+SystemsListView.PaintInfoItem.Border+SystemsListView.Left;
+    FormSelectFilterSystemMega.ClientHeight:= LabelSelectMode.Height+PanelMachinesType.Height+PanelSystemsListView.Height+PanelBottom.Height;
 
-  if SystemsListView.Scrollbars.VertBarVisible then
-     begin
-       SystemsListView.HotTrack.Enabled:= False;
-       FormSelectFilterSystemMega.ClientWidth:= FormSelectFilterSystemMega.ClientWidth+GetSystemMetrics(SM_CXVSCROLL);
-     end;
+    if (FormSelectFilterSystemMega.Top+FormSelectFilterSystemMega.Height) > MaxHeight then //ScreenHeightTest-68) then
+    //if FormSelectFilterSystemMega.Height > MaxHeight then
+       begin
+         HeightDiff:= (FormSelectFilterSystemMega.Top+FormSelectFilterSystemMega.Height)-MaxHeight;//(ScreenHeightTest-68); //// FormSelectFilterSystemMega.Height-MaxHeight;//+GetSystemMetrics(SM_CYCAPTION);//+SystemsListView.PaintInfoItem.Border;
+         SystemsListView.Height:= SystemsListView.Height-HeightDiff;//+SystemsListView.PaintInfoItem.Border;
+         PanelSystemsListView.Height:= SystemsListView.Height;//+SystemsListView.Top;
+         FormSelectFilterSystemMega.ClientHeight:= LabelSelectMode.Height+PanelMachinesType.Height+PanelSystemsListView.Height+PanelBottom.Height;
+         //FormSelectFilterSystemMega.Height:= FormSelectFilterSystemMega.Height-HeightDiff;// MaxHeight-GetSystemMetrics(SM_CYCAPTION);
+       end;
+    if (FormSelectFilterSystemMega.Left+FormSelectFilterSystemMega.Width) >= ScreenWidthTest then
+       FormSelectFilterSystemMega.Left:= 0;
 
-  ButtonCancel.Left:= (FormSelectFilterSystemMega.ClientWidth-ButtonCancel.Width)-6;
-  ButtonOk.Left:= ButtonCancel.Left-ButtonOk.Width-4;
+    if MachinesTypeList.Scrollbars.VertBarVisible then
+       MachinesTypeList.HotTrack.Enabled:= False;
 
-  if ScreenWidthTest > 640 then
-     begin
-       HeightDiff:= (ButtonOk.Left-(ButtonHelp.Left+ButtonHelp.Width));
-       LabelCategoryIniForMESS.Left:= (HeightDiff-LabelCategoryIniForMESS.Width) div 2 +ButtonHelp.Left+ButtonHelp.Width;
-       LabelCategoryIniFolderForMESS.Left:= (HeightDiff-LabelCategoryIniFolderForMESS.Width) div 2+ButtonHelp.Left+ButtonHelp.Width;
-     end;
+    if SystemsListView.Scrollbars.VertBarVisible then
+       begin
+         SystemsListView.HotTrack.Enabled:= False;
+         FormSelectFilterSystemMega.ClientWidth:= FormSelectFilterSystemMega.ClientWidth+GetSystemMetrics(SM_CXVSCROLL);
+       end;
+
+    ButtonCancel.Left:= (FormSelectFilterSystemMega.ClientWidth-ButtonCancel.Width)-6;
+    ButtonOk.Left:= ButtonCancel.Left-ButtonOk.Width-4;
+
+    if ScreenWidthTest > 640 then
+       begin
+         HeightDiff:= (ButtonOk.Left-(ButtonHelp.Left+ButtonHelp.Width));
+         LabelCategoryIniForMESS.Left:= (HeightDiff-LabelCategoryIniForMESS.Width) div 2 +ButtonHelp.Left+ButtonHelp.Width;
+         LabelCategoryIniFolderForMESS.Left:= (HeightDiff-LabelCategoryIniFolderForMESS.Width) div 2+ButtonHelp.Left+ButtonHelp.Width;
+       end;
+  end;
   // for debugging only
   //FormSelectFilterSystemMega.Caption:= 'Form Size: '+IntToStr(FormSelectFilterSystemMega.Left+FormSelectFilterSystemMega.Width)+'x'+IntToStr(FormSelectFilterSystemMega.Top+FormSelectFilterSystemMega.Height);
 end;
@@ -545,7 +617,9 @@ end;
 procedure TFormSelectFilterSystemMega.FormShow(Sender: TObject);
 var
   IconFolder: String;
+  Item: TEasyItem;
 begin
+  Resize4K;
   FormMain.LoadSystemsIcons(IL_Systems, False);
   FormMain.LoadNonArcadeSystemIcons(IL_Systems, False, False);
 
@@ -590,14 +664,6 @@ begin
 
   FiltersHaveChanged:= False;
   MAMEMachinesListPanelChanged:= False;
-end;
-
-procedure TFormSelectFilterSystemMega.FormActivate(Sender: TObject);
-var
-  Item: TEasyItem;
-begin
-  if FormSelectFilterSystemMega.Tag = 1 then
-     Exit;
 
   AddMachinesFilters;                                 //False -> show disabled should be FALSE
   FormMain.ELV_PopulateSystemsMulti(SystemsListView, 1, False, False, False, True);
@@ -615,43 +681,22 @@ begin
     Item:= SystemsListView.Groups.NextItem(Item);
   until Item = nil;
   SystemsListView.EndUpdate(False);
-
-  FormSelectFilterSystemMega.Tag:= 1;
 end;
 
 procedure TFormSelectFilterSystemMega.MachinesTypeListItemPaintText(
   Sender: TCustomEasyListview; Item: TEasyItem; Position: Integer;
   ACanvas: TCanvas);
 begin
-  if Position = 0 then
-     begin
-       ACanvas.Font.Style:= [fsBold];
-     end
-  else
-  if Position = 1 then
-     begin
-       ACanvas.Font.Name:= 'Segoe UI';
-       ACanvas.Font.Style:= [];
-       ACanvas.Font.Size:= 9;
-       //if LabelCategoryIniFolderForMESS.Tag = 1 then
-       //   ACanvas.Font.Style:= [fsItalic];
-       if IsNightMode then
-          begin
-            if Item.Selected then
-               ACanvas.Font.Color:= clrDarkGray
-            else
-               ACanvas.Font.Color:= clMedGray;
-          end
-       else
-          ACanvas.Font.Color:= clGray;
-     end;
-
+  case Position of
+    0: Canvas.Font.Style:= [fsBold];
+    1: FormMain.ELV_SetSelecionFontColors(MachinesTypeList, Item, ACanvas, True);
+  end;
   FormMain.ELV_SetGhostedIconText(Item, MachinesTypeList, ACanvas);
 end;
 
 procedure TFormSelectFilterSystemMega.ButtonHelpClick(Sender: TObject);
 begin
-  FormMain.InitMessageBox; //CallMessageBox;
+  FormMain.InitMessageBox;
   FormMain.AddMsgText('    Select machine types and system types you want show or hide in the main games list.'+
                       ' Make sure you tick the checkbox next to each machine type and system.'+#13#10+
                       'MAME software list games are not part of ');
@@ -676,7 +721,7 @@ begin
   FormMain.AddMsgText(' when you exit the frontend.'+#13#10+#13#10+
                       '    You can find more options for systems panel in the popup menu (mouse right-click).');
 
-  GenerateMessage('Info', 'Systems Filters', '');
+  FormMain.ShowMessageBox('Info', 'Systems Filters', '');
 end;
 
 procedure TFormSelectFilterSystemMega.LabelCategoryIniForMESSMouseEnter(
@@ -744,30 +789,10 @@ procedure TFormSelectFilterSystemMega.SystemsListViewItemPaintText(
   Sender: TCustomEasyListview; Item: TEasyItem; Position: Integer;
   ACanvas: TCanvas);
 begin
-  if Position = 0 then
-     begin
-       //ACanvas.Font.Style:= [fsBold];
-       //if IsNightMode and Item.Selected and (not Item.Checked) then
-       //   ACanvas.Font.Color:= clrDarkGray;
-     end
-  else
-  if Position = 1 then
-     begin
-       ACanvas.Font.Style:= [];
-       ACanvas.Font.Name:= 'Segoe UI';
-       ACanvas.Font.Size:= 9;
-       //if LabelCategoryIniFolderForMESS.Tag = 1 then
-       //   ACanvas.Font.Style:= [fsItalic];
-       if IsNightMode then
-          begin
-            if Item.Selected then
-               ACanvas.Font.Color:= clrDarkGray
-            else
-               ACanvas.Font.Color:= clMedGray;
-          end
-       else
-          ACanvas.Font.Color:= clGray;
-     end;
+  if not Is4KMode then
+     if Position = 1 then
+        FormMain.ELV_SetSelecionFontColors(SystemsListView, Item, ACanvas);
+
   FormMain.ELV_SetGhostedIconText(Item, SystemsListView, ACanvas);
 end;
 
@@ -788,8 +813,11 @@ procedure TFormSelectFilterSystemMega.SystemsListViewItemImageGetSize(
   Sender: TCustomEasyListview; Item: TEasyItem; Column: TEasyColumn;
   var ImageWidth, ImageHeight: Integer);
 begin
-  ImageWidth:= SystemsListView.ImagesExLarge.Width;//+16; // +16 is 16x16 icon size, plus 2 pixels border
-  ImageHeight:= SystemsListView.ImagesExLarge.Height;
+  ImageWidth:= IL_Systems.Width;
+  if Is4KMode then
+     ImageHeight:= IL_Systems.Height+FormMain.IL_GroupedMode.Width+4 // +4 -> space between sys icon / sys type icon
+  else
+     ImageHeight:= IL_Systems.Height;
 end;
 
 procedure TFormSelectFilterSystemMega.SystemsListViewItemImageDraw(
@@ -799,78 +827,63 @@ procedure TFormSelectFilterSystemMega.SystemsListViewItemImageDraw(
 var
   iLeft, iTop: Integer;
   iSysTypeIndex: Integer;
-
-  rgbBk, rgbFg: Longword;
-  fStyle: Integer;
 begin
-  // this is for tiles view mode
-  iLeft:= RectArray.IconRect.Left+SystemsListView.PaintInfoItem.ImageIndent;
-  iTop:=  RectArray.IconRect.Top+2;
-
-  if Item.Ghosted then
-     begin
-       rgbBk := CLR_NONE;
-       rgbFg := CLR_NONE;
-       fStyle:= ILD_TRANSPARENT or ILD_SELECTED;
-       rgbFg := ColorToRGB(SystemsListView.DisabledBlendColor);
-     end;
-
-  if FormMain.ELV_IsArcadeSystemMulti(Item) then
-     begin
-       if Item.Ghosted then
-          ImageList_DrawEx(SystemsListView.ImagesExLarge.Handle, Item.ImageIndex, ACanvas.Handle, iLeft, iTop, 0, 0, rgbBk, rgbFg, fStyle)
-       else
-          SystemsListView.ImagesExLarge.Draw(ACanvas, iLeft, iTop, Item.ImageIndex);
-       if Item.ImageIndex > 0 then
-          begin
-            iLeft:= iLeft+SystemsListView.ImagesExLarge.Width+SystemsListView.PaintInfoItem.CaptionIndent;
-            iTop:= iTop+(SystemsListView.ImagesExLarge.Height-FormMain.IL_MenuPopup.Height);
-
-            //FormMain.IL_MenuPopup.Draw(ACanvas, iLeft, iTop, 24); // index 24 is "arcade" icon
-            if Item.Ghosted then
-               ImageList_DrawEx(FormMain.IL_MenuPopup.Handle, 24, ACanvas.Handle, iLeft, iTop, 0, 0, rgbBk, rgbFg, fStyle)
-            else
-               FormMain.IL_MenuPopup.Draw(ACanvas, iLeft, iTop, 24); // index 24 is "arcade" icon
-            //if Item.Ghosted then
-            //   AlphaBlender.BasicBlend(Sender, ACanvas, Rect(iLeft, iTop, iLeft+FormMain.IL_MenuPopup.Width, iTop+FormMain.IL_MenuPopup.Height), ColorToRGB(SystemsListView.DisabledBlendColor));//Sender.Color);
-          end;
-     end
+  if Is4KMode then
+     FormMain.ELV_DrawTileSystem_CustomSysType(Sender, Item, Column, ACanvas, RectArray, IL_Systems, True)
   else
-     begin
-       if Item.Ghosted then
-          ImageList_DrawEx(SystemsListView.ImagesExLarge.Handle, MaxArcadeSystems+1+Item.StateImageIndex, ACanvas.Handle, iLeft, iTop, 0, 0, rgbBk, rgbFg, fStyle)
-       else
-          SystemsListView.ImagesExLarge.Draw(ACanvas, iLeft, iTop, MaxArcadeSystems+1+Item.StateImageIndex);
+  begin
+    iLeft:= RectArray.IconRect.Left+SystemsListView.PaintInfoItem.ImageIndent;
+    iTop:=  RectArray.IconRect.Top+2;
 
-       iLeft:= iLeft+SystemsListView.ImagesExLarge.Width+SystemsListView.PaintInfoItem.CaptionIndent;
-       iTop:= iTop+(SystemsListView.ImagesExLarge.Height-FormMain.IL_MenuPopup.Height);
+    if FormMain.ELV_IsArcadeSystemMulti(Item) then
+       begin
+         if Item.Ghosted then
+            FormMain.DrawGhostedImage(ACanvas.Handle, SystemsListView.ImagesExLarge, Item.ImageIndex, iLeft, iTop, False)
+         else
+            SystemsListView.ImagesExLarge.Draw(ACanvas, iLeft, iTop, Item.ImageIndex);
+         if Item.ImageIndex > 0 then
+            begin
+              iLeft:= iLeft+SystemsListView.ImagesExLarge.Width+SystemsListView.PaintInfoItem.CaptionIndent;
+              iTop:= iTop+(SystemsListView.ImagesExLarge.Height-FormMain.IL_MenuPopup.Height);
 
-       if Item.StateImageIndex > 0 then
-          begin
-            iSysTypeIndex:= -1;
-            if SystemIsConsole(Item.StateImageIndex) then
-               iSysTypeIndex:= 25 // index 25 is "console" icon
-            else
-            if SystemIsComputer(Item.StateImageIndex) then
-               iSysTypeIndex:= 26 // index 26 is "computer" icon
-            else
-            if SystemIsHandheld(Item.StateImageIndex) then
-               iSysTypeIndex:= 27; // index 27 is "handheld" icon
+              if Item.Ghosted then
+                 FormMain.DrawGhostedImage(ACanvas.Handle, FormMain.IL_MenuPopup, 24, iLeft, iTop, False)
+              else
+                 FormMain.IL_MenuPopup.Draw(ACanvas, iLeft, iTop, 24); // index 24 is "arcade" icon
+            end;
+       end
+    else
+       begin
+         if Item.Ghosted then
+            FormMain.DrawGhostedImage(ACanvas.Handle, SystemsListView.ImagesExLarge, MaxArcadeSystems+1+Item.StateImageIndex, iLeft, iTop, False)
+         else
+            SystemsListView.ImagesExLarge.Draw(ACanvas, iLeft, iTop, MaxArcadeSystems+1+Item.StateImageIndex);
 
-            if iSysTypeIndex <> -1 then
-               begin
-                 if Item.Ghosted then
-                    ImageList_DrawEx(FormMain.IL_MenuPopup.Handle, iSysTypeIndex, ACanvas.Handle, iLeft, iTop, 0, 0, rgbBk, rgbFg, fStyle)
-                 else
-                    FormMain.IL_MenuPopup.Draw(ACanvas, iLeft, iTop, iSysTypeIndex);
-                 //if Item.Ghosted then
-                 //   AlphaBlender.BasicBlend(Sender, ACanvas, Rect(iLeft, iTop, iLeft+FormMain.IL_MenuPopup.Width, iTop+FormMain.IL_MenuPopup.Height), ColorToRGB(SystemsListView.DisabledBlendColor));//Sender.Color);
-               end;
-          end;
-     end;
+         iLeft:= iLeft+SystemsListView.ImagesExLarge.Width+SystemsListView.PaintInfoItem.CaptionIndent;
+         iTop:=  iTop+(SystemsListView.ImagesExLarge.Height-FormMain.IL_MenuPopup.Height);
 
-  //if Item.Ghosted then
-  //   AlphaBlender.BasicBlend(Sender, ACanvas, RectArray.IconRect, ColorToRGB(SystemsListView.DisabledBlendColor));//Sender.Color);
+         if Item.StateImageIndex > 0 then
+            begin
+              iSysTypeIndex:= -1;
+              if SystemIsConsole(Item.StateImageIndex) then
+                 iSysTypeIndex:= 25 // index 25 is "console" icon
+              else
+              if SystemIsComputer(Item.StateImageIndex) then
+                 iSysTypeIndex:= 26 // index 26 is "computer" icon
+              else
+              if SystemIsHandheld(Item.StateImageIndex) then
+                 iSysTypeIndex:= 27; // index 27 is "handheld" icon
+
+              if iSysTypeIndex <> -1 then
+                 begin
+                   if Item.Ghosted then
+                      FormMain.DrawGhostedImage(ACanvas.Handle, FormMain.IL_MenuPopup, iSysTypeIndex, iLeft, iTop, False)
+                   else
+                      FormMain.IL_MenuPopup.Draw(ACanvas, iLeft, iTop, iSysTypeIndex);
+                 end;
+            end;
+       end;
+  end;
 end;
 
 procedure TFormSelectFilterSystemMega.PopupSystemsMeasureMenuItem(

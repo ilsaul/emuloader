@@ -77,7 +77,7 @@ object FormImageDeleteRename: TFormImageDeleteRename
   object LabelRenameImage: TShadowLabel
     Left = 348
     Top = 304
-    Width = 211
+    Width = 209
     Height = 16
     Caption = 'New Name (file extension not required)'
     Font.Charset = ANSI_CHARSET
@@ -122,9 +122,8 @@ object FormImageDeleteRename: TFormImageDeleteRename
   object LabelFileSize: TShadowLabel
     Left = 438
     Top = 204
-    Width = 337
+    Width = 106
     Height = 15
-    AutoSize = False
     Caption = 'Size: 331 Bytes'
     Font.Charset = ANSI_CHARSET
     Font.Color = clBlack
@@ -144,9 +143,8 @@ object FormImageDeleteRename: TFormImageDeleteRename
   object LabelDateTime: TShadowLabel
     Left = 438
     Top = 220
-    Width = 337
+    Width = 218
     Height = 15
-    AutoSize = False
     Caption = 'Date/Time: mmm/dd/yyyy hh:nn:ss'
     Font.Charset = ANSI_CHARSET
     Font.Color = clBlack
@@ -166,9 +164,8 @@ object FormImageDeleteRename: TFormImageDeleteRename
   object LabelFileType: TShadowLabel
     Left = 438
     Top = 236
-    Width = 337
+    Width = 316
     Height = 15
-    AutoSize = False
     Caption = 'Type: Joint Photographic Experts Group (JPEG)'
     Font.Charset = ANSI_CHARSET
     Font.Color = clBlack
@@ -188,7 +185,7 @@ object FormImageDeleteRename: TFormImageDeleteRename
   object LabelFileTypeMismatch: TShadowLabel
     Left = 481
     Top = 251
-    Width = 199
+    Width = 197
     Height = 16
     Caption = 'file type does not match file extension'
     Font.Charset = ANSI_CHARSET
@@ -210,7 +207,7 @@ object FormImageDeleteRename: TFormImageDeleteRename
   object LabelDimensions: TShadowLabel
     Left = 438
     Top = 188
-    Width = 150
+    Width = 148
     Height = 15
     Caption = 'Dimensions: 1000x1000'
     Font.Charset = ANSI_CHARSET
@@ -252,7 +249,7 @@ object FormImageDeleteRename: TFormImageDeleteRename
       Transparent = True
     end
   end
-  object BottomBar: TPanelEx
+  object PanelBottom: TPanelEx
     Left = 0
     Top = 377
     Width = 784
@@ -268,7 +265,7 @@ object FormImageDeleteRename: TFormImageDeleteRename
     ParentBackground = False
     Style = vgSimple
     object ButtonOk: TBitBtnEx
-      Left = 589
+      Left = 584
       Top = 8
       Width = 89
       Height = 25
@@ -397,17 +394,6 @@ object FormImageDeleteRename: TFormImageDeleteRename
       Transparent = True
     end
   end
-  object RenameImageEditBox: TEditEx
-    Left = 348
-    Top = 320
-    Width = 377
-    Height = 21
-    AutoSize = False
-    Color = clWhite
-    TabOrder = 0
-    Visible = False
-    OnKeyPress = RenameImageEditBoxKeyPress
-  end
   object ImagePreviewFrame: TPanelEx
     Left = 8
     Top = 80
@@ -443,15 +429,26 @@ object FormImageDeleteRename: TFormImageDeleteRename
   end
   object RenameImageEditBoxButtonReset: TBitBtnEx
     Left = 727
-    Top = 319
+    Top = 320
     Width = 49
-    Height = 23
+    Height = 21
     Hint = 'Click here to reset name to game filename'
     Caption = 'Reset'
     ParentShowHint = False
     ShowHint = True
-    TabOrder = 5
+    TabOrder = 4
     Visible = False
     OnClick = RenameImageEditBoxButtonResetClick
+  end
+  object RenameImageEditBox: TTntEditEx
+    Left = 348
+    Top = 320
+    Width = 377
+    Height = 21
+    AutoSize = False
+    Color = clWhite
+    TabOrder = 5
+    Visible = False
+    OnKeyPress = RenameImageEditBoxKeyPress
   end
 end

@@ -40,6 +40,7 @@ object FormSelectDirectory: TFormSelectDirectory
     Indent = 19
     ParentColor = False
     RightClickSelect = True
+    ShowRoot = False
     TabOrder = 0
     OnChange = ShellTreeChange
   end
@@ -90,7 +91,7 @@ object FormSelectDirectory: TFormSelectDirectory
       Transparent = True
     end
   end
-  object BottomBar: TPanelEx
+  object PanelBottom: TPanelEx
     Left = 0
     Top = 417
     Width = 584
@@ -106,9 +107,9 @@ object FormSelectDirectory: TFormSelectDirectory
     ParentBackground = False
     Style = vgSimple
     object LabelSelectedPath: TShadowLabel
-      Left = 2
+      Left = 8
       Top = 5
-      Width = 580
+      Width = 567
       Height = 19
       AutoSize = False
       Caption = 'Full path of the selected item is shown here...'
@@ -142,6 +143,9 @@ object FormSelectDirectory: TFormSelectDirectory
       State = cbChecked
       Themed = True
       CustomIconsEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
     object ButtonOk: TBitBtnEx
       Left = 389

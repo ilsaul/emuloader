@@ -1,6 +1,7 @@
-object FormThumbnailView: TFormThumbnailView
+object FormThumbnailViewSettings: TFormThumbnailViewSettings
   Left = 600
   Top = 600
+  ActiveControl = ShowBorder
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
   Caption = 'Thumbnail Settings'
@@ -27,7 +28,6 @@ object FormThumbnailView: TFormThumbnailView
     Top = 446
     Width = 160
     Height = 16
-    Hint = 'Cell Horizontal Size [%u pixels]'
     AutoSize = False
     Caption = 'Cell Horizontal Size:        pixels'
     ShowAccelChar = False
@@ -138,7 +138,7 @@ object FormThumbnailView: TFormThumbnailView
   object GridWidthSizeLabelBottom: TShadowLabel
     Left = 33
     Top = 493
-    Width = 332
+    Width = 330
     Height = 15
     Caption = '120                   260                   400'
     Font.Charset = ANSI_CHARSET
@@ -155,10 +155,10 @@ object FormThumbnailView: TFormThumbnailView
     Frames = []
     Transparent = True
   end
-  object ShadowLabel1: TShadowLabel
+  object GridHeightSizeLabelBottom: TShadowLabel
     Left = 33
     Top = 565
-    Width = 332
+    Width = 330
     Height = 15
     Caption = '120                   260                   400'
     Font.Charset = ANSI_CHARSET
@@ -176,7 +176,7 @@ object FormThumbnailView: TFormThumbnailView
     Transparent = True
   end
   object BorderColor: TColorBoxEx
-    Left = 430
+    Left = 422
     Top = 466
     Width = 189
     Height = 22
@@ -187,26 +187,29 @@ object FormThumbnailView: TFormThumbnailView
     ItemHeight = 16
     ParentShowHint = False
     ShowHint = True
-    TabOrder = 0
+    TabOrder = 1
     OnSelect = BorderColorSelect
   end
   object ShowBorder: TAdvOfficeCheckBoxEx
-    Left = 430
+    Left = 422
     Top = 444
     Width = 99
     Height = 20
     Hint = 'Show border arround the entire frame'
     ShowHint = True
-    TabOrder = 1
+    TabOrder = 0
     OnClick = ShowBorderClick
     Alignment = taLeftJustify
     Caption = 'Show Border'
     ReturnIsTab = False
     Themed = True
     CustomIconsEnabled = False
+    CustomEnableIconHD = False
+    CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+    CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
   end
   object BorderColorDefault: TBitBtnEx
-    Left = 620
+    Left = 614
     Top = 466
     Width = 49
     Height = 22
@@ -218,7 +221,7 @@ object FormThumbnailView: TFormThumbnailView
     OnClick = BorderColorDefaultClick
   end
   object ShowGameTitles: TAdvOfficeCheckBoxEx
-    Left = 561
+    Left = 553
     Top = 444
     Width = 112
     Height = 20
@@ -233,6 +236,9 @@ object FormThumbnailView: TFormThumbnailView
     State = cbChecked
     Themed = True
     CustomIconsEnabled = False
+    CustomEnableIconHD = False
+    CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+    CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
   end
   object MaintainAspectRatio: TAdvOfficeCheckBoxEx
     Left = 684
@@ -250,6 +256,9 @@ object FormThumbnailView: TFormThumbnailView
     State = cbChecked
     Themed = True
     CustomIconsEnabled = False
+    CustomEnableIconHD = False
+    CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+    CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
   end
   object ShowPreviewScreenshotsPanel: TAdvOfficeCheckBoxEx
     Left = 684
@@ -268,6 +277,9 @@ object FormThumbnailView: TFormThumbnailView
     State = cbChecked
     Themed = True
     CustomIconsEnabled = False
+    CustomEnableIconHD = False
+    CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+    CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
   end
   object ELV_ThumbnailPreview: TEasyListview
     Left = 8
@@ -287,7 +299,6 @@ object FormThumbnailView: TFormThumbnailView
       0006000000800800010100010000000000000161000000FFFFFF1F0001000000
       00000000000000000000000000000000}
     Header.Height = 23
-    ImagesExLarge = IL_Thumbnail
     PaintInfoGroup.MarginBottom.CaptionIndent = 4
     PaintInfoItem.BorderColor = 16370824
     PaintInfoItem.ShowBorder = False
@@ -302,18 +313,19 @@ object FormThumbnailView: TFormThumbnailView
     Selection.Color = 10902593
     Selection.FullCellPaint = True
     Selection.FullItemPaint = True
-    Selection.FullRowSelect = True
     Selection.GradientColorBottom = 16506264
     Selection.GradientColorTop = 15582647
     Selection.InactiveBorderColor = 10902593
     Selection.InactiveColor = 15582647
     Selection.MouseButton = [cmbLeft, cmbRight]
+    Selection.RectSelect = True
     Selection.RoundRectRadius = 2
     Selection.TextColor = clBlack
     Selection.UseFocusRect = False
     TabOrder = 6
     View = elsThumbnail
     CustomCheckRadioEnabled = False
+    CustomEnableIconHD = False
     OnItemPaintText = ELV_ThumbnailPreviewItemPaintText
     OnItemThumbnailDraw = ELV_ThumbnailPreviewItemThumbnailDraw
   end
@@ -447,14 +459,15 @@ object FormThumbnailView: TFormThumbnailView
       OnClick = ButtonGridDefaultClick
     end
   end
-  object IconsGroupBox: TAdvGroupBoxEx
-    Left = 430
+  object OverlayIconsGroupBox: TAdvGroupBoxEx
+    Left = 422
     Top = 488
-    Width = 397
+    Width = 405
     Height = 95
     CheckBox.CustomIconsEnabled = False
+    CheckBox.CustomEnableIconHD = False
     RoundEdges = True
-    Caption = 'Icons'
+    Caption = 'Overlay Icons'
     TabOrder = 12
     object ShowSystemIcon: TAdvOfficeCheckBoxEx
       Left = 6
@@ -471,9 +484,12 @@ object FormThumbnailView: TFormThumbnailView
       State = cbChecked
       Themed = True
       CustomIconsEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
     object ShowFavoriteIcon: TAdvOfficeCheckBoxEx
-      Left = 204
+      Left = 212
       Top = 44
       Width = 67
       Height = 20
@@ -485,6 +501,9 @@ object FormThumbnailView: TFormThumbnailView
       ReturnIsTab = False
       Themed = True
       CustomIconsEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
     object ShowMediaTypeIcon: TAdvOfficeCheckBoxEx
       Left = 6
@@ -501,11 +520,14 @@ object FormThumbnailView: TFormThumbnailView
       State = cbChecked
       Themed = True
       CustomIconsEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
     object SystemIconSize: TComboBox2Ex
       Left = 68
       Top = 42
-      Width = 125
+      Width = 133
       Height = 23
       Hint = 'System icon size'
       Style = csDropDownList
@@ -525,10 +547,11 @@ object FormThumbnailView: TFormThumbnailView
       Items.Strings = (
         'Medium (24x24)'
         'Large (32x32)'
-        'Extra Large (48x48)')
+        'Extra Large (48x48)'
+        'Mega Large (68x68)')
     end
     object ShowGameIcon: TAdvOfficeCheckBoxEx
-      Left = 204
+      Left = 212
       Top = 20
       Width = 57
       Height = 20
@@ -542,10 +565,13 @@ object FormThumbnailView: TFormThumbnailView
       State = cbChecked
       Themed = True
       CustomIconsEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
     object ThumbLeftAlignIcons: TAdvOfficeRadioButtonEx
       Tag = 1
-      Left = 316
+      Left = 324
       Top = 44
       Width = 75
       Height = 20
@@ -559,9 +585,12 @@ object FormThumbnailView: TFormThumbnailView
       ReturnIsTab = False
       Themed = True
       CustomIconsEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
     object ThumbRightAlignIcons: TAdvOfficeRadioButtonEx
-      Left = 316
+      Left = 324
       Top = 68
       Width = 79
       Height = 20
@@ -573,6 +602,9 @@ object FormThumbnailView: TFormThumbnailView
       ReturnIsTab = False
       Themed = True
       CustomIconsEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
     object ShowIconsWithNoThumbnail: TAdvOfficeCheckBoxEx
       Left = 6
@@ -580,19 +612,24 @@ object FormThumbnailView: TFormThumbnailView
       Width = 190
       Height = 20
       Hint = 'Show the overlay icons even if no thumbnail is available'
+      Checked = True
       ShowHint = True
       TabOrder = 7
       OnClick = ShowIconsWithNoThumbnailClick
       Alignment = taLeftJustify
       Caption = 'Show Icons With No Thumbnail'
       ReturnIsTab = False
+      State = cbChecked
       Themed = True
       CustomIconsEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
     object MediaTypeIconSize: TComboBox2Ex
       Left = 68
       Top = 66
-      Width = 125
+      Width = 133
       Height = 23
       Hint = 'Media/Game/Favorite/Special icon size'
       Style = csDropDownList
@@ -615,7 +652,7 @@ object FormThumbnailView: TFormThumbnailView
         'Extra Large (48x48)')
     end
     object ShowSpecialIcon: TAdvOfficeCheckBoxEx
-      Left = 204
+      Left = 212
       Top = 68
       Width = 78
       Height = 20
@@ -629,6 +666,9 @@ object FormThumbnailView: TFormThumbnailView
       State = cbChecked
       Themed = True
       CustomIconsEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
   end
   object GridWidthSize: TXiTrackBar
@@ -705,10 +745,22 @@ object FormThumbnailView: TFormThumbnailView
     Orientation = trHorizontal
     OnChange = GridHeightSizeChange
   end
-  object IL_Thumbnail: TImageList
-    Height = 128
-    Width = 128
-    Left = 300
-    Top = 424
+  object HideThumbnailImages: TAdvOfficeCheckBoxEx
+    Left = 8
+    Top = 412
+    Width = 150
+    Height = 20
+    Hint = 'Fine-tune overlay icons with no thumbnail image'
+    ShowHint = True
+    TabOrder = 15
+    OnClick = HideThumbnailImagesClick
+    Alignment = taLeftJustify
+    Caption = 'Hide Thumbnail Images'
+    ReturnIsTab = False
+    Themed = True
+    CustomIconsEnabled = False
+    CustomEnableIconHD = False
+    CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+    CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
   end
 end

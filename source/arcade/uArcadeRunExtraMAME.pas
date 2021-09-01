@@ -42,12 +42,11 @@ type
     GameIcon: TImage;
     LabelGameTitle: TShadowLabel;
     LabelGameName: TShadowLabel;
-    BottomBar: TPanelEx;
+    PanelBottom: TPanelEx;
     ButtonOk: TBitBtnEx;
     ButtonAbort: TBitBtnEx;
     LabelInfo: TShadowLabel;
     SystemIcon: TImage;
-    LabelSoftwareListTitle: TShadowLabel;
     NotebookPages: TNotebook;
     PageButtonInput: TSpeedButtonEx;
     PageButtonSaveState: TSpeedButtonEx;
@@ -82,7 +81,6 @@ type
     RecordMovieAVI: TAdvOfficeRadioButtonEx;
     LabelInputFileName: TShadowLabel;
     LabelLoadSaveStateNotSupportedMsg: TShadowLabel;
-    LabelMachineInUse: TShadowLabel;
     PopupELV: TBcBarPopupMenu;
     PopupInputRenameFile: TMenuItem;
     PopupInputDeleteFile: TMenuItem;
@@ -98,9 +96,6 @@ type
     ButtonInputResetFileNameTitle: TBitBtnEx;
     LabelRecordMovieFileName: TShadowLabel;
     LabelRecordMovieRootFolder: TShadowLabel;
-    MemoryCardFileFolderPanel: TPanelEx;
-    MemoryCardListView: TEasyListview;
-    LabelMemoryCardSelectedFileFolder: TShadowLabel;
     LabelInsertMemoryCard_Slot3: TShadowLabel;
     LabelInsertMemoryCard_Slot4: TShadowLabel;
     InsertMemoryCard_Slot3: TEditEx;
@@ -113,17 +108,15 @@ type
     ButtonInsertMemoryCard_Slot4_Clear: TBitBtnEx;
     PopupMemoryCardAssignToSlot3: TMenuItem;
     PopupMemoryCardAssignToSlot4: TMenuItem;
-    PanelInputListView: TPanelEx;
-    LabelInputSelectedFileFolder: TShadowLabel;
     InputListView: TEasyListview;
-    PanelSaveStateListView: TPanelEx;
+    LabelInputSelectedFileFolder: TShadowLabel;
     SaveStateListView: TEasyListview;
     LabelSaveStateSelectedFileFolder: TShadowLabel;
-    PanelRecordMovieListView: TPanelEx;
-    LabelRecordMovieSelectedFileFolder: TShadowLabel;
+    MemoryCardListView: TEasyListview;
+    LabelMemoryCardSelectedFileFolder: TShadowLabel;
     RecordMovieListView: TEasyListview;
+    LabelRecordMovieSelectedFileFolder: TShadowLabel;
     procedure FormShow(Sender: TObject);
-    procedure FormKeyPress(Sender: TObject; var Key: Char);
     procedure InputPlaybackClick(Sender: TObject);
     procedure ButtonInsertMemoryCard_Slot1_LastUsedClick(Sender: TObject);
     procedure ButtonInsertMemoryCard_Slot2_LastUsedClick(Sender: TObject);
@@ -263,10 +256,12 @@ type
     procedure SetBottomButtons(IsEnabled: Boolean);
     function  CheckInvalidEditBoxKeyPress(var iKey: Char): Boolean;
     procedure SetCheckBoxStateColor(CheckBoxSource: TAdvOfficeCheckBoxEx);
+    procedure Resize4K;
   public
     { Public declarations }
     sysID: Integer;
     MachineNameToRun, CommandLine, EmulatorFileName: String;
+    MachineTitleToRun: WideString;
     IsMultiSlotGame: Boolean;
   end;
 
@@ -291,6 +286,166 @@ begin
   end;
 end;
 
+procedure TFormArcadeRunGameExtraMAME.Resize4K;
+var
+  iSize: Integer;
+
+  function MoveCheckBox(iEnabled_CheckBox: TAdvOfficeCheckBoxEx; iLeft, iTop, iWidth: Integer; IsSemibold: Boolean = False): Boolean;
+  begin
+    Result:= True;
+    FormMain.Set4KCheckBoxSpecs(iEnabled_CheckBox, iLeft, iTop, iWidth, 36, 16);
+    if IsSemibold then
+       FormMain.Set4KCheckBoxFontNameSpecs(iEnabled_CheckBox);
+  end;
+
+  function MoveRadioButton(iRadioButton: TAdvOfficeRadioButtonEx; iLeft, iWidth: Integer; IsSemibold: Boolean = False): Boolean;
+  begin
+    Result:= True;
+    FormMain.Set4KRadioButtonSpecs(iRadioButton, iLeft, 40, iWidth, 36, 16);
+    if IsSemibold then
+       FormMain.Set4KRadioButtonFontNameSpecs(iRadioButton);
+  end;
+
+  function MoveEasyListView(iELV_Source: TEasyListView; iTop: Integer; LabelBottomBox: TShadowLabel): Boolean;
+  begin
+    Result:= True;
+    FormMain.Set4KListViewSpecs(iELV_Source, 10, iTop, ClientWidth-20, LabelBottomBox.Top-iTop, 16, False);
+    iELV_Source.CellSizes.Report.Height:= 37;
+    iELV_Source.PaintInfoColumn.Border:= 4;
+    iELV_Source.PaintInfoColumn.CaptionIndent:= 4;
+    FormMain.Set4KListViewHeaderFontSizeSpecs(iELV_Source);
+  end;
+
+  function MoveMemCardEditButtons(iSlotLabel: TShadowLabel; iSlotEdit: TEditEx; iButtonSelect, iButtonLastUsed, iButtonClear: TBitBtnEx; iPrevSlotEdit: TEditEx): Boolean;
+  var
+    iTop: Integer;
+  begin
+    Result:= True;
+    if iPrevSlotEdit <> nil then
+       iTop:= iPrevSlotEdit.Top+45 // 10 pixels space between edit boxes
+    else
+       iTop:= 40; // first edit box
+
+    FormMain.Set4KLabelSpecs(iSlotLabel, 10, iTop+2, -1, -1, 16);
+    FormMain.Set4KButtonSpecs(iButtonClear,    ClientWidth-10-89,          iTop,  89, 36, 16);
+    FormMain.Set4KButtonSpecs(iButtonLastUsed, iButtonClear.Left-3-109,    iTop, 109, 36, 16);
+    FormMain.Set4KButtonSpecs(iButtonSelect,   iButtonLastUsed.Left-3-89,  iTop,  89, 36, 16);
+
+    FormMain.Set4KEditSpecs(iSlotEdit, 66, iTop, iButtonSelect.Left-5-66, 36, 16);
+  end;
+
+begin
+  if not Is4KMode then
+     Exit;
+
+  with FormArcadeRunGameExtraMAME do
+  begin
+    ClientWidth:=  1800;
+    ClientHeight:= 1075;
+    Font.Size:= 16;
+
+    FormMain.Set4KEmuGameTopPanel(TopBar, GameIcon, SystemIcon, LabelGameTitle, 1205, LabelGameName, -1);
+
+    PanelBottom.Height:= 71;
+    FormMain.Set4KLabelSpecs(LabelInfo, 24, 24, -1, -1, 16);
+    FormMain.Set4KButtonsOkCancelPanel(PanelBottom, ButtonOk, ButtonAbort, False);
+
+    FormMain.Set4KButtonSpecs(PageButtonInput,         9, 163, 300, 45, 16);
+    FormMain.Set4KButtonSpecs(PageButtonSaveState,   308, 172, 182, 36, 16);
+    FormMain.Set4KButtonSpecs(PageButtonMemoryCard,  489, 172, 200, 36, 16);
+    FormMain.Set4KButtonSpecs(PageButtonRecordMovie, 688, 172, 335, 36, 16);
+
+    FormMain.Set4KBevelSpecs(PagesButtonBottomLine, -1, 206, 1028, -1);
+
+    FormMain.Set4KNotebookSpecs(NotebookPages, -1, 219, ClientWidth, PanelBottom.Top-219);
+    iSize:= NotebookPages.Height;
+
+    // Playback/Record an Input File
+    MoveCheckBox(Enabled_PlaybackRecordInput, 36, 1, 110, True);
+    MoveRadioButton(InputPlayback, 10, 120, True);
+    MoveRadioButton(InputRecord,  152, 100);
+    MoveCheckBox(InputExitEmulatorAfterInputPlayback, 309, 40, 350);
+    MoveCheckBox(InputRecordTimecodeFile, 309, 40, 315);
+
+    FormMain.Set4KLabelSpecs(LabelInputFileName, 10, iSize-20-36, -1, -1, 16);
+    FormMain.Set4KLabelFontNameSpecs(LabelInputFileName);
+
+    FormMain.Set4KButtonSpecs(ButtonInputResetFileNameTitle, ClientWidth-149-10, LabelInputFileName.Top, 149, 36, 16);
+    FormMain.Set4KButtonSpecs(ButtonInputResetFileName, ButtonInputResetFileNameTitle.Left-89-3, LabelInputFileName.Top, 89, 36, 16);
+
+    FormMain.Set4KEditSpecs(InputFileName, 369, LabelInputFileName.Top, ButtonInputResetFileName.Left-369-5, 36, 16);
+    FormMain.Set4KEditFontNameSpecs(InputFileName);
+
+    FormMain.Set4KLabelSpecs(LabelInputSelectedFileFolder, 10, LabelInputFileName.Top-10-37, ClientWidth-20, 37, 16);
+
+    MoveEasyListView(InputListView, 80, LabelInputSelectedFileFolder);
+    InputListView.Header.Columns[0].Width:= 800;
+    InputListView.Header.Columns[1].Width:= 180;
+    InputListView.Header.Columns[2].Width:= 220;
+    InputListView.Header.Columns[3].Width:= 578;
+
+    // Load a Save State
+    MoveCheckBox(Enabled_LoadSaveState, 36, 1, 110, True);
+    MoveCheckBox(AutoSaveState,        169, 1, 185);
+    FormMain.Set4KLabelSpecs(LabelLoadSaveStateNotSupportedMsg, 852, 8, 915, -1, 18);
+
+    FormMain.Set4KLabelSpecs(LabelSaveStateSelectedFileFolder, 10, iSize-20-37, ClientWidth-20, 37, 16);
+
+    MoveEasyListView(SaveStateListView, 40, LabelSaveStateSelectedFileFolder);
+    SaveStateListView.Header.Columns[0].Width:= 1378;
+    SaveStateListView.Header.Columns[1].Width:= 180;
+    SaveStateListView.Header.Columns[2].Width:= 220;
+
+    // Insert Memory Card
+    MoveCheckBox(Enabled_InsertMemoryCard, 36, 1, 110, True);
+
+    MoveMemCardEditButtons(LabelInsertMemoryCard_Slot1, InsertMemoryCard_Slot1,
+                           ButtonInsertMemoryCard_Slot1_SelectFile, ButtonInsertMemoryCard_Slot1_LastUsed, ButtonInsertMemoryCard_Slot1_Clear, nil);
+
+    MoveMemCardEditButtons(LabelInsertMemoryCard_Slot2, InsertMemoryCard_Slot2,
+                           ButtonInsertMemoryCard_Slot2_SelectFile, ButtonInsertMemoryCard_Slot2_LastUsed, ButtonInsertMemoryCard_Slot2_Clear, InsertMemoryCard_Slot1);
+
+    MoveMemCardEditButtons(LabelInsertMemoryCard_Slot3, InsertMemoryCard_Slot3,
+                           ButtonInsertMemoryCard_Slot3_SelectFile, ButtonInsertMemoryCard_Slot3_LastUsed, ButtonInsertMemoryCard_Slot3_Clear, InsertMemoryCard_Slot2);
+
+    MoveMemCardEditButtons(LabelInsertMemoryCard_Slot4, InsertMemoryCard_Slot4,
+                           ButtonInsertMemoryCard_Slot4_SelectFile, ButtonInsertMemoryCard_Slot4_LastUsed, ButtonInsertMemoryCard_Slot4_Clear, InsertMemoryCard_Slot3);
+
+    FormMain.Set4KLabelSpecs(LabelMemoryCardSelectedFileFolder, 10, iSize-20-37, ClientWidth-20, 37, 16);
+
+    MoveEasyListView(MemoryCardListView, InsertMemoryCard_Slot4.Top+47, LabelMemoryCardSelectedFileFolder);
+    MemoryCardListView.Header.Columns[0].Width:= 800;
+    MemoryCardListView.Header.Columns[1].Width:= 180;
+    MemoryCardListView.Header.Columns[2].Width:= 220;
+    MemoryCardListView.Header.Columns[3].Width:= 578;
+
+    // Record Current Section To a Movie
+    MoveCheckBox(Enabled_RecordMovie, 36, 1, 110, True);
+    MoveRadioButton(RecordMovieAVI,   10, 105, True);
+    MoveRadioButton(RecordMovieMNG,  138, 125);
+    MoveRadioButton(RecordMovieWAV,  282, 125);
+
+    FormMain.Set4KLabelSpecs(LabelRecordMovieRootFolder, 457, 45, ClientWidth-20-457, 28, 16);
+
+    FormMain.Set4KLabelSpecs(LabelRecordMovieFileName, 10, iSize-20-36, -1, -1, 16);
+    FormMain.Set4KLabelFontNameSpecs(LabelRecordMovieFileName);
+
+    FormMain.Set4KButtonSpecs(ButtonRecordMovieResetFileNameTitle, ClientWidth-149-10, LabelRecordMovieFileName.Top, 149, 36, 16);
+    FormMain.Set4KButtonSpecs(ButtonRecordMovieResetFileName, ButtonRecordMovieResetFileNameTitle.Left-89-3, LabelRecordMovieFileName.Top, 89, 36, 16);
+
+    FormMain.Set4KEditSpecs(RecordMovieFileName, 360, LabelRecordMovieFileName.Top, ButtonRecordMovieResetFileName.Left-360-5, 36, 16);
+    FormMain.Set4KEditFontNameSpecs(RecordMovieFileName);
+
+    FormMain.Set4KLabelSpecs(LabelRecordMovieSelectedFileFolder, 10, LabelRecordMovieFileName.Top-10-37, ClientWidth-20, 37, 16);
+
+    MoveEasyListView(RecordMovieListView, 80, LabelRecordMovieSelectedFileFolder);
+    RecordMovieListView.Header.Columns[0].Width:= 800;
+    RecordMovieListView.Header.Columns[1].Width:= 180;
+    RecordMovieListView.Header.Columns[2].Width:= 220;
+    RecordMovieListView.Header.Columns[3].Width:= 578;
+  end;
+end;
+
 procedure TFormArcadeRunGameExtraMAME.GetFiles(FeatureIndex: Byte; CheckGameNameSubFolder: Boolean);
 
   function AddFile_ELV(ELV_Holder: TEasyListView; const iFileName, iFolderName: String; IsGameSubFolder: Boolean): Boolean;
@@ -298,6 +453,7 @@ procedure TFormArcadeRunGameExtraMAME.GetFiles(FeatureIndex: Byte; CheckGameName
     Item: TEasyItem;
     iRelative: String;
   begin
+    Result:= True;
     case FeatureIndex of
       20,21: iRelative:= FolderInput;
       22: iRelative:= FolderState;
@@ -350,7 +506,8 @@ procedure TFormArcadeRunGameExtraMAME.GetFiles(FeatureIndex: Byte; CheckGameName
   var
     Search: TSearchRec;
   begin
-    if FindFirst(FolderStr+FileMaskStr, $37, Search) = 0 then
+    Result:= FindFirst(FolderStr+FileMaskStr, $37, Search) = 0;
+    if Result then // if FindFirst(FolderStr+FileMaskStr, $37, Search) = 0 then
     begin
       repeat
         if (Search.Name <> '.') and (Search.Name <> '..') then
@@ -443,7 +600,7 @@ begin
   case FeatureIndex of
     32:
       begin
-        GetFilesMulti(iFolder, FormMain.MemGameInfo.eName+iFileExtension); // for "memcard\psu\gamename.*"...
+        GetFilesMulti(iFolder, FormMain.MemGameInfo.eName+ iFileExtension); // for "memcard\psu\gamename.*"...
         GetFilesMulti(iFolder, FormMain.MemGameInfo.eTitle+iFileExtension); // for "memcard\psu\game_title.*"...
       end;
     23, 24, 25:
@@ -461,7 +618,7 @@ begin
   
   if FeatureIndex = 32 then
      begin
-       GetFilesMulti(iFolder, FormMain.MemGameInfo.eName+iFileExtension); // for "memcard\psu\gamename.*"...
+       GetFilesMulti(iFolder, FormMain.MemGameInfo.eName+ iFileExtension); // for "memcard\psu\gamename.*"...
        GetFilesMulti(iFolder, FormMain.MemGameInfo.eTitle+iFileExtension); // for "memcard\psu\game_title.*"...
      end
   else
@@ -505,7 +662,7 @@ begin
        // "memcard_dir\psu\psx\wildarms\Wild Arms (USA).*" -> game title
        if FeatureIndex = 32 then
        begin
-         GetFilesMulti(iFolder+SoftwareListFolder, FormMain.MemGameInfo.eName+iFileExtension); // for "memcard\psu\psx\gamename.*"...
+         GetFilesMulti(iFolder+SoftwareListFolder, FormMain.MemGameInfo.eName+ iFileExtension); // for "memcard\psu\psx\gamename.*"...
          GetFilesMulti(iFolder+SoftwareListFolder, FormMain.MemGameInfo.eTitle+iFileExtension); // for "memcard\psu\psx\game_title.*"...
        end
        else
@@ -564,17 +721,15 @@ begin
   MemCardFileExtFilter:= '';
   if (FormMain.MemGameInfo.eSoftwareName <> '') and (MachineNameToRun = '') then
      begin
-       DisablePage(2); //InsertMemoryCard_Box);
+       DisablePage(2);
        Exit;
      end;
   if not FileExists(FormMain.GetMemcardListFile(FormMain.MemGameInfo.eSystemID)) then
      begin
-       DisablePage(2); //InsertMemoryCard_Box);
+       DisablePage(2);
        Exit;
      end;
   MemCardFile:= TMemIniFile.Create(FormMain.GetMemcardListFile(FormMain.MemGameInfo.eSystemID));
-  //MemcardFile:= THashedStringList.Create;
-  //MemcardFile.LoadFromFile(FormMain.GetMemcardListFile(FormMain.MemGameInfo.eSystemID));
   
   if FormMain.MemGameInfo.eSoftwareName = '' then
      begin
@@ -596,7 +751,7 @@ begin
 
   if MemCardSlots.Count = 0 then
      begin
-       DisablePage(2); //InsertMemoryCard_Box)
+       DisablePage(2);
        MemCardLastUsed_MachineName:= '';
      end
   else
@@ -619,16 +774,28 @@ begin
 
        Loop:= MemCardSlots.Count-1; // -1 because the first entry is the file extension (can be multiple extensions)
        if Loop < 4 then
-          begin
-            case Loop of
-              1: iTop:= 53;
-              2: iTop:= 80;
-              3: iTop:= 105;
+       begin
+         if Is4KMode then
+            begin
+              case Loop of
+                1: iTop:= 85;
+                2: iTop:= 130;
+                3: iTop:= 175;
+              end;
+            end
+         else
+            begin
+              case Loop of
+                1: iTop:= 53;
+                2: iTop:= 80;
+                3: iTop:= 107;
+              end;
             end;
-            iHeight:= MemoryCardFileFolderPanel.Top-iTop;
-            MemoryCardFileFolderPanel.Top:= iTop;
-            MemoryCardFileFolderPanel.Height:= MemoryCardFileFolderPanel.Height+iHeight;
-          end;
+         iHeight:= MemoryCardListView.Top-iTop;
+         MemoryCardListView.Top:= iTop;
+         MemoryCardListView.Height:= MemoryCardListView.Height+iHeight;
+       end;
+       
        for Loop:=1 to MemCardSlots.Count-1 do
        begin
          case Loop of
@@ -741,7 +908,7 @@ begin
           repeat
             if uMain.TEasyGameInfo(Item).eName = MachineNameToRun then
                begin
-                 LabelMachineInUse.Hint:= uMain.TEasyGameInfo(Item).eTitle;
+                 MachineTitleToRun:= uMain.TEasyGameInfo(Item).eTitle;
                  GameFound:= True;
                  if uMain.TEasyGameInfo(Item).eSaveState <> 1 then
                     LabelLoadSaveStateNotSupportedMsg.Visible:= True;
@@ -760,7 +927,7 @@ begin
            begin
              if uMain.TEasyGameInfo(Item).eName = MachineNameToRun then
                 begin
-                  LabelMachineInUse.Hint:= uMain.TEasyGameInfo(Item).eTitle;
+                  MachineTitleToRun:= uMain.TEasyGameInfo(Item).eTitle;
                   GameFound:= True;
                   if uMain.TEasyGameInfo(Item).eSaveState <> 1 then
                      LabelLoadSaveStateNotSupportedMsg.Visible:= True;
@@ -1083,8 +1250,8 @@ begin
   if NearItem = nil then
      NearItem:= ELV_Holder.Groups.NextItem(Item);
   FileStr:= TFileInfo(Item).eFileFolder+TFileInfo(Item).eFileName;
-  FormMain.InitMessageBox;// CallMessageBox;
-  //ShowGameNameEntryMsgBox;
+
+  FormMain.InitMessageBox;
   FormMain.AddEmulatorHeaderArcade;
   FormMain.AddSoftwareListHeader;
 
@@ -1097,7 +1264,7 @@ begin
 
   FormMain.AddMsgText(#13#10+'   Are you sure you want to delete this file ? Recycle bin is not supported...');
 
-  if GenerateMessage('Delete File', 'You''re about to delete '+FileCategory+' file.', '', 1, False, 2) = mrNo then
+  if FormMain.ShowMessageBox('Delete File', 'You''re about to delete '+FileCategory+' file.', '', 1, False, 2) = mrNo then
      Exit;
 
   DeleteFile(TFileInfo(Item).eFileFolder+TFileInfo(Item).eFileName);
@@ -1198,7 +1365,7 @@ begin
           begin
             if FormMain.CheckTotal(InputListView) then
                begin
-                 GenerateMessage('Error', 'Filename is blank.', '    Playback input filename is not selected. Select a file in the list or uncheck "Enabled" to disable this feature.');
+                 FormMain.ShowMessageBox('Error', 'Filename is blank.', '    Playback input filename is not selected. Select a file in the list or uncheck "Enabled" to disable this feature.');
                  Result:= False;
                  Exit;
                end
@@ -1216,7 +1383,7 @@ begin
              RecFileName:= ChangeFileExt(RecFileName, '.inp')
           else
              begin
-               GenerateMessage('Error', 'Filename is blank.', 'Record input filename is empty. Select a file in the list or type a new filename in the edit box.');
+               FormMain.ShowMessageBox('Error', 'Filename is blank.', 'Record input filename is empty. Select a file in the list or type a new filename in the edit box.');
                Result:= False;
              end;
           if selItem <> nil then
@@ -1277,7 +1444,7 @@ begin
        begin
          if FormMain.CheckTotal(SaveStateListView) then
             begin
-              GenerateMessage('Error', 'Filename is blank.', 'Load save state filename is not selected. Select a file in the list or uncheck "Enabled" to disable this feature.');
+              FormMain.ShowMessageBox('Error', 'Filename is blank.', 'Load save state filename is not selected. Select a file in the list or uncheck "Enabled" to disable this feature.');
               Result:= False;
               Exit;
             end
@@ -1349,7 +1516,7 @@ begin
        RecFileName:= ChangeFileExt(RecFileName, GetRecordMovieFileExtension)
     else
        begin
-         GenerateMessage('Error', 'Filename is blank.', 'Record movie filename is blank. Either select a file in the list, enter a new filename '+
+         FormMain.ShowMessageBox('Error', 'Filename is blank.', 'Record movie filename is blank. Either select a file in the list, enter a new filename '+
                                                          'or uncheck "Enabled" to disable this feature.');
          Result:= False;
          Exit;
@@ -1400,16 +1567,24 @@ begin
 end;
 
 procedure TFormArcadeRunGameExtraMAME.FormShow(Sender: TObject);
-const
-  iTop: Integer = 26;
 var
   Loop: Integer;
+  iTop: Integer;
+  iStr: WideString;
 
   function AdjustDisabledPanel(PanelHolder: TPanel): Boolean;
   begin
     Result:= True;
-    PanelHolder.Left:= 8;
-    PanelHolder.Top:= 22;
+    if Is4KMode then
+       begin
+         PanelHolder.Left:= 8;
+         PanelHolder.Top:= 40;
+       end
+    else
+       begin
+         PanelHolder.Left:= 8;
+         PanelHolder.Top:= 22;
+       end;
     PanelHolder.Width:= NotebookPages.Width-16;
     PanelHolder.Height:= NotebookPages.Height-22-8;
     PanelHolder.ParentBackground:= False;
@@ -1419,6 +1594,16 @@ var
   end;
 
 begin
+  //remove "LabelMachineInUse" and "LabelSoftwareListTitle" labels and add the texts in "LabelGameName" label
+  //... this should be done in other Forms as well!
+  //4 lines in 4K is 145 pixels (Verdana, size 14)
+  //TopPanel heighit should be 235 pixels (label top = 84 + 145 height)
+  Resize4K;
+  if Is4KMode then
+     iTop:= 46
+  else
+     iTop:= 26;
+
   FormMain.ELV_ResetNormalColors(InputListView);
   FormMain.ELV_ResetNormalColors(SaveStateListView);
   FormMain.ELV_ResetNormalColors(MemoryCardListView);
@@ -1427,7 +1612,8 @@ begin
   CommandLine:= '';
 
   MemCardLastUsed_MachineName:= '';
-  MachineNameFolder:= MachineNameToRun;
+  MachineTitleToRun:= ''; // current softlist machine title
+  MachineNameFolder:= MachineNameToRun; // current softlist machine name
   if MachineNameFolder <> '' then
      MachineNameFolder:= MachineNameFolder+'\';
 
@@ -1442,48 +1628,32 @@ begin
 
   FoundInputExtra:= False;
 
-  InputRecordTimecodeFile.Left:= 170;
+  if not Is4KMode then
+     InputRecordTimecodeFile.Left:= InputExitEmulatorAfterInputPlayback.Left;// 170;
 
   LabelGameTitle.Caption:= FormMain.MemGameInfo.eTitle;
 
-  FormMain.LoadGameIconIntoImage(FormMain.MemGameInfo.eSystemID, FormMain.MemGameInfo.eCustomSystemID, FormMain.MemGameInfo.eROMIdentification, GameIcon, FormMain.MemGameInfo.eSoftwareName, FormMain.MemGameInfo.eIsCustomGame);
-  //FormMain.IL_StandardIconsExtraLarge.GetIcon(FormMain.GetMAMEImageIndex(FormMain.MemGameInfo.eROMIdentification, FormMain.MemGameInfo.eSoftwareName),
-  //                                            GameIcon.Picture.Icon);
-
-  FormMain.IL_ArcadeSystem_Small.GetIcon(FormMain.MemGameInfo.eSystemID, SystemIcon.Picture.Icon);
-
-  LabelGameName.Caption:= 'name: '+FormMain.StatusBar_GamesGameName.Caption+#13#10+FormMain.EmulatorVersion[FormMain.MemGameInfo.eSystemID];
+  FormMain.LoadSystemROMIdIcon(FormMain.MemGameInfo.eSystemID, FormMain.MemGameInfo.eCustomSystemID, FormMain.MemGameInfo.eROMIdentification, GameIcon, FormMain.MemGameInfo.eSoftwareName, FormMain.MemGameInfo.eGameSetStatus, FormMain.MemGameInfo.eIsCustomGame);
+  FormMain.LoadGameIcon(SystemIcon, False);
 
   if IsNightMode then
   begin
-    SetFormColors(FormArcadeRunGameExtraMAME, TopBar, BottomBar, LabelGameTitle, LabelGameName, nil, FormMain.MemGameInfo.eGameSetStatus, IsNightMode);
+    SetFormColors(FormArcadeRunGameExtraMAME, TopBar, PanelBottom, LabelGameTitle, LabelGameName, nil, FormMain.MemGameInfo.eGameSetStatus, IsNightMode);
     NotebookPages.Color:= FormArcadeRunGameExtraMAME.Color;
-
-    SetPanelNightColors(PanelInputListView,FormArcadeRunGameExtraMAME.Color, -1, clrBorderGroupBoxGrayBk, clrInnerBorderGroupBoxGrayBk);
 
     SetTabButtonLineColors(PagesButtonBottomLine);
 
-    SetLabelColors(LabelMachineInUse,      LabelGameName.Font.Color, clrLightBlack);
-    SetLabelColors(LabelSoftwareListTitle, LabelGameName.Font.Color, clrLightBlack);
-
     // playback/record panel
-    SetPanelNightColors(PanelInputListView, FormArcadeRunGameExtraMAME.Color, -1, PanelInputListView.ColorFrame, PanelInputListView.ColorInnerFrame);
-
     SetLabelColors(LabelInputSelectedFileFolder, clSilver, clrLightBlack);
-    SetLabelBkFrameColors(LabelInputSelectedFileFolder, clrDarkGray, PanelInputListView.ColorFrame);
-
-    FormMain.SetEasyListViewColors(InputListView, menu_background_color[1], item_caption_active_color[1]);
+    SetLabelBkFrameColors(LabelInputSelectedFileFolder, clrDarkGray, clrBorderGroupBoxGrayBk);
 
     SetLabelColors(LabelInputFileName, clGray, clrDarkGray);
 
     // Load a Save State panel
     SetLabelColors(LabelLoadSaveStateNotSupportedMsg, clrLightRed, clMaroon);
 
-    SetPanelNightColors(PanelSaveStateListView, FormArcadeRunGameExtraMAME.Color, -1, PanelInputListView.ColorFrame, PanelInputListView.ColorInnerFrame);
-
     SetLabelColors(LabelSaveStateSelectedFileFolder, clSilver, clrDarkGray);
-    SetLabelBkFrameColors(LabelSaveStateSelectedFileFolder, clrDarkGray, PanelSaveStateListView.ColorFrame);
-    FormMain.SetEasyListViewColors(SaveStateListView, menu_background_color[1], item_caption_active_color[1]);
+    SetLabelBkFrameColors(LabelSaveStateSelectedFileFolder, clrDarkGray, clrBorderGroupBoxGrayBk);
 
     // Insert Memory Card panel
     SetLabelColors(LabelInsertMemoryCard_Slot1, clCream, item_caption_active_shadow_color[1]);
@@ -1491,24 +1661,30 @@ begin
     SetLabelColors(LabelInsertMemoryCard_Slot3, clCream, item_caption_active_shadow_color[1]);
     SetLabelColors(LabelInsertMemoryCard_Slot4, clCream, item_caption_active_shadow_color[1]);
 
-    SetPanelNightColors(MemoryCardFileFolderPanel, FormArcadeRunGameExtraMAME.Color, -1, PanelInputListView.ColorFrame, PanelInputListView.ColorInnerFrame);
     SetLabelColors(LabelMemoryCardSelectedFileFolder, clSilver, clrDarkGray);
-    SetLabelBkFrameColors(LabelMemoryCardSelectedFileFolder, clrDarkGray, MemoryCardFileFolderPanel.ColorFrame);
-    FormMain.SetEasyListViewColors(MemoryCardListView, menu_background_color[1], item_caption_active_color[1]);
+    SetLabelBkFrameColors(LabelMemoryCardSelectedFileFolder, clrDarkGray, clrBorderGroupBoxGrayBk);
 
     // Record Session to a Movie panel
     SetLabelColors(LabelRecordMovieFileName, clCream, item_caption_active_shadow_color[1]);
     SetLabelColors(LabelRecordMovieRootFolder, clSilver, clrLightBlack);
 
-    SetPanelNightColors(PanelRecordMovieListView, FormArcadeRunGameExtraMAME.Color, -1, PanelInputListView.ColorFrame, PanelInputListView.ColorInnerFrame);
     SetLabelColors(LabelRecordMovieSelectedFileFolder, clSilver, clrLightBlack);
-    SetLabelBkFrameColors(LabelRecordMovieSelectedFileFolder, clrDarkGray, PanelRecordMovieListView.ColorFrame);
-    FormMain.SetEasyListViewColors(RecordMovieListView, menu_background_color[1], item_caption_active_color[1]);
+    SetLabelBkFrameColors(LabelRecordMovieSelectedFileFolder, clrDarkGray, clrBorderGroupBoxGrayBk);
 
     SetLabelColors(LabelInfo, clrLightGreen, clrDarkGreen);
 
     for Loop:= 0 to FormArcadeRunGameExtraMAME.ComponentCount-1 do
     begin
+      if FormArcadeRunGameExtraMAME.Components[Loop] is TEasyListView then
+         begin
+           FormMain.SetEasyListViewColors(TEasyListView(FormArcadeRunGameExtraMAME.Components[Loop]), menu_background_color[1], item_caption_active_color[1], -1, clrBorderGroupBoxGrayBk);
+           FormMain.SetEasyListViewHeaderColors(TEasyListView(FormArcadeRunGameExtraMAME.Components[Loop]), True, False, Is4KMode, True);
+           FormMain.ELV_SetEditBkColor(TEasyListView(FormArcadeRunGameExtraMAME.Components[Loop]));
+
+           FormMain.ELV_SetRibbonNightColors(0, TEasyListView(FormArcadeRunGameExtraMAME.Components[Loop]), True);
+           FormMain.SetWin10DarkScrollBar(TEasyListView(FormArcadeRunGameExtraMAME.Components[Loop]));
+         end
+      else
       if FormArcadeRunGameExtraMAME.Components[Loop] is TBitBtnEx then
          FormMain.SetButtonExColors(TBitBtnEx(FormArcadeRunGameExtraMAME.Components[Loop]))
       else
@@ -1530,26 +1706,6 @@ begin
       if FormArcadeRunGameExtraMAME.Components[Loop] is TEditEx then
          SetEditNightColors(TEditEx(FormArcadeRunGameExtraMAME.Components[Loop]));
     end;
-
-    FormMain.SetEasyListViewHeaderColors(InputListView, True);
-    FormMain.SetEasyListViewHeaderColors(SaveStateListView, True);
-    FormMain.SetEasyListViewHeaderColors(MemoryCardListView, True);
-    FormMain.SetEasyListViewHeaderColors(RecordMovieListView, True);
-
-    FormMain.ELV_SetEditBkColor(InputListView);
-    FormMain.ELV_SetEditBkColor(SaveStateListView);
-    FormMain.ELV_SetEditBkColor(MemoryCardListView);
-    FormMain.ELV_SetEditBkColor(RecordMovieListView);
-
-    FormMain.ELV_SetRibbonNightColors(0, InputListView, True);
-    FormMain.ELV_SetRibbonNightColors(0, SaveStateListView, True);
-    FormMain.ELV_SetRibbonNightColors(0, MemoryCardListView, True);
-    FormMain.ELV_SetRibbonNightColors(0, RecordMovieListView, True);
-
-    FormMain.SetWin10DarkScrollBar(InputListView);
-    FormMain.SetWin10DarkScrollBar(SaveStateListView);
-    FormMain.SetWin10DarkScrollBar(MemoryCardListView);
-    FormMain.SetWin10DarkScrollBar(RecordMovieListView);
   end;
   
   SetColorsGameTopBar(FormMain.MemGameInfo.eGameSetStatus, TopBar, IsNightMode); // change top bar color based on game set status // for light mode and night mode
@@ -1562,12 +1718,14 @@ begin
   AdjustDisabledPanel(PanelDisabledInput);
   AdjustDisabledPanel(PanelDisabledSaveState);
   AdjustDisabledPanel(PanelDisabledMemoryCard);
-  PanelDisabledSaveStateNotSupportedMsg.Left:= 95;
-  PanelDisabledSaveStateNotSupportedMsg.Width:= (NotebookPages.Width-PanelDisabledSaveStateNotSupportedMsg.Left)-10;
+  AdjustDisabledPanel(PanelDisabledRecordMovie);
+
+  FormMain.Set4KPanelSpecs(PanelDisabledSaveStateNotSupportedMsg, LabelLoadSaveStateNotSupportedMsg.Left,  LabelLoadSaveStateNotSupportedMsg.Top,
+                                                                  LabelLoadSaveStateNotSupportedMsg.Width, LabelLoadSaveStateNotSupportedMsg.Height);
+  //PanelDisabledSaveStateNotSupportedMsg.Left:= 95;
+  //PanelDisabledSaveStateNotSupportedMsg.Width:= (NotebookPages.Width-PanelDisabledSaveStateNotSupportedMsg.Left)-10;
   PanelDisabledSaveStateNotSupportedMsg.ParentBackground:= False;
   PanelDisabledSaveStateNotSupportedMsg.Color:= NotebookPages.Color;
-
-  AdjustDisabledPanel(PanelDisabledRecordMovie);
 
   LabelInputSelectedFileFolder.Caption:= '';
   InputPlayback_CurrentFile:= '';
@@ -1619,27 +1777,26 @@ begin
 
   CheckSaveStateSupport; // MAME only
 
-  LabelSoftwareListTitle.Visible:= FormMain.MemGameInfo.eSoftwareName <> '';
-  if LabelSoftwareListTitle.Visible then
+  iStr:= 'name: '+FormMain.StatusBar_GamesGameName.Caption+#13#10+FormMain.EmulatorVersion[FormMain.MemGameInfo.eSystemID];
+  if FormMain.MemGameInfo.eSoftwareName <> '' then
+     iStr:= iStr+#13#10+'software list: '+FormMain.MemGameInfo.eCategory+#13#10+
+                'run with machine ['+MachineNameToRun+']: '+MachineTitleToRun;
+
+  LabelGameName.Caption:= iStr;
+  if Is4KMode then
+     LabelGameName.Width:= 1500; // AutoSize must run again...messes up with the
+
+  if FormMain.MemGameInfo.eSoftwareName <> '' then
      begin
        FormArcadeRunGameExtraMAME.ClientHeight:= FormArcadeRunGameExtraMAME.ClientHeight+iTop;
+       NotebookPages.Top:= NotebookPages.Top+iTop;
+       TopBar.Height:= TopBar.Height+iTop;
+
        PagesButtonBottomLine.Top:= PagesButtonBottomLine.Top+iTop;
        PageButtonInput.Top:= PageButtonInput.Top+iTop;
        PageButtonSaveState.Top:= PageButtonSaveState.Top+iTop;
        PageButtonMemoryCard.Top:= PageButtonMemoryCard.Top+iTop;
        PageButtonRecordMovie.Top:= PageButtonRecordMovie.Top+iTop;
-
-       LabelMachineInUse.Visible:= True;
-       //LabelGameName.Top:= LabelGameName.Top-LabelSoftwareListTitle.Height;
-       //LabelGameName.Height:= LabelGameName.Height+iTop;
-       LabelGameName.Caption:= LabelGameName.Caption+#13#10+'software list:'+#13#10+'run with machine';
-
-       LabelSoftwareListTitle.Caption:= FormMain.MemGameInfo.eCategory;
-       LabelSoftwareListTitle.Left:= 182;
-       LabelSoftwareListTitle.Top:= LabelGameName.Top+(LabelSoftwareListTitle.Height*2)-2;
-       LabelMachineInUse.Caption:= '['+MachineNameToRun+']: '+LabelMachineInUse.Hint;
-       LabelMachineInUse.Top:= LabelSoftwareListTitle.Top+LabelSoftwareListTitle.Height-1;// LabelGameNameCloneOf.Top; //  LabelSoftwareListTitle.Top+12;
-       TopBar.Height:= TopBar.Height+iTop;//6;
      end;
 
   // this has to be done on code or ELV crashes... :_((
@@ -1669,27 +1826,6 @@ begin
      end;
 end;
 
-procedure TFormArcadeRunGameExtraMAME.FormKeyPress(Sender: TObject;
-  var Key: Char);
-begin
-  {case FormMain.MenuArcadeBrowseGames.Tag of
-    0:
-      begin
-        case Key of
-          #13: ButtonOk.Click;
-          #27: ButtonAbort.Click;
-        end;
-      end;
-    else
-      begin
-        case Key of
-         'S', 's': ButtonOk.Click;
-         'Q', 'q': ButtonAbort.Click;
-        end;
-      end;
-  end;}
-end;
-
 procedure TFormArcadeRunGameExtraMAME.InputPlaybackClick(Sender: TObject);
 begin
   if TAdvOfficeRadioButtonEx(Sender).Tag = InputListView.Tag then
@@ -1708,23 +1844,27 @@ begin
      end;
 
   InputListView.Tag:= TAdvOfficeRadioButtonEx(Sender).Tag;
-
   InputFileName.Enabled:= InputListView.Tag = 1;
-  //LabelInputFileName.Enabled:= InputFileName.Enabled;
-  TAdvOfficeRadioButtonEx(Sender).Font.Style:= [fsBold];
+
+  if Is4KMode then
+     FormMain.Set4KRadioButtonFontNameSpecs(TAdvOfficeRadioButtonEx(Sender))
+  else
+     TAdvOfficeRadioButtonEx(Sender).Font.Style:= [fsBold];
+     
   if TAdvOfficeRadioButtonEx(Sender).Tag = 0 then
      begin
-       InputRecord.Font.Style:= [];
+       if Is4KMode then
+          FormMain.Set4KRadioButtonFontNameSpecs(InputRecord, FormMain.Get4KFont);
        LabelInputFileName.Caption:= 'Selected File (file extension optional)';
        if IsNightMode then
           SetLabelColors(LabelInputFileName, clGray, clrDarkGray)
-          //LabelInputFileName.Font.Color:= clrGray
        else
           LabelInputFileName.Font.Color:= clrDarkGray;
      end
   else
      begin
-       InputPlayback.Font.Style:= [];
+       if Is4KMode then
+          FormMain.Set4KRadioButtonFontNameSpecs(InputPlayback, FormMain.Get4KFont);
        LabelInputFileName.Caption:= 'New File (file extension optional)';
        if IsNightMode then
           SetLabelColors(LabelInputFileName, clCream, item_caption_active_shadow_color[1])
@@ -1785,14 +1925,16 @@ begin
 end;
 
 procedure TFormArcadeRunGameExtraMAME.PageButtonInputClick(Sender: TObject);
+var
+  iSize: Integer;
 
   function UncheckButton(ButtonHolder: TSpeedButtonEx): Boolean;
   begin
     Result:= TSpeedButtonEx(ButtonHolder).Top = TSpeedButtonEx(Sender).Top;
     if Result then
        begin
-         TSpeedButtonEx(ButtonHolder).Top:= TSpeedButtonEx(ButtonHolder).Top+3;
-         TSpeedButtonEx(ButtonHolder).Height:= TSpeedButtonEx(ButtonHolder).Height-3;
+         TSpeedButtonEx(ButtonHolder).Height:= TSpeedButtonEx(ButtonHolder).Height-iSize;
+         TSpeedButtonEx(ButtonHolder).Top:= TSpeedButtonEx(ButtonHolder).Top+iSize;
          if not IsNightMode then
             TSpeedButtonEx(ButtonHolder).Font.Color:= clrDarkGray;
        end;
@@ -1801,8 +1943,13 @@ procedure TFormArcadeRunGameExtraMAME.PageButtonInputClick(Sender: TObject);
 begin
   if TSpeedButtonEx(Sender).Tag = NotebookPages.Tag then
      Exit;
-  TSpeedButtonEx(Sender).Top:= TSpeedButtonEx(Sender).Top-3;
-  TSpeedButtonEx(Sender).Height:= TSpeedButtonEx(Sender).Height+3;
+
+  if Is4KMode then
+     iSize:= 9
+  else
+     iSize:= 3;
+  TSpeedButtonEx(Sender).Top:= TSpeedButtonEx(Sender).Top-iSize;
+  TSpeedButtonEx(Sender).Height:= TSpeedButtonEx(Sender).Height+iSize;
   if not IsNightMode then
      TSpeedButtonEx(Sender).Font.Color:= clBlack;
 
@@ -2023,7 +2170,7 @@ end;
 function TFormArcadeRunGameExtraMAME.RenameTextConfirmDialog(const NewValueStr: Variant; newFileStr: WideString; iRemoveItem, iItem: TEasyItem): Boolean;
 begin
   Result:= False;
-  FormMain.InitMessageBox;// CallMessageBox;
+  FormMain.InitMessageBox;
   FormMain.AddMsgText('    The destination file already exists.'+#13#10);
   FormMain.AddCommandLineMsgBox(newFileStr, False, False);
   //FormMain.AddMsgText(newFileStr, MsgTxtColors.colorCmdLine, [fsBold], taLeftJustify, 10, 'Consolas');
@@ -2045,7 +2192,7 @@ begin
   //FormMain.AddMsgText(TFileInfo(iItem).eFileName, MsgTxtColors.colorCmdLine, [fsBold], taLeftJustify, 10, 'Consolas');
   FormMain.AddMsgText(' and overwrite the file above ?');
 
-  if GenerateMessage('Rename File', 'Rename file from "'+TFileInfo(iItem).eFileName+'" to "'+NewValueStr+'".', '', 1, False, 2) = mrYes then
+  if FormMain.ShowMessageBox('Rename File', 'Rename file from "'+TFileInfo(iItem).eFileName+'" to "'+NewValueStr+'".', '', 1, False, 2) = mrYes then
      Result:= True;
 end;
 
@@ -2394,7 +2541,7 @@ end;
 procedure TFormArcadeRunGameExtraMAME.InsertMemoryCard_Slot1KeyPress(
   Sender: TObject; var Key: Char);
 begin
-  // there can't be surround quotes...
+  // "There can't be no surround quotes"...
   if CheckInvalidEditBoxKeyPress(Key) then
      begin
        Key:= Char(0);
@@ -2405,7 +2552,7 @@ end;
 procedure TFormArcadeRunGameExtraMAME.InsertMemoryCard_Slot2KeyPress(
   Sender: TObject; var Key: Char);
 begin
-  // there can't be surround quotes...
+  // "There can't be no surround quotes"...
   if CheckInvalidEditBoxKeyPress(Key) then
      begin
        Key:= Char(0);
@@ -2416,7 +2563,7 @@ end;
 procedure TFormArcadeRunGameExtraMAME.InsertMemoryCard_Slot3KeyPress(
   Sender: TObject; var Key: Char);
 begin
-  // there can't be surround quotes...
+  // "There can't be no surround quotes"...
   if CheckInvalidEditBoxKeyPress(Key) then
      begin
        Key:= Char(0);
@@ -2427,7 +2574,7 @@ end;
 procedure TFormArcadeRunGameExtraMAME.InsertMemoryCard_Slot4KeyPress(
   Sender: TObject; var Key: Char);
 begin
-  // there can't be surround quotes...
+  // "There can't be no surround quotes"...
   if CheckInvalidEditBoxKeyPress(Key) then
      begin
        Key:= Char(0);
@@ -2468,20 +2615,39 @@ begin
      end;
   RecordMovieListView.Tag:= TAdvOfficeRadioButtonEx(Sender).Tag;
 
-  TAdvOfficeRadioButtonEx(Sender).Font.Style:= [fsBold];
+  if Is4KMode then
+     FormMain.Set4KRadioButtonFontNameSpecs(TAdvOfficeRadioButtonEx(Sender))
+  else
+     TAdvOfficeRadioButtonEx(Sender).Font.Style:= [fsBold];
+
   case TAdvOfficeRadioButtonEx(Sender).Tag of
     0:
       begin
+        if Is4KMode then
+        begin
+          FormMain.Set4KRadioButtonFontNameSpecs(RecordMovieMNG, FormMain.Get4KFont);
+          FormMain.Set4KRadioButtonFontNameSpecs(RecordMovieWAV, FormMain.Get4KFont);
+        end;
         RecordMovieMNG.Font.Style:= [];
         RecordMovieWAV.Font.Style:= [];
       end;
     1:
       begin
+        if Is4KMode then
+        begin
+          FormMain.Set4KRadioButtonFontNameSpecs(RecordMovieAVI, FormMain.Get4KFont);
+          FormMain.Set4KRadioButtonFontNameSpecs(RecordMovieWAV, FormMain.Get4KFont);
+        end;
         RecordMovieAVI.Font.Style:= [];
         RecordMovieWAV.Font.Style:= [];
       end;
     2:
       begin
+        if Is4KMode then
+        begin
+          FormMain.Set4KRadioButtonFontNameSpecs(RecordMovieAVI, FormMain.Get4KFont);
+          FormMain.Set4KRadioButtonFontNameSpecs(RecordMovieMNG, FormMain.Get4KFont);
+        end;
         RecordMovieAVI.Font.Style:= [];
         RecordMovieMNG.Font.Style:= [];
       end;
@@ -2617,8 +2783,13 @@ end;
 
 procedure TFormArcadeRunGameExtraMAME.FormCreate(Sender: TObject);
 begin
-  if FormMain.MenuCustomizeSplashScreen.Tag = 0 then //if Screen.Fonts.IndexOf('Terminal') = -1 then
-     FormMain.ChangeLabelFontConsolas(LabelLoadSaveStateNotSupportedMsg, 9, [fsBold]);
+  if FormMain.MenuCustomizeSplashScreen.Tag = 0 then
+     begin
+       if Is4KMode then
+          FormMain.ChangeLabelFontConsolas(LabelLoadSaveStateNotSupportedMsg, 19, [fsBold])
+       else
+          FormMain.ChangeLabelFontConsolas(LabelLoadSaveStateNotSupportedMsg, 9, [fsBold]);
+     end;
 end;
 
 end.

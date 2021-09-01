@@ -1408,7 +1408,7 @@ begin
       pf1Bit  : begin dirEntry.bColorCount :=  2; dirEntry.wBitCount :=  0; end;
       pf4Bit  : begin dirEntry.bColorCount := 16; dirEntry.wBitCount :=  0; end;
       pf8Bit  : begin dirEntry.bColorCount :=  0; dirEntry.wBitCount :=  8; end;
-      pf16Bit : begin dirEntry.bColorCount :=  0; dirEntry.wBitCount := 16; end;
+      pf15Bit, pf16Bit : begin dirEntry.bColorCount :=  0; dirEntry.wBitCount := 16; end;
       pf24Bit : begin dirEntry.bColorCount :=  0; dirEntry.wBitcount := 24; end;
       pf32Bit : begin dirEntry.bColorCount :=  0; dirEntry.wBitCount := 32; end;
       else

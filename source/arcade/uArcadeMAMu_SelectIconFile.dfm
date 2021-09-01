@@ -117,6 +117,7 @@ object FormArcadeMAMu_SelectIconFile: TFormArcadeMAMu_SelectIconFile
     TabOrder = 0
     View = elsTile
     CustomCheckRadioEnabled = False
+    CustomEnableIconHD = False
     OnItemCompare = FilesListViewItemCompare
     OnItemPaintText = FilesListViewItemPaintText
   end

@@ -133,6 +133,7 @@ object FormArcadeSelectSystem: TFormArcadeSelectSystem
       Selection.UseFocusRect = False
       TabOrder = 0
       CustomCheckRadioEnabled = False
+      CustomEnableIconHD = False
       OnDblClick = SystemsListViewDblClick
       OnItemPaintText = SystemsListViewItemPaintText
       OnItemSelectionChanged = SystemsListViewItemSelectionChanged
@@ -157,7 +158,7 @@ object FormArcadeSelectSystem: TFormArcadeSelectSystem
     object LabelMultiSelect: TShadowLabel
       Left = 22
       Top = 0
-      Width = 206
+      Width = 204
       Height = 16
       Caption = 'Hold Ctrl or Shift for multiple selections'
       Font.Charset = ANSI_CHARSET
@@ -176,7 +177,7 @@ object FormArcadeSelectSystem: TFormArcadeSelectSystem
       Transparent = True
     end
     object ButtonOk: TBitBtnEx
-      Left = 427
+      Left = 426
       Top = 13
       Width = 89
       Height = 25
@@ -219,6 +220,9 @@ object FormArcadeSelectSystem: TFormArcadeSelectSystem
     ReturnIsTab = False
     Themed = True
     CustomIconsEnabled = False
+    CustomEnableIconHD = False
+    CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+    CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
   end
   object MAMESoftwareListBox: TAdvGroupBoxEx
     Tag = 1
@@ -227,6 +231,7 @@ object FormArcadeSelectSystem: TFormArcadeSelectSystem
     Width = 364
     Height = 131
     CheckBox.CustomIconsEnabled = False
+    CheckBox.CustomEnableIconHD = False
     RoundEdges = True
     Caption = '           MAME Software List Games '
     Ctl3D = True
@@ -234,7 +239,7 @@ object FormArcadeSelectSystem: TFormArcadeSelectSystem
     object LabelMAMESoftwareList_Disabled: TShadowLabel
       Left = 172
       Top = 32
-      Width = 186
+      Width = 184
       Height = 16
       Caption = '(do not create lists and delete files)'
       Font.Charset = ANSI_CHARSET
@@ -255,7 +260,7 @@ object FormArcadeSelectSystem: TFormArcadeSelectSystem
     object LabelMAMESoftwareList_EnabledUpdate: TShadowLabel
       Left = 161
       Top = 58
-      Width = 197
+      Width = 195
       Height = 16
       Caption = '(create new lists and update old lists)'
       Font.Charset = ANSI_CHARSET
@@ -276,7 +281,7 @@ object FormArcadeSelectSystem: TFormArcadeSelectSystem
     object LabelMAMESoftwareList_EnabledOverwrite: TShadowLabel
       Left = 170
       Top = 84
-      Width = 188
+      Width = 186
       Height = 16
       Caption = '(delete all files and create new lists)'
       Font.Charset = ANSI_CHARSET
@@ -297,7 +302,7 @@ object FormArcadeSelectSystem: TFormArcadeSelectSystem
     object LabelCustomizeMAMESoftwareList: TShadowLabel
       Left = 45
       Top = 107
-      Width = 275
+      Width = 273
       Height = 14
       Cursor = crHandPoint
       Caption = 'customize, disable software lists you don'#39't want'
@@ -344,7 +349,7 @@ object FormArcadeSelectSystem: TFormArcadeSelectSystem
     object LabelMAMESoftwareListBox: TShadowLabel
       Left = 217
       Top = 1
-      Width = 109
+      Width = 107
       Height = 16
       Caption = '(console/computer)'
       Font.Charset = ANSI_CHARSET
@@ -380,6 +385,9 @@ object FormArcadeSelectSystem: TFormArcadeSelectSystem
       ReturnIsTab = False
       Themed = True
       CustomIconsEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
     object MAMESoftwareList_EnabledUpdate: TAdvOfficeRadioButtonEx
       Tag = 1
@@ -402,6 +410,9 @@ object FormArcadeSelectSystem: TFormArcadeSelectSystem
       ReturnIsTab = False
       Themed = True
       CustomIconsEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
     object MAMESoftwareList_EnabledOverwrite: TAdvOfficeRadioButtonEx
       Tag = 2
@@ -422,6 +433,9 @@ object FormArcadeSelectSystem: TFormArcadeSelectSystem
       ReturnIsTab = False
       Themed = True
       CustomIconsEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
     object ButtonHelpCreateMAMESoftwareListGames: TBitBtnEx
       Left = 328
@@ -449,6 +463,7 @@ object FormArcadeSelectSystem: TFormArcadeSelectSystem
     Width = 364
     Height = 159
     CheckBox.CustomIconsEnabled = False
+    CheckBox.CustomEnableIconHD = False
     RoundEdges = True
     Caption = '           Choose Scan Mode '
     Ctl3D = True
@@ -456,7 +471,7 @@ object FormArcadeSelectSystem: TFormArcadeSelectSystem
     object LabelForceAllAvailable: TShadowLabel
       Left = 167
       Top = 84
-      Width = 191
+      Width = 189
       Height = 16
       Caption = '(no validation or file search is done)'
       Font.Charset = ANSI_CHARSET
@@ -477,7 +492,7 @@ object FormArcadeSelectSystem: TFormArcadeSelectSystem
     object LabelQuickScan: TShadowLabel
       Left = 94
       Top = 58
-      Width = 264
+      Width = 262
       Height = 16
       Caption = '(search .zip; .7z; .chd game/bios/device files only)'
       Font.Charset = ANSI_CHARSET
@@ -498,7 +513,7 @@ object FormArcadeSelectSystem: TFormArcadeSelectSystem
     object LabelFullScan: TShadowLabel
       Left = 84
       Top = 32
-      Width = 274
+      Width = 272
       Height = 16
       Caption = '(validate all ROMs/CHDs, CRC32/SHA-1 checksum)'
       Font.Charset = ANSI_CHARSET
@@ -551,6 +566,9 @@ object FormArcadeSelectSystem: TFormArcadeSelectSystem
       ReturnIsTab = False
       Themed = True
       CustomIconsEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
     object QuickScan: TAdvOfficeRadioButtonEx
       Tag = 1
@@ -571,6 +589,9 @@ object FormArcadeSelectSystem: TFormArcadeSelectSystem
       ReturnIsTab = False
       Themed = True
       CustomIconsEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
     object FullScan: TAdvOfficeRadioButtonEx
       Left = 9
@@ -592,6 +613,9 @@ object FormArcadeSelectSystem: TFormArcadeSelectSystem
       ReturnIsTab = False
       Themed = True
       CustomIconsEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
     object ScanMAMESetsBox: TAdvGroupBoxEx
       Left = 7
@@ -600,6 +624,7 @@ object FormArcadeSelectSystem: TFormArcadeSelectSystem
       Height = 41
       BorderStyle = bsAdvNone
       CheckBox.CustomIconsEnabled = False
+      CheckBox.CustomEnableIconHD = False
       Caption = '         Scan MAME Sets (v0.162 or newer)'
       Ctl3D = True
       TabOrder = 3
@@ -629,6 +654,9 @@ object FormArcadeSelectSystem: TFormArcadeSelectSystem
         ReturnIsTab = False
         Themed = True
         CustomIconsEnabled = False
+        CustomEnableIconHD = False
+        CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+        CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
       end
       object ScanMAMEArcadeMachines: TAdvOfficeRadioButtonEx
         Tag = 1
@@ -643,6 +671,9 @@ object FormArcadeSelectSystem: TFormArcadeSelectSystem
         ReturnIsTab = False
         Themed = True
         CustomIconsEnabled = False
+        CustomEnableIconHD = False
+        CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+        CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
       end
       object ScanMAMESoftwareListGames: TAdvOfficeRadioButtonEx
         Tag = 2
@@ -657,6 +688,9 @@ object FormArcadeSelectSystem: TFormArcadeSelectSystem
         ReturnIsTab = False
         Themed = True
         CustomIconsEnabled = False
+        CustomEnableIconHD = False
+        CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+        CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
       end
     end
     object ForceAllAvailable: TAdvOfficeRadioButtonEx
@@ -678,12 +712,15 @@ object FormArcadeSelectSystem: TFormArcadeSelectSystem
       ReturnIsTab = False
       Themed = True
       CustomIconsEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
   end
   object IL_Systems: TImageList
     Height = 68
     Width = 68
-    Left = 272
-    Top = 320
+    Left = 296
+    Top = 344
   end
 end

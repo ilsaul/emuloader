@@ -12,7 +12,6 @@ type
   TFormConsCompGamesFolders = class(TForm)
     Systems: TEasyListview;
     PanelFolders: TPanelEx;
-    IL_GameIconSmall: TImageList;
     LabelFolderROM: TShadowLabel;
     LabelFolderDiscImage: TShadowLabel;
     LabelFolderFloppyDisk: TShadowLabel;
@@ -66,6 +65,7 @@ type
     PanelSystemTitle: TPanelEx;
     LabelSystemTitle: TShadowLabel;
     LabelSystemType: TShadowLabel;
+    IconSystemType: TImage;
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure SystemsItemSelectionChanged(Sender: TCustomEasyListview;
       Item: TEasyItem);
@@ -108,6 +108,15 @@ type
       var CharCode: Word; var Shift: TShiftState; var DoDefault: Boolean);
     procedure ButtonCancelClick(Sender: TObject);
     procedure ButtonOkClick(Sender: TObject);
+    procedure SystemsItemImageDrawIsCustom(Sender: TCustomEasyListview;
+      Item: TEasyItem; Column: TEasyColumn; var IsCustom: Boolean);
+    procedure SystemsItemImageGetSize(Sender: TCustomEasyListview;
+      Item: TEasyItem; Column: TEasyColumn; var ImageWidth,
+      ImageHeight: Integer);
+    procedure SystemsItemImageDraw(Sender: TCustomEasyListview;
+      Item: TEasyItem; Column: TEasyColumn; ACanvas: TCanvas;
+      const RectArray: TEasyRectArrayObject;
+      AlphaBlender: TEasyAlphaBlender);
   private
     { Private declarations }
     newsysCustomFolders: packed array[1..MaxConsoleComputerSystems] of packed array[Low(MediaTypeCustom)..High(MediaTypeCustom)] of THashedStringList;
@@ -119,6 +128,7 @@ type
     procedure AddGamesFoldersHashedList(const MediaTypeID: Integer; ELV_Holder: TEasyListview);
     procedure PopulateFolders(ELV_Holder: TEasyListview);
 
+    procedure Resize4K;
     procedure ResizeForm;
   public
     { Public declarations }
@@ -132,6 +142,91 @@ implementation
 uses uMain;
 
 {$R *.dfm}
+
+procedure TFormConsCompGamesFolders.Resize4K;
+var
+  iSystemsWidth, iSystemsHeight, iIndex, iIndex2, iIndex3: Integer;
+
+  procedure AdjustMediaControls(iTop: Integer; iIconMedia: TImage; LabelMediaTitle: TShadowLabel;
+                                iFoldersList: TEasyListView; iButtonMoveFolderUp, iButtonMoveFolderDown,
+                                iButtonAddFolder, iButtonEditFolder, iButtonDeleteFolder, iButtonClearFolder: TBitBtnEx);
+  begin
+    FormMain.Set4KImageIconSpecs(iIconMedia, 32, 18, iTop);
+    FormMain.Set4KLabelFontNameSpecs(LabelMediaTitle);
+    FormMain.Set4KLabelSpecs(LabelMediaTitle, iIconMedia.Left+iIconMedia.Width+8, iIconMedia.Top, -1, -1, 16);
+
+    FormMain.Set4KListViewSpecs(iFoldersList, 10, iIconMedia.Top+iIconMedia.Height+10, 794, 159, 16);
+    iFoldersList.PaintInfoItem.Border:= 4; // restore default value
+    iFoldersList.PaintInfoItem.CaptionIndent:= 4; // restore default value
+    iFoldersList.CellSizes.Report.Height:= 37;
+
+    iIndex:=  iFoldersList.Left+iFoldersList.Width+5; // +5 space between folders list and button
+    iIndex2:= iIndex+89+3; // 89 is button width, +1 space between buttons
+    iIndex3:= iFoldersList.Top+iFoldersList.Height-36; // 36 is button height
+    FormMain.Set4KButtonSpecs(iButtonMoveFolderUp,   iIndex,  iFoldersList.Top, 89, 36, 16);
+    FormMain.Set4KButtonSpecs(iButtonMoveFolderDown, iIndex2, iFoldersList.Top, 89, 36, 16);
+
+    FormMain.Set4KButtonSpecs(iButtonDeleteFolder, iIndex,  iIndex3, 89, 36, 16);
+    FormMain.Set4KButtonSpecs(iButtonClearFolder,  iIndex2, iIndex3, 89, 36, 16);
+
+    FormMain.Set4KButtonSpecs(iButtonAddFolder,  iIndex,  iIndex3-36-3, 89, 36, 16); // 36 button height, -3 space between buttons
+    FormMain.Set4KButtonSpecs(iButtonEditFolder, iIndex2, iIndex3-36-3, 89, 36, 16);
+  end;
+  
+begin
+  if not Is4KMode then
+     Exit;
+
+  with FormConsCompGamesFolders do
+  begin
+    FormMain.Set4KImageListSpecs(IL_Systems, 128);
+
+    FormMain.Set4KConsoleComputerSysPanel(Systems, PanelSystemTitle, IconSystemType, LabelSystemType, LabelSystemTitle, PanelFolders, iSystemsWidth, iSystemsHeight);
+
+    ClientWidth:=  iSystemsWidth+PanelFolders.Width;
+    ClientHeight:= iSystemsHeight;
+    Font.Size:= 16;
+
+    // cartridge folders
+    AdjustMediaControls(18, IconCartridge, LabelFolderROM, FolderROM,
+                        ButtonMoveFolderUp_ROM, ButtonMoveFolderDown_ROM,
+                        ButtonAddFolder_ROM, ButtonEditFolder_ROM,
+                        ButtonDeleteFolder_ROM, ButtonClearFolder_ROM);
+
+    // disc image folders
+    AdjustMediaControls(FolderROM.Top+FolderROM.Height+35, IconDiscImage, LabelFolderDiscImage, FolderDiscImage,
+                        ButtonMoveFolderUp_ISO, ButtonMoveFolderDown_ISO,
+                        ButtonAddFolder_ISO, ButtonEditFolder_ISO,
+                        ButtonDeleteFolder_ISO, ButtonClearFolder_ISO);
+
+    // floppy disk folders
+    AdjustMediaControls(FolderDiscImage.Top+FolderDiscImage.Height+35, IconFloppyDisk, LabelFolderFloppyDisk, FolderFloppyDisk,
+                        ButtonMoveFolderUp_FLOPPY, ButtonMoveFolderDown_FLOPPY,
+                        ButtonAddFolder_FLOPPY, ButtonEditFolder_FLOPPY,
+                        ButtonDeleteFolder_FLOPPY, ButtonClearFolder_FLOPPY);
+
+    // cassette tape folders
+    AdjustMediaControls(FolderFloppyDisk.Top+FolderFloppyDisk.Height+35, IconCassetteTape, LabelFolderCassetteTape, FolderCassetteTape,
+                        ButtonMoveFolderUp_TAPE, ButtonMoveFolderDown_TAPE,
+                        ButtonAddFolder_TAPE, ButtonEditFolder_TAPE,
+                        ButtonDeleteFolder_TAPE, ButtonClearFolder_TAPE);
+
+    // hard disk drive folders
+    AdjustMediaControls(FolderCassetteTape.Top+FolderCassetteTape.Height+35, IconHardDiskDrive, LabelFolderHardDiskDrive, FolderHardDiskDrive,
+                        ButtonMoveFolderUp_HARDDISK, ButtonMoveFolderDown_HARDDISK,
+                        ButtonAddFolder_HARDDISK, ButtonEditFolder_HARDDISK,
+                        ButtonDeleteFolder_HARDDISK, ButtonClearFolder_HARDDISK);
+
+    FormMain.Set4KLabelSpecs(LabelRecursiveFolderInfo, -1, FolderHardDiskDrive.Top+FolderHardDiskDrive.Height+35, 588, 55, 16);
+    LabelRecursiveFolderInfo.Left:= (PanelFolders.Width-LabelRecursiveFolderInfo.Width) div 2;
+
+    // Bottom panel
+    PanelBottom.Height:= 71;
+    PanelBottom.Frames:= [];
+
+    FormMain.Set4KButtonsOkCancelPanel(PanelBottom, ButtonOk, ButtonCancel, False);
+  end;
+end;
 
 procedure TFormConsCompGamesFolders.InitializeFoldersVariablesTemp;
 var
@@ -198,22 +293,22 @@ procedure TFormConsCompGamesFolders.ToggleControls(const SystemID: Integer);
          else
             iColor:= clWhite;
          if ELV_Holder.Color <> iColor then
-            ELV_Holder.Color:= iColor;
+            ELV_Holder.Color:=  iColor;
        end
     else
        begin
          if ELV_Holder.Color <> FormConsCompGamesFolders.Color then
-            ELV_Holder.Color:= FormConsCompGamesFolders.Color;
+            ELV_Holder.Color:=  FormConsCompGamesFolders.Color;
        end;
-    FormMain.SetEasyListViewBorderColor(ELV_Holder, ctrlEnabled);
+    FormMain.SetEasyListViewBorderColor(ELV_Holder, ctrlEnabled, True);
 
-    UpButton.Enabled:= ctrlEnabled;
-    DownButton.Enabled:= ctrlEnabled;
-    AddButton.Enabled:= ctrlEnabled;
+    UpButton.Enabled    := ctrlEnabled;
+    DownButton.Enabled  := ctrlEnabled;
+    AddButton.Enabled   := ctrlEnabled;
     DeleteButton.Enabled:= ctrlEnabled;
-    EditButton.Enabled:= ctrlEnabled;
-    ClearButton.Enabled:= ctrlEnabled;
-    MediaIcon.Visible:= ctrlEnabled;
+    EditButton.Enabled  := ctrlEnabled;
+    ClearButton.Enabled := ctrlEnabled;
+    MediaIcon.Visible   := ctrlEnabled;
   end;
 
 begin
@@ -312,6 +407,8 @@ procedure TFormConsCompGamesFolders.ResizeForm;
 var
   iDiff, iScreenWidth, iScreenHeight: Integer;
 begin
+  if Is4KMode then
+     Exit;
   iScreenWidth:= Screen.Width;
   iScreenHeight:= Screen.Height;
 
@@ -379,6 +476,8 @@ procedure TFormConsCompGamesFolders.FormShow(Sender: TObject);
 var
   Loop: Integer;
 begin
+  Resize4K;
+
   FormMain.ELV_ResetNormalColors(Systems);
   FormMain.ELV_ResetNormalColors(FolderROM);
   FormMain.ELV_ResetNormalColors(FolderDiscImage);
@@ -407,11 +506,11 @@ begin
        SetLabelColors(LabelFolderCassetteTape,  item_caption_active_color[1], item_caption_active_shadow_color[1]);
        SetLabelColors(LabelFolderHardDiskDrive, item_caption_active_color[1], item_caption_active_shadow_color[1]);
 
-       FormMain.SetEasyListViewColors(FolderROM,           clrDarkGray, clCream, -1, clSilver);
-       FormMain.SetEasyListViewColors(FolderDiscImage,     clrDarkGray, clCream, -1, clSilver);
-       FormMain.SetEasyListViewColors(FolderFloppyDisk,    clrDarkGray, clCream, -1, clSilver);
-       FormMain.SetEasyListViewColors(FolderCassetteTape,  clrDarkGray, clCream, -1, clSilver);
-       FormMain.SetEasyListViewColors(FolderHardDiskDrive, clrDarkGray, clCream, -1, clSilver);
+       FormMain.SetEasyListViewColors(FolderROM,           clrDarkGray, clCream, -1, clGray);
+       FormMain.SetEasyListViewColors(FolderDiscImage,     clrDarkGray, clCream, -1, clGray);
+       FormMain.SetEasyListViewColors(FolderFloppyDisk,    clrDarkGray, clCream, -1, clGray);
+       FormMain.SetEasyListViewColors(FolderCassetteTape,  clrDarkGray, clCream, -1, clGray);
+       FormMain.SetEasyListViewColors(FolderHardDiskDrive, clrDarkGray, clCream, -1, clGray);
 
        for Loop:= 0 to FormConsCompGamesFolders.ComponentCount-1 do
        begin
@@ -427,12 +526,29 @@ begin
   ResizeForm;
 
   FormMain.LoadNonArcadeSystemIcons(IL_Systems, False);
+  FormMain.ShowIconErrorMessage;
 
-  FormMain.IL_LeftPanel.GetIcon(16, IconCartridge.Picture.Icon);
-  FormMain.IL_LeftPanel.GetIcon(20, IconDiscImage.Picture.Icon);
-  FormMain.IL_LeftPanel.GetIcon(17, IconFloppyDisk.Picture.Icon);
-  FormMain.IL_LeftPanel.GetIcon(18, IconCassetteTape.Picture.Icon);
-  FormMain.IL_LeftPanel.GetIcon(22, IconHardDiskDrive.Picture.Icon);
+  case Is4KMode of
+    True:
+      begin
+        FormMain.IL_MediaType_Large.GetIcon(01, IconCartridge.Picture.Icon);
+        FormMain.IL_MediaType_Large.GetIcon(05, IconDiscImage.Picture.Icon);
+        //FormMain.IL_MediaType_Large.GetIcon(05, IconBootDisc.Picture.Icon);
+        FormMain.IL_MediaType_Large.GetIcon(02, IconFloppyDisk.Picture.Icon);
+        FormMain.IL_MediaType_Large.GetIcon(03, IconCassetteTape.Picture.Icon);
+        FormMain.IL_MediaType_Large.GetIcon(07, IconHardDiskDrive.Picture.Icon);
+
+      end;
+    False:
+      begin
+        FormMain.IL_LeftPanel.GetIcon(16, IconCartridge.Picture.Icon);
+        FormMain.IL_LeftPanel.GetIcon(20, IconDiscImage.Picture.Icon);
+        //FormMain.IL_LeftPanel.GetIcon(20, IconBootDisc.Picture.Icon);
+        FormMain.IL_LeftPanel.GetIcon(17, IconFloppyDisk.Picture.Icon);
+        FormMain.IL_LeftPanel.GetIcon(18, IconCassetteTape.Picture.Icon);
+        FormMain.IL_LeftPanel.GetIcon(22, IconHardDiskDrive.Picture.Icon);
+      end;
+  end;
 
   if IsNightMode then
      begin
@@ -461,7 +577,7 @@ begin
   if Item.Selected then
      begin
        Systems.Tag:= Systems.Selection.First.ImageIndex;
-       ELV_GetSystemTitleConsoleComputer(Systems, Item, LabelSystemTitle, LabelSystemType);
+       ELV_GetSystemTitleConsoleComputer(Systems, Item, LabelSystemTitle, LabelSystemType, IconSystemType);
        ToggleControls(Systems.Tag);
        PopulateFolders(FolderROM);
        PopulateFolders(FolderDiscImage);
@@ -753,6 +869,43 @@ begin
   UpdateEmulatorInfo;
   FormConsCompGamesFolders.ModalResult:= mrOk;
   Close;
+end;
+
+procedure TFormConsCompGamesFolders.SystemsItemImageDrawIsCustom(
+  Sender: TCustomEasyListview; Item: TEasyItem; Column: TEasyColumn;
+  var IsCustom: Boolean);
+begin
+  //Exit; // debugging
+  if Is4KMode then
+     IsCustom:= True;
+end;
+
+procedure TFormConsCompGamesFolders.SystemsItemImageGetSize(
+  Sender: TCustomEasyListview; Item: TEasyItem; Column: TEasyColumn;
+  var ImageWidth, ImageHeight: Integer);
+begin
+  //Exit; // debugging
+  if Is4KMode then
+     begin
+       ImageWidth:=  IL_Systems.Width;            // 4K mode = 32x32  - normal mode = 16x16
+       ImageHeight:= IL_Systems.Height+FormMain.IL_GroupedMode.Width;
+       //if Is4KMode then
+          ImageHeight:= ImageHeight+4; // 4 -> space between sys icon / sys type icon
+       //else
+       //   ImageHeight:= ImageHeight+2;
+     end;
+end;
+
+procedure TFormConsCompGamesFolders.SystemsItemImageDraw(
+  Sender: TCustomEasyListview; Item: TEasyItem; Column: TEasyColumn;
+  ACanvas: TCanvas; const RectArray: TEasyRectArrayObject;
+  AlphaBlender: TEasyAlphaBlender);
+begin
+  //Exit; // debugging
+  if not Is4KMode then
+     Exit;
+
+  FormMain.ELV_DrawIconSystem_CustomSysType(Sender, Item, Column, ACanvas, RectArray, IL_Systems, False);
 end;
 
 end.

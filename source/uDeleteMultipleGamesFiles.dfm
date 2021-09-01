@@ -1,6 +1,6 @@
 object FormDeleteMultipleGamesFiles: TFormDeleteMultipleGamesFiles
-  Left = 853
-  Top = 431
+  Left = 766
+  Top = 360
   BorderStyle = bsDialog
   Caption = 'Delete Games Files'
   ClientHeight = 525
@@ -60,13 +60,17 @@ object FormDeleteMultipleGamesFiles: TFormDeleteMultipleGamesFiles
       TabOrder = 5
       OnClick = DeleteCHDsClick
       Alignment = taLeftJustify
-      Caption = '         Delete Game File From Disk'
+      Caption = 'Delete Game File From Disk'
+      CaptionIndent = 27
       DisabledFontColor = clSilver
       ReturnIsTab = False
       ShadowColor = 14540253
       State = cbChecked
       Themed = True
       CustomIconsEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
     object DeleteGameFromGamesList: TAdvOfficeCheckBoxEx
       Tag = -1
@@ -88,13 +92,17 @@ object FormDeleteMultipleGamesFiles: TFormDeleteMultipleGamesFiles
       TabOrder = 4
       OnClick = DeleteCHDsClick
       Alignment = taLeftJustify
-      Caption = '         Delete Game From Games List'
+      Caption = 'Delete Game From Games List'
+      CaptionIndent = 27
       DisabledFontColor = clSilver
       ReturnIsTab = False
       ShadowColor = 14540253
       State = cbChecked
       Themed = True
       CustomIconsEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
     object FileTypesGroupBox: TAdvGroupBoxEx
       Left = 8
@@ -104,6 +112,7 @@ object FormDeleteMultipleGamesFiles: TFormDeleteMultipleGamesFiles
       Hint = 'Check File Types to %'
       CaptionPosition = cpTopCenter
       CheckBox.CustomIconsEnabled = False
+      CheckBox.CustomEnableIconHD = False
       RoundEdges = True
       ShadowColor = clSilver
       Caption = ' Check Arcade File Types to Delete '
@@ -134,6 +143,9 @@ object FormDeleteMultipleGamesFiles: TFormDeleteMultipleGamesFiles
         State = cbChecked
         Themed = True
         CustomIconsEnabled = False
+        CustomEnableIconHD = False
+        CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+        CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
       end
       object DeleteROMs: TAdvOfficeCheckBoxEx
         Left = 7
@@ -157,6 +169,9 @@ object FormDeleteMultipleGamesFiles: TFormDeleteMultipleGamesFiles
         State = cbChecked
         Themed = True
         CustomIconsEnabled = False
+        CustomEnableIconHD = False
+        CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+        CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
       end
       object DeleteCHDs: TAdvOfficeCheckBoxEx
         Left = 58
@@ -181,12 +196,15 @@ object FormDeleteMultipleGamesFiles: TFormDeleteMultipleGamesFiles
         ShadowColor = 14540253
         Themed = True
         CustomIconsEnabled = False
+        CustomEnableIconHD = False
+        CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+        CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
       end
     end
     object ButtonDeleteFiles: TBitBtnEx
       Tag = 1
-      Left = 1072
-      Top = 14
+      Left = 1070
+      Top = 12
       Width = 73
       Height = 30
       Hint = 'Click here to process files of all games on the list'
@@ -197,8 +215,8 @@ object FormDeleteMultipleGamesFiles: TFormDeleteMultipleGamesFiles
       OnClick = ButtonDeleteFilesClick
     end
     object ButtonNo: TBitBtnEx
-      Left = 1151
-      Top = 14
+      Left = 1149
+      Top = 12
       Width = 73
       Height = 30
       Hint = 'Click here to cancel the operation ("Esc" hotkey)'
@@ -210,8 +228,8 @@ object FormDeleteMultipleGamesFiles: TFormDeleteMultipleGamesFiles
     end
     object ButtonHelp: TBitBtnEx
       Tag = 1
-      Left = 1033
-      Top = 18
+      Left = 1031
+      Top = 16
       Width = 33
       Height = 23
       Hint = 'A litte help on how to use this feature'
@@ -240,7 +258,7 @@ object FormDeleteMultipleGamesFiles: TFormDeleteMultipleGamesFiles
     object DestinationFolderLabel: TShadowLabel
       Left = 8
       Top = 6
-      Width = 245
+      Width = 243
       Height = 16
       Caption = 'Destination folder. Full path, no network path.'
       ShowAccelChar = False
@@ -274,8 +292,8 @@ object FormDeleteMultipleGamesFiles: TFormDeleteMultipleGamesFiles
       OnClick = ButtonSelectROMsFolderClick
     end
     object CopyMoveOverwriteFiles: TAdvOfficeCheckBoxEx
-      Left = 263
-      Top = 4
+      Left = 495
+      Top = 23
       Width = 98
       Height = 18
       Hint = 
@@ -288,10 +306,13 @@ object FormDeleteMultipleGamesFiles: TFormDeleteMultipleGamesFiles
       ReturnIsTab = False
       Themed = True
       CustomIconsEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
     object CopyMoveAddSystemFolder: TAdvOfficeCheckBoxEx
-      Left = 369
-      Top = 4
+      Left = 601
+      Top = 23
       Width = 120
       Height = 18
       Hint = 
@@ -306,9 +327,12 @@ object FormDeleteMultipleGamesFiles: TFormDeleteMultipleGamesFiles
       State = cbChecked
       Themed = True
       CustomIconsEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
   end
-  object GamesList: TEasyListview
+  object GamesListDeleteMulti: TEasyListview
     Left = 0
     Top = 0
     Width = 1250
@@ -377,6 +401,7 @@ object FormDeleteMultipleGamesFiles: TFormDeleteMultipleGamesFiles
     ImagesSmall = FormMain.IL_StandardIconsStandard
     ImagesExLarge = FormMain.IL_StandardIconsLarge
     PaintInfoColumn.CaptionIndent = 0
+    PaintInfoGroup.Expandable = False
     PaintInfoGroup.MarginBottom.CaptionIndent = 4
     PaintInfoItem.ImageIndent = 0
     PaintInfoItem.ShowBorder = False
@@ -400,15 +425,16 @@ object FormDeleteMultipleGamesFiles: TFormDeleteMultipleGamesFiles
     TabOrder = 2
     View = elsTile
     CustomCheckRadioEnabled = False
-    OnColumnClick = GamesListColumnClick
-    OnItemCompare = GamesListItemCompare
-    OnItemFreeing = GamesListItemFreeing
-    OnItemImageDraw = GamesListItemImageDraw
-    OnItemImageGetSize = GamesListItemImageGetSize
-    OnItemImageDrawIsCustom = GamesListItemImageDrawIsCustom
-    OnItemPaintText = GamesListItemPaintText
-    OnItemSelectionChanged = GamesListItemSelectionChanged
-    OnKeyAction = GamesListKeyAction
+    CustomEnableIconHD = False
+    OnColumnClick = GamesListDeleteMultiColumnClick
+    OnItemCompare = GamesListDeleteMultiItemCompare
+    OnItemFreeing = GamesListDeleteMultiItemFreeing
+    OnItemImageDraw = GamesListDeleteMultiItemImageDraw
+    OnItemImageGetSize = GamesListDeleteMultiItemImageGetSize
+    OnItemImageDrawIsCustom = GamesListDeleteMultiItemImageDrawIsCustom
+    OnItemPaintText = GamesListDeleteMultiItemPaintText
+    OnItemSelectionChanged = GamesListDeleteMultiItemSelectionChanged
+    OnKeyAction = GamesListDeleteMultiKeyAction
   end
   object Panel1: TPanel
     Left = 8

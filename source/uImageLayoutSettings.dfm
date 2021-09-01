@@ -114,6 +114,9 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
       TabOrder = 0
       View = elsTile
       CustomCheckRadioEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
       OnItemCheckChange = LayoutListViewItemCheckChange
       OnItemPaintText = LayoutListViewItemPaintText
       OnItemSelectionChanged = LayoutListViewItemSelectionChanged
@@ -138,7 +141,7 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
         Top = 0
         Width = 412
         Height = 16
-        Align = alBottom
+        Align = alClient
         Alignment = taCenter
         AutoSize = False
         Caption = 'LAYOUT TITLE'
@@ -247,6 +250,9 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
     CheckBox.Action = caNone
     CheckBox.Visible = True
     CheckBox.CustomIconsEnabled = False
+    CheckBox.CustomEnableIconHD = False
+    CheckBox.CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+    CheckBox.CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     RoundEdges = True
     Caption = '      Use Custom Category for Console/Computer '
     Ctl3D = True
@@ -282,7 +288,7 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
     object LabelPanel1_ConsComp: TShadowLabel
       Left = 39
       Top = 23
-      Width = 42
+      Width = 40
       Height = 19
       Caption = 'Panel 1'
       Font.Charset = ANSI_CHARSET
@@ -357,7 +363,6 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
       Top = 56
       Width = 68
       Height = 68
-      IncrementalDisplay = True
       Transparent = True
       OnClick = IconLayScr1_ConsCompClick
     end
@@ -366,7 +371,6 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
       Top = 56
       Width = 68
       Height = 68
-      IncrementalDisplay = True
       Transparent = True
       OnClick = IconLayScr2_ConsCompClick
     end
@@ -375,7 +379,6 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
       Top = 56
       Width = 68
       Height = 68
-      IncrementalDisplay = True
       Transparent = True
       OnClick = IconLayScr3_ConsCompClick
     end
@@ -443,14 +446,13 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
       Top = 56
       Width = 68
       Height = 68
-      IncrementalDisplay = True
       Transparent = True
       OnClick = IconLayScr4_ConsCompClick
     end
     object LabelPanel4_ConsComp: TShadowLabel
       Left = 365
       Top = 23
-      Width = 42
+      Width = 40
       Height = 19
       Caption = 'Panel 4'
       Font.Charset = ANSI_CHARSET
@@ -471,7 +473,7 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
     object LabelPanel3_ConsComp: TShadowLabel
       Left = 257
       Top = 23
-      Width = 42
+      Width = 40
       Height = 19
       Caption = 'Panel 3'
       Font.Charset = ANSI_CHARSET
@@ -493,7 +495,7 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
     object LabelPanel2_ConsComp: TShadowLabel
       Left = 148
       Top = 23
-      Width = 42
+      Width = 40
       Height = 19
       Caption = 'Panel 2'
       Font.Charset = ANSI_CHARSET
@@ -512,13 +514,50 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
       Transparent = True
       Visible = False
     end
-    object ButtonHelp_CustomCategoryConsComp: TBitBtnEx
+    object ButtonLayoutResetPanelsIndex_ConsComp: TSpeedButtonEx
+      Left = 388
+      Top = 0
+      Width = 47
+      Height = 21
+      Hint = 'Reset settings of selected layout to default'
+      Caption = 'Default'
+      Flat = True
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -12
+      Font.Name = 'Segoe UI'
+      Font.Style = []
+      ParentFont = False
+      ParentShowHint = False
+      ShowHint = True
+      OnClick = ButtonLayoutResetPanelsIndex_ConsCompClick
+    end
+    object ButtonLayoutCopyCatAllSystems_ConsComp: TSpeedButtonEx
+      Left = 347
+      Top = 0
+      Width = 41
+      Height = 21
+      Hint = 'Copy category selections from "all systems"'
+      Caption = 'Copy'
+      Flat = True
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -12
+      Font.Name = 'Segoe UI'
+      Font.Style = []
+      ParentFont = False
+      ParentShowHint = False
+      ShowHint = True
+      OnClick = ButtonLayoutCopyCatAllSystems_ConsCompClick
+    end
+    object ButtonHelp_CustomCategoryConsComp: TSpeedButtonEx
       Left = 26
       Top = 0
       Width = 19
       Height = 19
       Hint = 'What is this for ?'
       Caption = '?'
+      Flat = True
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlack
       Font.Height = -12
@@ -527,44 +566,7 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
       ParentFont = False
       ParentShowHint = False
       ShowHint = True
-      TabOrder = 1
       OnClick = ButtonHelp_CustomCategoryConsCompClick
-    end
-    object ButtonLayoutCopyCatAllSystems_ConsComp: TBitBtnEx
-      Left = 347
-      Top = 3
-      Width = 41
-      Height = 21
-      Hint = 'Copy category selections from "all systems"'
-      Caption = 'Copy'
-      Font.Charset = ANSI_CHARSET
-      Font.Color = clBlack
-      Font.Height = -12
-      Font.Name = 'Segoe UI'
-      Font.Style = []
-      ParentFont = False
-      ParentShowHint = False
-      ShowHint = True
-      TabOrder = 2
-      OnClick = ButtonLayoutCopyCatAllSystems_ConsCompClick
-    end
-    object ButtonLayoutResetPanelsIndex_ConsComp: TBitBtnEx
-      Left = 388
-      Top = 3
-      Width = 47
-      Height = 21
-      Hint = 'Reset settings of selected layout to default'
-      Caption = 'Default'
-      Font.Charset = ANSI_CHARSET
-      Font.Color = clBlack
-      Font.Height = -12
-      Font.Name = 'Segoe UI'
-      Font.Style = []
-      ParentFont = False
-      ParentShowHint = False
-      ShowHint = True
-      TabOrder = 0
-      OnClick = ButtonLayoutResetPanelsIndex_ConsCompClick
     end
   end
   object GroupBoxCategoryAllSystems: TAdvGroupBoxEx
@@ -573,6 +575,7 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
     Width = 445
     Height = 161
     CheckBox.CustomIconsEnabled = False
+    CheckBox.CustomEnableIconHD = False
     RoundEdges = True
     Caption = ' Category (All Systems) '
     Ctl3D = True
@@ -607,7 +610,7 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
     object LabelPanel1: TShadowLabel
       Left = 41
       Top = 23
-      Width = 42
+      Width = 40
       Height = 19
       Caption = 'Panel 1'
       Font.Charset = ANSI_CHARSET
@@ -682,7 +685,6 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
       Top = 56
       Width = 68
       Height = 68
-      IncrementalDisplay = True
       Transparent = True
       OnClick = IconLayScr1Click
     end
@@ -691,7 +693,6 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
       Top = 56
       Width = 68
       Height = 68
-      IncrementalDisplay = True
       Transparent = True
       OnClick = IconLayScr2Click
     end
@@ -700,7 +701,6 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
       Top = 56
       Width = 68
       Height = 68
-      IncrementalDisplay = True
       Transparent = True
       OnClick = IconLayScr3Click
     end
@@ -768,14 +768,13 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
       Top = 56
       Width = 68
       Height = 68
-      IncrementalDisplay = True
       Transparent = True
       OnClick = IconLayScr4Click
     end
     object LabelPanel4: TShadowLabel
       Left = 365
       Top = 23
-      Width = 42
+      Width = 40
       Height = 19
       Caption = 'Panel 4'
       Font.Charset = ANSI_CHARSET
@@ -796,7 +795,7 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
     object LabelPanel2: TShadowLabel
       Left = 148
       Top = 8
-      Width = 42
+      Width = 40
       Height = 19
       Caption = 'Panel 2'
       Font.Charset = ANSI_CHARSET
@@ -818,7 +817,7 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
     object LabelPanel3: TShadowLabel
       Left = 257
       Top = 8
-      Width = 42
+      Width = 40
       Height = 19
       Caption = 'Panel 3'
       Font.Charset = ANSI_CHARSET
@@ -836,6 +835,24 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
       Frames = []
       Transparent = True
       Visible = False
+    end
+    object ButtonLayoutResetPanelsIndex: TSpeedButtonEx
+      Left = 388
+      Top = 0
+      Width = 47
+      Height = 21
+      Hint = 'Reset settings of selected layout to default'
+      Caption = 'Default'
+      Flat = True
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -12
+      Font.Name = 'Segoe UI'
+      Font.Style = []
+      ParentFont = False
+      ParentShowHint = False
+      ShowHint = True
+      OnClick = ButtonLayoutResetPanelsIndexClick
     end
     object PanelEnabledScr2: TAdvOfficeCheckBoxEx
       Left = 140
@@ -860,6 +877,9 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
       State = cbChecked
       Themed = True
       CustomIconsEnabled = False
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
     object PanelEnabledScr3: TAdvOfficeCheckBoxEx
       Left = 249
@@ -884,24 +904,9 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
       State = cbChecked
       Themed = True
       CustomIconsEnabled = False
-    end
-    object ButtonLayoutResetPanelsIndex: TBitBtnEx
-      Left = 388
-      Top = 3
-      Width = 47
-      Height = 21
-      Hint = 'Reset settings of selected layout to default'
-      Caption = 'Default'
-      Font.Charset = ANSI_CHARSET
-      Font.Color = clBlack
-      Font.Height = -12
-      Font.Name = 'Segoe UI'
-      Font.Style = []
-      ParentFont = False
-      ParentShowHint = False
-      ShowHint = True
-      TabOrder = 2
-      OnClick = ButtonLayoutResetPanelsIndexClick
+      CustomEnableIconHD = False
+      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
   end
   object PanelBottom: TPanelEx
@@ -920,7 +925,7 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
     Style = vgSimple
     object ButtonHelp: TBitBtnEx
       Left = 9
-      Top = 73
+      Top = 9
       Width = 89
       Height = 25
       Hint = 'How to use this feature'
@@ -932,7 +937,7 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
     end
     object ButtonClose: TBitBtnEx
       Left = 9
-      Top = 9
+      Top = 41
       Width = 89
       Height = 25
       Hint = 'Close and update settings'
@@ -944,7 +949,7 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
     end
     object ButtonAbort: TBitBtnEx
       Left = 9
-      Top = 41
+      Top = 73
       Width = 89
       Height = 25
       Hint = 'Close and abort changes'
@@ -962,15 +967,9 @@ object FormImageLayoutSettings: TFormImageLayoutSettings
     Top = 73
   end
   object IL_ImageCategory: TImageList
-    Height = 48
-    Width = 48
-    Left = 240
-    Top = 104
-  end
-  object IL_ImageCategory_ExtraLarge: TImageList
     Height = 68
     Width = 68
-    Left = 272
+    Left = 240
     Top = 104
   end
 end

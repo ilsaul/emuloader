@@ -2,9 +2,11 @@ object FormConsCompSystemsEditor: TFormConsCompSystemsEditor
   Left = 779
   Top = 584
   Width = 1021
-  Height = 970
+  Height = 946
   BorderIcons = [biSystemMenu, biMaximize]
-  Caption = 'Console/Computer Systems Editor - Assign MAME software lists'
+  Caption = 
+    'Console/Computer/Handheld Systems Editor - Assign MAME software ' +
+    'lists'
   Color = 15856113
   DefaultMonitor = dmMainForm
   Font.Charset = ANSI_CHARSET
@@ -24,7 +26,7 @@ object FormConsCompSystemsEditor: TFormConsCompSystemsEditor
     Left = 392
     Top = 0
     Width = 6
-    Height = 932
+    Height = 907
     ResizeStyle = rsUpdate
     OnMoved = SplitterMoved
     Appearance.BorderColor = clNone
@@ -42,7 +44,7 @@ object FormConsCompSystemsEditor: TFormConsCompSystemsEditor
     Left = 398
     Top = 0
     Width = 607
-    Height = 932
+    Height = 907
     Align = alClient
     BevelOuter = bvNone
     Color1 = clWhite
@@ -99,7 +101,8 @@ object FormConsCompSystemsEditor: TFormConsCompSystemsEditor
         Hint = ' MAME software lists assigned to '
         Align = alBottom
         AutoSize = False
-        Caption = '  00000 MAME software lists assigned to MSX'
+        Caption = '000000 MAME software lists assigned to MSX'
+        CaptionIndent = 6
         Color = 15856113
         ParentColor = False
         ParentShowHint = False
@@ -146,7 +149,6 @@ object FormConsCompSystemsEditor: TFormConsCompSystemsEditor
         IncrementalSearch.ResetTime = 1000
         IncrementalSearch.StartType = eissFocusedNode
         ImagesSmall = IL_MediaType
-        PaintInfoColumn.CaptionIndent = 0
         PaintInfoGroup.Expandable = False
         PaintInfoGroup.MarginBottom.CaptionIndent = 4
         PaintInfoItem.BorderColor = 16370824
@@ -177,6 +179,7 @@ object FormConsCompSystemsEditor: TFormConsCompSystemsEditor
         TabOrder = 0
         View = elsReport
         CustomCheckRadioEnabled = False
+        CustomEnableIconHD = False
         OnColumnSizeChanged = SoftListAssignedToSystemColumnSizeChanged
         OnDblClick = SoftListAssignedToSystemDblClick
         OnItemSelectionChanged = SoftListAssignedToSystemItemSelectionChanged
@@ -187,7 +190,7 @@ object FormConsCompSystemsEditor: TFormConsCompSystemsEditor
       Left = 0
       Top = 456
       Width = 607
-      Height = 435
+      Height = 410
       Align = alClient
       BevelOuter = bvNone
       Color1 = 15856113
@@ -202,13 +205,14 @@ object FormConsCompSystemsEditor: TFormConsCompSystemsEditor
       Style = vgSolid
       object LabelSoftListFilesNotAssigned: TShadowLabel
         Left = 0
-        Top = 409
+        Top = 384
         Width = 605
         Height = 24
         Hint = ' MAME software lists not assigned to any system'
         Align = alBottom
         AutoSize = False
-        Caption = '  00000 MAME software lists not assigned to any system'
+        Caption = '000000 MAME software lists not assigned to any system'
+        CaptionIndent = 6
         Color = 15856113
         ParentColor = False
         ParentShowHint = False
@@ -227,7 +231,7 @@ object FormConsCompSystemsEditor: TFormConsCompSystemsEditor
         Left = 0
         Top = 0
         Width = 605
-        Height = 409
+        Height = 384
         Align = alClient
         CellSizes.Report.Height = 22
         Color = clWhite
@@ -255,7 +259,6 @@ object FormConsCompSystemsEditor: TFormConsCompSystemsEditor
         IncrementalSearch.ResetTime = 1000
         IncrementalSearch.StartType = eissFocusedNode
         ImagesSmall = IL_MediaType
-        PaintInfoColumn.CaptionIndent = 0
         PaintInfoGroup.Expandable = False
         PaintInfoGroup.MarginBottom.CaptionIndent = 4
         PaintInfoItem.BorderColor = 16370824
@@ -286,6 +289,7 @@ object FormConsCompSystemsEditor: TFormConsCompSystemsEditor
         TabOrder = 0
         View = elsReport
         CustomCheckRadioEnabled = False
+        CustomEnableIconHD = False
         OnColumnClick = SoftListFilesNotAssignedColumnClick
         OnColumnSizeChanged = SoftListFilesNotAssignedColumnSizeChanged
         OnDblClick = SoftListFilesNotAssignedDblClick
@@ -296,7 +300,7 @@ object FormConsCompSystemsEditor: TFormConsCompSystemsEditor
     object PanelBottom: TPanelEx
       Tag = 1
       Left = 0
-      Top = 891
+      Top = 866
       Width = 607
       Height = 41
       Align = alBottom
@@ -310,46 +314,9 @@ object FormConsCompSystemsEditor: TFormConsCompSystemsEditor
       ParentBackground = False
       Style = vgSimple
       OnResize = PanelBottomResize
-      object GamesListFontSize: TShadowLabel
-        Tag = 9
-        Left = 132
-        Top = 10
-        Width = 25
-        Height = 23
-        Hint = 'Software lists font size (default 9)'
-        Alignment = taCenter
-        AutoSize = False
-        Caption = '9'
-        Font.Charset = ANSI_CHARSET
-        Font.Color = clBlack
-        Font.Height = -15
-        Font.Name = 'Trebuchet MS'
-        Font.Style = []
-        ParentFont = False
-        ShowAccelChar = False
-        ShadowColor = clGray
-        ShadowEnabled = False
-        EllipsType = etNone
-        ColorFrame = 7891291
-        ColorInnerFrame = clBlack
-        Frames = [lfrLeft, lfrTop, lfrRight, lfrBottom]
-        Transparent = True
-        Layout = tlCenter
-      end
-      object ButtonOptions: TSpeedButtonEx
-        Left = 9
-        Top = 9
-        Width = 22
-        Height = 24
-        Hint = 'Settings'
-        Flat = True
-        ImageIndex = 7
-        Images = FormMain.IL_MenuPopup
-        OnClick = ButtonOptionsClick
-      end
       object ButtonOk: TBitBtnEx
         Tag = 1
-        Left = 414
+        Left = 409
         Top = 8
         Width = 89
         Height = 25
@@ -359,7 +326,7 @@ object FormConsCompSystemsEditor: TFormConsCompSystemsEditor
         TabOrder = 0
       end
       object ButtonCancel: TBitBtnEx
-        Left = 512
+        Left = 508
         Top = 8
         Width = 89
         Height = 25
@@ -383,74 +350,25 @@ object FormConsCompSystemsEditor: TFormConsCompSystemsEditor
         ReturnIsTab = False
         Themed = True
         CustomIconsEnabled = False
+        CustomEnableIconHD = False
+        CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+        CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
       end
-      object GamesListFontSizeSmaller: TBitBtnEx
-        Tag = -1
-        Left = 105
-        Top = 9
-        Width = 25
-        Height = 25
-        Hint = 'Smaller font size'
-        Caption = #231
-        Font.Charset = SYMBOL_CHARSET
-        Font.Color = clBlack
-        Font.Height = -15
-        Font.Name = 'Wingdings'
-        Font.Style = []
-        ParentFont = False
+      object ShowBiggerGamesListFont: TAdvOfficeCheckBoxEx
+        Left = 9
+        Top = 11
+        Width = 175
+        Height = 20
         TabOrder = 3
-        OnClick = GamesListFontSizeSmallerClick
-      end
-      object GamesListFontSizeLarger: TBitBtnEx
-        Tag = 1
-        Left = 159
-        Top = 9
-        Width = 25
-        Height = 25
-        Hint = 'Larger font size'
-        Caption = #232
-        Font.Charset = SYMBOL_CHARSET
-        Font.Color = clBlack
-        Font.Height = -15
-        Font.Name = 'Wingdings'
-        Font.Style = []
-        ParentFont = False
-        TabOrder = 4
-        OnClick = GamesListFontSizeSmallerClick
-      end
-      object GamesListFontSizeSmaller_x4: TBitBtnEx
-        Tag = -4
-        Left = 57
-        Top = 9
-        Width = 46
-        Height = 25
-        Hint = 'Smaller font size (4 steps)'
-        Caption = #231#231
-        Font.Charset = SYMBOL_CHARSET
-        Font.Color = clBlack
-        Font.Height = -15
-        Font.Name = 'Wingdings'
-        Font.Style = []
-        ParentFont = False
-        TabOrder = 5
-        OnClick = GamesListFontSizeSmallerClick
-      end
-      object GamesListFontSizeLarger_x4: TBitBtnEx
-        Tag = 4
-        Left = 185
-        Top = 9
-        Width = 46
-        Height = 25
-        Hint = 'Larger font size (4 steps)'
-        Caption = #232#232
-        Font.Charset = SYMBOL_CHARSET
-        Font.Color = clBlack
-        Font.Height = -15
-        Font.Name = 'Wingdings'
-        Font.Style = []
-        ParentFont = False
-        TabOrder = 6
-        OnClick = GamesListFontSizeSmallerClick
+        OnClick = ShowBiggerGamesListFontClick
+        Alignment = taLeftJustify
+        Caption = 'Show Bigger Games List Font'
+        ReturnIsTab = False
+        Themed = True
+        CustomIconsEnabled = False
+        CustomEnableIconHD = False
+        CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+        CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
       end
     end
   end
@@ -458,7 +376,7 @@ object FormConsCompSystemsEditor: TFormConsCompSystemsEditor
     Left = 0
     Top = 0
     Width = 392
-    Height = 932
+    Height = 907
     Align = alLeft
     BevelOuter = bvNone
     Color1 = clWhite
@@ -473,9 +391,9 @@ object FormConsCompSystemsEditor: TFormConsCompSystemsEditor
     object Systems: TEasyListview
       Tag = -1
       Left = 0
-      Top = 24
+      Top = 0
       Width = 392
-      Height = 908
+      Height = 907
       Align = alClient
       BorderStyle = bsNone
       CellSizes.Icon.Height = 82
@@ -485,13 +403,13 @@ object FormConsCompSystemsEditor: TFormConsCompSystemsEditor
       Color = clWhite
       EditManager.Font.Charset = ANSI_CHARSET
       EditManager.Font.Color = clBlack
-      EditManager.Font.Height = -9
-      EditManager.Font.Name = 'Tahoma'
+      EditManager.Font.Height = -12
+      EditManager.Font.Name = 'Trebuchet MS'
       EditManager.Font.Style = []
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlack
-      Font.Height = -9
-      Font.Name = 'Tahoma'
+      Font.Height = -12
+      Font.Name = 'Trebuchet MS'
       Font.Style = []
       GroupFont.Charset = ANSI_CHARSET
       GroupFont.Color = clBlack
@@ -518,7 +436,7 @@ object FormConsCompSystemsEditor: TFormConsCompSystemsEditor
       ImagesLarge = IL_Systems
       ImagesExLarge = IL_Systems
       PaintInfoGroup.MarginBottom.CaptionIndent = 4
-      PaintInfoItem.ShowBorder = False
+      PaintInfoItem.ImageIndent = 0
       PaintInfoItem.TileDetailCount = 2
       ParentFont = False
       ParentShowHint = False
@@ -532,78 +450,21 @@ object FormConsCompSystemsEditor: TFormConsCompSystemsEditor
       Selection.TextColor = clBlack
       Selection.UseFocusRect = False
       TabOrder = 0
+      View = elsTile
       CustomCheckRadioEnabled = False
+      CustomEnableIconHD = False
       OnItemImageDraw = SystemsItemImageDraw
       OnItemImageGetSize = SystemsItemImageGetSize
       OnItemImageDrawIsCustom = SystemsItemImageDrawIsCustom
       OnItemPaintText = SystemsItemPaintText
       OnItemSelectionChanged = SystemsItemSelectionChanged
     end
-    object PanelSystemTitle: TPanelEx
-      Left = 0
-      Top = 0
-      Width = 392
-      Height = 16
-      Align = alTop
-      Color1 = 15856113
-      Color2 = 15132390
-      Color3 = clYellow
-      Color4 = clTeal
-      ColorFrame = clGreen
-      ColorInnerFrame = clGreen
-      Frames = []
-      ParentBackground = False
-      Style = vgSimple
-      object LabelSystemTitle: TShadowLabel
-        Left = 0
-        Top = 0
-        Width = 392
-        Height = 16
-        Align = alBottom
-        Alignment = taCenter
-        AutoSize = False
-        Caption = 'SYSTEM TITLE'
-        Color = 16448250
-        Font.Charset = ANSI_CHARSET
-        Font.Color = clMaroon
-        Font.Height = -12
-        Font.Name = 'Trebuchet MS'
-        Font.Style = [fsBold]
-        ParentColor = False
-        ParentFont = False
-        ShowAccelChar = False
-        ShadowColor = 14540253
-        ShadowEnabled = True
-        EllipsType = etNone
-        ColorFrame = clBlack
-        ColorInnerFrame = clBlack
-        Frames = []
-        Transparent = True
-        Layout = tlCenter
-      end
-    end
-    object PanelSystemTitleBottom: TPanelEx
-      Left = 0
-      Top = 16
-      Width = 392
-      Height = 8
-      Align = alTop
-      Color1 = 15132390
-      Color2 = clWhite
-      Color3 = clYellow
-      Color4 = clTeal
-      ColorFrame = clGreen
-      ColorInnerFrame = clGreen
-      Frames = []
-      ParentBackground = False
-      Style = vgSimple
-    end
   end
   object IL_Systems: TImageList
-    Height = 48
-    Width = 48
-    Left = 288
-    Top = 888
+    Height = 32
+    Width = 32
+    Left = 312
+    Top = 800
   end
   object PopupSoftList: TBcBarPopupMenu
     AutoHotkeys = maManual
@@ -642,55 +503,7 @@ object FormConsCompSystemsEditor: TFormConsCompSystemsEditor
     end
   end
   object IL_MediaType: TImageList
-    Left = 320
-    Top = 888
-  end
-  object PopupMenuOptions: TBcBarPopupMenu
-    AutoHotkeys = maManual
-    Images = FormMain.IL_MenuPopup
-    OwnerDraw = True
-    TrackButton = tbLeftButton
-    Bar.Visible = False
-    Bar.BarCaption.Font.Charset = DEFAULT_CHARSET
-    Bar.BarCaption.Font.Color = clWhite
-    Bar.BarCaption.Font.Height = -19
-    Bar.BarCaption.Font.Name = 'Tahoma'
-    Bar.BarCaption.Font.Style = [fsBold, fsItalic]
-    Separators.Font.Charset = ANSI_CHARSET
-    Separators.Font.Color = clBlack
-    Separators.Font.Height = -11
-    Separators.Font.Name = 'Tahoma'
-    Separators.Font.Style = []
-    MenuFont.Charset = ANSI_CHARSET
-    MenuFont.Color = clBlack
-    MenuFont.Height = -12
-    MenuFont.Name = 'Trebuchet MS'
-    MenuFont.Style = []
-    MenuStyle = msWindowsXP
-    UseSystemFont = False
-    DrawModule = FormMain.BcDrawModule
-    OnMeasureMenuItem = PopupSoftListMeasureMenuItem
-    Left = 360
-    Top = 888
-    object PopupSystemsViewMode: TMenuItem
-      Tag = 1
-      Caption = 'Systems View Mode'
-      object PopupSystemsViewMode_Tiles: TMenuItem
-        AutoCheck = True
-        Caption = 'Tiles View'
-        Hint = 'Detailed system type info and icons'
-        RadioItem = True
-        OnClick = PopupSystemsViewMode_TilesClick
-      end
-      object PopupSystemsViewMode_LargeIcons: TMenuItem
-        Tag = 1
-        AutoCheck = True
-        Caption = 'Large Icons View'
-        Checked = True
-        Hint = 'System title only'
-        RadioItem = True
-        OnClick = PopupSystemsViewMode_TilesClick
-      end
-    end
+    Left = 344
+    Top = 800
   end
 end

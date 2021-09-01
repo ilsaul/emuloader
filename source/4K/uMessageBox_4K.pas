@@ -21,12 +21,14 @@ type
     IconMediaType: TImage;
     NightMode: TAdvOfficeCheckBoxEx;
     LabelMessageW: TTntRichEdit;
+    HideCommandLineRunConfirm: TAdvOfficeCheckBoxEx;
     procedure FormKeyPress(Sender: TObject; var Key: Char);
     procedure FormShow(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure NightModeClick(Sender: TObject);
     procedure LabelMessageWResizeRequest(Sender: TObject; Rect: TRect);
     procedure LabelMessageWURLClick(Sender: TObject; const URL: WideString);
+    procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
   private
     { Private declarations }
     RichEditHeight: Integer;
@@ -89,15 +91,32 @@ end;
 
 procedure TFormMessageBox4K.FormShow(Sender: TObject);
 var
-  newHeight, scrMaxHeight{, MediaTypeIconID}: Integer;
+  newHeight, scrMaxHeight: Integer;
 begin
+  if IsNightMode then
+     begin
+       for newHeight:= 0 to FormMessageBox4K.ComponentCount-1 do
+       begin
+         if FormMessageBox4K.Components[newHeight] is TBitBtnEx then
+            FormMain.SetButtonExColors(TBitBtnEx(FormMessageBox4K.Components[newHeight]))
+         else
+         if FormMessageBox4K.Components[newHeight] is TAdvOfficeCheckBoxEx then
+         begin                                                                         // clCream
+           SetCheckBoxColors(TAdvOfficeCheckBoxEx(FormMessageBox4K.Components[newHeight]), $00f1f1f1, item_caption_active_shadow_color[1]);
+           FormMain.SetCheckBoxExCustomIcon(TAdvOfficeCheckBoxEx(FormMessageBox4K.Components[newHeight]));
+         end;
+       end;
+       FormMain.SetWin10DarkScrollBar(LabelMessageW);
+     end;
+
   // icon index:
   // -1 -> Game ID Icon
   // 00 -> Info (default icon)
   // 01 -> Error
   // 02 -> Question
   // 03 -> Command Line
-  // 04 -> Run Neo-Geo MVS multi-slot games
+  // 04 -> Warning
+  // 05 -> Run Neo-Geo MVS multi-slot games
   // 05 -> Run Sega Mega-Tech System multi-slot games
   // 06 -> Run Nintendo PlayChoice-10 multi-slot games
   // 07 -> Run Sega Titan-Video multi-slot games
@@ -110,7 +129,8 @@ begin
       1: PanelBottom.Hint:= 'error.ico';
       2: PanelBottom.Hint:= 'question.ico';
       3: PanelBottom.Hint:= 'cmdline.ico';
-      //4: PanelMessages.Hint:= 'NeoGeoMVS.ico'; // Run Neo-Geo MVS multi-slot games
+      4: PanelBottom.Hint:= 'warning.ico';
+      //5: PanelMessages.Hint:= 'NeoGeoMVS.ico'; // Run Neo-Geo MVS multi-slot games
       //5: PanelMessages.Hint:= 'SegaMegaTech.ico'; // Run Sega Mega-Tech multi-slot games
       //6: PanelMessages.Hint:= 'cmdline.ico'; // Run Nintendo PlayChoice-10 multi-slot games
       //7: PanelMessages.Hint:= 'cmdline.ico'; // Run Sega Titan-Video (ST-V) multi-slot games
@@ -121,7 +141,7 @@ begin
      SetColorsGameTopBar(1, PanelTop, IsNightMode)
   else
      begin
-       if PanelBottom.Tag = 4 then // multi-slot arcade machines
+       if PanelBottom.Tag = 5 then // multi-slot arcade machines
           MessageIcon.Tag:= -1;
        if MessageIcon.Tag <> -1 then
           SetFormColors(nil, nil, nil, LabelGameTitle, LabelGameName, nil, MessageIcon.Tag, IsNightMode);
@@ -132,6 +152,7 @@ begin
   if IsNightMode then
      begin
        FormMain.SetCheckBoxExCustomIcon(NightMode);
+       FormMain.SetCheckBoxExCustomIcon(HideCommandLineRunConfirm);
        FormMain.SetButtonExColors(ButtonYestoAll);
        FormMain.SetButtonExColors(ButtonYes);
        FormMain.SetButtonExColors(ButtonNo);
@@ -144,23 +165,23 @@ begin
                                      FormMain.MemGameInfo.eArcadeCHDMediaType, IconMediaType,
                                      FormMain.MemGameInfo.eSoftwareExecParameter, FormMain.MemGameInfo.eSoftwareName, True);
 
-  if (PanelBottom.Tag = -1) or (LabelGameName.Visible and (PanelBottom.Tag <> 4)) then
-     FormMain.LoadGameIconIntoImage(FormMain.MemGameInfo.eSystemID, FormMain.MemGameInfo.eCustomSystemID, FormMain.MemGameInfo.eROMIdentification, MessageIcon, FormMain.MemGameInfo.eSoftwareName, FormMain.MemGameInfo.eIsCustomGame)
+  if (PanelBottom.Tag = -1) or (LabelGameName.Visible and (PanelBottom.Tag <> 5)) then
+     FormMain.LoadSystemROMIdIcon(FormMain.MemGameInfo.eSystemID, FormMain.MemGameInfo.eCustomSystemID, FormMain.MemGameInfo.eROMIdentification, MessageIcon, FormMain.MemGameInfo.eSoftwareName, FormMain.MemGameInfo.eGameSetStatus, FormMain.MemGameInfo.eIsCustomGame)
   else
-  if PanelBottom.Tag = 4 then // for Multi-cart loading systems
-     FormMain.LoadIconIntoImage(FormMain.GetArcadeSystemIconFileName(FormMain.MemGameInfo.eSystemID), MessageIcon)
+  if PanelBottom.Tag = 5 then // for Multi-cart loading systems
+     FormMain.LoadSystemIcon(FormMain.MemGameInfo.eSystemID, MessageIcon, False)
   else
      FormMain.LoadMessageIcon(MessageIcon, PanelBottom.Hint);
 
   LabelGameTitle.Caption:= LabelMessageTitle;
 
   if Screen.Cursor <> crDefault then
-     Screen.Cursor:= crDefault;
+     Screen.Cursor:=  crDefault;
 
   if (RichEditHeight > 0) then
      begin
        //scrMaxHeight:= 400; // for debugging 640x840 resolution
-       scrMaxHeight:= Screen.Height-80;
+       scrMaxHeight:= Screen.DesktopHeight-150;
        newHeight:= FormMessageBox4K.LabelMessageW.Top+RichEditHeight+PanelBottom.Height+16;
        if newHeight <= scrMaxHeight then
           begin
@@ -180,15 +201,20 @@ end;
 
 procedure TFormMessageBox4K.FormCreate(Sender: TObject);
 begin
-  LabelMessageW.Height:= 1500; // without this hack-fix, form height goes nuts, DO NOT REMOVE!
+  LabelMessageW.Height:= 2000; // without this hack-fix, form height goes nuts, DO NOT REMOVE!
 end;
 
 procedure TFormMessageBox4K.NightModeClick(Sender: TObject);
 begin
+  if not FormMessageBox4K.Visible then
+     Exit;
   IsNightMode:= NightMode.Checked;
   FormMain.MenuEnableNightMode.Checked:= IsNightMode;
   PopulateMsgColors;
   FormMain.MenuEnableNightMode.OnClick(Self);
+
+  if NightMode.CustomIconsEnabled <> IsNightMode then
+     NightMode.CustomIconsEnabled:=  IsNightMode;
 end;
 
 procedure TFormMessageBox4K.LabelMessageWResizeRequest(Sender: TObject;
@@ -200,6 +226,18 @@ end;
 procedure TFormMessageBox4K.LabelMessageWURLClick(Sender: TObject; const URL: WideString);
 begin
   CallShellExecute(Sender, URL);
+end;
+
+procedure TFormMessageBox4K.FormCloseQuery(Sender: TObject;
+  var CanClose: Boolean);
+begin
+  if CanClose then
+     begin
+       if HideCommandLineRunConfirm.Visible then
+          if HideCommandLineRunConfirm.Checked then
+             if not (ModalResult in [mrNo, mrAbort]) then
+                FormMain.MenuViewEmulatorFullCommandLine.Checked:= False;
+     end;
 end;
 
 end.

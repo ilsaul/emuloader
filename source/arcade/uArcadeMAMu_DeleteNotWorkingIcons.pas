@@ -112,7 +112,7 @@ begin
                 begin
                   eImageIndex:= FormArcadeMAMu_DeleteNotWorkingIcons.AddMAMu_Icon(eSystemID, eName, eSoftwareName);
                   if eImageIndex = -1 then
-                     eImageIndex:= FormMain.GetMAMEImageIndex(eROMIdentification, eSoftwareName);
+                     eImageIndex:= FormMain.GetMAMEImageIndex(eROMIdentification, eSoftwareName, eGameStatus);
                   eIconLoaded:= True;
                 end;
            end;
@@ -138,7 +138,7 @@ begin
      begin
        Icon32.CurrentImage:= icoIndex;
        tmpIco:= TIcon.Create;
-       tmpIco.Width:= 32;//Icon32.Images[icoLoop].Width;
+       tmpIco.Width:=  32;//Icon32.Images[icoLoop].Width;
        tmpIco.Height:= 32;//Icon32.Images[icoLoop].Width;
        tmpIco.Handle:= Icon32.Handle;
        Result:= IL_NotWorking.AddIcon(tmpIco);
@@ -253,11 +253,11 @@ begin
                       TNotWorkingGameInfo(Item).eSystemID,
                       TNotWorkingGameInfo(Item).eGameStatus,
                       TNotWorkingGameInfo(Item).eDriverStatus,
-                      TNotWorkingGameInfo(Item).eClone, ACanvas, True, False);
+                      TNotWorkingGameInfo(Item).eClone, ACanvas, True, False, False);
      end
   else
      begin
-       ACanvas.Font.Name:= 'Trebuchet MS';
+       ACanvas.Font.Name:= FormMain.Get4KSystemFont;
        ACanvas.Font.Size:= 10;
        ACanvas.Font.Style:= [fsItalic];
      end;
@@ -308,16 +308,15 @@ begin
      FormArcadeMAMu_IconsManager.zzzIconFolder:= FormMain.DetectFolderIcon('zzz.ico');
   if not FileExists(FormArcadeMAMu_IconsManager.zzzIconFolder+FormArcadeMAMu_IconsManager.SourceIconFile) then
      begin
-       FormMain.InitMessageBox;// CallMessageBox;
+       FormMain.InitMessageBox;
        FormMain.AddMsgText('    Required file ');
        FormMain.AddMsgText(FormArcadeMAMu_IconsManager.zzzIconFolder+FormArcadeMAMu_IconsManager.SourceIconFile, MsgTxtColors.colorFileName,[fsBold]);
        FormMain.AddMsgText(' was not found. Cannot proceed...');
-       GenerateMessage('Error', 'File not found', '', 2, False, 1);
+       FormMain.ShowMessageBox('Error', 'File not found', '', 2, False, 1);
        //ButtonCancel.Click;
        Exit;
      end;
 
-  FormMain.AddGamesSystemsIcons(IL_NotWorking, False);
   zIcon:= TIcon.Create;
   zIcon.LoadFromFile(FormArcadeMAMu_IconsManager.zzzIconFolder+FormArcadeMAMu_IconsManager.SourceIconFile); // index = MaxGameID+1
 

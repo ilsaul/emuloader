@@ -193,7 +193,7 @@ var
 
 procedure LoadCustomMAMEIconToForm(FormHolder: TForm; CustomImageIndex: Integer = 20);
 
-procedure GetCustomGameFields(const ROMLine: String; DecodeUnicodeString: Boolean = False);
+procedure GetCustomGameFields(const ROMLine: String);//; DecodeUnicodeString: Boolean = False);
 procedure GetCustomGameExtraFields(const ROMLine: String; DecodeUnicodeString: Boolean);
 
 function  GetCustomGameMediaType(romTagIndex: Integer): Integer;
@@ -207,7 +207,7 @@ function  SystemIsComputer(sysID: Integer): Boolean;
 function  SystemIsHandheld(sysID: Integer): Boolean;
 function  GetSystemTypeTitle(sysID: Integer; IsArcadeSystem: Boolean): String;
 
-function  ELV_GetSystemTitleConsoleComputer(ELV_Holder: TEasyListView; SelectedItem: TEasyItem; EmulatorTitle: TShadowLabel = nil; SystemType: TShadowLabel = nil): String;
+function  ELV_GetSystemTitleConsoleComputer(ELV_Holder: TEasyListView; SelectedItem: TEasyItem; EmulatorTitle: TShadowLabel = nil; SystemType: TShadowLabel = nil; IconSystemType: TImage = nil): String;
 procedure ELV_PopulateCustomSystems(ELV_Holder: TEasyListView; SelectSystemID: Integer = 0; ActionMode: ShortInt = -1; HideAllSystemsItem: Boolean = False);
 
 function  GetMiscSettingsFile: String;
@@ -241,6 +241,7 @@ function  IsWinVice(const emuFile: String): Boolean;
 function  IsAmigaUAE(const emuFile: String): Boolean;
 function  IsWinApe(const emuFile: String): Boolean;
 function  IsAppleWinEmu(const emuFile: String): Boolean;
+function  IsMicroM8Emu(const emuFile: String): Boolean;
 function  IsAppleIIGS(const emufile: String): Boolean;
 
 function  IsAtari800Emu(const emuFile: String): Boolean;
@@ -251,7 +252,7 @@ function  FindFile(RootFolder: String; {const }FileName: WideString; out ResultV
 
 procedure GetPlayedGameInfoIniCustom(const LineStr: String;
                                      var TimesPlayedVar: Cardinal; var LastPlayedVar: Integer; var TotalPlaytimeVar: Int64);
-function  GetPlayedGamePosIndex(ListPlayed: THashedStringList; const GameName: String; CustomMediaType: Integer; IsUnicode: Boolean; AddGameTag: Boolean = True): Integer;
+function  GetPlayedGamePosIndex(ListPlayed: THashedStringList; const GameName: String; CustomMediaType: Integer; AddGameTag: Boolean = True): Integer;
 function  GetCustomGamePosExtraInfoIndex(ListPlayed: THashedStringList; const GameName: String; CustomMediaType: Integer; IsUnicode: Boolean): Integer;
 
 implementation
@@ -265,13 +266,13 @@ begin
   FormMain.IL_MenuPopup.GetIcon(CustomImageIndex, FormHolder.Icon);
 end;
 
-procedure GetCustomGameFields(const ROMLine: String; DecodeUnicodeString: Boolean = False);
+procedure GetCustomGameFields(const ROMLine: String);//; DecodeUnicodeString: Boolean = False);
 var
   iStr: String;
 begin
   // new 2016
-  // SystemID MediaType IsUnicode <file>Game Filename (no path)/> <size>file size (bytes)/>
-  // 005 01 0 <file>Hero.bin</file> <size>8192</size>
+  // SystemID MediaType <file>Game Filename (no path)/> <size>file size (bytes)/>
+  // 005 01 <file>Hero.bin</file> <size>8192</size>
 
   //TempField:= '';
   //FieldNumber:= 1;
@@ -280,7 +281,6 @@ begin
 
   FormMain.TempGameVars.eCustomSystemID:= StrToInt(Copy(ROMLine, 1, 3));
   FormMain.TempGameVars.eCustomMediaType:= StrToInt(Copy(ROMLine, 4, 1));
-  FormMain.TempGameVars.eIsUnicode:= Boolean(StrToInt(Copy(ROMLine, 5, 1)));
 
   FormMain.TempGameVars.eName:= SoftListGetEntryValue(ROMLine, 'file');
 
@@ -289,20 +289,8 @@ begin
      iStr:= '0';
   FormMain.TempGameVars.eGameSize:= StrToInt64(iStr);
 
-  // the extra info is now parsed here!!!! May 25, 2017
-  //FormMain.TempGameVars.eTitle:= SoftListGetEntryValue(ROMLine, 'title');
-
-  //FormMain.TempGameVars.eYear:= SoftListGetEntryValue(ROMLine, 'year');
-  //FormMain.TempGameVars.eManufacturer:= SoftListGetEntryValue(ROMLine, 'manuf');
-
-  //FormMain.TempGameVars.eNumberPlayers:= SoftListGetEntryValue(ROMLine, 'nplayer');
-
-  // huh ? softfile - softtitle ??? no use for them here!!!
-  //FormMain.TempGameVars.eSoftwareName:= SoftListGetEntryValue(ROMLine, 'softfile');
-  //FormMain.TempGameVars.eCategory:= SoftListGetEntryValue(ROMLine, 'softtitle'); // description of software list files...
-
-  if FormMain.TempGameVars.eIsUnicode and DecodeUnicodeString then
-     FormMain.TempGameVars.eName:= UTF8Decode(FormMain.TempGameVars.eName);
+  //if DecodeUnicodeString then
+  //   FormMain.TempGameVars.eName:= DecodeUnicodeStr(FormMain.TempGameVars.eName); //UTF8Decode(FormMain.TempGameVars.eName);
 
   if FormMain.TempGameVars.eTitle = '' then
      FormMain.TempGameVars.eTitle:= ChangeFileExtW(FormMain.TempGameVars.eName, '');
@@ -367,11 +355,12 @@ end;
 
 function SystemUseCassetteTape(sysID: Integer): Boolean;
 begin
-  Result:= sysID in [39, 40..43, 46, 47, 48, 49, 52, 56, 59];
+  Result:= sysID in [05, 39, 40..43, 46, 47, 48, 49, 52, 56, 59];
 end;
 
 function SystemUseHardDiskDrive(sysID: Integer): Boolean;
 begin
+  // Atari 2600 (Supercharger cartridge)
   // Commodore 64
   // MSX
   // Amiga
@@ -412,13 +401,9 @@ begin
      Result:= 'Handheld';
 end;
 
-//function IsCustomSystemAvailable(const sysID: Integer): Boolean;
-//begin
-//  Result:= FormMain.ValidateFile(GetCustomGamesFile(sysID));
-//  //Result:= FormMain.ValidateFile(FormMain.GetCustomGamesFolder+SystemsListCustom[sysID, 2]);
-//end;
-
-function ELV_GetSystemTitleConsoleComputer(ELV_Holder: TEasyListView; SelectedItem: TEasyItem; EmulatorTitle: TShadowLabel = nil; SystemType: TShadowLabel = nil): String;
+function ELV_GetSystemTitleConsoleComputer(ELV_Holder: TEasyListView; SelectedItem: TEasyItem; EmulatorTitle: TShadowLabel = nil; SystemType: TShadowLabel = nil; IconSystemType: TImage = nil): String;
+var
+  iIconIndex: Integer;
 begin
   Result:= SystemsListCustom[SelectedItem.ImageIndex, 0]; // .ImageIndex because there's only console/computer/handheld systems (from EmuCon)
   if SystemType <> nil then
@@ -426,6 +411,39 @@ begin
 
   if EmulatorTitle <> nil then
      EmulatorTitle.Caption:= UpperCase(Result);
+
+  if IconSystemType <> nil then
+     begin
+       if IconSystemType.Width = FormMain.IL_MenuPopup.Width then
+          begin
+            if SystemIsConsole(ELV_Holder.Tag) then
+               iIconIndex:= 25 // index 25 is "console" icon
+            else
+            if SystemIsComputer(ELV_Holder.Tag) then
+               iIconIndex:= 26 // index 26 is "computer" icon
+            else
+            if SystemIsHandheld(ELV_Holder.Tag) then
+               iIconIndex:= 27; // index 27 is "handheld" icon
+
+            if iIconIndex <> -1 then
+               FormMain.IL_MenuPopup.GetIcon(iIconIndex, IconSystemType.Picture.Icon);
+          end
+       else
+       if IconSystemType.Width = FormMain.IL_SystemType_ExtraLarge.Width then
+          begin
+            if SystemIsConsole(ELV_Holder.Tag) then
+               iIconIndex:= 01 // index 25 is "console" icon
+            else
+            if SystemIsComputer(ELV_Holder.Tag) then
+               iIconIndex:= 02 // index 26 is "computer" icon
+            else
+            if SystemIsHandheld(ELV_Holder.Tag) then
+               iIconIndex:= 03; // index 27 is "handheld" icon
+
+            if iIconIndex <> -1 then
+               FormMain.IL_SystemType_ExtraLarge.GetIcon(iIconIndex, IconSystemType.Picture.Icon);
+          end;
+     end;
 end;
 
 procedure ELV_PopulateCustomSystems(ELV_Holder: TEasyListView; SelectSystemID: Integer = 0; ActionMode: ShortInt = -1; HideAllSystemsItem: Boolean = False);
@@ -488,10 +506,8 @@ begin
     if ActionMode <> 4 then
        begin
          selItem.ImageIndex:= Loop;
-         begin
-           selItem.Captions[1]:= '      '+LowerCase(GetSystemTypeTitle(Loop, False));
-           selItem.Details[1]:= 1;
-         end;
+         selItem.Captions[1]:= '      '+LowerCase(GetSystemTypeTitle(Loop, False));
+         selItem.Details[1]:= 1;
        end
     else
        begin
@@ -622,7 +638,7 @@ begin
     5: Result:= 'HARDDISK';
   else
     begin
-      GenerateMessage('Warning', 'Get Media Type Name', '    It seems that the index is higher than '+
+      FormMain.ShowMessageBox('Warning', 'Get Media Type Name', '    It seems that the index is higher than '+
            'uMain.GetMediaTypeName() function supports.'+#13#10+'Please contact the author. Media Index: '+
            IntToStr(MediaTypeIndex));
       Exit;
@@ -1089,10 +1105,19 @@ begin
   Result:= SameText(emuFile, 'AppleWin.exe');
 end;
 
+function IsMicroM8Emu(const emuFile: String): Boolean;
+begin
+  // for Apple II system
+  Result:= SameText(emufile, 'microm8.exe');
+
+end;
+
 function IsAppleIIGS(const emuFile: String): Boolean;
 begin
   Result:= SameText(emuFile, 'kegs32.exe') or
-           SameText(emuFile, 'GSport.exe');
+           SameText(emuFile, 'GSport.exe') or
+           SameText(emuFile, 'gsplus32.exe') or
+           SameText(emuFile, 'gsplus.exe');
 end;
 
 function IsAtari800Emu(const emuFile: String): Boolean;
@@ -1178,17 +1203,16 @@ begin
   FreeAndNil(FoldersList);
 end;
 
-procedure GetPlayedGameInfoIniCustom(const LineStr: String;
-                               var TimesPlayedVar: Cardinal; var LastPlayedVar: Integer; var TotalPlaytimeVar: Int64);
+procedure GetPlayedGameInfoIniCustom(const LineStr: String; var TimesPlayedVar: Cardinal; var LastPlayedVar: Integer; var TotalPlaytimeVar: Int64);
 var
   iPos, iPos2, vPos: Integer;
   iStr, ValueStr: String;
 begin
-  // <file>Game Filename/> media_type is_unicode  times_played;last_played;total_playtime
-  // <file>H.E.R.O. (1984) (Activision).bin/>10 2;1219279034;9454
+  // <file>Game Filename/> media_type ' ' times_played;last_played;total_playtime
+  // <file>H.E.R.O. (1984) (Activision).bin/>1 2;1219279034;9454
 
   // only 9 media types max will be supported in EmuCon
-  // cart, disc, floppy, cassette. what more media types can one have ???
+  // cart, disc, floppy, cassette. how many more media types can one have ???
 
   if LineStr = '' then
      Exit;
@@ -1200,7 +1224,7 @@ begin
   iPos:= Pos(';', ValueStr); // last played
   iPos2:= PosEx(';', ValueStr, iPos+1); // total playtime
 
-  iStr:= Copy(ValueStr, 4, iPos-4);
+  iStr:= Copy(ValueStr, 3, iPos-3);
   TimesPlayedVar:= StrToInt(iStr);
 
   iStr:= Copy(ValueStr, iPos+1, iPos2-(iPos+1));
@@ -1210,7 +1234,7 @@ begin
   TotalPlaytimeVar:= StrToInt64(iStr);
 end;
 
-function GetPlayedGamePosIndex(ListPlayed: THashedStringList; const GameName: String; CustomMediaType: Integer; IsUnicode: Boolean; AddGameTag: Boolean = True): Integer;
+function GetPlayedGamePosIndex(ListPlayed: THashedStringList; const GameName: String; CustomMediaType: Integer; AddGameTag: Boolean = True): Integer;
 var
   iStr: String;
   Loop: Integer;
@@ -1221,8 +1245,8 @@ begin
   begin
     iStr:= ListPlayed[Loop];
     case AddGameTag of
-      True : iPos:= PosEx('<file>'+GameName+'/>'+IntToStr(CustomMediaType)+IntToStr(Ord(IsUnicode))+' ', iStr); // this is only used by uMain.AddGames()
-      False: iPos:= PosEx(GameName+IntToStr(CustomMediaType)+IntToStr(Ord(IsUnicode))+' ', iStr); // this is everywhere else
+      True : iPos:= PosEx('<file>'+GameName+'/>'+IntToStr(CustomMediaType)+' ', iStr); // this is only used by uMain.AddGames()
+      False: iPos:= PosEx(GameName+IntToStr(CustomMediaType)+' ', iStr); // this is everywhere else
     end;
     if iPos <> 0 then
     begin
@@ -1243,7 +1267,7 @@ begin
   for Loop:=0 to ListPlayed.Count-1 do
   begin
     iStr:= ListPlayed[Loop];
-    iPos:= PosEx(IntToStr(CustomMediaType)+IntToStr(Ord(IsUnicode))+'<file>'+GameName+'/>', iStr);
+    iPos:= PosEx(IntToStr(CustomMediaType)+'<file>'+GameName+'/>', iStr);
     if iPos <> 0 then
     begin
       Result:= Loop;

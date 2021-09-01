@@ -10,7 +10,7 @@ uses
 
 type
   TFormArcadeSoftwareListMachineToRunGame = class(TForm)
-    BottomBar: TPanelEx;
+    PanelBottom: TPanelEx;
     ButtonYes: TBitBtnEx;
     ButtonNo: TBitBtnEx;
     TopBar: TPanelEx;
@@ -23,10 +23,8 @@ type
     HidePreliminaryMachines: TAdvOfficeCheckBoxEx;
     LabelTotalMachines: TShadowLabel;
     IconMediaType: TImage;
-    FrameMachinesList: TPanelEx;
     MachinesListView: TEasyListview;
     procedure FormKeyPress(Sender: TObject; var Key: Char);
-    procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure MachinesListViewColumnClick(Sender: TCustomEasyListview;
       Button: TCommonMouseButton; ShiftState: TShiftState;
@@ -41,13 +39,17 @@ type
     procedure MachinesListViewDblClick(Sender: TCustomEasyListview;
       Button: TCommonMouseButton; MousePos: TPoint;
       ShiftState: TShiftState; var Handled: Boolean);
+    function MachinesListViewItemCompare(Sender: TCustomEasyListview;
+      Column: TEasyColumn; Group: TEasyGroup; Item1, Item2: TEasyItem;
+      var DoDefault: Boolean): Integer;
   private
     { Private declarations }
     //SelectedMachineName: String;
-    procedure ResizeForm;
+    //procedure ResizeForm;
     procedure ReselectItem(const MachineName: String);
     procedure ChangeFilters;
     procedure ReadWriteSettings(ReadMode: Boolean);
+    procedure Resize4K;
   public
     { Public declarations }
     CurrentMachineName: String;
@@ -62,6 +64,45 @@ uses uMain, uCommon, uCommonCustom;
 
 {$R *.dfm}
 
+procedure TFormArcadeSoftwareListMachineToRunGame.Resize4K;
+begin
+  if not Is4KMode then
+     Exit;
+
+  with FormArcadeSoftwareListMachineToRunGame do
+  begin
+    ClientWidth:= 2184;
+    ClientHeight:= 1211;
+    Font.Size:= 16;
+
+    FormMain.Set4KEmuGameTopPanel(TopBar, GameIcon, IconMediaType, LabelGameTitle, 1640, LabelGameName, ClientWidth-205-20);
+
+    FormMain.Set4KLabelSpecs(LabelTotalMachines, 10, 160, -1, -1, 16);
+    FormMain.Set4KLabelSpecs(LabelSoftwarelistTitleW, (ClientWidth-1900) div 2, 160, 1900, 24, 14);
+
+    PanelBottom.Height:= 71;
+
+    FormMain.Set4KButtonSpecs(ButtonResetToCurrent, 10, 16, 168, 45, 16);
+    FormMain.Set4KCheckBoxSpecs(ShowAvailableMachinesOnly, ButtonResetToCurrent.Left+ButtonResetToCurrent.Width+10, 20, 250, 36, 16);
+    FormMain.Set4KCheckBoxSpecs(HidePreliminaryMachines, 444, 20, 380, 36, 16);
+
+    FormMain.Set4KButtonsOkCancelPanel(PanelBottom, ButtonYes, ButtonNo, False);
+
+    FormMain.Set4KListViewSpecs(MachinesListView, 10, LabelTotalMachines.Top+40, 2164, 937, 16);
+    MachinesListView.CellSizes.Report.Height:= 37;
+
+    FormMain.Set4KListViewColumnSizeSpecs(MachinesListView, 0, 880);
+    FormMain.Set4KListViewColumnSizeSpecs(MachinesListView, 1, 250);
+    FormMain.Set4KListViewColumnSizeSpecs(MachinesListView, 2, 465);
+    FormMain.Set4KListViewColumnSizeSpecs(MachinesListView, 3, 145);
+    FormMain.Set4KListViewColumnSizeSpecs(MachinesListView, 4, 250);
+    FormMain.Set4KListViewColumnSizeSpecs(MachinesListView, 5, 138);
+    FormMain.Set4KListViewColumnSizeSpecs(MachinesListView, 6,  34);
+
+    MachinesListView.ImagesSmall:= FormMain.IL_StandardIconsLarge;
+    MachinesListView.PaintInfoColumn.CaptionIndent:= 4; // reset to default value    
+  end;
+end;
 
 procedure TFormArcadeSoftwareListMachineToRunGame.FormKeyPress(Sender: TObject;
   var Key: Char);
@@ -96,7 +137,7 @@ begin
   end;
 end;
 
-procedure TFormArcadeSoftwareListMachineToRunGame.ResizeForm;
+{procedure TFormArcadeSoftwareListMachineToRunGame.ResizeForm;
 var
   iScreenWidth, iScreenHeight, iWidth, iHeight, iWidthDec: Integer;
 begin
@@ -145,57 +186,19 @@ begin
   if iScreenWidth >= 1152 then
      iWidthDec:= iWidth;//(FormSoftwareListMachineToRunGame.Width+iWidth+10);
 
-  FormArcadeSoftwareListMachineToRunGame.Width:= FormArcadeSoftwareListMachineToRunGame.Width+iWidthDec;
+  FormArcadeSoftwareListMachineToRunGame.Width:=  FormArcadeSoftwareListMachineToRunGame.Width+ iWidthDec;
   FormArcadeSoftwareListMachineToRunGame.Height:= FormArcadeSoftwareListMachineToRunGame.Height+iHeight;
 
-  FrameMachinesList.Width:= FrameMachinesList.Width+iWidthDec;
+  FrameMachinesList.Width:=  FrameMachinesList.Width +iWidthDec;
   FrameMachinesList.Height:= FrameMachinesList.Height+iHeight;
 
-  MachinesListView.Width:= MachinesListView.Width+iWidthDec-2;
+  MachinesListView.Width:=  MachinesListView.Width+iWidthDec-2;
   MachinesListView.Height:= MachinesListView.Height+iHeight;
   LabelGameTitle.Width:= LabelGameTitle.Width+iWidthDec;
   ButtonYes.Left:= ButtonYes.Left+iWidthDec;
-  ButtonNo.Left:= ButtonNo.Left+iWidthDec;
+  ButtonNo.Left:=  ButtonNo.Left +iWidthDec;
   LabelSoftwarelistTitleW.Width:= LabelSoftwarelistTitleW.Width+iWidthDec;
-end;
-
-procedure TFormArcadeSoftwareListMachineToRunGame.FormCreate(Sender: TObject);
-begin
-  FormMain.GetMediaTypeIconMsgBox(FormMain.MemGameInfo.eCustomMediaType, FormMain.MemGameInfo.eIsCustomGame,
-                                  FormMain.MemGameInfo.eMediaType, FormMain.MemGameInfo.eArcadeCHDMediaType, IconMediaType,
-                                  FormMain.MemGameInfo.eSoftwareExecParameter, FormMain.MemGameInfo.eSoftwareName, True);
-
-  FormMain.LoadGameIconIntoImage(FormMain.MemGameInfo.eSystemID, FormMain.MemGameInfo.eCustomSystemID, FormMain.MemGameInfo.eROMIdentification, GameIcon, FormMain.MemGameInfo.eSoftwareName, FormMain.MemGameInfo.eIsCustomGame);
-
-  case FormMain.MemGameInfo.eIsCustomGame of
-    True:
-      begin
-        LabelSoftwarelistTitleW.Caption:= SystemsListCustom[FormMain.MemGameInfo.eCustomSystemID, 0]+' - '+MediaTypeCustom[FormMain.MemGameInfo.eCustomMediaType, 0];
-        //FormMain.IL_StandardIconsExtraLarge.GetIcon(MaxGameID+FormMain.MemGameInfo.eCustomSystemID, MessageIcon.Picture.Icon);
-        LabelGameName.Caption:= 'file: '+FormMain.MemGameInfo.eName;
-      end;
-    False:
-      begin
-        LabelSoftwarelistTitleW.Caption:= FormMain.MemGameInfo.eCategory;
-
-        //FormMain.IL_StandardIconsExtraLarge.GetIcon(FormMain.GetMAMEImageIndex(FormMain.MemGameInfo.eROMIdentification, FormMain.MemGameInfo.eSoftwareName),
-        //                                               MessageIcon.Picture.Icon);
-        LabelGameName.Caption:= 'name: '+FormMain.StatusBar_GamesGameName.Caption;
-      end;
-  end;
-
-  LabelGameTitle.Caption:= FormMain.MemGameInfo.eTitle;
-
-  if FormMain.MemGameInfo.eSoftwareUsageTip <> '' then
-     begin
-       LabelGameName.Caption:= LabelGameName.Caption+#13#10+
-                               'usage: '+FormMain.MemGameInfo.eSoftwareUsageTip;
-     end;
-  //else
-  //   LabelGameNameCloneOf.Top:= IconMediaType.Top+1;
-
-  BringToFront;
-end;
+end;}
 
 procedure TFormArcadeSoftwareListMachineToRunGame.ReadWriteSettings(ReadMode: Boolean);
 var
@@ -226,18 +229,18 @@ end;
 
 procedure TFormArcadeSoftwareListMachineToRunGame.FormShow(Sender: TObject);
 begin
+  Resize4K;
   FormMain.ELV_ResetNormalColors(MachinesListView);
-  ResizeForm;
+  FormMain.SetEasyListViewHeaderColors(MachinesListView, True, False, Is4KMode, True);
+  //ResizeForm; // no longer used (May 29, 2021)
   if IsNightMode then
   begin
-    SetFormColors(FormArcadeSoftwareListMachineToRunGame, TopBar, BottomBar, LabelGameTitle, LabelGameName, nil, FormMain.MemGameInfo.eGameSetStatus, IsNightMode);
+    SetFormColors(FormArcadeSoftwareListMachineToRunGame, TopBar, PanelBottom, LabelGameTitle, LabelGameName, nil, FormMain.MemGameInfo.eGameSetStatus, IsNightMode);
     SetLabelColors(LabelTotalMachines,      LabelGameName.Font.Color, LabelGameName.ShadowColor);
     SetLabelColors(LabelSoftwarelistTitleW, clrLightRed, clrLightBlack);
 
-    FrameMachinesList.Color1:= FormArcadeSoftwareListMachineToRunGame.Color;
-
-    FormMain.SetEasyListViewColors(MachinesListView, FormArcadeSoftwareListMachineToRunGame.Color, clWhite);
-    FormMain.SetEasyListViewHeaderColors(MachinesListView, True);
+    FormMain.SetEasyListViewColors(MachinesListView, FormArcadeSoftwareListMachineToRunGame.Color, clWhite, -1, clrBorderGroupBoxGrayBk);
+    FormMain.SetEasyListViewHeaderColors(MachinesListView, True, False, Is4KMode, True);
     FormMain.SetWin10DarkScrollBar(MachinesListView);
 
     SetCheckBoxColors(ShowAvailableMachinesOnly, item_caption_active_color[1], item_caption_active_shadow_color[1]);
@@ -254,6 +257,33 @@ begin
   end;
 
   SetColorsGameTopBar(FormMain.MemGameInfo.eGameSetStatus, TopBar, IsNightMode); // change top bar color based on game set status
+
+  FormMain.GetMediaTypeIconMsgBox(FormMain.MemGameInfo.eCustomMediaType, FormMain.MemGameInfo.eIsCustomGame,
+                                  FormMain.MemGameInfo.eMediaType, FormMain.MemGameInfo.eArcadeCHDMediaType, IconMediaType,
+                                  FormMain.MemGameInfo.eSoftwareExecParameter, FormMain.MemGameInfo.eSoftwareName, True);
+
+  FormMain.LoadSystemROMIdIcon(FormMain.MemGameInfo.eSystemID, FormMain.MemGameInfo.eCustomSystemID, FormMain.MemGameInfo.eROMIdentification, GameIcon, FormMain.MemGameInfo.eSoftwareName, FormMain.MemGameInfo.eGameSetStatus, FormMain.MemGameInfo.eIsCustomGame);
+
+  case FormMain.MemGameInfo.eIsCustomGame of
+    True:
+      begin
+        LabelSoftwarelistTitleW.Caption:= SystemsListCustom[FormMain.MemGameInfo.eCustomSystemID, 0]+' - '+MediaTypeCustom[FormMain.MemGameInfo.eCustomMediaType, 0];
+        LabelGameName.Caption:= 'file: '+FormMain.MemGameInfo.eName;
+      end;
+    False:
+      begin
+        LabelSoftwarelistTitleW.Caption:= FormMain.MemGameInfo.eCategory;
+        LabelGameName.Caption:= 'name: '+FormMain.StatusBar_GamesGameName.Caption;
+      end;
+  end;
+
+  LabelGameTitle.Caption:= FormMain.MemGameInfo.eTitle;
+
+  if FormMain.MemGameInfo.eSoftwareUsageTip <> '' then
+     begin
+       LabelGameName.Caption:= LabelGameName.Caption+#13#10+
+                               'usage: '+FormMain.MemGameInfo.eSoftwareUsageTip;
+     end;
 
   ReadWriteSettings(True);
   MachinesListView.Header.Columns[0].SortDirection:= esdAscending;
@@ -287,13 +317,14 @@ procedure TFormArcadeSoftwareListMachineToRunGame.MachinesListViewItemPaintText(
   ACanvas: TCanvas);
 begin
   FormMain.ELV_ItemPaintText_General(MachinesListView, Item, ACanvas);
-  FormMain.GetCanvasDefaultFont(ACanvas, Item.Tag, Item.StateImageIndexes[6], IsNightMode);
+  FormMain.GetCanvasDefaultFont(ACanvas, Item.Tag, Item.StateImageIndexes[6], IsNightMode, Is4KMode);
   if Item.Captions[1] = CurrentMachineName then
      begin
        Item.Bold:= True;
        ACanvas.Font.Style:= ACanvas.Font.Style+[fsBold];
+       if IsNightMode then
+          ACanvas.Font.Color:= clrOrangeVivid;
      end;
-
 end;
 
 procedure TFormArcadeSoftwareListMachineToRunGame.ReselectItem(const MachineName: String);
@@ -388,6 +419,24 @@ procedure TFormArcadeSoftwareListMachineToRunGame.MachinesListViewDblClick(
   MousePos: TPoint; ShiftState: TShiftState; var Handled: Boolean);
 begin
   ButtonYes.Click;
+end;
+
+function TFormArcadeSoftwareListMachineToRunGame.MachinesListViewItemCompare(
+  Sender: TCustomEasyListview; Column: TEasyColumn; Group: TEasyGroup;
+  Item1, Item2: TEasyItem; var DoDefault: Boolean): Integer;
+var
+  gItem1, gItem2: TEasyItem;
+begin
+  DoDefault:= False;
+  FormMain.ELV_GetSortDirection(Column, Item1, Item2, gItem1, gItem2);
+  case Column.Index of
+    0: Result:= FormMain.iCompare(gItem1.Caption, gItem2.Caption);         // machine title
+    1: Result:= FormMain.iCompare(gItem1.Captions[1], gItem2.Captions[1]); // game name
+    2: Result:= FormMain.iCompare(gItem1.Captions[2], gItem2.Captions[2]); // manufacturer
+    3: Result:= FormMain.iCompare(gItem1.Captions[3], gItem2.Captions[3]); // monitor frequency (Hz)
+    4: Result:= FormMain.iCompare(gItem1.Captions[4], gItem2.Captions[4]); // clone of
+    5: Result:= AnsiCompareText  (gItem1.Captions[5], gItem2.Captions[5]); // save state
+  end;
 end;
 
 end.

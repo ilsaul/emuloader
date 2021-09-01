@@ -66,19 +66,27 @@ type
     procedure GamesTileBackgroundClick(Sender: TObject);
     procedure GamesBackgroundImageButtonSelectClick(Sender: TObject);
     procedure GamesBackgroundImageButtonUpdateClick(Sender: TObject);
-    procedure FormResize(Sender: TObject);
     procedure PopupShowAvailableSystemsOnlyClick(Sender: TObject);
     procedure PopupSetFontsToMatchAllSystemsFontClick(Sender: TObject);
     procedure PopupSetAllConsoleComputerSystemsFontsToAllSystemsClick(
       Sender: TObject);
     procedure PopupHelpClick(Sender: TObject);
     procedure PopupShowFontNameClick(Sender: TObject);
+    procedure GamesFontItemImageDrawIsCustom(Sender: TCustomEasyListview;
+      Item: TEasyItem; Column: TEasyColumn; var IsCustom: Boolean);
+    procedure GamesFontItemImageGetSize(Sender: TCustomEasyListview;
+      Item: TEasyItem; Column: TEasyColumn; var ImageWidth,
+      ImageHeight: Integer);
+    procedure GamesFontItemImageDraw(Sender: TCustomEasyListview;
+      Item: TEasyItem; Column: TEasyColumn; ACanvas: TCanvas;
+      const RectArray: TEasyRectArrayObject;
+      AlphaBlender: TEasyAlphaBlender);
   private
     ArcadeSystemsHave: Boolean;
     tFont_Parent, tFont_Clone, tFont_Preliminary, tFont_MissingROMs, tFont_MissingROMsPreliminary: TFont;
     PixelsMin, PixelsMax: Integer;
     tFont_ConsoleComputer: array[1..MaxConsoleComputerSystems] of TFont;
-    ScrollBarLastVisible: Boolean;
+    //ScrollBarLastVisible: Boolean;
     //FontNameDetail_Index, FontSizeDetail_Index: ShortInt;
     TileDetailsTextColor: TColor;
     procedure DeInitConsoleComputerFonts(IsMainFontsArray: Boolean);
@@ -90,6 +98,7 @@ type
     //procedure InitializeFont(var tempFontVar: TFont; MainGamesListFont: TFont; AutoCreateFontVar: Boolean);
     procedure ModifyFont(ItemToUpdate: TEasyItem);
     procedure ResizeForm;
+    procedure Resize4K;
     { Private declarations }
   public
     { Public declarations }
@@ -103,6 +112,44 @@ implementation
 uses uMain;
 
 {$R *.dfm}
+
+procedure TFormGamesListFontSettings.Resize4K;
+begin
+  if not Is4KMode then
+     Exit;
+
+  with FormGamesListFontSettings do
+  begin
+    FormMain.Set4KImageListSpecs(IL_FontSettings, 128);
+    Font.Size:= 16;
+
+    GamesFont.Align:= alNone;
+    GamesFont.CellSizes.Tile.Height:= 144;
+    GamesFont.CellSizes.Tile.Width:=  600;
+    GamesFont.PaintInfoItem.TileDetailTextIndent:= FormMain.IL_SystemType_ExtraLarge.Width-6;
+    FormMain.Set4KListViewSpecs(GamesFont, -1, -1, (GamesFont.CellSizes.Tile.Width*6)+20, GamesFont.CellSizes.Tile.Height*12, 16);
+
+    PanelBottom.Height:= 90;
+
+    ClientWidth:=  GamesFont.Width-20;
+    ClientHeight:= GamesFont.Height+PanelBottom.Height;
+
+    FormMain.Set4KLabelSpecs(LabelBackgroundColor, 10, 8, -1, -1, 16);
+    FormMain.Set4KColorBoxSpecs(GamesBackgroundColor, 10, 44);
+    FormMain.Set4KButtonSpecs(ButtonDefaultBkSortedColor, GamesBackgroundColor.Left+GamesBackgroundColor.Width+5, GamesBackgroundColor.Top, 89, 36, 16);
+
+    FormMain.Set4KCheckBoxSpecs(GamesBackgroundImageEnable, ButtonDefaultBkSortedColor.Left+ButtonDefaultBkSortedColor.Width+19, 6, 345, 36, 16);
+    FormMain.Set4KEditSpecs(GamesBackgroundImage, GamesBackgroundImageEnable.Left, 44, 950, 36, 16);
+    FormMain.Set4KButtonSpecs(GamesBackgroundImageButtonSelect, GamesBackgroundImage.Left+GamesBackgroundImage.Width+5,
+                                                                GamesBackgroundImage.Top, 89, 36, 16);
+    FormMain.Set4KButtonSpecs(GamesBackgroundImageButtonUpdate, GamesBackgroundImageButtonSelect.Left+GamesBackgroundImageButtonSelect.Width+3,
+                                                                GamesBackgroundImage.Top, 89, 36, 16);
+
+    FormMain.Set4KCheckBoxSpecs(GamesTileBackground, GamesBackgroundImage.Left+GamesBackgroundImage.Width-60, 6, 65, 36, 16);
+
+    FormMain.Set4KButtonsOkCancelPanel(PanelBottom, ButtonOk, ButtonCancel, False)
+  end;
+end;
 
 procedure TFormGamesListFontSettings.DeInitConsoleComputerFonts(IsMainFontsArray: Boolean);
 var
@@ -127,14 +174,14 @@ var
     if Assigned(FontSource) then
        begin
          NewPixelsValue:= FormMain.GetFontHeightSize(FontSource);
-         FontNameValue:= FontSource.Name;
-         FontSizeValue:= FontSource.Size;
+         FontNameValue:=  FontSource.Name;
+         FontSizeValue:=  FontSource.Size;
        end
     else
        begin
          NewPixelsValue:= FormMain.GetFontHeightSize(GamesFont.Font);
-         FontNameValue:= GamesFont.Font.Name;
-         FontSizeValue:= GamesFont.Font.Size;
+         FontNameValue:=  GamesFont.Font.Name;
+         FontSizeValue:=  GamesFont.Font.Size;
        end;
   end;
 
@@ -169,12 +216,15 @@ begin
 
   if PopupShowFontName.Checked then
      begin
-       Item.Captions[1]:= '  font name: '+FontNameValue;
+       //Item.Captions[1]:= '  font name: '+FontNameValue;
+       Item.Captions[1]:= '  font: '+FontNameValue;
        Item.Details[1]:= 1;
      end;
 
   DetailLine:= Ord(PopupShowFontName.Checked)+1; // PopupShowFontName.Checked + 1 -> either Captions[1] or Captions[2]
-  Item.Captions[DetailLine]:= '  font size: '+IntToStr(FontSizeValue)+' - height: '+IntToStr(NewPixelsValue)+' pixels ';
+  //Item.Captions[DetailLine]:= '  font size: '+IntToStr(FontSizeValue)+' - height: '+IntToStr(NewPixelsValue)+' pixels ';
+  Item.Captions[DetailLine]:= '  size: '+IntToStr(FontSizeValue)+' - height: '+IntToStr(NewPixelsValue)+' pixels ';
+
   Item.Details[DetailLine]:= DetailLine;
 
   if PixelsMin > PixelsMax then
@@ -222,7 +272,7 @@ begin
   ELV_PopulateCustomSystems(GamesFont, -1, 4, True);
   GamesFont.BeginUpdate;
   GamesFont.Items.ReIndexDisable:= True;
-  AddItem(5, 'All Console/Computer Systems', 0);
+  AddItem(5, 'All Computer/Console Systems', 0);
   AddItem(4, 'Missing ROMs, Preliminary', -1, False);
   AddItem(3, 'Missing ROMs/CHDs', -1, False);
   AddItem(2, 'Preliminary Set');
@@ -324,77 +374,34 @@ end;
 procedure TFormGamesListFontSettings.ResizeForm;
 var
   iNewWidth, iNewHeight: Integer;
-  HaveScrollBar: Boolean;
-  iWidth, iHeight: Integer;
+  iWidth, iHeight, ItemsColCount, ItemsLineCount: Integer;
 begin
-  //GamesFont.CellSizes.Tile.Height:= 148;
-  //GamesFont.CellSizes.Tile.Width:= 600;
-  //IL_FontSettings.Width:= 128;
-  //IL_FontSettings.Height:= 128;
+  if Is4KMode then
+     Exit;
 
-  iWidth:= Screen.Width;
+  iWidth:=  Screen.Width;
   iHeight:= Screen.Height;
-  HaveScrollBar:= iWidth < 1920;
 
-  //if iWidth < 800 then
-  //   begin
-  //     IL_FontSettings.Width:= 32;
-  //     IL_FontSettings.Height:= 32;
-  //   end
-  //else
+  if (iWidth >= 3840) and (iHeight >= 2160) then
+     begin // set screen size to 2560x1440 (1440p)
+       iWidth:=  2560;
+       iHeight:= 1440;
+     end;
 
   if iWidth >= 1920 then // 1280 then
      begin
-       IL_FontSettings.Width:= 68;
-       IL_FontSettings.Height:= 68;
+       FormMain.Set4KImageListSpecs(IL_FontSettings, 68);
+       GamesFont.PaintInfoItem.TileDetailTextIndent:= FormMain.IL_SystemType_Standard.Width-6;
      end;
 
-  if iWidth >= 1024 then
-     begin
-       //FontSizeDetail_Index:= 1;
-       //FontNameDetail_Index:= 2;
-       //GamesFont.PaintInfoItem.TileDetailCount:= 3;
-     end
-  else
-     begin
-       //FontSizeDetail_Index:= 1;
-       //FontNameDetail_Index:= -1;
-       //GamesFont.PaintInfoItem.TileDetailCount:= 2;
-     end;
   if iWidth <= 1440 then
      GamesFont.PaintInfoItem.ImageIndent:= 0;
 
-  case iWidth of //Screen.Width of
-     {640:
-       begin
-         iNewWidth:= 625;
-         iNewHeight:= 400;
-         GamesFont.CellSizes.Tile.Width:= 300;
-         GamesFont.CellSizes.Tile.Height:= 60;
-       end;
-     720:
-       begin
-         iNewWidth:= 700;
-         iNewHeight:= 400;
-         GamesFont.CellSizes.Tile.Width:= 338;
-         GamesFont.CellSizes.Tile.Height:= 60;
-       end;
-     800:
-       begin
-         iNewWidth:= 780;
-         iNewHeight:= 540;
-         GamesFont.CellSizes.Tile.Width:= 252;//378;
-         GamesFont.CellSizes.Tile.Height:= 60;
-       end;
-     960:
-       begin
-         iNewWidth:= 930;
-         iNewHeight:= 503;// 517;
-         GamesFont.CellSizes.Tile.Width:= 302;//425;
-         GamesFont.CellSizes.Tile.Height:= 60;
-       end;}
+  case iWidth of
     1024:
       begin
+        ItemsColCount:=  3;
+        ItemsLineCount:= 9;
         iNewWidth:= 1000;
         iNewHeight:= 623;
         GamesFont.CellSizes.Tile.Width:= 325;
@@ -402,17 +409,27 @@ begin
       end;
     1280, 1360, 1366:
       begin
+        ItemsColCount:= 4;
         iNewWidth:= 1260;
         case iHeight of
-          1024: iNewHeight:= 923;
-          720: iNewHeight:= 623;
-          768: iNewHeight:= 623;
+          1024:
+            begin
+              ItemsLineCount:= 12;
+              iNewHeight:= 923;
+            end;
+          720, 768:
+            begin
+              ItemsLineCount:= 9;
+              iNewHeight:= 623;
+            end;
         end;
         GamesFont.CellSizes.Tile.Width:= 309;
         GamesFont.CellSizes.Tile.Height:= 60;
       end;
     1440: // 1440x900 (16:10 resolution)
       begin
+        ItemsColCount:=   4;
+        ItemsLineCount:= 12;
         iNewWidth:= 1336;
         iNewHeight:= 803;
         GamesFont.CellSizes.Tile.Width:= 328;
@@ -420,25 +437,30 @@ begin
       end;
     1600, 1680, 1768:
       begin
+        ItemsColCount:= 6; // 1600
         GamesFont.CellSizes.Tile.Width:= 256;
         GamesFont.CellSizes.Tile.Height:= 78;
+
         case iHeight of
           1024, 900, 992:
             begin
+              ItemsLineCount:= 9;
               iNewHeight:= 785;
               iNewWidth:= 1560;
             end;
           1200:
             begin
-              HaveScrollBar:= False;
+              ItemsLineCount:= 12;
+              //HaveScrollBar:= False;
               iNewHeight:= 1019;
               iNewWidth:= 1546;
             end;
           1050:
             begin
+              ItemsLineCount:= 12;
               iNewHeight:= 947;
               iNewWidth:= 1627;
-              HaveScrollBar:= False;
+              //HaveScrollBar:= False;
               GamesFont.CellSizes.Tile.Width:= 270;
               GamesFont.CellSizes.Tile.Height:= 72;
             end;
@@ -446,6 +468,8 @@ begin
       end;
     1920, 2048:
       begin
+        ItemsColCount:=   6;
+        ItemsLineCount:= 12;
         // 1920x1080 / 1920x1200 / 1920x1440 / 2048x1536
         //IL_FontSettings.Width:= 48;
         //IL_FontSettings.Height:= 48;
@@ -454,85 +478,44 @@ begin
         GamesFont.PaintInfoItem.ImageIndent:= 0;
         iNewHeight:= 1018;
         iNewWidth:= 1880;
-
-        //GamesFont.CellSizes.Tile.Height:= 78;
-        //GamesFont.CellSizes.Tile.Width:= 317;
-        {if iWidth = 1920 then
-           begin
-             case iHeight of
-               1080: iNewHeight:= 1018;
-               1200: iNewHeight:= 1123;
-               1440:
-                 begin
-                   GamesFont.CellSizes.Tile.Width:= 311;
-                   GamesFont.CellSizes.Tile.Height:= 104;
-                   iNewWidth:= 1873;
-                   iNewHeight:= 1330;
-                 end;
-             end;
-           end
-        else
-           begin // 2048x1536
-             iNewWidth:= 1873;
-             iNewHeight:= 1330;
-           end;}
       end;
     2560: // 2560x1440 / 2560x1600
       begin
-        GamesFont.CellSizes.Tile.Height:= 106;
+        ItemsColCount:=   6;
+        ItemsLineCount:= 12;
+        GamesFont.CellSizes.Tile.Height:= 104;
         GamesFont.CellSizes.Tile.Width:= 420;
         iNewWidth:= 2530;
-        //iNewWidth:= (GamesFont.CellSizes.Tile.Width*6)+8-10; // *6 columns -> +8 left/right border
-        iNewHeight:= 1355;
+        iNewHeight:= (GamesFont.CellSizes.Tile.Height*12)+PanelBottom.Height+29;// 1355; // +24 is extra height
+        // must fix this later with "Form.ClientHeight" and "Form.ClientWidth"
       end;
-    3840:
+    {3840: // this is no longer valid, use 4K mode instead (April 20, 2021)
       begin
         GamesFont.CellSizes.Tile.Height:= 148;
         GamesFont.CellSizes.Tile.Width:= 600;
         iNewWidth:= (GamesFont.CellSizes.Tile.Width*6)+8; // *6 columns -> +8 left/right border
-        iNewHeight:= 1859;
+        if Is4KMode then
+           iNewHeight:= 1859+36 // 36 -> PanelBottom 90 - 54  (90 = 4K) -- (54 = regular)
+        else
+           iNewHeight:= 1859;
         IL_FontSettings.Width:= 128;
         IL_FontSettings.Height:= 128;
-      end;
+      end;}
   end;
 
-  if iNewWidth <> FormGamesListFontSettings.Width then
-     FormGamesListFontSettings.Width:= iNewWidth;
+  iNewWidth:=  GamesFont.CellSizes.Tile.Width*ItemsColCount;
+  iNewHeight:= GamesFont.CellSizes.Tile.Height*ItemsLineCount;
+  GamesFont.Width:=  iNewWidth+20;
+  GamesFont.Height:= iNewHeight;
 
-  if iNewHeight <> FormGamesListFontSettings.Height then
-     FormGamesListFontSettings.Height:= iNewHeight;
+  if GamesFont.Scrollbars.VertBarVisible then
+     iNewWidth:= iNewWidth+GetSystemMetrics(SM_CXVSCROLL);
 
-  {if iWidth < 960 then
-     begin
-       //need to decrease size only for 640 resolution!!!
-       if iWidth = 640 then
-          begin
-            GamesBackgroundColor.Width:= 158;
-            ButtonDefaultBkSortedColor.Left:= 168;
-            GamesBackgroundImageEnable.Left:= 240;
-            GamesTileBackground.Left:= 472;
-            GamesBackgroundImage.Left:= 240;
-            GamesBackgroundImage.Width:= 270;
-            GamesBackgroundImageButtonUpdate.Left:= 512;
-            GamesBackgroundImageButtonSelect.Left:= 561;
-          end;
-       PanelBottom.Height:= 91;
+  FormGamesListFontSettings.ClientWidth:=  iNewWidth;
+  FormGamesListFontSettings.ClientHeight:= iNewHeight+PanelBottom.Height;
 
-       ButtonOk.Top:= 58;
-       ButtonCancel.Top:= 58;
-     end;}
-
-  //if iWidth < 960 then
-  //   ButtonCancel.Left:= PanelBottom.Width-ButtonCancel.Width-8
-  //else
-  ButtonCancel.Left:= PanelBottom.Width-ButtonCancel.Width-16;//ButtonOk.Left+ButtonOk.Width+11; // 22 pixels apart!!!
+  ButtonCancel.Left:= PanelBottom.Width-ButtonCancel.Width-16;
   ButtonOk.Left:= ButtonCancel.Left-ButtonOk.Width-4;
-
-  if not HaveScrollBar then
-     begin
-       GamesFont.Align:= alNone;
-       GamesFont.Width:= GamesFont.Width+GetSystemMetrics(SM_CXVSCROLL);
-     end;
 end;
 
 procedure TFormGamesListFontSettings.FormShow(Sender: TObject);
@@ -540,6 +523,7 @@ var
   Loop: Integer;
   strFolder: String;
 begin
+  Resize4K;
   FormMain.ELV_ResetNormalColors(GamesFont);
   if IsNightMode then
      begin
@@ -559,11 +543,12 @@ begin
        FormMain.SetButtonExColors(ButtonDefaultBkSortedColor);
 
        FormMain.SetWin10DarkScrollBar(GamesFont);
+       FormMain.SetWin10DarkScrollBar(GamesBackgroundColor);
      end;
 
-  FormMain.SetSelectedColorBox(GamesBackgroundColor, FormMain.GamesListView.Color);
+  SetSelectedColorBox(GamesBackgroundColor, FormMain.GamesListView.Color);
   TileDetailsTextColor:= GetContrastColor(GamesFont.Color);
-  ResizeForm;
+  //ResizeForm;
 
   ArcadeSystemsHave:= False;
   for Loop:= 1 to MaxArcadeSystems do
@@ -574,16 +559,6 @@ begin
          Break;
        end;
   end;
-
-  strFolder:= FormMain.GetFolderFull(33);
-  FormMain.AddDefaultIcons(FormMain.GetELGameIconFileName(0),  strFolder, IL_FontSettings); // parent
-  FormMain.AddDefaultIcons(FormMain.GetELGameIconFileName(9),  strFolder, IL_FontSettings); // clone
-  FormMain.AddDefaultIcons(FormMain.GetELGameIconFileName(12), strFolder, IL_FontSettings); // preliminary
-  FormMain.AddDefaultIcons(FormMain.GetELGameIconFileName(30), strFolder, IL_FontSettings); // found with missing rom/chd
-  FormMain.AddDefaultIcons(FormMain.GetELGameIconFileName(25), strFolder, IL_FontSettings); // preliminary found widht misssing rom/chd
-
-  FormMain.AddDefaultIcons('emucon.ico', FormMain.GetFolderFull(32), IL_FontSettings);      // all systems
-  FormMain.LoadNonArcadeSystemIcons(IL_FontSettings, False, False, True);
 
   if FormMain.GamesListView.BackGround.Enabled then
      begin
@@ -609,10 +584,20 @@ begin
   end;
 
   PopulateELV;
-  ScrollBarLastVisible:= False;
-  //ELV_UpdateScrollBar;
-  FormGamesListFontSettings.Left:= (Screen.Width shr 1)-(FormGamesListFontSettings.Width shr 1)-1;
-  FormGamesListFontSettings.Top:= (Screen.Height shr 1)-(FormGamesListFontSettings.Height shr 1)-1-20;
+  ResizeForm;
+  
+  strFolder:= FormMain.GetFolderFull(33);
+  FormMain.AddDefaultIcons(FormMain.GetELGameIconFileName(0),  strFolder, IL_FontSettings); // parent
+  FormMain.AddDefaultIcons(FormMain.GetELGameIconFileName(9),  strFolder, IL_FontSettings); // clone
+  FormMain.AddDefaultIcons(FormMain.GetELGameIconFileName(12), strFolder, IL_FontSettings); // preliminary
+  FormMain.AddDefaultIcons(FormMain.GetELGameIconFileName(30), strFolder, IL_FontSettings); // found with missing rom/chd
+  FormMain.AddDefaultIcons(FormMain.GetELGameIconFileName(25), strFolder, IL_FontSettings); // preliminary found widht misssing rom/chd
+
+  FormMain.AddDefaultIcons('emucon.ico', FormMain.GetFolderFull(32), IL_FontSettings);      // all systems
+  FormMain.LoadNonArcadeSystemIcons(IL_FontSettings, False, False, True);
+
+  //ScrollBarLastVisible:= False;
+  CallCenterWindow(FormGamesListFontSettings);
 end;
 
 procedure TFormGamesListFontSettings.FormKeyPress(Sender: TObject;
@@ -644,8 +629,8 @@ begin
 
   if Position in [1, 2] then
      begin
-       ACanvas.Font.Name:= 'Segoe UI';
-       ACanvas.Font.Size:= 9;
+       ACanvas.Font.Name:= FormMain.Get4KFont;
+       ACanvas.Font.Size:= FormMain.GetDefaultFontSize;
        ACanvas.Font.Color:= TileDetailsTextColor;
        ACanvas.Font.Style:= [];
      end;
@@ -733,11 +718,11 @@ begin
   DeInitConsoleComputerFonts(False);
   if TMenuItem(Sender).Tag = 0 then
      begin // reset to default
-        FormMain.SetDefaultFont(tFont_Parent, 0);
-        FormMain.SetDefaultFont(tFont_Clone, 1);
-        FormMain.SetDefaultFont(tFont_Preliminary, 2);
-        FormMain.SetDefaultFont(tFont_MissingROMs, 3);
-        FormMain.SetDefaultFont(tFont_MissingROMsPreliminary, 4);
+        FormMain.SetDefaultFont(tFont_Parent,                 0, False, False);
+        FormMain.SetDefaultFont(tFont_Clone,                  1, False, False);
+        FormMain.SetDefaultFont(tFont_Preliminary,            2, False, False);
+        FormMain.SetDefaultFont(tFont_MissingROMs,            3, False, False);
+        FormMain.SetDefaultFont(tFont_MissingROMsPreliminary, 4, False, False);
 
         GamesFont.Font:= tFont_Parent;
      end
@@ -745,10 +730,10 @@ begin
      begin // reset to current from uMain.GamesListView
        GamesFont.Font:= FormMain.GamesListView.Font;
 
-       FormMain.SetFont(FormMain.Font_Parent, tFont_Parent);
-       FormMain.SetFont(FormMain.Font_Clone, tFont_Clone);
-       FormMain.SetFont(FormMain.Font_Preliminary, tFont_Preliminary);
-       FormMain.SetFont(FormMain.Font_MissingROMs, tFont_MissingROMs);
+       FormMain.SetFont(FormMain.Font_Parent,                 tFont_Parent);
+       FormMain.SetFont(FormMain.Font_Clone,                  tFont_Clone);
+       FormMain.SetFont(FormMain.Font_Preliminary,            tFont_Preliminary);
+       FormMain.SetFont(FormMain.Font_MissingROMs,            tFont_MissingROMs);
        FormMain.SetFont(FormMain.Font_MissingROMsPreliminary, tFont_MissingROMsPreliminary);
 
        for Loop:=1 to MaxConsoleComputerSystems do
@@ -781,20 +766,20 @@ begin
          if TMenuItem(Sender).Tag = 0 then
             begin
               case selItem.ImageIndex of
-                0: FormMain.SetDefaultFont(tFont_Parent, 0);
-                1: FormMain.SetDefaultFont(tFont_Clone, 1);
-                2: FormMain.SetDefaultFont(tFont_Preliminary, 2);
-                3: FormMain.SetDefaultFont(tFont_MissingROMs, 3);
-                4: FormMain.SetDefaultFont(tFont_MissingROMsPreliminary, 4);
+                0: FormMain.SetDefaultFont(tFont_Parent,                 0, False, False);
+                1: FormMain.SetDefaultFont(tFont_Clone,                  1, False, False);
+                2: FormMain.SetDefaultFont(tFont_Preliminary,            2, False, False);
+                3: FormMain.SetDefaultFont(tFont_MissingROMs,            3, False, False);
+                4: FormMain.SetDefaultFont(tFont_MissingROMsPreliminary, 4, False, False);
               end;
             end
          else
             begin
               case selItem.ImageIndex of
-                0: FormMain.SetFont(FormMain.Font_Parent, tFont_Parent);
-                1: FormMain.SetFont(FormMain.Font_Clone, tFont_Clone);
-                2: FormMain.SetFont(FormMain.Font_Preliminary, tFont_Preliminary);
-                3: FormMain.SetFont(FormMain.Font_MissingROMs, tFont_MissingROMs);
+                0: FormMain.SetFont(FormMain.Font_Parent,                 tFont_Parent);
+                1: FormMain.SetFont(FormMain.Font_Clone,                  tFont_Clone);
+                2: FormMain.SetFont(FormMain.Font_Preliminary,            tFont_Preliminary);
+                3: FormMain.SetFont(FormMain.Font_MissingROMs,            tFont_MissingROMs);
                 4: FormMain.SetFont(FormMain.Font_MissingROMsPreliminary, tFont_MissingROMsPreliminary);
               end;
             end;
@@ -804,7 +789,7 @@ begin
          if TMenuItem(Sender).Tag = 0 then
             begin
               if selItem.StateImageIndex = 0 then
-                 FormMain.SetDefaultFont(GamesFont.Font, 0)
+                 FormMain.SetDefaultFont(GamesFont.Font, 0, False, False)
               else
                  FreeAndNil(tFont_ConsoleComputer[selItem.StateImageIndex]);
             end
@@ -877,7 +862,7 @@ begin
              if not FormMain.IsStartup then
                 begin
                   if GamesFont.BackGround.Image <> nil then
-                     GamesFont.BackGround.Image:= nil;
+                     GamesFont.BackGround.Image := nil;
                   FormMain.BlinkBkEdit(GamesBackgroundImage);
                 end;
              Exit;
@@ -897,12 +882,6 @@ begin
         GamesFont.Background.Image:= nil;
       end;
   end;
-end;
-
-procedure TFormGamesListFontSettings.FormResize(Sender: TObject);
-begin
-  //Label1.Caption:= IntToStr(FormGamesListFontSettings.Width)+'x'+IntToStr(FormGamesListFontSettings.Height)+#13#10+
-  //                 'Client Rect: '+IntToStr(FormGamesListFontSettings.ClientWidth)+'x'+IntToStr(FormGamesListFontSettings.ClientHeight);
 end;
 
 procedure TFormGamesListFontSettings.PopupShowAvailableSystemsOnlyClick(
@@ -1036,7 +1015,7 @@ end;
 
 procedure TFormGamesListFontSettings.PopupHelpClick(Sender: TObject);
 begin
-  FormMain.InitMessageBox; //CallMessageBox;
+  FormMain.InitMessageBox;
   FormMain.AddMsgText('    Customizing game fonts is easy. If you select different fonts, '+
                       'they might have different height in pixels. Even more so if you change the font size.'+#13#10+
                       'For thumbnails view mode this is a problem. To make this easy, you can see a ');
@@ -1046,7 +1025,7 @@ begin
   FormMain.AddMsgText('Show Available Systems Only', MsgTxtColors.colorKeyTitle, [fsBold]);
   FormMain.AddMsgText(' option in popup menu.');
 
-  GenerateMessage('Help', 'Shed some light into the darkness.');
+  FormMain.ShowMessageBox('Help', 'Shed some light into the darkness.');
 end;
 
 procedure TFormGamesListFontSettings.PopupShowFontNameClick(
@@ -1057,6 +1036,90 @@ begin
   UpdateFontSizeInfoAllSystems;
   GamesFont.EndUpdate;
   GamesFont.SetFocus;
+end;
+
+
+procedure TFormGamesListFontSettings.GamesFontItemImageDrawIsCustom(
+  Sender: TCustomEasyListview; Item: TEasyItem; Column: TEasyColumn;
+  var IsCustom: Boolean);
+begin
+  //Exit; // debug only
+  if GamesFont.ImagesExLarge.Width >= 68 then
+     IsCustom:= True;
+end;
+
+procedure TFormGamesListFontSettings.GamesFontItemImageGetSize(
+  Sender: TCustomEasyListview; Item: TEasyItem; Column: TEasyColumn;
+  var ImageWidth, ImageHeight: Integer);
+begin
+  //Exit; // debug only
+  if GamesFont.ImagesExLarge.Width < 68 then
+     Exit;
+
+  //Exit; // debugging
+  ImageWidth:=  GamesFont.ImagesExLarge.Width;
+  ImageHeight:= GamesFont.ImagesExLarge.Height;
+end;
+
+procedure TFormGamesListFontSettings.GamesFontItemImageDraw(
+  Sender: TCustomEasyListview; Item: TEasyItem; Column: TEasyColumn;
+  ACanvas: TCanvas; const RectArray: TEasyRectArrayObject;
+  AlphaBlender: TEasyAlphaBlender);
+var
+  iLeft, iTop, iSysTypeIndex, iImageIndex: Integer;
+  iText: String;
+begin
+  //Exit; // debug only
+  if GamesFont.ImagesExLarge.Width < 68 then
+     Exit;
+
+  ACanvas.Lock;
+  iLeft:= RectArray.IconRect.Left+GamesFont.PaintInfoItem.ImageIndent;
+  iTop:=  RectArray.IconRect.Top+(((RectArray.IconRect.Bottom-RectArray.IconRect.Top)-GamesFont.ImagesExLarge.Height) div 2);
+  //iTop:=  RectArray.IconRect.Top+GamesFont.PaintInfoItem.ImageIndent+(GamesFont.PaintInfoItem.Border div 2);
+  GamesFont.ImagesExLarge.Draw(ACanvas, iLeft, iTop, Item.ImageIndex);
+
+  // .ItemIndex = index of icons; StateImageIndex = Console/Computer sysID
+  if Item.StateImageIndex = 0 then
+     begin
+       ACanvas.Unlock;
+       Exit; // 0 index is "All Systems"
+     end;
+
+  iImageIndex:= -1;
+  iSysTypeIndex:= -1;
+  if Item.StateImageIndex = -1 then
+     iSysTypeIndex:= 0//4//24 // index 4 is "arcade" icon
+  else
+  begin
+    if SystemIsConsole(Item.StateImageIndex) then
+       iSysTypeIndex:= 1//5//25 // index 5 is "console" icon
+    else
+    if SystemIsComputer(Item.StateImageIndex) then
+       iSysTypeIndex:= 2//6//26 // index 6 is "computer" icon
+    else
+    if SystemIsHandheld(Item.StateImageIndex) then
+       iSysTypeIndex:= 3;//7;//27; // index 7 is "handheld" icon
+
+    iImageIndex:= Item.StateImageIndex;
+  end;
+
+  if iSysTypeIndex <> -1 then
+     begin
+       iLeft:= iLeft+GamesFont.ImagesExLarge.Width;
+       iLeft:= iLeft+4; // 4 -> space between sys icon and sys type icon
+       if Is4KMode then
+          begin
+            iTop:= RectArray.TextRects[1].Top+8; // +8 is to align SysType icon with 2-lines details text
+            FormMain.IL_SystemType_ExtraLarge.Draw(ACanvas, iLeft, iTop, iSysTypeIndex);
+          end
+       else
+          begin
+            iTop:= RectArray.TextRects[1].Top+3; // +3 is to align SysType icon with 2-lines details text
+            FormMain.IL_SystemType_Standard.Draw(ACanvas, iLeft, iTop, iSysTypeIndex);
+          end;
+     end;
+  ACanvas.UnLock;
 end;
 
 

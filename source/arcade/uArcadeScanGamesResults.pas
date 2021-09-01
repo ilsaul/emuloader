@@ -6,7 +6,8 @@ uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
   StdCtrls, ImgList, IniFiles, ComCtrls, uCommon, MPCommonObjects,
   MPCommonUtilities, EasyListview, ExtCtrls, ToolWin, Buttons, ShadowLabel,
-  PanelEx, Menus, BarMenus, EditEx, ColorBoxEx, ButtonsEx;
+  PanelEx, Menus, BarMenus, ColorBoxEx, ButtonsEx, TntStdCtrls, TntEditEx,
+  AdvOfficeButtons;
 
 type
   TEasyScanInfo = class(TEasyItemStored)
@@ -139,6 +140,9 @@ type
     fSoftwareTitle: String;
     fSoftwareName: String;
     fIsMerged: Boolean;
+    fHaveGameROMs: ShortInt; // 1 - have game ROMs; 0 -> no game ROMs, maybe only bios ROMs, device ROMs
+    fCHDsCount: Byte;
+    fHavedeviceROMs: Boolean;
   protected
     function GetCaptions(Column: Integer): WideString; override;
     function GetImageIndexes(Column: Integer): TCommonImageIndexInteger; override;
@@ -167,39 +171,35 @@ type
     property eSoftwareName: String read fSoftwareName write fSoftwareName;
 
     property eIsMerged: Boolean read fIsMerged write fIsMerged;
+    property eHaveGameROMs: ShortInt read fHaveGameROMs write fHaveGameROMs; // game ROMs ? or it's just bios ROMs and/or device ROMs or nothing at all
+    property eCHDsCount: Byte read fCHDsCount write fCHDsCount;
+    property eHaveDeviceROMs: Boolean read fHaveDeviceROMs write fHaveDeviceROMs;
   end;
 
 type
   TFormArcadeScanGamesResults = class(TForm)
-    IL_ScanResults: TImageList;
     ROMsListView: TEasyListview;
-    PanelTop: TPanelEx;
+    TopBar: TPanelEx;
     SystemIcon: TImage;
     LabelEmulatorVersion: TShadowLabel;
     LabelGamesListVersion: TShadowLabel;
-    LabelGamesListList: TShadowLabel;
-    SystemSelectorToolBar: TToolBar;
-    sysMAME: TToolButton;
-    sysSupermodelSEGAModel3: TToolButton;
-    sysDemul: TToolButton;
-    sysHBMAME: TToolButton;
-    sysDICE: TToolButton;
-    sysSEGAModel2: TToolButton;
-    sysZiNc: TToolButton;
     LabelTotalGames: TShadowLabel;
     MAMEMachinesFilterIcon: TImage;
     MAMEMachinesFilter: TComboBox2Ex;
-    PopupSplitters: TBcBarPopupMenu;
-    CenterSplitter1: TMenuItem;
-    MenuItem11: TMenuItem;
-    PopupShowSplitterGrip: TMenuItem;
-    N22: TMenuItem;
-    MenuItem13: TMenuItem;
     ButtonToggleTree: TBitBtnEx;
-    SearchBarEdit: TEditEx;
-    SearchBarToolBar: TToolBar;
-    ButtonFilterTitleApply_ToolBar: TToolButton;
+    SearchBarEdit: TTntEditEx;
     LabelSearchBar: TShadowLabel;
+    SetsFilter_CHDs: TAdvOfficeCheckBoxEx;
+    SetsFilter_DeviceROMs: TAdvOfficeCheckBoxEx;
+    SetsFilter_BiosROMs: TAdvOfficeCheckBoxEx;
+    ButtonFilterTitleApply_ToolBar: TSpeedButtonEx;
+    sysMAME: TSpeedButtonEx;
+    sysSupermodelSEGAModel3: TSpeedButtonEx;
+    sysDemul: TSpeedButtonEx;
+    sysHBMAME: TSpeedButtonEx;
+    sysDICE: TSpeedButtonEx;
+    sysSEGAModel2: TSpeedButtonEx;
+    sysZiNc: TSpeedButtonEx;
     procedure FormShow(Sender: TObject);
     procedure FormKeyPress(Sender: TObject; var Key: Char);
     procedure ButtonToggleTreeClick(Sender: TObject);
@@ -214,23 +214,24 @@ type
     function ROMsListViewGroupCompare(Sender: TCustomEasyListview; Item1,
       Item2: TEasyGroup): Integer;
     procedure MAMEMachinesFilterSelect(Sender: TObject);
-    procedure SystemSelectorToolBarCustomDraw(Sender: TToolBar;
-      const ARect: TRect; var DefaultDraw: Boolean);
     procedure PopupSplittersMeasureMenuItem(Sender: TObject;
       AMenuItem: TMenuItem; ACanvas: TCanvas; var Width, Height: Integer;
       ABarVisible: Boolean; var DefaultMeasure: Boolean);
     procedure ButtonFilterTitleApply_ToolBarClick(Sender: TObject);
     procedure SearchBarEditKeyPress(Sender: TObject; var Key: Char);
+    procedure SetsFilter_CHDsClick(Sender: TObject);
   private
     { Private declarations }
     GamesListVersion: packed array[1..MaxArcadeSystems] of String;
     sysSelectButton: Integer;
     HaveDevices: Boolean;
+    
     function  CheckEmptyVar(const VarStr: String): String;
     procedure GetGamesListVersions;
     procedure LoadScanResultsFile(sysID: ShortInt; const SoftwareName: String);
     procedure FilterGamesList;
     procedure SearchGame;
+    procedure Resize4K;
   public
     { Public declarations }
     SingleGame: Boolean;
@@ -306,8 +307,6 @@ begin
       end;
     4: // device name
       begin
-        //if eGameName = 'arkanoidj' then
-        //   beep;
         if eLineMode = 6 then
            begin
              if FormMain.IsFileID_DeviceROM(eROMTagIndex) then
@@ -352,9 +351,9 @@ begin
                 Result:= FormArcadeScanGamesResults.CheckEmptyVar(Result)+'No Dump'
              else
              case eStateImageIndex of
-               MaxArcadeSystems+1: Result:= FormArcadeScanGamesResults.CheckEmptyVar(Result)+'Ok';
-               MaxArcadeSystems+2: Result:= FormArcadeScanGamesResults.CheckEmptyVar(Result)+'Missing';
-               MaxArcadeSystems+3:
+               0: {MaxArcadeSystems+1: }Result:= FormArcadeScanGamesResults.CheckEmptyVar(Result)+'Ok';
+               1: {MaxArcadeSystems+2: }Result:= FormArcadeScanGamesResults.CheckEmptyVar(Result)+'Missing';
+               2: //MaxArcadeSystems+3:
                  begin
                    if eROMCRC32 <> '' then
                       begin
@@ -363,7 +362,7 @@ begin
                       end
                    else
                       begin
-                        // CHDs usually don't have CRC32 checksum!!!!
+                        // CHDs usually don't have CRC32 checksum
                         if Length(eROMSHA1) > 32 then
                            Result:= Result+'Bad SHA-1'
                         else
@@ -419,9 +418,90 @@ end;
 function TEasyScanGroupInfo.GetImageIndexes(Column: Integer): TCommonImageIndexInteger;
 begin
   case Column of
-    0: Result:= FormMain.GetMAMEImageIndex(eImageIndex, eSoftwareName) // eImageIndex;
+    0: Result:= FormMain.GetMAMEImageIndex(eImageIndex, eSoftwareName, 0) // game status is always "HAVE"
   else
      Result:= -1;
+  end;
+end;
+
+procedure TFormArcadeScanGamesResults.Resize4K;
+
+  procedure MoveButton(iButton: TSpeedButtonEx; iNextButton: TSpeedButtonEx);
+  var
+    iPos2, iW, iTop: Integer;
+  begin
+    iW:= 36;
+    iTop:= -1;
+
+    if iNextButton <> nil then
+       iPos2:= iNextButton.Left-iW-1
+    else
+       iPos2:= ClientWidth-10-iW;
+
+    FormMain.Set4KButtonSpecs(iButton, iPos2, 10, iW, iW+1, 16, -1, FormMain.IL_StandardIconsLarge);
+  end;
+
+begin
+  if not Is4KMode then
+     Exit;
+
+  with FormArcadeScanGamesResults do
+  begin
+    ClientWidth:= 1938;
+    ClientHeight:= 1200;
+    Font.Size:= 16;
+
+    TopBar.Height:= 150;
+    FormMain.Set4KImageIconSpecs(SystemIcon, 128, 10, 10);
+    FormMain.Set4KLabelSpecs(LabelEmulatorVersion,   150, 10,  -1, -1, 18);
+    FormMain.Set4KLabelSpecs(LabelGamesListVersion,  150, 54,  -1, -1, 14);
+    FormMain.Set4KLabelSpecs(LabelTotalGames,        150, 105, -1, -1, 16);
+
+    FormMain.Set4KImageIconSpecs(MAMEMachinesFilterIcon, 32, 539, 98);
+    FormMain.Set4KComboBoxSpecs(MAMEMachinesFilter, MAMEMachinesFilterIcon.Left+MAMEMachinesFilterIcon.Width+10, MAMEMachinesFilterIcon.Top-1, 215);
+
+    FormMain.Set4KCheckBoxSpecs(SetsFilter_CHDs, MAMEMachinesFilter.Left+MAMEMachinesFilter.Width+20, MAMEMachinesFilter.Top, 135, 36, 16);
+    FormMain.Set4KCheckBoxSpecs(SetsFilter_DeviceROMs, SetsFilter_CHDs.Left+144,                      SetsFilter_CHDs.Top,    157, 36, 16);
+    FormMain.Set4KCheckBoxSpecs(SetsFilter_BiosROMs, SetsFilter_DeviceROMs.Left+167,                  SetsFilter_CHDs.Top,    132, 36, 16);
+
+    MoveButton(sysZiNc, nil);
+    MoveButton(sysSEGAModel2,           sysZiNc);
+    MoveButton(sysDICE,                 sysSEGAModel2);
+    MoveButton(sysHBMAME,               sysDICE);
+    MoveButton(sysDemul,                sysHBMAME);
+    MoveButton(sysSupermodelSEGAModel3, sysDemul);
+    MoveButton(sysMAME,                 sysSupermodelSEGAModel3);
+
+    FormMain.Set4KButtonSpecs(ButtonFilterTitleApply_ToolBar, ClientWidth-36-10, SetsFilter_CHDs.Top, 36, 37);
+
+    FormMain.Set4KEditSpecs(SearchBarEdit, ButtonFilterTitleApply_ToolBar.Left-250-4, SetsFilter_CHDs.Top, 250, 36, 16);
+    FormMain.Set4KEditFontNameSpecs(SearchBarEdit);
+    FormMain.Set4KLabelSpecs(LabelSearchBar, -1, SearchBarEdit.Top+2, -1, -1, 16);
+    LabelSearchBar.Left:= SearchBarEdit.Left-LabelSearchBar.Width-10;
+
+    FormMain.Set4KButtonSpecs(ButtonToggleTree, 0, ROMsListView.Top, 39, 39, 14);
+
+    ROMsListView.CellSizes.Report.Height:= 38;
+    FormMain.Set4KListViewSpecs(ROMsListView, -1, -1, -1, -1, 16, True, 18);
+    FormMain.Set4KListViewHeaderFontSizeSpecs(ROMsListView);
+
+    ROMsListView.ImagesGroup:= FormMain.IL_StandardIconsLarge;
+    ROMsListView.ImagesSmall:= FormMain.IL_MediaType_Large;
+    ROMsLisTView.ImagesState:= FormMain.IL_Misc_Large;
+
+    ROMsListView.Header.Columns[0].Caption:= '      Name';
+    ROMsListView.Header.Columns[0].Width:= 704;
+    ROMsListView.Header.Columns[1].Width:= 120;
+    ROMsListView.Header.Columns[2].Width:= 504;
+    ROMsListView.Header.Columns[3].Width:= 180;
+    ROMsListView.Header.Columns[4].Width:= 250;
+    ROMsListView.Header.Columns[5].Width:= 180;
+
+    ROMsListView.PaintInfoColumn.CaptionIndent:= 4; // reset to default value
+    ROMsListView.PaintInfoGroup.MarginTop.Size:= 50;
+    ROMsListView.PaintInfoGroup.ImageIndent:= 25;
+    ROMsListView.PaintInfoGroup.BandIndent:= ButtonToggleTree.Width;
+    ROMsListView.PaintInfoGroup.BandLength:= 1180;
   end;
 end;
 
@@ -567,7 +647,6 @@ var
     // 4 -> bios name
     // 5 -> software name/title
     // 6 -> CRC32 / SHA-1
-//////////    // 7 -> SHA-1
     // 7 - n -> device sets
     Result:= True;
     if TypeIndex > 6 then // in [7..n] then
@@ -658,9 +737,9 @@ var
        Result:= FormMain.GetSizeType(iSize, (iArcadeMediaType in [3, 4, 5])); // ROM size
   end;
 
-  function AddGame: Boolean;
+  function AddGame(HaveDeviceSets: Boolean): Boolean;
   var
-    LoopROMs, BaseIconIndex: Integer;
+    LoopROMs, IcoIndexSubtract: Integer;
     LineStr, iNameEntry, romName, romCRC32, romSHA1, chdParentName, romDeviceName: String;
     iCHDFile: WideString;
     romSize: Int64;
@@ -685,6 +764,9 @@ var
     TEasyScanGroupInfo(addGroup).eSoftwareName:= FormMain.TempGameVars.eSoftwareName;
 
     TEasyScanGroupInfo(addGroup).eIsMerged:= FormMain.TempGameVars.eIsMerged;
+    TEasyScanGroupInfo(addGroup).eHaveGameROMs:= FormMain.TempGameVars.eHaveGameROMs;
+    TEasyScanGroupInfo(addGroup).eCHDsCount:= FormMain.TempGameVars.eCHDsCount;
+    TEasyScanGroupInfo(addGroup).eHaveDeviceROMs:= HaveDeviceSets;
 
     case FormMain.GameIsClone(FormMain.TempGameVars.eClone) of
       True: TEasyScanGroupInfo(addGroup).eImageIndex:= 1;
@@ -736,7 +818,12 @@ var
 
     //HaveMultipleDeviceSets:= Assigned(TEasyGameInfo(checkItem).eDeviceSets) and (TEasyGameInfo(checkItem).eDeviceSets.Count > 1);
 
-    BaseIconIndex:= MaxArcadeSystems+3; // from IL_ScanResults index... 0 + MaxArcadeSytems + 3 (result OK, result Not Found, result Bad CRC)
+    if Is4KMode then
+       IcoIndexSubtract:= 15 // IL_MediaType_Large (32x32)
+    else
+       IcoIndexSubtract:= 0; // IL_LeftPanel (16x16)
+
+    //BaseIconIndex:= MaxArcadeSystems+3; // from IL_ScanResults index... 0 + MaxArcadeSytems + 3 (result OK, result Not Found, result Bad CRC)
     // add ROMs entries ELV
     for LoopROMs:=0 to TEasyGameInfo(checkItem).eROMInfo.Count-1 do
     begin
@@ -762,14 +849,14 @@ var
 
       addItem:= ROMsListView.Items.AddCustom(TEasyScanInfo, addGroup);
       if tmpString = '' then
-         TEasyScanInfo(addItem).eStateImageIndex:= MaxArcadeSystems+1 // file Ok
+         TEasyScanInfo(addItem).eStateImageIndex:= 0 //MaxArcadeSystems+1 // file Ok
       else
          begin
             if tmpString = '0' then
-               TEasyScanInfo(addItem).eStateImageIndex:= MaxArcadeSystems+2 // file Missing
+               TEasyScanInfo(addItem).eStateImageIndex:= 1 //MaxArcadeSystems+2 // file Missing
             else
             if tmpString = '1' then
-               TEasyScanInfo(addItem).eStateImageIndex:= MaxArcadeSystems+3; // CHD file found with bad SHA-1
+               TEasyScanInfo(addItem).eStateImageIndex:= 2 //MaxArcadeSystems+3; // CHD file found with bad SHA-1
          end;
 
       iCHDFile:= '';
@@ -777,12 +864,13 @@ var
         True:
           begin
             case romTagIndex of
-              12, 13, 14: tmpFileID:= BaseIconIndex+5; // HDD (also general CHD)
-              15, 16, 17: tmpFileID:= BaseIconIndex+6; // CD
-              18, 19, 20: tmpFileID:= BaseIconIndex+7; // Compact Flash Card
-              21, 22, 23: tmpFileID:= BaseIconIndex+8; // Video Tape (VHS)
+              12, 13, 14: tmpFileID:= 22-IcoIndexSubtract; // HDD (also general CHD)
+              15, 16, 17: tmpFileID:= 20-IcoIndexSubtract; // CD
+              18, 19, 20: tmpFileID:= 21-IcoIndexSubtract; // Compact Flash Card
+              21, 22, 23: tmpFileID:= 23-IcoIndexSubtract; // Video Tape (VHS)
             end;
-            if TEasyScanInfo(addItem).eStateImageIndex in [MaxArcadeSystems+1, MaxArcadeSystems+3] then
+
+            if TEasyScanInfo(addItem).eStateImageIndex in [0, 2] then // [MaxArcadeSystems+1, MaxArcadeSystems+3] then
                begin
                  // CHD is OK or have bad SHA-1 / MD-5 checksum
                  iCHDFile:= FormMain.SearchCHDFolder(romName, FormMain.TempGameVars.eName, FormMain.TempGameVars.eBiosName, FormMain.TempGameVars.eClone, FormMain.TempGameVars.eSystemID, FormMain.TempGameVars.eSoftwareName);
@@ -795,13 +883,18 @@ var
           end;
         False:
           begin
+            if FormMain.TempGameVars.eSoftwareName = 'vgmplay' then
+               tmpFileID:= 24-IcoIndexSubtract
+            else
             case romTagIndex of
-              00, 01, 02: tmpFileID:= BaseIconIndex+1; // ROM
-              03, 04, 05: tmpFileID:= BaseIconIndex+2; // Cartridge
-              06, 07, 08: tmpFileID:= BaseIconIndex+3; // Floppy Disk
-              09, 10, 11: tmpFileID:= BaseIconIndex+4; // Cassette Tape
-              18, 19, 20: tmpFileID:= BaseIconIndex+7; // Compact Flash Card (but it's not a CHD file)
-              21, 22, 23: tmpFileID:= BaseIconIndex+8; // Video Tape (VHS) (but it's not a CHD file)
+              00, 01, 02: tmpFileID:= 15-IcoIndexSubtract; // ROM
+              03, 04, 05: tmpFileID:= 16-IcoIndexSubtract; // Cartridge
+              06, 07, 08: tmpFileID:= 17-IcoIndexSubtract; // Floppy Disk
+              09, 10, 11: tmpFileID:= 18-IcoIndexSubtract; // Cassette Tape
+              12, 13, 14: tmpFileID:= 22-IcoIndexSubtract; // HDD... is there any game ROMs with region="hdd" ???? not sure but better to have this here!!!
+              15, 16, 17: tmpFileID:= 20-IcoIndexSubtract; // CD (Demul (v5.8.2) have .bin files ROMs that are actually image CDs
+              18, 19, 20: tmpFileID:= 21-IcoIndexSubtract; // Compact Flash Card (but it's not a CHD file)... "Konami System 573"
+              21, 22, 23: tmpFileID:= 23-IcoIndexSubtract; // Video Tape (VHS) (but it's not a CHD file)...
             end;
           end;
       end;
@@ -842,17 +935,11 @@ var
     Result:= True;
   end;
 
-  procedure EnableToolButton(sysID: ShortInt);
-  var
-    ButtonID: Integer;
+  procedure EnableToolButton(iButton: TSpeedButtonEx);
   begin
-    if sysID > idDaphne then
-       ButtonID:= sysID-2
-    else
-       ButtonID:= sysID-1;
-    SystemSelectorToolBar.Buttons[ButtonID].Enabled:= True;
-    if sysID = sysSelectButton then
-       SystemSelectorToolBar.Buttons[ButtonID].Down:= True;
+    iButton.Enabled:= True;
+    if iButton.Tag = sysSelectButton then
+       iButton.Down:= True;
   end;
 
 begin
@@ -870,8 +957,17 @@ begin
        CheckSysToSelect;
        Exit;
      end;
-     
-  EnableToolButton(sysID);
+
+  case sysID of
+    1: EnableToolButton(sysMAME);
+    2: EnableToolButton(sysSupermodelSEGAModel3);
+    4: EnableToolButton(sysDemul);
+    5: EnableToolButton(sysHBMAME);
+    6: EnableToolButton(sysDICE);
+    7: EnableToolButton(sysSEGAModel2);
+    8: EnableToolButton(sysZiNc);
+  end;
+
   missFile:= TMemIniFile.Create(MissingROMsFileName); // sys_missgames.miss
 
   case SingleGame of
@@ -879,7 +975,7 @@ begin
       begin
         FormMain.FillMemGameInfo(FormMain.TempGameVars);
         checkItem:= FormMain.SelectedEasyItem;
-        AddGame;
+        AddGame(Assigned(uMain.TEasyGameInfo(FormMain.SelectedEasyItem).eDeviceSets));
       end;
     False:
       begin
@@ -898,7 +994,7 @@ begin
                          begin
                            FormMain.ClearMemGameInfo(FormMain.TempGameVars);
                            FormMain.FillTempGameInfo(checkItem);
-                           AddGame;
+                           AddGame(Assigned(uMain.TEasyGameInfo(checkItem).eDeviceSets));
                          end;
                     end;
                end;
@@ -920,56 +1016,83 @@ end;
 
 procedure TFormArcadeScanGamesResults.FormShow(Sender: TObject);
 var
-  tempFolder: String;
   Loop: Integer;
   missSoftListFiles: THashedStringList;
+  
+  function DarkColorsCheckBox(iCheckBox: TAdvOfficeCheckBoxEx): Boolean;
+  begin
+    Result:= True;
+    SetCheckBoxColors(iCheckBox, clCream, item_caption_active_shadow_color[1], clrMedDarkGray, clrLightBlack);
+    FormMain.SetCheckBoxExCustomIcon(iCheckBox);
+  end;
+
+  function SetButtonImageIndexHint(iButton: TSpeedButtonEx): Boolean;
+  begin
+    Result:= True;
+    iButton.ImageIndex:= FormMain.GetImageIndexSystemID(iButton.Tag);
+    iButton.Hint:= FormMain.GetArcadeEmulatorDescription(iButton.Tag);
+  end;
+
+  function ExecClickButton(iButton: TSpeedButtonEx): Boolean;
+  begin
+    Result:= Loop = 0;
+    if not Result then
+       Exit;
+    if iButton.Enabled then
+       begin
+         if iButton.Down then
+            begin
+              Loop:= 1; // found pressed button, execute its code and ignore other system buttons
+              iButton.Click;
+            end;
+       end;
+  end;
+  
 begin
+  Resize4K;
   FormMain.ELV_ResetNormalColors(ROMsListView);
+
+  sysMAME.Tag:=                 idMAME;
+  sysSupermodelSEGAModel3.Tag:= idSupermodel;
+  sysDemul.Tag:=                idDemul;
+  sysHBMAME.Tag:=               idHBMAME;
+  sysDICE.Tag:=                 idDICE;
+  sysSEGAModel2.Tag:=           idSEGAModel2;
+  sysZiNc.Tag:=                 idZiNc;
+
+  SetButtonImageIndexHint(sysMAME);
+  SetButtonImageIndexHint(sysSupermodelSEGAModel3);
+  SetButtonImageIndexHint(sysDemul);
+  SetButtonImageIndexHint(sysHBMAME);
+  SetButtonImageIndexHint(sysDICE);
+  SetButtonImageIndexHint(sysSEGAModel2);
+  SetButtonImageIndexHint(sysZiNc);
+
+  SystemIcon.Tag:= 0;
 
   CallMaximizeWindow(TForm(Sender));
 
   if IsNightMode then
      begin
-       SetFormColors(FormArcadeScanGamesResults, PanelTop, nil, LabelEmulatorVersion, LabelGamesListVersion, nil, -1, True);
-       SetLabelColors(LabelGamesListList, clWhite, clrMedBlue);
+       SetFormColors(FormArcadeScanGamesResults, TopBar, nil, LabelEmulatorVersion, LabelGamesListVersion, nil, -1, True);
        SetLabelColors(LabelTotalGames,    clWhite, clrDarkOrange);
        SetLabelColors(LabelSearchBar,     clWhite, clrMedBlue);
        SetComboBox2ExColors(MAMEMachinesFilter, True);
 
+       DarkColorsCheckBox(SetsFilter_CHDs);
+       DarkColorsCheckBox(SetsFilter_DeviceROMs);
+       DarkColorsCheckBox(SetsFilter_BiosROMs);
 
        FormMain.SetEasyListViewColors(ROMsListView, menu_background_color[1], clWhite, clrOrangeBarTop);
-       FormMain.SetEasyListViewHeaderColors(ROMsListView, True);
+       FormMain.SetEasyListViewHeaderColors(ROMsListView, True, False, Is4KMode);
        FormMain.ELV_SetRibbonNightColors(0, ROMsListView, True);
        FormMain.SetWin10DarkScrollBar(ROMsListView);
 
        SetEditNightColors(SearchBarEdit);
        FormMain.SetButtonExColors(ButtonToggleTree);
      end;
-     
-  tempFolder:= FormMain.GetFolderFull(32);
-  FormMain.AddDefaultIcons('option_radiogroup_on.ico', tempFolder, IL_ScanResults);
-  for Loop:=1 to MaxArcadeSystems do
-      FormMain.AddDefaultIcons(FormMain.GetArcadeSystemIconFileName(Loop), tempFolder, IL_ScanResults);
-  FormMain.AddDefaultIcons('scanresult_ok.ico', tempFolder, IL_ScanResults);            // 09
-  FormMain.AddDefaultIcons('scanresult_notfound.ico', tempFolder, IL_ScanResults);      // 10
-  FormMain.AddDefaultIcons('scanresult_badcrc.ico', tempFolder, IL_ScanResults);        // 11
 
-  FormMain.AddDefaultIcons('bios_chip.ico', tempFolder, IL_ScanResults);                // 12
-
-  FormMain.AddDefaultIcons('media_cartridge.ico', tempFolder, IL_ScanResults);          // 13
-  FormMain.AddDefaultIcons('media_floppydisk.ico', tempFolder, IL_ScanResults);         // 14
-  FormMain.AddDefaultIcons('media_cassettetape.ico', tempFolder, IL_ScanResults);       // 15
-
-  FormMain.AddDefaultIcons('chd.ico', tempFolder, IL_ScanResults);                      // 16 -> this is also used for "Hard Disk Drive" media type...
-  FormMain.AddDefaultIcons('media_disc.ico', tempFolder, IL_ScanResults);               // 17
-  FormMain.AddDefaultIcons('media_flashcard.ico', tempFolder, IL_ScanResults);          // 18
-  FormMain.AddDefaultIcons('media_vhs.ico', tempFolder, IL_ScanResults);                // 19
-  FormMain.AddDefaultIcons('media_videogamemusic.ico', tempFolder, IL_ScanResults);     // 20
-
-  for Loop:=0 to SystemSelectorToolBar.ButtonCount-1 do
-      SystemSelectorToolBar.Buttons[Loop].Hint:= FormMain.GetArcadeEmulatorDescription(SystemSelectorToolBar.Buttons[Loop].ImageIndex);
-
-  IL_ScanResults.GetIcon(idMAME, MAMEMachinesFilterIcon.Picture.Icon);
+  FormMain.LoadSystemIcon(-1, MAMEMachinesFilterIcon, False);
   GetGamesListVersions;
   sysSelectButton:= -1;
   case SingleGame of
@@ -1008,61 +1131,50 @@ begin
   ROMsListView.Items.ReIndexDisable:= False;
   ROMsListView.EndUpdate(False);
 
-  for Loop:=0 to SystemSelectorToolBar.ButtonCount-1 do
+  Loop:= 0;
+  ExecClickButton(sysMAME);
+  ExecClickButton(sysSupermodelSEGAModel3);
+  ExecClickButton(sysDemul);
+  ExecClickButton(sysHBMAME);
+  ExecClickButton(sysDICE);
+  ExecClickButton(sysSEGAModel2);
+  ExecClickButton(sysZiNc);
+
+  if not Is4KMode then
   begin
-    if SystemSelectorToolBar.Buttons[Loop].Enabled then
+    // file size column
+    MAMEMachinesFilterIcon.Tag:= ROMsListView.Header.Columns[3].Width;
+    ROMsListView.Header.Columns[3].AutoSizeToFit;
+    if ROMsListView.Header.Columns[3].Width < 35 then
        begin
-         if sysSelectButton <> -1 then
-            begin
-              if SystemSelectorToolBar.Buttons[Loop].Down then
-                 begin
-                   SystemSelectorToolBar.Buttons[Loop].Click;
-                   Break;
-                 end;
-            end
-         else
-            begin
-              SystemSelectorToolBar.Buttons[Loop].Down:= True;
-              SystemSelectorToolBar.Buttons[Loop].Click;
-              Break;
-            end;
-       end;
+         ROMsListView.Header.Columns[3].Width:= 35;
+         MAMEMachinesFilterIcon.Tag:= 0;
+       end
+    else
+    if ROMsListView.Header.Columns[3].Width > 35 then
+       MAMEMachinesFilterIcon.Tag:= ROMsListView.Header.Columns[3].Width-MAMEMachinesFilterIcon.Tag;
+
+    Loop:= ROMsListView.Header.Columns[4].Width;
+    ROMsListView.Header.Columns[4].AutoSizeToFit;
+    if ROMsListView.Header.Columns[4].Width < 50 then
+       begin
+         Loop:= 0;
+         ROMsListView.Header.Columns[4].Width:= 50
+       end
+    else
+    if ROMsListView.Header.Columns[4].Width > 50 then
+       Loop:= ROMsListView.Header.Columns[4].Width-Loop;
+
+    if MAMEMachinesFilterIcon.Tag+Loop > 0 then
+       ROMsListView.Header.Columns[0].Width:= ROMsListView.Header.Columns[0].Width-(MAMEMachinesFilterIcon.Tag+Loop);
   end;
-
-  //... this is not working correctly
-  //.-> add a filter to show only show games with CHD ? add an edit box to search for a game name ???
-  // file size column
-  MAMEMachinesFilterIcon.Tag:= ROMsListView.Header.Columns[3].Width;
-  ROMsListView.Header.Columns[3].AutoSizeToFit;
-  if ROMsListView.Header.Columns[3].Width < 35 then
-     begin
-       ROMsListView.Header.Columns[3].Width:= 35;
-       MAMEMachinesFilterIcon.Tag:= 0;
-     end
-  else
-  if ROMsListView.Header.Columns[3].Width > 35 then
-     MAMEMachinesFilterIcon.Tag:= ROMsListView.Header.Columns[3].Width-MAMEMachinesFilterIcon.Tag;
-
-  Loop:= ROMsListView.Header.Columns[4].Width;
-  ROMsListView.Header.Columns[4].AutoSizeToFit;
-  if ROMsListView.Header.Columns[4].Width < 50 then
-     begin
-       Loop:= 0;
-       ROMsListView.Header.Columns[4].Width:= 50
-     end
-  else
-  if ROMsListView.Header.Columns[4].Width > 50 then
-     Loop:= ROMsListView.Header.Columns[4].Width-Loop;
-
-  if MAMEMachinesFilterIcon.Tag+Loop > 0 then
-     ROMsListView.Header.Columns[0].Width:= ROMsListView.Header.Columns[0].Width-(MAMEMachinesFilterIcon.Tag+Loop);
 
   if SingleGame then
      begin
        Loop:= (ROMsListView.Header.Height+2+4)+ // +4 for the bottom border
               (ROMsListView.Groups.ItemCount*ROMsListView.CellSizes.Report.Height)+
               (ROMsListView.PaintInfoGroup.MarginTop.Size)+
-               PanelTop.Height;
+               TopBar.Height;
 
        if Loop < (Screen.Height-100) then
           begin
@@ -1114,15 +1226,25 @@ begin
   ROMsListView.BeginUpdate;
   vGroup:= ROMsListView.Groups.FirstGroup;
   repeat
-    ShowItem:= TEasyScanGroupInfo(vGroup).eSystem = SystemSelectorToolBar.Tag;
-    if ShowItem and (SystemSelectorToolBar.Tag = idMAME) then
+    ShowItem:= TEasyScanGroupInfo(vGroup).eSystem = SystemIcon.Tag;
+    if ShowItem and (SystemIcon.Tag = idMAME) then
     begin
       case MAMEMachinesFilter.ItemIndex of
         //0: ShowItem:= True;
         1: ShowItem:= TEasyScanGroupInfo(vGroup).eSoftwareName = '';
         2: ShowItem:= TEasyScanGroupInfo(vGroup).eSoftwareName <> '';
       end;
+
+      if ShowItem and (SetsFilter_CHDs.Checked) then
+         ShowItem:= TEasyScanGroupInfo(vGroup).eCHDsCount > 0; // this filter takes priority over other CheckBox filters
+
+      if ShowItem and (TEasyScanGroupInfo(vGroup).eBiosName <> '') then
+         ShowItem:= SetsFilter_BiosROMs.Checked;
+
+      if ShowItem and TEasyScanGroupInfo(vGroup).eHaveDeviceROMs then
+         ShowItem:= SetsFilter_DeviceROMs.Checked;
     end;
+
     vGroup.Visible:= ShowItem;
 
     vGroup:= ROMsListView.Groups.NextGroup(vGroup);
@@ -1175,14 +1297,11 @@ end;
 
 procedure TFormArcadeScanGamesResults.sysMAMEClick(Sender: TObject);
 begin
-  SystemSelectorToolBar.Tag:= TToolButton(Sender).ImageIndex;
+  SystemIcon.Tag:= TToolButton(Sender).Tag;
   SystemIcon.Picture:= nil;
-  FormMain.LoadIconIntoImage(FormMain.GetArcadeSystemIconFileName(SystemSelectorToolBar.Tag), SystemIcon);
-  //FormMain.IL_ArcadeSystem_ExtraLarge.GetIcon(SystemSelectorToolBar.Tag, SysIcon.Picture.Icon);
-  LabelEmulatorVersion.Caption:=  FormMain.EmulatorVersion[SystemSelectorToolBar.Tag];
-  LabelGamesListVersion.Caption:= GamesListVersion[SystemSelectorToolBar.Tag];
-  //FormScanResults.Caption:= FormMain.GetEmulatorDescription(SystemSelectorToolBar.Tag, True)+' - Games with Missing ROMs/CHDs';
-  //IL_ScanResults.GetIcon(SystemSelectorToolBar.Tag, FormScanResults.Icon);
+  FormMain.LoadSystemIcon(SystemIcon.Tag, SystemIcon, False);
+  LabelEmulatorVersion.Caption:=  FormMain.EmulatorVersion[SystemIcon.Tag];
+  LabelGamesListVersion.Caption:= 'Games List: '+GamesListVersion[SystemIcon.Tag];
 
   MAMEMachinesFilter.Visible:= sysMAME.Down;
   MAMEMachinesFilterIcon.Visible:= MAMEMachinesFilter.Visible;
@@ -1217,7 +1336,7 @@ procedure TFormArcadeScanGamesResults.ROMsListViewItemPaintText(
 
 begin
   //FormMain.ELV_ItemPaintText_General(ROMsListView, Item, ACanvas);
-  if TEasyScanInfo(Item).eStateImageIndex in [MaxArcadeSystems+2, MaxArcadeSystems+3] then
+  if TEasyScanInfo(Item).eStateImageIndex in [1, 2] then // [MaxArcadeSystems+2, MaxArcadeSystems+3] then
      begin // missing file and CHD with bad SHA-1 / MD-5 checksum
        if IsNightMode then
           ACanvas.Font.Color:= clSilver
@@ -1265,7 +1384,7 @@ begin
       begin
         // MaxArcadeSystems+1
         
-        if TEasyScanInfo(Item).eStateImageIndex in [MaxArcadeSystems+2, MaxArcadeSystems+3] then
+        if TEasyScanInfo(Item).eStateImageIndex in [1, 2] then //in [MaxArcadeSystems+2, MaxArcadeSystems+3] then
            begin
              if IsNightMode then
                 ACanvas.Font.Color:= clrLightRed
@@ -1294,7 +1413,7 @@ begin
   // MarArcadeSystems+2  -> CHD bad SHA-1 checksum
   if Item.Selected then
      begin
-       BarMode:= Ord(TEasyScanInfo(Item).eStateImageIndex = MaxArcadeSystems+3);
+       BarMode:= Ord(TEasyScanInfo(Item).eStateImageIndex = 2); //= MaxArcadeSystems+3);
        if IsNightMode then
           FormMain.ELV_SetRibbonNightColors(BarMode, ROMsListView)
        else
@@ -1350,14 +1469,6 @@ begin
   FilterGamesList;
 end;
 
-procedure TFormArcadeScanGamesResults.SystemSelectorToolBarCustomDraw(
-  Sender: TToolBar; const ARect: TRect; var DefaultDraw: Boolean);
-begin
-  FormMain.DrawGradient(Sender.Canvas, Sender.ClientRect, gsVertical, False,
-                        PanelTop.Canvas.Pixels[3, TToolBar(Sender).Top],
-                        PanelTop.Canvas.Pixels[3, TToolBar(Sender).Top+TToolBar(Sender).Height], 0, 0, 0);
-end;
-
 procedure TFormArcadeScanGamesResults.PopupSplittersMeasureMenuItem(
   Sender: TObject; AMenuItem: TMenuItem; ACanvas: TCanvas; var Width,
   Height: Integer; ABarVisible: Boolean; var DefaultMeasure: Boolean);
@@ -1379,6 +1490,12 @@ begin
        Key:= #0; // to remove the "ding" sound when pressing keys like ENTER, ESC
        ButtonFilterTitleApply_ToolBar.Click;
      end
+end;
+
+procedure TFormArcadeScanGamesResults.SetsFilter_CHDsClick(
+  Sender: TObject);
+begin
+  FilterGamesList;
 end;
 
 end.

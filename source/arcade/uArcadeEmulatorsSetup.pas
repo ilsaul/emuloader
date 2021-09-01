@@ -97,6 +97,7 @@ type
     newbuildMAME, newbuildHBMAME: String;
     //IsExeMAME: Boolean; // for AlterMAME default settings button
     elIni: TMemIniFile;
+    procedure Resize4K;
     function  VerifyEmulator(SystemID: Byte): Boolean;
     function  VerifyAlterMAME1: Boolean;
     function  VerifyAlterMAME2: Boolean;
@@ -117,9 +118,112 @@ var
 
 implementation
 
-uses uMain, uPreferences, uStatus;
+uses uMain, uStatus;
 
 {$R *.DFM}
+
+procedure TFormArcadeEmulatorsSetup.Resize4K;
+
+  procedure  SetEmulatorPos4K(iIconEmulator: TImage; iIconEmulatorTop: Integer;
+                             iEmulatorTitle: TShadowLabel;
+                             iEmulatorFile: TEditEx;
+                             iSelectButton, iClearButton: TBitBtnEx;
+                             iLabelVersionInfo: TShadowLabel;
+                             iVersionInfo: TEditEx);
+  begin
+    FormMain.Set4KImageIconSpecs(iIconEmulator,  32, 10, iIconEmulatorTop);
+
+    FormMain.Set4KLabelSpecs(iEmulatorTitle, 49, iIconEmulator.Top,      -1, -1, 16);
+    FormMain.Set4KLabelFontNameSpecs(iEmulatorTitle);
+
+    FormMain.Set4KEditFontNameSpecs(iEmulatorFile);
+    FormMain.Set4KButtonSpecs(iClearButton,  ClientWidth-89-10,       iIconEmulator.Top+40,      89, 36, 16);
+    FormMain.Set4KButtonSpecs(iSelectButton, iClearButton.Left-3-89,  iIconEmulator.Top+40,      89, 36, 16);
+    FormMain.Set4KEditSpecs(iEmulatorFile, 10, iIconEmulator.Top+40, iSelectButton.Left-5-10, 36, 16);
+
+    //FormMain.Set4KEditSpecs(iEmulatorFile,     10, iIconEmulator.Top+40, 1058, 36, 16);
+    //FormMain.Set4KButtonSpecs(iSelectButton, 1073, iEmulatorFile.Top,      89, 36, 16);
+    //FormMain.Set4KButtonSpecs(iClearButton,  1165, iEmulatorFile.Top,      89, 36, 16);
+                                                                   //+47 ?
+
+    FormMain.Set4KEditFontNameSpecs(iVersionInfo);
+    FormMain.Set4KEditSpecs(iVersionInfo,       10, iEmulatorFile.Top+46, 1244, 36, 16);
+    FormMain.Set4KLabelSpecs(iLabelVersionInfo, 14, iVersionInfo.Top+3,     -1, -1, 16);
+    FormMain.Set4KLabelFontNameSpecs(iLabelVersionInfo);
+  end;
+  
+begin
+  if not Is4KMode then
+     Exit;
+
+  with FormArcadeEmulatorsSetup do
+  begin
+    ClientWidth:= 1264;
+    ClientHeight:= 890;
+    Font.Size:= 16;
+    FormMain.Set4KImageListSpecs(IL_Systems, 128);
+
+    PanelBottom.Height:= 71;
+    FormMain.Set4KButtonSpecs(ButtonSetOptions,    10, 16, 168, 45, 16);
+    FormMain.Set4KButtonSpecs(ButtonUpdateSystem, 188, 16, 168, 45, 16);
+    FormMain.Set4KButtonSpecs(ButtonClearSystem,  366, 16, 168, 45, 16);
+    FormMain.Set4KButtonSpecs(ButtonOk,           908, 16, 168, 45, 16);
+    FormMain.Set4KButtonSpecs(ButtonCancel,      1086, 16, 168, 45, 16);
+
+    FormMain.Set4KArcadeSysPanel(PanelSystemsSelect, SystemSelector, PanelSystemTitle, LabelSystemTitle, PanelSystemTitleBottom);
+
+    FormMain.Set4KPanelSpecs(PanelEmulatorDetails, -1, PanelSystemTitleBottom.Top+PanelSystemTitleBottom.Height{238}, ClientWidth, 570);
+
+    SetEmulatorPos4K(IconEmulator, 10, LabelArcade_exec, Arcade_exec, ButtonBrowseArcade_exec, ButtonClearArcade_exec,
+                     LabelArcade_versionInfo, Arcade_versioninfo);
+
+    FormMain.Set4KPanelSpecs(PanelMAMEEmulatorsText, 607, 10, 495, 31);
+
+    FormMain.Set4KLabelSpecs(LabelMAMELink_Tabs, 74, 0, -1, -1, 16);//348, 31, 16);
+    LabelMAMELink_Tabs.Caption:= '•                                •                     •';
+    FormMain.Set4KLabelSpecs(LabelMAMELink1,   1, 0, -1, -1, 16);
+    FormMain.Set4KLabelSpecs(LabelMAMELink2,  92, 0, -1, -1, 16);
+    FormMain.Set4KLabelSpecs(LabelMAMELink3, 295, 0, -1, -1, 16);
+    FormMain.Set4KLabelSpecs(LabelMAMELink4, 428, 0, -1, -1, 16);
+
+                                          // Arcade_versioninfo.Top+68 // or +69 ?  // 32 pixels of space
+    SetEmulatorPos4K(IconEmulatorAlterMAME1, 164, LabelAlterMAME1, AlterMAME1_exec, ButtonBrowseAlterMAME1, ButtonClearAlterMAME1,
+                     LabelAlterMAME1_versioninfo, AlterMAME1_versioninfo);
+    FormMain.Set4KLabelSpecs(LabelAlterMAME1_Tip1, 674, LabelAlterMAME1.Top, -1, -1, 16);
+
+    SetEmulatorPos4K(IconEmulatorAlterMAME2, 318, LabelAlterMAME2, AlterMAME2_exec, ButtonBrowseAlterMAME2, ButtonClearAlterMAME2,
+                     LabelAlterMAME2_versioninfo, AlterMAME2_versioninfo);
+    FormMain.Set4KLabelSpecs(LabelAlterMAME2_Tip1, 697, LabelAlterMAME2.Top, -1, -1, 16);
+
+    FormMain.Set4KCheckBoxSpecs(AlterMAME1_Autorun, 10, 477, 355, 36, 16);
+    FormMain.Set4KCheckBoxFontNameSpecs(AlterMAME1_Autorun);
+    FormMain.Set4KLabelSpecs(LabelAlterMAME1_Autorun, 453, AlterMAME1_Autorun.Top+2, -1, -1, 16);
+
+    FormMain.Set4KCheckBoxSpecs(AlterMAME2_Autorun, 10, 512, 355, 36, 16); // 512, not 514
+    FormMain.Set4KCheckBoxFontNameSpecs(AlterMAME2_Autorun);
+    FormMain.Set4KLabelSpecs(LabelAlterMAME2_Autorun, 453, AlterMAME2_Autorun.Top+2, -1, -1, 16);
+
+    FormMain.Set4KButtonSpecs(ButtonHelpAlterMAME, ClientWidth-168-10, 494, 168, 36, 16);
+
+    FormMain.Set4KCheckBoxSpecs(UseLargeIcons, 640, 20, 140, 36, 16);
+    UseLargeIcons.Visible:= False; // this setting is useless in 4K mode
+
+    if Is4KMode then
+       begin
+         FormMain.IL_Misc_Large.GetIcon(1, IconEmulator.Picture.Icon);
+         FormMain.IL_Misc_Large.GetIcon(1, IconEmulatorAlterMAME1.Picture.Icon);
+         FormMain.IL_Misc_Large.GetIcon(1, IconEmulatorAlterMAME2.Picture.Icon);
+       end
+    else
+       begin
+         FormMain.IL_LeftPanel.GetIcon(1, IconEmulator.Picture.Icon);
+         FormMain.IL_LeftPanel.GetIcon(1, IconEmulatorAlterMAME1.Picture.Icon);
+         FormMain.IL_LeftPanel.GetIcon(1, IconEmulatorAlterMAME2.Picture.Icon);
+       end;
+
+    // FormArcadeEmulatorsSetup.Color:= clBlue; // debug only
+  end;
+end;
 
 procedure TFormArcadeEmulatorsSetup.GetEmulatorDefaultDescription(SystemID: Byte; UpdateLabel: Boolean = True);
 var
@@ -189,6 +293,8 @@ procedure TFormArcadeEmulatorsSetup.FormShow(Sender: TObject);
 var
   Loop: Integer;
 begin
+  Resize4K;
+
   if IsNightMode then
      begin
        FormArcadeEmulatorsSetup.Color:= menu_background_color[1];
@@ -255,15 +361,19 @@ begin
 
   ReadWriteSettings(True);
 
-  FormMain.IL_LeftPanel.GetIcon(1, IconEmulator.Picture.Icon);
-  FormMain.IL_LeftPanel.GetIcon(1, IconEmulatorAlterMAME1.Picture.Icon);
-  FormMain.IL_LeftPanel.GetIcon(1, IconEmulatorAlterMAME2.Picture.Icon);
+  if not Is4KMode then //FormMain.Menu4KMode2160pEnable.Checked then
+     begin
+       FormMain.IL_LeftPanel.GetIcon(1, IconEmulator.Picture.Icon);
+       FormMain.IL_LeftPanel.GetIcon(1, IconEmulatorAlterMAME1.Picture.Icon);
+       FormMain.IL_LeftPanel.GetIcon(1, IconEmulatorAlterMAME2.Picture.Icon);
+     end;
 
   FormMain.ELV_ResetNormalColors(SystemSelector);
   if IsNightMode then
      FormMain.ELV_SetNightModeColors(SystemSelector);
      
   FormMain.LoadSystemsIcons(IL_Systems, False);
+  FormMain.ShowIconErrorMessage;
 
   // show emulator icon like in EmuCon ???
   //GetExtIcon('.exe', IL_EmulatorIcon); // .exe files
@@ -395,9 +505,9 @@ begin
   end;
   if not EmulatorFound then
      begin
-       GenerateMessage('Error', FormArcadeEmulatorsSetup.Caption, '    No emulator filenames were selected. '+
-                       'Please select at least one emulator or hit cancel button to terminate '+
-                       'the application...', 2, False, 1);
+       FormMain.ShowMessageBox('Error', FormArcadeEmulatorsSetup.Caption, '    No emulator filenames were selected. '+
+                               'Please select at least one emulator or hit cancel button to terminate '+
+                               'the application...', 2, False, 1);
        Exit;
      end;
   FormMain.MainMenuOptions.Tag:= 0;
@@ -440,7 +550,7 @@ begin
        FormMain.buildAlterMAME[2]:= newbuildAlterMAME[2];
      end;
 
-  if not FormMain.CheckReadOnly(FormMain.GetArcadeEmulatorsFile) then
+  if not CheckReadOnly(FormMain.GetArcadeEmulatorsFile) then
      elIni.UpdateFile;
   FreeAndNil(elIni);
   Close;
@@ -611,7 +721,7 @@ end;
 
 procedure TFormArcadeEmulatorsSetup.ButtonHelpAlterMAMEClick(Sender: TObject);
 begin
-  FormMain.InitMessageBox; // CallMessageBox;
+  FormMain.InitMessageBox;
   FormMain.AddMsgText('    You can select a second and a third MAME emulator to run games. Handy when you want/need to run a game that '+
                       'requires a different MAME build or a MAME variant like ');
   FormMain.AddMsgText('SDLMAME', MsgTxtColors.colorKeyTitle, [fsBold]);
@@ -633,7 +743,7 @@ begin
   FormMain.AddMsgText(' in games popup menu.'+#13#10+#13#10+
                       '    No ROMs validation is made so, make sure to audit your ROMs with a ROMs manager '+
                       'tool like ClrMAME or RomCenter. The emulators must also be fully configured before you can use them.');
-  GenerateMessage('Help', 'What is AlterMAME ?', '', 2);
+  FormMain.ShowMessageBox('Help', 'What is AlterMAME ?', '', 2);
 end;
 
 procedure TFormArcadeEmulatorsSetup.ButtonBrowseAlterMAME1Click(Sender: TObject);
@@ -762,6 +872,8 @@ procedure TFormArcadeEmulatorsSetup.UseLargeIconsClick(Sender: TObject);
 var
   iDiff: Integer;
 begin
+  if Is4KMode then //FormMain.Menu4KMode2160pEnable.Checked then
+     Exit;
   if Screen.Height < 720 then
      Exit;
   if UseLargeIcons.Checked then
@@ -772,13 +884,14 @@ begin
   IL_Systems.Height:= IL_Systems.Width;
 
   FormMain.LoadSystemsIcons(IL_Systems);
+  FormMain.ShowIconErrorMessage;
 
   if UseLargeIcons.Checked then
   begin
     if SystemSelector.CellSizes.Icon.Height = 166 then
        Exit;
 
-    SystemSelector.PaintInfoItem.IconViewAdjustIconTopBorder:= True;
+    SystemSelector.PaintInfoItem.IconViewRemoveIconTopBorder:= True;
     iDiff:=(166*2)-SystemSelector.Height;
 
     FormArcadeEmulatorsSetup.ClientHeight:= FormArcadeEmulatorsSetup.ClientHeight+iDiff;
@@ -795,7 +908,7 @@ begin
   begin
     if SystemSelector.CellSizes.Icon.Height = 92 then
        Exit;
-    SystemSelector.PaintInfoItem.IconViewAdjustIconTopBorder:= False;
+    SystemSelector.PaintInfoItem.IconViewRemoveIconTopBorder:= False;
     iDiff:= SystemSelector.Height-92;
     SystemSelector.Height:= 92;
     SystemSelector.CellSizes.Icon.Height:= 92;
