@@ -755,6 +755,7 @@ type
     ShadowLabel146: TShadowLabel;
     EditEx94: TEditEx;
     BitBtnEx70: TBitBtnEx;
+    AdvOfficeCheckBoxEx3: TAdvOfficeCheckBoxEx;
   private
     { Private declarations }
   public

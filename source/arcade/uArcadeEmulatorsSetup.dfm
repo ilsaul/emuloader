@@ -239,9 +239,9 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
     object LabelAlterMAME1: TShadowLabel
       Left = 26
       Top = 76
-      Width = 170
+      Width = 75
       Height = 16
-      Caption = 'AlterMAME 1 (.exe; .bat; .cmd)'
+      Caption = 'AlterMAME 1'
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlack
       Font.Height = -12
@@ -281,9 +281,9 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
     object LabelArcade_exec: TShadowLabel
       Left = 26
       Top = 3
-      Width = 168
+      Width = 73
       Height = 16
-      Caption = 'Emulator File (.exe; .bat; .cmd)'
+      Caption = 'Emulator File'
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlack
       Font.Height = -12
@@ -346,9 +346,9 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
     object LabelAlterMAME2: TShadowLabel
       Left = 26
       Top = 149
-      Width = 170
+      Width = 75
       Height = 16
-      Caption = 'AlterMAME 2 (.exe; .bat; .cmd)'
+      Caption = 'AlterMAME 2'
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlack
       Font.Height = -12

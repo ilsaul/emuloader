@@ -115,10 +115,10 @@ object FormConsCompEmulatorsSetup: TFormConsCompEmulatorsSetup
     object LabelEmulatorFile: TShadowLabel
       Left = 56
       Top = 135
-      Width = 220
+      Width = 125
       Height = 16
-      Hint = 'Emulator %d Executable (.exe; .bat; .cmd)'
-      Caption = 'Emulator 1 Executable (.exe; .bat; .cmd)'
+      Hint = 'Emulator %d Executable'
+      Caption = 'Emulator 1 Executable'
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlack
       Font.Height = -12

@@ -264,8 +264,8 @@ var
 
     iSize:= iWidth;
     if iButton1 <> nil then
-       iSize:= iWidth-5-70;
-    FormMain.Set4KEditSpecs(iEdit, iLeft, iTopValue+36, iWidth, 36, 16);
+       iSize:= iSize-5-70;
+    FormMain.Set4KEditSpecs(iEdit, iLeft, iTopValue+36, iSize, 36, 16);
     if iButton1 <> nil then
        FormMain.Set4KButtonSpecs(iButton1, iLeft+iSize+5, iTopValue+36, 70, 36, 16);
     iTopValue:= iTopValue+82;
@@ -282,7 +282,7 @@ var
 
     iSize:= iWidth;
     if iButton <> nil then
-       iSize:= iSize-70-5;
+       iSize:= iSize-5-70;
     FormMain.Set4KComboBoxSpecs(iComboBox, iLeft, iTopValue+36, iSize, 16);
     if iButton <> nil then
        FormMain.Set4KButtonSpecs(iButton, iLeft+iSize+5, iTopValue+36, 70, 36, 16);

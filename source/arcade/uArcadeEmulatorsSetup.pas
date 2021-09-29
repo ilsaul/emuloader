@@ -673,7 +673,7 @@ end;
 procedure TFormArcadeEmulatorsSetup.ButtonBrowseArcade_execClick(
   Sender: TObject);
 begin
-  if FormMain.DialogOpenFile(2, 'Select an emulator file for '+FormMain.GetArcadeEmulatorDescription(SystemSelector.Tag),
+  if FormMain.DialogOpenFile(0, 'Select an emulator file for '+FormMain.GetArcadeEmulatorDescription(SystemSelector.Tag),
                              Arcade_exec, False) = '' then
      Exit;
   if FileExists(Arcade_exec.Text) then
@@ -748,7 +748,7 @@ end;
 
 procedure TFormArcadeEmulatorsSetup.ButtonBrowseAlterMAME1Click(Sender: TObject);
 begin
-  if FormMain.DialogOpenFile(2, 'Select an emulator file for AlterMAME',
+  if FormMain.DialogOpenFile(0, 'Select an emulator file for AlterMAME',
                              AlterMAME1_exec, False) = '' then
      Exit;
   if FileExists(AlterMAME1_exec.Text) then
@@ -931,10 +931,9 @@ begin
      ReadWriteSettings(False);
 end;
 
-procedure TFormArcadeEmulatorsSetup.ButtonBrowseAlterMAME2Click(
-  Sender: TObject);
+procedure TFormArcadeEmulatorsSetup.ButtonBrowseAlterMAME2Click(Sender: TObject);
 begin
-  if FormMain.DialogOpenFile(2, 'Select an emulator file for AlterMAME 2',
+  if FormMain.DialogOpenFile(0, 'Select an emulator file for AlterMAME 2',
                              AlterMAME2_exec, False) = '' then
      Exit;
   if FileExists(AlterMAME2_exec.Text) then

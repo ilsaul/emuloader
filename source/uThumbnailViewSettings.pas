@@ -288,10 +288,16 @@ begin
      end;
 
   if FormMain.GamesListView.PaintInfoItem.BorderColor <> BorderColor.Selected then
-     FormMain.GamesListView.PaintInfoItem.BorderColor:=  BorderColor.Selected;
+     begin
+       FormMain.GamesListView.PaintInfoItem.BorderColor:=  BorderColor.Selected;
+       UpdateSettings:= True;
+     end;
 
   if FormMain.GamesListView.PaintInfoItem.ShowBorder <> ShowBorder.Checked then
-     FormMain.GamesListView.PaintInfoItem.ShowBorder:=  ShowBorder.Checked;
+     begin
+       FormMain.GamesListView.PaintInfoItem.ShowBorder:=  ShowBorder.Checked;
+       UpdateSettings:= True;
+     end;
 
   if FormMain.GamesListView.PaintInfoItem.HideCaption <> not ShowGameTitles.Checked then
      begin

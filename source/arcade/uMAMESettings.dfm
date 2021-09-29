@@ -2198,7 +2198,7 @@ object FormMAMESettings: TFormMAMESettings
       end
       object Samples: TAdvOfficeCheckBoxEx
         Left = 155
-        Top = 38
+        Top = 20
         Width = 90
         Height = 20
         Hint = 'Enable the use of external samples if available'
@@ -2349,6 +2349,27 @@ object FormMAMESettings: TFormMAMESettings
           'Details Level 2'
           'Details Level 3'
           'Details Level 4')
+      end
+      object AudioUseCompressor: TAdvOfficeCheckBoxEx
+        Left = 155
+        Top = 40
+        Width = 123
+        Height = 20
+        Hint = 
+          'It temporarily reduces the overall volume when the audio output ' +
+          'is overdriven'
+        Checked = True
+        Enabled = False
+        TabOrder = 7
+        Alignment = taLeftJustify
+        Caption = 'Enable Compressor'
+        ReturnIsTab = False
+        State = cbChecked
+        Themed = True
+        CustomIconsEnabled = False
+        CustomEnableIconHD = False
+        CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+        CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
       end
     end
     object PortAudioSettingsGroupBox: TPanelEx
@@ -4289,7 +4310,7 @@ object FormMAMESettings: TFormMAMESettings
         HintType = ehtToolTip
         Header.Columns.Items = {
           0600000001000000110000005445617379436F6C756D6E53746F726564FFFECE
-          0006000000800800010100010000000000000115010000FFFFFF1F0001000000
+          0006000000800800010100010000000000000117010000FFFFFF1F0001000000
           00000000000000000000000000000000}
         Header.Draggable = False
         Header.FixedSingleColumn = True

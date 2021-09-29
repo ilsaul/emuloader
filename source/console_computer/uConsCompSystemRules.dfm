@@ -38,7 +38,7 @@ object FormConsCompSystemRules: TFormConsCompSystemRules
     object LabelTitle: TShadowLabel
       Left = 56
       Top = 16
-      Width = 77
+      Width = 75
       Height = 17
       Caption = 'Label Title'
       Font.Charset = ANSI_CHARSET

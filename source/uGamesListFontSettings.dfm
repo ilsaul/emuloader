@@ -24,7 +24,7 @@ object FormGamesListFontSettings: TFormGamesListFontSettings
   PixelsPerInch = 96
   TextHeight = 15
   object GamesFont: TEasyListview
-    Left = 8
+    Left = 0
     Top = 0
     Width = 984
     Height = 435

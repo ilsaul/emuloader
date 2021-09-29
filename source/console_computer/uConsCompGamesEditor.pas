@@ -932,7 +932,7 @@ begin
      begin
        FormMain.SetToolBarPanelColors(PanelToolBarGamesEditor, FormMain.PanelSearchGames_ToolBar);
        FormMain.SetToolBarPanelColors(PanelToolBarGamesEditor, PanelSearchGames);
-       LabelToolBarFilterTitle.Font:= FormMain.LabelSearchGamesFilter_ToolBar.Font;
+       //LabelToolBarFilterTitle.Font:= FormMain.LabelSearchGamesFilter_ToolBar.Font;
      end;
 
   ReadSettings;

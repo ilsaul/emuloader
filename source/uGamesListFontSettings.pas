@@ -718,11 +718,11 @@ begin
   DeInitConsoleComputerFonts(False);
   if TMenuItem(Sender).Tag = 0 then
      begin // reset to default
-        FormMain.SetDefaultFont(tFont_Parent,                 0, False, False);
-        FormMain.SetDefaultFont(tFont_Clone,                  1, False, False);
-        FormMain.SetDefaultFont(tFont_Preliminary,            2, False, False);
-        FormMain.SetDefaultFont(tFont_MissingROMs,            3, False, False);
-        FormMain.SetDefaultFont(tFont_MissingROMsPreliminary, 4, False, False);
+        FormMain.SetDefaultFont(tFont_Parent,                 0, IsNightMode, Is4KMode);
+        FormMain.SetDefaultFont(tFont_Clone,                  1, IsNightMode, Is4KMode);
+        FormMain.SetDefaultFont(tFont_Preliminary,            2, IsNightMode, Is4KMode);
+        FormMain.SetDefaultFont(tFont_MissingROMs,            3, IsNightMode, Is4KMode);
+        FormMain.SetDefaultFont(tFont_MissingROMsPreliminary, 4, IsNightMode, Is4KMode);
 
         GamesFont.Font:= tFont_Parent;
      end
@@ -766,11 +766,11 @@ begin
          if TMenuItem(Sender).Tag = 0 then
             begin
               case selItem.ImageIndex of
-                0: FormMain.SetDefaultFont(tFont_Parent,                 0, False, False);
-                1: FormMain.SetDefaultFont(tFont_Clone,                  1, False, False);
-                2: FormMain.SetDefaultFont(tFont_Preliminary,            2, False, False);
-                3: FormMain.SetDefaultFont(tFont_MissingROMs,            3, False, False);
-                4: FormMain.SetDefaultFont(tFont_MissingROMsPreliminary, 4, False, False);
+                0: FormMain.SetDefaultFont(tFont_Parent,                 0, IsNightMode, Is4KMode);
+                1: FormMain.SetDefaultFont(tFont_Clone,                  1, IsNightMode, Is4KMode);
+                2: FormMain.SetDefaultFont(tFont_Preliminary,            2, IsNightMode, Is4KMode);
+                3: FormMain.SetDefaultFont(tFont_MissingROMs,            3, IsNightMode, Is4KMode);
+                4: FormMain.SetDefaultFont(tFont_MissingROMsPreliminary, 4, IsNightMode, Is4KMode);
               end;
             end
          else
@@ -789,7 +789,7 @@ begin
          if TMenuItem(Sender).Tag = 0 then
             begin
               if selItem.StateImageIndex = 0 then
-                 FormMain.SetDefaultFont(GamesFont.Font, 0, False, False)
+                 FormMain.SetDefaultFont(GamesFont.Font, 0, IsNightMode, Is4KMode)
               else
                  FreeAndNil(tFont_ConsoleComputer[selItem.StateImageIndex]);
             end

@@ -6,7 +6,7 @@ uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
   Dialogs, uCommon, uCommonCustom, MPCommonObjects, MPCommonUtilities, EasyListview,
   ImgList, StdCtrls, Buttons, ComCtrls, ShadowLabel, PanelEx, ExtCtrls,
-  IniFiles, GraphicEx, RichEditURL, ButtonsEx, XiProgressBar, TntComCtrls;
+  IniFiles, GraphicEx, ButtonsEx, XiProgressBar, TntComCtrls;
 
 type
   TFormCopyMoveGameFiles = class(TForm)

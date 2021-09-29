@@ -241,7 +241,6 @@ type
     NightModeSearchGamesPanelColorsBoxPreviewButtonClose: TShadowLabel;
     NightModeSearchGamesPanelColorsBoxPreviewLabel: TShadowLabel;
     NightModePanelSearchGames: TPanelEx;
-    NightModeLabelSearchGamesFilter: TShadowLabel;
     NightModeLabelSearchGamesBy: TShadowLabel;
     NightModeFilterGameTitle: TEditEx;
     NightModeSearchGamesPanelColorsButtonPreview: TBitBtnEx;
@@ -1331,11 +1330,11 @@ procedure TFormNightMode.NightModeSearchGamesPanelFilterFontColorSelect(
 begin
   if IsNightMode then
      begin
-       FormMain.LabelSearchGamesFilter_ToolBar.Font.Color:= NightModeSearchGamesPanelFilterFontColor.Selected;
+       //FormMain.LabelSearchGamesFilter_ToolBar.Font.Color:= NightModeSearchGamesPanelFilterFontColor.Selected;
        FormMain.LabelSelectCPU.Font.Color:=                 NightModeSearchGamesPanelFilterFontColor.Selected;
        FormMain.LabelCustomCPUFilter.Font.Color:=           NightModeSearchGamesPanelFilterFontColor.Selected;
      end;
-  NightModeLabelSearchGamesFilter.Font.Color:= NightModeSearchGamesPanelFilterFontColor.Selected; // sample panel
+  //NightModeLabelSearchGamesFilter.Font.Color:= NightModeSearchGamesPanelFilterFontColor.Selected; // sample panel
 end;
 
 procedure TFormNightMode.NightModeSearchGamesPanelFieldFontColorSelect(

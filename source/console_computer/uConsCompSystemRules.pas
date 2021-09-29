@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, SysUtils, Classes, Graphics, Controls, Forms,
-  StdCtrls, Buttons, PanelEx, ComCtrls, ShadowLabel, RichEditURL,
+  StdCtrls, Buttons, PanelEx, ComCtrls, ShadowLabel,
   ShellApi, ExtCtrls, TntComCtrls;
 
 type

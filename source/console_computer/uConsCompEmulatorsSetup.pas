@@ -877,7 +877,7 @@ procedure TFormConsCompEmulatorsSetup.ButtonSelectEmulatorClick(Sender: TObject)
 var
   fileStr: String;
 begin
-  if FormMain.DialogOpenFile(2, 'Select an emulator file for '+SystemsListCustom[Systems.Tag, 0], // Systems.Selection.First.Caption,
+  if FormMain.DialogOpenFile(0, 'Select an emulator file for '+SystemsListCustom[Systems.Tag, 0], // Systems.Selection.First.Caption,
                              EmulatorFile, False) <> '' then
      begin
        EmulatorFile.Tag:= 0;
@@ -1509,10 +1509,8 @@ begin
   LabelEmulatorFile.Caption:= Format(LabelEmulatorFile.Hint, [PanelEmulators.Tag]);
   //LabelEmuTitle.Caption:= Format(LabelEmuTitle.Hint, [PanelEmulators.Tag]);
   ButtonClearEmulator.Hint:= 'Clear emulator '+IntToStr(PanelEmulators.Tag)+' settings (emulator and parameters)';
-  //LabelEmulatorFile.Caption:= 'Emulator '+IntToStr(PanelEmulators.Tag)+' Executable (.exe; .bat; .cmd)';
   ShowEmulatorDetails(PanelEmulators.Tag);
 end;
-
 
 procedure TFormConsCompEmulatorsSetup.IconCartridgeResetClick(Sender: TObject);
 begin

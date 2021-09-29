@@ -7,7 +7,7 @@ uses
   StdCtrls, ImgList, ExtCtrls, MPCommonObjects, MPCommonUtilities,
   EasyListview, Menus, BarMenus, IniFiles, ShellAPI, Buttons,
   ComCtrls, ToolWin, SplitterEx, PanelEx, ShadowLabel, ButtonsEx,
-  RichEditURL, EditEx, TntComCtrls;
+  EditEx, TntComCtrls;
 
 type
   TMissingIconInfo = class(TEasyItemStored)

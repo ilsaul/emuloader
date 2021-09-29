@@ -1101,7 +1101,12 @@ procedure TFormPreferences.SearchGamesPanelFilterFontColorSelect(
   Sender: TObject);
 begin
   if not IsNightMode then
-     FormMain.LabelSearchGamesFilter_ToolBar.Font.Color:= SearchGamesPanelFilterFontColor.Selected;
+     begin
+       //FormMain.LabelSearchGamesFilter_ToolBar.Font.Color:= SearchGamesPanelFilterFontColor.Selected;
+       FormMain.LabelSelectCPU.Font.Color:=                 SearchGamesPanelFilterFontColor.Selected;
+       FormMain.LabelCustomCPUFilter.Font.Color:=           SearchGamesPanelFilterFontColor.Selected;
+     end;
+     //FormMain.LabelSearchGamesFilter_ToolBar.Font.Color:= SearchGamesPanelFilterFontColor.Selected;
 end;
 
 procedure TFormPreferences.SearchGamesPanelFieldFontColorSelect(

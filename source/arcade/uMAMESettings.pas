@@ -775,6 +775,7 @@ type
     FolderShareEmulatedMachinesGroupBoxLabel: TShadowLabel;
     FolderShareEmulatedMachinesButtonSelect: TBitBtnEx;
     FolderShareEmulatedMachines: TEditEx;
+    AudioUseCompressor: TAdvOfficeCheckBoxEx;
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure FormKeyPress(Sender: TObject; var Key: Char);
     procedure ButtonReadFileClick(Sender: TObject);
@@ -1617,7 +1618,8 @@ begin
     MoveComboBox(SampleRate, SampleRateLabel, -1, 10, 298);
     MoveGaugeBar(Volume, VolumeLabel, -1, 10, 298);
 
-    MoveCheckBox(Samples, 81, 333, 235);
+    MoveCheckBox(Samples,            45, 333, 235);
+    MoveCheckBox(AudioUseCompressor, 87, 333, 275);
     MoveComboBox(AudioLatency, AudioLatencyLabel, SampleRateLabel.Top, 333, 223);
     FormMain.Set4KButtonSpecs(AudioLatencyButtonReset, AudioGroupBox.Width-12-70, AudioLatency.Top, 70, 36, 16);
     MoveComboBox(SpeakerReport, SpeakerReportLabel, -1, 333, 298);
@@ -2085,6 +2087,9 @@ begin
       if (EntryString = 'lowlatency ') or
          (EntryString = 'lolat ') then
          LowLatency.Enabled:= True
+      else
+      if EntryString = 'compressor ' then
+         AudioUseCompressor.Enabled:= True
       else
       if EntryString = 'speaker_report ' then
          begin
@@ -3414,6 +3419,9 @@ begin
             else
             if EntryString = 'samples ' then
                Samples.Checked:= GetBooleanValue
+            else
+            if EntryString = 'compressor ' then
+               AudioUseCompressor.Checked:= GetBooleanValue
             else
             if (EntryString = 'volume ') or
                (EntryString = 'vol ') then
@@ -5366,6 +5374,9 @@ begin
          else
          if tmpEntryStr = 'samples ' then
             UpdateMAMELine(EntryString, GetBooleanValue(Samples.Checked))
+         else
+         if tmpEntryStr = 'compressor ' then
+            UpdateMAMELine(EntryString, GetBooleanValue(AudioUseCompressor.Checked))
          else
          if (tmpEntryStr = 'volume ') or
             (tmpEntryStr = 'vol ') then

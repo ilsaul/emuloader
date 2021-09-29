@@ -5,11 +5,11 @@ interface
 uses
   Windows, Messages, SysUtils, Classes, ZipForge, Graphics, Controls, Forms,
   Menus, ComCtrls, ToolWin, ExtCtrls, IniFiles, StdCtrls, Buttons, Dialogs,
-  FileCtrl, GraphicEx, GR32_Image, GR32, GR32_RangeBars, uGR32Extra, {RichEdit,}//for AppendTextW()
+  FileCtrl, GraphicEx, GR32_Image, GR32, GR32_RangeBars, uGR32Extra, // RichEdit, //for AppendTextW()
   TntComCtrls, GR32_Resamplers {$IFDEF Ex},GR32_ResamplersEx {$ENDIF},
   ShellAPI, CommCtrl, JPEG, Themes, BarMenus, XPMan, UxTheme,
   URLMon, OleCtrls, SHDocVw, madExceptVcl, unitExIcon, BcDrawModule,
-  BcCustomDrawModule, BcRectUtilities, ImgList, RichEditURL, AdvGroupBox, AdvOfficeButtons,
+  BcCustomDrawModule, BcRectUtilities, ImgList, AdvGroupBox, AdvOfficeButtons,
   EditEx, ButtonsEx, ColorBoxEx, XiProgressBar, XiTrackBar,
   EasyListview, MPCommonObjects, MPCommonUtilities, MPThreadManager, Math, uCommon, uCommonCustom,
   SplitterEx, BevelEx, ShadowLabel, PanelEx, CommDlg, MPShellTypes, ShellCtrls,
@@ -1099,7 +1099,6 @@ type
     PanelToolBar: TPanelEx;
     PanelSearchGames_ToolBar: TPanelEx;
     FilterGameTitle_ToolBar: TTntEditEx;
-    LabelSearchGamesFilter_ToolBar: TShadowLabel;
     LabelSearchGamesBy_ToolBar: TShadowLabel;
     FilterSearchBarUseSmallIcons: TMenuItem;
     FilterSearchBarShowFilterLabels: TMenuItem;
@@ -2635,9 +2634,9 @@ type
     procedure LoadMediaIcons(IL_Holder: TImageList; EmptyImageList: Boolean = True);
     procedure LoadCategoriesIcons(IL_Holder: TImageList);
 
-    function  AppendText(ARichEdit: TRichEditURL; const AText: WideString; AFontColor: TColor = -1; AFontStyle: TFontStyles = [];
-                         AAlignment: TAlignment = taLeftJustify; const AFontName: String = 'default'; AFontSize: Integer = -1;
-                         AFontCharSet: TFontCharSet = DEFAULT_CHARSET): Integer;
+    //function  AppendText(ARichEdit: TRichEditURL; const AText: WideString; AFontColor: TColor = -1; AFontStyle: TFontStyles = [];
+    //                     AAlignment: TAlignment = taLeftJustify; const AFontName: String = 'default'; AFontSize: Integer = -1;
+    //                     AFontCharSet: TFontCharSet = DEFAULT_CHARSET): Integer;
 
     function  AppendTextW(ARichEdit: TTntRichEdit; const AText: WideString; AFontColor: TColor = -1; AFontStyle: TFontStyles = [];
                           AAlignment: TAlignment = taLeftJustify; ATextBackgroundColor: TColor = -1;
@@ -4046,7 +4045,7 @@ begin
      end;
 
   if Image.PixelFormat <> pf32bit then
-     Image.PixelFormat:= pf32bit;
+     Image.PixelFormat:=  pf32bit;
 
   if MaintainAspectRatio then
      begin
@@ -5615,9 +5614,9 @@ begin
   Result:= '';
   //save file
   case FilterType of
-     0: FilterStr:= 'Executable Files (*.exe)|*.exe';
+     0: FilterStr:= 'Executable Files (*.exe)|*.exe|All Files (*.*)|*.*';
      1: FilterStr:= 'MAME Input Files (*.inp)|*.inp';
-     2: FilterStr:= 'Executable Files/Batch Files (*.exe; *.bat; *.cmd)|*.exe;*.bat;*.cmd';//|All files (*.*)|*.*';
+     2: FilterStr:= 'Executable Files/Batch Files (*.exe; *.bat; *.cmd)|*.exe;*.bat;*.cmd'; //|All Files (*.*)|*.*';
      3: FilterStr:= 'Data Files (*.dat; *.el)|*.dat; *.el';
      4: FilterStr:= 'JPEG Image File (*.jpg; *.jpeg)|*.jpg; *.jpeg';
      5: FilterStr:= 'PNG Image File (*.png)|*.png';
@@ -9801,7 +9800,7 @@ begin
     else
        Index:= 3; // default icon size
     PopupGameIconSize.Tag:= INIFile.ReadInteger('Preferences', 'GameIconSize', Index);
-    //if PopupGameIconSize.Tag <> 3 then
+    if not PopupGameIconSize.Items[PopupGameIconSize.Tag].Checked then //if PopupGameIconSize.Tag <> 3 then
        PopupGameIconSize.Items[PopupGameIconSize.Tag].Click;
     //case PopupGameIconSize.Tag of
     //  0: PopupIconSizeMegaLarge.Click;
@@ -9815,7 +9814,7 @@ begin
     else
        Index:= 3;
     PopupTilesViewGameIconsSize.Tag:= INIFile.ReadInteger('Preferences', 'TilesViewCellSize', Index);
-    //if PopupTilesViewGameIconsSize.Tag <> 3 then
+    if not PopupTilesViewGameIconsSize.Items[PopupTilesViewGameIconsSize.Tag].Checked then // if PopupTilesViewGameIconsSize.Tag <> 3 then
        PopupTilesViewGameIconsSize.Items[PopupTilesViewGameIconsSize.Tag].Click;
 
     ReadColumnProfile; // load columns settings
@@ -20745,6 +20744,14 @@ var
             end;
        end;
 
+    if FileID in [1, 2] then
+       begin
+         // device sets now have ROMs from "parent sets" (MAME v0.236 and newer)
+         // bios sets have this too
+         if romNameMerge <> '' then
+            ROMInfoFull[6]:= '1'; // ROM is from the parent set; change tag index in position 6 (this is for MAME 0.236 and newer)
+       end;
+
     if FileID = 2 then // parsing bios sets
        BiosInfoROM:='<name>'+romName+'<crc>'+romCRC32+'<sha1>'+romSHA1+'='+TempGameVars.eBiosName;
 
@@ -20803,7 +20810,7 @@ var
     end;
 
     if FileID = 1 then
-       HasROMs:= True; // this is used only when creating device sets list!!!!!
+       HasROMs:= True; // this is used only when creating device sets list
   end;
 
 begin
@@ -20907,7 +20914,7 @@ begin
                 HasROMs:= False;
                 GetScreenRes:= False;
                 ROMsHeaderAdded:= False;
-                IsDiscreteAudio:= PosEx('discrete', LowerCase(TempGameVars.eDriverName)) <> 0; // for UME and MAME 0.162+
+                IsDiscreteAudio:= PosEx('discrete', LowerCase(TempGameVars.eDriverName)) <> 0; // for MAME 0.162+
                 if IsDiscreteAudio then
                    TempGameVars.eAudioType:= 1; // 0 -> chip (normal) -- 1 -> discrete
                 TempString:= '';
@@ -25787,7 +25794,7 @@ begin
             begin
               if IsROM_Device(TEasyGameInfo(addedItem).eROMIdentification) then
                  begin
-                   if IsFileID_DeviceROM(FileID) and (romCRC32 <> '') and (not IsParentROM) then
+                   if IsFileID_DeviceROM(FileID) and (romCRC32 <> '') then // and (not IsParentROM) then // device sets can have parent ROMs now (MAME 0.236 and newer)
                       TEasyGameInfo(addedItem).eGameROMsNoDump:= False; // GameROMsAllNoDump:= False;
 
                    if IsFileID_DeviceROM(FileID) then //FileID = 1 then
@@ -25802,7 +25809,7 @@ begin
               else
               if IsROM_Bios(TEasyGameInfo(addedItem).eROMIdentification) then
                  begin
-                   if IsFileID_BiosROM(FileID) and (romCRC32 <> '') and (not IsParentROM) then
+                   if IsFileID_BiosROM(FileID) and (romCRC32 <> '') then // and (not IsParentROM) then // bios sets can have parent ROMs now (MAME 0.236 and newer)
                       TEasyGameInfo(addedItem).eGameROMsNoDump:= False; //GameROMsAllNoDump:= False;
 
                    if IsFileID_BiosROM(FileID) then // FileID = 2 then
@@ -28820,7 +28827,7 @@ var
     tmpDeviceStr, tmpBiosStr: String;
   begin
     tmpDeviceStr:= '';
-    tmpBiosStr:= '';
+    tmpBiosStr:= '';                 
     if IsROM_Device(TempGameVars.eROMIdentification) then
        tmpDeviceStr:= TEasyGameInfo(ItemSource).eName
     else
@@ -28834,12 +28841,21 @@ var
        begin
          if DeviceListSource.IndexOf(tmpDeviceStr) = -1 then
             DeviceListSource.Add(tmpDeviceStr);
+
+         // device sets can have parent ROMs (MAME 0.236 and newer)
+         if GameIsClone(TempGameVars.eClone) then
+            if DeviceListSource.IndexOf(TempGameVars.eClone) = -1 then
+               DeviceListSource.Add(TempGameVars.eClone);
        end;
 
     if tmpBiosStr <> '' then
        begin
          if BiosListSource.IndexOf(tmpBiosStr) = -1 then
             BiosListSource.Add(tmpBiosStr);
+         // bios sets can have parent ROMs (MAME 0.236 and newer)
+         if GameIsClone(TempGameVars.eClone) then
+            if BiosListSource.IndexOf(TempGameVars.eClone) = -1 then
+               BiosListSource.Add(TempGameVars.eClone);
        end;
 
     // note: some bios sets have device sets in them
@@ -29106,10 +29122,18 @@ begin
     if RefreshMode = 3 then // single game audit
     begin
       if FormMain.IsROM_Device(TEasyGameInfo(SelectedEasyItem).eROMIdentification) then
-         TempDevsList.Add(TEasyGameInfo(SelectedEasyItem).eName)
+         begin
+           TempDevsList.Add(TEasyGameInfo(SelectedEasyItem).eName);
+           if GameIsClone(TEasyGameInfo(SelectedEasyItem).eClone) then
+              TempDevsList.Add(TEasyGameInfo(SelectedEasyItem).eClone);
+         end
       else
       if FormMain.IsROM_Bios(TEasyGameInfo(SelectedEasyItem).eROMIdentification) then
-         TempBiosList.Add(TEasyGameInfo(SelectedEasyItem).eName)
+         begin
+           TempBiosList.Add(TEasyGameInfo(SelectedEasyItem).eName);
+           if GameIsClone(TEasyGameInfo(SelectedEasyItem).eClone) then
+              TempBiosList.Add(TEasyGameInfo(SelectedEasyItem).eClone);
+         end
       else
       if TEasyGameInfo(SelectedEasyItem).eBiosName <> '' then
          TempBiosList.Add(TEasyGameInfo(SelectedEasyItem).eBiosName);
@@ -29500,9 +29524,9 @@ var
     // this function should update "system_name.elstatus"
     ChangeGameStatus:= False;
     if TEasyGameInfo(ItemAudit).eScanMode <> PopupSelectScanGamesMode.Tag then
-       TEasyGameInfo(ItemAudit).eScanMode:= PopupSelectScanGamesMode.Tag;
+       TEasyGameInfo(ItemAudit).eScanMode:=  PopupSelectScanGamesMode.Tag;
     if TempGameVars.eScanMode <> PopupSelectScanGamesMode.Tag then
-       TempGameVars.eScanMode:= PopupSelectScanGamesMode.Tag;
+       TempGameVars.eScanMode:=  PopupSelectScanGamesMode.Tag;
 
     ROMDataLine:= PopulateGameStatusDataLine;
 
@@ -29838,7 +29862,7 @@ var
                 end;
              case romIsCHD of
                0: Continue:= romCRC32 <> ''; // need to set this to TRUE or games won't be audited correctly
-               1: Continue:= romSHA1 <> '';  // Continue is FALSE if ROM/CHD is tagged "nodump" (no CRC32 or SHA1 checksums)
+               1: Continue:= romSHA1  <> ''; // Continue is FALSE if ROM/CHD is tagged "nodump" (no CRC32 or SHA1 checksums)
              end;
            end;
 
@@ -29929,7 +29953,7 @@ var
                                 True :
                                   begin
                                     if StatusCHD <> 2 then
-                                       StatusCHD:= 1; // found and OK
+                                       StatusCHD:=  1; // found and OK
                                   end;
                                 False:
                                   begin
@@ -32076,19 +32100,19 @@ begin
   AddDefaultIcons('option_check.ico',           tempFolder, IL_PopupPlayCustomEmulators); // 00
   AddDefaultIcons('option_radiogroup_on.ico',   tempFolder, IL_PopupPlayCustomEmulators); // 01
   AddDefaultIcons('multidisks.ico',             tempFolder, IL_PopupPlayCustomEmulators); // 02
-  AddDefaultIcons('reserved.ico',               tempFolder, IL_PopupPlayCustomEmulators); // 03 -> associated app icon
+  AddDefaultIcons('EmuLoader_Orb.ico',          tempFolder, IL_PopupPlayCustomEmulators); // 03 -> associated app icon
 
   LoadFileExtensionIcons(IL_PopupPlayCustomEmulators);                                    // 04 -> executable default icon (.exe)
                                                                                           // 05 -> batch default icon      (.bat; .cmd)
 
-  AddDefaultIcons('reserved.ico',               tempFolder, IL_PopupPlayCustomEmulators); // 06 -> emulator 1 icon
-  AddDefaultIcons('reserved.ico',               tempFolder, IL_PopupPlayCustomEmulators); // 07 -> emulator 2 icon
-  AddDefaultIcons('reserved.ico',               tempFolder, IL_PopupPlayCustomEmulators); // 08 -> emulator 3 icon
-  AddDefaultIcons('reserved.ico',               tempFolder, IL_PopupPlayCustomEmulators); // 09 -> emulator 4 icon
+  AddDefaultIcons('EmuLoader_Orb.ico',          tempFolder, IL_PopupPlayCustomEmulators); // 06 -> emulator 1 icon
+  AddDefaultIcons('EmuLoader_Orb.ico',          tempFolder, IL_PopupPlayCustomEmulators); // 07 -> emulator 2 icon
+  AddDefaultIcons('EmuLoader_Orb.ico',          tempFolder, IL_PopupPlayCustomEmulators); // 08 -> emulator 3 icon
+  AddDefaultIcons('EmuLoader_Orb.ico',          tempFolder, IL_PopupPlayCustomEmulators); // 09 -> emulator 4 icon
 
-  AddDefaultIcons('reserved.ico',               tempFolder, IL_PopupPlayCustomEmulators); // 10 -> no longer used for anything (August 27, 2021)
+  AddDefaultIcons('EmuLoader_Orb.ico',          tempFolder, IL_PopupPlayCustomEmulators); // 10 -> no longer used for anything (August 27, 2021)
 
-  AddDefaultIcons('reserved.ico',               tempFolder, IL_PopupPlayCustomEmulators); // 11 -> console/computer system
+  AddDefaultIcons('EmuLoader_Orb.ico',          tempFolder, IL_PopupPlayCustomEmulators); // 11 -> console/computer system
 
   for Loop:= 1 to Length(MediaTypeCustom) do
       AddDefaultIcons(MediaTypeCustom[Loop, 1], tempFolder, IL_PopupPlayCustomEmulators); // 12, 13, 14, 15, 16
@@ -32175,11 +32199,9 @@ begin
 
   AddDefaultIcons('search.ico',               tempFolder, IL_MiscToolBarPopup); // 09
   AddDefaultIcons('settings.ico',             tempFolder, IL_MiscToolBarPopup); // 10
-  AddDefaultIcons('toolbar.ico',              tempFolder, IL_MiscToolBarPopup); // 11
 
-  AddDefaultIcons('interface_classic.ico',    tempFolder, IL_MiscToolBarPopup); // 12 // Search Games
-  AddDefaultIcons('video_preview.ico',        tempFolder, IL_MiscToolBarPopup); // 13 // web game info tool bar button
-  //AddDefaultIcons('favorite_thumbnail.ico',   tempFolder, IL_MiscToolBarPopup); // 13 // (no longer used! - April 21, 2021) for thumbnails view, load favorite icon overlay (April 30, 2019)
+  AddDefaultIcons('interface_classic.ico',    tempFolder, IL_MiscToolBarPopup); // 11 // Search Games
+  AddDefaultIcons('video_preview.ico',        tempFolder, IL_MiscToolBarPopup); // 12 // web game info tool bar button
 end;
 
 
@@ -32273,7 +32295,7 @@ begin
   AddDefaultIcons('emu_mame.ico',             tempFolder, IL_MenuPopup); // 02 // used by Edit Custom Parameters sub-menu
   AddDefaultIcons('favorite_user.ico',        tempFolder, IL_MenuPopup); // 03
   AddDefaultIcons('folder.ico',               tempFolder, IL_MenuPopup); // 04
-  AddDefaultIcons('toolbar.ico',              tempFolder, IL_MenuPopup); // 05
+  AddDefaultIcons('EmuLoader_Orb.ico',             tempFolder, IL_MenuPopup); // 05 // toolbar.ico no longer used
   AddDefaultIcons('image_view.ico',           tempFolder, IL_MenuPopup); // 06
   AddDefaultIcons('settings.ico',             tempFolder, IL_MenuPopup); // 07
   AddDefaultIcons('bios_chip.ico',            tempFolder, IL_MenuPopup); // 08
@@ -32285,14 +32307,14 @@ begin
   AddDefaultIcons('video_preview.ico',        tempFolder, IL_MenuPopup); // 13
   AddDefaultIcons('delete.ico',               tempFolder, IL_MenuPopup); // 14
   AddDefaultIcons('refresh.ico',              tempFolder, IL_MenuPopup); // 15
-  AddDefaultIcons('exit.ico',                 tempFolder, IL_MenuPopup); // 16 // is savestate.ico still used somewhere ? (August 21, 2021)
+  AddDefaultIcons('exit.ico',                 tempFolder, IL_MenuPopup); // 16
 
   AddDefaultIcons('miscellaneous.ico',        tempFolder, IL_MenuPopup); // 17
   AddDefaultIcons('play_standard.ico',        tempFolder, IL_MenuPopup); // 18
   AddDefaultIcons('EmuLoader_Orb.ico',        tempFolder, IL_MenuPopup); // 19
   AddDefaultIcons('emu_ume.ico',              tempFolder, IL_MenuPopup); // 20 // used by Edit Custom Parameters sub-menu
   AddDefaultIcons('multidisks.ico',           tempFolder, IL_MenuPopup); // 21
-  AddDefaultIcons('reserved.ico',             tempFolder, IL_MenuPopup); // 22 // no longer used by anything; it was "usagerules.ico" (August 21, 2021)
+  AddDefaultIcons('EmuLoader_Orb.ico',             tempFolder, IL_MenuPopup); // 22 // no longer used by anything; it was "usagerules.ico" (August 21, 2021)
   AddDefaultIcons('emucon.ico',               tempFolder, IL_MenuPopup); // 23,
 
   AddDefaultIcons('systemtype_arcade.ico',    tempFolder, IL_MenuPopup); // 24
@@ -32403,7 +32425,7 @@ begin
   AddDefaultIcons('zipfile.ico',             tempFolder, IL_LeftPanel); // 08
   AddDefaultIcons('settings.ico',            tempFolder, IL_LeftPanel); // 09 -> for search bar settings        ; no longer used (July 27, 2021)
   AddDefaultIcons('favorite_game.ico',       tempFolder, IL_LeftPanel); // 10
-  AddDefaultIcons('toolbar.ico',             tempFolder, IL_LeftPanel); // 11 -> for search bar title filter    ; no longer used (July 27, 2021)
+  AddDefaultIcons('EmuLoader_Orb.ico',            tempFolder, IL_LeftPanel); // 11 -> toolbar.ico no longer used
   AddDefaultIcons('exit.ico',                tempFolder, IL_LeftPanel); // 12 -> for internet game info button
   AddDefaultIcons('stop.ico',                tempFolder, IL_LeftPanel); // 13 -> for internet game info button
   AddDefaultIcons('interface_classic.ico',   tempFolder, IL_LeftPanel); // 14 -> for search bar controls filter ; no longer used (July 27, 2021)
@@ -34598,7 +34620,7 @@ begin
      Exit;
 
   PopupSearchBarControlsFilter.BeginUpdate;
-  with AddMenuItem(PopupSearchBarControlsFilter.Items, 'Include Tool Bar Filters', '', True, True, False, 5) do
+  with AddMenuItem(PopupSearchBarControlsFilter.Items, 'Include Tool Bar Filters', '', True, True, False, -1) do
   begin
     Checked:= Boolean(PopupSearchBarControlsFilter.Tag);
     OnClick:= PopupSearchBarControlsFilterIncludeMainFiltersClick;
@@ -38860,32 +38882,20 @@ begin
        //SetSelectedGame(True); // reload selected game info, just to make sure... no need for this as it's called in SetGameType(False) above (April 25, 2018)
      end;
 
-  {UpdateStatusBarGame; // to clear icons and labels
-  UpdateStatusBarMachine; // to clear icons and labels
-
-  PopupEnableFavorites.Hint:= FavoriteProfile[0];
-
-  if (buildMAME = '') and (EmulatorFile[idMAME] <> '') then
-     buildMAME:= GetMAMEBinaryVersion(EmulatorFile[idMAME]);
-
-  if (buildHBMAME = '') and (EmulatorFile[idHBMAME] <> '') then
-     buildHBMAME:= GetMAMEBinaryVersion(EmulatorFile[idHBMAME]);
-
-  if (buildAlterMAME[1] = '') and (AlterMAMEFile[1] <> '') then
-     buildAlterMAME[1]:= GetMAMEBinaryVersion(AlterMAMEFile[1]);
-
-  if (buildAlterMAME[2] = '') and (AlterMAMEFile[2] <> '') then
-     buildAlterMAME[2]:= GetMAMEBinaryVersion(AlterMAMEFile[2]);
-
-  AlterMAME_ValidateMAME;}
+  //UpdateStatusBarGame; // to clear icons and labels
+  //UpdateStatusBarMachine; // to clear icons and labels
 
   FormStatus.Close;
-  //Application.ProcessMessages;
-  //FormMain.SetFocus;
-  //FocusGamesList;
 
   if IsThumbnailView then
      ResetThumbnails; // reset thumbs here or they might not show at startup
+
+  //if GetForegroundWindow <> FormMain.Handle then
+  //   begin
+  //     FormMain.SendToBack;
+  //     FormMain.BringToFront;
+  //     FormMain.SetFocus;
+  //   end;
 end;
 
 procedure TFormMain.FormCloseQuery(Sender: TObject; var CanClose: Boolean);
@@ -40880,6 +40890,7 @@ begin
   CallSetDeleteOptions(TMenuItem(Sender).Hint, TMenuItem(Sender));
 end;
 
+{
 function TFormMain.AppendText(ARichEdit: TRichEditURL; const AText: WideString; AFontColor: TColor = -1; AFontStyle: TFontStyles = [];
          AAlignment: TAlignment = taLeftJustify; const AFontName: String = 'default'; AFontSize: Integer = -1;
          AFontCharSet: TFontCharSet = DEFAULT_CHARSET): Integer;
@@ -40928,7 +40939,7 @@ begin
   ARichEdit.SelAttributes.Charset:= reFontCharSet;
   aRichEdit.SelAttributes.Style:=   [];
 end;
-
+}
 function TFormMain.AppendTextW(ARichEdit: TTntRichEdit; const AText: WideString; AFontColor: TColor = -1; AFontStyle: TFontStyles = [];
          AAlignment: TAlignment = taLeftJustify; ATextBackgroundColor: TColor = -1;
          const AFontName: String = 'default'; AFontSize: Integer = -1; AFontCharSet: TFontCharSet = DEFAULT_CHARSET): Integer;
@@ -43118,7 +43129,7 @@ begin
   case PopupTilesViewGameIconsSize.Tag of
     0: // insane 128x128
       begin
-        tWidth:=  450;
+        tWidth:=  550;
         tHeight:= 148;
         ValidateCellSize;
         Font_TilesViewDetailsText.Size:= 16;
@@ -47676,10 +47687,10 @@ var
   function ValidateStatusID(DriverCategoryVar: ShortInt): Boolean;
   begin
     case ButtonGameFilterDriverStatus.Tag of
-      1: Result:= DrivercategoryVar in [0, 1];// working (good + imperfect)
-      2: Result:= DrivercategoryVar = 0;// working (good)
-      3: Result:= DrivercategoryVar = 1;// working (imperfect)
-      4: Result:= DrivercategoryVar = 2;// non-working (preliminary)
+      1: Result:= DriverCategoryVar in [0, 1];// working (good + imperfect)
+      2: Result:= DriverCategoryVar = 0;// working (good)
+      3: Result:= DriverCategoryVar = 1;// working (imperfect)
+      4: Result:= DriverCategoryVar = 2;// non-working (preliminary)
     end;
   end;
 
@@ -47773,8 +47784,13 @@ var
 
     if not MemGameInfo.eIsCustomGame then
     begin
-      if ButtonGameFilterHaveMiss.Tag = 3 then // found with Missing ROMs/CHDs
-         KeepGame:= MemGameInfo.eGameSetStatus = 1;
+      case ButtonGameFilterHaveMiss.Tag of
+        3: KeepGame:= MemGameInfo.eGameSetStatus = 1; // found with Missing ROMs/CHDs
+        4: KeepGame:= MemGameInfo.eGameSetStatus in [0, 1]; // available and found missing ROMs/CHDs
+        5: KeepGame:= MemGameInfo.eGameSetStatus in [2, 1];
+      end;
+      //if ButtonGameFilterHaveMiss.Tag = 3 then
+      //   KeepGame:= MemGameInfo.eGameSetStatus = 1;
 
       if not KeepGame then Exit;
       if ButtonGameFilterDriverStatus.Tag > 0 then
@@ -48159,7 +48175,7 @@ begin
        if Group.ItemCount > 1 then
           begin
             DoDefault:= False;
-            ResultMain:= iCompare(TEasyGameInfo(Item1).eTitle, TEasyGameInfo(Item2).eTitle);
+            ResultMain:=  iCompare(TEasyGameInfo(Item1).eTitle, TEasyGameInfo(Item2).eTitle);
             ResultClone:= iCompare(TEasyGameInfo(Item1).eClone, TEasyGameInfo(Item2).eClone);
             if (GameIsClone(TEasyGameInfo(Item1).eClone) and GameIsClone(TEasyGameInfo(Item2).eClone)) then
                Result:= ResultMain
@@ -53298,7 +53314,7 @@ begin
                                                      FormNightMode.NightModeToolBarBkBottomColor.Selected);
 
        SetToolBarPanelColors(PanelSearchGames_ToolBar, PanelWebToolBarButtons); // what is this ???
-       SetLabelColors(LabelSearchGamesFilter_ToolBar, FormNightMode.NightModeSearchGamesPanelFilterFontColor.Selected);
+       //SetLabelColors(LabelSearchGamesFilter_ToolBar, FormNightMode.NightModeSearchGamesPanelFilterFontColor.Selected);
        SetLabelColors(LabelSearchGamesBy_ToolBar,     FormNightMode.NightModeSearchGamesPanelFieldFontColor.Selected);
      end
   else
@@ -53317,7 +53333,7 @@ begin
 
        SetToolBarPanelColors(PanelSearchGames_ToolBar, PanelWebToolBarButtons);
 
-       SetLabelColors(LabelSearchGamesFilter_ToolBar, FormPreferences.SearchGamesPanelFilterFontColor.Selected);
+       //SetLabelColors(LabelSearchGamesFilter_ToolBar, FormPreferences.SearchGamesPanelFilterFontColor.Selected);
        SetLabelColors(LabelSearchGamesBy_ToolBar,     FormPreferences.SearchGamesPanelFieldFontColor.Selected);
 
        // "Main CPU Filter" panel
@@ -54220,7 +54236,7 @@ begin
     24:
       begin
         ButtonFilterTitleApply_ToolBar.ImageIndex:=    9;
-        ButtonFilterControls_ToolBar.ImageIndex:=      12;
+        ButtonFilterControls_ToolBar.ImageIndex:=      11;
         ButtonFilterTitleReset_ToolBar.ImageIndex:=    3;
         ButtonFilterTitleSettings_ToolBar.ImageIndex:= 10;
       end;
@@ -54294,8 +54310,8 @@ begin
   if Is4KMode then
      begin
        PanelSearchGames_ToolBar.Width:= 447;
-       FormMain.Set4KLabelSpecs(LabelSearchGamesFilter_ToolBar, 8, 4, -1, -1, 14);
-       FormMain.Set4KLabelSpecs(LabelSearchGamesBy_ToolBar,    94, 4, -1, -1, 14);
+       //FormMain.Set4KLabelSpecs(LabelSearchGamesFilter_ToolBar, 8, 4, -1, -1, 14);
+       FormMain.Set4KLabelSpecs(LabelSearchGamesBy_ToolBar,    8{94}, 4, -1, -1, 14);
        FormMain.Set4KEditSpecs(FilterGameTitle_ToolBar, 8, 33, 280, 34, 16);
 
        MoveButton(ButtonFilterTitleApply_ToolBar, nil);
@@ -54309,32 +54325,32 @@ begin
   else
   if MenuToolBarIconSize.Tag = 2 then // Small tool bar filter icons 30x24 (search bar text must be left of TEdit)
      begin
-       LabelSearchGamesFilter_ToolBar.Visible:=  FilterSearchBarShowFilterLabels.Checked;
+       //LabelSearchGamesFilter_ToolBar.Visible:=  FilterSearchBarShowFilterLabels.Checked;
        LabelSearchGamesBy_ToolBar.Visible:=      FilterSearchBarShowFilterLabels.Checked;
      end
   else
      begin
        // labels are always visible
-       LabelSearchGamesFilter_ToolBar.Visible:= True;
+       //LabelSearchGamesFilter_ToolBar.Visible:= True;
        LabelSearchGamesBy_ToolBar.Visible:=     True;
      end;
 
-  FormMain.Set4KLabelSpecs(LabelSearchGamesFilter_ToolBar, 8, 6, -1, -1, 8);
-  FormMain.Set4KLabelSpecs(LabelSearchGamesBy_ToolBar,    59, 6, -1, -1, 8);
+  //FormMain.Set4KLabelSpecs(LabelSearchGamesFilter_ToolBar, 8, 6, -1, -1, 8);
+  FormMain.Set4KLabelSpecs(LabelSearchGamesBy_ToolBar,    8{59}, 6, -1, -1, 8);
 
   case MenuToolBarIconSize.Tag of
     0: // Extra Large (68x68)
       begin
         // perhaps add an option to move buttons below the edit box ? (top "2", "18")
         // maybe invert the order of the buttons "back to front" so search icon is at right instead of left
-        LabelSearchGamesFilter_ToolBar.Top:=  16;
+        //LabelSearchGamesFilter_ToolBar.Top:=  16;
         LabelSearchGamesBy_ToolBar.Top:=      16;
         FormMain.Set4KEditSpecs(FilterGameTitle_ToolBar, 8, LabelSearchGamesBy_ToolBar.Top+16, 189, 24, 9);
         SetFilterSearchBarIconsSize;
       end;
     1: // Large (48x48) - default size
       begin
-        LabelSearchGamesFilter_ToolBar.Top:=  6;
+        //LabelSearchGamesFilter_ToolBar.Top:=  6;
         LabelSearchGamesBy_ToolBar.Top:=  6;
         FormMain.Set4KEditSpecs(FilterGameTitle_ToolBar, 8, LabelSearchGamesBy_ToolBar.Top+16, 189, 24, 9);
         SetFilterSearchBarIconsSize;
@@ -54342,7 +54358,7 @@ begin
     2: // Small (30x24)
       begin
         // must adjust the left position so label texts can fit before the edit box (when "show label texts" option is enabled)
-        LabelSearchGamesFilter_ToolBar.Top:=  8;
+        //LabelSearchGamesFilter_ToolBar.Top:=  8;
         LabelSearchGamesBy_ToolBar.Top:=      8;
         FormMain.Set4KEditSpecs(FilterGameTitle_ToolBar, 8, 3, 189, 24, 9);
         SetFilterSearchBarIconsSize;
@@ -55373,8 +55389,8 @@ begin
     SetBoxCloseButton(NightModeSearchGamesPanelColorsBoxPreviewButtonClose, NightModeSearchGamesPanelColorsBoxPreviewLabel);
 
     Set4KPanelSpecs(NightModePanelSearchGames, 10, 54, 593, 91);
-    Set4KLabelSpecs(NightModeLabelSearchGamesFilter, 12, 12, -1, -1, 14);
-    Set4KLabelSpecs(NightModeLabelSearchGamesBy,     98, 12, -1, -1, 14);
+    //Set4KLabelSpecs(NightModeLabelSearchGamesFilter, 12, 12, -1, -1, 14);
+    Set4KLabelSpecs(NightModeLabelSearchGamesBy,     12, 12, -1, -1, 14);
 
     Set4KEditSpecs(NightModeFilterGameTitle, 12, 41, 416, 34, 16);
     Set4KButtonSpecs(ButtonFilterTitleApply_ToolBar,    432, 40, 36, 37, 16);

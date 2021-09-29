@@ -73,29 +73,8 @@ object FormMain: TFormMain
       ParentBackground = False
       Style = vgWindowsTheme
       OnMouseDown = ToolBarButtonsMouseDown
-      object LabelSearchGamesFilter_ToolBar: TShadowLabel
-        Left = 8
-        Top = 6
-        Width = 47
-        Height = 14
-        Caption = 'Filter by'
-        Font.Charset = ANSI_CHARSET
-        Font.Color = clBlack
-        Font.Height = -11
-        Font.Name = 'Verdana'
-        Font.Style = []
-        ParentFont = False
-        ShowAccelChar = False
-        ShadowColor = clWhite
-        ShadowEnabled = False
-        EllipsType = etNone
-        ColorFrame = clBlack
-        ColorInnerFrame = clBlack
-        Frames = []
-        Transparent = True
-      end
       object LabelSearchGamesBy_ToolBar: TShadowLabel
-        Left = 59
+        Left = 8
         Top = 6
         Width = 25
         Height = 14
@@ -140,7 +119,7 @@ object FormMain: TFormMain
           'Click here to select a MAME controls filter (will be applied imm' +
           'ediately)'
         Flat = True
-        ImageIndex = 12
+        ImageIndex = 11
         Images = IL_MiscToolBarPopup
         OnClick = ButtonFilterControls_ToolBarClick
         FontColorDisabled = clBtnShadow
@@ -1139,7 +1118,7 @@ object FormMain: TFormMain
           Hint = 'Play a video of selected game'
           Caption = 'Play Video Preview'
           Flat = True
-          ImageIndex = 13
+          ImageIndex = 12
           Images = IL_MiscToolBarPopup
           OnClick = PopupVideoPreviewPlayClick
           FontColorDisabled = clBtnShadow
@@ -4606,7 +4585,6 @@ object FormMain: TFormMain
       AutoCheck = True
       Caption = 'Include Tool Bar Filters'
       Checked = True
-      ImageIndex = 5
     end
     object N39: TMenuItem
       Caption = '-'

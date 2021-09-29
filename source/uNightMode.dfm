@@ -1019,9 +1019,9 @@ object FormNightMode: TFormNightMode
         Width = 185
         Height = 22
         Hint = 'Font Color For The Filter Text'
-        DefaultColorColor = 4734774
+        DefaultColorColor = 6576720
         NoneColorColor = clWhite
-        Selected = 4734774
+        Selected = 6576720
         Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames]
         ItemHeight = 16
         TabOrder = 1
@@ -4927,29 +4927,8 @@ object FormNightMode: TFormNightMode
       Frames = []
       ParentBackground = False
       Style = vgSimple
-      object NightModeLabelSearchGamesFilter: TShadowLabel
-        Left = 8
-        Top = 6
-        Width = 47
-        Height = 14
-        Caption = 'Filter by'
-        Font.Charset = ANSI_CHARSET
-        Font.Color = 4734774
-        Font.Height = -11
-        Font.Name = 'Verdana'
-        Font.Style = []
-        ParentFont = False
-        ShowAccelChar = False
-        ShadowColor = 1578258
-        ShadowEnabled = False
-        EllipsType = etNone
-        ColorFrame = clBlack
-        ColorInnerFrame = clBlack
-        Frames = []
-        Transparent = True
-      end
       object NightModeLabelSearchGamesBy: TShadowLabel
-        Left = 60
+        Left = 8
         Top = 6
         Width = 25
         Height = 14

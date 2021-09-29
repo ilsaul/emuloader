@@ -1030,7 +1030,7 @@ begin
   if not FormMain.CheckTotal(GamesListDeleteMulti) then
      Exit;
 
-  iScreenWidth:=  Screen.Width;
+  iScreenWidth:= Screen.Width;
   iScreenHeight:= Screen.Height;// Screen.WorkAreaRect.Bottom-Screen.WorkAreaRect.Top;
 
   ItemsColumnCount:= 2;

@@ -335,6 +335,16 @@ begin
          else
             LabelSource.Font.Color:= clOlive;
        end;
+      3: // Merged Clone Set
+        begin
+          if IsNightMode then
+            begin
+              LabelSource.Font.Color:= clrGameBarGreen;
+              LabelSource.ShadowColor:= $003232;
+            end
+         else
+            LabelSource.Font.Color:= clMoneyGreen;
+        end;
       20: LabelSource.Font.Color:= MsgTxtColors.colorFileName; // Scan Mode
     end;
 end;
@@ -991,7 +1001,7 @@ begin
       end;
     False:
       begin
-        if ((TEasyGameInfo(FormMain.SelectedEasyItem).eROMInfo = nil) and (FormMain.MemGameInfo.eSystemID <> idDaphne)) or
+        if ((TEasyGameInfo(FormMain.SelectedEasyItem).eROMInfo = nil)    and (FormMain.MemGameInfo.eSystemID <> idDaphne)) or
            ((TEasyGameInfo(FormMain.SelectedEasyItem).eHaveGameROMs = 0) and (FormMain.MemGameInfo.eSystemID <> idDaphne)) then
            begin
              NoROMs:= True;
@@ -1045,7 +1055,7 @@ begin
         if IsCHDGameOnly then
            begin
              // nothing here... this is for "Need for Speed" intall disk games and others alike
-             // still need to double-check this and make sure there's no need to validate IsCHDGameOnly...
+             // still need to double-check this and make sure there's no need to validate IsCHDGameOnly
            end
         else
         if (not IsBiosSetOnly) and (not IsDeviceSetOnly) and (not NoROMs) then
@@ -1053,7 +1063,7 @@ begin
              if not FormMain.MemGameInfo.eIsMerged then
                 AddEntry2('   Game Set', FormMain.MemGameInfo.eName+tmpString, 0)
              else
-                AddEntry2('   Game Set', FormMain.MemGameInfo.eName+' (Merged)', 1); // 'Merged in parent set', 1); // for merged clone sets!!!
+                AddEntry2('   Game Set', FormMain.MemGameInfo.eName+' (Merged)', 3); // for merged clone sets
            end;
         if FormMain.GameIsClone(FormMain.MemGameInfo.eClone) and (not NoROMs) then
            begin
@@ -1273,10 +1283,11 @@ var
            end;
       end;
 
-    if IsROMFromParentSet and
-       (not FormMain.IsROM_Device(FormMain.MemGameInfo.eROMIdentification)) and
-       (not FormMain.IsROM_Bios(FormMain.MemGameInfo.eROMIdentification)) then
-       Result:= 'Parent'+Result;
+    //if IsROMFromParentSet and
+    //   (not FormMain.IsROM_Device(FormMain.MemGameInfo.eROMIdentification)) and
+    //   (not FormMain.IsROM_Bios(FormMain.MemGameInfo.eROMIdentification)) then
+    if IsROMFromParentSet then
+       Result:= 'Parent'+Result; // device sets and bios sets can have parent ROMs (MAME 0.236 and newer)
     if (FormMain.MemGameInfo.eScanMode = 0) or (ROMTag >= 12) then
     begin
       if IsCHDFile and (StatusImageIndex <> 1) and (iChecksum <> '') then
@@ -1472,7 +1483,7 @@ var
                       if romSHA1 <> '' then
                          ValidCHD:= FormMain.CreateCHD_SHA1(CHDFile, romSHA1, CHDChecksum, HeaderVerCHD)
                       else
-                         ValidCHD:= True; // no dump...
+                         ValidCHD:= True; // no dump
                     end;
                  StatusImageIndex:= GetCHD_NewImageIndex(ValidCHD);
                  Item.Captions[1]:= CHDChecksum;

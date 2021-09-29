@@ -187,6 +187,7 @@ object FormMAMESettings4K: TFormMAMESettings4K
     Width = 1677
     Height = 1187
     Color = 15856113
+    PageIndex = 4
     ParentColor = False
     TabOrder = 0
     object TPage
@@ -5697,7 +5698,7 @@ object FormMAMESettings4K: TFormMAMESettings4K
         Top = 49
         Width = 1677
         Height = 1138
-        PageIndex = 1
+        PageIndex = 2
         TabOrder = 2
         object TPage
           Left = 0
@@ -9585,7 +9586,7 @@ object FormMAMESettings4K: TFormMAMESettings4K
         end
         object Samples: TAdvOfficeCheckBoxEx
           Left = 333
-          Top = 81
+          Top = 45
           Width = 232
           Height = 36
           Hint = 'Enable the use of external samples if available'
@@ -9736,6 +9737,31 @@ object FormMAMESettings4K: TFormMAMESettings4K
             'Details (Level 3)'
             'Details (Level 4)')
           CaptionVertIndent = -1
+        end
+        object AdvOfficeCheckBoxEx3: TAdvOfficeCheckBoxEx
+          Left = 333
+          Top = 87
+          Width = 275
+          Height = 36
+          Hint = 'Enable the use of external samples if available'
+          Checked = True
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clBlack
+          Font.Height = -21
+          Font.Name = 'Segoe UI'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 7
+          Alignment = taLeftJustify
+          ButtonVertAlign = tlCenter
+          Caption = 'Enable Audio Compressor'
+          ReturnIsTab = False
+          State = cbChecked
+          Themed = True
+          CustomIconsEnabled = False
+          CustomEnableIconHD = True
+          CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+          CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
         end
       end
     end
