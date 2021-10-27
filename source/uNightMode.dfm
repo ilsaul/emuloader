@@ -5010,7 +5010,7 @@ object FormNightMode: TFormNightMode
         GradientColorBottom_Disabled = clMedGray
         FrameColor_Disabled = clGray
       end
-      object NightModeFilterGameTitle: TEditEx
+      object NightModeFilterGameTitle: TTntEditEx
         Left = 8
         Top = 22
         Width = 189

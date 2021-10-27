@@ -173,7 +173,7 @@ begin
                      'Images of parent games will not be deleted.'+#13#10+
                      '    Recycle bin is not supported. Are you sure ? Click No button to cancel.', 1) = mrNo then
         Exit;
-  FormStatus.Show;
+  FormMain.ShowStatusForm;
   FormStatus.StartThreadClock;
   FormStatus.TitleStr('Delete Clone Images');
   case SelectedOnly of
@@ -553,7 +553,7 @@ begin
           Exit;
      end;
 
-  FormStatus.Show;
+  FormMain.ShowStatusForm;
   FormStatus.StartThreadClock;
   FormStatus.TitleStr('Scan Games Images');
   FormStatus.MessageStr('Validating images of clone games.');

@@ -147,7 +147,9 @@ begin
 
     FormMain.Set4KCheckBoxSpecs(GamesTileBackground, GamesBackgroundImage.Left+GamesBackgroundImage.Width-60, 6, 65, 36, 16);
 
-    FormMain.Set4KButtonsOkCancelPanel(PanelBottom, ButtonOk, ButtonCancel, False)
+    FormMain.Set4KButtonsOkCancelPanel(PanelBottom, ButtonOk, ButtonCancel, False);
+    ButtonOk.Top:= (PanelBottom.Height-ButtonOk.Height)-10;
+    ButtonCancel.Top:= ButtonOk.Top;
   end;
 end;
 

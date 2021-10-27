@@ -19,7 +19,6 @@ type
     ButtonUpdateSystem: TBitBtnEx;
     ButtonClearSystem: TBitBtnEx;
     IL_Systems: TImageList;
-    UseLargeIcons: TAdvOfficeCheckBoxEx;
     PanelEmulatorDetails: TPanelEx;
     LabelArcade_versioninfo: TShadowLabel;
     LabelAlterMAME1: TShadowLabel;
@@ -79,8 +78,6 @@ type
     procedure LabelMAMELink1MouseEnter(Sender: TObject);
     procedure LabelMAMELink1MouseLeave(Sender: TObject);
     procedure LabelMAMELink1Click(Sender: TObject);
-    procedure UseLargeIconsClick(Sender: TObject);
-    procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure AlterMAME2_AutorunClick(Sender: TObject);
     procedure ButtonBrowseAlterMAME2Click(Sender: TObject);
     procedure AlterMAME2_execChange(Sender: TObject);
@@ -108,7 +105,6 @@ type
     //procedure ClearEmulatorIcon(AlterMAME: Boolean);
     //function  SetEmulatorIcon(sysID: ShortInt; IsAlterMAME: Boolean): Integer;
     procedure SetSystemInfo(sysID: ShortInt);
-    procedure ReadWriteSettings(ReadMode: Boolean);
   public
     { Public declarations }
   end;
@@ -204,9 +200,6 @@ begin
     FormMain.Set4KLabelSpecs(LabelAlterMAME2_Autorun, 453, AlterMAME2_Autorun.Top+2, -1, -1, 16);
 
     FormMain.Set4KButtonSpecs(ButtonHelpAlterMAME, ClientWidth-168-10, 494, 168, 36, 16);
-
-    FormMain.Set4KCheckBoxSpecs(UseLargeIcons, 640, 20, 140, 36, 16);
-    UseLargeIcons.Visible:= False; // this setting is useless in 4K mode
 
     if Is4KMode then
        begin
@@ -331,8 +324,6 @@ begin
        SetLabelColors(LabelAlterMAME1_Autorun, clSilver, item_caption_active_shadow_color[1]);
        SetLabelColors(LabelAlterMAME2_Autorun, clSilver, item_caption_active_shadow_color[1]);
 
-       SetCheckBoxColors(UseLargeIcons, clWhite, item_caption_active_shadow_color[1]);
-
        SetEditNightColors(Arcade_exec);
        SetEditNightColors(Arcade_versioninfo);
        SetEditNightColors(AlterMAME1_exec);
@@ -359,9 +350,7 @@ begin
        end;
      end;
 
-  ReadWriteSettings(True);
-
-  if not Is4KMode then //FormMain.Menu4KMode2160pEnable.Checked then
+  if not Is4KMode then
      begin
        FormMain.IL_LeftPanel.GetIcon(1, IconEmulator.Picture.Icon);
        FormMain.IL_LeftPanel.GetIcon(1, IconEmulatorAlterMAME1.Picture.Icon);
@@ -845,90 +834,6 @@ end;
 procedure TFormArcadeEmulatorsSetup.LabelMAMELink1Click(Sender: TObject);
 begin
   CallShellExecute(Sender);
-end;
-
-procedure TFormArcadeEmulatorsSetup.ReadWriteSettings(ReadMode: Boolean);
-var
-  INIFile: TMemIniFile;
-  SectionStr: String;
-begin
-  if not FileExists(FormMain.GetFrontendExtraIniFile) then
-     Exit;
-  SectionStr:= 'UseLargeIcons';
-  try
-    INIFile:= TMemIniFile.Create(FormMain.GetFrontendExtraIniFile);
-    if ReadMode then
-       UseLargeIcons.Checked:= Boolean(INIFile.ReadInteger(SectionStr, 'ArcadeEmulatorsSetup', 0))
-    else
-       INIFile.WriteInteger(SectionStr, 'ArcadeEmulatorsSetup', Ord(UseLargeIcons.Checked));
-  finally
-    if not ReadMode then
-       INIFile.UpdateFile;
-    FreeAndNil(INIFile);
-  end;
-end;
-
-procedure TFormArcadeEmulatorsSetup.UseLargeIconsClick(Sender: TObject);
-var
-  iDiff: Integer;
-begin
-  if Is4KMode then //FormMain.Menu4KMode2160pEnable.Checked then
-     Exit;
-  if Screen.Height < 720 then
-     Exit;
-  if UseLargeIcons.Checked then
-     IL_Systems.Width:= 128
-  else
-     IL_Systems.Width:= 68;
-
-  IL_Systems.Height:= IL_Systems.Width;
-
-  FormMain.LoadSystemsIcons(IL_Systems);
-  FormMain.ShowIconErrorMessage;
-
-  if UseLargeIcons.Checked then
-  begin
-    if SystemSelector.CellSizes.Icon.Height = 166 then
-       Exit;
-
-    SystemSelector.PaintInfoItem.IconViewRemoveIconTopBorder:= True;
-    iDiff:=(166*2)-SystemSelector.Height;
-
-    FormArcadeEmulatorsSetup.ClientHeight:= FormArcadeEmulatorsSetup.ClientHeight+iDiff;
-    PanelEmulatorDetails.Top:= PanelEmulatorDetails.Top+iDiff;
-    PanelSystemsSelect.Height:= PanelSystemsSelect.Height+iDiff;
-
-    PanelSystemTitle.Top:= PanelSystemTitle.Top+iDiff;
-    PanelSystemTitleBottom.Top:= PanelSystemTitleBottom.Top+iDiff;
-    SystemSelector.Height:= 166*2;
-    SystemSelector.CellSizes.Icon.Height:= 166;
-    SystemSelector.CellSizes.Icon.Width:= 156;
-  end
-  else
-  begin
-    if SystemSelector.CellSizes.Icon.Height = 92 then
-       Exit;
-    SystemSelector.PaintInfoItem.IconViewRemoveIconTopBorder:= False;
-    iDiff:= SystemSelector.Height-92;
-    SystemSelector.Height:= 92;
-    SystemSelector.CellSizes.Icon.Height:= 92;
-    SystemSelector.CellSizes.Icon.Width:= 78;
-    PanelSystemTitle.Top:= PanelSystemTitle.Top-iDiff;
-    PanelSystemTitleBottom.Top:= PanelSystemTitleBottom.Top-iDiff;
-    PanelSystemsSelect.Height:= PanelSystemsSelect.Height-iDiff; // 125;
-    PanelEmulatorDetails.Top:= PanelEmulatorDetails.Top-iDiff; // 136;
-    FormArcadeEmulatorsSetup.ClientHeight:= FormArcadeEmulatorsSetup.ClientHeight-iDiff; //392;
-  end;
-
-  if FormMain.CheckTotal(SystemSelector) then
-     FormArcadeEmulatorsSetup.Top:= (Screen.Height shr 1)-(FormArcadeEmulatorsSetup.Height shr 1)-1;
-end;
-
-procedure TFormArcadeEmulatorsSetup.FormCloseQuery(Sender: TObject;
-  var CanClose: Boolean);
-begin
-  if CanClose then
-     ReadWriteSettings(False);
 end;
 
 procedure TFormArcadeEmulatorsSetup.ButtonBrowseAlterMAME2Click(Sender: TObject);

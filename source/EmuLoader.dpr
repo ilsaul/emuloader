@@ -62,7 +62,6 @@ uses
   uConsCompMultiFloppyGames in 'console_computer\uConsCompMultiFloppyGames.pas' {FormConsCompMultiFloppyGames},
   uConsCompSystemSelector in 'console_computer\uConsCompSystemSelector.pas' {FormConsCompSystemSelector},
   uConsCompSelectEmulator in 'console_computer\uConsCompSelectEmulator.pas' {FormConsCompSelectEmulator},
-  uCustomCommandLine in 'uCustomCommandLine.pas' {FormCustomCommandLine},
   uCleanInstallGuide in 'uCleanInstallGuide.pas' {FormCleanInstallGuide},
   uImageCategorySettings in 'uImageCategorySettings.pas' {FormImageCategorySettings},
   uVideoPreviewSettings in 'uVideoPreviewSettings.pas' {FormVideoPreviewSettings},
@@ -77,10 +76,10 @@ uses
   uArcadeMAMEMachinesCustomize in 'arcade\uArcadeMAMEMachinesCustomize.pas' {FormArcadeMAMEMachinesCustomize},
   uFavoritesManagerCleanseProfile in 'uFavoritesManagerCleanseProfile.pas' {FormFavoritesManagerCleanseProfile},
   uNightMode in 'uNightMode.pas' {FormNightMode},
-  uNightModeRGBQuickEdit in 'uNightModeRGBQuickEdit.pas' {FormNightModeRGBQuickEdit},
   uMessageBox_4K in '4K\uMessageBox_4K.pas' {FormMessageBox4K},
   uZTestWorkbench in 'uZTestWorkbench.pas' {FormZTestWorkbench},
-  uCustomParameters in 'arcade\uCustomParameters.pas' {FormCustomParameters};
+  uCustomParameters in 'arcade\uCustomParameters.pas' {FormCustomParameters},
+  uColorPickerEx in 'uColorPickerEx.pas' {FormColorPickerEx};
 
 {$R EmuLoader.res}
 
@@ -105,28 +104,33 @@ begin
   else
      Delete(FrontendVersion, Length(FrontendVersion)-3, 4);
 
-  CreateSplashIniFile;       // remove splash settings from "ini_files\lightmode.ini" [Splash] section and create "ini_files\splash.ini"
-  CreateGamesFiltersIniFile; // remove tool bar filters settings from "emuloader.ini" and create "ini_files\games_filters.ini"
+  //CreateSplashIniFile;       // remove splash settings from "ini_files\lightmode.ini" [Splash] section and create "ini_files\splash.ini"
+  //CreateGamesFiltersIniFile; // remove tool bar filters settings from "emuloader.ini" and create "ini_files\games_filters.ini"
   // -> these functions will be removed in a future version
 
+  //HideAppFormTaskBarButton2; // this is to show a secondary task bar button for forms
+
   FormStatus:= TFormStatus.Create(nil); // create splash screen here to show as soon as possible: "this is not the app's main Form you're looking for!" (May 01, 2021)
+  //FormStatus.Caption:= FormStatus.Caption+' '+FrontendVersion;
   FormStatus.LabelVersion.Caption:= FrontendVersion;
   FormStatus.TitleStr('Initializing');
   FormStatus.MessageStr('Loading primary settings.', False);
 
   FormStatus.StartThreadClock;
-  FormStatus.Show;
+  FormStatus.Visible:= True;// Show;
 
   Application.ProcessMessages;
   FormApplyFilterMsgBox:= TFormApplyFilterMsgBox.Create(nil); // creating this Form here forces splash screen to show up... why Delphi 7, WHY!!!? (May 21, 2021)
   Application.Initialize;
+
   Application.Title := 'Emu Loader: Multiple Systems Frontend';
   Application.HintPause:= 200; // fix for the hint pause timer
   Application.HintColor:= $00f8f4f3; //$00eeebe6;
 
   FormStatus.MessageStr('Initializing main screen.');
-  Application.CreateForm(TFormMain, FormMain);
-  // application's main form
+  Application.CreateForm(TFormMain, FormMain); // application's main form
+  FormMain.Caption:= FormMain.Caption+' '+FrontendVersion;
+
   FormStatus.MessageStr('Initializing night mode screen.');
   Application.CreateForm(TFormNightMode, FormNightMode);
   FormStatus.MessageStr('Initializing preferences screen.');

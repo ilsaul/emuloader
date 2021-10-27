@@ -47,12 +47,22 @@ type
     ButtonAbort: TBitBtnEx;
     LabelInfo: TShadowLabel;
     SystemIcon: TImage;
-    NotebookPages: TNotebook;
     PageButtonInput: TSpeedButtonEx;
     PageButtonSaveState: TSpeedButtonEx;
     PageButtonMemoryCard: TSpeedButtonEx;
     PageButtonRecordMovie: TSpeedButtonEx;
     PagesButtonBottomLine: TBevelEx;
+    PopupELV: TBcBarPopupMenu;
+    PopupInputRenameFile: TMenuItem;
+    PopupInputDeleteFile: TMenuItem;
+    PopupMemoryCardAssignToSlot1: TMenuItem;
+    PopupMemoryCardAssignToSlot2: TMenuItem;
+    N1: TMenuItem;
+    PopupMemoryCardAssignToSlot3: TMenuItem;
+    PopupMemoryCardAssignToSlot4: TMenuItem;
+    Panel1_PlayRecInputFile: TPanelEx;
+    LabelInputFileName: TShadowLabel;
+    LabelInputSelectedFileFolder: TShadowLabel;
     Enabled_PlaybackRecordInput: TAdvOfficeCheckBoxEx;
     InputPlayback: TAdvOfficeRadioButtonEx;
     InputFileName: TEditEx;
@@ -60,11 +70,32 @@ type
     InputExitEmulatorAfterInputPlayback: TAdvOfficeCheckBoxEx;
     InputRecordTimecodeFile: TAdvOfficeCheckBoxEx;
     ButtonInputResetFileName: TBitBtnEx;
+    ButtonInputResetFileNameTitle: TBitBtnEx;
+    InputListView: TEasyListview;
+    PanelDisabledInput: TPanel;
+    Panel2_SaveState: TPanelEx;
+    LabelLoadSaveStateNotSupportedMsg: TShadowLabel;
+    LabelSaveStateSelectedFileFolder: TShadowLabel;
     Enabled_LoadSaveState: TAdvOfficeCheckBoxEx;
-    Enabled_InsertMemoryCard: TAdvOfficeCheckBoxEx;
-    Enabled_RecordMovie: TAdvOfficeCheckBoxEx;
+    AutoSaveState: TAdvOfficeCheckBoxEx;
+    PanelDisabledSaveStateNotSupportedMsg: TPanel;
+    SaveStateListView: TEasyListview;
+    PanelDisabledSaveState: TPanel;
+    Panel3_MemoryCard: TPanelEx;
+    LabelInsertMemoryCard_Slot4: TShadowLabel;
+    LabelInsertMemoryCard_Slot3: TShadowLabel;
     LabelInsertMemoryCard_Slot1: TShadowLabel;
     LabelInsertMemoryCard_Slot2: TShadowLabel;
+    LabelMemoryCardSelectedFileFolder: TShadowLabel;
+    ButtonInsertMemoryCard_Slot4_Clear: TBitBtnEx;
+    ButtonInsertMemoryCard_Slot4_LastUsed: TBitBtnEx;
+    ButtonInsertMemoryCard_Slot4_SelectFile: TBitBtnEx;
+    ButtonInsertMemoryCard_Slot3_LastUsed: TBitBtnEx;
+    ButtonInsertMemoryCard_Slot3_Clear: TBitBtnEx;
+    ButtonInsertMemoryCard_Slot3_SelectFile: TBitBtnEx;
+    InsertMemoryCard_Slot4: TEditEx;
+    InsertMemoryCard_Slot3: TEditEx;
+    Enabled_InsertMemoryCard: TAdvOfficeCheckBoxEx;
     InsertMemoryCard_Slot1: TEditEx;
     InsertMemoryCard_Slot2: TEditEx;
     ButtonInsertMemoryCard_Slot1_SelectFile: TBitBtnEx;
@@ -73,49 +104,21 @@ type
     ButtonInsertMemoryCard_Slot2_SelectFile: TBitBtnEx;
     ButtonInsertMemoryCard_Slot2_LastUsed: TBitBtnEx;
     ButtonInsertMemoryCard_Slot2_Clear: TBitBtnEx;
+    MemoryCardListView: TEasyListview;
+    PanelDisabledMemoryCard: TPanel;
+    Panel4_RecordMovie: TPanelEx;
+    LabelRecordMovieFileName: TShadowLabel;
+    LabelRecordMovieRootFolder: TShadowLabel;
+    LabelRecordMovieSelectedFileFolder: TShadowLabel;
+    Enabled_RecordMovie: TAdvOfficeCheckBoxEx;
     ButtonRecordMovieResetFileNameTitle: TBitBtnEx;
     ButtonRecordMovieResetFileName: TBitBtnEx;
     RecordMovieFileName: TEditEx;
     RecordMovieWAV: TAdvOfficeRadioButtonEx;
     RecordMovieMNG: TAdvOfficeRadioButtonEx;
     RecordMovieAVI: TAdvOfficeRadioButtonEx;
-    LabelInputFileName: TShadowLabel;
-    LabelLoadSaveStateNotSupportedMsg: TShadowLabel;
-    PopupELV: TBcBarPopupMenu;
-    PopupInputRenameFile: TMenuItem;
-    PopupInputDeleteFile: TMenuItem;
-    PanelDisabledInput: TPanel;
-    PanelDisabledSaveState: TPanel;
-    PanelDisabledMemoryCard: TPanel;
-    PanelDisabledRecordMovie: TPanel;
-    PopupMemoryCardAssignToSlot1: TMenuItem;
-    PopupMemoryCardAssignToSlot2: TMenuItem;
-    N1: TMenuItem;
-    AutoSaveState: TAdvOfficeCheckBoxEx;
-    PanelDisabledSaveStateNotSupportedMsg: TPanel;
-    ButtonInputResetFileNameTitle: TBitBtnEx;
-    LabelRecordMovieFileName: TShadowLabel;
-    LabelRecordMovieRootFolder: TShadowLabel;
-    LabelInsertMemoryCard_Slot3: TShadowLabel;
-    LabelInsertMemoryCard_Slot4: TShadowLabel;
-    InsertMemoryCard_Slot3: TEditEx;
-    InsertMemoryCard_Slot4: TEditEx;
-    ButtonInsertMemoryCard_Slot3_SelectFile: TBitBtnEx;
-    ButtonInsertMemoryCard_Slot3_Clear: TBitBtnEx;
-    ButtonInsertMemoryCard_Slot3_LastUsed: TBitBtnEx;
-    ButtonInsertMemoryCard_Slot4_SelectFile: TBitBtnEx;
-    ButtonInsertMemoryCard_Slot4_LastUsed: TBitBtnEx;
-    ButtonInsertMemoryCard_Slot4_Clear: TBitBtnEx;
-    PopupMemoryCardAssignToSlot3: TMenuItem;
-    PopupMemoryCardAssignToSlot4: TMenuItem;
-    InputListView: TEasyListview;
-    LabelInputSelectedFileFolder: TShadowLabel;
-    SaveStateListView: TEasyListview;
-    LabelSaveStateSelectedFileFolder: TShadowLabel;
-    MemoryCardListView: TEasyListview;
-    LabelMemoryCardSelectedFileFolder: TShadowLabel;
     RecordMovieListView: TEasyListview;
-    LabelRecordMovieSelectedFileFolder: TShadowLabel;
+    PanelDisabledRecordMovie: TPanel;
     procedure FormShow(Sender: TObject);
     procedure InputPlaybackClick(Sender: TObject);
     procedure ButtonInsertMemoryCard_Slot1_LastUsedClick(Sender: TObject);
@@ -290,6 +293,11 @@ procedure TFormArcadeRunGameExtraMAME.Resize4K;
 var
   iSize: Integer;
 
+  function MovePagePanel(iPanel: TPanelEx): Boolean;
+  begin
+    FormMain.Set4KPanelSpecs(iPanel, 0, Panel1_PlayRecInputFile.Top, Panel1_PlayRecInputFile.Width, Panel1_PlayRecInputFile.Height);
+  end;
+
   function MoveCheckBox(iEnabled_CheckBox: TAdvOfficeCheckBoxEx; iLeft, iTop, iWidth: Integer; IsSemibold: Boolean = False): Boolean;
   begin
     Result:= True;
@@ -346,7 +354,8 @@ begin
 
     FormMain.Set4KEmuGameTopPanel(TopBar, GameIcon, SystemIcon, LabelGameTitle, 1205, LabelGameName, -1);
 
-    PanelBottom.Height:= 71;
+    FormMain.Set4KPanelSpecs(PanelBottom, 0, ClientHeight-71, ClientWidth, 71);
+    //PanelBottom.Height:= 71;
     FormMain.Set4KLabelSpecs(LabelInfo, 24, 24, -1, -1, 16);
     FormMain.Set4KButtonsOkCancelPanel(PanelBottom, ButtonOk, ButtonAbort, False);
 
@@ -357,8 +366,15 @@ begin
 
     FormMain.Set4KBevelSpecs(PagesButtonBottomLine, -1, 206, 1028, -1);
 
-    FormMain.Set4KNotebookSpecs(NotebookPages, -1, 219, ClientWidth, PanelBottom.Top-219);
-    iSize:= NotebookPages.Height;
+    FormMain.Set4KPanelSpecs(Panel1_PlayRecInputFile, 0, 219, ClientWidth, PanelBottom.Top-219);
+
+    // move all pages, adjust size/position
+    MovePagePanel(Panel2_SaveState);
+    MovePagePanel(Panel3_MemoryCard);
+    MovePagePanel(Panel4_RecordMovie);
+
+    //FormMain.Set4KNotebookSpecs(NotebookPages, -1, 219, ClientWidth, PanelBottom.Top-219);
+    iSize:= Panel1_PlayRecInputFile.Height;
 
     // Playback/Record an Input File
     MoveCheckBox(Enabled_PlaybackRecordInput, 36, 1, 110, True);
@@ -1239,7 +1255,7 @@ var
 begin
   if not FormMain.CheckSelected(ELV_Holder) then
      Exit;
-  case NotebookPages.Tag of
+  case PanelBottom.Tag of
     1: FileCategory:= 'an input';
     2: FileCategory:= 'a save state';
     3: FileCategory:= 'a memory card';
@@ -1256,7 +1272,6 @@ begin
   FormMain.AddSoftwareListHeader;
 
   FormMain.AddCommandLineMsgBox(FileStr, True, False);
-  //FormMain.AddMsgText(#13#10+FileStr+#13#10, MsgTxtColors.colorCmdLine, [], taLeftJustify, 10, 'Lucida Console');
   FormMain.AddMsgText('Size: ', -1, [fsBold]);
   FormMain.AddMsgText(TFileInfo(Item).eSizeText+#13#10);
   FormMain.AddMsgText('Date modified: ', -1, [fsBold]);
@@ -1585,12 +1600,25 @@ var
          PanelHolder.Left:= 8;
          PanelHolder.Top:= 22;
        end;
-    PanelHolder.Width:= NotebookPages.Width-16;
-    PanelHolder.Height:= NotebookPages.Height-22-8;
+    PanelHolder.Width:= Panel1_PlayRecInputFile.Width-16;
+    PanelHolder.Height:= Panel1_PlayRecInputFile.Height-22-8;
     PanelHolder.ParentBackground:= False;
-    PanelHolder.Color:= NotebookPages.Color;// clBlue;
+    PanelHolder.Color:= Panel1_PlayRecInputFile.Color1;// clBlue;
     //PanelHolder.Visible:= True;
     //PanelHolder.Color:= clSilver;
+  end;
+
+  function MovePanel(iPanel: TPanelEx): Boolean;
+  begin
+    Result:= True;
+    iPanel.Left:= 0;
+    iPanel.Top:= Panel1_PlayRecInputFile.Top;
+    iPanel.Visible:= False;
+  end;
+
+  function AdjustPagePanel(PanelSource: TPanelEx): Boolean;
+  begin
+    PanelSource.Top:= PanelSource.Top+iTop;
   end;
 
 begin
@@ -1598,6 +1626,11 @@ begin
   //... this should be done in other Forms as well!
   //4 lines in 4K is 145 pixels (Verdana, size 14)
   //TopPanel heighit should be 235 pixels (label top = 84 + 145 height)
+  FormArcadeRunGameExtraMAME.Color:= clWhite; // $00f1f1f1; // reset to normal color just in case
+  MovePanel(Panel2_SaveState);
+  MovePanel(Panel3_MemoryCard);
+  MovePanel(Panel4_RecordMovie);
+
   Resize4K;
   if Is4KMode then
      iTop:= 46
@@ -1639,7 +1672,10 @@ begin
   if IsNightMode then
   begin
     SetFormColors(FormArcadeRunGameExtraMAME, TopBar, PanelBottom, LabelGameTitle, LabelGameName, nil, FormMain.MemGameInfo.eGameSetStatus, IsNightMode);
-    NotebookPages.Color:= FormArcadeRunGameExtraMAME.Color;
+    Panel1_PlayRecInputFile.Color1:= FormArcadeRunGameExtraMAME.Color;
+    Panel2_SaveState.Color1:=        FormArcadeRunGameExtraMAME.Color;
+    Panel3_MemoryCard.Color1:=       FormArcadeRunGameExtraMAME.Color;
+    Panel4_RecordMovie.Color1:=      FormArcadeRunGameExtraMAME.Color;
 
     SetTabButtonLineColors(PagesButtonBottomLine);
 
@@ -1725,7 +1761,7 @@ begin
   //PanelDisabledSaveStateNotSupportedMsg.Left:= 95;
   //PanelDisabledSaveStateNotSupportedMsg.Width:= (NotebookPages.Width-PanelDisabledSaveStateNotSupportedMsg.Left)-10;
   PanelDisabledSaveStateNotSupportedMsg.ParentBackground:= False;
-  PanelDisabledSaveStateNotSupportedMsg.Color:= NotebookPages.Color;
+  PanelDisabledSaveStateNotSupportedMsg.Color:= Panel1_PlayRecInputFile.Color1;
 
   LabelInputSelectedFileFolder.Caption:= '';
   InputPlayback_CurrentFile:= '';
@@ -1789,13 +1825,18 @@ begin
   if FormMain.MemGameInfo.eSoftwareName <> '' then
      begin
        FormArcadeRunGameExtraMAME.ClientHeight:= FormArcadeRunGameExtraMAME.ClientHeight+iTop;
-       NotebookPages.Top:= NotebookPages.Top+iTop;
+       PanelBottom.Top:= PanelBottom.Top+iTop;
+       AdjustPagePanel(Panel1_PlayRecInputFile); // NotebookPages.Top:= NotebookPages.Top+iTop;
+       AdjustPagePanel(Panel2_SaveState);
+       AdjustPagePanel(Panel3_MemoryCard);
+       AdjustPagePanel(Panel4_RecordMovie);
+
        TopBar.Height:= TopBar.Height+iTop;
 
        PagesButtonBottomLine.Top:= PagesButtonBottomLine.Top+iTop;
-       PageButtonInput.Top:= PageButtonInput.Top+iTop;
-       PageButtonSaveState.Top:= PageButtonSaveState.Top+iTop;
-       PageButtonMemoryCard.Top:= PageButtonMemoryCard.Top+iTop;
+       PageButtonInput.Top:=       PageButtonInput.Top+iTop;
+       PageButtonSaveState.Top:=   PageButtonSaveState.Top+iTop;
+       PageButtonMemoryCard.Top:=  PageButtonMemoryCard.Top+iTop;
        PageButtonRecordMovie.Top:= PageButtonRecordMovie.Top+iTop;
      end;
 
@@ -1818,12 +1859,15 @@ begin
        PageButtonSaveState.Down:= True;
        PageButtonSaveState.Click;
        PageButtonInput.Visible:= False;
-       PageButtonMemoryCard.Visible:= False;
+       PageButtonMemoryCard.Visible:=  False;
        PageButtonRecordMovie.Visible:= False;
        PageButtonSaveState.Left:= PageButtonInput.Left;
 
        Enabled_LoadSaveState.Checked:= True; // auto-enable save state; user can disable it if needed
      end;
+
+  ClientWidth:= Panel1_PlayRecInputFile.Width;
+  ClientHeight:= PanelBottom.Top+PanelBottom.Height;
 end;
 
 procedure TFormArcadeRunGameExtraMAME.InputPlaybackClick(Sender: TObject);
@@ -1928,27 +1972,37 @@ procedure TFormArcadeRunGameExtraMAME.PageButtonInputClick(Sender: TObject);
 var
   iSize: Integer;
 
+  procedure SetPanel(IsVisible: Boolean);
+  begin
+    case PanelBottom.Tag of
+      1: Panel1_PlayRecInputFile.Visible:= IsVisible;
+      2: Panel2_SaveState.Visible:=        IsVisible;
+      3: Panel3_MemoryCard.Visible:=       IsVisible;
+      4: Panel4_RecordMovie.Visible:=      IsVisible;
+    end;
+  end;
+  
   function UncheckButton(ButtonHolder: TSpeedButtonEx): Boolean;
   begin
     Result:= TSpeedButtonEx(ButtonHolder).Top = TSpeedButtonEx(Sender).Top;
     if Result then
        begin
          TSpeedButtonEx(ButtonHolder).Height:= TSpeedButtonEx(ButtonHolder).Height-iSize;
-         TSpeedButtonEx(ButtonHolder).Top:= TSpeedButtonEx(ButtonHolder).Top+iSize;
+         TSpeedButtonEx(ButtonHolder).Top:=    TSpeedButtonEx(ButtonHolder).Top+iSize;
          if not IsNightMode then
             TSpeedButtonEx(ButtonHolder).Font.Color:= clrDarkGray;
        end;
   end;
 
 begin
-  if TSpeedButtonEx(Sender).Tag = NotebookPages.Tag then
+  if TSpeedButtonEx(Sender).Tag = PanelBottom.Tag then
      Exit;
 
   if Is4KMode then
      iSize:= 9
   else
      iSize:= 3;
-  TSpeedButtonEx(Sender).Top:= TSpeedButtonEx(Sender).Top-iSize;
+  TSpeedButtonEx(Sender).Top:=    TSpeedButtonEx(Sender).Top-iSize;
   TSpeedButtonEx(Sender).Height:= TSpeedButtonEx(Sender).Height+iSize;
   if not IsNightMode then
      TSpeedButtonEx(Sender).Font.Color:= clBlack;
@@ -1980,8 +2034,9 @@ begin
       end;
   end;
 
-  NotebookPages.Tag:= TSpeedButtonEx(Sender).Tag;
-  NoteBookPages.PageIndex:= TSpeedButtonEx(Sender).Tag-1;
+  SetPanel(False);
+  PanelBottom.Tag:= TSpeedButtonEx(Sender).Tag;
+  SetPanel(True);
 end;
 
 procedure TFormArcadeRunGameExtraMAME.SetCheckBoxStateColor(CheckBoxSource: TAdvOfficeCheckBoxEx);

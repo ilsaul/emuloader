@@ -898,7 +898,7 @@ begin
      end;
   Result:= GetAppIcon(newEmulatorFileCustom[sysID, EmulatorIndex], IL_EmulatorIcon, 32, 2);
   if Result = -1 then
-     Result:= 0+(Ord(FormMain.IsExeBatchFile(newEmulatorFileCustom[sysID, EmulatorIndex])));
+     Result:= 0;//+(Ord(FormMain.IsExeBatchFile(newEmulatorFileCustom[sysID, EmulatorIndex])));
   IL_EmulatorIcon.GetIcon(Result, EmuIcon.Picture.Icon);
 
   EmuIconFrame.Visible:= False;

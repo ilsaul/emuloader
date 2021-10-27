@@ -61,10 +61,6 @@ type
     ButtonReplicate: TSpeedButtonEx;
     ButtonDelete: TSpeedButtonEx;
     PopupFavoritesManagerSettings: TBcBarPopupMenu;
-    PopupSettingsSmallFont: TMenuItem;
-    PopupSettingsMediumFont: TMenuItem;
-    PopupSettingsLargeFont: TMenuItem;
-    N7: TMenuItem;
     PopupSettingsCenterWindow: TMenuItem;
     PopupResetWindowSize: TMenuItem;
     procedure FavoritesListKeyAction(Sender: TCustomEasyListview;
@@ -93,7 +89,6 @@ type
     procedure PopupFavoritesManagerSettingsMeasureMenuItem(Sender: TObject;
       AMenuItem: TMenuItem; ACanvas: TCanvas; var Width, Height: Integer;
       ABarVisible: Boolean; var DefaultMeasure: Boolean);
-    procedure PopupSettingsSmallFontClick(Sender: TObject);
     procedure PopupSettingsCenterWindowClick(Sender: TObject);
     procedure FavoritesListItemPaintText(Sender: TCustomEasyListview;
       Item: TEasyItem; Position: Integer; ACanvas: TCanvas);
@@ -183,9 +178,6 @@ begin
     FavoritesList.Header.Columns[3].Width:= 240;
 
     PopupFavoritesManagerSettings.BeginUpdate;
-    PopupSettingsSmallFont.Enabled:=  False;
-    PopupSettingsMediumFont.Enabled:= False;
-    PopupSettingsLargeFont.Enabled:=  False;
     FormMain.PopupMenuToggle4K(PopupFavoritesManagerSettings);
     PopupFavoritesManagerSettings.EndUpdate;
   end;
@@ -1380,13 +1372,6 @@ begin
   FavoritesList.Header.Columns[2].Width:= iniFile.ReadInteger('FavoritesManager', 'ColumnFileNameWidth'+Str4K,     aColumnSize[Ord(Is4KMode), 2]);
   FavoritesList.Header.Columns[3].Width:= iniFile.ReadInteger('FavoritesManager', 'ColumnDateModifiedWidth'+Str4K, aColumnSize[Ord(Is4KMode), 3]);
 
-
-  case iniFile.ReadInteger('FavoritesManager', 'FavoritesListFontSize', 0) of
-    //0: PopupSettingsSmallFont.Checked:= True;
-    1: PopupSettingsMediumFont.Click;
-    2: PopupSettingsLargeFont.Click;
-  end;
-
   FreeAndNil(iniFile);
   if FormFavoritesManager.Tag = 1 then
      FormFavoritesManager.WindowState:= wsMaximized
@@ -1424,20 +1409,6 @@ begin
   iniFile.WriteInteger('FavoritesManager', 'ColumnGamesCountWidth'+Str4K,   FavoritesList.Header.Columns[1].Width);
   iniFile.WriteInteger('FavoritesManager', 'ColumnFileNameWidth'+Str4K,     FavoritesList.Header.Columns[2].Width);
   iniFile.WriteInteger('FavoritesManager', 'ColumnDateModifiedWidth'+Str4K, FavoritesList.Header.Columns[3].Width);
-
-  if not Is4KMode then
-     begin
-       tmpString:= '0';
-       if PopupSettingsSmallFont.Checked then
-          tmpString:= IntToStr(PopupSettingsSmallFont.Tag)
-       else
-       if PopupSettingsMediumFont.Checked then
-          tmpString:= IntToStr(PopupSettingsMediumFont.Tag)
-       else
-       if PopupSettingsLargeFont.Checked then
-          tmpString:= IntToStr(PopupSettingsLargeFont.Tag);
-       iniFile.WriteString('FavoritesManager', 'FavoritesListFontSize', tmpString);
-     end;
 
   iniFile.UpdateFile;
   FreeAndNil(iniFile);
@@ -1502,36 +1473,6 @@ procedure TFormFavoritesManager.PopupFavoritesManagerSettingsMeasureMenuItem(
   Height: Integer; ABarVisible: Boolean; var DefaultMeasure: Boolean);
 begin
   FormMain.SetPopupMenuMeasureItem(AMenuItem, ACanvas, Width, Height);
-end;
-
-procedure TFormFavoritesManager.PopupSettingsSmallFontClick(
-  Sender: TObject);
-begin
-  if Is4KMode then
-     Exit;
-  FavoritesList.BeginUpdate;
-  case TMenuItem(Sender).Tag of
-    0:
-      begin
-        FavoritesList.CellSizes.Report.Height:= 22;
-        FavoritesList.Font.Size:= 9;
-        FavoritesList.Header.Font.Size:= 9;
-      end;
-    1:
-      begin
-        FavoritesList.CellSizes.Report.Height:= 28;
-        FavoritesList.Font.Size:= 12;
-        FavoritesList.Header.Font.Size:= 12;
-      end;
-    2:
-      begin
-        FavoritesList.CellSizes.Report.Height:= 32;
-        FavoritesList.Font.Size:= 14;
-        FavoritesList.Header.Font.Size:= 12;
-      end;
-  end;
-  FavoritesList.EndUpdate;
-  FavoritesList.SetFocus;
 end;
 
 procedure TFormFavoritesManager.PopupSettingsCenterWindowClick(

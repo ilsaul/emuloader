@@ -47,7 +47,6 @@ type
     LabelSystemTitle: TShadowLabel;
     EmulatorIcon: TImage;
     LabelEmulatorVersion: TShadowLabel;
-    UseBiggerFontIconSize: TAdvOfficeCheckBoxEx;
     SoftwareLists: TEasyListview;
     procedure FormShow(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
@@ -64,7 +63,6 @@ type
     procedure SoftwareListsItemCheckChanging(Sender: TCustomEasyListview;
       Item: TEasyItem; var Allow: Boolean);
     procedure ButtonYesClick(Sender: TObject);
-    procedure UseBiggerFontIconSizeClick(Sender: TObject);
     procedure FormKeyPress(Sender: TObject; var Key: Char);
   private
     { Private declarations }
@@ -133,11 +131,8 @@ begin
 
     FormMain.Set4KButtonSpecs(ButtonResetToCurrent, 10, 16, 168, 45, 16);
     FormMain.Set4KCheckBoxSpecs(FilterShowUncheckedOnly, ButtonResetToCurrent.Left+ButtonResetToCurrent.Width+10, 20, 250, 36, 16);
-    FormMain.Set4KCheckBoxSpecs(UseBiggerFontIconSize, 444, 20, 250, 36, 16);
 
     FormMain.Set4KButtonsOkCancelPanel(PanelBottom, ButtonYes, ButtonNo, False);
-    //FormMain.Set4KButtonSpecs(ButtonNo, PanelBottom.Width-168-10, 16, 168, 45, 16);
-    //FormMain.Set4KButtonSpecs(ButtonYes, ButtonNo.Left-168-10, 16, 168, 45, 16);
 
     FormMain.Set4KListViewSpecs(SoftwareLists, 10, CheckAll.Top+40, 2164, 937, 16);
     FormMain.Set4KListViewCheckBoxHDSpecs(SoftwareLists);
@@ -149,8 +144,6 @@ begin
 
     SoftwareLists.ImagesSmall:= FormMain.IL_StandardIconsLarge;
     SoftwareLists.PaintInfoColumn.CaptionIndent:= 4; // reset to default value
-
-    UseBiggerFontIconSize.Visible:= False; // no need to show this setting
   end;
 end;
 
@@ -160,8 +153,6 @@ begin
      Exit;
   if Screen.Width >= 1280 then
      Exit;
-
-  UseBiggerFontIconSize.Visible:= False;
 
   FormArcadeSoftwareListCustomize.Width:= 1000;
   LabelTotalSoftwareList.Left:= LabelTotalSoftwareList.Left-200;
@@ -374,11 +365,9 @@ begin
 
        SetCheckBoxColors(CheckAll,                item_caption_active_color[1], item_caption_active_shadow_color[1]);
        SetCheckBoxColors(FilterShowUncheckedOnly, item_caption_active_color[1], item_caption_active_shadow_color[1]);
-       SetCheckBoxColors(UseBiggerFontIconSize,   item_caption_active_color[1], item_caption_active_shadow_color[1]);
 
        FormMain.SetCheckBoxExCustomIcon(CheckAll);
        FormMain.SetCheckBoxExCustomIcon(FilterShowUncheckedOnly);
-       FormMain.SetCheckBoxExCustomIcon(UseBiggerFontIconSize);
 
        FormMain.SetEasyListViewHeaderColors(SoftwareLists, True, False, Is4KMode);
        FormMain.ELV_SetRibbonNightColors(0, SoftwareLists, True);
@@ -592,41 +581,6 @@ begin
   if iListXML.Count > 0 then
      iListXML.SaveToFile(FormMain.GetSoftListExcludeFile(idMAME));
   FreeAndNil(iListXML);
-end;
-
-procedure TFormArcadeSoftwareListCustomize.UseBiggerFontIconSizeClick(
-  Sender: TObject);
-begin
-  if Is4KMode then
-     Exit;
-  if Screen.Width < 1280 then
-     Exit; // this feature is for high resolutions only
-
-  SoftwareLists.BeginUpdate;
-  if UseBiggerFontIconSize.Checked then
-     begin
-       FormMain.Set4KImageListSpecs(IL_MediaType, 24);
-       SoftwareLists.Font.Size:= 14;
-       SoftwareLists.CellSizes.Report.Height:= 30;
-       //SoftwareLists.Header.Columns[0].Width:= 687;
-       //SoftwareLists.Header.Columns[1].Width:= 235;
-       //SoftwareLists.Header.Columns[2].Width:= 170;
-     end
-  else
-     begin
-       FormMain.Set4KImageListSpecs(IL_MediaType, 16);
-       SoftwareLists.Font.Size:= 9;
-       SoftwareLists.CellSizes.Report.Height:= 22;
-       //SoftwareLists.Header.Columns[0].Width:= 672;
-       //SoftwareLists.Header.Columns[1].Width:= 165;
-       //SoftwareLists.Header.Columns[2].Width:= 125;
-     end;
-  if FormMain.CheckTotal(SoftwareLists) then
-     FormMain.LoadMediaTypeIcons2(IL_MediaType, True)
-  else
-     SoftwareLists.Header.Columns[0].Width:= SoftwareLists.Header.Columns[0].Width+GetSystemMetrics(SM_CXVSCROLL);
-  SoftwareLists.EndUpdate(False);
-  FormMain.MenuCustomizeMAMESoftwareList.Tag:= Ord(UseBiggerFontIconSize.Checked);
 end;
 
 procedure TFormArcadeSoftwareListCustomize.FormKeyPress(Sender: TObject;

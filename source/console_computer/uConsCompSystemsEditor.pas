@@ -29,7 +29,6 @@ type
     SystemsHideScrollBarArea: TAdvOfficeCheckBoxEx;
     LabelSoftListAssignedToSystem: TShadowLabel;
     LabelSoftListFilesNotAssigned: TShadowLabel;
-    ShowBiggerGamesListFont: TAdvOfficeCheckBoxEx;
     procedure FormShow(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure SystemsItemSelectionChanged(Sender: TCustomEasyListview;
@@ -77,7 +76,6 @@ type
     procedure SystemsItemPaintText(Sender: TCustomEasyListview;
       Item: TEasyItem; Position: Integer; ACanvas: TCanvas);
     procedure FormResize(Sender: TObject);
-    procedure ShowBiggerGamesListFontClick(Sender: TObject);
   private
     { Private declarations }
     SystemsSoftList: array[1..MaxConsoleComputerSystems] of THashedStringList; // holds softlist names for each system
@@ -171,8 +169,7 @@ begin
 
     PanelBottom.Height:= 71;
 
-    FormMain.Set4KCheckBoxSpecs(ShowBiggerGamesListFont,   10, 18, 305, 36, 16);
-    FormMain.Set4KCheckBoxSpecs(SystemsHideScrollBarArea, 405, 18, 250, 36, 16);
+    FormMain.Set4KCheckBoxSpecs(SystemsHideScrollBarArea, 10, 18, 250, 36, 16);
 
     FormMain.Set4KButtonsOkCancelPanel(PanelBottom, ButtonOk, ButtonCancel, False);
 
@@ -641,8 +638,6 @@ begin
       SoftListFilesNotAssigned.Header.Columns[Loop].Width:= SoftListAssignedToSystem.Header.Columns[Loop].Width;
   SoftListFilesNotAssigned.EndUpdate;
 
-  ShowBiggerGamesListFont.Checked:= Boolean(iIniFile.ReadInteger(iSectionStr, 'ShowBiggerGamesListFont', 0));
-
   FreeAndNil(iIniFile);
 end;
 
@@ -679,8 +674,6 @@ begin
 
   for Loop:= 0 to SoftListAssignedToSystem.Header.Columns.Count-1 do
       iIniFile.WriteInteger(iSectionStr, 'SoftListColumnWidth'+IntToStr(Loop), SoftListAssignedToSystem.Header.Columns[Loop].Width);
-
-  iIniFile.WriteInteger(iSectionStr, 'ShowBiggerGamesListFont', Ord(ShowBiggerGamesListFont.Checked));
   
   iIniFile.UpdateFile;
   FreeAndNil(iIniFile);
@@ -717,9 +710,6 @@ begin
        LabelSoftListFilesNotAssigned.Color:= clrLightBlack;
        SetLabelColors(LabelSoftListAssignedToSystem, item_caption_active_color[1], item_caption_active_shadow_color[1]);
        SetLabelColors(LabelSoftListFilesNotAssigned, item_caption_active_color[1], item_caption_active_shadow_color[1]);
-
-       SetCheckBoxColors(ShowBiggerGamesListFont,  clCream, item_caption_active_shadow_color[1]);
-       FormMain.SetCheckBoxExCustomIcon(ShowBiggerGamesListFont);
 
        SetCheckBoxColors(SystemsHideScrollBarArea, clCream, item_caption_active_shadow_color[1]);
        FormMain.SetCheckBoxExCustomIcon(SystemsHideScrollBarArea);
@@ -1078,30 +1068,6 @@ end;
 procedure TFormConsCompSystemsEditor.FormResize(Sender: TObject);
 begin
   UpdateSystemsDimensions;
-end;
-
-procedure TFormConsCompSystemsEditor.ShowBiggerGamesListFontClick(
-  Sender: TObject);
-var
-  iValue: Integer;
-begin
-  if ShowBiggerGamesListFont.Checked then
-     begin
-       if Is4KMode then
-          iValue:= 20
-       else
-          iValue:= 12;
-     end
-  else
-     begin
-       iValue:= FormMain.GetDefaultFontSize;
-     end;
-
-  if SoftListAssignedToSystem.Font.Size <> iValue then
-     begin
-       SoftListAssignedToSystem.Font.Size:= iValue;
-       SoftListFilesNotAssigned.Font.Size:= iValue;
-     end;
 end;
 
 end.

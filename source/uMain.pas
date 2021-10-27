@@ -50,6 +50,7 @@ type
     eIsUnicode: Boolean;           // for EmuCon games only... this shouldn't be needed. EL could test the filename and make sure is unicode (January 03, 2018)
     eIconLoaded: Boolean;
     eTitle: WideString;
+    eTitleAlternate: WideString;
 
     eYear: String;
     eManufacturer: WideString;
@@ -106,6 +107,7 @@ type
     eSoftwareExecParameter: String; // list MESS parameter for each media type -cart1; -flop1; -cass1; etc
     eSoftwareCompatible: WideString;    // compatibility tag for MESS games from hash\softwarelist.xml files
     eSoftwareUsageTip:   WideString;  // usage info for MESS software list games
+    eNotes: WideString;
 
     eScanMode: Byte; // 0 -> full scan; 1 -> quick scan (file search only); 2 -> force available
     eIsMerged: Boolean;
@@ -231,6 +233,7 @@ type
     fCustomMediaType: ShortInt;
     fIsCustomGame: Boolean;
     fTitle: WideString;
+    fTitleAlternate: WideString;
     fYear: String;
     fManufacturer: WideString;
     fName: WideString;
@@ -248,6 +251,7 @@ type
     property eIsCustomGame: Boolean read fIsCustomGame write fIsCustomGame;
 
     property eTitle: WideString read fTitle write fTitle;
+    property eTitleAlternate: WideString read fTitleAlternate write fTitleAlternate;
     property eYear: String read fYear write fYear;
     property eManufacturer: WideString read fManufacturer write fManufacturer;
     property eName: WideString read fName write fName;
@@ -281,6 +285,7 @@ type
     fThumbTempVars: TThumbnailTempVars;
 
     fTitle: WideString;
+    fTitleAlternate: WideString;
     fTitleShort: WideString;
     fYear: String;
     fManufacturer: WideString;
@@ -334,6 +339,7 @@ type
     fSoftwareExecParameter: String;   // list MESS parameter for each media type -cart; -flop1; -cass1; etc; for each softlist based game, not a MESS machine
     fSoftwareCompatible: WideString;  // compatibility tag for MESS games from hash\softwarelist.xml files...
     fSoftwareUsageTip:   WideString;    // usage info for MESS software list games
+    fNotes: WideString;
 
     fScanMode: Byte;
     fIsMerged: Boolean;
@@ -376,6 +382,7 @@ type
     //property eThumbTempVars: TThumbnailTempVars read fThumbTempVars write fThumbTempVars; // temp vars for thumbnails view
 
     property eTitle: WideString read fTitle write fTitle;
+    property eTitleAlternate: WideString read  fTitleAlternate write fTitleAlternate;
     property eTitleShort: WideString read fTitleShort write fTitleShort;
     property eYear: String read fYear write fYear;
     property eManufacturer: WideString read fManufacturer write fManufacturer;
@@ -430,6 +437,7 @@ type
     property eSoftwareExecParameter: String read fSoftwareExecParameter write fSoftwareExecParameter; // list MESS parameter for each media type -cart1; -flop1; -cass1; etc
     property eSoftwareCompatible: WideString read fSoftwareCompatible write fSoftwareCompatible; // compatibility tag for MESS games from hash\softwarelist.xml files
     property eSoftwareUsageTip: WideString read fSoftwareUsageTip write fSoftwareUsageTip;   // usage info for MESS software list games
+    property eNotes: WideString read fNotes write fNotes;
 
     property eScanMode: Byte read fScanMode write fScanMode;    // 0 -> full scan; 1 -> quick scan (file search only); 2 -> force available
     property eIsMerged: Boolean read fIsMerged write fIsMerged; // for MAME and software list games / HBMAME
@@ -1021,16 +1029,6 @@ type
     ButtonCustomSelectDefaultEmulators: TToolButton;
     MenuArcade: TMenuItem;
     MenuConsoleComputer: TMenuItem;
-    CustomCommandLine1: TMenuItem;
-    PopupSetGameCustomCommandLine: TMenuItem;
-    PopupDeleteGameCustomCommandLine: TMenuItem;
-    N31: TMenuItem;
-    PopupSetDriverCustomCommandLine: TMenuItem;
-    PopupDeleteDriverCustomCommandLine: TMenuItem;
-    N50: TMenuItem;
-    PopupSetSystemCustomCommandLine: TMenuItem;
-    PopupDeleteSystemCustomCommandLine: TMenuItem;
-    PopupEnableCustomCommandLine: TMenuItem;
     N54: TMenuItem;
     N55: TMenuItem;
     N56: TMenuItem;
@@ -1148,7 +1146,6 @@ type
     PopupNightModeCopyPasteColor: TBcBarPopupMenu;
     PopupNightModeTitle: TMenuItem;
     PopupNightModeTitleSeparator: TMenuItem;
-    PopupNightModeRGBQuickEdit: TMenuItem;
     PopupNightModePasteColor: TMenuItem;
     PopupNightModeCopyColor: TMenuItem;
     IL_Colors: TImageList;
@@ -1409,8 +1406,6 @@ type
     procedure PopupUseCustomEmuParameter1Click(Sender: TObject);
     procedure ButtonGamesMRUClick(Sender: TObject);
     procedure ButtonCustomSelectDefaultEmulatorsClick(Sender: TObject);
-    procedure PopupSetGameCustomCommandLineClick(Sender: TObject);
-    procedure PopupDeleteGameCustomCommandLineClick(Sender: TObject);
     procedure MenuImageCategorySettingsClick(Sender: TObject);
     procedure MenuImageVideoPreviewSettingsClick(Sender: TObject);
     procedure PopupTilesViewCellSizeStandardClick(Sender: TObject);
@@ -1455,7 +1450,6 @@ type
     procedure WebButtonStopClick(Sender: TObject);
     procedure WebButtonExitClick(Sender: TObject);
     procedure PopupNightModeCopyPasteColorPopup(Sender: TObject);
-    procedure PopupNightModeRGBQuickEditClick(Sender: TObject);
     procedure PopupNightModePasteColorClick(Sender: TObject);
     procedure PopupNightModeCopyColorClick(Sender: TObject);
     procedure MenuImageUseSingleBackgroundColorClick(Sender: TObject);
@@ -1570,7 +1564,7 @@ type
     procedure WriteImageSingleBackground;
     procedure LoadImageCategoryLayoutSettings(ReadCategoryBackgroundColorsOnly: Boolean = False);
 
-    // functions for "RGB Quick Edit"
+    // functions for "RGB Edit"
     function  GetRGBTextFromColor(iColor: TColor; ReturnRGBPrefixText: Boolean = True): String;
     function  GetColorName(iColor: TColor; ReturnHexStringOnly: Boolean): String;
     procedure ReplaceColorIcon(IsCopyColor: Boolean; IsImageBkColor: Boolean = False; Startup: Boolean = False);
@@ -1749,6 +1743,8 @@ type
 
     procedure ResetImageTagTo1; // this will reset Images.Tag; ImageScr[???].Tag; back to "1"
 
+    procedure ImageLayoutDimensionsUpdatePos;
+
     // zipped images functions
     procedure ShowInitZipImageMsgBox(IsStartupApp: Boolean = False);
     procedure HideInitZipImageMsgBox;
@@ -1918,6 +1914,9 @@ type
     function  DeleteSingleGameFromGamesListConsoleComputer(ShowDeleteMessage: Boolean): Boolean;
     procedure ItemThumbnailShowIcons(Item: TEasyItem; ACanvas: TCanvas; ARect: TRect); // for OnItemThumbnailDraw() event in main games list
 
+    function  IsLinuxWine: Boolean; // detect if running in Linux thru WINE or not
+
+    procedure SetFormStatusParentWindow;
     // 4K Mode
     //function  Validate4KResolution: Boolean;
     procedure FilterMsgBoxToggle4K;
@@ -2030,16 +2029,11 @@ type
     // thumbnail view mode settings
     ThumbnailSettings: TThumbnailSettings;
 
+    procedure SetWindowStayOnTop(FormSource: TForm; SetParentWindow: Boolean = False); // do not set TForm.FormStyle = fsStayOnTop, it causes flicker; use this function
+
     // custom parameters (2021)
     function  CustomParam_ReadParams(iFileName: String): String; //iGameName: WideString; iCloneName, iSoftwareName: String; iMachineName: WideString; iSysID: ShortInt): WideString;
-    function  CustomParam_DeleteFile(iFileName: String): Boolean;
-
-    // custom command line
-    function  GetCustomCommandLineFolder: String;
-    function  GetBatchFileFieldIndex(ParameterIndex: String): String;
-    function  GetCustomCommandLineFileFullPath(const strFileName: WideString; sysID: ShortInt;SystemType: ShortInt; const MAMESoftwareName: String): WideString;
-    function  ReadCustomCommandLine(const sFileFullPath: WideString; RunningGame: Boolean = False): WideString;
-    procedure DeleteCustomCommandLine(const sFileName: WideString);
+    //function  CustomParam_DeleteFile(iFileName: String): Boolean;
 
     procedure SelectScanGamesModeHelpButton;
 
@@ -2107,6 +2101,7 @@ type
     function  GetDefaultFontSize: Integer;
     procedure SetDefaultFont(tFont: TFont; FontID: ShortInt; SetFontColorNightMode, Use4KMode: Boolean);
     function  GetArcadeFolder: String;
+    function  GetFrontendTempFolder: String;
     function  GetGamesFolderEL(SystemType: ShortInt = 0; sysID: ShortInt = idMAME): String;
     function  GetCustomParamsFolder(sysID: ShortInt = idMAME): String;
     //function  GetFolderSoftwareList(sysID: Byte): String;
@@ -2190,12 +2185,14 @@ type
 
     function  GetGameTypeString(sysID, sysType: ShortInt; const SoftwareName: String): String;
 
+    procedure ShowStatusForm;
+    procedure CloseStatusForm;
+
     procedure SetGameType(LoadFiles: Boolean);
 
     function  GameIsClone(const CloneOfName: String): Boolean;
     function  ValidateBiosName(const BiosName, GameName: String): Boolean;
     function  GetDemulMachineName(const DriverName: String; IsOldBuild: Boolean): String;
-    function  IsExeBatchFile(const emuFile: String): Boolean;
     function  IsZipFile(const GameFile: WideString): Boolean;
     procedure ShowGameNameEntryMsgBox(MultiSlot: Boolean = False; const MultiSlotMachineName: String = '');
     procedure EnableMsgMediaTypeLabel(MountImage: Boolean; AssociatedApplication: Boolean = False);
@@ -2242,8 +2239,7 @@ type
                          Visibility: Word = SW_SHOWNORMAL;
                          PositionX: Integer = -1; PositionY: Integer = -1): DWORD;
 
-    function RunProcessCaptureConsoleOutput(const AppPath: String; ListInfoVar: TStringStream; RichEditVar: TTntRichEdit = nil): DWORD;
-
+    function  RunProcessCaptureConsoleOutput(const AppPath: String; ListInfoVar: TStringStream; RichEditVar: TTntRichEdit = nil): DWORD;
 
     function  IsSystemAvailable(sysID: ShortInt; IsConsoleComputerSystem: Boolean = False): Boolean;
 
@@ -2281,7 +2277,7 @@ type
     function  GetWindowStateRunGame(sysID: ShortInt): Integer;
     function  GetArcadeEmulatorVersion(SystemID: Byte; const strEmuFile: String; out StoreResultIn: String; out StoreMAMEBuildVersionIn: String): Boolean;
     function  GetArcadeEmuVersionXML(sysID: Byte): String;
-    //procedure SetSelectedColorBox(ColorBoxHolder: TColorBoxEx; Color: TColor);
+
     procedure FixEmptyValue(TextHolder: TEditEx; StringValue: String);
 
     procedure ReadExtraIni;
@@ -2665,6 +2661,10 @@ type
     procedure SetThumbGridSize(WidthSizeIndex, HeightSizeIndex: Integer);
     procedure ThumbnailCalculateIconPos(var SettingsGroup: TThumbnailSettings; ARect: TRect; IsConsoleComputer: Boolean);
 
+    // RGB Color Picker Ex
+    procedure RGBColorPickerExecute(Sender: TObject);
+    procedure RGBColorPickerAssignOnClick(FormSource: TForm);
+
     // 4K Mode
     procedure Set4KImageListSpecs(ImageListSource: TImageList; iSize: Integer; iHeight: Integer = -1);
     procedure Set4KImageIconSpecs(ImageSource: TImage;   iSize: Integer; iLeft: Integer = -1; iTop: Integer = -1); overload;
@@ -2769,13 +2769,13 @@ uses
   uArcadeSoftwareListCustomize, uApplyFilterMsgBox, uArcadeExportGamesList,
   uArcadeRunExtraMAME, uConsCompGamesEditor, uConsCompEmulatorsSetup, uConsCompSystemsEditor,
   uConsCompGamesFolders, uConsCompMultiFloppyGames, uConsCompSystemSelector,
-  uConsCompSelectEmulator, uCustomCommandLine, uCleanInstallGuide,
+  uConsCompSelectEmulator, uCleanInstallGuide,
   uImageCategorySettings, uVideoPreviewSettings,
   uSelectFilterSystemMega, uLastPlayedGames, uSelectFile,
   uConsCompSystemRules, uSelectFilterSystemSimple, uImageLayoutSelector,
   uImageCategorySelector, uArcadeFileVersionsLarge,
-  uArcadeMAMEMachinesCustomize, uNightMode, uNightModeRGBQuickEdit,
-  uCustomParameters;
+  uArcadeMAMEMachinesCustomize, uNightMode,
+  uCustomParameters, uColorPickerEx;
 
 {$R *.dfm}
 
@@ -2890,7 +2890,7 @@ begin
         try
           Color   := TColor(SendDlgItemMessage(Self.Handle, IDCOLORCMB, CB_GETITEMDATA, 0, 0));
           Options := [cdFullOpen];
-          if Execute then //(Self.Handle) then
+          if Execute then
              SendDlgItemMessage(Self.Handle, IDCOLORCMB, CB_SETITEMDATA, 0, ColorToRGB(Color));
         finally
           Free;
@@ -3747,9 +3747,9 @@ begin
       p:= loPByte;
       Inc(p, loSize * to_y);
       slo:= pRGBArray(p);
-      slo[to_x].rgbtRed:= Round(total_red);
+      slo[to_x].rgbtRed:=   Round(total_red);
       slo[to_x].rgbtGreen:= Round(total_green);
-      slo[to_x].rgbtBlue:= Round(total_blue);
+      slo[to_x].rgbtBlue:=  Round(total_blue);
     end;
   end;
   bTmp.Canvas.UnLock;
@@ -4633,205 +4633,10 @@ begin
   FreeAndNil(iFile);
 end;
 
-function TFormMain.CustomParam_DeleteFile(iFileName: String): Boolean;
-begin
-
-end;
-
-// custom command line functions
-function TFormMain.GetBatchFileFieldIndex(ParameterIndex: String): String;
-begin
-  Result:= '-1';
-  case StrToInt(ParameterIndex) of
-    0: Result:= '0';  // description
-    1: Result:= '9';  // name
-    2: Result:= '10'; // clone of
-    3: Result:= '11'; // driver name
-    4: Result:= '-2'; // control type
-  end;
-end;
-
-function TFormMain.GetCustomCommandLineFileFullPath(const strFileName: WideString; sysID: ShortInt; SystemType: ShortInt; const MAMESoftwareName: String): WideString;
-var
-  sysTypeStr: String;
-begin
-  // 0 -> arcade
-  // 1 -> MAME software list
-  // 2 -> console/computer (EmuCon systems)
-  case SystemType of
-    0: sysTypeStr:= 'arcade\'+GetArcadeSystemIniSection(sysID);
-    1: sysTypeStr:= 'arcade\'+GetArcadeSystemIniSection(sysID)+'\'+MAMESoftwareName;
-    2: sysTypeStr:= 'console_computer\'+ChangeFileExt(SystemsListCustom[sysID, 2], '');
-  end;
-  Result:= GetCustomCommandLineFolder+sysTypeStr+'\'+strFileName+'.ini';
-end;
-
-function TFormMain.ReadCustomCommandLine(const sFileFullPath: WideString; RunningGame: Boolean = False): WideString;
-var
-  CommandLineFile: THashedStringList;
-  sEmulatorBatchFile, sParametersPrefix, sParameters, sParametersSuffix, sQuotes, sAdditionalParameters: String;
-  PrefixList, ParametersList, SuffixList, QuotesList: TStringList;
-  Loop, sIndex, PrefixSendLeadingSpace: Integer;
-
-  function ExtractFieldsList(ParamStr: String; StringListHolder: TStringList): Boolean;
-  var
-    LoopFList: Integer;
-    TempField: String;
-  begin
-    Result:= True;
-    TempField:= '';
-    if (ParamStr = '') or
-       (not Assigned(StringListHolder)) then
-       begin
-         Result:= False;
-         Exit;
-       end;
-    for LoopFList:=1 to Length(ParamStr) do
-    begin
-      if ParamStr[LoopFList] = ';' then
-         begin
-           StringListHolder.Add(TempField);
-           TempField:= '';
-         end
-      else
-         TempField:= TempField+ParamStr[LoopFList];
-    end;
-  end;
-
-begin
-  Result:= '';
-  if not ValidateFile(sFileFullPath) then
-     Exit;
-
-  CommandLineFile:= THashedStringList.Create;
-  CommandLineFile.LoadFromFile(sFileFullPath);
-  sEmulatorBatchFile:= CommandLineFile.Values['FileName'];
-  sParametersPrefix:= CommandLineFile.Values['Prefix'];
-  PrefixSendLeadingSpace:= StrToInt(CommandLineFile.Values['PrefixAddLeadingSpace']);
-  sParameters:= CommandLineFile.Values['Parameters'];
-  sParametersSuffix:= CommandLineFile.Values['Suffix'];
-  sQuotes:= CommandLineFile.Values['Quotes'];
-  sAdditionalParameters:= CommandLineFile.Values['AdditionalParameters'];
-  FreeAndNil(CommandLineFile);
-  if sEmulatorBatchFile = '' then
-     begin
-       ShowMessageBox('Error', 'Read Custom Command Line', 'Custom command line is blank.'+#13#10+
-                      'Filename is empty, cannot execute custom command line. Aborting...', 2, False, 1);
-       Exit;
-     end;
-  PrefixList:= TStringList.Create;
-  ParametersList:= TStringList.Create;
-  SuffixList:= TStringList.Create;
-  QuotesList:= TStringList.Create;
-  ExtractFieldsList(sParametersPrefix, PrefixList);
-  ExtractFieldsList(sParameters, ParametersList);
-  ExtractFieldsList(sParametersSuffix, SuffixList);
-  ExtractFieldsList(sQuotes, QuotesList);
-
-  if Assigned(PrefixList) and Assigned(ParametersList) and
-     Assigned(SuffixList) and Assigned(QuotesList) then
-     begin
-       for Loop:=0 to ParametersList.Count-1 do
-       begin
-         case RunningGame of
-           False:
-             begin
-               FormCustomCommandLine.ParametersListView.BeginUpdate;
-               sIndex:= StrToInt(ParametersList[Loop]);
-               if sIndex > FormCustomCommandLine.FieldToAdd.ItemsEx.Count then
-                  begin
-                    ShowMessageBox('Error', 'Read Custom Command Line', 'Error trying to set parameter.'+#13#10+
-                                   Format('Parameter #%u.'+#13#10+'Index "%u" is invalid! '+
-                                   'Will replace it by "Name" field.', [Loop+1, sIndex]), 2);
-                    sIndex:= 4;
-                  end;
-               with FormCustomCommandLine.ParametersListView.Items.Add do
-               begin
-                 ImageIndex:= FormCustomCommandLine.FieldToAdd.ItemsEx[sIndex].ImageIndex;
-                 StateImageIndex:= sIndex;
-                 if PrefixList.Count > 0 then
-                    Caption:= PrefixList[Loop]
-                 else
-                    Caption:= '';
-                 Captions[1]:= FormCustomCommandLine.FieldToAdd.ItemsEx[sIndex].Caption;
-                 if SuffixList.Count > 0 then
-                    Captions[2]:= SuffixList[Loop]
-                 else
-                    Captions[2]:= '';
-                 case StrToInt(QuotesList[Loop]) of
-                   0: Captions[3]:= 'No';
-                   1: Captions[3]:= 'Yes';
-                 end;
-               end;
-               FormCustomCommandLine.ParametersListView.EndUpdate;
-             end;
-           True:
-             begin
-               if PrefixList.Count > 0 then
-                  sParametersPrefix:= PrefixList[Loop]
-               else
-                  sParametersPrefix:= '';
-               sParameters:= GetBatchFileFieldIndex(ParametersList[Loop]);
-               if SuffixList.Count > 0 then
-                  sParametersSuffix:= SuffixList[Loop]
-               else
-                  sParametersSuffix:= '';
-               case StrToInt(QuotesList[Loop]) of
-                 0: sQuotes:= '';
-                 1: sQuotes:= '"';
-               end;
-               if (Result <> '') and Boolean(PrefixSendLeadingSpace) then
-                  sParametersPrefix:= ' '+sParametersPrefix;
-               case StrToInt(sParameters) of
-                 00: Result:= Result+sParametersPrefix+sQuotes+MemGameInfo.eTitle+sQuotes+sParametersSuffix;
-                 09: Result:= Result+sParametersPrefix+sQuotes+MemGameInfo.eName+sQuotes+sParametersSuffix;
-                 10: Result:= Result+sParametersPrefix+sQuotes+MemGameInfo.eClone+sQuotes+sParametersSuffix;
-                 11: Result:= Result+sParametersPrefix+sQuotes+MemGameInfo.eDriverName+sQuotes+sParametersSuffix;
-                 //-2: Result:= Result+sParametersPrefix+sQuotes+
-                 //             aControlType[StrToInt(MountControlTypesList(MemGameInfo.eControls, nil, nil, True)), 0]+
-                 //             sQuotes+sParametersSuffix;
-               end;
-             end;
-         end;
-       end;
-     end;
-  case RunningGame of
-    True:
-      begin
-        if Result <> '' then
-           begin
-             Result:= SystemStr+sEmulatorBatchFile+SystemStr+' '+Result;
-             if sAdditionalParameters <> '' then
-                Result:= Result+' '+sAdditionalParameters;
-           end
-        else
-           Result:= SystemStr+sEmulatorBatchFile+SystemStr;
-      end;
-    False:
-      begin
-        Result:='file_found';
-        FormCustomCommandLine.EmulatorBatchFile.Text:= sEmulatorBatchFile;
-        FormCustomCommandLine.PrefixSendLeadingSpace.Checked:= Boolean(PrefixSendLeadingSpace);
-        FormCustomCommandLine.AdditionalParameters.Text:= sAdditionalParameters;
-      end;
-  end;
-  // end of function
-  FreeAndNil(PrefixList);
-  FreeAndNil(ParametersList);
-  FreeAndNil(SuffixList);
-  FreeAndNil(QuotesList);
-end;
-
-procedure TFormMain.DeleteCustomCommandLine(const sFileName: WideString);
-begin
-  if sFileName = '' then
-     Exit;
-  if ShowMessageBox('Delete File', 'Delete custom command line.', Format('Are you sure you want to delete '+
-                    '"%s" file ? Recycle bin is not supported. Click No to keep this file.',
-                    [sFileName]), 1, False, 2) = mrYes then
-     DeleteFileW(PWideChar(sFileName));
-end;
-// custom command line functions
+//function TFormMain.CustomParam_DeleteFile(iFileName: String): Boolean;
+//begin
+//
+//end;
 
 procedure TFormMain.GetLastSelectedItem(out EasyItemVar: TEasyItem);
 var
@@ -5039,6 +4844,11 @@ end;
 function TFormMain.GetArcadeFolder: String;
 begin
   Result:= FrontendPath+'arcade\';
+end;
+
+function TFormMain.GetFrontendTempFolder: String;
+begin
+  Result:= FrontendPath+'temp\';
 end;
 
 function TFormMain.GetGamesFolderEL(SystemType: ShortInt = 0; sysID: ShortInt = idMAME): String;
@@ -5400,9 +5210,10 @@ begin
              ;
 
     Result:= Result+MountGameInfoFieldStr('title',     TempGameVars.eTitle);
-    Result:= Result+MountGameInfoFieldStr('alt_title', TempGameVars.ePlayedDateText);
+    Result:= Result+MountGameInfoFieldStr('alt_title', TempGameVars.eTitleAlternate);
     Result:= Result+MountGameInfoFieldStr('year',      TempGameVars.eYear);
     Result:= Result+MountGameInfoFieldStr('publisher', TempGameVars.eManufacturer);
+    Result:= Result+MountGameInfoFieldStr('notes',     TempGameVars.eNotes);
     Result:= Result+MountGameInfoFieldStr('cloneof',   TempGameVars.eClone);
     if TempGameVars.eGameSize <> 0 then
        Result:= Result+MountGameInfoFieldStr('size', IntToStr(TempGameVars.eGameSize));
@@ -5844,6 +5655,7 @@ begin
   GameInfoVar.eIsUnicode:= TEasyGameInfo(SelectedEasyItem).eIsUnicode;
   GameInfoVar.eIconLoaded:= TEasyGameInfo(SelectedEasyItem).eIconLoaded;
   GameInfoVar.eTitle:= TEasyGameInfo(SelectedEasyItem).eTitle;
+  GameInfoVar.eTitleAlternate:= TEasyGameInfo(SelectedEasyItem).eTitleAlternate;
   GameInfoVar.eYear:= TEasyGameInfo(SelectedEasyItem).eYear;
   GameInfoVar.eManufacturer:= TEasyGameInfo(SelectedEasyItem).eManufacturer;
   GameInfoVar.eControls:= TEasyGameInfo(SelectedEasyItem).eControls;
@@ -5895,6 +5707,7 @@ begin
   GameInfoVar.eSoftwareExecParameter:= TEasyGameInfo(SelectedEasyItem).eSoftwareExecParameter; // MAME games 'softwarelist_name.xml'
   GameInfoVar.eSoftwareCompatible:=    TEasyGameInfo(SelectedEasyItem).eSoftwareCompatible;    // MAME games 'softwarelist_name.xml'
   GameInfoVar.eSoftwareUsageTip:=      TEasyGameInfo(SelectedEasyItem).eSoftwareUsageTip;      // MAME games 'softwarelist_name.xml'
+  GameInfoVar.eNotes:=                 TEasyGameInfo(SelectedEasyItem).eNotes;                 // MAME games 'softwarelist_name.xml'
 
   GameInfoVar.eScanMode:= TEasyGameInfo(SelectedEasyItem).eScanMode; // MAME and arcade only
   GameInfoVar.eIsMerged:= TEasyGameInfo(SelectedEasyItem).eIsMerged; // MAME and Supermodel 3 only
@@ -5928,6 +5741,7 @@ begin
 
   GameInfoVar.eIconLoaded:= False; // for MAMu_ icons
   GameInfoVar.eTitle:= '';
+  GameInfovar.eTitleAlternate:= '';
   GameInfoVar.eYear:= '';
   GameInfoVar.eManufacturer:= '';
   GameInfoVar.eControls:= '';
@@ -5972,10 +5786,11 @@ begin
   GameInfoVar.eGameSizeText:= '';
   GameInfoVar.eHaveGameROMs:= 0;
 
-  GameInfoVar.eSoftwareName:=          ''; // for MAME 'softwarelist.xml' files
+  GameInfoVar.eSoftwareName:=          ''; // for MAME 'softwarelist.xml'
   GameInfoVar.eSoftwareExecParameter:= ''; // for MAME 'softwarelist.xml'
   GameInfoVar.eSoftwareCompatible:=    ''; // for MAME 'softwarelist.xml'
   GameInfoVar.eSoftwareUsageTip:=      ''; // for MAME 'softwarelist.xml'
+  GameInfoVar.eNotes:=                 ''; // for MAME 'softwarelist.xml'
 
   GameInfoVar.eScanMode:= 0; // always full scan (ROMs/CHDs validation)
   GameInfoVar.eIsMerged:= False;
@@ -5996,26 +5811,27 @@ begin
   // used by some features like Scan Missing Images/MAMu_ Icons
   // Scan Not Used Images/MAMu_ Icons, Scan Audio Samples, Not Used Zip Files
   ClearMemGameInfo(TempGameVars);
-  TempGameVars.eImageIndex:= TEasyGameInfo(ELV_Item).eImageIndex;
-  TempGameVars.eROMIdentification:= TEasyGameInfo(ELV_Item).eROMIdentification;
-  TempGameVars.eMediaType:= TEasyGameInfo(ELV_Item).eMediaType;
+  TempGameVars.eImageIndex:=         TEasyGameInfo(ELV_Item).eImageIndex;
+  TempGameVars.eROMIdentification:=  TEasyGameInfo(ELV_Item).eROMIdentification;
+  TempGameVars.eMediaType:=          TEasyGameInfo(ELV_Item).eMediaType;
   TempGameVars.eArcadeCHDMediaType:= TEasyGameInfo(ELV_Item).eArcadeCHDMediaType;
-  TempGameVars.eSystemID:= TEasyGameInfo(ELV_Item).eSystemID;
-  TempGameVars.eSystemType:= TEasyGameInfo(ELV_Item).eSystemType;
-  TempGameVars.eCustomSystemID:= TEasyGameInfo(ELV_Item).eCustomSystemID;
+  TempGameVars.eSystemID:=        TEasyGameInfo(ELV_Item).eSystemID;
+  TempGameVars.eSystemType:=      TEasyGameInfo(ELV_Item).eSystemType;
+  TempGameVars.eCustomSystemID:=  TEasyGameInfo(ELV_Item).eCustomSystemID;
   TempGameVars.eCustomMediaType:= TEasyGameInfo(ELV_Item).eCustomMediaType;
   TempGameVars.eIsCustomGame:= TEasyGameInfo(ELV_Item).eIsCustomGame;
-  TempGameVars.eIsUnicode:= TEasyGameInfo(ELV_Item).eIsUnicode;
-  TempGameVars.eIconLoaded:= TEasyGameInfo(ELV_Item).eIconLoaded;
-  TempGameVars.eTitle:= TEasyGameInfo(ELV_Item).eTitle;
-  TempGameVars.eYear:= TEasyGameInfo(ELV_Item).eYear;
+  TempGameVars.eIsUnicode:=    TEasyGameInfo(ELV_Item).eIsUnicode;
+  TempGameVars.eIconLoaded:=   TEasyGameInfo(ELV_Item).eIconLoaded;
+  TempGameVars.eTitle:=          TEasyGameInfo(ELV_Item).eTitle;
+  TempGameVars.eTitleAlternate:= TEasyGameInfo(ELV_Item).eTitleAlternate;
+  TempGameVars.eYear:=         TEasyGameInfo(ELV_Item).eYear;
   TempGameVars.eManufacturer:= TEasyGameInfo(ELV_Item).eManufacturer;
-  TempGameVars.eControls:= TEasyGameInfo(ELV_Item).eControls;
+  TempGameVars.eControls:=     TEasyGameInfo(ELV_Item).eControls;
   TempGameVars.eButtonsCount:= TEasyGameInfo(ELV_Item).eButtonsCount;
-  TempGameVars.eAudioType:= TEasyGameInfo(ELV_Item).eAudioType;
+  TempGameVars.eAudioType:=  TEasyGameInfo(ELV_Item).eAudioType;
   TempGameVars.eScreenType:= TEasyGameInfo(ELV_Item).eScreenType;
   TempGameVars.eScreenOrientation:= TEasyGameInfo(ELV_Item).eScreenOrientation;
-  TempGameVars.eScreenResolution:= TEasyGameInfo(ELV_Item).eScreenResolution;
+  TempGameVars.eScreenResolution:=  TEasyGameInfo(ELV_Item).eScreenResolution;
   TempGameVars.eScreenRefreshRate:= TEasyGameInfo(ELV_Item).eScreenRefreshRate;
 
   TempGameVars.eDriverStatus:=     TEasyGameInfo(ELV_Item).eDriverStatus;
@@ -6029,33 +5845,34 @@ begin
   TempGameVars.eNetwork:= TEasyGameInfo(ELV_Item).eNetwork;
   TempGameVars.eRequiresArtwork:= TEasyGameInfo(ELV_Item).eRequiresArtwork;
 
-  TempGameVars.eCategory:= TEasyGameInfo(ELV_Item).eCategory;
+  TempGameVars.eCategory:=     TEasyGameInfo(ELV_Item).eCategory;
   TempGameVars.eVersionAdded:= TEasyGameInfo(ELV_Item).eVersionAdded;
-  TempGameVars.eLanguage:= TEasyGameInfo(ELV_Item).eLanguage;
-  TempGameVars.eName:= TEasyGameInfo(ELV_Item).eName;
-  TempGameVars.eClone:= TEasyGameInfo(ELV_Item).eClone;
+  TempGameVars.eLanguage:=     TEasyGameInfo(ELV_Item).eLanguage;
+  TempGameVars.eName:=       TEasyGameInfo(ELV_Item).eName;
+  TempGameVars.eClone:=      TEasyGameInfo(ELV_Item).eClone;
   TempGameVars.eDriverName:= TEasyGameInfo(ELV_Item).eDriverName;
-  TempGameVars.eBiosName:= TEasyGameInfo(ELV_Item).eBiosName;
-  TempGameVars.eNumberPlayers:= TEasyGameInfo(ELV_Item).eNumberPlayers;
+  TempGameVars.eBiosName:=   TEasyGameInfo(ELV_Item).eBiosName;
+  TempGameVars.eNumberPlayers:=    TEasyGameInfo(ELV_Item).eNumberPlayers;
   TempGameVars.eNumberPlayersIni:= TEasyGameInfo(ELV_Item).eNumberPlayersIni;
   TempGameVars.eChipCPU:= TEasyGameInfo(ELV_Item).eChipCPU;
-  TempGameVars.ePlayed:= TEasyGameInfo(ELV_Item).ePlayed;
-  TempGameVars.ePlayedDate:= TEasyGameInfo(ELV_Item).ePlayedDate;
-  TempGameVars.ePlayedDateText:= TEasyGameInfo(ELV_Item).ePlayedDateText;
-  TempGameVars.eTotalPlaytime:= TEasyGameInfo(ELV_Item).eTotalPlaytime;
+  TempGameVars.ePlayed:=            TEasyGameInfo(ELV_Item).ePlayed;
+  TempGameVars.ePlayedDate:=        TEasyGameInfo(ELV_Item).ePlayedDate;
+  TempGameVars.ePlayedDateText:=    TEasyGameInfo(ELV_Item).ePlayedDateText;
+  TempGameVars.eTotalPlaytime:=     TEasyGameInfo(ELV_Item).eTotalPlaytime;
   TempGameVars.eTotalPlaytimeText:= TEasyGameInfo(ELV_Item).eTotalPlaytimeText;
   TempGameVars.eMechanical:= TEasyGameInfo(ELV_Item).eMechanical;
-  TempGameVars.eSaveState:= TEasyGameInfo(ELV_Item).eSaveState;
+  TempGameVars.eSaveState:=  TEasyGameInfo(ELV_Item).eSaveState;
   TempGameVars.eIsFavorite:= TEasyGameInfo(ELV_Item).eIsFavorite;
   TempGameVars.eGameSetStatus:= TEasyGameInfo(ELV_Item).eGameSetStatus;
-  TempGameVars.eGameSize:= TEasyGameInfo(ELV_Item).eGameSize;
-  TempGameVars.eGameSizeText:= TEasyGameInfo(ELV_Item).eGameSizeText;
+  TempGameVars.eGameSize:=      TEasyGameInfo(ELV_Item).eGameSize;
+  TempGameVars.eGameSizeText:=  TEasyGameInfo(ELV_Item).eGameSizeText;
   TempGameVars.eHaveGameROMs:= TEasyGameInfo(ELV_Item).eHaveGameROMs;
 
-  TempGameVars.eSoftwareName:=          TEasyGameInfo(ELV_Item).eSoftwareName;          // for MAME 'softwarelist.xml' files
-  TempGameVars.eSoftwareExecParameter:= TEasyGameInfo(ELV_Item).eSoftwareExecParameter; // for MAME 'softwarelist.xml' files
-  TempGameVars.eSoftwareCompatible:=    TEasyGameInfo(ELV_Item).eSoftwareCompatible;    // for MAME 'softwarelist.xml' files
-  TempGameVars.eSoftwareUsageTip:=      TEasyGameInfo(ELV_Item).eSoftwareUsageTip;      // for MAME 'softwarelist.xml' files
+  TempGameVars.eSoftwareName:=          TEasyGameInfo(ELV_Item).eSoftwareName;          // for MAME 'softwarelist.xml'
+  TempGameVars.eSoftwareExecParameter:= TEasyGameInfo(ELV_Item).eSoftwareExecParameter; // for MAME 'softwarelist.xml'
+  TempGameVars.eSoftwareCompatible:=    TEasyGameInfo(ELV_Item).eSoftwareCompatible;    // for MAME 'softwarelist.xml'
+  TempGameVars.eSoftwareUsageTip:=      TEasyGameInfo(ELV_Item).eSoftwareUsageTip;      // for MAME 'softwarelist.xml'
+  TempGameVars.eNotes:=                 TEasyGameInfo(ELV_Item).eNotes;                 // for MAME 'softwarelist.xml'
 
   TempGameVars.eScanMode:=  TEasyGameInfo(ELV_Item).eScanMode;
   TempGameVars.eIsMerged:=  TEasyGameInfo(ELV_Item).eIsMerged;
@@ -6342,8 +6159,8 @@ begin
   cmdLine:= SystemStr+VideoPreviewMediaPlayerExecutable+SystemStr+' ';
   cmdLine:= cmdLine+iParams;
 
-  if IsExeBatchFile(VideoPreviewMediaPlayerExecutable) then
-     cmdLine:= CommandPromptStr+SystemStr+cmdLine+SystemStr;
+  //if IBatchFile(VideoPreviewMediaPlayerExecutable) then
+  //   cmdLine:= CommandPromptStr+SystemStr+cmdLine+SystemStr;
 
   if VideoPreviewPlayDummyVideo then
      PlayDummyVideoPreview:= not StopCurrentPlayback;
@@ -7106,7 +6923,7 @@ end;
 function TFormMain.GetArcadeEmulatorVersion(SystemID: Byte; const strEmuFile: String; out StoreResultIn: String; out StoreMAMEBuildVersionIn: String): Boolean;
 var
   CommandLine, VersionDescription, tempFile, fDateStr, fVersion: String;
-  BatchFile: THashedStringList;
+  iInfo: THashedStringList;
   Continue, IsStatusOpened: Boolean;
   fDate: Integer;
   ExecIndex: Integer;
@@ -7128,7 +6945,7 @@ begin
                 ExecIndex:= 2;
            end;
 
-        fDate:= FileAgeW(strEmuFile);
+        fDate:= FileAge(strEmuFile);
         fDateStr:= GetDateStr(fDate, True);
         if ExecIndex = 0 then
            begin
@@ -7159,7 +6976,7 @@ begin
     idDaphne:
       begin
         StoreResultIn:=  'Daphne v1.0 build v'+GetFileVersion(strEmuFile);
-        fDate:= FileAgeW(strEmuFile);
+        fDate:= FileAge(strEmuFile);
         fDateStr:= GetDateStr(fDate, True);
         if fDateStr <> '' then
            StoreResultIn:= StoreResultIn+' '+fDateStr;
@@ -7192,9 +7009,9 @@ begin
     // for Supermodel3 and Demul emulators only... still need to get version info from "-help" output
     if VerifyTempDirectory then
        begin
-         tempFile:= FrontendPath+'temp\'+GetArcadeSystemIniSection(SystemID)+'Version.tmp';
+         tempFile:= GetFrontendTempFolder+GetArcadeSystemIniSection(SystemID)+'Version.tmp';
          case SystemID of
-           idSupermodel: CommandLine:= SystemStr+strEmuFile+SystemStr+' -h > '+SystemStr+tempFile+SystemStr;  // Supermodel: SEGA Model 3 Emu
+           idSupermodel: CommandLine:= SystemStr+strEmuFile+SystemStr+' -h > ' +SystemStr+tempFile+SystemStr; // Supermodel: SEGA Model 3 Emu
            idDemul: CommandLine:= SystemStr+strEmuFile+SystemStr+' -version > '+SystemStr+tempFile+SystemStr; // Demul
          end;
 
@@ -7204,10 +7021,10 @@ begin
 
          if ValidateFile(tempFile) then
             begin
-              BatchFile:= THashedStringList.Create;
-              BatchFile.LoadFromFile(tempFile);
+              iInfo:= THashedStringList.Create;
+              iInfo.LoadFromFile(tempFile);
               fDateStr:= '';
-              VersionDescription:= BatchFile[0];
+              VersionDescription:= iInfo[0];
               case SystemID of
                 idSupermodel: // Supermodel: SEGA Model 3 Emu
                   begin
@@ -7222,10 +7039,10 @@ begin
                   begin
                     VersionDescription:= Trim(Copy(VersionDescription, PosEx(')', VersionDescription)+1, Length(VersionDescription)));
                     VersionDescription:= FormMain.GetArcadeEmulatorDescription(idDemul, False, strEmuFile)+' '+VersionDescription;
-                    VersionDescription:= VersionDescription+' ('+Copy(BatchFile[1], 13, Length(BatchFile[1]))+')';
+                    VersionDescription:= VersionDescription+' ('+Copy(iInfo[1], 13, Length(iInfo[1]))+')';
                   end;
               end;
-              FreeAndNil(BatchFile);
+              FreeAndNil(iInfo);
               DeleteFile(tempFile);
               Application.ProcessMessages;
             end;
@@ -7240,13 +7057,6 @@ begin
   if isStatusOpened and Result then
      FormStatus.Visible:= True;
 end;
-
-{procedure TFormMain.SetSelectedColorBox(ColorBoxHolder: TColorBoxEx; Color: TColor);
-begin
-  ColorBoxHolder.Selected:= Color;
-  if Assigned(ColorBoxHolder.OnSelect) then
-     ColorBoxHolder.OnSelect(ColorBoxHolder);
-end;}
 
 procedure TFormMain.FixEmptyValue(TextHolder: TEditEx; StringValue: String);
 begin
@@ -8209,10 +8019,17 @@ var
     Result:= False;
     if EmulatorFile[sysID] <> '' then
        begin
-         FileIniUI:= ExtractFilePath(EmulatorFile[sysID])+'ui.ini';
+         // linux mode (ON)
+         FileIniUI:= FrontendPath+'ui.ini';
          Result:= ValidateFile(FileIniUI);
+         // linux mode (OFF)
          if not Result then
-            Exit;
+         begin
+           FileIniUI:= ExtractFilePath(EmulatorFile[sysID])+'ui.ini';
+           Result:= ValidateFile(FileIniUI);
+           if not Result then
+              Exit;
+         end;
        end
     else
        Exit;
@@ -9660,10 +9477,12 @@ begin
 
   try
     INIFile:= TMemIniFile.Create(GetFrontendIniFile);
-    MenuBoundToGamesPanel.Tag:= INIFile.ReadInteger('ToolBar', 'GamesFilters_BoundToGamesPanel', Ord(Is4KMode));
-
-    MenuBoundToGamesPanel.Checked:= Boolean(MenuBoundToGamesPanel.Tag);
-    MenuBoundToGamesPanel.OnClick(Self);
+    //MenuBoundToGamesPanel.Tag:= INIFile.ReadInteger('ToolBar', 'GamesFilters_BoundToGamesPanel', Ord(Is4KMode));
+    //if MenuBoundToGamesPanel.Checked <> Boolean(MenuBoundToGamesPanel.Tag) then
+    //   begin
+    //     MenuBoundToGamesPanel.Checked:= Boolean(MenuBoundToGamesPanel.Tag);
+    //     MenuBoundToGamesPanel.OnClick(Self);
+    //   end;
 
     MenuFontSettings.Tag:= INIFile.ReadInteger('Appearance', 'GamesFontDialogShowAvailableOnly', 0);
     MenuFontSettings.HelpContext:= INIFile.ReadInteger('Appearance', 'GamesFontShowFontName', 0);
@@ -10021,8 +9840,6 @@ begin
 
     PopupCustomMAME.Tag:= INIFile.ReadInteger('Preferences', 'MAMESettings_ValidateAllCustomFiles', 0);
 
-    MenuCustomizeMAMESoftwareList.Tag:= INIFile.ReadInteger('Preferences', 'CustomizeMAMESoftwareList_LargeIcons', 0);
-
     tmpString:= INIFile.ReadString('ToolBar', 'GamesFilters_Buttons', '');
     if tmpString = '' then
        begin
@@ -10250,8 +10067,6 @@ begin
 
       INIFile.WriteInteger('Preferences', 'MAMESettings_ValidateAllCustomFiles', PopupCustomMAME.Tag);
 
-      INIFile.WriteInteger('Preferences', 'CustomizeMAMESoftwareList_LargeIcons', MenuCustomizeMAMESoftwareList.Tag);
-
       INIFile.WriteInteger('Preferences', 'RestoreInternetGameInfoStartup', Ord(FormPreferences.RestoreInternetGameInfoStartup.Checked));
       Loop:= 0;
       if FormPreferences.RestoreInternetGameInfoStartup.Checked then
@@ -10405,6 +10220,17 @@ begin
                 tmpSys:= 'mame.ini'
              else
                 tmpSys:= 'hbmame.ini';
+
+             // linux mode (ON)
+             Continue:= not FileExists(FrontendPath+tmpSys);
+             if not Continue then
+                begin
+                  Result:= FrontendPath+tmpSys;
+                  Exit;
+                end;
+             // linux mode (OFF)
+             if not Continue then
+                Exit;
              Continue:= not FileExists(EmuPath+tmpSys);
              if Continue then
                 begin
@@ -10481,9 +10307,6 @@ begin
   if not FileExists(EmulatorFileName) then
      Exit;
 
-  if IsExeBatchFile(EmulatorFileName) then
-     Exit;
-
   fVersion:= GetFileVersion(EmulatorFileName, True);
   if fVersion <> '' then
      begin
@@ -10504,8 +10327,6 @@ begin
   if not FileExists(EmulatorFileName) then
      Exit;
 
-  if IsExeBatchFile(EmulatorFileName) then
-     Exit;
   fVersion:= GetFileVersion(EmulatorFileName, True);
 
   if fVersion <> '' then
@@ -10521,7 +10342,7 @@ begin
      begin
        if FormStatus.Visible then
           FormStatus.MessageStr('Parsing MAME build number.');
-       tempFile:= FrontendPath+'temp\iMAMEVersion.tmp';
+       tempFile:= GetFrontendTempFolder+'iMAMEVersion.tmp';
        CommandLine:= SystemStr+EmulatorFileName+SystemStr+' -help > '+SystemStr+tempFile+SystemStr;
        SetCurrentDir(EmulatorFileName);
        RunProcess(CommandPromptStr+SystemStr+CommandLine+SystemStr, True, GetWindowStateEmulator);
@@ -11078,8 +10899,7 @@ begin
 
   FormStatus.TitleStr('Create Games List: '+GetArcadeEmulatorDescription(idSupermodel));
   FormStatus.MessageStr('', False);
-  if not FormStatus.Visible then
-     FormStatus.Show;
+  ShowStatusForm;
   FormStatus.StartThreadClock;
   SetCurrentDir(FrontendPath);
   FileLine:= '';
@@ -11366,18 +11186,6 @@ begin
      Result:= 'atomiswave'
   else
      Result:= ChangeFileExt(DriverName, '');
-end;
-
-function TFormMain.IsExeBatchFile(const emuFile: String): Boolean;
-var
-  fExt: String;
-begin
-  Result:= emuFile <> '';
-  if Result then
-     begin
-       fExt:= LowerCase(ExtractFileExt(emuFile));
-       Result:= (fExt = '.bat') or (fExt = '.cmd');
-     end;
 end;
 
 function TFormMain.IsZipFile(const GameFile: WideString): Boolean;
@@ -12007,7 +11815,6 @@ begin
   AddMsgText(CommandLineStr+#13#10, MsgTxtColors.colorCmdLine, [], taLeftJustify, FontSize, 'Consolas');
 end;
 
-// ExecuteGame() function with .bat; .cmd batch files detection and NO custom .bat file support!
 // RunWithAlterMAME_Index
 // -1 -> no AlterMAME, run normal arcade/MAME
 //  1 -> run with AlterMAME 1 (games popup menu select)
@@ -12020,8 +11827,8 @@ var
   ErrorMsgTitle, MultiSlotMachineName, TempStr, TempStr2: String;
   ScreenResolutions: THashedStringList;
   SupermodelSettings: TStringList; // it contains Supermodel settings for "emu default settings" and then "game custom settings" (like MAME does it)
-  IsBatchFile, IsDemulEmptySystem, IsMultiSlot: Boolean;
-  RunWithAlterMAME, TryAgainAlterMAME, IsBatchFileAlterMAME: array[Low(AlterMAMEFile)..High(AlterMAMEFile)] of Boolean;
+  IsDemulEmptySystem, IsMultiSlot: Boolean;
+  RunWithAlterMAME, TryAgainAlterMAME: array[Low(AlterMAMEFile)..High(AlterMAMEFile)] of Boolean;
   ExitCode: DWORD;
   ExitCodeAlterMAME: array[Low(AlterMAMEFile)..High(AlterMAMEFile)] of DWORD;
   iPlayTime: Cardinal;
@@ -12559,12 +12366,12 @@ var
     FreeAndNil(tmpFile);
   end;
 
-  function AddRaineParamNoGUI_CommandLine(const iCommandLineStr: WideString; iIsBatchFile: Boolean): WideString;
+  function AddRaineParamNoGUI_CommandLine(const iCommandLineStr: WideString): WideString;
   var
     iNamePos: Integer;
   begin
     Result:= iCommandLineStr;
-    if (not MemGameInfo.eIsCustomGame) and (MemGameInfo.eSystemID = idMAME) and (MemGameInfo.eSoftwareName = '') and (not iIsBatchFile) then
+    if (not MemGameInfo.eIsCustomGame) and (MemGameInfo.eSystemID = idMAME) and (MemGameInfo.eSoftwareName = '') then
        begin
          if PosEx('raine', LowerCase(iCommandLineStr)) <> 0 then
             begin
@@ -12684,10 +12491,7 @@ begin
   TryAgainAlterMAME[1]:= False;
   TryAgainAlterMAME[2]:= False;
   IsDemulEmptySystem:= False;
-  IsBatchFile:= False;
-  IsBatchFileAlterMAME[1]:= False;
-  IsBatchFileAlterMAME[2]:= False;
-
+  
   IsMultiSlot:= False;
   MultiSlotMachineName:= '';
   MachineNameStr:= '';
@@ -12795,20 +12599,6 @@ begin
   end;
 
   GetScreenResolutions;
-
-  if RunWithAlterMAME[1] then
-     IsBatchFile:= IsExeBatchFile(AlterMAMEFile[1])
-  else
-  if RunWithAlterMAME[2] then
-     IsBatchFile:= IsExeBatchFile(AlterMAMEFile[2])
-  else
-     begin
-       IsBatchFile:= IsExeBatchFile(EmulatorFile[MemGameInfo.eSystemID]);
-       if TryAgainAlterMAME[1] then
-          IsBatchFileAlterMAME[1]:= IsExeBatchFile(AlterMAMEFile[1]);
-       if TryAgainAlterMAME[2] then
-          IsBatchFileAlterMAME[2]:= IsExeBatchFile(AlterMAMEFile[2]);
-     end;
 
   if RunWithAlterMAME[1] then
      CommandLine:= SystemStr+AlterMAMEFile[1]+SystemStr+' '
@@ -12985,174 +12775,164 @@ begin
   end;
 
   ItemToUpdate:= SelectedEasyItem;
-  if IsBatchFile then
-     CommandLine:= CommandPromptStr+SystemStr+CommandLine+SystemStr; // cmd.exe /c "emu-call.bat"
+  //if IsBatchFile then
+  //   CommandLine:= CommandPromptStr+SystemStr+CommandLine+SystemStr; // cmd.exe /c "emu-call.bat"
 
-  case IsBatchFile of
+  case IsMAMEBasedSys(MemGameInfo.eSystemID) of
     True:
       begin
-        // cmd.exe /c "emu-call.bat"
-        //CommandLine:= CommandPromptStr+SystemStr+CommandLine+SystemStr;
+        // "MAME_ExtraSetting" will be used only to activate "AlterMAME"; will change its var name later (August 26, 2016)
+        if MAME_ExtraPamars and (not RunWithAlterMAME[1]) and (not RunWithAlterMAME[2]) and (not IsMultiSlot) then
+           begin
+             // old tags... remove these (October 30, 2016)
+             // -1: none... invalid!
+             // 20: playback input
+             // 21: record input
+             // 22: load a save state
+             // 23: record wave
+             // 24: record mng
+             // 25: record avi
+             // 26: * left panel file select (not used anymore!!!)
+             // 27: play and use an effect overlay
+             // 28: Select Effect Overlay (MAME Settings)
+             // 29: Select Font Files, emulator (BDF)
+             // 30: Select Font Files, game, driver (BDF)
+             // 31: Select Shadow Mask Texture (MAME Settings)
+             // all these options are now MAME exclusive features
+
+             MAME_ExtraParamsCommandLine:= RunMAMEExtraParameters(MemGameInfo.eSystemID, EmulatorFile[MemGameInfo.eSystemID], MachineNameStr);
+             // if var above is empty... no biggie, continue to run game!
+             if SameText(MAME_ExtraParamsCommandLine, 'abort') then
+                begin
+                  ResetSettings;
+                  Exit; // "Abort. For the 1000th time... ABORT!!!" :)
+                end;
+             //ShowMessage('"->'+MAME_ExtraParamsCommandLine+'<-"'); // for debugging only!!!
+           end;
       end;
     False:
       begin
-        case IsMAMEBasedSys(MemGameInfo.eSystemID) of
-          True:
+        case MemGameInfo.eSystemID of
+          idSupermodel:
             begin
-              // "MAME_ExtraSetting" will be used only to activate "AlterMAME"; will change its var name later (August 26, 2016)
-              if MAME_ExtraPamars and (not RunWithAlterMAME[1]) and (not RunWithAlterMAME[2]) and (not IsMultiSlot) then
+              // must add options before game, and it's a .zip file with full path
+              NewOption:= SearchZIPFolder(MemGameInfo.eName, MemGameInfo.eSystemID);
+              if NewOption = '' then
                  begin
-                   // old tags... remove these (October 30, 2016)
-                   // -1: none... invalid!
-                   // 20: playback input
-                   // 21: record input
-                   // 22: load a save state
-                   // 23: record wave
-                   // 24: record mng
-                   // 25: record avi
-                   // 26: * left panel file select (not used anymore!!!)
-                   // 27: play and use an effect overlay
-                   // 28: Select Effect Overlay (MAME Settings)
-                   // 29: Select Font Files, emulator (BDF)
-                   // 30: Select Font Files, game, driver (BDF)
-                   // 31: Select Shadow Mask Texture (MAME Settings)
-                   // all these options are now MAME exclusive features
+                   InitMessageBox;
+                   ShowGameNameEntryMsgBox;
+                   AddGamesListHeaderArcade(GetGamesListVersion(MemGameInfo.eSystemID));
+                   AddEmulatorHeaderArcade;
+                   ShowMessageBox(ErrorMsgTitle, MemGameInfo.eTitle,
+                                  'Cannot execute because the game file was not found. Aborting...', 2, False, 0);
 
+                   ResetSettings;
+                   Exit; // game file not found, "Abort. For the 1000th time... ABORT!!!"
+                 end;
+
+              if MAME_ExtraPamars then
+                 begin
+                   // 22: load a save state
                    MAME_ExtraParamsCommandLine:= RunMAMEExtraParameters(MemGameInfo.eSystemID, EmulatorFile[MemGameInfo.eSystemID], MachineNameStr);
                    // if var above is empty... no biggie, continue to run game!
                    if SameText(MAME_ExtraParamsCommandLine, 'abort') then
                       begin
                         ResetSettings;
-                        Exit; // "Abort. For the 1000th time... ABORT!!!" :)
+                        Exit; // "Abort. For the 1000th time... ABORT!!!"
                       end;
                    //ShowMessage('"->'+MAME_ExtraParamsCommandLine+'<-"'); // for debugging only!!!
                  end;
+
+              SupermodelSettings:= TStringList.Create;
+
+              // read "D:\EmuLoader\arcade\emulator_ini\supermodel_ini\Supermodel.ini" first
+              ReadSupermodelIni(GetArcadeEmuIniFileName(MemGameInfo.eSystemID), False);
+
+              // read "D:\EmuLoader\arcade\emulator_ini\supermodel_ini\gamename.ini", and overwrite current settings
+              ReadSupermodelIni(MemGameInfo.eName+'.ini', True);
+
+              NewOption2:= MountSupermodelCommandLine;
+
+              FreeAndNil(SupermodelSettings);
+
+              SetCmdLineTitle(True);
+
+              CommandLine:= CommandLine+'"'+NewOption+'"'; // add the game filename with full path
             end;
-          False:
+          idDaphne:
             begin
-              case MemGameInfo.eSystemID of
-                idSupermodel:
-                  begin
-                    // must add options before game, and it's a .zip file with full path
-                    NewOption:= SearchZIPFolder(MemGameInfo.eName, MemGameInfo.eSystemID);
-                    if NewOption = '' then
-                       begin
-                         InitMessageBox;
-                         ShowGameNameEntryMsgBox;
-                         AddGamesListHeaderArcade(GetGamesListVersion(MemGameInfo.eSystemID));
-                         AddEmulatorHeaderArcade;
-                         ShowMessageBox(ErrorMsgTitle, MemGameInfo.eTitle,
-                                        'Cannot execute because the game file was not found. Aborting...', 2, False, 0);
+              CommandLine:= CommandLine+ReadDaphneIni;
+            end;
+          idDemul: // Demul, need special parameters before the game name
+            begin
+              if MemGameInfo.eDriverName <> '' then
+                 CommandLine:= CommandLine+'-run='+GetDemulMachineName(MemGameInfo.eDriverName, IsDemulOldVersion)+
+                               ' -rom='+MemGameInfo.eName
+              else
+                 IsDemulEmptySystem:= True;
+              // do nothing else as Demul doesn't support custom game settings
+              //if MemGameInfo.eDriverName <> '' then
+              //   CommandLine:= CommandLine+'-run='+GetDemulMachineName(MemGameInfo.eDriverName)+
+              //              ' -rom='+MemGameInfo.eName
+              //else
+              //   IsDemulEmptySystem:= True;
+              // do nothing else as Demul doesn't support custom game settings
+            end;
+          idZiNc:
+            begin
+              // ZiNc, needs special parameters before the game name
+              if MemGameInfo.eScreenType <> -1 then
+                 CommandLine:= CommandLine+IntToStr(MemGameInfo.eScreenType) // ZiNc stores game index in "eScreenType" var
+              else
+                 begin
+                   InitMessageBox;
+                   ShowGameNameEntryMsgBox;
+                   case IsROM_Bios(MemGameInfo.eROMIdentification) of
+                     True : ShowMessageBox(msgBoxTitle, MemGameInfo.eTitle,
+                                   'This is a BIOS set and ZiNc does not run BIOS sets, only games. Aborting...', 2);
+                     False: ShowMessageBox(ErrorMsgTitle, MemGameInfo.eTitle,
+                                   'Invalid ZiNc game index (-1). Please create games list again. Aborting...', 2, False, 1);
+                   end;
+                   ResetSettings;
+                   Exit;
+                 end;
+              // first driver, second game, then default emulator options
+              SetCmdLineTitle(True);
 
-                         ResetSettings;
-                         Exit; // game file not found, "Abort. For the 1000th time... ABORT!!!"
-                       end;
-
-                    if MAME_ExtraPamars then
-                       begin
-                         // 22: load a save state
-                         MAME_ExtraParamsCommandLine:= RunMAMEExtraParameters(MemGameInfo.eSystemID, EmulatorFile[MemGameInfo.eSystemID], MachineNameStr);
-                         // if var above is empty... no biggie, continue to run game!
-                         if SameText(MAME_ExtraParamsCommandLine, 'abort') then
-                            begin
-                              ResetSettings;
-                              Exit; // "Abort. For the 1000th time... ABORT!!!"
-                            end;
-                         //ShowMessage('"->'+MAME_ExtraParamsCommandLine+'<-"'); // for debugging only!!!
-                       end;
-
-                    SupermodelSettings:= TStringList.Create;
-
-                    // read "D:\EmuLoader\arcade\emulator_ini\supermodel_ini\Supermodel.ini" first
-                    ReadSupermodelIni(GetArcadeEmuIniFileName(MemGameInfo.eSystemID), False);
-
-                    // read "D:\EmuLoader\arcade\emulator_ini\supermodel_ini\gamename.ini", and overwrite current settings
-                    ReadSupermodelIni(MemGameInfo.eName+'.ini', True);
-
-                    NewOption2:= MountSupermodelCommandLine;
-
-                    FreeAndNil(SupermodelSettings);
-
-                    SetCmdLineTitle(True);
-
-                    CommandLine:= CommandLine+'"'+NewOption+'"'; // add the game filename with full path
+              NewOption:= GetFolderArcadeEmulatorIni(MemGameInfo.eSystemID);
+              NewOption2:= ChangeFileExt(MemGameInfo.eDriverName, '.cfg'); // NewOption2 holds the filename (no path)
+              if not FileExists(NewOption+NewOption2) then
+                 begin
+                   NewOption2:= MemGameInfo.eName+'.cfg';
+                   if not FileExists(NewOption+NewOption2) then
+                      begin
+                        // use default emulator settings
+                        NewOption2:= GetArcadeEmuIniFileName(MemGameInfo.eSystemID);
+                        SetCmdLineTitle;
+                      end;
                   end;
-                idDaphne:
-                  begin
-                    CommandLine:= CommandLine+ReadDaphneIni;
-                  end;
-                idDemul: // Demul, need special parameters before the game name
-                  begin
-                    if MemGameInfo.eDriverName <> '' then
-                       CommandLine:= CommandLine+'-run='+GetDemulMachineName(MemGameInfo.eDriverName, IsDemulOldVersion)+
-                                     ' -rom='+MemGameInfo.eName
-                    else
-                       IsDemulEmptySystem:= True;
-                    // do nothing else as Demul doesn't support custom game settings
-                    //if MemGameInfo.eDriverName <> '' then
-                    //   CommandLine:= CommandLine+'-run='+GetDemulMachineName(MemGameInfo.eDriverName)+
-                    //              ' -rom='+MemGameInfo.eName
-                    //else
-                    //   IsDemulEmptySystem:= True;
-                    // do nothing else as Demul doesn't support custom game settings
-                  end;
-                idZiNc:
-                  begin
-                    // ZiNc, needs special parameters before the game name
-                    if MemGameInfo.eScreenType <> -1 then
-                       CommandLine:= CommandLine+IntToStr(MemGameInfo.eScreenType) // ZiNc stores game index in "eScreenType" var
-                    else
-                       begin
-                         InitMessageBox;
-                         ShowGameNameEntryMsgBox;
-                         case IsROM_Bios(MemGameInfo.eROMIdentification) of
-                           True : ShowMessageBox(msgBoxTitle, MemGameInfo.eTitle,
-                                         'This is a BIOS set and ZiNc does not run BIOS sets, only games. Aborting...', 2);
-                           False: ShowMessageBox(ErrorMsgTitle, MemGameInfo.eTitle,
-                                         'Invalid ZiNc game index (-1). Please create games list again. Aborting...', 2, False, 1);
-                         end;
-                         ResetSettings;
-                         Exit;
-                       end;
-                    // first driver, second game, then default emulator options
-                    SetCmdLineTitle(True);
 
-                    NewOption:= GetFolderArcadeEmulatorIni(MemGameInfo.eSystemID);
-                    NewOption2:= ChangeFileExt(MemGameInfo.eDriverName, '.cfg'); // NewOption2 holds the filename (no path)
-                    if not FileExists(NewOption+NewOption2) then
-                       begin
-                         NewOption2:= MemGameInfo.eName+'.cfg';
-                         if not FileExists(NewOption+NewOption2) then
-                            begin
-                              // use default emulator settings
-                              NewOption2:= GetArcadeEmuIniFileName(MemGameInfo.eSystemID);
-                              SetCmdLineTitle;
-                            end;
-                        end;
+              // function "LongToShortPath()" cannot have last backslash '\' or it won't work; the filename is also lost
+              // "NewOption" var will store the .cfg file with full path (October 10, 2016)
 
-                    // function "LongToShortPath()" cannot have last backslash '\' or it won't work; the filename is also lost
-                    // "NewOption" var will store the .cfg file with full path (October 10, 2016)
+              // ZiNc does not support Unicode paths or filenames
+              NewOption:= GetShortFileNameW(NewOption); //NewOption:= ExtractShortPathName(NewOption); // this doesn't work (do not remove this comment)
+              if ValidateFile(NewOption+NewOption2) then
+                 CommandLine:= CommandLine+' --use-config-file='+NewOption+NewOption2;
 
-                    // ZiNc does not support Unicode paths or filenames
-                    NewOption:= GetShortFileNameW(NewOption); //NewOption:= ExtractShortPathName(NewOption); // this doesn't work (do not remove this comment)
-                    if ValidateFile(NewOption+NewOption2) then
-                       CommandLine:= CommandLine+' --use-config-file='+NewOption+NewOption2;
-
-                    // get game.zip or parent.zip folder
-                    NewOption:= SearchZIPFolder(MemGameInfo.eName, MemGameInfo.eSystemID);
-                    if NewOption <> '' then
-                       NewOption:= GetShortFileNameW(ExtractFilePath(NewOption))
-                    else
-                    if GameIsClone(MemGameInfo.eClone) then
-                       begin
-                         NewOption:= SearchZIPFolder(MemGameInfo.eClone, MemGameInfo.eSystemID);
-                         if NewOption <> '' then
-                            NewOption:= GetShortFileNameW(ExtractFilePath(NewOption));
-                       end;
-                    if NewOption <> '' then
-                       CommandLine:= CommandLine+' --roms-directory='+NewOption;
-                  end;
-              end;
+              // get game.zip or parent.zip folder
+              NewOption:= SearchZIPFolder(MemGameInfo.eName, MemGameInfo.eSystemID);
+              if NewOption <> '' then
+                 NewOption:= GetShortFileNameW(ExtractFilePath(NewOption))
+              else
+              if GameIsClone(MemGameInfo.eClone) then
+                 begin
+                   NewOption:= SearchZIPFolder(MemGameInfo.eClone, MemGameInfo.eSystemID);
+                   if NewOption <> '' then
+                      NewOption:= GetShortFileNameW(ExtractFilePath(NewOption));
+                 end;
+              if NewOption <> '' then
+                 CommandLine:= CommandLine+' --roms-directory='+NewOption;
             end;
         end;
       end;
@@ -13238,7 +13018,7 @@ begin
               end;
 
            if not IsDemulEmptySystem then
-              AddCommandLineMsgBox(AddRaineParamNoGUI_CommandLine(CommandLine, IsBatchFile))
+              AddCommandLineMsgBox(AddRaineParamNoGUI_CommandLine(CommandLine))
            else
               AddMsgText(#13#10+'    The system name is blank, Demul cannot run games without it. If this is a playable game, '+
                          'please post a message in the forum or contact by e-mail.'+#13#10+#13#10+
@@ -13252,10 +13032,10 @@ begin
                 AddMsgText('Will be used if it fails to load with MAME'+#13#10, -1, [], ALignEmuGameText);
 
                 NewOption:= StringReplace(CommandLine, EmulatorFile[MemGameInfo.eSystemID], AlterMAMEFile[1], [rfIgnoreCase]);
-                if IsBatchFileAlterMAME[1] then
-                   NewOption:= CommandPromptStr+systemStr+NewOption+SystemStr;
+                //if IsBatchFileAlterMAME[1] then
+                //   NewOption:= CommandPromptStr+systemStr+NewOption+SystemStr;
 
-                AddCommandLineMsgBox(AddRaineParamNoGUI_CommandLine(NewOption, IsBatchFileAlterMAME[1]));
+                AddCommandLineMsgBox(AddRaineParamNoGUI_CommandLine(NewOption));
               end;
            if (not RunWithAlterMAME[2]) and TryAgainAlterMAME[2] then
               begin
@@ -13263,10 +13043,10 @@ begin
                 AddMsgText('Will be used if it fails to load with AlterMAME'+#13#10, -1, [], AlignEmuGameText);
 
                 NewOption:= StringReplace(CommandLine, EmulatorFile[MemGameInfo.eSystemID], AlterMAMEFile[2], [rfIgnoreCase]);
-                if IsBatchFileAlterMAME[2] then
-                   NewOption:= CommandPromptStr+systemStr+NewOption+SystemStr;
+                //if IsBatchFileAlterMAME[2] then
+                //   NewOption:= CommandPromptStr+systemStr+NewOption+SystemStr;
 
-                AddCommandLineMsgBox(AddRaineParamNoGUI_CommandLine(NewOption, IsBatchFileAlterMAME[2]));
+                AddCommandLineMsgBox(AddRaineParamNoGUI_CommandLine(NewOption));
               end;
            if not IsMultiSlot then
               begin
@@ -13343,18 +13123,18 @@ begin
 
       IsRunningGame:= True;
 
-      ExitCode:= RunProcess(AddRaineParamNoGUI_CommandLine(CommandLine, IsBatchFile), True, GetWindowStateRunGame(MemGameInfo.eSystemID)); // run game
+      ExitCode:= RunProcess(AddRaineParamNoGUI_CommandLine(CommandLine), True, GetWindowStateRunGame(MemGameInfo.eSystemID)); // run game
       if ExitCode <> 0 then // = 2 ? // files are missing error code
          begin
            if (not RunWithAlterMAME[1]) and TryAgainAlterMAME[1] then
               begin
                 RunWithAlterMAME[1]:= True; // set this here to avoid problems below
                 CommandLine:= StringReplace(CommandLine, EmulatorFile[MemGameInfo.eSystemID], AlterMAMEFile[1], [rfIgnoreCase]);
-                if IsBatchFileAlterMAME[1] then
-                   CommandLine:= CommandPromptStr+SystemStr+CommandLine+SystemStr;
+                //if IsBatchFileAlterMAME[1] then
+                //   CommandLine:= CommandPromptStr+SystemStr+CommandLine+SystemStr;
 
                 SetCurrentDir(ExtractFilePath(AlterMAMEFile[1]));
-                ExitCodeAlterMAME[1]:= RunProcess(AddRaineParamNoGUI_CommandLine(CommandLine, IsBatchFileAlterMAME[1]), True, GetWindowStateRunGame(MemGameInfo.eSystemID)); // run game with AlterMAME executable
+                ExitCodeAlterMAME[1]:= RunProcess(AddRaineParamNoGUI_CommandLine(CommandLine), True, GetWindowStateRunGame(MemGameInfo.eSystemID)); // run game with AlterMAME executable
 
                 if ExitCodeAlterMAME[1] <> 0 then
                    begin
@@ -13362,11 +13142,11 @@ begin
                         begin
                           RunWithAlterMAME[2]:= True; // set this here to avoid problems below
                           CommandLine:= StringReplace(CommandLine, AlterMAMEFile[1], AlterMAMEFile[2], [rfIgnoreCase]);
-                          if IsBatchFileAlterMAME[2] then
-                             CommandLine:= CommandPromptStr+SystemStr+CommandLine+SystemStr;
+                          //if IsBatchFileAlterMAME[2] then
+                          //   CommandLine:= CommandPromptStr+SystemStr+CommandLine+SystemStr;
 
                           SetCurrentDir(ExtractFilePath(AlterMAMEFile[2]));
-                          ExitCodeAlterMAME[2]:= RunProcess(AddRaineParamNoGUI_CommandLine(CommandLine, IsBatchFileAlterMAME[2]), True, GetWindowStateRunGame(MemGameInfo.eSystemID)); // run game with AlterMAME executable
+                          ExitCodeAlterMAME[2]:= RunProcess(AddRaineParamNoGUI_CommandLine(CommandLine), True, GetWindowStateRunGame(MemGameInfo.eSystemID)); // run game with AlterMAME executable
                         end;
                    end;
               end
@@ -13375,11 +13155,11 @@ begin
               begin
                 RunWithAlterMAME[2]:= True; // set this here to avoid problems below
                 CommandLine:= StringReplace(CommandLine, EmulatorFile[MemGameInfo.eSystemID], AlterMAMEFile[2], [rfIgnoreCase]);
-                if IsBatchFileAlterMAME[2] then
-                   CommandLine:= CommandPromptStr+SystemStr+CommandLine+SystemStr;
+                //if IsBatchFileAlterMAME[2] then
+                //   CommandLine:= CommandPromptStr+SystemStr+CommandLine+SystemStr;
                    
                 SetCurrentDir(ExtractFilePath(AlterMAMEFile[2]));
-                ExitCodeAlterMAME[2]:= RunProcess(AddRaineParamNoGUI_CommandLine(CommandLine, IsBatchFileAlterMAME[2]), True, GetWindowStateRunGame(MemGameInfo.eSystemID)); // run game with AlterMAME executable
+                ExitCodeAlterMAME[2]:= RunProcess(AddRaineParamNoGUI_CommandLine(CommandLine), True, GetWindowStateRunGame(MemGameInfo.eSystemID)); // run game with AlterMAME executable
               end;
          end;
       IsRunningGame:= False;
@@ -13718,7 +13498,7 @@ var
   EmulatorString, ErrorMsgTitle,
   MountImageStr, UnmountImageStr: WideString;
   GameFileExt: WideString;
-  Continue, UseVirtualDrive, IsBatchFile, IsFileFound, MultiFloppy, IsWinUAE, IsViceFlipList: Boolean;
+  Continue, UseVirtualDrive, IsFileFound, MultiFloppy, IsWinUAE, IsViceFlipList: Boolean;
   ExtraParameters, ExtraDefaultParameters: TMemIniFile;
   IsJavaPSPEmu, IsWinApeEmu: Boolean;
   ExitCode: DWORD;
@@ -13916,12 +13696,6 @@ var
        end;
   end;
 
-  // no longer used 
-  //function IsKEGAFusionEmu: Boolean;
-  //begin
-  //  Result:= SameText(ExtractFileName(EmulatorString), 'fusion.exe');
-  //end;
-
   function GetGamesListVersion(sysID: Integer): String;
   var
     tmpFile: TMemIniFile;
@@ -14017,19 +13791,6 @@ begin
   IsViceFlipList:= False;
   IsJavaPSPEmu:= False;
   IsWinApeEmu:= False;
-
-  IsBatchFile:= IsExeBatchFile(EmulatorString);
-  //if IsBatchFile and MultiFloppy then
-  //   begin
-  //     txtString:= 'System: %s'+#13#10+'    Emulator '+IntToStr(EmulatorIndexToUse[MemGameInfo.eSystemID])+
-  //                 ' is a batch file and there are multiple games selected.'+#13#10+#13#10+
-  //                 'This is not supported by EmuCon. Aborting...';
-  //     ShowMessageApp(ErrorMsgTitle,
-  //                    MemGameInfo.eTitle+#13#10+#13#10+
-  //                    Format(txtString, [SystemsList[MemGameInfo.eSystemID, 0]]));
-  //     ResetToFrontend;
-  //     Exit;
-  //   end;
 
   if MemGameInfo.eCustomSystemID = 59 then
      begin
@@ -14317,8 +14078,8 @@ begin
       end;
   end;
 
-  if IsBatchFile then
-     CommandLine:= CommandPromptStr+SystemStr+CommandLine+SystemStr;
+  //if IsBatchFile then
+  //   CommandLine:= CommandPromptStr+SystemStr+CommandLine+SystemStr;
 
   if UseVirtualDrive then
      begin
@@ -15033,7 +14794,7 @@ begin
         cfgFileFullPathVar:= cfgFile;
         if MenuItemHolder <> nil then
            begin
-             MenuItemHolder.Caption:= 'Edit Flip List File with notepad.exe';
+             MenuItemHolder.Caption:= 'Edit Flip List File with Notepad';
              MenuItemHolder.Hint:= '.vfl'; // WinVice flip list file
 
            end;
@@ -15059,7 +14820,7 @@ begin
         cfgFileFullPathVar:= cfgFile;
         if MenuItemHolder <> nil then
            begin
-             MenuItemHolder.Caption:= 'Edit Game Config File with notepad.exe';
+             MenuItemHolder.Caption:= 'Edit Game Config File with Notepad';
              MenuItemHolder.Hint:= FileExt; // WinVice flip list file
            end;
       end;
@@ -15290,8 +15051,6 @@ begin
       begin
         if (not IsAppleWinEmu(emuFile)) and
            (not IsMicroM8Emu(emuFile)) then
-           //(not SameText(emuFile, 'jace.bat')) and
-           //(not SameText(emuFile, 'jace.cmd')) then
            begin
              Result:= False;
              InitMessageBox;
@@ -15304,7 +15063,6 @@ begin
                         'For this feature to work, the emulator filename must be one of the following:'+#13#10);
              AddMsgText('AppleWin.exe'+#13#10, MsgTxtColors.colorFileName, [fsBold], AlignEmuGameText);
              AddMsgText('AppleWin.exe        microm8.exe'+#13#10, MsgTxtColors.colorFileName, [fsBold], AlignEmuGameText);
-             //AddMsgText('AppleWin.exe        jace.bat        jace.cmd'+#13#10, MsgTxtColors.colorFileName, [fsBold], AlignEmuGameText);
              AddMsgText(#13#10+SelectValidEmulatorText
                         +#13#10+#13#10+'Aborting...');
 
@@ -15390,7 +15148,7 @@ begin
           FormConsCompMultiFloppyGames.IL_EmulatorIcon.GetIcon(2, FormConsCompMultiFloppyGames.EmulatorIcon.Picture.Icon)
        else
           begin
-            EmuIconIndex:= Ord(IsExeBatchFile(EmulatorFileCustom[MemGameInfo.eCustomSystemID, EmulatorIndexToUseCustom[MemGameInfo.eCustomSystemID]]));
+            EmuIconIndex:= 0; //Ord(IsExeBatchFile(EmulatorFileCustom[MemGameInfo.eCustomSystemID, EmulatorIndexToUseCustom[MemGameInfo.eCustomSystemID]]));
             FormConsCompMultiFloppyGames.IL_EmulatorIcon.GetIcon(EmuIconIndex, FormConsCompMultiFloppyGames.EmulatorIcon.Picture.Icon);
           end;
        FormConsCompMultiFloppyGames.LabelEmulatorDetails.Caption:=
@@ -18274,11 +18032,6 @@ begin
   Result:= GetArcadeFolder+GetArcadeSystemIniSection(sysID, True)+'_machines_exclude.txt';
 end;
 
-function TFormMain.GetCustomCommandLineFolder: String;
-begin
-  Result:= FrontendPath+'cmdline\';
-end;
-
 procedure TFormMain.SoftListGetRequirementInfo(sysID: Integer; GameName, SoftwareName: String; out VarReqSetName: String; out VarReqSoftwareName: String);
 var
   RequirementIni: TMemIniFile;
@@ -19306,8 +19059,7 @@ begin
 
   FormStatus.TitleStr('Create Games List: '+EmuTitle);
 
-  if not FormStatus.Visible then
-     FormStatus.Show;
+  ShowStatusForm;
   FormStatus.StartThreadClock;
 
   iMAME:= -1;
@@ -19676,14 +19428,13 @@ begin
 
   FormStatus.TitleStr('Create Games List: '+EmuTitle);
 
-  if not FormStatus.Visible then
-     FormStatus.Show;
+  ShowStatusForm;
   FormStatus.StartThreadClock;
 
   iMAME:= -1;
 
   FormStatus.MessageStr('Extracting emulator version.');
-  EmulatorDateTime[sysID]:= FileAgeW(EmulatorFile[sysID]); // get emulator date/time stamp
+  EmulatorDateTime[sysID]:= FileAge(EmulatorFile[sysID]); // get emulator date/time stamp
   GetArcadeEmulatorVersion(sysID, EmulatorFile[sysID], EmulatorVersion[sysID], iVersion);
 
   if iVersion = '' then
@@ -19717,17 +19468,20 @@ begin
   begin
     // for MAME v0.70 or newer (-listxml output) and for HBMAME
     tempFile:= GetArcadeSystemIniSection(sysID, True)+'_listxml.xml';
-    FormStatus.MessageStr('Creating "'+tempFile+'" file.');
+    if not FileExists(GetFrontendTempFolder+tempFile) then
+    begin
+      FormStatus.MessageStr('Creating "'+tempFile+'" file.');
 
-    FileLine:= SystemStr+EmulatorFile[sysID]+SystemStr+' -listxml > '+SystemStr+GetGamesFolderEL+tempFile+SystemStr;
-    SetCurrentDir(ExtractFilePath(EmulatorFile[sysID]));
-    RunProcess(CommandPromptStr+SystemStr+FileLine+SystemStr, True, GetWindowStateEmulator);
+      FileLine:= SystemStr+EmulatorFile[sysID]+SystemStr+' -listxml > '+SystemStr+GetFrontendTempFolder+tempFile+SystemStr;
+      SetCurrentDir(ExtractFilePath(EmulatorFile[sysID]));
+      RunProcess(CommandPromptStr+SystemStr+FileLine+SystemStr, True, GetWindowStateEmulator);
 
-    SetCurrentDir(FrontendPath);
-    FileLine:= '';
+      SetCurrentDir(FrontendPath);
+      FileLine:= '';
 
-    Sleep(50); // small pause
-    Result:= Check_Temp_Files(GetGamesFolderEL+tempFile, (sysID = idHBMAME));
+      Sleep(50); // small pause
+    end;
+    Result:= Check_Temp_Files(GetFrontendTempFolder+tempFile, (sysID = idHBMAME));
 
     if not Result then
        Exit;
@@ -19737,18 +19491,21 @@ begin
     // for MAME v0.69 and older (-listinfo output)
     // ...will try to create -listinfo output for old MAME builds (0.56 to 0.69)...
     tempFile:= GetArcadeSystemIniSection(sysID, True)+'_listinfo.txt';
-    FormStatus.MessageStr('Creating "'+tempFile+'" file.');
-    FileLine:= SystemStr+EmulatorFile[sysID]+SystemStr+' -listinfo > '+SystemStr+GetGamesFolderEL+tempFile+SystemStr;
-    SetCurrentDir(ExtractFilePath(EmulatorFile[sysID]));
-    RunProcess(CommandPromptStr+SystemStr+FileLine+SystemStr, True, GetWindowStateEmulator);
+    if not FileExists(GetFrontendTempFolder+tempFile) then
+    begin
+      FormStatus.MessageStr('Creating "'+tempFile+'" file.');
+      FileLine:= SystemStr+EmulatorFile[sysID]+SystemStr+' -listinfo > '+SystemStr+GetFrontendTempFolder+tempFile+SystemStr;
+      SetCurrentDir(ExtractFilePath(EmulatorFile[sysID]));
+      RunProcess(CommandPromptStr+SystemStr+FileLine+SystemStr, True, GetWindowStateEmulator);
 
-    SetCurrentDir(FrontendPath);
-    FileLine:= '';
-    if FormMain.Visible then
-       FormMain.Refresh;
+      SetCurrentDir(FrontendPath);
+      FileLine:= '';
+      if FormMain.Visible then
+         FormMain.Refresh;
 
-    Sleep(50); // small pause
-    Result:= Check_Temp_Files(GetGamesFolderEL+tempFile, True);
+      Sleep(50); // small pause
+    end;
+    Result:= Check_Temp_Files(GetFrontendTempFolder+tempFile, True);
 
     if not Result then
        Exit;
@@ -19756,18 +19513,21 @@ begin
     // it's the old MAME, yikes!
     // create -listdetails to get driver name for each game...
     tempFile2:= GetArcadeSystemIniSection(sysID, True)+'_listdetails.txt';
-    FormStatus.MessageStr('Creating "'+tempFile2+'" file.');
-    FileLine:= SystemStr+EmulatorFile[sysID]+SystemStr+' -listdetails > '+SystemStr+GetGamesFolderEL+tempFile2+SystemStr;
-    SetCurrentDir(ExtractFilePath(EmulatorFile[sysID]));
-    RunProcess(CommandPromptStr+SystemStr+FileLine+SystemStr, True, GetWindowStateEmulator);
+    if not FileExists(GetFrontendTempFolder+tempFile2) then
+    begin
+      FormStatus.MessageStr('Creating "'+tempFile2+'" file.');
+      FileLine:= SystemStr+EmulatorFile[sysID]+SystemStr+' -listdetails > '+SystemStr+GetFrontendTempFolder+tempFile2+SystemStr;
+      SetCurrentDir(ExtractFilePath(EmulatorFile[sysID]));
+      RunProcess(CommandPromptStr+SystemStr+FileLine+SystemStr, True, GetWindowStateEmulator);
 
-    SetCurrentDir(FrontendPath);
-    FileLine:= '';
-    if FormMain.Visible then
-       FormMain.Refresh;
+      SetCurrentDir(FrontendPath);
+      FileLine:= '';
+      if FormMain.Visible then
+         FormMain.Refresh;
 
-    Sleep(50); // small pause
-    Result:= Check_Temp_Files(GetGamesFolderEL+tempFile2, True);
+      Sleep(50); // small pause
+    end;
+    Result:= Check_Temp_Files(GetFrontendTempFolder+tempFile2, True);
 
     if not Result then
        Exit;
@@ -20826,7 +20586,7 @@ begin
   WarningMessagesList:= THashedStringList.Create;
   WarningMessagesList.BeginUpdate;
   ListXML:= THashedStringList.Create;
-  ListXML.LoadFromFile(GetGamesFolderEL+tempFile);
+  ListXML.LoadFromFile(GetFrontendTempFolder+tempFile);
 
   if ListXML.Count > 0 then
   begin
@@ -21496,7 +21256,7 @@ begin
   ListGames.UpdateFile;
   GameStatusList.SaveToFile(GetGamesFolderEL+GetSystemFileName(sysID, 2));
 
-  DeleteFile(GetGamesFolderEL+tempFile); // delete temp "listxml.xml" file
+  DeleteFile(GetFrontendTempFolder+tempFile); // delete temp "listxml.xml" file
 
   if Assigned(SoftList) then
      begin
@@ -21898,7 +21658,7 @@ begin
   Result:= True;
   FormStatus.MessageStr('Parsing "'+tempDriverFile+'"');
   ListDrivers:= THashedStringList.Create;
-  ListDrivers.LoadFromFile(GetGamesFolderEL+tempDriverFile);
+  ListDrivers.LoadFromFile(GetFrontendTempFolder+tempDriverFile);
   ListDrivers.BeginUpdate;
   for MainLoop:=0 to ListDrivers.Count -1 do
       ListDrivers[MainLoop]:= Trim(Copy(ListDrivers[MainLoop], 1, 8))+'='+Trim(Copy(ListDrivers[MainLoop], 10, 10));
@@ -21907,7 +21667,7 @@ begin
   FormStatus.MessageStr('Parsing "'+tempFile+'" (1st pass). Creating BIOS sets list.');
   
   ListXML:= THashedStringList.Create;
-  ListXML.LoadFromFile(GetGamesFolderEL+tempFile);
+  ListXML.LoadFromFile(GetFrontendTempFolder+tempFile);
 
   ListCPU:= THashedStringList.Create;
 
@@ -22264,8 +22024,8 @@ begin
 
   GameStatusList.SaveToFile(GetGamesFolderEL+GetSystemFileName(sysID, 2));
 
-  DeleteFile(GetGamesFolderEL+tempFile); // delete temp lisinfo.txt file
-  DeleteFile(GetGamesFolderEL+tempDriverFile);
+  DeleteFile(GetFrontendTempFolder+tempFile); // delete temp lisinfo.txt file
+  DeleteFile(GetFrontendTempFolder+tempDriverFile);
 
   Application.ProcessMessages;
   if (Assigned(ROMsList)) and (ROMsList.Count > 0) then
@@ -22414,10 +22174,8 @@ begin
   FormStatus.SetProgressPos(0);
   FormStatus.TitleStr('Create Games List: '+GetArcadeEmulatorDescription(idDaphne));
   FormStatus.MessageStr('Parsing "config.xml" (1st pass). Adding parent sections in .ini file.');
-  //FormStatus.MessageStr('Parsing "config.xml" (1st pass).'+#13#10+
-  //                      'Creating parent games sections in .ini file.');
-  if not FormStatus.Visible then
-     FormStatus.Show;
+
+  ShowStatusForm;
   configXML:= THashedStringList.Create;
   configXML.LoadFromFile(TempString);
   if configXML.Count > 0 then
@@ -22887,7 +22645,7 @@ begin
        else
           begin
             // Demul, generate listxml with -listxml cmdline parameter
-            tempFile:= FrontendPath+'temp\demul-listxml.xml';
+            tempFile:= GetFrontendTempFolder+'demul-listxml.xml';
             FormStatus.MessageStr('Creating "'+ExtractFileName(tempFile)+'" file.');
             FileLine:= SystemStr+EmulatorFile[sysID]+SystemStr+' -listxml > '+SystemStr+tempFile+SystemStr;
             SetCurrentDir(ExtractFilePath(EmulatorFile[sysID]));
@@ -22917,8 +22675,7 @@ begin
 
   FormStatus.TitleStr('Create Games List: '+GetArcadeEmulatorDescription(sysID));
   FormStatus.MessageStr('');
-  if not FormStatus.Visible then
-     FormStatus.Show;
+  ShowStatusForm;
   FormStatus.StartThreadClock;
   SetCurrentDir(FrontendPath);
   FileLine:= '';
@@ -23505,8 +23262,8 @@ begin
   if sysID = idDemul then
      begin
        FreeAndNil(DemulDriverName);
-       if FileExists(FrontendPath+'temp\demul-listxml.xml') then
-          DeleteFile(FrontendPath+'temp\demul-listxml.xml');
+       if FileExists(GetFrontendTempFolder+'demul-listxml.xml') then
+          DeleteFile(GetFrontendTempFolder+'demul-listxml.xml');
      end;
 
   if (Assigned(ROMsList)) and (ROMsList.Count > 0) then
@@ -23785,8 +23542,7 @@ begin
 
   FormStatus.MessageStr('Parsing "'+SoftwareListName+'.xml" file.');
 
-  if not FormStatus.Visible then
-     FormStatus.Show;
+  ShowStatusForm;
   if not IsMultiSlot then // no need for neogeo, stv as this function will be called when creating MAME games list
      FormStatus.StartThreadClock; // only for MAME softwarelist.xml files (mamedir\hash\ folder)
 
@@ -23978,8 +23734,11 @@ begin
                    if XML_CheckData(FileLine, '<publisher>') then
                       TempGameVars.eManufacturer:= DecodeHTML(Copy(FileLine, 12, PosEx('</publisher>', FileLine)-12))
                    else
+                   if XML_CheckData(FileLine, '<notes>') then
+                      TempGameVars.eNotes:= DecodeHTML(Copy(FileLine, 8, PosEx('</notes>', FileLine)- 8))
+                   else
                    if XML_CheckData(FileLine, '<info name="alt_title"') then
-                      TempGameVars.ePlayedDateText:= XML_GetEntryValue(FileLine, 'value')
+                      TempGameVars.eTitleAlternate:= XML_GetEntryValue(FileLine, 'value')
                    else
                    if XML_CheckData(FileLine, '<sharedfeat name="compatibility"') then
                       TempGameVars.eSoftwareCompatible:= XML_GetEntryValue(FileLine, 'value')
@@ -24194,7 +23953,7 @@ begin
     TempGameVars.eMediaType:= StrToInt(tmpString[6]); // 0 -> ROM; 1 -> CHD
 
     TempGameVars.eTitle:= SoftListGetEntryValue(tmpString, 'title');
-    TempGameVars.eYear:= SoftListGetEntryValue(tmpString, 'year');
+    TempGameVars.eYear:=  SoftListGetEntryValue(tmpString, 'year');
     TempGameVars.eManufacturer:= SoftListGetEntryValue(tmpString, 'manuf');
     TempGameVars.eControls:= SoftListGetEntryValue(tmpString, 'ctrl');
     TempField:= SoftListGetEntryValue(tmpString, 'btn');
@@ -24311,8 +24070,10 @@ begin
     //TempGameVars.eScreenOrientation:= StrToInt(tmpString[11]+tmpString[12]); // for future improvement ? software list games don't have the screen orientation tag
 
     TempGameVars.eTitle:= SoftListGetEntryValue(tmpString, 'title');
+    TempGameVars.eTitleAlternate:= SoftListGetEntryValue(tmpString, 'alt_title');
     TempGameVars.eYear:= SoftListGetEntryValue(tmpString, 'year');
     TempGameVars.eManufacturer:= SoftListGetEntryValue(tmpString, 'publisher');
+    TempGameVars.eNotes:= SoftListGetEntryValue(tmpString, 'notes');
 
     TempGameVars.eScreenType:= 0; // set to raster by default
     TempGameVars.eScreenOrientation:= 0; // set to horizontal by default
@@ -25396,7 +25157,7 @@ begin
      begin
        FormApplyFilterMsgBox.LabelBoxMessageTitle.Caption:= TitleMessageStr;
        FormApplyFilterMsgBox.LabelBoxMessage.Caption:= MessageStr;
-       FormApplyFilterMsgBox.Show;
+       FormApplyFilterMsgBox.Visible:= True;// Show;
        Application.ProcessMessages;
      end
 end;
@@ -25404,7 +25165,7 @@ end;
 procedure TFormMain.HideFilterMsgBox;
 begin
   if not IsStartup then
-     FormApplyFilterMsgBox.Close;
+     FormApplyFilterMsgBox.Visible:= False;// Close;
 end;
 
 procedure TFormMain.LoadLanguagesList(var ListHolder: THashedStringList);
@@ -26234,6 +25995,7 @@ var
               TGroupInfo(addGroup).eSystemType:= TempGameVars.eSystemType;
               TGroupInfo(addGroup).eIsCustomGame:= TempGameVars.eIsCustomGame;
               TGroupInfo(addGroup).eTitle:= TempGameVars.eTitle;
+              TGroupInfo(addGroup).eTitleAlternate:= TempGameVars.eTitleAlternate;
               TGroupInfo(addGroup).eYear:= TempGameVars.eYear;
               TGroupInfo(addGroup).eManufacturer:= TempGameVars.eManufacturer;
               TGroupInfo(addGroup).eName:= TempGameVars.eName;
@@ -26267,6 +26029,7 @@ var
     TEasyGameInfo(addItem).eThumbnailFileName:= '';
     TEasyGameInfo(addItem).eThumbnailIsZipped:= False;
     TEasyGameInfo(addItem).eTitle:= TempGameVars.eTitle;
+    TEasyGameInfo(addItem).eTitleAlternate:= TempGameVars.eTitleAlternate;
     SetCustomGameTitle(addItem);
 
     TEasyGameInfo(addItem).eYear:=         TempGameVars.eYear;
@@ -26323,6 +26086,7 @@ var
     TEasyGameInfo(addItem).eSoftwareExecParameter:= TempGameVars.eSoftwareExecParameter;
     TEasyGameInfo(addItem).eSoftwareCompatible:=    TempGameVars.eSoftwareCompatible;
     TEasyGameInfo(addItem).eSoftwareUsageTip:=      TempGameVars.eSoftwareUsageTip;
+    TEasyGameInfo(addItem).eNotes:=                 TempGameVars.eNotes;
 
     TEasyGameInfo(addItem).eGameSetStatus:=   TempGameVars.eGameSetStatus;
     TEasyGameInfo(addItem).eScanMode:=        TempGameVars.eScanMode;
@@ -26517,13 +26281,16 @@ begin
             if TempGameVars.eSoftwareName <> '' then
                begin
                  TempGameVars.eTitle:= FixUnicodeGameTitle(TempGameVars.eTitle); // mostly for MSX games (AlphaRoid, Alpha Squadron)
+
                  TempGameVars.eManufacturer:= DecodeUnicodeStr(TempGameVars.eManufacturer);
 
                  GetSoftListCustomSystemID(TempGameVars.eSoftwareName);
                  TempGameVars.eCustomMediaType:= GetCustomMediaTypeID(TempGameVars.eSoftwareExecParameter, TempGameVars.eSoftwareName);
                end;
-            TempGameVars.eTitle:= DecodeUnicodeStr(TempGameVars.eTitle);
+            TempGameVars.eTitle:=          DecodeUnicodeStr(TempGameVars.eTitle);
+            TempGameVars.eTitleAlternate:= DecodeUnicodeStr(TempGameVars.eTitleAlternate);
 
+            TempGameVars.eNotes:= DecodeUnicodeStr(TempGameVars.eNotes);
             TempGameVars.eImageIndex:= TempGameVars.eROMIdentification;
             SetDescriptionFormat(True);
 
@@ -26686,7 +26453,7 @@ begin
       TempGameVars.eROMsAllNoDump:= False;
 
       tStr:= TempGameVars.eName;
-      TempGameVars.eName:= DecodeUnicodeStr(TempGameVars.eName);
+      TempGameVars.eName:=  DecodeUnicodeStr(TempGameVars.eName);
       TempGameVars.eTitle:= DecodeUnicodeStr(TempGameVars.eTitle);
       TempGameVars.eIsUnicode:= IsUnicodeString(tStr, TempGameVars.eName); // this var will always be set here
 
@@ -28527,7 +28294,7 @@ begin
              begin
                if PassedStr <> '' then
                   PassedStr:= PassedStr+#13#10;
-               PassedStr:= PassedStr+GetArcadeSystemShortTitle(CurrentSystem)+': Emulator file valid.';
+               PassedStr:= PassedStr+GetArcadeSystemShortTitle(CurrentSystem)+': Emulator file found.';
                Continue:= True;
                CreateSys[CurrentSystem]:= True; // only set to TRUE if emulator is valid
              end
@@ -28535,7 +28302,7 @@ begin
              begin
                if FailedStr <> '' then
                   FailedStr:= FailedStr+#13#10;
-               FailedStr:= FailedStr+GetArcadeSystemShortTitle(CurrentSystem)+': Emulator file invalid.';
+               FailedStr:= FailedStr+GetArcadeSystemShortTitle(CurrentSystem)+': Emulator file not found.';
                CreateSys[Loop]:= False; // set system to false since emulator validation failed
              end;
         end;
@@ -28544,7 +28311,7 @@ begin
              if FailedStr <> '' then
                 begin
                    ShowMessageBox('Error', 'Create games list for multiple systems.',
-                                  '    One or more emulator files failed to be valited. The games list will not be '+
+                                  '    One or more emulator files were not found. The games list will not be '+
                                   'created for the following systems:'+#13#10+#13#10+
                                   FailedStr+#13#10+#13#10, 2);
                 end;
@@ -28552,7 +28319,7 @@ begin
         else
            begin
              ShowMessageBox('Error', 'Create games list for multiple systems.',
-                            '    Validation failed for all selected systems.'+#13#10+#13#10+
+                            '    No emulators found for selected systems.'+#13#10+#13#10+
                             FailedStr+#13#10+#13#10+'Cannot continue, aborting...', 2, False, 1);
              Exit;
            end;
@@ -28560,7 +28327,7 @@ begin
            begin
              // create games list
              Continue:= False;
-             FormStatus.Show;
+             ShowStatusForm;
              FormStatus.StartThreadClock;
              FailedStr:= '';
              for Loop:=Low(CreateSys) to High(CreateSys) do
@@ -28586,7 +28353,7 @@ begin
       begin
         if not ValidateArcadeEmulatorFile(sysID) then
            Exit;
-        FormStatus.Show;
+        ShowStatusForm;
         FormStatus.StartThreadClock;
         Continue:= CreateList(sysID);
       end;
@@ -29069,11 +28836,8 @@ begin
        MissingROMs:= TMemIniFile.Create(MissingROMsFileName);
      end;
 
-  if not FormStatus.Visible then
-     begin
-       FormStatus.Show;
-       FormStatus.StartThreadClock;
-     end;
+  ShowStatusForm;
+  FormStatus.StartThreadClock;
 
   NumGamesChanged:= 0;
   UpdateList:= False;
@@ -32373,7 +32137,6 @@ begin
   AddDefaultIcons('systemtype_console.ico',  tempFolder, IL_SystemType_Standard); // 01
   AddDefaultIcons('systemtype_computer.ico', tempFolder, IL_SystemType_Standard); // 02
   AddDefaultIcons('systemtype_handheld.ico', tempFolder, IL_SystemType_Standard); // 03
-
   end;
 
   ShowIconErrorMessage;
@@ -32457,21 +32220,6 @@ begin
   AddDefaultIcons('bios_chip.ico', tempFolder, IconList);
   for Loop:=Low(MediaTypeCustom) to High(MediaTypeCustom) do
       AddDefaultIcons(MediaTypeCustom[Loop, 1], tempFolder, IconList);
-end;
-
-function RGB2BGR(R, G, B: Byte): COLORREF; overload;
-begin
-  Result := (Integer(B) shl 16) + (Integer(G) shl 8) + R;
-end;
-
-function RGB2BGR(RGB: Integer): COLORREF; overload;
-var
-  R, G, B: Integer;
-begin
-  R      := RGB div $10000;
-  G      := ((RGB mod $10000) div $100) shl 8;
-  B      := (RGB mod $100) shl 16;
-  Result := B + G + R;
 end;
 
 function TFormMain.CombineIcons(FrontIcon, BackIcon: HIcon): HIcon;
@@ -32581,7 +32329,7 @@ var
     x: Integer;
     iBitmap, iBitmapMask: TBitmap; // temp bitmaps for editing
     iRect: TRect;
-    oldColor, newColor: TRGB;
+    oldColor, newColor: uCommon.TRGB;
   begin
     // get the front bitmap part to edit
     iBitmap:= TBitmap.Create;
@@ -34242,6 +33990,35 @@ begin
      ColorBoxExSource.PopupMenu:= PopupNightModeCopyPasteColor;
 end;
 
+procedure TFormMain.RGBColorPickerExecute(Sender: TObject);
+begin
+  if not Assigned(FormColorPickerEx) then
+     FormColorPickerEx:= TFormColorPickerEx.Create(nil);
+
+  FormColorPickerEx.OldColor:= (Sender as TColorBoxEx).Selected;
+  FormColorPickerEx.MarkerIconPath:= GetFolderFull(32);
+
+  FormColorPickerEx.ShowModal;
+  if FormColorPickerEx.mmResult = mrOk then
+     SetSelectedColorBox((Sender as TColorBoxEx), FormColorPickerEx.NewColor);
+  
+  FreeAndNil(FormColorPickerEx);
+end;
+
+procedure TFormMain.RGBColorPickerAssignOnClick(FormSource: TForm);
+var
+  Loop: Integer;
+begin
+  if not Assigned(FormSource) then
+     Exit;
+
+  for Loop:= 0 to FormSource.ComponentCount-1 do
+  begin
+    if FormSource.Components[Loop] is TColorBoxEx then
+       TColorBoxEx(FormSource.Components[Loop]).OnButtonRGBClick:= FormMain.RGBColorPickerExecute;
+  end;
+end;
+
 procedure TFormMain.PopupNightModeCopyPasteColorPopup(Sender: TObject);
 var
   colorSender: TObject;
@@ -34279,6 +34056,9 @@ begin
   ReplaceColorIcon(True);
 end;
 
+{
+// "RGB Quick Edit" form is no longer used but this code is left
+// here for future reference
 procedure TFormMain.PopupNightModeRGBQuickEditClick(Sender: TObject);
 var
   APopupMenu: TPopupMenu;
@@ -34454,7 +34234,7 @@ begin
      end;
 
   FreeAndNil(FormNightModeRGBQuickEdit);
-end;
+end;}
 
 procedure TFormMain.PopupNightModePasteColorClick(Sender: TObject);
 var
@@ -34669,6 +34449,23 @@ begin
   ButtonFilterControls_ToolBar.Tag:= 0; // restore searching text with search bar options, not "controls" search button
 end;
 
+function TFormMain.IsLinuxWine: Boolean;
+var
+  fHandle: THandle;
+  fPointer: Pointer;
+  IsLinux: Boolean;
+begin
+  fHandle:= LoadLibrary(PChar('ntdll.dll'));
+  Result:= FHandle <> 0;
+  if Result then
+     begin
+       // https://stackoverflow.com/questions/56277858/how-to-detect-is-wine-running-from-linux-or-from-mac-os-environment-in-c
+       fPointer:= GetProcAddress(fHandle, 'wine_get_host_version'); // check this function name, it only exists in Linux
+       IsLinux:= fPointer <> nil;
+     end;
+  FreeLibrary(fHandle);
+end;
+
 procedure TFormMain.FormCreate(Sender: TObject);
 var
   INIFile: TMemIniFile;
@@ -34677,7 +34474,7 @@ var
 begin
   // Override Delphi's ugly hand cursor with the nice Windows hand cursor
   Screen.Cursors[crHandPoint]:= LoadCursor(0, IDC_HAND);
-
+  
   IsStartup:= True;
   CreatingGamesList:= False;
 
@@ -34705,9 +34502,7 @@ begin
      iIndex:= 415;
   PanelScreenshotsArea.Width:= iIndex; // set default panel size at runtime; design time is larger so all controls are visible in images tool bar buttons
 
-  CallCenterWindow(FormMain);
-
-  MenuEnableNightMode.Tag:= Ord(IsWin10);
+  MenuEnableNightMode.Tag:= 1; // Ord(IsWin10); night enabled by default, even on Windows 7
 
   Font_Parent:= TFont.Create;
   Font_Clone:=  TFont.Create;
@@ -34760,8 +34555,6 @@ begin
   PanelToolBar.Height:= 55;
   SplashUpdateButtonsImages;
 
-  FormMain.Caption:= FormMain.Caption+' '+FrontendVersion;
-
   MenuRestoreMainScreenDefaultScreenSizePosition.Click; // need to restore initial form size, dunno why it gets enlarged at runtime
 
   LastColumnSorted:= 0;
@@ -34786,25 +34579,25 @@ begin
   CheckAndCreateFolder(GetFolderFull(38));  // "console_computer\game_cfg\" folder
   CheckAndCreateFolder(GetNightModeFolder); // create "frontendpath\nightmode\" folder is necessary
 
-  UpdateEmuConGamesListTags;  // remove "IsUnicode" tag from position 5 (April 25, 2021)
+  //UpdateEmuConGamesListTags;  // remove "IsUnicode" tag from position 5 (April 25, 2021)
                               //   000        0
                               // SystemID MediaType <file>Game Filename (no path)/> <size>file size (bytes)/>
-  UpdateEmuConPlayedGamesTags; // remove "IsUnicode" tag from position 2 (April 25, 2021)
+  //UpdateEmuConPlayedGamesTags; // remove "IsUnicode" tag from position 2 (April 25, 2021)
                                //
                                // <file>game_filename.zip/>01 8;
 
-  UpdateEmuConExtraInfoTags; // remove "IsUnicode" tag from Position 2 (April 25, 2021)
+  //UpdateEmuConExtraInfoTags; // remove "IsUnicode" tag from Position 2 (April 25, 2021)
 
   IsNightMode:= True; // make night mode enabled by default (enabled at runtime only, in design time is set to disabled)
   NightModeProfileStr:= 'Default';
   ToolBarOverlayIconFolderStr:= 'Default'; // set tool bar overlay icon to default value (each night mode profile can have a different value)
 
-  // initialize "RGB Quick Edit" popup menu
+  // initialize "ColorBoxEx" popup menu
   if Is4KMode then
      begin
        MenuBoundToGamesPanel.Checked:= True;
-       //MenuBoundToGamesPanel.Tag:= 1;
        MenuBoundToGamesPanel.OnClick(Self);
+
        FormMain.Set4KImageListSpecs(IL_Colors, 32);
        SetToolBarIconSize4K;
        SetImagesToolBar4K;
@@ -34834,7 +34627,16 @@ begin
      begin
        INIFile:= TMemIniFile.Create(GetFrontendIniFile);
        if not Is4KMode then
-          MenuToolBarIconSize.Tag:= INIFile.ReadInteger('ToolBar', 'GamesFilters_IconSize', 1); // 0 -> extra large (68x68); 1 -> large (48x48); 2 -> small (30x24)
+          begin
+            MenuToolBarIconSize.Tag:=   INIFile.ReadInteger('ToolBar', 'GamesFilters_IconSize', 1); // 0 -> extra large (68x68); 1 -> large (48x48); 2 -> small (30x24)
+            MenuBoundToGamesPanel.Tag:= INIFile.ReadInteger('ToolBar', 'GamesFilters_BoundToGamesPanel', Ord(Is4KMode));
+            if MenuBoundToGamesPanel.Checked <> Boolean(MenuBoundToGamesPanel.Tag) then
+               begin
+                 MenuBoundToGamesPanel.Checked:= Boolean(MenuBoundToGamesPanel.Tag);
+                 MenuBoundToGamesPanel.OnClick(Self);
+               end;
+          end;
+
        NightModeProfileStr:=  INIFile.ReadString('Preferences', 'NightModeProfile', 'Default');
        if NightModeProfileStr = '' then
           NightModeProfileStr:= 'Default';
@@ -34843,6 +34645,9 @@ begin
        MenuUseAlternateFrontendIcons.Checked:= Boolean(INIFile.ReadInteger('Preferences', 'UseAlternateFrontendIcons', 0));
        FreeAndNil(INIFile);
      end;
+
+  if MenuToolBarIconSize.Tag <> 1 then
+     MenuToolBarIconSize.Items[MenuToolBarIconSize.Tag].Click; // change games list filters tool bar size
 
   if IsNightMode then
      begin
@@ -34986,6 +34791,12 @@ begin
   FreeAndNil(fFile);
 end;
 
+procedure TFormMain.SetFormStatusParentWindow;
+begin
+  if FormStatus.ParentWindow = 0 then // 0 is no parent window (Windows desktop is the parent)
+     FormStatus.ParentWindow:= Application.MainForm.Handle;
+end;
+
 procedure TFormMain.FormShow(Sender: TObject);
 var
   GamesListFound, UpdateArcadeVersionInfo: {packed }array[1..MaxArcadeSystems] of Boolean;
@@ -35029,17 +34840,17 @@ var
   function UpdateEmulatorVersionInfo(sysID: Byte; AlterMAMEIndex: Integer = -1): Boolean;
   begin
     if AlterMAMEIndex = -1 then
-       Result:= (EmulatorFile[sysID] <> '') and FileExistsW(EmulatorFile[sysID])
+       Result:= (EmulatorFile[sysID] <> '') and FileExists(EmulatorFile[sysID])
     else
-       Result:= (AlterMAMEFile[AlterMAMEIndex] <> '') and FileExistsW(AlterMAMEFile[AlterMAMEIndex]);
+       Result:= (AlterMAMEFile[AlterMAMEIndex] <> '') and FileExists(AlterMAMEFile[AlterMAMEIndex]);
 
     if not Result then
        Exit;
 
     if AlterMAMEIndex = -1 then
-       NewDateTime:= FileAgeW(EmulatorFile[sysID])
+       NewDateTime:= FileAge(EmulatorFile[sysID])
     else
-       NewDateTime:= FileAgeW(AlterMAMEFile[AlterMAMEIndex]);
+       NewDateTime:= FileAge(AlterMAMEFile[AlterMAMEIndex]);
 
     Application.ProcessMessages;
     Result:= NewDateTime <> -1;
@@ -35186,6 +34997,7 @@ var
     Result:= True;
     TerminateEmuLoader:= True;
     Application.Terminate;
+    CloseStatusForm;
     PostMessage(Handle, wm_Close, 0, 0);
   end;
 
@@ -35234,18 +35046,6 @@ var
     end;
   end;
 
-  function ReadConsCompSelectEmulatorIni: Boolean;
-  var
-    miscIni: TMemIniFile;
-  begin
-    if FileExists(GetMiscSettingsFile) then
-       begin
-         miscIni:= TMemIniFile.Create(GetMiscSettingsFile);
-         ButtonCustomSelectDefaultEmulators.Tag:= miscIni.ReadInteger('Miscellaneous', 'SelectDefaultEmulator_SmallIcons', 0);
-         FreeAndNil(miscIni);
-       end;
-  end;
-
 begin
   if TerminateEmuLoader then
      begin
@@ -35264,17 +35064,8 @@ begin
   InitPreferencesScreen;
   InitSplashScreen; // splash screen has night colors even if "Night Mode" is not enabled (May 01, 2021)
 
-  // must set custom colors here, after FormNightMode is created
-  {SetButtonExColors(FormStatus.ColorsBoxButtonDefault, True, True);
-  SetButtonExColors(FormStatus.VersionInfoPositionButtonDefault, True, True);
-  SetButtonExColors(FormStatus.ProgressBarSchemeButtonDefault, True, True);
-  SetButtonExColors(FormStatus.ProgressBarCopyCurrentColorsToCustomButton, True, True);
-  SetButtonExColors(FormStatus.StatusButtonClose, True, True);}
-
   FormStatus.MessageStr('Loading main screen icons.');
   LoadMainScreenIcons(False);
-  if MenuToolBarIconSize.Tag <> 1 then
-     MenuToolBarIconSize.Items[MenuToolBarIconSize.Tag].Click; // change games list filters tool bar size
 
   FormStatus.MessageStr('Loading miscellaneous icons.');
   LoadLeftPanelIcons;
@@ -35291,6 +35082,7 @@ begin
   IsFirstTimeRun:= False;
   CreateListArcade:= False;
   CreateListConsoleComputer:= False;
+  CleanInstallDialogModal:= -1;
   for Loop:=1 to MaxArcadeSystems do
   begin
     GamesListFound[Loop]:= True;
@@ -35311,8 +35103,6 @@ begin
      Adjust4KModePanels;
 
   SetPopupMenuNightColorsFormMain(True); // set popup menus frame colors for the night mode ("FormMain" only)
-
-  ReadConsCompSelectEmulatorIni; // set small icons or 128x128 icons in "Select Default Emulators To Play (Console/Computer)" tool bar button
 
   // make sure "\ini_files\videopreview.ini" file exists; if not, make a duplicate of "\ini_files\videopreview[default].ini"
   if not FileExists(GetVideoPreviewIniFile) then
@@ -35368,10 +35158,9 @@ begin
   if not Continue then
      IsFirstTimeRun:= True;
 
-  // IsFirstTimeRun:= True; // for debugging only, do not enable
-  case IsFirstTimeRun of
-    True:
-      begin
+  //IsFirstTimeRun:= True; // for debugging only, do not enable
+  if IsFirstTimeRun then
+     begin
         if not Assigned(FormCleanInstallGuide) then
            FormCleanInstallGuide:= TFormCleanInstallGuide.Create(nil);
 
@@ -35404,14 +35193,13 @@ begin
              FormCleanInstallGuide.LabelOption_SelectConsoleComputerGamesFolders_FileStatus.Font.Color:=  clYellow;
              FormCleanInstallGuide.LabelOption_SelectConsoleComputerGamesFolders_FileStatus.ShadowColor:= clrOrange;
            end;
-        FormStatus.Close; // close FormStatus to prevent clean guide dialog to be hidden behind it
+        CloseStatusForm; // close FormStatus to prevent clean guide dialog to be hidden behind it
         CleanInstallDialogModal:= FormCleanInstallGuide.ShowModal;
 
         if CleanInstallDialogModal = mrCancel then
            begin
              TerminateEmuLoader:= True;
              FreeAndNil(FormCleanInstallGuide);
-             FormStatus.Close;
              ForceApplicationTerminate;
              Exit;
            end;
@@ -35464,69 +35252,64 @@ begin
                   CreateListConsoleComputer:= True;
              end;
         end;
-        
+
         WriteSettingsCleanInstall; // update "el_extra.ini" with clean install dialog settings
         FreeAndNil(FormCleanInstallGuide);
+        // set splash parent window to main form; don't set this here, the main window is not yet visible (October 22, 2021)
+        //if CreateListArcade or CreateListConsoleComputer then
+        //   SetFormStatusParentWindow;
+     end;
 
-        FormStatus.TitleStr('Initializing');
-        FormStatus.StartThreadClock;
-        FormStatus.Show;
+  FormStatus.TitleStr('Initializing');
+  ShowStatusForm;
+  FormStatus.StartThreadClock;
 
-        FormStatus.MessageStr('Loading EmuCon settings to RAM: games folders, image categories folders, emulators selections.');
-        ReadCustomGamesFolders;
-        ReadCustomEmulatorsInfo;
-        ReadCustomSysImageFolders;
+  FormStatus.MessageStr('Loading EmuCon settings to RAM: games folders, image categories folders, emulators selections.');
+  ReadCustomGamesFolders;
+  ReadCustomEmulatorsInfo;
+  ReadCustomSysImageFolders;
 
-        if CreateListArcade then
-           begin
-             FormStatus.MessageStr('Loading arcade folders to RAM.');
-             LoadFoldersAllArcadeSystems; // reload arcade emulator files and ROMs folders in case user clicked "Cancel" button in "MenuEmulatorSetup.Click"
-              for Loop:=1 to MaxArcadeSystems do
-                  CreateGamesFirstRunArcade(Loop);
+  ReadIniFile;
 
-              FreeAndNil(MAMESoftwareListsToProcess);
-              FreeAndNil(HBMAMESoftwareListsToProcess);
-           end;
+  Continue:= ReadArcadeEmulatorExecutable; // load emulator settings but if not found, do not ask user again
+  if Continue then
+     ErrorStr:= '';
 
-        if CreateListConsoleComputer then
-           CreateGamesFirstRunConsoleComputer;
-      end;
-    False:
-      begin
-        FormStatus.MessageStr('Loading EmuCon settings to RAM: games folders, image categories folders, emulators selections.');
-        ReadCustomGamesFolders;
-        ReadCustomEmulatorsInfo;
-        ReadCustomSysImageFolders;
+  CheckAllMAMEIniFiles; // file emulators were selected and .exe files exist, check for mame.ini files and try to create them
 
-        ReadIniFile;
+  // load ROMs folders and update emulator .exe info in case user updated .exe files before starting Emu Loader
+  FormStatus.MessageStr('Loading arcade folders lists to RAM.');
+  LoadFoldersAllArcadeSystems;
+  Continue:= False;
 
-        Continue:= ReadArcadeEmulatorExecutable; // load emulator settings but if not found, do not ask user again
-        if Continue then
-           ErrorStr:= '';
-
-        CheckAllMAMEIniFiles; // file emulators were selected and .exe files exist, check for mame.ini files and try to create them
-
-        // load ROMs folders and update emulator .exe info in case user updated .exe files before starting Emu Loader
-        FormStatus.MessageStr('Loading arcade folders to RAM.');
-        LoadFoldersAllArcadeSystems;
-        Continue:= False;
-
-        FormStatus.MessageStr('Validating and updating arcade emulators version info.');
-        for Loop:=1 to MaxArcadeSystems do
-        begin
-          if UpdateEmulatorVersionInfo(Loop) then
-             Continue:= True; // update emulator Date/Time Windows stamp
-        end;
-        if UpdateEmulatorVersionInfo(idMAME, 1) then
-           Continue:= True;
-
-        if UpdateEmulatorVersionInfo(idMAME, 2) then
-           Continue:= True;
-
-        if Continue then
-           SaveEmuVersionIniFile;
-      end;
+  FormStatus.MessageStr('Scanning arcade emulators version info.');
+  for Loop:=1 to MaxArcadeSystems do
+  begin
+    if UpdateEmulatorVersionInfo(Loop) then
+       Continue:= True; // update emulator Date/Time Windows stamp
   end;
+  if UpdateEmulatorVersionInfo(idMAME, 1) then
+     Continue:= True;
+
+  if UpdateEmulatorVersionInfo(idMAME, 2) then
+     Continue:= True;
+
+  if Continue then
+     SaveEmuVersionIniFile;
+
+  //if IsFirstTimeRun, create games lists
+  if CreateListArcade then
+     begin
+       FormStatus.MessageStr('Loading arcade folders lists to RAM.');
+        for Loop:=1 to MaxArcadeSystems do
+            CreateGamesFirstRunArcade(Loop);
+
+        FreeAndNil(MAMESoftwareListsToProcess);
+        FreeAndNil(HBMAMESoftwareListsToProcess);
+     end;
+
+  if CreateListConsoleComputer then
+     CreateGamesFirstRunConsoleComputer;
 
   FormStatus.TitleStr('Finalizing Setup');
 
@@ -35548,8 +35331,8 @@ begin
 
   SetGameType(True); // load games list before CallScanGames() function
 
-  if IsFirstTimeRun then
-     begin
+  //if IsFirstTimeRun then
+  //   begin
        if CreateListArcade then
        begin
          for Loop:=1 to MaxArcadeSystems do
@@ -35562,7 +35345,7 @@ begin
            end;
          end;
        end;
-     end;
+  //   end;
   SortAuditGames:= False;
 
   if PopupEnableMAMu_Icons.Tag = 1 then
@@ -35596,8 +35379,27 @@ begin
      end;
 
   ReadCustomGameFontFile(IsNightMode); // read default font for GamesListView (all systems) and custom font for each system
-  //if IsFirstTimeRun then
-  //   FormMain.Tag = 1; // make FormMain maximized
+
+  if IsNightMode then
+     SetPreferencesColors;
+
+  PopupEnableFavorites.Hint:= FavoriteProfile[0];
+
+  if (buildMAME = '') and (EmulatorFile[idMAME] <> '') then
+     buildMAME:= GetMAMEBinaryVersion(EmulatorFile[idMAME]);
+
+  if (buildHBMAME = '') and (EmulatorFile[idHBMAME] <> '') then
+     buildHBMAME:= GetMAMEBinaryVersion(EmulatorFile[idHBMAME]);
+
+  if (buildAlterMAME[1] = '') and (AlterMAMEFile[1] <> '') then
+     buildAlterMAME[1]:= GetMAMEBinaryVersion(AlterMAMEFile[1]);
+
+  if (buildAlterMAME[2] = '') and (AlterMAMEFile[2] <> '') then
+     buildAlterMAME[2]:= GetMAMEBinaryVersion(AlterMAMEFile[2]);
+
+  AlterMAME_ValidateMAME;
+
+  HideAppFormTaskBarButton; // disable this if using EmuLoader HideAppFormTaskBarButton2 (and override FormCreate in FormStatus)
 end;
 
 procedure TFormMain.InitImgZipThumbnail(FreeList: Boolean = False);
@@ -38571,6 +38373,17 @@ begin
   ButtonArcadeGamesFilters.Enabled:= (not PopupEnableFavorites.Checked) and (not PanelMachinesList.Visible);
 end;
 
+procedure TFormMain.ShowStatusForm;
+begin
+  if not FormStatus.Visible then
+     FormStatus.Visible:= True;
+end;
+
+procedure TFormMain.CloseStatusForm;
+begin
+  FormStatus.Close;
+end;
+
 procedure TFormMain.SetGameType(LoadFiles: Boolean);
 //var
   //sClock: Integer;
@@ -38584,7 +38397,7 @@ begin
          begin
            if LoadFiles then
               begin
-                FormStatus.Show;
+                ShowStatusForm;
                 FormStatus.StartThreadClock;
               end
            else
@@ -38754,15 +38567,21 @@ begin
   FreeAndNil(FormAbout);
 end;
 
+procedure TFormMain.SetWindowStayOnTop(FormSource: TForm; SetParentWindow: Boolean = False);
+begin
+  SetWindowPos(FormSource.Handle, hWnd_TopMost, 0, 0, 0, 0, SWP_NOACTIVATE+SWP_NOMOVE+SWP_NOSIZE); // this prevent form flicker (using Form.StayOnTop causes flicker)
+  if SetParentWindow then
+     if FormSource.ParentWindow = 0 then // 0 is no parent window (Windows desktop is the parent)
+        FormSource.ParentWindow:= Application.MainForm.Handle;
+end;
+
 procedure TFormMain.FormActivate(Sender: TObject);
 begin
   if TerminateEmuLoader then
      Exit;
 
   if not IsStartup then
-     Exit
-  else
-     HideAppFormTaskBarButton;
+     Exit;
 
   Font_TilesViewDetailsText.Color:= GetContrastColor(GamesListView.Color);
   SetMainToolBarIcon(ButtonViewMode);
@@ -38780,13 +38599,7 @@ begin
      WindowState:= wsMaximized
   else
      begin
-       if ((FormMain.Top = 0) and (FormMain.Left = 0)) then
-          begin
-            CallCenterWindow(FormMain);
-            //FormMain.Top:=  (Screen.Height-FormMain.Height) div 2;
-            //FormMain.Left:= (Screen.Width-FormMain.Width)   div 2;
-          end;
-
+       CallCenterWindow(FormMain);
        ImagesToolBarButtons.Invalidate;
        ToolBarButtons.Invalidate;
        PanelScreenshotsArea.Invalidate;
@@ -38797,22 +38610,12 @@ begin
   if MenuShowImages.Tag = 0 then
      MenuShowImages.Click;
 
-  //if MenuViewFullScreen.Tag = 1 then
-  //   MenuViewFullScreen.Click; // no longer used (June 04, 2018)
-
-  //if MenuShowImages.Tag = 0 then
-  //   MenuShowImages.Click;
-
-  //GetGameDataListView(SelectedEasyItem);
-
   LoadImgSoftwareListNames;
 
   SetThumbGridSize(ThumbnailSettings.Width, ThumbnailSettings.Height); // only set grid size, need to call ResetThumbnails below (thumbnails view only)
 
   if not IsDetailsView then
-     begin
-       PopupMenuViewMode.Items[ButtonViewMode.Tag].Click;
-     end;
+     PopupMenuViewMode.Items[ButtonViewMode.Tag].Click;
 
   // must set image layout after main form size is set to last used or layout splitter do not work correctly (April 12, 2018)
   if IsSingleImageLayout then
@@ -38836,28 +38639,6 @@ begin
 
   HideInitZipImageMsgBox;
 
-  ELV_ResetNormalColors(GamesListView); // set games list selection bar colors to user custom colors
-  ELV_ResetNormalColors(MachinesListSidePanel);
-
-  if IsNightMode then
-     SetPreferencesColors;
-
-  PopupEnableFavorites.Hint:= FavoriteProfile[0];
-
-  if (buildMAME = '') and (EmulatorFile[idMAME] <> '') then
-     buildMAME:= GetMAMEBinaryVersion(EmulatorFile[idMAME]);
-
-  if (buildHBMAME = '') and (EmulatorFile[idHBMAME] <> '') then
-     buildHBMAME:= GetMAMEBinaryVersion(EmulatorFile[idHBMAME]);
-
-  if (buildAlterMAME[1] = '') and (AlterMAMEFile[1] <> '') then
-     buildAlterMAME[1]:= GetMAMEBinaryVersion(AlterMAMEFile[1]);
-
-  if (buildAlterMAME[2] = '') and (AlterMAMEFile[2] <> '') then
-     buildAlterMAME[2]:= GetMAMEBinaryVersion(AlterMAMEFile[2]);
-
-  AlterMAME_ValidateMAME;
-
   SetGameType(False); // apply games filters
 
   UpdateStatusBarGame;    // to clear icons and labels
@@ -38876,26 +38657,20 @@ begin
             //TEasyGameInfo(SelectedEasyItem).Initialized:= False;
           end;
        GamesListView.EndUpdate(False);
-
        //GamesListView.Scrollbars.OffsetX:= 0;
        Application.ProcessMessages;
-       //SetSelectedGame(True); // reload selected game info, just to make sure... no need for this as it's called in SetGameType(False) above (April 25, 2018)
      end;
 
-  //UpdateStatusBarGame; // to clear icons and labels
+  //UpdateStatusBarGame;    // to clear icons and labels
   //UpdateStatusBarMachine; // to clear icons and labels
 
-  FormStatus.Close;
+  CloseStatusForm;
 
   if IsThumbnailView then
      ResetThumbnails; // reset thumbs here or they might not show at startup
 
-  //if GetForegroundWindow <> FormMain.Handle then
-  //   begin
-  //     FormMain.SendToBack;
-  //     FormMain.BringToFront;
-  //     FormMain.SetFocus;
-  //   end;
+  SetFormStatusParentWindow;
+  SetWindowStayOnTop(FormApplyFilterMsgBox, True);
 end;
 
 procedure TFormMain.FormCloseQuery(Sender: TObject; var CanClose: Boolean);
@@ -40591,24 +40366,6 @@ begin
        ToggleOptionsMAME(PopupSetOtherSysIniCustomOptions, PopupDeleteOtherSysIniCustomOptions);
      end;
 
-  // custom command line detection code... August 17, 2017
-  {PopupPlayCustom_CommandLineGame.Visible:= FileExists(GetCustomCommandLineFileFullPath(MemGameInfo.eName, MemGameInfo.eSystemID));
-  if PopupPlayCustom_CommandLineGame.Visible then
-     PopupPlayCustom_CommandLineGame.Caption:= Format(PopupPlayCustom_CommandLineGame.Hint, [MemGameInfo.eName]);
-
-  PopupPlayCustom_CommandLineDriver.Visible:= FileExists(GetCustomCommandLineFileFullPath(GameDriver, MemGameInfo.eSystemID));
-  if PopupPlayCustom_CommandLineDriver.Visible then
-     PopupPlayCustom_CommandLineDriver.Caption:= Format(PopupPlayCustom_CommandLineDriver.Hint, [GameDriver]);
-
-  PopupPlayCustom_CommandLineSystem.Visible:= FileExists(GetCustomCommandLineFileFullPath(GameSystem, MemGameInfo.eSystemID));
-  if PopupPlayCustom_CommandLineSystem.Visible then
-     PopupPlayCustom_CommandLineSystem.Caption:= Format(PopupPlayCustom_CommandLineSystem.Hint, [GameSystem]);
-
-  PopupPlayCustom_CommandLine.Visible:= PopupPlayCustom_CommandLineGame.Visible or
-                                        PopupPlayCustom_CommandLineDriver.Visible or
-                                        PopupPlayCustom_CommandLineSystem.Visible;}
-
-
   PopupScanResultsSelectedGame.Visible:= IsROMsListBasedSys(MemGameInfo.eSystemID) and
                                          (GamesListView.Selection.Count = 1) and
                                          (MemGameInfo.eGameSetStatus = 1) and (not MemGameInfo.eIsCustomGame); // only with Missing ROMs/CHDs
@@ -41220,7 +40977,11 @@ begin
   case Enabled of
     True:
       begin
-        emuPath:= ExtractFilePath(EmulatorFile[idMAME]);
+        // linux mode (ON)
+        emuPath:= FrontendPath;
+        if not FileExists(emuPath+'ui.ini') then
+           emuPath:= ExtractFilePath(EmulatorFile[idMAME]);
+        // linux mode (OFF)
         if FileExists(emuPath+'ui.ini') then
         begin
           mameIni:= THashedStringList.Create;
@@ -41953,7 +41714,7 @@ begin
     docItem:= FormPreferences.GameDocs.Groups.NextItem(docItem);
   until docItem = nil;
   if NoFilesMsg then
-     AddTextLine('    No .dat files were found!'+#13#10+'Place files in "mamedir\dats\" folder or change the "historypath" entry in "mamedir\ui.ini" file.')
+     AddTextLine('    No .dat files were found!'+#13#10+'Place files in "mamedir\dats\" folder or change the "historypath" entry in MAME''s "ui.ini" file.')
   else
      MAMEDocsText.SelStart:= 0; // move caret to the beginning of the text; fixes "Go To doc x" popup menus; no need to move scrol blar to the top anymore
 
@@ -43016,7 +42777,7 @@ begin
              ViewModeToggle;
              if ((LastViewIndex = 1) or IsGroupedView) then
                 begin
-                  FormStatus.Show;
+                  ShowStatusForm;
                   FormStatus.StartThreadClock;
                   SetGameType(True); // ResetMAMu_ImageList() is done here
                   FormStatus.Close;
@@ -43357,11 +43118,9 @@ begin
   if iCount > 0 then
      begin
        FormStatus.LabelMessage.Caption:= '';
-       if not FormStatus.Visible then
-          begin
-            FormStatus.Show;
-            FormStatus.StartThreadClock;
-          end;
+       ShowStatusForm;
+       FormStatus.StartThreadClock;
+
        SetLabelSoftwareScanCountVisible(True);
        GamesListView.BeginUpdate;
        for iLoop:=0 to iCount-1 do
@@ -43566,7 +43325,7 @@ begin
   pbPos:= 0;
   SnapsDownloaded:= 0;
   TotalGamesVisible:= GamesListView.Groups.VisibleItemCount;
-  FormStatus.Show;
+  ShowStatusForm;
   FormStatus.TitleStr('Download In-Game Snapshots');
   FormStatus.StartThreadClock;
   linkMW:= 'http://maws.mameworld.info/maws/img/shots/mwsnap/';
@@ -43631,7 +43390,7 @@ end;
 
 procedure TFormMain.PopupScanResultsAllGamesClick(Sender: TObject);
 begin
-  FormStatus.Show;
+  ShowStatusForm;
   FormStatus.TitleStr('View Incomplete Games/Machines');
   FormStatus.MessageStr('Loading files.');
   Application.ProcessMessages;
@@ -43674,7 +43433,7 @@ begin
         case missFile.SectionExists(MemGameInfo.eName) of
           True:
             begin
-              FormStatus.Show;
+              ShowStatusForm;
               FormStatus.TitleStr('View Incomplete Games/Machines: '+FormMain.GetArcadeEmulatorDescription(MemGameInfo.eSystemID, True));
               FormStatus.MessageStr('Loading files.');
               FreeAndNil(missFile);
@@ -45531,6 +45290,7 @@ var
   OutBounds: Integer;
   Continue, IsVisible: Boolean;
   iLoop: Integer;
+  s: TList;
 begin
   Result:= -1;
   iLoop:= SelectCategoryID;
@@ -46423,6 +46183,7 @@ begin
   FormThumbnailViewSettings.ELV_ThumbnailPreview.CellSizes.Thumbnail.Width:=  ThumbnailSettings.Width;
   FormThumbnailViewSettings.ELV_ThumbnailPreview.CellSizes.Thumbnail.Height:= ThumbnailSettings.Height;
 
+  RGBColorPickerAssignOnClick(FormThumbnailViewSettings);
   AssignRGBQuickEditPopupToColorBoxEx(FormThumbnailViewSettings.BorderColor);
 
   FormThumbnailViewSettings.ShowModal;
@@ -46598,6 +46359,7 @@ begin
   FormGamesListFontSettings.PopupShowFontName.Checked:=             Boolean(MenuFontSettings.HelpContext);
   FormGamesListFontSettings.GamesFont.PaintInfoItem.TileDetailCount:=   Ord(MenuFontSettings.HelpContext)+2;
 
+  FormGamesListFontSettings.GamesBackgroundColor.OnButtonRGBClick:= FormMain.RGBColorPickerExecute;
   AssignRGBQuickEditPopupToColorBoxEx(FormGamesListFontSettings.GamesBackgroundColor);
 
   if IsNightMode then
@@ -47117,7 +46879,7 @@ begin
           begin
             FormStatus.TitleStr(TMenuItem(Sender).Caption);
             FormStatus.MessageStr('Searching files of selected games...');
-            FormStatus.Show;
+            ShowStatusForm;
             FormStatus.StartThreadClock;
             Application.ProcessMessages;
           end;
@@ -47510,7 +47272,7 @@ begin
           begin
             FormStatus.TitleStr(TMenuItem(Sender).Caption);
             FormStatus.MessageStr('Adding games to the list...');
-            FormStatus.Show;
+            ShowStatusForm;
             FormStatus.StartThreadClock;
             Application.ProcessMessages;
           end;
@@ -48020,8 +47782,8 @@ begin
        SetGripIcon(FormArcadeMAMu_IconsManager.SplitterIconHistory, FormPreferences.GamesListSplitterShowGripIcon.Checked);
      end;
 
-  FormArcadeMAMu_IconsManager.FormStyle:= fsStayOnTop;
-  FormArcadeMAMu_IconsManager.Show;
+  SetWindowStayOnTop(FormArcadeMAMu_IconsManager, True);
+  FormArcadeMAMu_IconsManager.Visible:= True; // .Show;
 end;
 
 procedure TFormMain.MenuImagesManagerClick(Sender: TObject);
@@ -48589,8 +48351,7 @@ begin
      Exit;
   FormStatus.TitleStr('Search New CHD Media And Control Types');
   FormStatus.MessageStr('Loading "'+tempFile+'" file.', False);
-  if not FormStatus.Visible then
-     FormStatus.Show;
+  ShowStatusForm;
   FormStatus.StartThreadClock;
   SetCurrentDir(FrontendPath);
   FileLine:= '';
@@ -48659,7 +48420,7 @@ begin
   ctype.EndUpdate;
   waysList.EndUpdate;
   FreeAndNil(ListXML);
-  DeleteFile(FrontendPath+'temp\'+tempFile);
+  DeleteFile(GetFrontendTempFolder+tempFile);
   FormStatus.Close;
 
   ctype.SaveToFile('d:\EmuLoader\controltype_new.ini');
@@ -48721,6 +48482,7 @@ begin
   if not IsStartup then
      begin
        ELV_MakeVisible(nil, nil, False);
+       ImageLayoutDimensionsUpdatePos;
        UpdateImageDimensionsInfo;
      end;
 end;
@@ -48757,23 +48519,30 @@ begin
 end;
 
 procedure TFormMain.MenuBoundToGamesPanelClick(Sender: TObject);
+
+  procedure ChangeParent(DestControl: TWinControl);
+  begin
+    if PanelToolBar.Parent = DestControl then
+       Exit;
+
+    if not IsStartup then
+       FormMain.Canvas.Lock;
+
+    PanelToolBar.Parent:= DestControl;
+
+    if not IsStartup then
+       begin
+         FormMain.Canvas.UnLock;
+         ToolBarButtons.Invalidate;
+       end;
+  end;
+
 begin
   MenuBoundToGamesPanel.Tag:= Ord(MenuBoundToGamesPanel.Checked);
-  FormMain.Canvas.Lock;
   case MenuBoundToGamesPanel.Checked of
-    True:
-      begin
-        if PanelToolBar.Parent <> PanelGamesArea then
-           PanelToolBar.Parent:=  PanelGamesArea;
-      end;
-    False:
-      begin
-        if PanelToolBar.Parent <> FormMain then
-           PanelToolBar.Parent:=  FormMain;
-      end;
+    True : ChangeParent(PanelGamesArea);
+    False: ChangeParent(FormMain);
   end;
-  ToolBarButtons.Invalidate;
-  FormMain.Canvas.UnLock;
 end;
 
 procedure TFormMain.PopupImageCustomizeSplittersClick(Sender: TObject);
@@ -48868,6 +48637,16 @@ begin
   ImageSource.EndUpdate;
 end;
 
+procedure TFormMain.ImageLayoutDimensionsUpdatePos;
+begin
+  if Assigned(FormImageLayoutDimensions) then
+     begin
+       FormImageLayoutDimensions.PanelImageLayoutDimensions.Top:= FormMain.GamesListView.Top+FormMain.GamesListView.Header.Height+15;
+       FormImageLayoutDimensions.PanelImageLayoutDimensions.Left:= (FormMain.GamesListView.Left+FormMain.GamesListView.Width)-
+                                                                   FormImageLayoutDimensions.PanelImageLayoutDimensions.Width-15-GetSystemMetrics(SM_CXVSCROLL);
+     end;
+end;
+
 procedure TFormMain.PopupImageShowLayoutDimensionsClick(Sender: TObject);
 begin
   case PopupImageShowLayoutDimensions.Checked of
@@ -48876,10 +48655,11 @@ begin
         if not Assigned(FormImageLayoutDimensions) then
            begin
              FormImageLayoutDimensions:= TFormImageLayoutDimensions.Create(nil);
-             if IsNightMode then
+             //if IsNightMode then
                 begin
                   FormImageLayoutDimensions.Color:= menu_background_color[1];
                   SetSystemTitleLabelColors(FormImageLayoutDimensions.LabelLayoutTitle);
+                  FormImageLayoutDimensions.ImageScrLayout.Color:= FormImageLayoutDimensions.PanelImageLayoutDimensions.Color1;
                   SetLabelColors(FormImageLayoutDimensions.LabelImagesPanel, clrLightRed, clMaroon);
                   SetLabelColors(FormImageLayoutDimensions.LabelImagesPanelDimensions, clrLightRed, clMaroon);
                   SetLabelColors(FormImageLayoutDimensions.LabelImage1, item_caption_active_color[1], item_caption_active_shadow_color[1]);
@@ -48891,12 +48671,11 @@ begin
                   SetLabelColors(FormImageLayoutDimensions.LabelImage3Dimensions, item_caption_active_color[1], item_caption_active_shadow_color[1]);
                   SetLabelColors(FormImageLayoutDimensions.LabelImage4Dimensions, item_caption_active_color[1], item_caption_active_shadow_color[1]);
                 end;
+             ImageLayoutDimensionsUpdatePos;
            end;
 
         LoadImageLayoutPreview(ButtonScreenshotLayouts.Tag, FormImageLayoutDimensions.ImageScrLayout, True);
         UpdateImageDimensionsInfo;
-        FormImageLayoutDimensions.FormStyle:= fsStayOnTop;
-        FormImageLayoutDimensions.Show;
       end;
     False:
       begin
@@ -50148,7 +49927,7 @@ begin
     2: FormStatus.TitleStr('Create '+GetArcadeEmulatorDescription(sysID, True)+' Software Games Lists (Overwrite Mode)');
   end;
 
-  FormStatus.Show;
+  ShowStatusForm;
   FormStatus.StartThreadClock;
 
   SoftListRemoveExcludedList(sysID, MachinesList);
@@ -51309,9 +51088,6 @@ begin
   if not Assigned(FormArcadeSoftwareListCustomize) then
      FormArcadeSoftwareListCustomize:= TFormArcadeSoftwareListCustomize.Create(nil);
 
-  if MenuCustomizeMAMESoftwareList.Tag = 1 then
-     FormArcadeSoftwareListCustomize.UseBiggerFontIconSize.Checked:= True;
-
   FormArcadeSoftwareListCustomize.ShowModal;
   FreeAndNil(FormArcadeSoftwareListCustomize);
 end;
@@ -51642,11 +51418,9 @@ var
   begin
     if EmulatorFileCustom[CustomSystemID, EmulatorIndex] <> '' then
        begin
-         //if IsExeBatchFile(EmulatorFile[SystemID, EmulatorIndex]) then
-         //   custom command line leftover ?; // for debugging only, do not remove (April 01, 2018)
          Result:= GetAppIcon(EmulatorFileCustom[CustomSystemID, EmulatorIndex], IL_PopupPlayCustomEmulators, 24, 5+EmulatorIndex);
          if Result = -1 then
-            Result:= 4+Ord(IsExeBatchFile(EmulatorFileCustom[CustomSystemID, EmulatorIndex]));
+            Result:= 4;//+Ord(IsExeBatchFile(EmulatorFileCustom[CustomSystemID, EmulatorIndex]));
        end
     else
        begin
@@ -52114,7 +51888,7 @@ begin
      end;
 
   FormStatus.TitleStr(MsgTitle);
-  FormStatus.Show;
+  ShowStatusForm;
 
   CheckAndCreateFolder(GetGamesFolderEL(2));
 
@@ -52321,11 +52095,8 @@ procedure TFormMain.MenuCustomSystemsEditorClick(Sender: TObject);
 begin
   FormStatus.TitleStr('Custom Games Editor');
   FormStatus.MessageStr('Initializing...');
-  if not FormStatus.Visible then
-     begin
-       FormStatus.Show;
-       //FormStatus.StartThreadClock;
-     end;
+  ShowStatusForm;
+  //FormStatus.StartThreadClock;
 
   if not Assigned(FormConsCompSystemsEditor) then
      FormConsCompSystemsEditor:= TFormConsCompSystemsEditor.Create(nil);
@@ -52516,13 +52287,8 @@ begin
        PopupUseCustomEmuParameter1.Hint:= '(empty)';
        PopupUseCustomEmuParameter2.Hint:= '(empty)';
        Exit;
-     end
-  else
-     begin
-       // nothing to do here ? (February 13, 2018)
-       //if not SameText(ExtractFileExt(EmulatorString), '.exe') then
-       //   Exit;
      end;
+  
   if not ValidateFile(GetEmuParametersFile) then
      begin
        InitMessageBox;
@@ -52625,50 +52391,9 @@ begin
   if not Assigned(FormConsCompSelectEmulator) then
      FormConsCompSelectEmulator:= TFormConsCompSelectEmulator.Create(nil);
 
-  FormConsCompSelectEmulator.UseSmallIcons.Checked:= Boolean(ButtonCustomSelectDefaultEmulators.Tag);
   FormConsCompSelectEmulator.ShowModal;
-  ButtonCustomSelectDefaultEmulators.Tag:= Ord(FormConsCompSelectEmulator.UseSmallIcons.Checked);
-
-  if not Is4KMode then
-  if not CheckReadOnly(GetFrontendExtraIniFile) then
-     begin
-       miscIni:= TMemIniFile.Create(GetMiscSettingsFile);
-       miscIni.WriteInteger('Miscellaneous', 'SelectDefaultEmulator_SmallIcons', ButtonCustomSelectDefaultEmulators.Tag);
-       miscIni.UpdateFile;
-       FreeAndNil(miscIni);
-     end;
-
   FreeAndNil(FormConsCompSelectEmulator);
   FocusGamesList;
-end;
-
-procedure TFormMain.PopupSetGameCustomCommandLineClick(Sender: TObject);
-begin
-  if not ValidateSelectedGame(False) then
-     Exit;
-  if MemGameInfo.eName = '' then
-     Exit;
-
-  if not Assigned(FormCustomCommandLine) then
-     FormCustomCommandLine:= TFormCustomCommandLine.Create(nil);
-  FormCustomCommandLine.TopBar.Tag:= TMenuItem(Sender).Tag; // 0=game; 1=driver; 2=system
-  FormCustomCommandLine.ShowModal;
-  FreeAndNil(FormCustomCommandLine);
-  SetCurrentDir(FrontendPath);
-end;
-
-procedure TFormMain.PopupDeleteGameCustomCommandLineClick(Sender: TObject);
-var
-  sFileName: WideString;
-begin
-  if not ValidateSelectedGame(False) then
-     Exit;
-  case TMenuItem(Sender).Tag of
-    0: sFileName:= MemGameInfo.eName;
-    1: sFileName:= ChangeFileExt(MemGameInfo.eDriverName, '');
-    2: sFileName:= GetArcadeSystemIniSection(MemGameInfo.eSystemID, True);
-  end;
-  DeleteCustomCommandLine(GetCustomCommandLineFileFullPath(sFileName, MemGameInfo.eSystemID, MemGameInfo.eSystemType, MemGameInfo.eSoftwareName));
 end;
 
 procedure TFormMain.MenuImageCategorySettingsClick(Sender: TObject);
@@ -52678,6 +52403,7 @@ begin
   MenuImageCategorySettings.Tag:= 0;
   FormImageCategorySettings:= TFormImageCategorySettings.Create(nil);
 
+  RGBColorPickerAssignOnClick(FormImageCategorySettings);
   AssignRGBQuickEditPopupToColorBoxEx(FormImageCategorySettings.ImageCategoryBackgroundColor);
   AssignRGBQuickEditPopupToColorBoxEx(FormImageCategorySettings.ImageSingleBackgroundColor);
 
@@ -52805,7 +52531,7 @@ begin
 
   FormStatus.TitleStr('Convert Favorites Profiles to New Format');
   FormStatus.MessageStr('Building files lists.');
-  FormStatus.Show;
+  ShowStatusForm;
   ArcadeFavList:= THashedStringList.Create;
   ConsCompFavList:= THashedStringList.Create;
 
@@ -54605,7 +54331,10 @@ begin
   for Loop:= 0 to FormPreferences.ComponentCount-1 do
   begin
     if FormPreferences.Components[Loop] is TColorBoxEx then
-       AssignRGBQuickEditPopupToColorBoxEx(TColorBoxEx(FormPreferences.Components[Loop]));
+       begin
+         TColorBoxEx(FormPreferences.Components[Loop]).OnButtonRGBClick:= RGBColorPickerExecute;
+         AssignRGBQuickEditPopupToColorBoxEx(TColorBoxEx(FormPreferences.Components[Loop]));
+       end;
   end;
 end;
 
@@ -54616,6 +54345,7 @@ var
 begin
   if Application.Terminated then
      Exit;
+
   iStr:= GetCheckBoxThemeFolder+'Night Mode 1 Black\';
   for Loop:= 0 to FormStatus.ComponentCount-1 do
   begin
@@ -54623,6 +54353,7 @@ begin
        begin
          SetColorBoxColors(TColorBoxEx(FormStatus.Components[Loop]), True, True);
          TColorBoxEx(FormStatus.Components[Loop]).FrameColorDisabled:= $00606060; // fix missing frame on "Disabled" state
+         TColorBoxEx(FormStatus.Components[Loop]).OnButtonRGBClick:= FormMain.RGBColorPickerExecute;
          AssignRGBQuickEditPopupToColorBoxEx(TColorBoxEx(FormStatus.Components[Loop]));
          SetWin10DarkScrollBar(TColorBoxEx(FormStatus.Components[Loop]), True);
        end
@@ -54796,6 +54527,8 @@ begin
        begin
          SetWin10DarkScrollBar(TColorBoxEx(FormNightMode.Components[Loop]), True);
          SetColorBoxColors    (TColorBoxEx(FormNightMode.Components[Loop]), True, True);
+
+         TColorBoxEx(FormNightMode.Components[Loop]).OnButtonRGBClick:= RGBColorPickerExecute;
          AssignRGBQuickEditPopupToColorBoxEx(TColorBoxEx(FormNightMode.Components[Loop]));
        end
     else
@@ -56053,7 +55786,7 @@ begin
   if not FormStatus.Visible then
      begin
        FormStatus.StatusButtonClose.Visible:= True;
-       FormStatus.Show;
+       ShowStatusForm;
      end;
 end;
 
@@ -56599,7 +56332,6 @@ procedure TFormMain.PopupDeleteGameCustomParametersClick(Sender: TObject);
 var
   iFolder, iFileName: String;
   iSize: Integer;
-
 begin
   iFolder:= GetCustomParamsFolder;
   iFileName:= TMenuItem(Sender).Hint;
@@ -56615,6 +56347,17 @@ begin
           DeleteFile(iFolder+iFileName);
      end;
 end;
+
+{
+// for LinuxMAME executable ?
+var
+  cmdLine: WideString;
+begin
+  cmdLine:= SystemStr+EmulatorFile[idMAME]+SystemStr+' -listxml > '+SystemStr+GetFrontendTempFolder+'linuxmame.xml'+SystemStr;
+  RunProcess('wine '+CommandPromptStr+SystemStr+cmdLine+SystemStr, True, GetWindowStateEmulator);
+  ShowMessage('Done! Check if the following file was created:'+#13#10+#13#10+
+              GetFrontendTempFolder+'linuxmame.xml');
+}
 
 end.
 

@@ -453,7 +453,7 @@ object FormConsCompGamesEditor: TFormConsCompGamesEditor
         end
       end
       object SystemsHideScrollBarArea: TAdvOfficeCheckBoxEx
-        Left = 250
+        Left = 8
         Top = 5
         Width = 146
         Height = 20
@@ -464,22 +464,6 @@ object FormConsCompGamesEditor: TFormConsCompGamesEditor
         OnClick = SystemsHideScrollBarAreaClick
         Alignment = taLeftJustify
         Caption = 'Hide Systems Scroll Bar'
-        ReturnIsTab = False
-        Themed = True
-        CustomIconsEnabled = False
-        CustomEnableIconHD = False
-        CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
-        CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
-      end
-      object ShowBiggerGamesListFont: TAdvOfficeCheckBoxEx
-        Left = 8
-        Top = 5
-        Width = 175
-        Height = 20
-        TabOrder = 4
-        OnClick = ShowBiggerGamesListFontClick
-        Alignment = taLeftJustify
-        Caption = 'Show Bigger Games List Font'
         ReturnIsTab = False
         Themed = True
         CustomIconsEnabled = False

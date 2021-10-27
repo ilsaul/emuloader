@@ -7,7 +7,7 @@ uses
   Dialogs, IniFiles, PanelEx, AdvOfficeButtons, StdCtrls, Buttons,
   ExtCtrls, uCommon, GraphicEx, ShadowLabel, ColorBoxEx, ButtonsEx, EditEx,
   SplitterEx, GR32_RangeBars, MPCommonObjects, EasyListview, GR32_Image,
-  Menus, BarMenus, ImgList, ComCtrls, ToolWin;
+  Menus, BarMenus, ImgList, ComCtrls, ToolWin, TntStdCtrls, TntEditEx;
 
 type
   TFormNightMode = class(TForm)
@@ -242,7 +242,7 @@ type
     NightModeSearchGamesPanelColorsBoxPreviewLabel: TShadowLabel;
     NightModePanelSearchGames: TPanelEx;
     NightModeLabelSearchGamesBy: TShadowLabel;
-    NightModeFilterGameTitle: TEditEx;
+    NightModeFilterGameTitle: TTntEditEx;
     NightModeSearchGamesPanelColorsButtonPreview: TBitBtnEx;
     NightModeColorsBoxButtonDefault2: TBitBtnEx;
     NightModeGamesListHeaderBox: TPanelEx;
@@ -507,7 +507,7 @@ var
 
 const
   NightModeDefaultCheckTheme: String = 'Night Mode 1 Black';
-  
+
 implementation
 
 uses uMain, uApplyFilterMsgBox;

@@ -2,7 +2,7 @@ object FormCleanInstallGuide: TFormCleanInstallGuide
   Left = 1069
   Top = 625
   BorderIcons = [biSystemMenu]
-  BorderStyle = bsDialog
+  BorderStyle = bsNone
   Caption = 'Setup Guide'
   ClientHeight = 392
   ClientWidth = 636
@@ -32,6 +32,7 @@ object FormCleanInstallGuide: TFormCleanInstallGuide
     Scale = 1.000000000000000000
     ScaleMode = smNormal
     TabOrder = 0
+    OnMouseDown = ImageCleanInstallMouseDown
     object LabelOption_SelectArcadeEmulators_FileStatus: TShadowLabel
       Left = 351
       Top = 154

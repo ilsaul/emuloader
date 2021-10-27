@@ -47,7 +47,6 @@ type
     FilterGameTitle: TTntEditEx;
     ButtonFilterTitleApply: TSpeedButtonEx;
     ButtonFilterTitleReset: TSpeedButtonEx;
-    ShowBiggerGamesListFont: TAdvOfficeCheckBoxEx;
     LabelEditSelected_Total: TShadowLabel;
     LabelEditSelectedDrag: TShadowLabel;
     IL_Systems: TImageList;
@@ -109,7 +108,6 @@ type
       Item: TEasyItem; Position: Integer; ACanvas: TCanvas);
     procedure CustomGamesListHintCustomInfo(Sender: TCustomEasyListview;
       TargetObj: TEasyCollectionItem; Info: TEasyHintInfo);
-    procedure ShowBiggerGamesListFontClick(Sender: TObject);
     procedure PanelEditSelectedMouseDown(Sender: TObject;
       Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
   private
@@ -266,8 +264,7 @@ begin
 
     PanelToolBarGamesEditor.Height:= 75;
 
-    FormMain.Set4KCheckBoxSpecs(ShowBiggerGamesListFont,   10, 9, 305, 36, 16);
-    FormMain.Set4KCheckBoxSpecs(SystemsHideScrollBarArea, 405, 9, 250, 36, 16);
+    FormMain.Set4KCheckBoxSpecs(SystemsHideScrollBarArea, 10, 9, 250, 36, 16);
 
     FormMain.Set4KLabelSpecs(LabelHotkeyKeys, 10, 49, -1, -1, 14);
     FormMain.Set4KLabelSpecs(LabelHotkeyText, 11, 49, -1, -1, 14);
@@ -792,8 +789,6 @@ begin
   for Loop:= 0 to CustomGamesList.Header.Columns.Count-1 do
       CustomGamesList.Header.Columns[Loop].Width:= iIniFile.ReadInteger(iSectionStr, 'GamesListColumnWidth'+IntToStr(Loop), CustomGamesList.Header.Columns[Loop].Width);
 
-  ShowBiggerGamesListFont.Checked:= Boolean(iIniFile.ReadInteger(iSectionStr, 'ShowBiggerGamesListFont', 0));
-
   CustomGamesList.EndUpdate;
 
   FreeAndNil(iIniFile);
@@ -834,8 +829,6 @@ begin
   for Loop:= 0 to CustomGamesList.Header.Columns.Count-1 do
       iIniFile.WriteInteger(iSectionStr, 'GamesListColumnWidth'+IntToStr(Loop), CustomGamesList.Header.Columns[Loop].Width);
 
-  iIniFile.WriteInteger(iSectionStr, 'ShowBiggerGamesListFont', Ord(ShowBiggerGamesListFont.Checked));
-
   iIniFile.UpdateFile;
   FreeAndNil(iIniFile);
 end;
@@ -848,7 +841,7 @@ begin
   FormStatus.MessageStr('Loading systems icons.');
   if not FormStatus.Visible then
      begin
-       FormStatus.Show;
+       FormMain.ShowStatusForm;
        FormStatus.StartThreadClock;
      end;
 
@@ -915,9 +908,6 @@ begin
        FilterGameTitle.ColorFrameFocused:= FormMain.FilterGameTitle_ToolBar.ColorFrameFocused;
 
        FilterGameTitle.UseCustomBorder:= True;
-
-       SetCheckBoxColors(ShowBiggerGamesListFont, clCream, item_caption_active_shadow_color[1]);
-       FormMain.SetCheckBoxExCustomIcon(ShowBiggerGamesListFont);
 
        SetCheckBoxColors(SystemsHideScrollBarArea, clCream, item_caption_active_shadow_color[1]);
        FormMain.SetCheckBoxExCustomIcon(SystemsHideScrollBarArea);
@@ -1389,30 +1379,6 @@ procedure TFormConsCompGamesEditor.CustomGamesListHintCustomInfo(
   Info: TEasyHintInfo);
 begin
   FormMain.ELV_Set4KHint(Info);
-end;
-
-procedure TFormConsCompGamesEditor.ShowBiggerGamesListFontClick(
-  Sender: TObject);
-var
-  iValue: Integer;
-begin
-  if ShowBiggerGamesListFont.Checked then
-     begin
-       if Is4KMode then
-          iValue:= 20
-       else
-          iValue:= 12;
-     end
-  else
-     begin
-       iValue:= FormMain.GetDefaultFontSize;
-     end;
-
-  if CustomGamesList.Font.Size <> iValue then
-     begin
-       CustomGamesList.Font.Size:= iValue;
-       //ELV_AdjustCellHeight(CustomGamesList); // no need for this anymore (July 07, 2021)
-     end;
 end;
 
 procedure TFormConsCompGamesEditor.PanelEditSelectedMouseDown(

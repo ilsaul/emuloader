@@ -618,6 +618,9 @@ begin
               SetRadioButtonColors(TAdvOfficeRadioButtonEx(FormThumbnailViewSettings.Components[Loop]), item_caption_active_color[1], item_caption_active_shadow_color[1]);
               FormMain.SetRadioButtonExCustomIcon(TAdvOfficeRadioButtonEx(FormThumbnailViewSettings.Components[Loop]));
             end
+         //else
+         //if FormThumbnailViewSettings.Components[Loop] is TColorBoxEx then
+         //   TColorBoxEx(FormThumbnailViewSettings.Components[Loop]).OnButtonRGBClick:= FormMain.RGBColorPickerExecute
          else
          if FormThumbnailViewSettings.Components[Loop] is TBitBtnEx then
             FormMain.SetButtonExColors(TBitBtnEx(FormThumbnailViewSettings.Components[Loop]));

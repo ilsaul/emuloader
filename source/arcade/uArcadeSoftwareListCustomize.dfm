@@ -22,7 +22,7 @@ object FormArcadeSoftwareListCustomize: TFormArcadeSoftwareListCustomize
   PixelsPerInch = 96
   TextHeight = 15
   object LabelTotalSoftwareList: TShadowLabel
-    Left = 969
+    Left = 970
     Top = 91
     Width = 155
     Height = 15
@@ -106,23 +106,6 @@ object FormArcadeSoftwareListCustomize: TFormArcadeSoftwareListCustomize
       OnClick = FilterShowUncheckedOnlyClick
       Alignment = taLeftJustify
       Caption = 'Show Unchecked Only'
-      ReturnIsTab = False
-      Themed = True
-      CustomIconsEnabled = False
-      CustomEnableIconHD = False
-      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
-      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
-    end
-    object UseBiggerFontIconSize: TAdvOfficeCheckBoxEx
-      Left = 252
-      Top = 11
-      Width = 183
-      Height = 20
-      ShowHint = True
-      TabOrder = 4
-      OnClick = UseBiggerFontIconSizeClick
-      Alignment = taLeftJustify
-      Caption = 'Use Bigger Icon and Font Sizes'
       ReturnIsTab = False
       Themed = True
       CustomIconsEnabled = False

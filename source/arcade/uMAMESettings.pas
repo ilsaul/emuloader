@@ -1727,7 +1727,7 @@ begin
     MoveCheckBox(DRCLogUML   ,  -1, 16, 345);
     MoveCheckBox(DRCLogNative,  -1, 16, 360);
 
-    FormMain.Set4KBoxLabel(RAMSizeGroupBox, RAMSizeGroupBoxLabel, 16, 640, 129, 303);
+    FormMain.Set4KBoxLabel(RAMSizeGroupBox, RAMSizeGroupBoxLabel, 16, 640, 129, 309);
     MoveComboBox(RAMSize, RAMSizeLabel, 45);
 
     FormMain.Set4KBoxLabel(UserInterfaceGroupBox, UserInterfaceGroupBoxLabel, 684, 180, 991, 309);
@@ -1920,13 +1920,13 @@ begin
          IsSDLMAME:= True
       else
       if EntryString =  'gl_glsl ' then
-         ButtonPageVideoEffectsGLSL.Enabled:= True // GLSL_GroupBox.Enabled:= True
+         ButtonPageVideoEffectsGLSL.Enabled:= True
       else
       if EntryString =  'hlsl_enable ' then
-         ButtonPageVideoEffectsHLSL.Enabled:= True // HLSL_GroupBox.Enabled:= True
+         ButtonPageVideoEffectsHLSL.Enabled:= True
       else
       if EntryString =  'bgfx_backend ' then
-         ButtonPageVideoEffectsBGFX.Enabled:= True // BGFX_GroupBox.Enabled:= True
+         ButtonPageVideoEffectsBGFX.Enabled:= True 
       else
       //if EntryString =  'hlsl_prescale_x ' then
       //   begin
@@ -2117,19 +2117,18 @@ begin
 end;
 
 procedure TFormMAMESettings.PopulateVideoOutputMode;
-//var
-//  mameIni: THashedStringList;
-//  Loop: Integer;
 begin
   if VideoOutputMode.Items.Count > 0 then
      Exit;
-  IsSDLMAME:= False;
 
-  if sysID in [idMAME, idHBMAME] then
-     begin
-       if PosEx('sdl', LowerCase(emuFileExec)) <> 0 then
-          IsSDLMAME:= True;
-     end;
+  if not IsSDLMAME then
+  begin
+    if sysID in [idMAME, idHBMAME] then
+       begin
+         if PosEx('sdl', LowerCase(emuFileExec)) <> 0 then
+            IsSDLMAME:= True;
+       end;
+  end;
 
   VideoOutputMode.Items.Add('Auto');
   case IsSDLMAME of
@@ -7156,8 +7155,9 @@ begin
   SaveValidateAllCustomFiles.Checked:= Boolean(FormMain.PopupCustomMAME.Tag);
 
   IsSDLMAME:= False;
-  PopulateVideoOutputMode;
   EnableSettingsIniMAME;
+  PopulateVideoOutputMode;
+
   if IsSDLMAME then
      begin
        Debugger.Items.BeginUpdate;
@@ -8388,8 +8388,8 @@ procedure TFormMAMESettings.ButtonPageFoldersClick(Sender: TObject);
       7: Panel7_Miscellaneous.Visible:=  IsVisible;
       8: Panel8_SDL.Visible:=            IsVisible;
     end;
-
   end;
+  
 begin
   if TSpeedButtonEx(Sender).Tag = PanelBottom.Tag then
      Exit;

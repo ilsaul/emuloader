@@ -221,7 +221,7 @@ type
     { Private declarations }
     SelectedItemMissing, SelectedItemNotUsed: TEasyItem;
 
-    // image preview form, dinamically created...
+    // image preview form, dinamically created
     FormImageFoundMissingGame: TForm;
     SnapPreview: TImage32;
 
@@ -364,18 +364,18 @@ begin
   try
     INIFile:= TMemIniFile.Create(FormMain.GetFrontendExtraIniFile);
     FormImagesManager.Tag:= Ord(INIFile.ReadString('ImagesManager', 'WindowState', 'Normal') = 'Maximized');
-    FormImagesManager.Width:= INIFile.ReadInteger('ImagesManager', 'ScreenWidth', 1200);
+    FormImagesManager.Width:=  INIFile.ReadInteger('ImagesManager', 'ScreenWidth', 1200);
     FormImagesManager.Height:= INIFile.ReadInteger('ImagesManager', 'ScreenHeight', 600);
-    FormImagesManager.Left:= INIFile.ReadInteger('ImagesManager', 'ScreenLeft', (Screen.Width shr 1)-(Width shr 1)-1);
-    FormImagesManager.Top:= INIFile.ReadInteger('ImagesManager', 'ScreenTop', (Screen.Height shr 1)-(Height shr 1)-1);
-    PanelNotUsed.Width:= INIFile.ReadInteger('ImagesManager', 'MainSplitterPos', 594);
-    ImagePreview.Height:= INIFile.ReadInteger('ImagesManager', 'ImageSplitterPos', 200);
+    FormImagesManager.Left:=   INIFile.ReadInteger('ImagesManager', 'ScreenLeft', (Screen.Width shr 1)- (Width shr 1) -1);
+    FormImagesManager.Top:=    INIFile.ReadInteger('ImagesManager', 'ScreenTop',  (Screen.Height shr 1)-(Height shr 1)-1);
+    PanelNotUsed.Width:=       INIFile.ReadInteger('ImagesManager', 'MainSplitterPos',  594);
+    ImagePreview.Height:=      INIFile.ReadInteger('ImagesManager', 'ImageSplitterPos', 200);
 
-    PopupSearchCloneImages.Checked:= Boolean(INIFile.ReadInteger('ImagesManager', 'SearchCloneImages', 0));
-    PopupScanMissingGames.Checked:= Boolean(INIFile.ReadInteger('ImagesManager', 'ScanMissingGames', 0));
-    PopupScanBiosGames.Checked:= Boolean(INIFile.ReadInteger('ImagesManager', 'ScanBiosSets', 0));
-    PopupScanDeviceSets.Checked:= Boolean(INIFile.ReadInteger('ImagesManager', 'ScanDeviceSets', 0));
-    PopupScanArcadeMachines.Checked:= Boolean(INIFile.ReadInteger('ImagesManager', 'ScanArcadeMachines', 1));
+    PopupSearchCloneImages.Checked:=     Boolean(INIFile.ReadInteger('ImagesManager', 'SearchCloneImages',  0));
+    PopupScanMissingGames.Checked:=      Boolean(INIFile.ReadInteger('ImagesManager', 'ScanMissingGames',   0));
+    PopupScanBiosGames.Checked:=         Boolean(INIFile.ReadInteger('ImagesManager', 'ScanBiosSets',       0));
+    PopupScanDeviceSets.Checked:=        Boolean(INIFile.ReadInteger('ImagesManager', 'ScanDeviceSets',     0));
+    PopupScanArcadeMachines.Checked:=    Boolean(INIFile.ReadInteger('ImagesManager', 'ScanArcadeMachines', 1));
     PopupScanSoftwareListGames.Checked:= Boolean(INIFile.ReadInteger('ImagesManager', 'ScanSoftwareListGames', 0));
     PopupScanNonArcadeMachines.Checked:= Boolean(INIFile.ReadInteger('ImagesManager', 'ScanNonArcadeMachines', 1));
 
@@ -459,11 +459,11 @@ begin
 
   if FormImageFoundMissingGame.Tag = 1 then
      begin
-       FormImageFoundMissingGame.ClientWidth:= SnapPreview.Bitmap.Width;
+       FormImageFoundMissingGame.ClientWidth:=  SnapPreview.Bitmap.Width;
        FormImageFoundMissingGame.ClientHeight:= SnapPreview.Bitmap.Height;
      end;
   if not FormImageFoundMissingGame.Visible then
-     FormImageFoundMissingGame.Show;
+     FormImageFoundMissingGame.Visible:= True; // .Show;
 end;
 
 procedure TFormImagesManager.SetSelectedMissingGame(AutoSelect: Boolean = True);
@@ -486,7 +486,7 @@ procedure TFormImagesManager.UpdateTotalGamesLabelMissing;
 begin
   case LabelTotalItemsMissing.Tag of
     0: LabelTotalItemsMissing.Caption:= 'Missing Images: '+IntToStr(MissingImagesList.Groups.ItemCount);
-    1: LabelTotalItemsMissing.Caption:= 'Images Found: '+IntToStr(MissingImagesList.Groups.ItemCount);
+    1: LabelTotalItemsMissing.Caption:= 'Images Found: '  +IntToStr(MissingImagesList.Groups.ItemCount);
   end;
 end;
 
@@ -645,7 +645,7 @@ begin
      begin
        if not ValidateImageFolder then
           Exit;
-       FormStatus.Show;
+       FormMain.ShowStatusForm;
        FormStatus.StartThreadClock;
        FormStatus.TitleStr(FormImagesManager.Caption);
      end;
@@ -717,11 +717,11 @@ procedure TFormImagesManager.CreateImagePanelForm;
 
     sIni:= TMemIniFile.Create(FormMain.GetFrontendExtraIniFile);
 
-    FormImageFoundMissingGame.Tag:= sIni.ReadInteger('ImagesManager_SnapPreview', 'AdjustWindowToSnapSize', 1);
-    FormImageFoundMissingGame.Width:= sIni.ReadInteger('ImagesManager_SnapPreview', 'ScreenWidth', 320);
+    FormImageFoundMissingGame.Tag:=    sIni.ReadInteger('ImagesManager_SnapPreview', 'AdjustWindowToSnapSize', 1);
+    FormImageFoundMissingGame.Width:=  sIni.ReadInteger('ImagesManager_SnapPreview', 'ScreenWidth',  320);
     FormImageFoundMissingGame.Height:= sIni.ReadInteger('ImagesManager_SnapPreview', 'ScreenHeight', 240);
-    FormImageFoundMissingGame.Left:= sIni.ReadInteger('ImagesManager_SnapPreview', 'ScreenLeft', (Screen.Width shr 1)-(Width shr 1)-1);
-    FormImageFoundMissingGame.Top:= sIni.ReadInteger('ImagesManager_SnapPreview', 'ScreenTop', (Screen.Height shr 1)-(Height shr 1)-1);
+    FormImageFoundMissingGame.Left:=   sIni.ReadInteger('ImagesManager_SnapPreview', 'ScreenLeft', (Screen.Width shr 1)- (Width shr 1) -1);
+    FormImageFoundMissingGame.Top:=    sIni.ReadInteger('ImagesManager_SnapPreview', 'ScreenTop',  (Screen.Height shr 1)-(Height shr 1)-1);
 
     FreeAndNil(sIni);
   end;
@@ -739,7 +739,7 @@ begin
        FormImageFoundMissingGame.Font.Name:= FormMain.Get4KFont;
        FormImageFoundMissingGame.Font.Size:= 9;
        FormImageFoundMissingGame.Font.Color:= clBlack;
-       FormImageFoundMissingGame.Tag:= 1; // always adjust window to image size... no stretch
+       FormImageFoundMissingGame.Tag:= 1; // always adjust window to image size, no stretch
        FormImageFoundMissingGame.Caption:= 'Not Used Image';
 
        SnapPreview:= TImage32.Create(FormImageFoundMissingGame);
@@ -749,14 +749,11 @@ begin
        SnapPreview.ScaleMode:= smResize;
        //SnapPreview.Bitmap.DrawMode:= dmBlend;
 
-       FormImageFoundMissingGame.FormStyle:= fsStayOnTop;
+       FormMain.SetWindowStayOnTop(FormImageFoundMissingGame); // FormImageFoundMissingGame.FormStyle:= fsStayOnTop;
        ReadSettingsF;
      end;
   if not FormImageFoundMissingGame.Visible then
-     begin
-       FormImageFoundMissingGame.Show;
-       //FormImageFoundMissingGame.BringToFront; // might not be needed
-     end;
+     FormImageFoundMissingGame.Visible:= True; // Show;
 end;
 
 procedure TFormImagesManager.FreeImagePanelForm;
@@ -772,9 +769,9 @@ procedure TFormImagesManager.FreeImagePanelForm;
     sIni.EraseSection('ImagesManager_SnapPreview');
 
     sIni.WriteInteger('ImagesManager_SnapPreview', 'AdjustWindowToSnapSize', FormImageFoundMissingGame.Tag);
-    sIni.WriteInteger('ImagesManager_SnapPreview', 'ScreenTop', FormImageFoundMissingGame.Top);
-    sIni.WriteInteger('ImagesManager_SnapPreview', 'ScreenLeft', FormImageFoundMissingGame.Left);
-    sIni.WriteInteger('ImagesManager_SnapPreview', 'ScreenWidth', FormImageFoundMissingGame.Width);
+    sIni.WriteInteger('ImagesManager_SnapPreview', 'ScreenTop',    FormImageFoundMissingGame.Top);
+    sIni.WriteInteger('ImagesManager_SnapPreview', 'ScreenLeft',   FormImageFoundMissingGame.Left);
+    sIni.WriteInteger('ImagesManager_SnapPreview', 'ScreenWidth',  FormImageFoundMissingGame.Width);
     sIni.WriteInteger('ImagesManager_SnapPreview', 'ScreenHeight', FormImageFoundMissingGame.Height);
 
     sIni.UpdateFile;
@@ -786,11 +783,6 @@ begin
      Exit;
   WriteSettingsF;
   SnapPreview.Bitmap:= nil;
-  //SnapPreview:= nil;
-  //SnapPreview.Free;
-
-  //FormImageFoundMissingGame:= nil;
-  //FormImageFoundMissingGame.Free;
   FreeAndNil(SnapPreview);
   FreeAndNil(FormImageFoundMissingGame);
 end;
@@ -908,7 +900,7 @@ begin
      begin
        if not ValidateImageFolder then
           Exit;
-       FormStatus.Show;
+       FormMain.ShowStatusForm;
        FormStatus.StartThreadClock;
        FormStatus.TitleStr(FormImagesManager.Caption);
      end;
@@ -1159,7 +1151,7 @@ begin
      begin
        if not ValidateImageFolder then
           Exit;
-       FormStatus.Show;
+       FormMain.ShowStatusForm;
        FormStatus.StartThreadClock;
        FormStatus.TitleStr(FormImagesManager.Caption);
      end;
@@ -1676,7 +1668,7 @@ begin
   FormMain.FindGameName(TMissingImageInfo(SelectedItemMissing).eName, idMAME, -1, False,
                         TMissingImageInfo(SelectedItemMissing).eSoftwareName, GameEasy, False);
   if Assigned(FormImageFoundMissingGame) then
-     FormImageFoundMissingGame.Hide;
+     FormImageFoundMissingGame.Visible:= False; // Hide;
   if GameEasy <> nil then
      begin
        case GameEasy.Visible of
@@ -1698,8 +1690,8 @@ begin
        FormMain.ExecuteGame;
      end;
   if Assigned(FormImageFoundMissingGame) then
-     FormImageFoundMissingGame.Show;
-  //FormImageFoundMissingGame.FormStyle:= fsStayOnTop;
+     FormImageFoundMissingGame.Visible:= True; // Show;
+
   MissingImagesList.SetFocus;
 end;
 
@@ -1721,10 +1713,7 @@ begin
   else
      begin
        if ((FormImagesManager.Top = 0) and (FormImagesManager.Left = 0)) then
-          begin
-            FormImagesManager.Top:= (Screen.Height-FormImagesManager.Height) div 2;
-            FormImagesManager.Left:= (Screen.Width-FormImagesManager.Width) div 2;
-          end;
+          CallCenterWindow(FormImagesManager);
      end;
   MissingImagesList.Tag:= 1;
 end;
@@ -1742,9 +1731,6 @@ begin
   WriteIniFile;
 
   FreeImagePanelForm;
-
-  //FormImagesManager.Release;
-  //FormImagesManager:= nil;
 end;
 
 procedure TFormImagesManager.PopupMissingClearListClick(Sender: TObject);

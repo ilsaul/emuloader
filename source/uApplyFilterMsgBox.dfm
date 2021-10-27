@@ -12,7 +12,6 @@ object FormApplyFilterMsgBox: TFormApplyFilterMsgBox
   Font.Height = -12
   Font.Name = 'Segoe UI'
   Font.Style = []
-  FormStyle = fsStayOnTop
   OldCreateOrder = False
   Position = poScreenCenter
   Scaled = False

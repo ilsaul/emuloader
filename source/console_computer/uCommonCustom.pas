@@ -179,7 +179,7 @@ var
 
   // custom systems and custom games
   sysCustomFolders: packed array[1..MaxConsoleComputerSystems] of packed array[Low(MediaTypeCustom)..High(MediaTypeCustom)] of THashedStringList;
-  // 1 -> cartridge; 2 -> disc image; 3 -> floppy disk; 4 -> cassette tape; 5 -> hard disk drive
+  // 1 -> cartridge; 2 -> disc image; 3 -> floppy disk; 4 -> cassette tape; 5 -> hard disk drive; 6 -> video game music
 
   SnapshotFolderCustom: TImageFoldersConsoleComputer;
   // see uCommon.ImageCategoryArray[] for the image category indexes
@@ -193,29 +193,30 @@ var
 
 procedure LoadCustomMAMEIconToForm(FormHolder: TForm; CustomImageIndex: Integer = 20);
 
-procedure GetCustomGameFields(const ROMLine: String);//; DecodeUnicodeString: Boolean = False);
+procedure GetCustomGameFields(const ROMLine: String);
 procedure GetCustomGameExtraFields(const ROMLine: String; DecodeUnicodeString: Boolean);
 
 function  GetCustomGameMediaType(romTagIndex: Integer): Integer;
-function  SystemUseCartridge(sysID: Integer): Boolean;
-function  SystemUseDisc(sysID: Integer): Boolean;
-function  SystemUseFloppyDisk(sysID: Integer): Boolean;
-function  SystemUseCassetteTape(sysID: Integer): Boolean;
+function  SystemUseCartridge    (sysID: Integer): Boolean;
+function  SystemUseDisc         (sysID: Integer): Boolean;
+function  SystemUseFloppyDisk   (sysID: Integer): Boolean;
+function  SystemUseCassetteTape (sysID: Integer): Boolean;
 function  SystemUseHardDiskDrive(sysID: Integer): Boolean;
-function  SystemIsConsole(sysID: Integer): Boolean;
-function  SystemIsComputer(sysID: Integer): Boolean;
-function  SystemIsHandheld(sysID: Integer): Boolean;
+
+function  SystemIsConsole   (sysID: Integer): Boolean;
+function  SystemIsComputer  (sysID: Integer): Boolean;
+function  SystemIsHandheld  (sysID: Integer): Boolean;
 function  GetSystemTypeTitle(sysID: Integer; IsArcadeSystem: Boolean): String;
 
 function  ELV_GetSystemTitleConsoleComputer(ELV_Holder: TEasyListView; SelectedItem: TEasyItem; EmulatorTitle: TShadowLabel = nil; SystemType: TShadowLabel = nil; IconSystemType: TImage = nil): String;
 procedure ELV_PopulateCustomSystems(ELV_Holder: TEasyListView; SelectSystemID: Integer = 0; ActionMode: ShortInt = -1; HideAllSystemsItem: Boolean = False);
 
 function  GetMiscSettingsFile: String;
-function  GetCustomGamesFile(sysID: Integer): String;
+function  GetCustomGamesFile     (sysID: Integer): String;
 function  GetCustomGamePlayedFile(sysID: Integer): String;
-function  GetSysEmulators(ReturnFullPath: Boolean = True): String;
-function  GetSysGameFolders(ReturnFullPath: Boolean = True): String;
-function  GetSysImageFolders(ReturnFullPath: Boolean = True): String;
+function  GetSysEmulators     (ReturnFullPath: Boolean = True): String;
+function  GetSysGameFolders   (ReturnFullPath: Boolean = True): String;
+function  GetSysImageFolders  (ReturnFullPath: Boolean = True): String;
 function  GetSysGameCustomFont(ReturnFullPath: Boolean = True): String;
 function  GetEmuParametersFile(ReturnFullPath: Boolean = True; GetDefaultFileName: Boolean = False): String;
 
@@ -237,18 +238,18 @@ procedure EmuParametersAddMissingSections;
 
 procedure InitializeCustomEmulatorVariables;
 
-function  IsWinVice(const emuFile: String): Boolean;
-function  IsAmigaUAE(const emuFile: String): Boolean;
-function  IsWinApe(const emuFile: String): Boolean;
+function  IsWinVice    (const emuFile: String): Boolean;
+function  IsAmigaUAE   (const emuFile: String): Boolean;
+function  IsWinApe     (const emuFile: String): Boolean;
 function  IsAppleWinEmu(const emuFile: String): Boolean;
-function  IsMicroM8Emu(const emuFile: String): Boolean;
-function  IsAppleIIGS(const emufile: String): Boolean;
+function  IsMicroM8Emu (const emuFile: String): Boolean;
+function  IsAppleIIGS  (const emufile: String): Boolean;
 
-function  IsAtari800Emu(const emuFile: String): Boolean;
+function  IsAtari800Emu  (const emuFile: String): Boolean;
 function  IsAtariPlusPlus(const emuFile: String): Boolean;
-function  IsAltirra(const emuFile: String): Boolean;
+function  IsAltirra      (const emuFile: String): Boolean;
 
-function  FindFile(RootFolder: String; {const }FileName: WideString; out ResultVar: WideString; SearchISOmetadata: Boolean): Boolean;
+function  FindFile(RootFolder: String; FileName: WideString; out ResultVar: WideString; SearchISOmetadata: Boolean): Boolean;
 
 procedure GetPlayedGameInfoIniCustom(const LineStr: String;
                                      var TimesPlayedVar: Cardinal; var LastPlayedVar: Integer; var TotalPlaytimeVar: Int64);
@@ -279,7 +280,7 @@ begin
   //FormMain.ClearMemGameInfo(FormMain.TempGameVars);
   FormMain.TempGameVars.eIsCustomGame:= True;
 
-  FormMain.TempGameVars.eCustomSystemID:= StrToInt(Copy(ROMLine, 1, 3));
+  FormMain.TempGameVars.eCustomSystemID:=  StrToInt(Copy(ROMLine, 1, 3));
   FormMain.TempGameVars.eCustomMediaType:= StrToInt(Copy(ROMLine, 4, 1));
 
   FormMain.TempGameVars.eName:= SoftListGetEntryValue(ROMLine, 'file');
@@ -417,10 +418,10 @@ begin
        if IconSystemType.Width = FormMain.IL_MenuPopup.Width then
           begin
             if SystemIsConsole(ELV_Holder.Tag) then
-               iIconIndex:= 25 // index 25 is "console" icon
+               iIconIndex:= 25  // index 25 is "console"  icon
             else
             if SystemIsComputer(ELV_Holder.Tag) then
-               iIconIndex:= 26 // index 26 is "computer" icon
+               iIconIndex:= 26  // index 26 is "computer" icon
             else
             if SystemIsHandheld(ELV_Holder.Tag) then
                iIconIndex:= 27; // index 27 is "handheld" icon
@@ -432,10 +433,10 @@ begin
        if IconSystemType.Width = FormMain.IL_SystemType_ExtraLarge.Width then
           begin
             if SystemIsConsole(ELV_Holder.Tag) then
-               iIconIndex:= 01 // index 25 is "console" icon
+               iIconIndex:= 01  // index 25 is "console"  icon
             else
             if SystemIsComputer(ELV_Holder.Tag) then
-               iIconIndex:= 02 // index 26 is "computer" icon
+               iIconIndex:= 02  // index 26 is "computer" icon
             else
             if SystemIsHandheld(ELV_Holder.Tag) then
                iIconIndex:= 03; // index 27 is "handheld" icon
@@ -630,7 +631,7 @@ begin
   // ParameterIndex: 1 -> Param1; 2 -> Param2
   Result:= '';
   case MediaTypeIndex of
-    0: Result:= 'DISC'; // boot cd!!! special case.
+    0: Result:= 'DISC'; // "boot cd" special case
     1: Result:= 'ROM';
     2: Result:= 'ISO';
     3: Result:= 'FLOPPY';
@@ -665,7 +666,7 @@ var
       sIndex:= '';
       if sLoop > 1 then
          sIndex:= IntToStr(sLoop);
-      EmulatorFileCustom[SystemID, sLoop]:= IniFileName.ReadString(SystemsListCustom[SystemID, 0], 'Emulator'+sIndex, '');
+      EmulatorFileCustom[SystemID, sLoop]:=    IniFileName.ReadString(SystemsListCustom[SystemID, 0], 'Emulator'+sIndex, '');
       EmulatorVersionCustom[SystemID, sLoop]:= IniFileName.ReadString(SystemsListCustom[SystemID, 0], 'EmuDescription'+sIndex, '');
 
       if EmulatorFileCustom[SystemID, sLoop] <> '' then
@@ -762,13 +763,13 @@ var
       IniFileName.WriteInteger(SystemsListCustom[SystemID, 0], 'PlayWithAssociatedApp', Ord(PlayWithAssociatedEmulator[SystemID]));
 
       if SystemUseCartridge(SystemID) then
-         IniFileName.WriteInteger(SystemsListCustom[SystemID, 0], 'UseParameterIndexCartridge', EmulatorParameterIndexToUseCustom[SystemID, 1]);
+         IniFileName.WriteInteger(SystemsListCustom[SystemID, 0], 'UseParameterIndexCartridge',     EmulatorParameterIndexToUseCustom[SystemID, 1]);
       if SystemUseDisc(SystemID) then
-         IniFileName.WriteInteger(SystemsListCustom[SystemID, 0], 'UseParameterIndexDiscImage', EmulatorParameterIndexToUseCustom[SystemID, 2]);
+         IniFileName.WriteInteger(SystemsListCustom[SystemID, 0], 'UseParameterIndexDiscImage',     EmulatorParameterIndexToUseCustom[SystemID, 2]);
       if SystemUseFloppyDisk(SystemID) then
-         IniFileName.WriteInteger(SystemsListCustom[SystemID, 0], 'UseParameterIndexFloppyDisk', EmulatorParameterIndexToUseCustom[SystemID, 3]);
+         IniFileName.WriteInteger(SystemsListCustom[SystemID, 0], 'UseParameterIndexFloppyDisk',    EmulatorParameterIndexToUseCustom[SystemID, 3]);
       if SystemUseCassetteTape(SystemID) then
-         IniFileName.WriteInteger(SystemsListCustom[SystemID, 0], 'UseParameterIndexCassetteTape', EmulatorParameterIndexToUseCustom[SystemID, 4]);
+         IniFileName.WriteInteger(SystemsListCustom[SystemID, 0], 'UseParameterIndexCassetteTape',  EmulatorParameterIndexToUseCustom[SystemID, 4]);
       if SystemUseHardDiskDrive(SystemID) then
          IniFileName.WriteInteger(SystemsListCustom[SystemID, 0], 'UseParameterIndexHardDiskDrive', EmulatorParameterIndexToUseCustom[SystemID, 5]);
     end;

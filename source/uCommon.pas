@@ -10,7 +10,8 @@ uses
   MessageDigests, MessageAuthenticationCodes, Consts, CommDlg, Registry,
   uMessageBox, uMessageBox_4K, uSelectDirectory, Math, MPCommonUtilities,
   ShadowLabel, AdvOfficeButtons, AdvGroupBox, PanelEx, EditEx, ButtonsEx,
-  BevelEx, ColorBoxEx, TntEditEx, GR32_RangeBars, uGR32Extra, XiTrackBar;//, uGetWindowsVersion;
+  BevelEx, ColorBoxEx, TntEditEx, GR32_RangeBars, uGR32Extra, XiTrackBar;
+  //, uGetWindowsVersion;
 
 const
   MaxArcadeSystems = 8;
@@ -390,6 +391,7 @@ type
     procedure SaveToFile(const FileName: WideString);
   end;
 
+  // used by procedure Antialiasing()
   PRGB = ^TRGB;
   TRGB = record Red, Green, Blue: Byte; //B, G, R: Byte;
   end;
@@ -402,13 +404,15 @@ type
   end;
 
 var
-  IsNightMode, Is4KMode:  Boolean;//, ShowDarkPopupMenu: Boolean;
+  IsNightMode, Is4KMode:  Boolean;
   MsgTxtColors: TMsgBoxColors;
   FrontendPath, FrontendVersion: String;
 
-function GradientFill(DC: hDC; pVertex: Pointer; dwNumVertex: DWORD;
-                      pMesh: Pointer; dwNumMesh, dwMode: DWORD): DWord; stdcall;
-                      external 'msimg32.dll';
+procedure HideAppFormTaskBarButton2;
+
+function  GradientFill(DC: hDC; pVertex: Pointer; dwNumVertex: DWORD;
+                       pMesh: Pointer; dwNumMesh, dwMode: DWORD): DWord; stdcall;
+                       external 'msimg32.dll';
 
 function  WideLibraryErrorMessage(const LibName: WideString; Dll: THandle; ErrorCode: Integer): WideString;
 function  WideSysErrorMessage(ErrorCode: Integer): WideString;
@@ -654,6 +658,14 @@ procedure CreateSplashIniFile;
 procedure CreateGamesFiltersIniFile;
 
 implementation
+
+procedure HideAppFormTaskBarButton2;
+begin
+  // all Windows versions need this
+  ShowWindow(Application.Handle, SW_HIDE);
+  SetWindowLong(Application.Handle, GWL_EXSTYLE, GetWindowLong(Application.Handle, GWL_EXSTYLE) and not WS_EX_APPWINDOW or WS_EX_TOOLWINDOW);
+  ShowWindow(Application.Handle, SW_SHOW);
+end;
 
 function GetCheckBoxThemeFolder: String;
 begin
@@ -4788,7 +4800,7 @@ var
   Mutex: THandle;
   elIni: TMemIniFile;
   iPath: String;
-begin
+begin 
   Result:= False;
   iPath:= ExtractFilePath(Application.ExeName);
   if not FileExists(iPath+'EmuLoader.ini') then

@@ -69,7 +69,6 @@ type
     procedure SetSelectedSystems;
     procedure SelectUnselectAll(SystemTypeIndex: Integer; SelectItems: Boolean);
     procedure Resize4K;
-
   public
     { Public declarations }
   end;

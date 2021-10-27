@@ -18,7 +18,6 @@ object FormArcadeROMsFolders: TFormArcadeROMsFolders
   OldCreateOrder = False
   Position = poScreenCenter
   Scaled = False
-  OnCloseQuery = FormCloseQuery
   OnKeyPress = FormKeyPress
   OnShow = FormShow
   PixelsPerInch = 96
@@ -136,23 +135,6 @@ object FormArcadeROMsFolders: TFormArcadeROMsFolders
       Caption = 'Close'
       ModalResult = 1
       TabOrder = 0
-    end
-    object UseLargeIcons: TAdvOfficeCheckBoxEx
-      Left = 9
-      Top = 11
-      Width = 79
-      Height = 20
-      Hint = 'Use 128x128 system icons'
-      TabOrder = 1
-      OnClick = UseLargeIconsClick
-      Alignment = taLeftJustify
-      Caption = 'Large Icons'
-      ReturnIsTab = False
-      Themed = True
-      CustomIconsEnabled = False
-      CustomEnableIconHD = False
-      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
-      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
   end
   object PanelFoldersList: TPanelEx

@@ -960,7 +960,7 @@ var
 begin
   FormStatus.TitleStr(FormDeleteMultipleGamesFiles.Caption);
   FormStatus.MessageStr('Scanning frontend games list files and deleting game entries...');
-  FormStatus.Show;
+  FormMain.ShowStatusForm;
   FormStatus.StartThreadClock;
   Application.ProcessMessages;
   for Loop:=Low(delList) to High(delList) do

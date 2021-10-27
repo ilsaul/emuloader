@@ -16,7 +16,6 @@ type
     LabelTips: TShadowLabel;
     ButtonOk: TBitBtnEx;
     ButtonCancel: TBitBtnEx;
-    UseSmallIcons: TAdvOfficeCheckBoxEx;
     procedure FormKeyPress(Sender: TObject; var Key: Char);
     procedure FormShow(Sender: TObject);
     procedure EmulatorsListItemPaintText(Sender: TCustomEasyListview;
@@ -33,7 +32,6 @@ type
       Group: TEasyGroup; ACanvas: TCanvas;
       const RectArray: TEasyRectArrayObject;
       AlphaBlender: TEasyAlphaBlender);
-    procedure UseSmallIconsClick(Sender: TObject);
   private
     newEmulatorIndexToUseCustom: packed array[1..MaxConsoleComputerSystems] of ShortInt; // emulator index to use 1..4
     SystemIcon: array [1..MaxConsoleComputersystems] of TImage;
@@ -63,7 +61,7 @@ begin
      Exit;
   with FormConsCompSelectEmulator do
   begin
-    ClientWidth:= 1600;
+    ClientWidth:=  1600;
     ClientHeight:= 1200;
     Font.Size:= 16;
 
@@ -71,8 +69,6 @@ begin
     LabelTips.Caption:= 'Tip: '+LabelTips.Caption;
     FormMain.Set4KLabelSpecs(LabelTips, 10, 9, 622, 55, 16);
     FormMain.Set4KButtonsOkCancelPanel(PanelBottom, ButtonOk, ButtonCancel, False);
-    FormMain.Set4KCheckBoxSpecs(UseSmallIcons, 640, 14, 150, 36, 16);
-    UseSmallIcons.Visible:= False;
 
     FormMain.Set4KImageListSpecs(IL_EmulatorIcon, 48);
 
@@ -92,10 +88,11 @@ end;
 procedure TFormConsCompSelectEmulator.AddIconImage(sysID: Integer);
 begin
   SystemIcon[sysID]:= TImage.Create(nil);
-  if UseSmallIcons.Checked and (not Is4KMode) then
-     SystemIcon[sysID].Width:= 32
+  if Is4KMode then
+     SystemIcon[sysID].Width:= 128
   else
-    SystemIcon[sysID].Width:= 128;
+     SystemIcon[sysID].Width:= 68;
+
   SystemIcon[sysID].Height:= SystemIcon[sysID].Width;
   FormMain.LoadSystemIcon(sysID, SystemIcon[sysID], True);
 end;
@@ -154,17 +151,17 @@ begin
   if (sys1Index <> -1) and (sys2Index <> -1) then
      sysList.Exchange(sys1Index, sys2Index);
 
-  sys1Index:= sysList.IndexOfName(SystemsListCustom[2, 0]+' '); // Game Boy Color
+  sys1Index:= sysList.IndexOfName(SystemsListCustom[2, 0]+' ');  // Game Boy Color
   sys2Index:= sysList.IndexOfName(SystemsListCustom[31, 0]+' '); // Game Boy Advance
   if (sys1Index <> -1) and (sys2Index <> -1) then
      sysList.Exchange(sys1Index, sys2Index);
 
-  sys1Index:= sysList.IndexOfName(SystemsListCustom[5, 0]+' '); // Atari 2600
+  sys1Index:= sysList.IndexOfName(SystemsListCustom[5, 0]+' ');  // Atari 2600
   sys2Index:= sysList.IndexOfName(SystemsListCustom[48, 0]+' '); // Atari 400/800/XL
   if (sys1Index <> -1) and (sys2Index <> -1) then
      sysList.Exchange(sys1Index, sys2Index);
 
-  sys1Index:= sysList.IndexOfName(SystemsListCustom[3, 0]+' '); // Nintendo 8-bit
+  sys1Index:= sysList.IndexOfName(SystemsListCustom[3, 0]+' ');  // Nintendo 8-bit
   sys2Index:= sysList.IndexOfName(SystemsListCustom[65, 0]+' '); // Nintendo 3DS
   if (sys1Index <> -1) and (sys2Index <> -1) then
      sysList.Exchange(sys1Index, sys2Index);
@@ -207,7 +204,7 @@ begin
            Item.StateImageIndex:= sysID; // this holds the system ID
            Item.ImageIndex:= GetAppIcon(EmulatorFileCustom[sysID, LoopEmu], IL_EmulatorIcon, 32);
            if Item.ImageIndex = -1 then
-              Item.ImageIndex:= Ord(FormMain.IsExeBatchFile(EmulatorFileCustom[sysID, LoopEmu]));
+              Item.ImageIndex:= 0;//Ord(FormMain.IsExeBatchFile(EmulatorFileCustom[sysID, LoopEmu]));
 
            Item.Caption:= Format('%-466s', [EmulatorVersionCustom[sysID, LoopEmu]]);
            Item.Captions[1]:= EmulatorFileCustom[sysID, LoopEmu];
@@ -235,8 +232,8 @@ begin
 
   if FormMain.CheckTotal(EmulatorsList) then
      begin
-       Group:= EmulatorsList.Groups.FirstGroup; // get first group (default group), should not be here!!!
-       EmulatorsList.Groups.DeleteGroup(Group); // delete the group...
+       Group:= EmulatorsList.Groups.FirstGroup; // get first group (default group), should not be here
+       EmulatorsList.Groups.DeleteGroup(Group); // delete the group
        EmulatorsList.Groups.ExpandAll;
      end;
 
@@ -273,8 +270,6 @@ begin
        FormMain.ELV_SetCheckRadioCustomIcon(EmulatorsList);
        FormMain.SetWin10DarkScrollBar(EmulatorsList);
        SetLabelColors(LabelTips, item_caption_active_color[1], item_caption_active_shadow_color[1]);
-       SetCheckBoxColors(UseSmallIcons, clWhite, item_caption_active_shadow_color[1]);
-       FormMain.SetCheckBoxExCustomIcon(UseSmallIcons);
 
        FormMain.SetButtonExColors(ButtonOk);
        FormMain.SetButtonExColors(ButtonCancel);
@@ -413,10 +408,10 @@ procedure TFormConsCompSelectEmulator.EmulatorsListGroupImageGetSize(
   Sender: TCustomEasyListview; Group: TEasyGroup; var ImageWidth,
   ImageHeight: Integer);
 begin
-  if UseSmallIcons.Checked and (not Is4KMode) then
-     ImageWidth:= 32
+  if Is4KMode then
+     ImageWidth:= 128
   else
-     ImageWidth:= 128;
+     ImageWidth:= 68;
 
   ImageHeight:= ImageWidth;
 end;
@@ -429,13 +424,14 @@ var
 begin
   ACanvas.Lock;
 
-  if UseSmallIcons.Checked and (not Is4KMode) then
-     iLeft:= RectArray.IconRect.Left
+  if Is4KMode then
+     iSysTypeIndex:= 59
   else
-     iLeft:= RectArray.IconRect.Left-5; // -5 to move icon closer to the left border and give some space between the icon and selection bar
-  iTop:=  RectArray.IconRect.Top+5; // -> +5 is to be the same as "no custom icon drawing"
+     iSysTypeIndex:= 49;
 
-  ACanvas.Draw(iLeft, iTop+54, SystemIcon[Group.ImageIndex].Picture.Icon); // +54 to move system icon below system title line
+  iLeft:= RectArray.IconRect.Left-5; // -5 to move icon closer to the left border and give some space between the icon and selection bar
+  iTop:=  RectArray.IconRect.Top+5;  // -> +5 is to be the same as "no custom icon drawing"
+  ACanvas.Draw(iLeft, iTop+iSysTypeIndex{+54}, SystemIcon[Group.ImageIndex].Picture.Icon); // +54 to move system icon below system title line
 
   iSysTypeIndex:= ACanvas.Pen.Color;
   ACanvas.Pen.Color:= clrBorderGroupBoxGrayBk;
@@ -447,20 +443,11 @@ begin
        ACanvas.LineTo(iLeft+(EmulatorsList.CellSizes.Tile.Width-20), iTop+48+2);
      end
   else
-  begin
-    if UseSmallIcons.Checked then
-       begin
-         // 32x32 group system icons
-         ACanvas.MoveTo(iLeft-5, iTop+32+2);
-         ACanvas.LineTo(iLeft+(EmulatorsList.CellSizes.Tile.Width-25), iTop+32+2);
-       end
-    else
-       begin
-         // 128x128 group system icons
-         ACanvas.MoveTo(iLeft+132, iTop+32+2);
-         ACanvas.LineTo(iLeft+(EmulatorsList.CellSizes.Tile.Width-20), iTop+32+2);
-       end;
-  end;
+     begin
+       // 68x68 group system icons
+       ACanvas.MoveTo(iLeft+72, iTop+32+2);
+       ACanvas.LineTo(iLeft+(EmulatorsList.CellSizes.Tile.Width-20), iTop+32+2);
+     end;
   ACanvas.Pen.Color:= iSysTypeIndex;
 
   iSysTypeIndex:= -1;
@@ -493,24 +480,18 @@ begin
   if Is4KMode then
      begin
        iLeft:= iLeft-49;
-       iTop:= iTop+10;
+       iTop:=  iTop+10;
      end
   else
      iTop:= iTop+(32-FormMain.IL_SystemType_Standard.Height) div 2;
 
   if iSysTypeIndex <> -1 then
      begin
+       Inc(iLeft, 5);
        if Is4KMode then
-          begin
-            Inc(iLeft, 5);
-            FormMain.IL_GroupedMode.Draw(ACanvas, iLeft, iTop, iSysTypeIndex+4);
-          end
+          FormMain.IL_GroupedMode.Draw(ACanvas, iLeft, iTop, iSysTypeIndex+4)
        else
-          begin
-            if not UseSmallIcons.Checked then
-               Inc(iLeft, 5);
-            FormMain.IL_SystemType_Standard.Draw(ACanvas, iLeft, iTop, iSysTypeIndex);
-          end;
+          FormMain.IL_SystemType_Standard.Draw(ACanvas, iLeft, iTop, iSysTypeIndex);
      end;
 
   ACanvas.Font.Name:= FormMain.Get4KFont;
@@ -520,7 +501,7 @@ begin
   else
      begin
        iLeft:= iLeft+28;
-       iTop:= iTop+4;
+       iTop:=  iTop+4;
      end;
   ACanvas.Font.Style:= [];
 
@@ -533,34 +514,5 @@ begin
   ACanvas.UnLock;
 end;
 
-procedure TFormConsCompSelectEmulator.UseSmallIconsClick(Sender: TObject);
-var
-  Group: TEasyGroup;
-begin
-  if Is4KMode then
-     Exit;
-  if UseSmallIcons.Checked then
-     begin
-       EmulatorsList.Selection.FullCellIndent:= 0;
-       EmulatorsList.PaintInfoItem.CheckIndent:= 15;
-     end
-  else
-     begin
-       EmulatorsList.Selection.FullCellIndent:= 134;
-       EmulatorsList.PaintInfoItem.CheckIndent:= 134;
-     end;
-
-  if not FormMain.CheckTotal(EmulatorsList) then
-     Exit;
-
-  EmulatorsList.BeginUpdate;
-  FreeIconImages;
-  Group:= EmulatorsList.Groups.FirstGroup;
-  repeat
-    AddIconImage(Group.ImageIndex);
-    Group:= EmulatorsList.Groups.NextGroup(Group);
-  until Group = nil;
-  EmulatorsList.EndUpdate;
-end;
 
 end.

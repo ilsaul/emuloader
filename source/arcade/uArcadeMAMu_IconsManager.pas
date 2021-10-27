@@ -308,6 +308,8 @@ type
     procedure CreateEditIcon(const IconName, SoftwareName: String; sysID: Integer);
 
     procedure AddGamesSystemsIcons(IL_Holder: TImageList; AddSystems: Boolean = True);
+  protected
+    procedure CreateParams(var Params: TCreateParams); override;
   public
     { Public declarations }
     SourceIconFile, zzzIconFolder: String;
@@ -323,6 +325,16 @@ implementation
 uses uMain, uStatus, uCommon, uCommonCustom, uArcadeMAMu_ExcludedList, uArcadeMAMu_DeleteNotWorkingIcons;
 
 {$R *.dfm}
+
+procedure TFormArcadeMAMu_IconsManager.CreateParams(var Params: TCreateParams);
+begin
+  inherited;
+  Params.Style:= Params.Style or WS_POPUP; // to prevent FormStatus on top of other applications
+  //Params.WndParent:= Application.MainForm.Handle;
+  //Params.ExStyle:= Params.ExStyle or WS_EX_APPWINDOW; // this makes FormStatus show on a separate taskbar button
+
+  ////Params.WndParent := 0; // this makes FormStatus show on a separate taskbar button
+end;
 
 function TMissingIconInfo.GetCaptions(Column: Integer): WideString;
 begin
@@ -812,7 +824,7 @@ begin
      begin
        if not ValidateMAMu_Folders then
           Exit;
-       FormStatus.Show;
+       FormMain.ShowStatusForm;
        FormStatus.StartThreadClock;
        FormStatus.TitleStr(FormArcadeMAMu_IconsManager.Caption);
      end;
@@ -959,7 +971,7 @@ begin
   CloseFormStatus:= not FormStatus.Visible;
   if CloseFormStatus then
      begin
-       FormStatus.Show;
+       FormMain.ShowStatusForm;
        FormStatus.StartThreadClock;
      end;
   case ActionIndex of
@@ -1086,7 +1098,7 @@ begin
      begin
        if not ValidateMAMu_Folders then
           Exit;
-       FormStatus.Show;
+       FormMain.ShowStatusForm;
        FormStatus.StartThreadClock;
        FormStatus.TitleStr(FormArcadeMAMu_IconsManager.Caption);
      end
@@ -2327,7 +2339,7 @@ procedure TFormArcadeMAMu_IconsManager.ButtonScanBothClick(Sender: TObject);
 begin
   if not ValidateMAMu_Folders then
      Exit;
-  FormStatus.Show;
+  FormMain.ShowStatusForm;
   FormStatus.StartThreadClock;
   FormStatus.TitleStr(FormArcadeMAMu_IconsManager.Caption);
   LoadGamesToMissingList(False);

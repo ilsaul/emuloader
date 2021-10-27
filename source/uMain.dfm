@@ -477,6 +477,7 @@ object FormMain: TFormMain
         Hint = 
           'Enter CPU title (not short name). Partial strings are supported'#13 +
           #10'Press "ENTER" hot-key or click "Apply" button'
+        TabStop = False
         AutoSize = False
         BevelOuter = bvNone
         Color = clWhite
@@ -505,6 +506,7 @@ object FormMain: TFormMain
         ItemHeight = 15
         ParentFont = False
         TabOrder = 1
+        TabStop = False
         OnSelect = FilterCPUListSelect
       end
     end
@@ -995,6 +997,7 @@ object FormMain: TFormMain
         Top = 31
         Width = 370
         Height = 106
+        TabStop = False
         Align = alClient
         TabOrder = 0
         OnEnter = WebBrowserEnter
@@ -2082,11 +2085,6 @@ object FormMain: TFormMain
       Caption = 'Enable AutoRun Console/Computer Game With MAME'
       Hint = 'Load games with MAME using ENTER or mouse double-click'
     end
-    object PopupEnableCustomCommandLine: TMenuItem
-      Caption = 'Enable Custom Command Line (NOT IMPLEMENTED!)'
-      Hint = 'Run game with custom command line, if available'
-      Visible = False
-    end
     object N29: TMenuItem
       Caption = '-'
     end
@@ -2271,50 +2269,6 @@ object FormMain: TFormMain
           ImageIndex = 14
           OnClick = PopupSetMAMEHorizontalGamesOptionsClick
         end
-      end
-    end
-    object CustomCommandLine1: TMenuItem
-      Caption = 'Custom Command Line (NOT IMPLEMENTED!)'
-      Visible = False
-      object PopupSetGameCustomCommandLine: TMenuItem
-        Caption = 'Set [gamename] Command Line'
-        Hint = 'Set [%s.ini] Command Line'
-        ImageIndex = 7
-        OnClick = PopupSetGameCustomCommandLineClick
-      end
-      object PopupDeleteGameCustomCommandLine: TMenuItem
-        Caption = 'Delete [gamename] Command Line'
-        Hint = 'Delete [%s.ini] Command Line'
-        ImageIndex = 14
-        OnClick = PopupDeleteGameCustomCommandLineClick
-      end
-      object N31: TMenuItem
-        Caption = '-'
-      end
-      object PopupSetDriverCustomCommandLine: TMenuItem
-        Tag = 1
-        Caption = 'Set Driver [drivername] Command Line'
-        Hint = 'Set Driver [%s.ini] Command Line'
-        ImageIndex = 7
-      end
-      object PopupDeleteDriverCustomCommandLine: TMenuItem
-        Tag = 1
-        Caption = 'Delete Driver [drivername] Command Line'
-        Hint = 'Delete Driver [%s.ini] Command Line'
-        ImageIndex = 14
-      end
-      object N50: TMenuItem
-        Caption = '-'
-      end
-      object PopupSetSystemCustomCommandLine: TMenuItem
-        Tag = 2
-        Caption = 'Set [system] Command Line'
-        ImageIndex = 7
-      end
-      object PopupDeleteSystemCustomCommandLine: TMenuItem
-        Tag = 2
-        Caption = 'Delete [system] Command Line'
-        ImageIndex = 14
       end
     end
     object N10: TMenuItem
@@ -4757,14 +4711,11 @@ object FormMain: TFormMain
     Top = 368
     object PopupNightModeTitle: TMenuItem
       Caption = '-'
+      Enabled = False
     end
     object PopupNightModeTitleSeparator: TMenuItem
       Caption = '-'
       Visible = False
-    end
-    object PopupNightModeRGBQuickEdit: TMenuItem
-      Caption = 'RGB Quick Edit'
-      OnClick = PopupNightModeRGBQuickEditClick
     end
     object PopupNightModePasteColor: TMenuItem
       Caption = 'Paste Color'

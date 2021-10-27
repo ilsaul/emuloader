@@ -72,6 +72,7 @@ object FormConsCompSelectEmulator: TFormConsCompSelectEmulator
     PaintInfoGroup.ImageIndent = 6
     PaintInfoGroup.MarginBottom.CaptionIndent = 4
     PaintInfoGroup.MarginTop.Size = 42
+    PaintInfoItem.CheckIndent = 72
     PaintInfoItem.CheckType = ectRadio
     PaintInfoItem.TileDetailCount = 2
     ParentColor = True
@@ -83,6 +84,7 @@ object FormConsCompSelectEmulator: TFormConsCompSelectEmulator
     Selection.FullCellPaint = True
     Selection.FullItemPaint = True
     Selection.FullRowSelect = True
+    Selection.FullCellIndent = 72
     Selection.RoundRectRadius = 2
     Selection.TextColor = clBlack
     Selection.UseFocusRect = False
@@ -157,24 +159,6 @@ object FormConsCompSelectEmulator: TFormConsCompSelectEmulator
       Caption = 'Abort'
       ModalResult = 2
       TabOrder = 1
-    end
-    object UseSmallIcons: TAdvOfficeCheckBoxEx
-      Left = 384
-      Top = 17
-      Width = 81
-      Height = 20
-      Hint = 'Use small system icons'
-      ShowHint = True
-      TabOrder = 2
-      OnClick = UseSmallIconsClick
-      Alignment = taLeftJustify
-      Caption = 'Small Icons'
-      ReturnIsTab = False
-      Themed = True
-      CustomIconsEnabled = False
-      CustomEnableIconHD = False
-      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
-      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
   end
   object IL_EmulatorIcon: TImageList

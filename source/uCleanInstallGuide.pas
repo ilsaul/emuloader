@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
   StdCtrls, ShadowLabel, Buttons, AdvOfficeButtons, ShellAPI, uCommon,
-  ButtonsEx, ExtCtrls, GraphicEx, GR32_Image;
+  ButtonsEx, ExtCtrls, GraphicEx, GR32_Image, GR32_Layers;
 
 type
   TFormCleanInstallGuide = class(TForm)
@@ -31,12 +31,17 @@ type
     procedure ButtonCancelClick(Sender: TObject);
     procedure UltraHD_4KModeDisableClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
+    procedure ImageCleanInstallMouseDown(Sender: TObject;
+      Button: TMouseButton; Shift: TShiftState; X, Y: Integer;
+      Layer: TCustomLayer);//;
+      //Layer: TCustomLayer);
   private
     { Private declarations }
     IsNightMode_Restore, Is4KMode_Restore: Boolean;
-
     procedure SetNightMode;
     procedure Resize4K;
+  protected
+    procedure CreateParams(var Params: TCreateParams);
   public
     { Public declarations }
   end;
@@ -49,6 +54,16 @@ implementation
 uses uMain;
 
 {$R *.dfm}
+
+procedure TFormCleanInstallGuide.CreateParams(var Params: TCreateParams);
+begin
+  inherited;
+  Params.Style:= Params.Style or WS_POPUP; // to prevent FormStatus on top of other applications
+  //Params.WndParent:= Application.MainForm.Handle;
+  //Params.ExStyle:= Params.ExStyle or WS_EX_APPWINDOW;
+
+  ////Params.WndParent := 0; // what is this ?
+end;
 
 procedure TFormCleanInstallGuide.Resize4K;
 begin
@@ -190,5 +205,15 @@ begin
   UltraHD_4KModeDisable.Tag:= 0;
 end;
 
+
+procedure TFormCleanInstallGuide.ImageCleanInstallMouseDown(
+  Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer;
+  Layer: TCustomLayer);
+const
+  sc_DragMove = $f012;
+begin
+  ReleaseCapture;
+  FormCleanInstallGuide.Perform(wm_SysCommand, sc_DragMove, 0);
+end;
 
 end.

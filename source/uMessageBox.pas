@@ -250,7 +250,7 @@ begin
 
   if FormMessageBox.Visible then
   if NightMode.CustomIconsEnabled <> IsNightMode then
-     NightMode.CustomIconsEnabled:= IsNightMode;
+     NightMode.CustomIconsEnabled:=  IsNightMode;
 end;
 
 procedure TFormMessageBox.LabelMessageWResizeRequest(Sender: TObject;

@@ -17,7 +17,6 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
   OldCreateOrder = False
   Position = poScreenCenter
   Scaled = False
-  OnCloseQuery = FormCloseQuery
   OnKeyPress = FormKeyPress
   OnShow = FormShow
   PixelsPerInch = 96
@@ -182,23 +181,6 @@ object FormArcadeEmulatorsSetup: TFormArcadeEmulatorsSetup
       ShowHint = True
       TabOrder = 4
       OnClick = ButtonClearSystemClick
-    end
-    object UseLargeIcons: TAdvOfficeCheckBoxEx
-      Left = 361
-      Top = 11
-      Width = 79
-      Height = 20
-      Hint = 'Use 128x128 system icons'
-      TabOrder = 5
-      OnClick = UseLargeIconsClick
-      Alignment = taLeftJustify
-      Caption = 'Large Icons'
-      ReturnIsTab = False
-      Themed = True
-      CustomIconsEnabled = False
-      CustomEnableIconHD = False
-      CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
-      CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
     end
   end
   object PanelEmulatorDetails: TPanelEx

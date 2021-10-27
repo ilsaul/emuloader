@@ -728,8 +728,8 @@ begin
 
   AddEntry2('Manufacturer', FormMain.MemGameInfo.eManufacturer);
 
-  // AddEntry2('Alternate Title', Utf8Decode('グラディウス')); ... for MAME software list only
-  // maybe ?????
+  AddEntry2('Alternate Title', FormMain.MemGameInfo.eTitleAlternate);
+  AddEntry2('Notes', FormMain.MemGameInfo.eNotes);
 
   if not FormMain.MemGameInfo.eIsCustomGame then
   begin

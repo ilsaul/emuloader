@@ -152,6 +152,8 @@ type
     function  GetVersionPosLeft: Integer;
     function  GetVersionPosTop: Integer;
     procedure UpdateVersionPos;
+  protected
+    procedure CreateParams(var Params: TCreateParams); override;
   public
     { Public declarations }
     //TaskBarHandle: HWND;
@@ -176,8 +178,19 @@ uses uMain;
 
 {$R *.DFM}
 
+procedure TFormStatus.CreateParams(var Params: TCreateParams);
+begin
+  inherited;
+  Params.Style:= Params.Style or WS_POPUP; // to prevent FormStatus on top of other applications
+  //Params.WndParent:= Application.MainForm.Handle;
+  //Params.ExStyle:= Params.ExStyle or WS_EX_APPWINDOW; // this makes FormStatus show on a separate taskbar button
+
+  ////Params.WndParent := 0; // this makes FormStatus show on a separate taskbar button
+end;
+
 function TFormStatus.GetVersionPosLeft: Integer;
 begin
+
   if Is4KMode then
      begin
        if SplashScreen4KUltraSize.Checked then
@@ -1061,7 +1074,7 @@ begin
 
   if FormStatus.Tag = 0 then
      begin
-       SetWindowPos(FormStatus.Handle, hWnd_TopMost, 0, 0, 0, 0, SWP_NOMOVE+SWP_NOSIZE); // this prevent form flicker (using Form.StayOnTop causes flicker)
+       SetWindowPos(FormStatus.Handle, hWnd_TopMost, 0, 0, 0, 0, SWP_NOACTIVATE+SWP_NOMOVE+SWP_NOSIZE); // this prevent form flicker (using Form.StayOnTop causes flicker)
        CallCenterWindow(FormStatus, Is4KMode and SplashScreen4KUltraSize.Checked);
        FormStatus.Tag:= 1;
      end;

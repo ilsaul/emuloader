@@ -359,32 +359,8 @@ object FormFavoritesManager: TFormFavoritesManager
     UseSystemFont = False
     DrawModule = FormMain.BcDrawModule
     OnMeasureMenuItem = PopupFavoritesManagerSettingsMeasureMenuItem
-    Left = 120
+    Left = 32
     Top = 88
-    object PopupSettingsSmallFont: TMenuItem
-      AutoCheck = True
-      Caption = 'Small Font (9 pixels)'
-      Checked = True
-      RadioItem = True
-      OnClick = PopupSettingsSmallFontClick
-    end
-    object PopupSettingsMediumFont: TMenuItem
-      Tag = 1
-      AutoCheck = True
-      Caption = 'Medium Font (12 pixels)'
-      RadioItem = True
-      OnClick = PopupSettingsSmallFontClick
-    end
-    object PopupSettingsLargeFont: TMenuItem
-      Tag = 2
-      AutoCheck = True
-      Caption = 'Large Font (14 pixels)'
-      RadioItem = True
-      OnClick = PopupSettingsSmallFontClick
-    end
-    object N7: TMenuItem
-      Caption = '-'
-    end
     object PopupSettingsCenterWindow: TMenuItem
       Caption = 'Center Window'
       OnClick = PopupSettingsCenterWindowClick

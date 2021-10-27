@@ -4447,7 +4447,7 @@ object FormMAMESettings: TFormMAMESettings
         Height = 18
         Align = alTop
         AutoSize = False
-        Caption = 'Path For LUA Plugins To Store Data (Read/Write)'
+        Caption = 'Path For LUA Plugins To Store Data (Home Path)'
         CaptionIndent = 3
         Color = clCream
         ParentColor = False
