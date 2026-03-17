@@ -94,7 +94,7 @@ OutputDir=..\
 UnitOutputDir=..\dcu
 PackageDLLOutputDir=
 PackageDCPOutputDir=
-SearchPath=
+SearchPath=..\lib\delphi7-components\Delphi Unicode Controls\Source
 Packages=vcl;rtl;inet;xmlrtl;vclie;inetdbbde;inetdbxpress;vclx;VclSmp;dbrtl;bdertl;vcldb;vclactnband;vclshlctrls;Rave50CLX;Rave50VCL;vclZipForged7;CoolBreezeD7;GR32_DSGN_D7;GR32_D7;VirtualTreesD7;components;madBasic_;madDisAsm_
 Conditionals=madExcept
 DebugSourceDirs=
@@ -105,6 +105,10 @@ HostApplication=
 Launcher=
 UseLauncher=0
 DebugCWD=
+[Language]
+ActiveLang=
+ProjectLang=
+RootDir=
 [Version Info]
 IncludeVerInfo=1
 AutoIncBuild=0
@@ -137,6 +141,9 @@ Item1=madExcept;fulldebugmode
 [HistoryLists\hlUnitAliases]
 Count=1
 Item0=WinTypes=Windows;WinProcs=Windows;DbiTypes=BDE;DbiProcs=BDE;DbiErrs=BDE;
+[HistoryLists\hlSearchPath]
+Count=1
+Item0=..\lib\delphi7-components\Delphi Unicode Controls\Source
 [HistoryLists\hlUnitOutputDirectory]
 Count=4
 Item0=..\dcu
