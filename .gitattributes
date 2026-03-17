@@ -1,0 +1,23 @@
+# Sorgenti e configurazioni
+*.pas  text eol=crlf
+*.dfm  text eol=crlf
+*.fmx  text eol=crlf
+*.dpr  text eol=crlf
+*.dpk  text eol=crlf
+*.dproj text eol=crlf
+*.groupproj text eol=crlf
+*.optset text eol=crlf
+*.rc   text eol=crlf
+*.inc  text eol=crlf
+
+# Risorse e binari
+*.res  binary
+*.dcr  binary
+*.ico  binary
+*.bmp  binary
+*.png  binary
+*.exe  binary
+*.dll  binary
+*.bpl  binary
+*.dcu  binary
+*.dcp  binary
