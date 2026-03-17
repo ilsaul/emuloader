@@ -1345,6 +1345,7 @@ type
     FGridLines: Boolean;
     FHideCaption: Boolean;
     FTileDetailCount: Integer;
+    FTileDetailTextTopBorderIndent: Integer; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
     procedure SetGridLineColor(const Value: TColor);
     procedure SetGridLines(const Value: Boolean);
     procedure SetHideCaption(const Value: Boolean);
@@ -1375,6 +1376,7 @@ type
     property ShowBorder;
     property TileCaptionLines; // added by Ciro Alfredo Consentino (October 19, 2017)
     property TileDetailCount;
+    property TileDetailTextTopBorderIndent: Integer read FTileDetailTextTopBorderIndent write FTileDetailTextTopBorderIndent default 0; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
     property IconViewAdjustIconTopBorder; // added by Ciro Alfredo Consentino (May 15, 2018)
     property VAlignment;
   end;
@@ -4811,6 +4813,8 @@ type
     FCustomCheckRadioDirectory: String; // added by Ciro Alfredo Consentino (August 18, 2019)
     FCustomCheckRadioEnabled: Boolean;  // added by Ciro Alfredo Consentino (August 18, 2019)
 
+    FBorderHeaderFix: Boolean; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
+
     icoCheckBox_Checked,
     icoCheckBox_Checked_Down,
     icoCheckBox_Checked_Hot,
@@ -5009,6 +5013,7 @@ type
     FWheelMouseDefaultScroll: TEasyDefaultWheelScroll;
     FWheelMouseScrollModifierEnabled: Boolean;
     FOnAfterPaint: TAfterPaintEvent;
+    FCustomEnableIconHD: Boolean; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
     function GetGroupCollapseImage: TBitmap;
     function GetGroupExpandImage: TBitmap;
     function GetHintType: TEasyHintType;
@@ -5516,6 +5521,7 @@ type
     property View: TEasyListStyle read FView write SetView default elsIcon;
     property WheelMouseDefaultScroll: TEasyDefaultWheelScroll read FWheelMouseDefaultScroll write FWheelMouseDefaultScroll default edwsVert;
     property WheelMouseScrollModifierEnabled: Boolean read FWheelMouseScrollModifierEnabled write FWheelMouseScrollModifierEnabled default True;
+    property CustomEnableIconHD: Boolean read FCustomEnableIconHD write FCustomEnableIconHD default False; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
@@ -5643,6 +5649,8 @@ type
     property DisabledBlendColor;
     property EditManager;
     property Enabled; // added by Ciro Alfredo Consentino (February 24, 2016)
+    property CustomEnableIconHD; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
+    property BorderHeaderFix: Boolean read FBorderHeaderFix write FBorderHeaderFix default False;
     property Gesture;
     property ImagesState;
     property UseDockManager default True;
