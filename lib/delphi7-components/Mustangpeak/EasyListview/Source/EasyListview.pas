@@ -1346,6 +1346,7 @@ type
     FHideCaption: Boolean;
     FTileDetailCount: Integer;
     FTileDetailTextTopBorderIndent: Integer; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
+    FTileDetailTextIndent: Integer; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
     procedure SetGridLineColor(const Value: TColor);
     procedure SetGridLines(const Value: Boolean);
     procedure SetHideCaption(const Value: Boolean);
@@ -1377,6 +1378,7 @@ type
     property TileCaptionLines; // added by Ciro Alfredo Consentino (October 19, 2017)
     property TileDetailCount;
     property TileDetailTextTopBorderIndent: Integer read FTileDetailTextTopBorderIndent write FTileDetailTextTopBorderIndent default 0; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
+    property TileDetailTextIndent: Integer read FTileDetailTextIndent write FTileDetailTextIndent default 0; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
     property IconViewAdjustIconTopBorder; // added by Ciro Alfredo Consentino (May 15, 2018)
     property VAlignment;
   end;
@@ -1850,6 +1852,7 @@ type
     FSelectionGroup: TEasySelectionGroupList;  // If grouped selection is on this points to the selection group this item belongs to (nil if none)
     FView: TEasyViewItem;
     FVisibleIndexInGroup: Integer;             // Index of visible item within a group
+    FTileDetailItemTextIndent: Integer;        // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
     function GetColumnPos: Integer;
     function GetOwnerGroup: TEasyGroup;
     function GetOwnerItems: TEasyItems;
@@ -1961,6 +1964,7 @@ type
     property ViewClass: TEasyViewItemClass read GetViewClass;
     property Visible;
     property VisibleIndexInGroup: Integer read FVisibleIndexInGroup;
+    property TileDetailItemTextIndent: Integer read FTileDetailItemTextIndent write FTileDetailItemTextIndent default 0; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
   published
   end;
 
