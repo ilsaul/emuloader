@@ -1293,6 +1293,7 @@ type
     FTileCaptionLines: Integer; // added by Ciro Alfredo Consentino (October 19, 2017)
     FGroupCaptionLines: Integer; // added by Ciro Alfredo Consentino (December 12, 2017)
     FIconViewAdjustIconTopBorder: Boolean; // added by Ciro Alfredo Consentino (May 15, 2018)
+    FIconViewRemoveIconTopBorder: Boolean; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
     FVAlignment: TCommonVAlignment;
     procedure SetAlignment(Value: TAlignment);
     procedure SetBorder(Value: Integer);
@@ -1309,6 +1310,7 @@ type
     procedure SetTileCaptionLines(Value: Integer); // added by Ciro Alfredo Consentino (October 19, 2017)
     procedure SetGroupCaptionLines(Value: Integer); // added by Ciro Aflredo Consentino (December 12, 2017)
     procedure SetIconViewAdjustIconTopBorder(Value: Boolean); // added by Ciro Alfredo Consentino (May 15, 2018)
+    procedure SetIconViewRemoveIconTopBorder(Value: Boolean); // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
     procedure SetVAlignment(Value: TCommonVAlignment);
   protected
     procedure Invalidate(ImmediateUpdate: Boolean); virtual;
@@ -1327,6 +1329,7 @@ type
     property TileCaptionLines: Integer read FTileCaptionLines write SetTileCaptionLines default 2;
     property GroupCaptionLines: Integer read FGroupCaptionLines write SetGroupCaptionLines default 1; // added by Ciro Alfredo Consentino (December 12, 2017)
     property IconViewAdjustIconTopBorder: Boolean read FIconViewAdjustIconTopBorder write SetIconViewAdjustIconTopBorder default False; // added by Ciro Alfredo Consentino (May 15, 2018)
+    property IconViewRemoveIconTopBorder: Boolean read FIconViewRemoveIconTopBorder write SetIconViewRemoveIconTopBorder default False; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
     property VAlignment: TCommonVAlignment read FVAlignment write SetVAlignment default cvaCenter;
   public
     constructor Create(AnOwner: TCustomEasyListview); override;
@@ -1380,6 +1383,7 @@ type
     property TileDetailTextTopBorderIndent: Integer read FTileDetailTextTopBorderIndent write FTileDetailTextTopBorderIndent default 0; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
     property TileDetailTextIndent: Integer read FTileDetailTextIndent write FTileDetailTextIndent default 0; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
     property IconViewAdjustIconTopBorder; // added by Ciro Alfredo Consentino (May 15, 2018)
+    property IconViewRemoveIconTopBorder; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
     property VAlignment;
   end;
 
@@ -25208,6 +25212,7 @@ begin
   FTileCaptionLines := 2; // added by Ciro Alfredo Consentino (October 19, 2017)
   FGroupCaptionLines := 1; // added by Ciro Alfredo Consentino (December 12, 2017)
   FIconViewAdjustIconTopBorder := False; // added by Ciro Alfredo Consentino (May 15, 2018)
+  FIconViewRemoveIconTopBorder := False; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
 end;
 
 procedure TEasyPaintInfoBasic.Assign(Source: TPersistent);
@@ -25230,6 +25235,7 @@ begin
     FCaptionLines := Temp.TileCaptionLines;
     FGroupCaptionLines := Temp.GroupCaptionLines;
     FIconViewAdjustIconTopBorder := Temp.IconViewAdjustIconTopBorder; // added by Ciro Alfredo Consentino (May 15, 2018)
+    FIconViewRemoveIconTopBorder := Temp.IconViewRemoveIconTopBorder; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
     FVAlignment := Temp.VAlignment;
   end
 end;
@@ -25357,6 +25363,15 @@ begin
   if Value <> FIconViewAdjustIconTopBorder then
   begin
     FIconViewAdjustIconTopBorder := Value;
+    Invalidate(False);
+  end
+end;
+
+procedure TEasyPaintInfoBasic.SetIconViewRemoveIconTopBorder(Value: Boolean); // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
+begin
+  if Value <> FIconViewRemoveIconTopBorder then
+  begin
+    FIconViewRemoveIconTopBorder := Value;
     Invalidate(False);
   end
 end;
