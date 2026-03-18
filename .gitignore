@@ -129,3 +129,4 @@ $RECYCLE.BIN/
 # Remove Examples from repository
 lib/delphi7-components/Graphics32/Examples/
 lib/ComponentAce/ZipForge/Demos/
+lib/madCollection/*/install.log
