@@ -67,6 +67,7 @@ type
     FShadowColor:TColor;
     FBorderColor:TColor;
     FArrowColor:TColor; // added by Ciro Alfredo Consentino (June 20, 2019)
+    FBkColorPushed: TColor; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
     FKind: TScrollBarKind;
     FShowArrows: Boolean;
     FShowHandleGrip: Boolean;
@@ -141,7 +142,8 @@ type
     property HighLightColor: TColor read FHighLightColor write SetHighLightColor default clBtnHighlight;
     property ShadowColor: TColor read FShadowColor write SetShadowColor default clBtnShadow;
     property BorderColor: TColor read FBorderColor write SetBorderColor default clWindowFrame;
-    property ArrowColor: TColor read FArrowColor write SetArrowColor default clWindowFrame; // added by Ciro Alfredo Consentino (June 20, 2019)
+    property ArrowColor: TColor read FArrowColor write SetArrowColor default clWindowFrame;	 // added by Ciro Alfredo Consentino (June 20, 2019)
+    property BkColorPushed: TColor read FBkColorPushed write FBkColorPushed default clBtnFace; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
     property Kind: TScrollBarKind read FKind write SetKind default sbHorizontal;
     property ShowArrows: Boolean read FShowArrows write SetShowArrows default True;
     property ShowHandleGrip: Boolean read FShowHandleGrip write SetShowHandleGrip;
@@ -660,6 +662,7 @@ begin
   FShadowColor := clBtnShadow;
   FBorderColor := clWindowFrame;
   FArrowColor := clWindowFrame; // added by Ciro Alfredo Consentino (June 20, 2019)
+  FBkColorPushed := clBtnFace; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
   FShowHandleGrip := True;
 end;
 
