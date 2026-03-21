@@ -1290,6 +1290,9 @@ type
     FCheckType: TEasyCheckType;
     FImageIndent: Integer;
     FShowBorder: Boolean;
+    FIconViewIconTopBorderIndent: Integer; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
+    FIconViewCheckVertAlignMiddle: Boolean; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
+    FIconViewCaptionBorder: Integer; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
     FTileCaptionLines: Integer; // added by Ciro Alfredo Consentino (October 19, 2017)
     FGroupCaptionLines: Integer; // added by Ciro Alfredo Consentino (December 12, 2017)
     FIconViewAdjustIconTopBorder: Boolean; // added by Ciro Alfredo Consentino (May 15, 2018)
@@ -1307,6 +1310,9 @@ type
     procedure SetCheckType(Value: TEasyCheckType);
     procedure SetImageIndent(Value: Integer);
     procedure SetShowBorder(const Value: Boolean);
+    procedure SetIconViewIconTopBorderIndent(Value: Integer); // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
+    procedure SetIconViewCheckVertAlignMiddle(Value: Boolean); // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
+    procedure SetIconViewCaptionBorder(Value: Integer); // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
     procedure SetTileCaptionLines(Value: Integer); // added by Ciro Alfredo Consentino (October 19, 2017)
     procedure SetGroupCaptionLines(Value: Integer); // added by Ciro Aflredo Consentino (December 12, 2017)
     procedure SetIconViewAdjustIconTopBorder(Value: Boolean); // added by Ciro Alfredo Consentino (May 15, 2018)
@@ -1327,6 +1333,9 @@ type
     property ImageIndent: Integer read FImageIndent write SetImageIndent default 2;
     property ShowBorder: Boolean read FShowBorder write SetShowBorder default True;
     property TileCaptionLines: Integer read FTileCaptionLines write SetTileCaptionLines default 2;
+    property IconViewIconTopBorderIndent: Integer read FIconViewIconTopBorderIndent write SetIconViewIconTopBorderIndent default 0; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
+    property IconViewCheckVertAlignMiddle: Boolean read FIconViewCheckVertAlignMiddle write SetIconViewCheckVertAlignMiddle default False; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
+    property IconViewCaptionBorder: Integer read FIconViewCaptionBorder write SetIconViewCaptionBorder default 0; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
     property GroupCaptionLines: Integer read FGroupCaptionLines write SetGroupCaptionLines default 1; // added by Ciro Alfredo Consentino (December 12, 2017)
     property IconViewAdjustIconTopBorder: Boolean read FIconViewAdjustIconTopBorder write SetIconViewAdjustIconTopBorder default False; // added by Ciro Alfredo Consentino (May 15, 2018)
     property IconViewRemoveIconTopBorder: Boolean read FIconViewRemoveIconTopBorder write SetIconViewRemoveIconTopBorder default False; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
@@ -1384,6 +1393,9 @@ type
     property TileDetailTextIndent: Integer read FTileDetailTextIndent write FTileDetailTextIndent default 0; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
     property IconViewAdjustIconTopBorder; // added by Ciro Alfredo Consentino (May 15, 2018)
     property IconViewRemoveIconTopBorder; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
+    property IconViewIconTopBorderIndent; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
+    property IconViewCheckVertAlignMiddle; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
+    property IconViewCaptionBorder;
     property VAlignment;
   end;
 
@@ -18973,6 +18985,33 @@ begin
   end;
 end;
 
+procedure TEasyPaintInfoBasic.SetIconViewIconTopBorderIndent(Value: Integer);
+begin
+  if Value <> FIconViewIconTopBorderIndent then
+  begin
+    FIconViewIconTopBorderIndent := Value;
+    Invalidate(False)
+  end
+end;
+
+procedure TEasyPaintInfoBasic.SetIconViewCheckVertAlignMiddle(Value: Boolean);
+begin
+  if Value <> FIconViewCheckVertAlignMiddle then
+  begin
+    FIconViewCheckVertAlignMiddle := Value;
+    Invalidate(False)
+  end
+end;
+
+procedure TEasyPaintInfoBasic.SetIconViewCaptionBorder(Value: Integer);
+begin
+  if Value <> FIconViewCaptionBorder then
+  begin
+    FIconViewCaptionBorder := Value;
+    Invalidate(False)
+  end
+end;
+
 procedure TEasyCollectionItem.SetCheckPending(Value: Boolean);
 begin
   if Value xor (esosCheckPending in FState) then
@@ -25209,6 +25248,9 @@ begin
   FChecksize := 12;
   FVAlignment := cvaCenter;
   FShowBorder := True;
+  FIconViewIconTopBorderIndent := 0; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
+  FIconViewCheckVertAlignMiddle := False; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
+  FIconViewCaptionBorder := 0; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
   FTileCaptionLines := 2; // added by Ciro Alfredo Consentino (October 19, 2017)
   FGroupCaptionLines := 1; // added by Ciro Alfredo Consentino (December 12, 2017)
   FIconViewAdjustIconTopBorder := False; // added by Ciro Alfredo Consentino (May 15, 2018)
