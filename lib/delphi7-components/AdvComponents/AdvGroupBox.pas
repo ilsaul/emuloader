@@ -3,7 +3,7 @@
 { for Delphi & C++Builder                                                   }
 {                                                                           }
 { written by TMS Software                                                   }
-{            copyright © 2007 - 2017                                        }
+{            copyright ï¿½ 2007 - 2017                                        }
 {            Email : info@tmssoftware.com                                   }
 {            Web : http://www.tmssoftware.com                               }
 {                                                                           }
@@ -82,6 +82,7 @@ type
     FGroupBox: TAdvCustomGroupBox;
     FCustomIconsDirectory: String; // added by Ciro Alfredo Consentino (August 16, 2019)
     FCustomIconsEnabled: Boolean;  // added by Ciro Alfredo Consentino (August 16, 2019)
+    FCustomEnableIconHD: Boolean;  // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
     icoCheckBox_Checked,
     icoCheckBox_Checked_Down,
     icoCheckBox_Checked_Hot,
@@ -129,6 +130,7 @@ type
     property Visible: Boolean read FVisible write SetVisible default False;
     property CustomIconsDirectory: String read FCustomIconsDirectory write SetCustomIconsDirectory; // added by Ciro Alfredo Consentino (August 16, 2019)
     property CustomIconsEnabled: Boolean read FCustomIconsEnabled write SetCustomIconsEnabled;      // added by Ciro Alfredo Consentino (August 16, 2019)
+    property CustomEnableIconHD: Boolean read FCustomEnableIconHD write FCustomEnableIconHD default False; // added by Moreno Cattaneo for missing source
   end;
 
   TAdvCustomGroupBox = class(TCustomGroupBox)

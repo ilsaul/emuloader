@@ -1357,13 +1357,13 @@ type
     FGridLines: Boolean;
     FHideCaption: Boolean;
     FTileDetailCount: Integer;
-    FTileDetailTextTopBorderIndent: Integer; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
-    FTileDetailTextIndent: Integer; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
     procedure SetGridLineColor(const Value: TColor);
     procedure SetGridLines(const Value: Boolean);
     procedure SetHideCaption(const Value: Boolean);
     procedure SetTileDetailCount(Value: Integer);
   protected
+    FTileDetailTextTopBorderIndent: Integer; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
+    FTileDetailTextIndent: Integer; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
     property GridLineColor: TColor read FGridLineColor write SetGridLineColor default clBtnFace;
     property GridLines: Boolean read FGridLines write SetGridLines default False;
     property HideCaption: Boolean read FHideCaption write SetHideCaption default False;
@@ -1373,6 +1373,15 @@ type
   end;
 
   TEasyPaintInfoItem = class(TEasyPaintInfoBaseItem)
+  private
+    { Aggiunte di Ciro per EmuLoader }
+    FReportViewTextTopBorderIndent: Integer;
+    FIconViewIconTopBorderIndent: Integer;
+    FIconViewCheckVertAlignMiddle: Boolean;
+    FIconViewCaptionBorder: Integer;
+    procedure SetReportViewTextTopBorderIndent(Value: Integer);
+  //public
+  //  constructor Create; // MC
   published
     property Border;
     property BorderColor;
@@ -1397,6 +1406,12 @@ type
     property IconViewCheckVertAlignMiddle; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
     property IconViewCaptionBorder;
     property VAlignment;
+
+    { added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source }
+    property ReportViewTextTopBorderIndent: Integer read FReportViewTextTopBorderIndent write SetReportViewTextTopBorderIndent default 0;
+    //property IconViewIconTopBorderIndent: Integer read FIconViewIconTopBorderIndent write FIconViewIconTopBorderIndent default 0;
+    //property IconViewCheckVertAlignMiddle: Boolean read FIconViewCheckVertAlignMiddle write FIconViewCheckVertAlignMiddle default False;
+    //property IconViewCaptionBorder: Integer read FIconViewCaptionBorder write FIconViewCaptionBorder default 0;
   end;
 
   TEasyPaintInfoTaskBandItem = class(TEasyPaintInfoBaseItem)
@@ -1869,6 +1884,7 @@ type
     FView: TEasyViewItem;
     FVisibleIndexInGroup: Integer;             // Index of visible item within a group
     FTileDetailItemTextIndent: Integer;        // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
+    FReportViewFirstColumnIndent: Integer;     // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
     function GetColumnPos: Integer;
     function GetOwnerGroup: TEasyGroup;
     function GetOwnerItems: TEasyItems;
@@ -1981,6 +1997,7 @@ type
     property Visible;
     property VisibleIndexInGroup: Integer read FVisibleIndexInGroup;
     property TileDetailItemTextIndent: Integer read FTileDetailItemTextIndent write FTileDetailItemTextIndent default 0; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
+    property ReportViewFirstColumnIndent: Integer read FReportViewFirstColumnIndent write FReportViewFirstColumnIndent default 0; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
   published
   end;
 
@@ -4652,6 +4669,10 @@ type
     FReshowTimeout: Integer;
     FText: WideString;
     FWindowPos: TPoint;
+    FCustomColors: Boolean; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
+    FCustomBkColor: TColor; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
+    FCustomBkFrameColor: TColor; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
+    FCustomFontColor: TColor; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
   public
     property Canvas: TCanvas read FCanvas write FCanvas;
     property Color: TColor read FColor write FColor;
@@ -4663,6 +4684,10 @@ type
     property ReshowTimeout: Integer read FReshowTimeout write FReshowTimeout;
     property Text: WideString read FText write FText;
     property WindowPos: TPoint read FWindowPos write FWindowPos;
+    property CustomColors: Boolean read FCustomColors write FCustomColors default False; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
+    property CustomBkColor: TColor read FCustomBkColor write FCustomBkColor default clWindow; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
+    property CustomBkFrameColor: TColor read FCustomBkFrameColor write FCustomBkFrameColor default clWindowFrame; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
+    property CustomFontColor: TColor read FCustomFontColor write FCustomFontColor default clWindowText; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
   end;
 
   // **************************************************************************
@@ -27085,6 +27110,7 @@ begin
   if Assigned(OwnerListview.Accessible) and (not (csDesigning in OwnerListview.ComponentState)) then
     Accessible := TEasyItemAccessibleManager.Create(Self);
   FVisibleIndexInGroup := -1;
+  FReportViewFirstColumnIndent := 0;
 end;
 
 destructor TEasyItem.Destroy;
@@ -31603,6 +31629,28 @@ end;
 procedure TEasyGridReportThumbGroup.SetCellSize(Value: TEasyCellSize);
 begin
    OwnerListview.CellSizes.ReportThumb.Assign(Value)
+end;
+
+{ TEasyPaintInfoItem }
+
+//constructor TEasyPaintInfoItem.Create;
+//begin
+//  inherited Create;
+//  FReportViewTextTopBorderIndent := 0;
+//  FIconViewIconTopBorderIndent := 0;
+//  FIconViewCheckVertAlignMiddle := False;
+//  FIconViewCaptionBorder := 0;
+//end;
+
+procedure TEasyPaintInfoItem.SetReportViewTextTopBorderIndent(Value: Integer);
+begin
+  if Value <> FReportViewTextTopBorderIndent then
+  begin
+    FReportViewTextTopBorderIndent := Value;
+    // Nota: TEasyPaintInfoItem non ha un metodo Invalidate proprio.
+    // Se ricevi errore qui, per ora commentalo: // Invalidate(False);
+    // Serve solo a aggiornare la grafica in tempo reale nell'IDE.
+  end;
 end;
 
 initialization

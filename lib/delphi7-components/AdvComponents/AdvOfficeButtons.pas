@@ -4,7 +4,7 @@
 {                                                                         }
 { written by                                                              }
 {    TMS Software                                                         }
-{    copyright � 2007 - 2017                                              }
+{    copyright � 2007 - 2017                                            }
 {    Email : info@tmssoftware.com                                         }
 {    Web : http://www.tmssoftware.com                                     }
 {                                                                         }
@@ -370,6 +370,8 @@ type
     icoRadioButton_Unchecked_Hot,
     icoRadioButton_Unchecked_Disabled: TIcon; // added by Ciro Alfredo Consentino (August 16, 2019)
     FParentBk: TBitmap; // added by Ciro Alfredo Consentino (August 24, 2019)
+    FCaptionIndent: Integer;      // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
+    FCustomEnableIconHD: Boolean; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
 
     procedure TurnSiblingsOff;
     procedure SetDown(Value:Boolean);
@@ -432,6 +434,8 @@ type
     property Themed: Boolean read FThemed write SetThemed default False;
     property CustomIconsDirectory: String read FCustomIconsDirectory write SetCustomIconsDirectory; // added by Ciro Alfredo Consentino (August 16, 2019)
     property CustomIconsEnabled: Boolean read FCustomIconsEnabled write SetCustomIconsEnabled;      // default False; // added by Ciro Alfredo Consentino (August 16, 2019)
+    property CaptionIndent: Integer read FCaptionIndent write FCaptionIndent; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
+    property CustomEnableIconHD: Boolean read FCustomEnableIconHD write FCustomEnableIconHD; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
   end;
 
   //{$IFDEF DELPHIXE2_LVL}
@@ -486,6 +490,8 @@ type
     property Themed;
     property CustomIconsDirectory; // added by Ciro Alfredo Consentino (August 16, 2019)
     property CustomIconsEnabled;   // added by Ciro Alfredo Consentino (August 16, 2019)
+    property CaptionIndent; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
+    property CustomEnableIconHD; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
   end;
 
   TEnabledEvent = procedure (Sender:TObject; ItemIndex: Integer; var Enabled: Boolean) of object;
@@ -1811,6 +1817,8 @@ begin
 
   //FCustomIconsDirectory := '';
   FCustomIconsEnabled := False;
+  FCaptionIndent := 0; // MC
+  FCustomEnableIconHD := False; // MC
 
   VerInfo.dwOSVersionInfoSize := SizeOf(TOSVersionInfo);
 
