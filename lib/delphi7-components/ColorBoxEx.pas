@@ -150,6 +150,7 @@ type
     property Windows10DarkMode: Boolean read FWindows10DarkMode write SetWindows10DarkMode default False;
     property ButtonArrowShowHD: Boolean read FButtonArrowShowHD write SetButtonArrowShowHD default False; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
     property OnButtonRGBClick: TNotifyEvent read FOnButtonRGBClick write FOnButtonRGBClick; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
+    property CaptionVertIndent: Integer read FCaptionVertIndent write SetCaptionVertIndent default 0; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
   end;
 
   TComboBox2Ex = class(TCustomComboBox)
@@ -304,6 +305,7 @@ type
     property Windows10DarkMode: Boolean read FWindows10DarkMode write SetWindows10DarkMode default False;
     property ButtonArrowShowHD: Boolean read FButtonArrowShowHD write SetButtonArrowShowHD default False; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
     property OnButtonRGBClick: TNotifyEvent read FOnButtonRGBClick write FOnButtonRGBClick; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
+    property CaptionVertIndent: Integer read FCaptionVertIndent write SetCaptionVertIndent default 0; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
   end;
 
 procedure Register;
