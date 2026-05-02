@@ -4859,6 +4859,8 @@ type
     FCustomCheckRadioEnabled: Boolean;  // added by Ciro Alfredo Consentino (August 18, 2019)
 
     FBorderHeaderFix: Boolean; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
+    FCustomIconsImages: TImageList; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
+    FCustomIconsImagesHD: TImageList; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
 
     icoCheckBox_Checked,
     icoCheckBox_Checked_Down,
@@ -5567,6 +5569,8 @@ type
     property WheelMouseDefaultScroll: TEasyDefaultWheelScroll read FWheelMouseDefaultScroll write FWheelMouseDefaultScroll default edwsVert;
     property WheelMouseScrollModifierEnabled: Boolean read FWheelMouseScrollModifierEnabled write FWheelMouseScrollModifierEnabled default True;
     property CustomEnableIconHD: Boolean read FCustomEnableIconHD write FCustomEnableIconHD default False; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
+    property CustomIconsImages: TImageList read FCustomIconsImages write FCustomIconsImages;        // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
+    property CustomIconsImagesHD: TImageList read FCustomIconsImages write FCustomIconsImages;        // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
@@ -5923,6 +5927,8 @@ type
     property OnThreadCallBack;
     property OnUnDock;
     property OnViewChange;
+    property CustomIconsImages;  // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
+    property CustomIconsImagesHD;  // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
   end;
 
   TEasyBaseTaskBand = class(TCustomEasyListview)
@@ -14388,7 +14394,10 @@ begin
   icoRadioButton_Unchecked_Down := TIcon.Create;
   icoRadioButton_Unchecked_Hot := TIcon.Create;
   icoRadioButton_Unchecked_Disabled := TIcon.Create;
+
   // custom CheckBox and RadioButton icons
+  FCustomIconsImages := TImageList.Create(self);
+  FCustomIconsImagesHD := TImageList.Create(self);
 
   FIncrementalSearch := TEasyIncrementalSearchManager.Create(Self);
   FScratchCanvas := TControlCanvas.Create;
