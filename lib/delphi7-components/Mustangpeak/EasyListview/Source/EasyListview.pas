@@ -1290,9 +1290,13 @@ type
     FCheckType: TEasyCheckType;
     FImageIndent: Integer;
     FShowBorder: Boolean;
+    FIconViewIconTopBorderIndent: Integer; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
+    FIconViewCheckVertAlignMiddle: Boolean; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
+    FIconViewCaptionBorder: Integer; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
     FTileCaptionLines: Integer; // added by Ciro Alfredo Consentino (October 19, 2017)
     FGroupCaptionLines: Integer; // added by Ciro Alfredo Consentino (December 12, 2017)
     FIconViewAdjustIconTopBorder: Boolean; // added by Ciro Alfredo Consentino (May 15, 2018)
+    FIconViewRemoveIconTopBorder: Boolean; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
     FVAlignment: TCommonVAlignment;
     procedure SetAlignment(Value: TAlignment);
     procedure SetBorder(Value: Integer);
@@ -1306,9 +1310,13 @@ type
     procedure SetCheckType(Value: TEasyCheckType);
     procedure SetImageIndent(Value: Integer);
     procedure SetShowBorder(const Value: Boolean);
+    procedure SetIconViewIconTopBorderIndent(Value: Integer); // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
+    procedure SetIconViewCheckVertAlignMiddle(Value: Boolean); // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
+    procedure SetIconViewCaptionBorder(Value: Integer); // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
     procedure SetTileCaptionLines(Value: Integer); // added by Ciro Alfredo Consentino (October 19, 2017)
     procedure SetGroupCaptionLines(Value: Integer); // added by Ciro Aflredo Consentino (December 12, 2017)
     procedure SetIconViewAdjustIconTopBorder(Value: Boolean); // added by Ciro Alfredo Consentino (May 15, 2018)
+    procedure SetIconViewRemoveIconTopBorder(Value: Boolean); // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
     procedure SetVAlignment(Value: TCommonVAlignment);
   protected
     procedure Invalidate(ImmediateUpdate: Boolean); virtual;
@@ -1325,8 +1333,12 @@ type
     property ImageIndent: Integer read FImageIndent write SetImageIndent default 2;
     property ShowBorder: Boolean read FShowBorder write SetShowBorder default True;
     property TileCaptionLines: Integer read FTileCaptionLines write SetTileCaptionLines default 2;
+    property IconViewIconTopBorderIndent: Integer read FIconViewIconTopBorderIndent write SetIconViewIconTopBorderIndent default 0; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
+    property IconViewCheckVertAlignMiddle: Boolean read FIconViewCheckVertAlignMiddle write SetIconViewCheckVertAlignMiddle default False; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
+    property IconViewCaptionBorder: Integer read FIconViewCaptionBorder write SetIconViewCaptionBorder default 0; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
     property GroupCaptionLines: Integer read FGroupCaptionLines write SetGroupCaptionLines default 1; // added by Ciro Alfredo Consentino (December 12, 2017)
     property IconViewAdjustIconTopBorder: Boolean read FIconViewAdjustIconTopBorder write SetIconViewAdjustIconTopBorder default False; // added by Ciro Alfredo Consentino (May 15, 2018)
+    property IconViewRemoveIconTopBorder: Boolean read FIconViewRemoveIconTopBorder write SetIconViewRemoveIconTopBorder default False; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
     property VAlignment: TCommonVAlignment read FVAlignment write SetVAlignment default cvaCenter;
   public
     constructor Create(AnOwner: TCustomEasyListview); override;
@@ -1350,6 +1362,8 @@ type
     procedure SetHideCaption(const Value: Boolean);
     procedure SetTileDetailCount(Value: Integer);
   protected
+    FTileDetailTextTopBorderIndent: Integer; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
+    FTileDetailTextIndent: Integer; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
     property GridLineColor: TColor read FGridLineColor write SetGridLineColor default clBtnFace;
     property GridLines: Boolean read FGridLines write SetGridLines default False;
     property HideCaption: Boolean read FHideCaption write SetHideCaption default False;
@@ -1359,6 +1373,15 @@ type
   end;
 
   TEasyPaintInfoItem = class(TEasyPaintInfoBaseItem)
+  private
+    { Aggiunte di Ciro per EmuLoader }
+    FReportViewTextTopBorderIndent: Integer;
+    FIconViewIconTopBorderIndent: Integer;
+    FIconViewCheckVertAlignMiddle: Boolean;
+    FIconViewCaptionBorder: Integer;
+    procedure SetReportViewTextTopBorderIndent(Value: Integer);
+  //public
+  //  constructor Create; // MC
   published
     property Border;
     property BorderColor;
@@ -1375,8 +1398,20 @@ type
     property ShowBorder;
     property TileCaptionLines; // added by Ciro Alfredo Consentino (October 19, 2017)
     property TileDetailCount;
+    property TileDetailTextTopBorderIndent: Integer read FTileDetailTextTopBorderIndent write FTileDetailTextTopBorderIndent default 0; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
+    property TileDetailTextIndent: Integer read FTileDetailTextIndent write FTileDetailTextIndent default 0; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
     property IconViewAdjustIconTopBorder; // added by Ciro Alfredo Consentino (May 15, 2018)
+    property IconViewRemoveIconTopBorder; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
+    property IconViewIconTopBorderIndent; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
+    property IconViewCheckVertAlignMiddle; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
+    property IconViewCaptionBorder;
     property VAlignment;
+
+    { added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source }
+    property ReportViewTextTopBorderIndent: Integer read FReportViewTextTopBorderIndent write SetReportViewTextTopBorderIndent default 0;
+    //property IconViewIconTopBorderIndent: Integer read FIconViewIconTopBorderIndent write FIconViewIconTopBorderIndent default 0;
+    //property IconViewCheckVertAlignMiddle: Boolean read FIconViewCheckVertAlignMiddle write FIconViewCheckVertAlignMiddle default False;
+    //property IconViewCaptionBorder: Integer read FIconViewCaptionBorder write FIconViewCaptionBorder default 0;
   end;
 
   TEasyPaintInfoTaskBandItem = class(TEasyPaintInfoBaseItem)
@@ -1848,6 +1883,8 @@ type
     FSelectionGroup: TEasySelectionGroupList;  // If grouped selection is on this points to the selection group this item belongs to (nil if none)
     FView: TEasyViewItem;
     FVisibleIndexInGroup: Integer;             // Index of visible item within a group
+    FTileDetailItemTextIndent: Integer;        // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
+    FReportViewFirstColumnIndent: Integer;     // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
     function GetColumnPos: Integer;
     function GetOwnerGroup: TEasyGroup;
     function GetOwnerItems: TEasyItems;
@@ -1959,6 +1996,8 @@ type
     property ViewClass: TEasyViewItemClass read GetViewClass;
     property Visible;
     property VisibleIndexInGroup: Integer read FVisibleIndexInGroup;
+    property TileDetailItemTextIndent: Integer read FTileDetailItemTextIndent write FTileDetailItemTextIndent default 0; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
+    property ReportViewFirstColumnIndent: Integer read FReportViewFirstColumnIndent write FReportViewFirstColumnIndent default 0; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
   published
   end;
 
@@ -4630,6 +4669,10 @@ type
     FReshowTimeout: Integer;
     FText: WideString;
     FWindowPos: TPoint;
+    FCustomColors: Boolean; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
+    FCustomBkColor: TColor; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
+    FCustomBkFrameColor: TColor; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
+    FCustomFontColor: TColor; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
   public
     property Canvas: TCanvas read FCanvas write FCanvas;
     property Color: TColor read FColor write FColor;
@@ -4641,6 +4684,10 @@ type
     property ReshowTimeout: Integer read FReshowTimeout write FReshowTimeout;
     property Text: WideString read FText write FText;
     property WindowPos: TPoint read FWindowPos write FWindowPos;
+    property CustomColors: Boolean read FCustomColors write FCustomColors default False; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
+    property CustomBkColor: TColor read FCustomBkColor write FCustomBkColor default clWindow; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
+    property CustomBkFrameColor: TColor read FCustomBkFrameColor write FCustomBkFrameColor default clWindowFrame; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
+    property CustomFontColor: TColor read FCustomFontColor write FCustomFontColor default clWindowText; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
   end;
 
   // **************************************************************************
@@ -4810,6 +4857,10 @@ type
     // custom CheckBox and RadioButton icons
     FCustomCheckRadioDirectory: String; // added by Ciro Alfredo Consentino (August 18, 2019)
     FCustomCheckRadioEnabled: Boolean;  // added by Ciro Alfredo Consentino (August 18, 2019)
+
+    FBorderHeaderFix: Boolean; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
+    FCustomIconsImages: TImageList; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
+    FCustomIconsImagesHD: TImageList; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
 
     icoCheckBox_Checked,
     icoCheckBox_Checked_Down,
@@ -5009,6 +5060,7 @@ type
     FWheelMouseDefaultScroll: TEasyDefaultWheelScroll;
     FWheelMouseScrollModifierEnabled: Boolean;
     FOnAfterPaint: TAfterPaintEvent;
+    FCustomEnableIconHD: Boolean; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
     function GetGroupCollapseImage: TBitmap;
     function GetGroupExpandImage: TBitmap;
     function GetHintType: TEasyHintType;
@@ -5516,6 +5568,9 @@ type
     property View: TEasyListStyle read FView write SetView default elsIcon;
     property WheelMouseDefaultScroll: TEasyDefaultWheelScroll read FWheelMouseDefaultScroll write FWheelMouseDefaultScroll default edwsVert;
     property WheelMouseScrollModifierEnabled: Boolean read FWheelMouseScrollModifierEnabled write FWheelMouseScrollModifierEnabled default True;
+    property CustomEnableIconHD: Boolean read FCustomEnableIconHD write FCustomEnableIconHD default False; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
+    property CustomIconsImages: TImageList read FCustomIconsImages write FCustomIconsImages;        // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
+    property CustomIconsImagesHD: TImageList read FCustomIconsImages write FCustomIconsImages;        // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
@@ -5643,6 +5698,8 @@ type
     property DisabledBlendColor;
     property EditManager;
     property Enabled; // added by Ciro Alfredo Consentino (February 24, 2016)
+    property CustomEnableIconHD; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
+    property BorderHeaderFix: Boolean read FBorderHeaderFix write FBorderHeaderFix default False;
     property Gesture;
     property ImagesState;
     property UseDockManager default True;
@@ -5870,6 +5927,8 @@ type
     property OnThreadCallBack;
     property OnUnDock;
     property OnViewChange;
+    property CustomIconsImages;  // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
+    property CustomIconsImagesHD;  // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
   end;
 
   TEasyBaseTaskBand = class(TCustomEasyListview)
@@ -14335,7 +14394,10 @@ begin
   icoRadioButton_Unchecked_Down := TIcon.Create;
   icoRadioButton_Unchecked_Hot := TIcon.Create;
   icoRadioButton_Unchecked_Disabled := TIcon.Create;
+
   // custom CheckBox and RadioButton icons
+  FCustomIconsImages := TImageList.Create(self);
+  FCustomIconsImagesHD := TImageList.Create(self);
 
   FIncrementalSearch := TEasyIncrementalSearchManager.Create(Self);
   FScratchCanvas := TControlCanvas.Create;
@@ -18955,6 +19017,33 @@ begin
       PaintInfo.CheckIndent := Value;
     Invalidate(False)
   end;
+end;
+
+procedure TEasyPaintInfoBasic.SetIconViewIconTopBorderIndent(Value: Integer);
+begin
+  if Value <> FIconViewIconTopBorderIndent then
+  begin
+    FIconViewIconTopBorderIndent := Value;
+    Invalidate(False)
+  end
+end;
+
+procedure TEasyPaintInfoBasic.SetIconViewCheckVertAlignMiddle(Value: Boolean);
+begin
+  if Value <> FIconViewCheckVertAlignMiddle then
+  begin
+    FIconViewCheckVertAlignMiddle := Value;
+    Invalidate(False)
+  end
+end;
+
+procedure TEasyPaintInfoBasic.SetIconViewCaptionBorder(Value: Integer);
+begin
+  if Value <> FIconViewCaptionBorder then
+  begin
+    FIconViewCaptionBorder := Value;
+    Invalidate(False)
+  end
 end;
 
 procedure TEasyCollectionItem.SetCheckPending(Value: Boolean);
@@ -25193,9 +25282,13 @@ begin
   FChecksize := 12;
   FVAlignment := cvaCenter;
   FShowBorder := True;
+  FIconViewIconTopBorderIndent := 0; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
+  FIconViewCheckVertAlignMiddle := False; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
+  FIconViewCaptionBorder := 0; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
   FTileCaptionLines := 2; // added by Ciro Alfredo Consentino (October 19, 2017)
   FGroupCaptionLines := 1; // added by Ciro Alfredo Consentino (December 12, 2017)
   FIconViewAdjustIconTopBorder := False; // added by Ciro Alfredo Consentino (May 15, 2018)
+  FIconViewRemoveIconTopBorder := False; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
 end;
 
 procedure TEasyPaintInfoBasic.Assign(Source: TPersistent);
@@ -25218,6 +25311,7 @@ begin
     FCaptionLines := Temp.TileCaptionLines;
     FGroupCaptionLines := Temp.GroupCaptionLines;
     FIconViewAdjustIconTopBorder := Temp.IconViewAdjustIconTopBorder; // added by Ciro Alfredo Consentino (May 15, 2018)
+    FIconViewRemoveIconTopBorder := Temp.IconViewRemoveIconTopBorder; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
     FVAlignment := Temp.VAlignment;
   end
 end;
@@ -25345,6 +25439,15 @@ begin
   if Value <> FIconViewAdjustIconTopBorder then
   begin
     FIconViewAdjustIconTopBorder := Value;
+    Invalidate(False);
+  end
+end;
+
+procedure TEasyPaintInfoBasic.SetIconViewRemoveIconTopBorder(Value: Boolean); // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
+begin
+  if Value <> FIconViewRemoveIconTopBorder then
+  begin
+    FIconViewRemoveIconTopBorder := Value;
     Invalidate(False);
   end
 end;
@@ -27016,6 +27119,7 @@ begin
   if Assigned(OwnerListview.Accessible) and (not (csDesigning in OwnerListview.ComponentState)) then
     Accessible := TEasyItemAccessibleManager.Create(Self);
   FVisibleIndexInGroup := -1;
+  FReportViewFirstColumnIndent := 0;
 end;
 
 destructor TEasyItem.Destroy;
@@ -31534,6 +31638,28 @@ end;
 procedure TEasyGridReportThumbGroup.SetCellSize(Value: TEasyCellSize);
 begin
    OwnerListview.CellSizes.ReportThumb.Assign(Value)
+end;
+
+{ TEasyPaintInfoItem }
+
+//constructor TEasyPaintInfoItem.Create;
+//begin
+//  inherited Create;
+//  FReportViewTextTopBorderIndent := 0;
+//  FIconViewIconTopBorderIndent := 0;
+//  FIconViewCheckVertAlignMiddle := False;
+//  FIconViewCaptionBorder := 0;
+//end;
+
+procedure TEasyPaintInfoItem.SetReportViewTextTopBorderIndent(Value: Integer);
+begin
+  if Value <> FReportViewTextTopBorderIndent then
+  begin
+    FReportViewTextTopBorderIndent := Value;
+    // Nota: TEasyPaintInfoItem non ha un metodo Invalidate proprio.
+    // Se ricevi errore qui, per ora commentalo: // Invalidate(False);
+    // Serve solo a aggiornare la grafica in tempo reale nell'IDE.
+  end;
 end;
 
 initialization

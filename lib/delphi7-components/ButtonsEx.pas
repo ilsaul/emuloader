@@ -67,6 +67,8 @@ type
 
     FUseCustomDraw: Boolean;
 
+    FCaptionVertIndent: Integer; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
+
     procedure ImageListChange(Sender: TObject);      // added June 04, 2019
     procedure SetImageIndex(Value: TImageIndex);     // added June 04, 2019
     procedure SetImages(Value: TCustomImageList);    // added June 04, 2019
@@ -114,6 +116,7 @@ type
     procedure SetShowFontShadow_Disabled(Value: Boolean);
 
     procedure SetUseCustomDraw(Value: Boolean);
+    procedure SetCaptionVertIndent(Value: Integer); // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
 
     procedure WMERASEBKGND(var Message: TWMEraseBkgnd); message WM_ERASEBKGND;
 
@@ -186,6 +189,7 @@ type
     property FontShadowShow_Disabled: Boolean read FShowFontShadow_Disabled write SetShowFontShadow_Disabled default True;
 
     property UseCustomDraw: Boolean read FUseCustomDraw write SetUseCustomDraw default False;
+    property CaptionVertIndent: Integer read FCaptionVertIndent write SetCaptionVertIndent default 0; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
   end;
     
   TBitBtnKindEx = (bkCustom, bkOK, bkCancel, bkHelp, bkYes, bkNo, bkClose, bkAbort, bkRetry, bkIgnore, bkAll);
@@ -228,6 +232,7 @@ type
     FShowFontShadow_Disabled: Boolean;
     
     FUseCustomDraw: Boolean;
+    FCaptionVertIndent: Integer; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
 
     procedure ImageListChange(Sender: TObject);      // added June 04, 2019
     procedure SetImageIndex(Value: TImageIndex);     // added June 04, 2019
@@ -273,6 +278,7 @@ type
     procedure SetShowFontShadow_Disabled(Value: Boolean);
     
     procedure SetUseCustomDraw(Value: Boolean);
+    procedure SetCaptionVertIndent(Value: Integer); // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
     procedure WMERASEBKGND(var Message: TWMEraseBkgnd); message WM_ERASEBKGND;
   protected
     procedure ActionChange(Sender: TObject; CheckDefaults: Boolean); override;
@@ -334,6 +340,7 @@ type
     property FontShadowShow_Disabled: Boolean read FShowFontShadow_Disabled write SetShowFontShadow_Disabled default True;
     
     property UseCustomDraw: Boolean read FUseCustomDraw write SetUseCustomDraw default False;
+    property CaptionVertIndent: Integer read FCaptionVertIndent write SetCaptionVertIndent default 0; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
   end;
     
 function  DrawButtonFace(Canvas: TCanvas; const Client: TRect;
@@ -1333,6 +1340,7 @@ begin
   FShowFontShadow_Disabled := True;
   
   FUseCustomDraw := False;
+  FCaptionVertIndent := 0; // MC
 
   Inc(ButtonCount);
 end;
@@ -2061,6 +2069,17 @@ begin
      end;
 end;
 
+// added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
+procedure TSpeedButtonEx.SetCaptionVertIndent(Value: Integer);
+begin
+  if FCaptionVertIndent <> Value then
+  begin
+    FCaptionVertIndent := Value;
+    if not (csDesigning in ComponentState) then
+       Invalidate;
+  end;
+end;
+
 procedure TSpeedButtonEx.WMERASEBKGND(var Message: TWMEraseBkgnd);
 begin
   Message.Result := 1;
@@ -2105,6 +2124,7 @@ begin
   FShowFontShadow_Disabled := True;
   
   FUseCustomDraw := False;
+  FCaptionVertIndent := 0; //MC
 
   ControlStyle := ControlStyle + [csReflector];
   DoubleBuffered := True;
@@ -2682,6 +2702,17 @@ begin
        if not (csDesigning in ComponentState) then
           Invalidate;
      end;
+end;
+
+// added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
+procedure TBitBtnEx.SetCaptionVertIndent(Value: Integer);
+begin
+  if FCaptionVertIndent <> Value then
+  begin
+    FCaptionVertIndent := Value;
+    if not (csDesigning in ComponentState) then
+       Invalidate;
+  end;
 end;
 
 procedure TBitBtnEx.WMERASEBKGND(var Message: TWMEraseBkgnd);

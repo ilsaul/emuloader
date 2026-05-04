@@ -1,4 +1,4 @@
-package GR32_DSGN_D7;
+package GR32_DSGN_D7;
 {$R *.res}
 {$R '..\GR32_Reg.dcr'}
 {$ALIGN 8}

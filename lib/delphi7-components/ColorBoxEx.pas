@@ -37,6 +37,15 @@ type
 
     FWindows10DarkMode: Boolean;
 
+    // --- MC ---
+    FButtonArrowShowHD: Boolean;
+    FCaptionVertIndent: Integer;
+    FOnButtonRGBClick: TNotifyEvent;
+    procedure SetButtonArrowShowHD(Value: Boolean); // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
+    procedure SetCaptionVertIndent(Value: Integer); // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
+
+    // -----------------------------------------
+
     procedure WMPaint(var Message: TWMPaint); message WM_PAINT;
 
     procedure CNDrawItem(var Message: TWMDrawItem); message CN_DRAWITEM;
@@ -139,6 +148,9 @@ type
     property ButtonArrowNewStyle: Boolean read FButtonArrowNewStyle write SetButtonArrowNewStyle default True;
 
     property Windows10DarkMode: Boolean read FWindows10DarkMode write SetWindows10DarkMode default False;
+    property ButtonArrowShowHD: Boolean read FButtonArrowShowHD write SetButtonArrowShowHD default False; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
+    property OnButtonRGBClick: TNotifyEvent read FOnButtonRGBClick write FOnButtonRGBClick; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
+    property CaptionVertIndent: Integer read FCaptionVertIndent write SetCaptionVertIndent default 0; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
   end;
 
   TComboBox2Ex = class(TCustomComboBox)
@@ -172,6 +184,9 @@ type
     FButtonArrowColorDisabled: TColor;
 
     FWindows10DarkMode: Boolean;
+    FButtonArrowShowHD: Boolean;
+    FCaptionVertIndent: Integer;
+    FOnButtonRGBClick: TNotifyEvent;
 
     procedure WMPaint(var Message: TWMPaint); message WM_PAINT;
 
@@ -198,6 +213,8 @@ type
     procedure SetButtonArrowColorDisabled(Value: TColor);
 
     procedure SetWindows10DarkMode(Value: Boolean);
+    procedure SetButtonArrowShowHD(Value: Boolean); // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
+    procedure SetCaptionVertIndent(Value: Integer); // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
   protected
     procedure DrawItem(Index: Integer; Rect: TRect; State: TOwnerDrawState); override;
     procedure SetStyle(Value: TComboBoxStyle); override;
@@ -286,6 +303,9 @@ type
     property ButtonArrowNewStyle: Boolean read FButtonArrowNewStyle write SetButtonArrowNewStyle default True;
 
     property Windows10DarkMode: Boolean read FWindows10DarkMode write SetWindows10DarkMode default False;
+    property ButtonArrowShowHD: Boolean read FButtonArrowShowHD write SetButtonArrowShowHD default False; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
+    property OnButtonRGBClick: TNotifyEvent read FOnButtonRGBClick write FOnButtonRGBClick; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
+    property CaptionVertIndent: Integer read FCaptionVertIndent write SetCaptionVertIndent default 0; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
   end;
 
 procedure Register;
@@ -334,6 +354,8 @@ begin
   FButtonArrow.Handle:= LoadBitmap(HInstance, PChar('DOWNARROW2'));
 
   FWindows10DarkMode := False;
+  FButtonArrowShowHD := False; // MC
+  FOnButtonRGBClick := nil; // MC
 end;
 
 destructor TColorBoxEx.Destroy;
@@ -540,6 +562,26 @@ begin
     //end
   end;
 
+end;
+
+// added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
+procedure TColorBoxEx.SetButtonArrowShowHD(Value: Boolean);
+begin
+  if FButtonArrowShowHD <> Value then
+  begin
+    FButtonArrowShowHD := Value;
+    Invalidate;
+  end;
+end;
+
+// added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
+procedure TColorBoxEx.SetCaptionVertIndent(Value: Integer);
+begin
+  if FCaptionVertIndent <> Value then
+  begin
+    FCaptionVertIndent := Value;
+    Invalidate;
+  end;
 end;
 
 function TColorBoxEx.GetCustomColorRGBText(cColor: TColor): String;
@@ -852,6 +894,8 @@ begin
   FButtonArrow.Handle:= LoadBitmap(HInstance, PChar('DOWNARROW2'));
 
   FWindows10DarkMode := False;
+  FButtonArrowShowHD := False; // MC
+  FOnButtonRGBClick := nil; // MC
 end;
 
 destructor TComboBox2Ex.Destroy;
@@ -1054,6 +1098,26 @@ procedure TComboBox2Ex.SetWindows10DarkMode(Value: Boolean);
 begin
   if FWindows10DarkMode <> Value then
      FWindows10DarkMode := Value;
+end;
+
+// added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
+procedure TComboBox2Ex.SetButtonArrowShowHD(Value: Boolean);
+begin
+  if FButtonArrowShowHD <> Value then
+  begin
+    FButtonArrowShowHD := Value;
+    Invalidate;
+  end;
+end;
+
+// added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
+procedure TComboBox2Ex.SetCaptionVertIndent(Value: Integer);
+begin
+  if FCaptionVertIndent <> Value then
+  begin
+    FCaptionVertIndent := Value;
+    Invalidate;
+  end;
 end;
 
 procedure TComboBox2Ex.WndProc(var Message: TMessage);

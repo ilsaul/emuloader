@@ -94,7 +94,7 @@ OutputDir=..\
 UnitOutputDir=..\dcu
 PackageDLLOutputDir=
 PackageDCPOutputDir=
-SearchPath=
+SearchPath=..\lib\delphi7-components\Delphi Unicode Controls\Source
 Packages=vcl;rtl;inet;xmlrtl;vclie;inetdbbde;inetdbxpress;vclx;VclSmp;dbrtl;bdertl;vcldb;vclactnband;vclshlctrls;Rave50CLX;Rave50VCL;vclZipForged7;CoolBreezeD7;GR32_DSGN_D7;GR32_D7;VirtualTreesD7;components;madBasic_;madDisAsm_
 Conditionals=madExcept
 DebugSourceDirs=
@@ -105,12 +105,16 @@ HostApplication=
 Launcher=
 UseLauncher=0
 DebugCWD=
+[Language]
+ActiveLang=
+ProjectLang=
+RootDir=
 [Version Info]
 IncludeVerInfo=1
 AutoIncBuild=0
-MajorVer=8
-MinorVer=9
-Release=4
+MajorVer=9
+MinorVer=0
+Release=0
 Build=0
 Debug=0
 PreRelease=0
@@ -122,13 +126,13 @@ CodePage=1252
 [Version Info Keys]
 CompanyName=
 FileDescription=Emu Loader
-FileVersion=8.9.4.0
+FileVersion=9.0.0.0
 InternalName=EmuLoader.exe
-LegalCopyright=(C) Ciro Alfredo Consentino
+LegalCopyright=(C) Moreno Cattaneo
 LegalTrademarks=
 OriginalFilename=
 ProductName=Emu Loader
-ProductVersion=7
+ProductVersion=9
 Comments=
 [HistoryLists\hlConditionals]
 Count=2
@@ -137,6 +141,9 @@ Item1=madExcept;fulldebugmode
 [HistoryLists\hlUnitAliases]
 Count=1
 Item0=WinTypes=Windows;WinProcs=Windows;DbiTypes=BDE;DbiProcs=BDE;DbiErrs=BDE;
+[HistoryLists\hlSearchPath]
+Count=1
+Item0=..\lib\delphi7-components\Delphi Unicode Controls\Source
 [HistoryLists\hlUnitOutputDirectory]
 Count=4
 Item0=..\dcu

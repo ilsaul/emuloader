@@ -34,6 +34,7 @@ type
     FCaptionIndent: Integer; // added July 31, 2019
     FShadowColor: TColor;
     FShadowEnabled: Boolean;
+    FShadowOffset: Byte; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
     FEllipsType: TEllipsType;
 
     FColorBorder: TColor; // added June 27, 2018
@@ -94,6 +95,7 @@ type
     property ShowHint;
     property ShadowColor: TColor read FShadowColor write SetShadowColor;
     property ShadowEnabled: Boolean read FShadowEnabled write SetFShadowEnabled;
+    property ShadowOffset: Byte read FShadowOffset write FShadowOffset default 1; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
     property EllipsType: TEllipsType read FEllipsType write SetEllipsType;
 
     property ColorFrame: TColor read FColorBorder write SetColorFrame default $00c8ba90; // added June 27, 2018
@@ -143,6 +145,7 @@ constructor TShadowLabel.Create(AOwner: TComponent);
 begin
   FShadowColor := clGray;
   FShadowEnabled := True;
+  FShadowOffset := 1;
   FEllipsType := etNone;
   if (csDesigning in ComponentState) and not
      ((csReading in Owner.ComponentState) or (csLoading in Owner.ComponentState)) then
@@ -362,7 +365,8 @@ begin
 
   if FShadowEnabled then
   begin
-    OffsetRect(Rect, 1, 1);
+    //OffsetRect(Rect, 1, 1);
+    OffsetRect(Rect, FShadowOffset, FShadowOffset); // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
     if Enabled then
        Canvas.Font.Color := FShadowColor
     else
