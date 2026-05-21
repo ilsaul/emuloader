@@ -5061,6 +5061,7 @@ type
     FWheelMouseScrollModifierEnabled: Boolean;
     FOnAfterPaint: TAfterPaintEvent;
     FCustomEnableIconHD: Boolean; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
+    FGhostedItemBlend25: Boolean; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
     function GetGroupCollapseImage: TBitmap;
     function GetGroupExpandImage: TBitmap;
     function GetHintType: TEasyHintType;
@@ -5569,6 +5570,7 @@ type
     property WheelMouseDefaultScroll: TEasyDefaultWheelScroll read FWheelMouseDefaultScroll write FWheelMouseDefaultScroll default edwsVert;
     property WheelMouseScrollModifierEnabled: Boolean read FWheelMouseScrollModifierEnabled write FWheelMouseScrollModifierEnabled default True;
     property CustomEnableIconHD: Boolean read FCustomEnableIconHD write FCustomEnableIconHD default False; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
+    property GhostedItemBlend25: Boolean read FGhostedItemBlend25 write FGhostedItemBlend25 default False; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
     property CustomIconsImages: TImageList read FCustomIconsImages write FCustomIconsImages;        // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
     property CustomIconsImagesHD: TImageList read FCustomIconsImages write FCustomIconsImages;        // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
   public
@@ -5699,6 +5701,7 @@ type
     property EditManager;
     property Enabled; // added by Ciro Alfredo Consentino (February 24, 2016)
     property CustomEnableIconHD; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
+    property GhostedItemBlend25; // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
     property BorderHeaderFix: Boolean read FBorderHeaderFix write FBorderHeaderFix default False;
     property Gesture;
     property ImagesState;
