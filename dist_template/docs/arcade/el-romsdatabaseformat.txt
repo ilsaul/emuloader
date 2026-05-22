@@ -1,0 +1,194 @@
+Emu Loader MAME/Arcade ROMs Database Format
+-------------------------------------------
+
+[gamename]
+FileID MediaType IsCRC32Collision IsBadDump IsParentSetFile<name>Filename/><crc>CRC32/><sha1>SHA-1 or MD5/><size>file_size/><region>Supermodel3_file_region/><offset>Supermode3_file_offset/><part_name>MediaID/><part_title>MediaTitle/><parentname>parent_filename/><optional>1/><mediatype_tag>media_tag_index/><devicename>device_setname/>
+  12      3            4             5             6
+
+[coh1000c]
+020000<name>m534002c-13.ic353/><crc>50033af6/><sha1>486d92ff6c7f1e54f8e0ef41cd9116eca0e10e1a/><size>524288/>
+020000<name>msm27c402zb.ic353/><crc>f20f7fe5/><sha1>9aac7d3b3d0cc0bbbe4056164b73078dce41d91c/><size>524288/>
+020000<name>cp01.ic652/><crc>bb7ba033/><sha1>966f3aee5d00e1312c455f855915d621e6cb0672/><size>8/>
+020000<name>78081g503.ic655/><size>8192/>
+010000<name>dl-1425.bin/><crc>d6cf5ef5/><sha1>555f50fe5cdf127619da7d854c03f4a244a0c501/><size>24576/><devicename>qsound_hle/>
+
+[elvactr]
+000000<name>e02-12.20/><crc>ea5f5a32/><sha1>4f30c56fbf068fee6d3afb2479043c7e89f6c055/><size>524288/>
+000000<name>e02-11.19/><crc>bcced8ff/><sha1>09c38c78300ba9d710b4e46ca71014bbc5ac46b4/><size>524288/>
+000000<name>e02-10.18/><crc>72f1b952/><sha1>9fc41ecfbee3581d9e92ff3a2ab6e4b93567e31d/><size>524288/>
+000000<name>e02-16.17/><crc>cd97182b/><sha1>b3387980acfeec81eb0178d5b2955ac39595e22d/><size>524288/>
+000000<name>e02-03.12/><crc>c884ebb5/><sha1>49009056bfdc564eac0ae6b7b49f070f05dc4ee3/><size>2097152/>
+000000<name>e02-02.8/><crc>c8e06cfb/><sha1>071d095a4930ce18a782c577811b553a9705fbd7/><size>2097152/>
+000000<name>e02-01.4/><crc>2ba94726/><sha1>3e9cdd076338e0e5358571ce4f97576f1a6a12a7/><size>2097152/>
+000000<name>e02-08.47/><crc>29c9bd02/><sha1>a5b552ae7ac15f514ee6105410ec3e6e34ea0adb/><size>2097152/>
+000000<name>e02-07.45/><crc>5eeee925/><sha1>d302da28df8ac6d406ef45f1d282ee22ce243857/><size>2097152/>
+000000<name>e02-06.43/><crc>4c8726e9/><sha1>8ce2320a087f43c49428a39dafffec8c40d61b03/><size>2097152/>
+000000<name>e02-13.32/><crc>80932702/><sha1>c468234d03aa31b2aa0c3bd6bec32034216c2ae4/><size>262144/>
+000000<name>e02-14.33/><crc>706671a5/><sha1>1ac90647d617e73f12a67274a025ae43a6b3a316/><size>262144/>
+000000<name>e02-04.38/><crc>b74307af/><sha1>deb42415049efa2df70e7b25ba8b1b716aa227f1/><size>2097152/>
+000000<name>e02-05.39/><crc>eb729855/><sha1>85253efe794e8b5ffaf16bcb1123bca831e776a5/><size>2097152/>
+000000<name>ampal20l10a.a12/><crc>e719542f/><sha1>b28b9e13ec1ca98203ebbfd592dbdc44d3a6e936/><size>204/>
+000000<name>pal20l10b.a24/><size>204/>
+000000<name>pal16l8b.b24/><crc>0b73a7d1/><sha1>953234ce95a8c2dfb9ba276742411cb2ca4d4bf8/><size>260/>
+000000<name>pal16l8b.b57/><crc>74b4d8be/><sha1>23ba316bc5550dd69f07f9a0f697927656a35e5a/><size>260/>
+000000<name>pal16l8b.b58/><crc>17e2c9b8/><sha1>841b290ee3a3089a975456b20018c04e6afb2257/><size>260/>
+000000<name>pal16l8b.b59/><crc>dc0db200/><sha1>9f46e7edf053ad9ee3a4a6dd00f9f6996203fc60/><size>260/>
+000000<name>pal16l8b.b64/><crc>3aed3d98/><sha1>8f0b02baad87aeda1767f0e95aa1a84545376076/><size>260/>
+
+[lindbios]
+020000<name>6.0.0010a.bin/><crc>10dd9b76/><sha1>1fdf1f921bc395846a7c3180fbdbc4ca287a9670/><size>1048576/>
+020000<name>6.0.0009.bin/><crc>5ffdfbf8/><sha1>605bc4967b749b4e6d13fc2ebb845ba956a259a7/><size>1048576/>
+020000<name>6.0.0010.bin/><crc>ea2bf888/><sha1>c9c5b6f0d4f4f36620939b15dd2f128a74347e37/><size>1048576/>
+020000<name>fpr-24370b.ic6/><crc>c3b021a4/><sha1>1b6938a50fe0e4ae813864649eb103838c399ac0/><size>4194304/>
+020000<name>vid_bios.u504/><crc>f78d14d7/><sha1>f129787e487984edd23bf344f2e9500c85052275/><size>65536/>
+201000<name>mda-c0004a_revb_lindyellow_v2.4.20_mvl31a_boot_2.01.chd/><sha1>e13da5f827df852e742b594729ee3f933b387410/>
+
+[airlbios]
+020000<name>epr-21802.ic27/><crc>a77c6b1c/><sha1>bd50a6bb8fa9bac121b076e21ea048a83a240a48/><size>2097152/>
+020000<name>epr-21801.ic27/><crc>a21bef24/><sha1>c6c6ed09772b63a9a84ef0678fc1b7527484038a/><size>2097152/>
+020000<name>main_eeprom.bin/><crc>fea29cbb/><sha1>4099f1747aafa07db34f6e072cd9bfaa83bae10e/><size>128/>
+020000<name>x76f100_eeprom.bin/><crc>3ea24b6a/><sha1>3a730ebcf56e0060fef6b1b02eb2eb7cfb7e61dc/><size>132/>
+010000<name>315-6146.bin/><crc>9b197e35/><sha1>864d14d58732dd4e2ee538ccc71fa8df7013ba06/><size>2048/><devicename>mie/>
+010000<name>sp5001.bin/><crc>3456c8cc/><sha1>f3b66ab1d2eab32e97b46077e3ed2ab5b2982325/><size>16384/><devicename>jvs13551/>
+010000<name>sp5001-b.bin/><crc>28b5fb84/><sha1>8784024548d24b6a43057f06de1d53ce3a34eb12/><size>16384/><devicename>jvs13551/>
+010000<name>sp5002-a.bin/><crc>72983a0f/><sha1>aa13276347bc643ef93e81e9ab7c905deb16c415/><size>16384/><devicename>jvs13551/>
+010000<name>315-6215.bin/><crc>98202738/><sha1>8c4dc85438298e31e25f69542804a78ff0e20962/><size>16384/><devicename>jvs13551/>
+
+[abclimax]
+020000<name>6.0.0010a.bin/><crc>10dd9b76/><sha1>1fdf1f921bc395846a7c3180fbdbc4ca287a9670/><size>1048576/>
+020000<name>6.0.0009.bin/><crc>5ffdfbf8/><sha1>605bc4967b749b4e6d13fc2ebb845ba956a259a7/><size>1048576/>
+020000<name>6.0.0010.bin/><crc>ea2bf888/><sha1>c9c5b6f0d4f4f36620939b15dd2f128a74347e37/><size>1048576/>
+020000<name>fpr-24370b.ic6/><crc>c3b021a4/><sha1>1b6938a50fe0e4ae813864649eb103838c399ac0/><size>4194304/>
+020000<name>vid_bios.u504/><crc>f78d14d7/><sha1>f129787e487984edd23bf344f2e9500c85052275/><size>65536/>
+000000<name>317-0440-com.bin/><crc>8d09e717/><sha1>6b25982f7042541874115d33ea5d0c028140a962/><size>8192/>
+201000<name>mda-c0004a_revb_lindyellow_v2.4.20_mvl31a_boot_2.01.chd/><sha1>e13da5f827df852e742b594729ee3f933b387410/>
+151000<name>dvp-0009.chd/><mediatype_tag>dvd/>
+
+[segadimm]
+010000<name>315-6301.ic11/><size>130817/>
+010000<name>315-6334.ic11/><crc>534c342d/><sha1>3e879f432c82305487922ab28c07107cf0f3c5cf/><size>130817/>
+010000<name>317-0352-exp.pic/><crc>b216fbfc/><sha1>da2341003b35d1600d63fbe34d13ff3b42bdc939/><size>16384/>
+010000<name>317-0422-jpn.pic/><crc>54197fbf/><sha1>a18b5b7aec0498c7a62cacf9f2298ddefb7482c9/><size>16384/>
+010000<name>317-0456-jpn.pic/><crc>cf3bd834/><sha1>6236cdb780260d34c02806478a39c9f3432a45e8/><size>16384/>
+010000<name>fpr-23489c.ic14/><crc>bc38bea1/><sha1>b36fcc6902f397d9749e9d02de1bbb7a5e29d468/><size>2097152/>
+010100<name>203_203.bin/><crc>a738ea1c/><sha1>6f55f1ae0606816a4eca6645ed36eb7f9c7ad9cf/><size>2097152/>
+010100<name>fpr23718.ic36/><crc>a738ea1c/><sha1>b7b5a55a6a4cf0aa2df1b3dff62ff67f864c55e8/><size>2097152/>
+010100<name>213_203.bin/><crc>a738ea1c/><sha1>17131f318632610b87bc095156ffad4597fed4ca/><size>2097152/>
+010100<name>217_203.bin/><crc>a738ea1c/><sha1>e5a229ae7ed48b2955cad63529fd938c6db555e5/><size>2097152/>
+010000<name>fpr23905.ic36/><crc>ffffffff/><sha1>acade4362807c7571b1c2a48ed6067e4bddd404b/><size>2097152/>
+010100<name>317_312.bin/><crc>a738ea1c/><sha1>31d698cd659446ee09a2eeedec6e4bc6a19d05e8/><size>2097152/>
+010100<name>401_203.bin/><crc>a738ea1c/><sha1>edb52597108462bcea8eb2a47c19e51e5fb60638/><size>2097152/>
+
+[konam80a]
+020000<name>700a01.22g/><crc>11812ef8/><sha1>e1284add4aaddd5337bd7f4e27614460d52b5b48/><size>524288/>
+020000<name>700a01,gchgchmp.22g/><crc>39ebb0ca/><sha1>9aab8c637dd2be84d79007e52f108abe92bf29dd/><size>524288/>
+020000<name>700b01.22g/><crc>6cf852af/><sha1>a2421d0a494892c0e71003c96995ce8f945064dd/><size>524288/>
+020000<name>h8a01.bin/><crc>131e0359/><sha1>967f66578ebc0cf6b044d71af09b59bce1f4a1d0/><size>64/>
+020000<name>h8b01.bin/><crc>508b057d/><sha1>779177e6312ef272483eeb64a5e84bbae6e301f2/><size>64/>
+020000<name>hd6473644h.18e/><size>32768/>
+180010<name>gc826aa.u1/><crc>9b38b959/><sha1>6b4fca340a9b1c2ae21ad3903c1ac1e39ab08b1a/><size>548/>
+151011<name>826aaa01.chd/><sha1>be5f8b31fd18ba631fe98c2132c56abf20193419/><parentname>826eaa01.chd/><mediatype_tag>cdrom/>
+
+[mk2r42]
+000001<name>l1_mortal_kombat_ii_sound_rom_u2.u2/><crc>5f23d71d/><sha1>54c2afef243759e0f3dbe2907edbc4302f5c8bad/><size>524288/>
+000001<name>l1_mortal_kombat_ii_sound_rom_u3.u3/><crc>d6d92bf9/><sha1>397351c6b707f2595e36360471015f9fa494e894/><size>524288/>
+000001<name>l1_mortal_kombat_ii_sound_rom_u4.u4/><crc>eebc8e0f/><sha1>705ab63ff7672a4857d546afda6dca4973cce1ad/><size>524288/>
+000001<name>l1_mortal_kombat_ii_sound_rom_u5.u5/><crc>2b0b7961/><sha1>1cdc64aab74d14afbd8c3531e3d0bd49271a281f/><size>524288/>
+000001<name>l1_mortal_kombat_ii_sound_rom_u6.u6/><crc>f694b27f/><sha1>d43e38a124665f49ebb4ffc5a55e8f19a1a64686/><size>524288/>
+000001<name>l1_mortal_kombat_ii_sound_rom_u7.u7/><crc>20387e0a/><sha1>505d05173b2a1f1ee3ebc2898ccd3a95c98dd04a/><size>524288/>
+000000<name>mk242j12.bin/><crc>c7fb1525/><sha1>350be1a6f6da3a6b42764cfceae196696482def2/><size>524288/>
+000000<name>mk242g12.bin/><crc>443d0e0a/><sha1>20e69c266cda59be92d7cd6423f6e03ad65226eb/><size>524288/>
+000001<name>l1_mortal_kombat_ii_game_rom_ug14.ug14/><crc>01e73af6/><sha1>6598cfd704cc92a7f358a0e1f1c973ab79dcc493/><size>1048576/>
+000001<name>l1_mortal_kombat_ii_game_rom_uj14.uj14/><crc>d4985cbb/><sha1>367865da7efae38d83de3c0868d02a705177ae63/><size>1048576/>
+000001<name>l1_mortal_kombat_ii_game_rom_ug19.ug19/><crc>fec137be/><sha1>f11ecb8a7993f5c4f4449564b4911f69bd6e9bf8/><size>1048576/>
+000001<name>l1_mortal_kombat_ii_game_rom_uj19.uj19/><crc>2d763156/><sha1>06536006da49ab5fb6b75b25f801b83fad000ff5/><size>1048576/>
+000001<name>l1_mortal_kombat_ii_game_rom_ug16.ug16/><crc>8ba6ae18/><sha1>465fe907de4a1e502180c4e41642998dd3abc8e6/><size>1048576/>
+000001<name>l1_mortal_kombat_ii_game_rom_uj16.uj16/><crc>39d885b4/><sha1>2251826d247c3c6df421124718401fb35a672f83/><size>1048576/>
+000001<name>l1_mortal_kombat_ii_game_rom_ug20.ug20/><crc>809118c1/><sha1>86153e648834c749e34573151cd4fee403a81962/><size>1048576/>
+000001<name>l1_mortal_kombat_ii_game_rom_uj20.uj20/><crc>b96824f0/><sha1>d42b122f9a57da330192abc7e5f97abc4065d718/><size>1048576/>
+000001<name>l1_mortal_kombat_ii_game_rom_ug17.ug17/><crc>937d8620/><sha1>8b9f80a460b124a747a6d1495b53f01f580e28f1/><size>1048576/>
+000001<name>l1_mortal_kombat_ii_game_rom_uj17.uj17/><crc>218de160/><sha1>87aea173720d2a33d8183903f4fe8ba1d47e3348/><size>1048576/>
+000001<name>l1_mortal_kombat_ii_game_rom_ug22.ug22/><crc>154d53b1/><sha1>58ff0aa59101f40a9a3b5fbae1c904d0b0b31612/><size>1048576/>
+000001<name>l1_mortal_kombat_ii_game_rom_uj22.uj22/><crc>8891d785/><sha1>fd460df1ef8f4306ea42f7dc41488a80fd2c8f53/><size>1048576/>
+
+[amerisuc]
+060000<name>american success (1989)(winky soft)(jp)(disk 1 of 2)(game disk).dsk/><crc>ebc63ebe/><sha1>0d0513cd17cc523a1c1aa720bba16d3364a4978d/><size>737280/><part_name>flop1/><part_title>Game Disk/>
+060000<name>american success (1989)(winky soft)(jp)(disk 2 of 2)(data disk).dsk/><crc>bb8bf20f/><sha1>9c51d922dbb87fb654e4b3069c1cad3b33fd1481/><size>737280/><part_name>flop2/><part_title>Data Disk/>
+
+Notes:
+ - If both CRC32 and SHA-1/MD5 are empty, it means the file is tagged as "nodump"
+
+ - ROMs/CHDs tagged as baddump have no special treatment when auditing sets. This tag is just for user information
+
+ - The "optional" tag in MAME's -listxml output is ignored when validating games. All game files are required by the frontend
+
+ - The FileID tag is there to separate the files in categories and is required by Emu Loader
+   so ROM/CHD files can be properly categorized and to make the validation easier (see File ID Codes section below)
+
+ - The MediaType tag is there to properly separate files (similar to "<rom" and "<disk" tags in -listxml output)
+   Required for proper games files validation
+
+ - The IsCRC32Collision tag on each ROM is used to detect multiple ROMs in the same set with the same CRC32 but different SHA-1 checksum
+
+ - The IsParentSetFile tag on each ROM is used on clone sets to show if a ROM is from the parent set or the clone set
+
+ - The <part_name> and <part_title> tags are for software list games only; see game [amerisuc] above from "msx2_flop" software list
+
+ - When a clone game use the CHD file of the parent game, a <parentname> tag is used
+
+ - Daphne is the only system that do not have a ROMs list
+
+ - Tags <region> and <offset> are used in Supermodel 3 Emulator only
+
+ - Only arcade systems and MAME software list games are supported
+
+
+
+File ID Codes
+-------------
+
+ID   Description
+
+00   Game ROM
+01   Device ROM
+02   Bios ROM
+
+03   Game Cartridge
+04   Device Cartridge
+05   Bios Cartridge
+
+06   Game Floppy Disk
+07   Device Floppy Disk
+08   Bios Floppy Disk
+
+09   Game Cassette Tape
+10   Device Cassette Tape
+11   Bios Cassette Tape
+
+12   Game HDD (also used as a general MAME "CHD" ID)
+13   Device HDD (also used as a general MAME "CHD" ID)
+14   Bios HDD (also used as a general MAME "CHD" ID)
+
+15   Game CD (CD/DVD/Laserdisc/GD-ROM/Blu-Ray)
+16   Device CD (CD/DVD/Laserdisc/GD-ROM/Blu-Ray)
+17   Bios CD (CD/DVD/Laserdisc/GD-ROM/Blu-Ray)
+
+18   Game Compact Flash Card
+19   Device Compact Flash Card
+20   Bios Compact Flash Card
+
+21   Game Video Tape (VHS)
+22   Device Video Tape (VHS)
+23   Bios Video Tape (VHS)
+
+
+Media Type Codes
+----------------
+
+ID   Description
+
+00   ROM/Cartridge/Floppy Disk/Cassette Tape/Video Game Music (VGM)
+01   CHD files (HDD, CD, Compact Flash card, Video Tape VHS)
+
+
+-- Master Control: "End of line." (quote from "TRON") --

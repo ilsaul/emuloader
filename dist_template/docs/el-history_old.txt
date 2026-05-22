@@ -1,0 +1,2897 @@
+version 5.1.5 change log [August 11, 2007]
+------------------------------------------
+
+.fixed: Bios name not being set for clones (neogeo, etc...)
+
+.fixed: Set columns indexes was screwed
+
+
+
+version 5.1.4 change log [August 10, 2007]
+------------------------------------------
+
+.fixed: MAME 0.117u2 and newer use a "mame.ini". Also valid for other MAME based emulators:
+        AGEMAME, PinMAME, HazeMD
+
+.fixed: Bios sets being added in double when creating a games list (MAME based only)
+
+.fixed: Error generating MAME based games lists with emulators builds older than 0.117u2
+
+.fixed: Function "FileExists()" updated to work properly, specially under Windows Vista
+
+.fixed: Memory leak when exiting frontend at the first time run
+
+.fixed: Bios sets were being added into MAME based lists as BIOS and regular games
+
+.fixed: Frontend works again under Windows Vista... as far as I could test it
+        Just make sure to "run as administrator" and also make sure to install the frontend and
+        all emulators in folders that are not protected by Vista
+
+.fixed: Enabling hidden games feature make all other games visible
+
+.fixed: Error when updating EL from v5.1.3 due to columns changes
+        Deleting "\ini_files\columns\default.ini" was solving the problem
+
+.removed: Column "Audio Channels", "Audio Samples"
+          You'll need to re-create your games lists again since .el files have changed!!!
+
+.optimized: Source code optimizations for easier maintenance
+
+.optimized: More startup optimizations
+
+.added: Column "Times Played" is back. New file "\ini_files\games_played.ini"
+
+.added: New feature: "Scan Audio Samples" ("Games List" main menu)
+        Use this to scan all games that use external samples files for the sample .zip file
+        You can also delete not used samples
+
+.added: New games filter: "Control Type" ("Games Filters" main menu)
+        Use this filter to show only games that use a particular control type: "Joystick 4-Way",
+        "Trackball", "Dial", etc
+        Filter added to replace the now removed "Control Type" column
+        NOTE: For games with multiple controls, only the first control type is checked!
+
+
+
+version 5.1.3 change log [July 26, 2007]
+----------------------------------------
+
+.fixed: Show/hide tool bar button in auto game info (image preview area) was not working
+        ... games popup menu, "Game Documents" menu item
+
+.fixed: When changing user description in favorite profile without changing the filename, a message
+        saying that the filename already exists appears
+
+.changed: User favorites profiles have some changes:
+           -> User description is stored inside "\ini_files\favorites\favfile.el" files, under
+              "fav_username" entry
+
+           -> The "[Favorites]" section in "Emuloader.ini" is gone, and only the user filename is stored
+              now, in "[Preferences]" section, "FavoritesFileName" entry
+
+           -> File "\ini_files\favorites.ini" is not used anymore
+
+           IMPORTANT NOTE: You will have to define user descriptions again. Please go to
+              "Favorites - Profile Editor" for that
+
+.removed: Some more icons
+
+.added: Support for MAME 0.117u2 (file "\ini_files\bios_overwrite.ini" is no longer needed)
+
+
+
+version 5.1.2 change log [July 20, 2007]
+----------------------------------------
+
+.fixed: Audit failing when a game have ROMs marked as "No Good Dump Known"
+
+.changed: Simplified scan and audit games features so all systems can use the hot-key (games popup menu)
+          Now a new screen appears so you can select the system
+
+.changed: Replaced progress bar by a windows progress bar (splash/status screen)
+          Also optimized for more speed
+
+.changed: Audit was too slow due to constant updates to the status bar's labels
+          Added a progress bar when auditing multiple games. Speed improvements by 300%!!!!!
+
+.added: Three new icons in "<frontend>\resources\main_icons" folder. Since main menu and popup menus are
+        custom (not OS default), check boxes and radio groups must be painted manually, but only when
+        there is no icon set for the item
+         - option_check.ico
+         - option_radiogroup_off.ico
+         - option_radiogroup_on.ico
+
+.added: Theme support for main menu / popup menus. Select the one you want in main menu "View",
+        "Main Menu / Popup Menu Themes" sub-menu
+         - Office 2007
+         - Windows XP
+
+.added: Support for MAME v0.117u1
+          - new "mame.ini" settings
+          - create games list (new file for correct bios set parsing: "\ini_files\bios_overwrite.ini")
+
+.added: New filter: "Bios Sets", game filters selection screen (forth button on the tool bar)
+        Use this to view only bios sets, like "neogeo", "playch10", "cvs", "naomi"
+        You'll find it below the "Vector" filter
+
+.added: New filter menu: "Select System" ("Games Filters" main menu")
+        Same as system filter button on the tool bar
+
+
+
+version 5.1.1 change log [July 15, 2007]
+----------------------------------------
+
+.fixed: Visual bug in the last column
+
+.fixed: Game documents not working (games popup menu)
+
+.fixed: Blend icons 50% feature reseting when games list not focused
+
+.fixed: Audit was threating CHDs as ROMs, and was not checking all CHD files when there is more than
+        1 CHD in a game
+
+.changed: Compiled project with updated components, Graphics32 v1.8.3
+
+.optimized: main menu / popup menus appearance improved a little bit :-))
+
+.added: "Driver Status" column is back by request
+
+.added: "Biosname" information in games ROMs lists ("\arcade\system_roms.el")
+        No need to re-create your games list. This is just a test for future audit improvements
+
+
+
+version 5.1 change log [July 09, 2007]
+--------------------------------------
+
+.fixed: Neo Geo filter use a new driver name: neodrvr.c
+
+.fixed: Games list not being properly generated with Daphne v1.0
+        Note that game names between v0.99.7 and v1.0 are different
+
+.fixed: A couple bugs in favorites profile editor
+
+.fixed: Shortcut texts on main menu and popup menus are correctly displayed now :-))
+
+.changed: Renamed "Cycle Image Types" to "Auto Previous/Next Image Type" and move it from preferences
+          screen to main menu "Images"
+
+.changed: Merged images settings and images files/folders into one place, preferences screen, "Images"
+          tab. All image types description are customizable now 
+
+.changed: Made image view mode button in images tool bar invisible by default
+
+.changed: Lots of bloatware removed:
+          -> features removed:
+             - Random Game Preview (no real use... EL is not for arcade cabinets)
+             - Times played and played count (columns were also removed)
+             - Audio clips playback (why keep it if there is no mng playback ?)
+             - Fix aspect ratio for image preview (this settings makes images look distored)
+             - Several GUI customizations and settings
+             - Custom games support. EL is not ment to be used with systems other than the ones supported
+             - Parental lock. Don't want kids playing mature games ? Don't have them or hide them
+
+          -> games columns removed:
+             - Screens resolution, refresh rate, video type (all 4 screens)
+             - Control type (useless for games with multiple controls)
+             - status types (driver, color, etc...)
+             - save state (this info is still displayed in "Game Details" screen
+             - times played (no real use since there is no statistics screen)
+             - played count (no real use since there is no statistics screen)
+
+          -> games .el files in "<frontend>\arcade\" folder are also changed. You will need to create
+             you games lists all over again
+
+.changed: Custom command line updated
+
+.changed: Moved "Hide Bios" tool bar button to main menu "Games List", sub-menu "Bios Sets"
+
+.changed: Removed "Correct Name", "Correct Size", "Correct Checksum" columns from audit games screen
+          They are shown like this now "field [correct data]"
+
+.changed: Move "Filter Games By Main CPU" from "Games List" main menu to "Games Filters" main menu
+
+.optimized: Several entries in "EmuLoader.ini" are renamed and moved for the sake of consistance
+
+.optimized: A few routines were merged and optimized
+
+.optimized: Removed some memory variables not really needed
+
+.optimized: main menu and popup menus
+
+.removed: Image index label from image tool bar buttons (useless...)
+
+.removed: "Grouped + System" view mode is gone... uses too much memory and memory leaks
+
+.removed: "Fill All Clone Entries". Please use grouped view mode to group parents and their clones
+
+.removed: Images filename format: "Old Format (shortname0000.png)"
+          MAME does not support this anymore, there is no point on keeping it
+          eg: game name: galaga
+              short image name: gala0000.png
+
+.removed: Some Win9x GUI settings. Win9x OS is too old, but still partially supported by EL
+
+.removed: Column "Bios Name"
+
+.removed: Customize audit columns
+
+.removed: Several UI icons
+
+.added: Enable/disable MAWS game info (preferences screen)
+
+.added: Two new image types:
+         - "PCB Preview":
+           Use this to display PCB images
+
+         - "Game Artwork Preview"
+           Use this to display game snapshots with artwork embedded in the image
+
+        NOTES [General]:
+          -> "Custom" image type has been removed...
+          -> Files have been renamed "image_??_name.ico"
+
+        NOTES [Game Artwork]:
+          -> if artwork image is not found, game snapshot image will be loaded if
+             "Display Game Snapshot if Artwork Not Found" setting is enabled (main menu "Images")
+          -> Set a folder for the artwork preview files in preferences screen "Files / Folders"
+             tab, "Images" sub-tab, "Game Artwork Preview" edit box. Both zipped and unzipped files
+             are supported (.png file formats only)
+          -> When this setting is enabled, the icon tool bar is similar to the game snapshots but
+             with an extra "artwork" label
+
+.added: New main menu: "Games Filters" -> will hold some extra filters for the games list
+
+.added: New games filter: "Artworks" (main menu "Games Filters)
+        To be used with "artwork.in" from Mr. Do!, also found with "MAME Plus!" package
+        Just put the file in <frontend>\ini_files\" folder
+        This feature have 3 options:
+          - List Both
+          - Games With Artwork (show only games listed in "artwork.ini")
+          - Games With No Artwork (show only games NOT listed in "artwork.ini")
+
+        ... feature requested by Mr. Do: http://www.mameworld.net/mrdo/mame_artwork.html
+        This is used by M.A.M.E. system only
+
+.added: New games filter: "Games With Bios" / "Games With No Bios" / "List Both"
+        ...main menu "Games List", "Bios Sets" menu item
+        Use this to show games that use a bios set or games that do not use a bios set... or both
+
+        To show/hide bios (neogeo, tps, playch10, etc...) use the "Hide Bios Sets", same location
+
+.added: Image info label is back. It's at the top of the image preview. Background color and
+        font color can be customized (preferences screen, "Images" tab)
+        It does not display zip/image full path though, just the filename
+
+.added: New feature: "Hidden Games" (main menu "Games Filters")
+        To replace parental lock. It works similar to PL, but without
+        password protection and no file encryption.
+        New file is created "<frontend>\ini_files\hidden_games.ini"
+
+        NOTES:
+          - Toggle feature ON/OFF using "Hidden Games Enabled" setting ("Games Filters" main menu)
+          - Customize hidden games with the editor ("Games List" main menu)
+          - Add games with "Add Selected To Hidden List" (games popup menu)
+
+
+
+version 5.0.1 change log [June 09, 2007]
+----------------------------------------
+
+.fixed: Image types not being properly set at frontend's startup
+
+.fixed: MAME custom game options not being generated on correct folder
+
+.fixed: Favorites tool bar button not being properly loaded when switching to small tool bar
+
+.fixed: if columns profile file do not exist, customize columns feature generate errors
+
+.fixed: Add single game to favorites was not working properly
+
+.fixed: File not found error message when favorites icon did not exist
+
+.fixed: Access violation when favorites list is empty
+
+.added: Columns captions can be customized now (customize columns screen)
+
+
+
+version 5.0 change log [June 09, 2007]
+--------------------------------------
+
+.fixed: Games list not being fully created when using a "MAME Plus!" binary
+
+.fixed: Added ".inp" extension to MAME's input playback / recording feature (by request)
+        ... MAME does not add the extension automatically
+
+.fixed: When using relative paths for snapshots and other image types, the frontend was pointing to
+        its own root folder instead of pointing to the emulator's root folder
+
+.fixed: Record wave output feature from MAME was not setting the correct folder when using relative
+        paths... it should redirect to the emulator's main path (for each system)
+
+.fixed: No more memory leaks after closing games filters screen
+
+.fixed: Procedure "GetFilesList" (uCommon.pas) was adding folder names in the ouput list when
+        "sub-directories" setting is disabled (only filenames should be added)
+
+.fixed: Very slow scan when building a list of files or directories (when a directory has a LOT of
+        files... like MAMu_ icons)
+
+.fixed: Grouped view modes were not displaying the "Tree Root" toggle button
+
+.fixed: Show game F.A.Q. was not working correctly... if using relative paths, the full path of the
+        emulator will be used (according to the selected game)
+
+.fixed: crazy "Joystick Deadzone" / "Joystick Saturation" floating values when updating "mame.ini"
+
+.fixed: when using relative paths with images folders / zip files, the full path is based on the
+        emulator path, not the frontend
+
+.fixed: Couple bugs with parental lock feature
+
+.changed: Moved "MAMu_ Icons" feature with all its settings to main screen's buttons tool bar
+
+.changed: Moved MAMu_ Icons settings from [Preferences] to [MAMu_] section, "EmuLoader.ini" file
+
+.changed: Update for MAME save state feature. According to MAME 0.114u3 all .sta files must be inside
+          their own game name folder now
+
+.changed: MNG output files are now generated inside a game name's folder, just like snaps (MAME emus)
+          eg: "c:\snaps\bagman\bagman.mng"... when snapshots folder is set to "c:\snaps\"
+
+.changed: Updated documentation files: "docs\el-quick-setup-quide.txt" and "docs\el-readme.txt"
+
+.changed: The "MAWS Game Info" is now handled as a new image type instead of a separate feature
+
+.changed: Images tool bar is now visible even when MAWS view mode is enabled
+
+.changed: Moved "New Description Format [Game, The]" from preferences screen to "Games List" main menu
+
+.changed: Renamed file from "filter2_02_master.ico" to "filter2_02_parent.ico", folder
+          "<frontend>\resources\main_icons\" and all "master / clone" references to "parent / clone"
+
+.changed: Renamed files
+           - folder: "<frontend>\resources\main_icons\"
+               -> "gameicons_checkmiss.ico" to "mamu_scanmiss.ico"
+               -> "gameicons_checkunneeded.ico" to "mamu_scannotneeded.ico"
+
+           - folder: "<frontend>\resources\gameslist_icons\"
+               -> "*Master.ico" to "*Parent.ico"
+
+.removed: File "<frontend>\resources\main_icons\gameicons_enable.ico"
+
+.removed: Zipped MAMu_ icons support is gone so multiple folders can be used
+
+.optimized: Several optimizations thru the entire project, reducing memory variables and for future
+            improvements. A bunch of duplicated codes were removed and some were merged, resulting on
+            hidden bug fixes. Frontend is much more solid now :)
+
+.added: New system: "SEGA Model 2"
+        Thanks to ElSemi, we now have support for "SEGA Model 2 Emulator"!
+        Only version 0.5a and newer are supported...
+
+        Some of the supported features:
+          -> Game custom options:
+               Custom .ini are created on folder "<frontend>\arcade\segamodel2_ini\" and when running
+               a game with custom options, the file "<emulator>\emulator.ini" is renamed to
+               "<emulator>\default_emulator.ini" and the custom ini will be copied over
+
+          -> Custom command line
+
+          -> Audit ROMs
+
+          -> No merged games support, since ElSemi's emulator works with split-merge sets
+
+.added: New column: "Bios Name". Useful for bios based games, like Neo Geo, PlayChoice-10, CVS, etc
+
+.added: Menu items renamed and added new features to run games (games popup menu):
+          -> renamed menu item "Play" to "Run Game"
+          -> renamed menu item "Play (Custom)" to "Run Game (Custom)"
+          -> added menu item "Run Game and Playback Input"
+          -> added menu item "Run Game And Record Input"
+          -> added menu item "Run Game and Load a Save State"
+          -> added menu item "Run Game and Record Wave Output"
+          -> added menu item "Run Game and Record MNG Output"
+
+        NOTES:
+          - As you can imagine, the new menu items work just like in MAME32. Select one of them
+            and a window will open, so you can select a file name
+          - The new menu items are for MAME based emulators only (no ZiNc, Daphne or SEGA Model 2)
+          - Hit the "Cancel" button to abort running the game
+          - You cannot change the folder where files are created, go to MAME default settings instead
+          - The old features located under "Advanced User" main menu were, of course, removed
+
+.added: New tool bar button: "Favorites". Use this to toggle favorites lists ON/OFF
+
+        NOTES:
+          - The favorites filter is removed from the main filters list now
+          - When favorites is enabled, the main filters button is disabled
+
+.added: New menu item: "Reload ROMs Folders" (main menu "Emulator")
+        Use this menu item to reload the ROMs folders into memory, if you edit the "rompath" entry
+        in "mame.ini" file manually
+
+.added: Support multiple folders in MAMu_ icons feature. Now each system can have its own
+        set of folders (preferences screen, "Folder/Files" / "General" tab)
+
+        NOTES:
+          -> From now on, you must set all folders you wish to use for each system
+             When using relative paths, the full path will be based on frontend's main folder
+
+          -> Files will be scanned from 1st folder to last so, make sure to always put the main
+             folder for a specific system at the top of the list, when using multiple folders
+
+          -> You can edit folders after adding them to the list with the new "Edit [F2]" button
+
+          -> Zipped icons is removed so multiple folders can be used
+
+.added: Feature "MAMu_ Icons" rewritten:
+        - New settings:
+           - "Show Parent Icons"
+                -> show/hide icons for parent games (clone icons are also affected)
+
+           - "Show Clone Icons"
+                -> enable to display game icon for, disable it to display the icon of the parent game
+
+           - "Show Special HazeMD Icons"
+                -> enabling this setting will make EL load the following icons for HazeMD games, when
+                   game icons are not found (MAME and HazeMD systems):
+                   .Mega Drive / Genesis: "g_games.ico", using drivers "md_games.c"; "md_gamul.c"
+                   .Master System: "s_games.ico", using driver "sms.c" and game names starting with "s_"
+                   .Game Gear: "gg_games.ico", using driver "sms.c" and game names starting with "gg_"
+
+           - "Show Game Bios Icons"
+                -> show/hide biosname.ico, when game icons are not found (for bios based games only)
+
+           - "Show Game Driver Icons"
+                -> show/hide drivername.ico, when game icons and bios icons are not found
+
+           - "Force Game Bios Icons"
+                -> show biosname.ico even if game icons are found (for bios based games only)
+
+           - "Force Game Driver Icons"
+                -> show gamedriver.ico even if game icons are found
+                   ... if "Force Game Bios Icons" is enabled and the biosname.ico is found, the driver
+                       icon will not be loaded
+
+        - "Settings Info"
+          Access this menu item for more info on how to use MAMu_ icons feature
+
+.added: Feature "Scan for Not Used MAMu_ Icons" has been rewritten
+        Now you can delete old files using the frontend, instead of just generating a HTML file
+        You can even edit the file using the "Edit" menu item (with .ico associated app)
+        To use this feature:
+          1. Select the system you want to scan
+          2. Click the "Scan" button and wait a moment
+          3. Repeat steps #1 and #2 to scan other systems
+          3. Check all files you want to delete
+          4. Select "Delete Checked Files" button to delete all files
+
+        NOTES:
+          - Files are grouped by system, making it easy to navigate
+          - Recycle bin is not supported. Once you delete files there is no turning back!
+          - You can export the current list to a .txt file
+          - You can sort the list by clicking the column's headers
+          - There is a file "<frontend>\ini_files\el_mamu_exclude.ini" containing a list of files
+            that you don't want to be included in the list (like "!mamu.ico" and others)
+            Update this file using a text editor or directly in the frontend (list popup menu)
+          - There is a popup menu (mouse right-click), use it
+
+.added: Feature "Scan for Missing MAMu_ Icons" has been rewritten
+        Create a list of all games with no game icons directly in the frontend, instead of a HTML file
+        You can even create and edit a .ico file using the "Edit" menu item (with .ico associated app)
+        To use this feature:
+        1. Select the system you want to scan
+        2. Check "Search Clone Icons" checkbox to scan icons for clone games (optional)
+        3. Click the "Scan" button and wait a few seconds
+        4. Repeat steps #1 to #3 to scan other systems
+
+        NOTES:
+          - Games are grouped by system, making it easy to navigate
+          - You can export the current list to a .txt file
+          - You can group all "parent + clones" related games sorting the list by the "clone of" column
+          - Show all games, only parents or only clones
+          - When creating/editing a icon, there will be a 700 milliseconds pause before the .ico
+            associated application is called (for slow computer systems)
+          - There is a popup menu (mouse right-click), use it
+
+.added: New games filter: "Konami Hornet System / Konami GTI Club System"
+        Two systems in one filter, based on Voodoo hardware
+
+.added: The hint in games filter tool bar button now contain the selected filter's descripton
+
+.added: Feature "Scan for Not Used Images" has been rewritten
+        Now you can delete old images using the frontend, instead of just generating a HTML file
+        To use this feature:
+          1. Select the system you want to scan
+          2. Click the "Scan" button and wait a moment
+          3. Repeat steps #1 and #2 to scan other systems
+          3. Check all files you want to delete
+          4. Select "Delete Checked Files" button to delete all files
+
+        NOTES:
+          - Files are grouped by system, making it easy to navigate
+          - Recycle bin is not supported. Once you delete files there is no turning back!
+          - You can export the current list to a .txt file
+          - You can sort the list by clicking the column's headers
+          - There is a popup menu (mouse right-click), use it
+          - Image types are separated by the icon you are used to
+
+.added: Feature "Scan for Missing Images" has been rewritten
+        Create a list of all games with no snapshots directly in the frontend, instead of a HTML file
+        You can even run the game from this screen
+        To use this feature:
+        1. Select the system you want to scan
+        2. Select the image type you want to scan
+        2. Check "Search Clone Images" to scan images for clone games (popup menu)
+        3. Check "Scan Unavailable Games" to scan images for games you don't have (popup menu)
+        4. Check "Scan Bios Games" to scan images for bios sets, like neogeo, cvs, playch10 (popup menu)
+        5. Click the "Scan" button and wait a moment
+        4. Repeat steps #1 to #5 to scan other systems
+
+        NOTES:
+          - Games are grouped by system, making it easy to navigate
+          - You can export the current list to a .txt file
+          - You can group all "parent + clones" related games sorting the list by the "clone of" column
+          - Show all games, only parents or only clones
+          - When creating/editing a icon, there will be a 700 milliseconds pause before the .ico
+            associated application is called (for slow computer systems)
+          - There is a popup menu (mouse right-click), use it
+
+.added: New feature: "Delete All Selected Games Files" (games popup menu, "Delete" sub-menu)
+        Delete multiple .zip files at once. A new window will open so you can check all files to
+        delete. Separeted by system
+        Note that "Enable Multiple Selection" setting ("Games List" main menu) must be enabled
+
+.added: New feature: "Delete All Visible Games" (games popup menu, "Favorite Games" sub-menu)
+        Same as delete all selected games files, but is for favorites lists and with 3 differences:
+
+        1. You must be in favorites mode
+        2. Only games that are visible on the list will be added, meaning, the list will be affected
+           by the current games filters settings
+        3. No need to select multiple games, as they will all be added to the list automatically
+
+.added: Multiple folders support in "ZiNc - 3D Arcade Emulator" system
+        Note that parent + clones + bios sets must be in the same folder since ZiNc does not
+        support loading sets on different folders
+
+.added: New audit options: "Export Results to File" and "Export Bad Results to File" (audit popup menu)
+        these 2 options replace the "Save to HTML" menu items (they are still available though)
+
+.added: New feature: "View Audit Results" (main menu "Games List")
+        View the results of your audited games at any time, without using the audit screen. 
+        To use this feature, you need to save the audit using "Export Results to File" menu items on
+        the audit screen's popup menu
+        There is also a new file: "docs\el-audit-results-format.txt"
+
+.added: New game documents view: "PCB Info" (main menu "View", sub-menu "Documents")
+        New feature to view pcb info, also works with automatic game info
+        Make sure to set the folder where .txt files are (preferences screen, "Folder /Files" tab,
+          "General" sub-tab, in "PCB Info Folder" frame)
+        You will find pcbinfo files at MASH website (http://www.mameworld.net/mameinfo/)
+
+.added: Support for Daphne v1.0 betas
+        Works the same as before, but the file "\ini_files\daphne.ini" is not needed anymore
+        The only required file is "<daphne1.0>\config.xml" to build the games list
+
+        NOTE: File "\ini_files\daphne.ini" is still needed for Daphne v0.99.7
+
+.added: Setting: "Incremental Search Disabled" (main menu "Games List")
+        Enable this setting to disable keyboard strokes to find games in the list as you type
+
+
+
+version 4.9.8.1 change log [April 12, 2007]
+-------------------------------------------
+
+.fixed: Deleting games from favorites lists does not reset selection to the first game anymore
+        ... might not work when multiple games are selected and in some weird cases
+
+.fixed: Screenshots, auto game docs, MAWS info not updated when "Multiple Selection" is enabled
+        ... main menu "Games List"
+
+.fixed: Error when running games with custom command line, using mouse double-click
+
+.fixed: Error when trying to run a game with default settings, when emulator filename is not set
+
+.fixed: Using empty prefix / suffix on custom command line was generating a madexcept error
+
+.changed: Removed "Hide Bar" button from all tool bar editors and added new menu items called
+          "Enable Tool Bar": main menu "View", for main tool bar and status bar, main menu
+          "Images" for the images tool bar
+
+.changed: Menu items renamed:
+          - all "Toolbar Editor" renamed to "Customize"
+          - "Columns Editor" renamed to "Customize Columns"
+          - "Parental Lock" renamed to "Enable Parental Lock"
+          - "Parental Lock Editor" renamed to "Customize"
+
+.changed: Moved menu items:
+          - "Customize Columns" from "Advanced User" main menu to "Games List" main menu
+          - "Restore Default Screen Size/Position" from "Advanced User" main menu to "View" main menu
+
+.changed: Moved files from "\resources\images\logo\" folder to "\resources\images\" folder and changed
+          images formats to PNG:
+          - "logo.png"
+          - "about.png"
+
+.changed: Moved section "[GameDocuments]" from "EmuLoader.ini" file to "\ini_files\el_extras.ini" file
+          ... and moved all settings from "[GameInfo]" section to the new "[GameDocuments]" section
+
+.removed: Setting: "Splash Screen Logo (Frontend)" from preferences. Only one splash logo filename is
+          supported from now on
+
+.added: Multiple folders support for "Font Files", directory selection (MAME settings screen)
+
+.added: New message box and input box screens, now with icons and a title
+        Also, a new folder with .png files: "resources\msgbox_icons\"
+
+.added: New game filters (updates to "\ini_files\mame_filters.ini" file):
+        "Konami Viper System" (driver: viper.c)
+        "Sega Naomi" (driver: naomi.c)
+        
+        Also, two new icons for these filters in "\resources\main_icons\arcade_filters\" folder:
+        "viper.ico", "naomi.ico"
+
+
+
+version 4.9.8 change log [March 20, 2007]
+-----------------------------------------
+
+.fixed: Range check error bug when saving audit results to HTML file
+
+.fixed: MNG video recording is always done in "Game Snapshot" folder (MAME based emulators), so
+        EL now points to that folder automatically when recording videos
+        NOTE: MNG folder settings on preferences screen is never used! No need to set folders there
+
+.fixed: Audio recording updated, also bug fix
+
+.fixed: Emulator version info detection was bugged
+
+.fixed: Emulator version in "MAME Settings" screen was not being set on EL's 1st time run
+
+.fixed: Slow emulators start/quit when running games (mostly MAME, compressed with UPX)
+
+.fixed: Odd memory leak on favorites profile editor
+
+.fixed: Added all 3 image naming formats to the "Scan For Misisng Images" feature
+
+.fixed: Some UI texts, displaying wrong / old information
+
+.fixed: Custom columns profile not being read on frontend's first run or when "EmuLoader.ini" is
+        not found on startup
+
+.changed: The "Show Automatic Game Info" feature now support all systems
+          Also, the window / text box will not be hidden anymore when no info is found
+          NOTE: for systems other than MAME, the same info from MAME will be used
+                eg: "sfex" from ZiNc, since MAME have a game with same name
+
+.changed: Updates to the "MAME Settings" screen
+          - several UI modifications
+          - added all settings for latest MAME v0.113u1
+          - removed all settings not used by latest MAME build v0.113u1
+          - Screen [all, 0, 1, 2, 3] settings rewritten, removed the color depth setting (bpp)
+
+.changed: Renamed "MNG Videos" label to "MNG Playback" (preferences screen)
+          NOTE: since MAME use game snapshots folder to save .mng files, this setting is useless.
+                ... this setting will probably be removed on a future release since EL cannot playback
+                    .mng files :((
+
+.changed: Delphi components updates:
+          - Graphic32 v1.8.2
+          - My new components "TGaugeBar2" updated to latest Graphics32, on "uGR32Extras.pas" file
+
+.changed: All settings related to game documents and auto game documents are not stored in a new
+          section called "[GameDocuments]" (EmuLoader.ini file)
+
+.changed: Some more changes in the directory structure (icons directories)
+
+.removed: My custom component "jkSpinEdit" does not work very well when using float values and is not
+          worthed trying to fix this problem. This component is removed from the project
+          ... replaced by "TGaugeBar" / "TGaugeBar2" from Graphics32 library
+
+.removed: Support for MAME Plus! is gone. Too much work and no feedback from users
+          ... feature was WAY outdated and nobody complained!
+
+.removed: Settings (You cannot choose customized icons sets anymore... edit the ones available)
+            - "Frontend Icons Folder"
+            - "Standard Game Icons Folder"
+
+.optimized: Merged some functions to reduce duplicated lines of code
+
+.added: Two Delphi 7 library files with some changes / fixes: "ComCtrls.pas" and "ImgList.pas"
+        ... needed to fix limitations of some Delphi 7 components. Both files are now part of
+            Emu Loader's source code (meaning, original .dcu files from Delphi 7 are NOT used)
+
+.added: New setting: "Enable Game Play Time and Times Played"
+        These two features are now optional. They are used to display how many times you played a game
+        and for how long (games columns)
+        Note that enabling it, after quiting a game the frontend might freeze for 2 or 3 seconds
+
+.added: New component used: "CoolTrayIcon", made by Troels Jakobsen [troels.jakobsen@gmail.com]
+
+.added: New setting: "Minimize Frontend To Tray When Running Games
+        ... this fixes the slow MAME start... hopefully
+
+.added: Tray icon ballon message when scanning for games... 1st atempt (MAME based emus only) :)))
+        NOTE: Feature available only for Win2000 and newer OS
+
+.added: New, but not so useful, main menu items:
+          - "Reload Frontend Icons"  : reload all icons in the frontend
+          - "Reload Games List Icons": reload default EL icons on the games list
+
+.added: Keyboard shortcut to display all game documents: Shift+F3
+        ...main menu "View" / "Game Documents" / "Show All"
+
+.added: Automatic game documents tool bar with the following:
+        - New menu item: "Enable Tool Bar", located at "View" / "Game Documents" main menu
+          use this to show/hide the docs tool bar
+
+        - 4 different layouts. Now you can put the auto game docs window anywhere :)
+          ... each layout setting is saved on "EmuLoader.ini"
+
+        - Font selector, so you can change the font used on the text window
+
+        NOTE: this tool bar does not work with the "Open In A Window" setting, except "Font" button
+
+
+
+version 4.9.7.2 change log [February 11, 2007]
+---------------------------------------------
+
+.fixed: "Out of Range" error when using ZiNc settings (emu or games) in one line (.cfg files)
+
+.fixed: History info not being displayed when using old file format (history.dat)
+
+.fixed: Window position was being reset while using auto game info on a window
+
+.added: New game info: "Story" main menu "View" / "Game Documents"
+        Added by request. Not sure what info this is for, but it's being used to replace hiscores
+        Notes:
+          - File "story.dat" is required and, like the others, must be placed at MAME's root folder or
+            Emu Loader's "\ini_files\" folder
+          - Added a "Reset" button in the preferences screen, auto game info drop-boxes, to reset
+            texts to its default order ("General" tab, "Miscellanous" sub-tab)
+
+
+
+version 4.9.7.1 change log [January 22, 2007]
+---------------------------------------------
+
+.fixed: Option "Use MAMu_ Icons" was being set as disabled when not using zipped icons
+
+.fixed: Error when creating games lists at startup
+
+.changed: Favorites Profile Editor:
+
+          - Removed "Edit User" button. You can change description / filename
+            "on-the-fly" now. Remember to click the "Update" button to save the changes
+            Selecting another profile or exiting the editor cancel the changes
+
+          - Added two extra confirmation messages when deleting a profile, so you can keep the
+            games list and icon files for that profile
+
+          - You can have multiple profiles with same description, but the filename must be unique
+
+          - Some minor optimizations and improvements
+
+.added: Select a filter with mouse double-click ("Arcade Main Filters" screen)
+
+
+
+version 4.9.7 change log [January 12, 2007]
+-------------------------------------------
+
+.fixed: Hints were not showing... anywhere (buttons, edit boxes, checkboxes, etc)
+
+.fixed: Rename / delete images not working due to changes in the core
+
+.fixed: Entry "ctrlr" in "mame.ini" was being deleted if using empty value
+
+.fixed: Audio and video recording not working if destination folder does not exists. The
+        folders are automatically created now
+
+.fixed: String "File Not Found" was not being added in the "Notes" column when auditing CHD files
+
+.fixed: Some bugs and missing cases on the audit ROMs feature
+
+.changed: Moved favorites to the top of the games filters list (\ini_files\mame_filters.ini) for
+          easier access when switching between filters
+
+.changed: Moved the following settings from preferences screen to "Games List" main menu:
+          - "Incremental Search"
+          - "Fill All Clone Entries"
+          - "Multiple Games Selection", and renamed it to "Enable Multiple Selection"
+
+.changed: Moved "Filter Games by Main CPU" settings from "View" to "Games List" main menu
+
+.changed: New "About..." screen, with new background image
+
+.optimized: Detailed messages for .zip handling errors
+
+.optimized: Added warning/information messages on a bunch of features, to make your life easier :)
+
+.added: New arcade filter: "Konami System 576"
+
+.added: In MAME settings screen:
+        - Filename with full path of the file being edited, just below the top bar
+        - Emulator version info label at the bottom of the MAME settings screen
+
+.added: Three new settings for multiple format in images filenames. Now all formats can be used
+        simultaneously. Settings can be found in main menu "Images":
+
+        - EL Format (fullgamename0000.png) ... enabled by default
+          enable this so EL can display images like "snaps\galaga0004.png" (full game name + 4 digits)
+
+        - New Format (\gamename\0000.png) ... enabled by default
+          enable this so EL can display images like "snaps\galaga\0004.png"
+
+        - Old Format (shortname0000.png) ... disabled by default
+          enable this so EL can display images in old MAME style "snaps\gala0004.png"
+          (short name + 4 digits)
+
+        Note: This new feature applies to all systems, not just MAME
+
+.added: Convert new MAME images format (\gamename\0000.png) to Emu Loader's own format
+        (fullgamename0000.png), located in "Images" main menu
+        Only unzipped images are supported on this feature
+
+.added: Updates for latest MAME build (MAME settings screen)
+
+.added: New feature: "All Selected Games Files" (games popup menu, "Delete" sub-menu)
+        If multi-selection is enabled, you can delete more than one game.zip file at once
+
+        After selecting this option, a window will open, with the list of all games to be deleted.
+        You can edit that list the way you see fit. For merged clones, the game filename with
+        full path appears in red color.
+
+        WARNING: Recycle bin is not supported
+
+.added: New main menu option: "Games List"
+        this menu will hold settings for the games list itself
+
+.removed: Setting "New Image Name Format"... not needed anymore
+
+.removed: Feature "Display Total Images"
+          This was responsable to display the "01 of ??" label in the images tool bar, to know the
+          amount of images you have for that image type / game
+          Removed because now EL can display three image formats at the same time
+          ... also, I can't think of any reason anyone would use this just to know now many more images
+          you can view for a specific game when you can simply click on the "Next Image" button
+
+
+
+version 4.9.5.3 change log [October 09, 2006]
+--------------------------------------------
+
+.fixed: Range check error when using MAME's history.dat
+
+.fixed: Some visual bugs when using MAME settings (default and custom game options)
+
+.fixed: Feature "Filter by CPU" was taking too long and using 50% of system resources
+        while being executed... that's a no no
+
+.fixed: RBG pallette for MAME Plus! was not being read and set (mame settings screen)
+
+.fixed: Game descriptions ending with ", The" were not being correctly fixed when creating
+        games lists
+
+.changed: Optimized the read/write function for MAME settings (MAME settings screen)
+          and removed redundant code
+
+.changed: Frontend now compiled with "Range Check" option (Delphi project settings)
+          This will help me to track down memory variables that are trying to use values
+          outside its limits
+
+.removed: "resources\images\toolbars\statusbar_random_game.ico" and
+          "resources\images\toolbars\statusbar_game_size.ico" files
+
+.added: New icons:
+          - "resources\images\toolbars\emu_all.ico"
+          - "resources\images\toolbars\random_game.ico"
+          - "resources\images\toolbars\statusbar_game_size_emu.ico"
+          - "resources\images\toolbars\statusbar_game_size_zip.ico"
+
+
+
+version 4.9.5.2 change log [October 08, 2006]
+--------------------------------------------
+
+.fixed: Some console left-overs
+
+.fixed: If using zipped images and setting a relative path for the .zip files, images were
+        not being loaded
+
+.fixed: Tool bar and status bar hidden when restarting frontend in full mode
+
+.changed: Custom game settings for ZiNc moved from "resources\zinc_cfg\" to
+          "arcade\zinc_cfg\" folder. Just move your folder to the new place
+
+.changed: Filter games by main CPU is not automatic anymore. You must click "Apply" button
+          to filter games from now on
+
+.changed: Moved status bar from bottom of main screen to below the games list
+
+.changed: Moved game size settings from preferences screen to main menu "View"
+
+.changed: Moved "Tool Bar Editor" menu item from "Advanced User" to "View" main menu and
+          renamed it to "Settings"
+
+.changed: A few entry names in "EmuLoader.ini"
+
+.changed: Random game button moved to main tool bar buttons
+          Warning: this feature only works when viewing all games with full filters
+          enabled 
+
+.removed: MAME Mouse / light gun settings from preferences screen
+
+.added: Improvements to the columns profile feature:
+        - Each system can have its own columns profile
+        - Editor improved to allow selecting a profile for each system
+
+.added: Each system can have a different column sort. settings saved in the new "[Columns]"
+        section, "EmuLoader.ini" file
+
+.added: Status bar editor (main menu "View")
+        - the current favorites profile can be found in the button's hint... or you can
+          identify it by the icon :)
+        - status bar is hidden when in full screen mode
+
+.added: All default menu items are in bold font... for multiple items like image types,
+        game icons size, status bar size, etc (main menu and tool bar dropdown menus)
+
+
+
+version 4.9.5.1 change log [September 27, 2006]
+----------------------------------------------
+
+.fixed: Columns Editor was not saving profiles in the correct folder
+
+.fixed: Favorites lists not loading
+
+.fixed: System nodes are visible after applying filters
+
+.fixed: Out of index error when creating MAME based games lists
+
+.fixed: Setting "m68kCore" not being properly read from "mame.ini"
+
+.fixed: Default / custom game settings not being correctly detected (MAME based emulators)
+
+
+
+version 4.9.5 change log [September 26, 2006]
+--------------------------------------------
+
+.fixed: All screens setting in "mame.ini" was not being loaded (resolution, bpp, refresh
+        rate)... mame settings screen
+
+.fixed: System filter not working when using grouped, system or system+grouped view modes
+        ... nobody noticed this!!! ????
+
+.changed: Emulator filename checksum is now MD5
+
+.changed: Directory structure has changed a little bit:
+          - arcade games lists from "resources" to
+             "<frontend>\arcade\" folder (*.el)
+          - favorites games files from "resources\favorites\" to
+             "<frontend>\ini_files\favorites\" folder (*.el; *.ico)
+          - columns profile files from "resources\columns\" to
+             "<frontend>\ini_files\columns\"
+
+.removed: Remaining "MAME legacy" code from the source code
+
+.added: New setting: "Force Quotes in Command Line (WinXP/Vista)
+        It appears that the emulator filename must be surrounded with quotes in some
+        WinXP/2k3/Vista machines (preferences screen, general / miscellaneous tab)
+
+.added: Support for MAME Plus! v0.108u3 (mame settings screen)
+        notes:
+          - hiscore.dat is not supported
+          - "driver_config" is not supported
+
+.added Main CPU info on an external file (ini_files\cpu.ini)
+
+.added: Option: "Filter Games by CPU" (main menu "View")
+        Enable this setting and an edit box will appear at the top of the games list
+        Type a CPU name to filter the games list or select one from the listbox
+        The file "ini_files\cpu.ini" must exist.
+        When enabled, an edit box / listbox will appear at the top of the games list
+        eg.: Z80   (it will show only games that use a Z80 main CPU)
+
+.added: New system: HazeMD
+        all the usual stuff from MAME is supported on this emulator :)
+
+
+
+version 4.9.4 change log:
+------------------------
+
+.fixed: Application crash when searching for games in parental lock editor
+        when "ini_files\catver.ini" wasn't found
+        This file is not required for the editor to function anymore
+
+.fixed: Multi-selection wasn't working correctly
+
+.fixed: Bios entries are not shown in vectors filter anymore
+
+.fixed: Feature "Encrypt File" (parental lock editor screen) was not saving the new file
+        encrypted
+
+.fixed: Slow emulator loading when trying to run games (some systems only)
+
+.fixed: Main menu reappearing when in full screen mode
+
+.changed: Moved from games popup menu to main menu "View":
+          - Show Game Details
+          - Full Screen
+
+.changed: Move "Show Command Line" from main menu "Emulator" to main menu "View" and
+          renamed to "Show Command Line Before Run Game"
+
+.changed: Run game menu items are split into 2 categories (games popup menu):
+          - "Play" -> used to play games with default settings
+          - "Play (Custom)" use to play custom command lines and zinc custom options
+
+.changed: Feature "Refresh Games" renamed to "Scan Games"
+          It is used to set games status of available/missing avoiding the need for
+          create new games list
+
+.changed: Description of the following image types cannot be changed anymore, and they
+          support images in .png format only (indexes 0, 1, 7, 8):
+          - Title Snapshots
+          - Game Snapshots
+          - Select
+          - Versus
+          Located in preferences screen, "General" / "Images" / "Type Settings" tab
+
+.changed: MAME ROMs folders selection (MAME settings screen)
+          From now on, you must add all your MAME roms, instead of just the top folder
+          ... bye bye recursive scan
+
+.removed: Batch files feature
+
+.removed: MAME settings (Legacy), for all MAME based emulators
+          From now on, only latest MAME builds will be officially supported
+
+.removed: Extra Command Line Parameter feature
+
+.removed: Detection of .exe type from the frontend's core (too buggy)
+
+.removed: Game info label from preview image
+
+.added: Images preview popup menu item "Image Details"
+        Info displayed:
+        - Filename with full path
+        - File size in bytes
+        - Zip filename with full path (if image is zipped)
+        - Resolution
+        - Screen resolution (screen aspect ratio)
+
+.added: Games popup menu setting: "Return to Window Mode"
+        Option visible only when in full screen mode
+
+.added: New column: "Save State"
+        Handy, now that hiscore support is removed from MAME
+
+.added: New search patterns for a more precise search:
+          -> Description
+          -> Manufacturer
+          -> Category
+          -> Game Name
+          -> Parent Game Name
+          -> Driver Name
+          -> System Name
+        - "Clear Search List" checkbox, used with "Begin Search" button
+          Disabling this setting, the previous searches are not lost
+        - "Delete Duplicates" button
+          It remove all game entries from the search list that are already added in the
+          protected list (game name + clone name + system)
+        - "Clear" in keywords frame to empty the keywords list
+
+.added: Custom command line is back
+        More complete, easier and intuitive to use
+        You can create cmdline for games, game drivers and systems
+        Set or delete .ini files in games popup menu,
+        "Custom Options" / "Command Line" menu item
+        To execute, use "Play (Custom)" / "Command Line" (games popup menu)
+
+        More info:
+        - this feature can be used with ".exe" / ".bat" files
+          ...do not add quotes in the filename, it will added by the frontend
+        - you cannot set dynamic variables in "additional parameters" like %1 or %s,
+          use "parameters" for that
+          ...but you can add as many extra parameters as you like
+        - use the "Field With Quotes" checkbox to surround the parameter with quotes
+          this is useful for emulators that require game filename between quotes
+        - you can also define a parameter "prefix" and a "sufix" for those emulators that
+          require a specific command before and/or after the actual data
+          ...prefix and sufix cannot be surrounded with quotes
+
+
+
+version 4.9.3 change log:
+------------------------
+
+.fixed: Missing 16x16 sized icons in emulator icons files pack, causing index errors
+
+.fixed: Some "mame.ini" settings were not being written correctly or not at all
+
+.fixed: Icons not not displaying correctly or not at all in games list and status bar
+        while in small icons mode (16x16)
+
+.changed: Moved game icon size settings from view mode tool bar button
+          to "View" main menu
+
+.added: Option "Bold Font In Selected Game" that toggle normal / bold font style
+        in the selected game (preferences screen, appearance tab)
+
+.added: When game snapshots file/folder setting is empty (frontend setting), the path
+        from MAME based emus will be automatically used
+        This feature is used when doing a clean frontend install
+
+
+
+version 4.9.2 change log:
+------------------------
+
+.fixed: Icon size being reset to standard (24x24) while MAMu_ icons is enabled
+
+.fixed: Smooth scroll setting was not being saved in "EmuLoader.ini"
+
+.changed: Options "rotate" / "ror" / "rol" / "autoror" / "autorol" in MAME settings
+          screen split into checkboxes to properly support these settings
+
+.changed: Create a new section in "EmuLoader.ini" for status bar settings
+          named "[StatusBar]"
+
+.changed: Move game documents items from games popup menu to main menu "View"
+
+.removed: Hi-Score column (no point in keeping it anymore)
+
+
+
+version 4.9.1 change log:
+------------------------
+
+.fixed: Effect overlay was being set with full path and extension causing MAME to ignore
+        the setting
+
+.fixed: Typo in "3rd" pass label when creating a MAME games list (was showing "3th"...)
+
+.fixed: Settings in "mame.ini" were being wrongly written as comments if parameter's
+        value is empty
+        eg.: "# resolution0    <NULL> (not set)"
+
+.fixed: Category column was limited to 20 char in length
+
+.fixed: Icon in "Favorites - Profile Editor" main menu option was not being updated
+        after selecting a different favorites profile
+
+.fixed: Error "invalid pointer operation" after using favorites mode
+
+.fixed: ZiNc games could not be executed
+
+.fixed: Icons in games lists were being reset 3 times while MAMu_ icons enabled
+
+.fixed: Some icons were not being properly loaded in a couple screens
+
+.fixed: Audit icons legend screen updated
+
+.fixed: Set custom options and delete custom options were not mounting the correct
+        system path
+
+.added: Support for 16x16 icons in games list is back
+        See view mode tool bar button, "additional settings" for the available icon sizes
+
+.added: Status bar can have 3 sizes, Large (32x32), Standard (24x24) and Small (16x16)
+        See main menu "View" / "Status Bar Size"
+
+.added: Added control type column back
+        Since MAME now output more than one control for several games (-listxml), only the
+        first one is displayed in this column. To see the full list of controls, select
+        "View Game Details" on games popup menu
+
+.added: All possible parameter entries are now supported when reading/writing "mame.ini"
+        files... see MAME "docs\windows.txt" for all valid parameters:
+        "rompath" or "rp"
+        "screen0" or "screen"
+        "resolution0" or "resolution" or "r" or "r1"
+        "aspect0" or "screen_aspect"
+        "full_screen_brightness" or "fsb"
+        etc...
+
+
+
+version 4.9 change log:
+----------------------
+
+.fixed: Clone icons were not being loaded in MAMu_ icons feature
+
+.fixed: A rom filename use the char " & " and it was causing problems to refresh/audit the
+        game "gt103a2". Filenames should not use special chars like " & "...
+
+.fixed: Similar rom paths were not being added to the command line before running games
+        (eg: "c:\mame\roms\neogeo" and "c:\mame\roms")
+
+.fixed: Long names support for save state files (.sta). Filename will be converted to
+        short name before running games to avoid errors in emulator's startup
+
+.fixed: correct stats display at the status bar when re-auditing a game (audit screen)
+
+.fixed: Couple memory leaks in single game audit
+
+.fixed: Frontend is working with a limited account (WinXP/2K3)... out of nowhere!
+
+.fixed: Main screen's status bar panels resized to fit texts
+
+.fixed: Access violation when exiting frontend and ZiNc folders list is empty
+
+.fixed: Memory leak when selecting favorites filter
+
+.fixed: Error when returning an empty value, while reading emulators config files
+
+.fixed: Several coding errors after removing "ListView" view modes
+
+.fixed: Games list wasn't being properly released when switching view modes
+
+.fixed: Several memory leaks when switching between games filters while MAMu_ icons were
+        enabled
+
+.changed: Lots of new columns, making a total of 33. Check it out:
+
+          00 Description
+          01 Year
+          02 Manufacturer
+          03 Audio Channels
+          04 Audio Samples
+          05 Number of Screens
+          06 Screen Type 1
+          07 Orientation 1
+          08 Resolution 1
+          09 Refresh Rate 1
+          10 Screen Type 2
+          11 Orientation 2
+          12 Resolution 2
+          13 Refresh Rate 2
+          14 Screen Type 3
+          15 Orientation 3
+          16 Resolution 3
+          17 Refresh Rate 3
+          18 Screen Type 4
+          19 Orientation 4
+          20 Resolution 4
+          21 Refresh Rate 4
+          22 Driver Status
+          23 Emulation Status
+          24 Color Status
+          25 Sound Status
+          26 Graphic Status
+          27 Cocktail Status
+          28 Protection Status
+          29 Category
+          30 Version Added
+          31 Name
+          32 Clone of
+          33 Driver Name
+          34 Merged
+          35 Play Time
+          36 Played
+          37 # of Players
+          38 Hi-Score
+
+.changed: Games list format changed again. This will be the last time the general
+          format of these files will change. I might add add more data in them later
+          (see docs\el-listformat.txt for more info)
+          This adds full support for MAME 0.107! :D
+
+          -> Section "[info_file]" must be placed at the top on all files
+             mame.el", "zinc.el", "daphne.el", "agemame.el", "pinmame.el"
+
+          -> Section "[bios]" contain all bios available (do not add biossets in here!)
+             it can be placed anywhere in the file (below section "info_file"!)
+
+          -> Create games routine is way faster and the files are more organized :)
+
+          -> ROMs list files are also changed:
+
+             [gamename1]
+             gmtitle=Full Title of The Game 1
+             cloneof=clone_gamename
+             rom1file¬rom1size¬rom1crc¬rom1status;
+             rom2file¬rom2size¬rom2crc¬rom2status;
+
+             [gamename2]
+             gmtitle=Full Title of The Game 2
+             rom1file¬rom1size¬rom1crc¬rom1status;
+             rom2file¬rom2size¬rom2crc¬rom2status;
+
+          -> Game classes are simplified and their indexes are reorganized. Now there are
+             only master, clone and bios classes.
+             No more classic, neo geo, vector and raster classes:
+             -> MAME Master (have / miss)
+             -> MAME Clone  (have / miss)
+             -> MAME Bios   (have / miss)             
+
+.changed: Since number of players info is now extracted from -listxml output, if file
+          "ini_files\nplayers.ini" is found, info from it will be used instead
+
+.changed: Game details screen updated for MAME 0.106u12 and newer
+
+.changed: Refresh games feature rewritten and optimized for speed
+          Full MAME sets with merged clones are scanned a lot faster now... unfortunatelly,
+          it cannot get any faster than this
+
+.changed: Some icons were removed and others renamed ("resources\defaulticons\gameslist\")
+
+.changed: Option "Run MAME Based Emulators After Startup" enabled only on Win9x/Me systems
+          This option is not required on WinXP/Vista as MAME never output garbage in the
+          first run (when redirecting output to a file)
+
+.changed: New icons in "resources\images\toolbars\" folder
+
+.changed: Frontend's default font is now "Segoe UI", size 9. If you do not have this font
+          installed, another font will be used (done automatically by Windows, not EL)
+          Note: Font name, size, color cannot be changed anymore
+          You can find this font RARed in the frontend's binary package
+
+.changed: Splash screen
+          -> New layout and background image. Old layout not supported anymore
+          -> Moved splash screen logo browser from miscellaneous tab to folders/files tab
+          (preferences screen)
+          -> Colors settings are removed (no customization possible)
+
+.changed: Message box and input box background
+          -> File "resources\images\msgbox.png" is used as background image
+          -> Colors settings are removed (no customization possible)
+
+.changed: Major makeover in main menu and popup menus
+
+.changed: Default favorite icon now loaded from "\resources\favorites\default.ico" file
+          ... file "\resources\images\toolbars\favorite_user.ico" removed
+
+.changed: Moved file "resources\parental_lock.el" to "ini_files\" folder and renamed it
+          to "parental_lock.ini"
+          Just move your file to the new folder and rename it to avoid losing your
+          protected list (file format is not changed!)
+
+.changed: Option "Play Game (Custom)" is only for ZiNc custom game options and batch
+          files (MAME based emulators load custom options automatically anyway)
+
+.changed: Feature "Alternate Batch Files" is now called "Batch Files"
+          - Renamed "\ini_files\alternate_batch.ini" to "\ini_files\batch_files.ini"
+          - Entries in "\ini_files\batch_files.ini" changed:
+          - Updated parameter options
+
+            -- old --
+            [system]
+            AlternateBatchEnabled=0
+            AlternateBatchFile=
+            AlternateBatchParameters=5 
+
+            -- new --
+            [system]
+            BatchFileEnabled=0
+            BatchFile=
+            BatchFileParameters=5
+
+.changed: Files "mameinfo.dat", "history.dat" must be placed either in MAME root folder
+          or "<frontend>\ini_files\" folder. EL will search them automatically
+          ... file selection boxes in preferences screen are removed
+
+.changed: Screen top bars replaced by 68x68 transparent images
+
+.changed: Feature refresh games rewritten to fully support all systems.
+          Merged games support only for MAME, AGEMAME and PinMAME
+
+.changed: Set default buttons on several screens (buttons "OK", "Cancel", "Close", etc...)
+
+.changed: Audit system icons reorganized and updated, and a new column added: "System".
+          It displays the system's description of the audited game
+
+.changed: Moved "resources\gameplaytime.el" to "ini_files\" folder and renamed to
+          "gameplaytime.ini"
+          Format is also changed. Use "PlayTime Update" to keep your old playtime list
+
+.changed: View modes renamed and added new ones:
+          - Standard (details mode)
+          - Grouped (standard mode + clones grouped into its parent)
+          - System (standard mode + games grouped by system)
+          - Grouped + System (grouped mode + grouped by system)
+
+.changed: Dozens of routines were simplified and optimized for speed
+          Some others were merged
+
+.changed: Tool bar icons were remade with a different look. Same for filters
+
+.changed: Small icons in games list updated to 24x24 size (16x16 not supported anymore)
+
+.added: Full MAME 0.106u12 ~ 0.107 support
+        Notes: - older builds are still supported. To set emulator default settings
+                 or game settings, use "MAME (Legacy)" menu items and the
+                 normal menus for build 0.106u12 and newer
+               - MAME v0.106 to v0.106u11 have limited supported
+
+.added: Select file for playback / record input feature (advanced user main menu,
+        "MAME / AGEMAME / PinMAME", "Input" sub-menus)
+
+        -> Two new menu options were added (Advanced User / MAME / Input):
+           - Default Input File: Playback/record a .inp file using game name as parameter
+
+           - Select Input File: Opens a screen to select an existing .inp file for
+                                playback/record or to set a custom filename for recording
+
+        -> Notes: - when recording, an edit box is available at the
+                    bottom of the selection screen so you can set a custom filename
+                  - when recording, to use an existing file, clear the edit box at the
+                    bottom of the selection screen
+                  - when recording, setting a custom filename overwrites the selected
+                    input file
+                  - when recording a custom filename, do not use long names (filenames
+                    with spaces and special characters)
+                  - Long names support only for existing .inp files (playback/record)
+
+.added: Sound column now display more options:
+        -> 1 channel : "Mono"
+        -> 2 channels: "Stereo"
+        -> 3 channels: "Stereo + Subwoofer"
+        -> 4 channels: "Quadraphonic"
+        -> 5 channels: "Quadraphonic + Subwoofer"
+        -> 6 channels: "Dolby Digital 5.1"
+        -> 7 channels: "DTS 6.1"
+        -> 8 channels: "THX 7.1"
+
+.added: Hot-key to toggle between favorites and current arcade games filter (Ctrl+F3)
+
+.added: New file "resources\images\el_bk.png" to be used in games list background image
+
+.added: New option: "Show Emulator Version in System Description"
+        Enabled by default, it add the version info of the emulator in description column
+        ("System" and "System + Grouped" view modes)... like so:
+        - enabled : "MAME 0.106u12 (Jul 17 2006)"
+        - disabled: "MAME"
+
+.added: Bios classes for AGEMAME and PinMAME systems
+
+.added: Custom mouse / light gun settings are now saved in "EmuLoader.ini" (preferences
+        screen, emulators tab, MAME)
+        Note: this setting overwrites default MAME settings ("mame.ini")
+
+.added: Favorite profiles can have a custom icon. Icon for profile editor screen MUST be
+        128x128 sized! Just create an icon with the same filename as the profile
+        (not description) and put the .ico in "\resources\favorites\" folder
+        ... see "\resources\favorites\default.ico" for all the require formats:
+        128x128, 32x32, 24x24 (true color "AND" XP/Vista color depths)
+
+.added: More messages at frontend's initialization
+
+.removed: Second MAME binary is not supported anymore
+
+.removed: Custom command line feature
+          Now "batch files" and custom options features are supported
+
+.removed: Icons of all buttons. This fixes a bug in Win9x/Me WinVista systems and
+          improves overall speed when opening screens
+
+.removed: Image types "Custom 2" and "Custom 3". Not needed since description are
+          customizable
+
+.removed: Button "Update Descriptions" since image descriptions are updated automatically
+          when closing preferences screen or selecting another tab
+          (General / Images / Type Settings tab)
+
+.removed: Sequels feature. No one is updating the sequels file anyway
+
+.removed: All "ListView" view modes:
+          - "Large Icons", "Small Icons", "List", "Thumbnails", "Tiles"
+
+.removed: Support for "-listinfo" output, used by old MAME builds
+          Now only XML output is supported
+
+.removed: Custom description / category / font features
+          These features were cause some weird memory leaks that could not be fixed
+          Note that master, clone and preliminary fonts are still supported and were not
+          working at all
+
+.removed: Custom aspect ratio, since a game can have multiple screens with both horizontal
+          and vertical aspects
+
+.removed: Files "bios.ini"; "audio_samples.ini"; "savestate.ini"; "control_types.ini"
+          ("ini_files\" folder) not needed anymore
+
+.removed: General appearance customization (screens color, fonts)
+
+.removed: Menu option "Re-Index Games Files" (advanced user main menu) as it is no longer
+          needed
+
+
+
+version 4.8.2 change log:
+------------------------
+
+.changed: Entries "mame_version", "zinc_version", "daphne_version", "pinmame_version",
+          "agemame_version" in section "[info]" replaced by "version"
+          ("mame.el", "zinc.el", "daphne.el", "pinmame.el", "agemame.el")
+
+.added: Option "Games List Versions" (main menu "View")
+        Information on emulator versions used to create games lists (all systems)
+
+.fixed: Vector games was not being shown in any filter other than "Vectors"
+
+.changed: A few icons in "resources\images\toolbar" folder
+
+.fixed: Favorite games were not being loaded
+
+
+
+version 4.8.1 change log:
+------------------------
+
+.changed: Buttons icons in .bmp format with 2 states: normal / disabled
+          ... "resources\images\toolbars\buttons". This fixes the bad background for
+          some Win9x / WinXP users (Vista still have bugs)
+
+.changed: Unzipped arcades images from "resources\images\controllers.zip" again
+
+.changed: Removed some old code and optimized some functions
+
+.changed: Updated Graphic32 component to latest version 1.8.1
+          ...faster and new image filters
+
+.changed: Renamed "Filters" menu to "Resampler" (main menu "Images") and added some
+          new filters
+
+.added: Reminder message for Custom Game Appearance feature
+        Displays a reminder message after customizing game appearance
+        (description, category, font)
+
+.changed: Frame box "Customized Game Strings" renamed to "Customized Game Appearance"
+          ... preferences screen, general / games tab
+
+.changed: Emulator version info now extract from -listxml output (MAME based emus)
+          ... if info cannot be extracted, the old way will be used (-help output)
+          Note: in emulators setup screen, the info is still extracted from the -help
+                output
+
+.added: Frame box "Control Games List With", listing all supported arcade controllers
+        ... preferences screen, general / miscellaneous tab
+        Devastator II, HotRodSE, SlikStik, X-Arcade tabsheets removed
+
+.added: Menu option "Arcade Controllers Layout" (main menu View) to display the images of
+        all controllers and their keys layout used to control games list in the frontend
+        (Devastator II, HotRod SE, SlikStik, X-Arcade)
+
+.changed: Audit feature. Game name replaced by game title and game name appears in
+          second column (same line as game title)
+
+.fixed: Error in audit feature for games and bios that have "game" / "bios" strings in
+        their titles
+
+.added: Support for 48x48 sized icons in main screen's tool bar buttons
+        Main menu "View" / "Large Tool Bar" (disabled by default)
+
+.changed: A bunch of icons in "images\toolbars" folder were remade and others added
+
+.changed: Library "IconTools v2.01" replaced by a new library called "TExIcon"
+          created by Colin Wilson (http://www.wilsonc.demon.co.uk/index.htm)
+
+.removed: The library "IconTools" is not used by this project anymore
+
+.fixed: Tons of memory leaks caused by "IconTools v2.01"
+
+.changed: Dynamic loading of tool bar icons / large image type icons to save memory
+          and increase speed
+
+.added: New feature: "Scan Not Used Images". It searches for filenames that do not have
+        a corresponding game name in the games list (main menu "Images")
+        Note: only unzipped images are supported
+
+.fixed: Zipped icons were not being properly handled in "search missing icons" feature
+
+.added: New feature: "Scan For Missing Images". It searches your entire games list for
+        games that do not have a screenshot (main menu "Images")
+        Note: both unzipped and zipped images are supported
+
+.changed: Old MAME builds that use "-listinfo" output are automatically detected when
+          creating new MAME games lists
+
+.removed: Check button "Use XML" from emulators setup screen / MAME tabs
+
+.fixed: Splash screen background disappearing when switching between EL and other apps
+
+.fixed: A few actions were not being properly executed when controlling games list with
+        arcade controllers (most noticeable PG_UP / PG_DOWN)
+
+.added: New actions to arcade controllers (when feature enabled)
+        There is also a change in the actions layout for all controllers (see main menu
+        "View" / "Arcade Controllers Layout")
+
+.changed: Game documents feature rewritten to merge all docs functions and to fix several
+          memory leaks when using automatic game info
+
+.added: "Show All" in "Game Documents" games popup menu item
+        Use this option to view all docs at once from the selected game (game info,
+        history, game driver info, faq)
+        Note: this is not the same as automatic game info!
+
+.fixed: Image type tool bar icons were not being set at startup
+
+.fixed: Tool bar button systems was not included in [ToolBar] section ("EmuLoader.ini")
+
+.changed: moved sections "[MAMu_]", "[Audit]" to a new file: "\ini_files\el_extras.ini"
+          since those section are updated only when using certain features
+          Also, added section "[GameInfo]"
+
+.changed: FMOD always use "Windows Multimedia Output" driver for playback now
+          ... this output gives you the best audio quality anyway :)
+
+.fixed: A few bugs when running EL on Windows Vista (betas)
+        ... still, a bunch of visual bugs due Vista's new GUI that will not be fixed until
+        "Delphi Longhorn" is released in 2007
+
+.changed: All updates up to MAME 0.105u3 are supported
+
+.changed: New about screen image ("resources\images\logo\"), new arcade controllers layout
+          images ("resources\images\")
+
+.added: new section in "docs\el-readme.txt" named "Useful Links" with some interesting
+        articles about advanced frontend usage and integration with other apps :D
+
+
+
+version 4.8 change log:
+----------------------
+
+.added: Software compiled with new FMOD v3.7.5 and added "fmod64.dll" file so audio files
+        can be played in Windows 64-bit editions
+
+.fixed: Feature "Record Sound" in "Advanced User" / "MAME" section was not working
+
+.fixed: Folder of "-wavwrite" feature in MAME was not being set correctly
+
+.fixed: AV error when closing the audit screen while games are being audited
+
+.changed: File "docs\el-tips-tricks.txt" updated
+
+.changed: Some minor modifications
+
+.changed: Tab "Unsupported" renamed to "Old Builds" (MAME settings screen)
+
+.changed: Updates for MAME v0.104u3
+          - Thread Priority (MAME settings screen, Miscellaneous tab)
+
+.added: New file "ini_files\savestate.ini"
+        ... guess what it does :)
+
+.added: New feature: "Load Save State" ("Advanced Users" main menu, MAME based emus only)
+        Load a save state before starting a game, if available
+        Be aware, games that do not have proper save state support may malfunction due
+        to MAME limitations, not caused by this frontend!
+        
+        WARNING: MAME "autosave" will be disabled if loading a save state manually
+                 (disabled in command line only, not in "mame.ini")
+
+.added: New folder with imagaes "resources\images\topbars"
+        ... used in some screens
+
+.changed: Section "[bios]" in "ini_files\bios.ini" file now display bios descriptions
+          as it should be from the start. This doesn't prevent EL from functioning but
+          you will see "bios" as a description for all bios sets instead of real
+          descriptions
+
+.added: Default bios names and selected bios names stored in "ini_files\biosset.ini" file
+        ... see next item below for more info :)
+
+.changed: Bios sets feature rewrite
+          - Each system with multiple bios sets can have a custom selection, by using a
+            new screen "Bios Sets" accessible from "Advanced User / Bios Sets / Settings"
+            main menu (remember to activate this feature by selecting "User Defined"
+            menu item)
+          - Systems with only one bios are excluded from this feature (obviously...)
+          - This feature is used only when executing games for MAME based emulators
+            (MAME, AGEMAME, PinMAME)
+          - Menu item "System Bios" removed (now obsolete)
+          - When in "Bios Sets" screen, bios sets shown in bold font are the default sets
+
+          Make sure to recreate your MAME based games lists so this feature can function
+          properly!
+ 
+          WARNING: Do not delete "default_bios" / "selected_bios" entries in
+                   "ini_files\biosset.ini" or this feature will not work properly.
+                   ...as a matter of fact, do not mess with this file at all :)
+
+.changed: Bios dropdown button in "MAME Settings" replaced by a listview for easy access
+          - All bios sets are shown, even single bios systems
+          - Default bios sets are shown in bold font
+
+.added: New Option: Display Bios Set "User Defined" Warning (Preferences screen)
+        To remove the "annoying" message after customizing bios sets ;)
+
+.fixed: Username and user filename in favorites feature were not being properly handled
+        causing some bugs when adding/deleting games in favorites lists
+
+.changed: Renamed "Toggle Expanded / Closed" setting to "Show Expanded Items"
+          ... treeview settings menu option / view mode button in tool bar
+
+.fixed: Error when all groups are closed in ListView
+        (large, small, list, thumbnails, tiles view modes)
+
+.fixed: Long folder/filenames in ZiNc was not properly supported
+
+.added: GUI settings for mng playback (feature not implemented yet!)
+
+.changed: Sound clips playback and recording now use the sound clips folders setting
+          (Preferences screen, "Folders / Files" tab)
+          - The setting "MAME Wave Write" has been removed
+          - Record sounds is for MAME based emus only (MAME / AGEMAME / PinMAME)
+          - when recording sounds, if a .wav file already exists, Emu Loader will
+            try to create a new filename with additional numbering, up to "9999"
+            (format "gamename0019.wav")
+
+.added: MNG recording (MAME based emus)
+        - use "MNG Videos" in preferences screen "Folders / Files" tab to set folders
+        - in a future release, these folders will also be used for mng playback
+        - to record a video, select "Advanced Users" / "MAME" / "Record Video" main menu
+
+
+
+version 4.7.6.2 change log:
+--------------------------
+
+.fixed: Error when saving custom game options (default MAME ini not being defined)
+        ... this error was very hard to find. I guess this was another code that got
+        corrupted
+
+
+
+version 4.7.6.1 change log:
+--------------------------
+
+.fixed: Key strokes not working when enabling an arcade controller (Preferences screen)
+
+
+
+version 4.7.6 change log:
+------------------------
+
+.fixed: Default favorites username was being set incorrectly as "default.ini"
+        The extension is always ".el"
+
+.fixed: Games that require bios not running due to a bug in the path scanning
+
+.fixed: Error messages "Cannot open file" and errors when saving emulator configurations
+        and games custom options due to emulator filename not being selected
+
+
+
+version 4.7.5 change log:
+------------------------
+
+.fixed: Sorting by manufacturer not working
+
+.added: New File "<frontend>\ini_files\control_types.ini" containing a list of all
+        control types listed in -listxml output (MAME based emulators)
+
+.changed: Games list files (*.el) are updated to support "ini_files\control_types.ini"
+          Unfortunatelly you will have to recreate your games lists... except for
+          Daphne games
+
+.fixed: Control type not correct for lots of games
+
+.fixed: Games tooltip hints not displaying the correct string in columns other than
+        description
+
+.fixed: A few more memory leaks caused by the IconTools component... there are a bunch
+        of leaks caused by this component that I've been unable to fix :_(
+
+.fixed: Game play time and times played not being updated after playing games
+
+.fixed: Read-only checks on files before updating and/or saving to prevent
+        crash errors
+
+.added: Option: "Display Read-Only Message" (preferences screen)
+        A warning message is displayed when atempting to write on an existing file
+        that is marked as read-only (disabled by default)
+
+.fixed: Error when setting a MAME emulator in the second MAME tab (Emulator Setup)
+        When f using only one binary, you must set it in the first MAME tab
+
+.fixed: Feature "Delete gamename.zip File" was not deleting AGEMAME games
+
+.changed: Unique sound clips folder for each system (preferences, "Folders / Files" tab)
+
+.changed: Background images for messages and input box screens
+
+.changed: Buttons icons (<frontend>\resources\images\toolbars\buttons)
+
+.changed: Removed the "flat" state of all buttons
+
+
+
+version 4.7.4 change log:
+------------------------
+
+.fixed: Check for duplicates in "Alternate Batch Files" feature (read/write/add)
+
+.added: Support text files (.txt) in open dialog's extension filters
+
+.changed: Alternate batch files support on all emulators
+
+.added: Alternate batch settings saved on "<frontend>\ini_files\alternate_batch.ini"
+
+.added: Custom screen for alternate batch feature
+        (main menu "Advanced User" / "Alternate Batch Files")
+
+.removed: Option "Windows XP Header Style" in Preferences screen
+
+.added: Custom colors for splash screen texts and progress bar
+        (preferences screen, appearance tab)
+
+.fixed: Tons of memory leaks are gone (FastMM4)
+        Thanks to Christophe De Vocht for letting me know about this library
+        Not fixed memory leaks caused by "TCoolVirtualListview" and "IconTools"
+        components... :_(
+
+.fixed: MAME based games list files (resources\*.el) being deleted if user
+        cancel the create games list
+
+.added: Support for MAME v0.100u4
+
+
+
+version 4.7.3 change log:
+------------------------
+
+.fixed: Feature "Extra Command Line Parameters" in Preferences screen, Emulators tab
+        was working only with MAME games
+
+.fixed: Relative paths not working when searching games .zip files (bug introduced
+        in v4.7.2)
+
+.fixed: Feature not working: "Fill All Clone Columns"
+
+.changed: Renamed "Fill All Clone Columns" to "Fill All Clone Entries"
+
+.fixed: Full .ini path not showing in "MAME Settings" screen
+        ("Read Ini File" button's hint)
+
+.changed: Export games list have more output options
+
+.added: Audit support for all MAME based emulators (MAME, AGEMAME, PinMAME)
+        Each system has its own audit menu options
+
+.fixed: MAME games not auditing correctly if a game of different system was selected
+        before starting the audit
+
+.changed: Decryption is not used anymore when adding games to parental lock. This also
+          prevents breaking the password inside the parental lock file
+
+.fixed: Password not being set when using "Parental Lock Editor", when a password is
+        already created
+
+.fixed: Error when using "Save To HTML" menu options in audit screen
+
+.fixed: Some bugs related to the parental lock feature
+
+.changed: Several improvements to "Parental Lock Editor" screen...
+
+.fixed: Error "File is being used by another process" when trying to extract version
+        info from emulator binaries
+
+.added: Option "Import Games List" in "Parental Lock Editor"
+        Use this new button to import an entire games list to the parental lock list
+        (advanced users only)
+
+.fixed: Error when reading paths surrounded by quotes. This also fixes ROM search when
+        running games and scanning for audio samples.
+        The following mame.ini entries are fixed:
+         -> rompath, inipath, samplepath, ctrlr_directory
+
+.changed: Moved all "advanced user" settings to a new tabsheet called "Advanced User"
+          (preferences screen, "General" tab)
+
+.changed: Favorites Manager is now called "Favorites - UserName Editor"
+
+.changed: Default profile entry removed from "<frontend>\ini_files\favorites.ini" file
+
+.added: Multiple profiles can use the same favorites file
+
+.changed: Screen "Favorites - UserName Editor" updated, optimized and bugs fixed
+
+.fixed: Info was not being displayed for certain games in "Game Documents" and
+        "Automatic Game Information" features
+
+.changed: Unsupported settings in "mame.ini" of newer MAME versions are separated in
+          a new tab called "Unsupported" (MAME Settigngs screen)
+
+.fixed: Read/write errors in MAME Plus! ini files 
+
+
+
+version 4.7.2 change log:
+------------------------
+
+.fixed: MAMu_ icons are displayed in tiles view mode (stretched to 48x48)
+
+.changed: New file: "zinc.ini". It's a list of ZiNc games and its driver names
+          (required to use ZiNc)
+
+.added: Support to create custom driver options for ZiNc drivers and run games with
+        these settings
+
+.added: menu option: "Emulators Versions" in "View" main menu, to display the version
+        info of all emulators in use
+
+.fixed: Games popup menu option "Delete Audio Files" was not poiting to the correct
+        folder before deleting audio files
+
+.fixed: Load/save function in "MAME Settings" screen (emulator setup and games custom
+        options) was not setting to the correct "mame.ini" file, according to the
+        selected system (MAME, AGEMAME, PinMAME)
+
+.fixed: The initialization filename (.ini) of MAME based emulators was not being
+        correctly set in the read/write functions (MAME Settings screen)
+
+.updated: Added missing settings for MAME Plus! (MAME Settings screen)
+
+.changed: All extra initialization files moved to a new folder: "<frontend>\ini_files\"
+          The following files must be moved to this new folder:
+          - catver.ini
+          - nplayers.ini
+          - favorites.ini
+          - sequels.ini
+          - hiscore.dat
+          - GameDescription.ini
+          - GameCategory.ini
+          - GameFont.ini
+          - daphne.ini
+          - zinc.ini
+          - bios.ini
+          - biosset.ini
+          - controls.ini (support not implemented for this file yet! but it will be...)
+
+
+
+version 4.7.1 change log:
+------------------------
+
+.fixed: MAMu_ icons was not malfunctioning when switching between view modes and when
+        toggleing "Show Large Icons" in "TreeView Settings"
+
+.fixed: favorites lists were not being loaded when switching to favorites view
+
+.fixed: game selection was not being properly handled in "large icons", "small icons",
+        "list", "thumbnails", "tiles" view modes
+
+.fixed: error in load/save routines in ZiNc settings screen
+
+.changed: ZiNc config files are now stored in EL's directory tree ("resources\zinc_cfg\")
+
+.fixed: Game .zip file was not being search when using custom settings (ZiNc games)
+
+
+
+version 4.7 change log:
+----------------------
+
+.added: "Display Total Images" (images tool bar button)
+        enable this so EL can scan all images of the selected game and display a label
+        in the format "01 of xx"
+        This scan is made in real-time. You can now dump the file "images.el"!! :)
+
+.added: "Load 'No Thumbnail' Images" option-> load a no image instead of leaving it blank
+        when in thumbnails mode (it uses more memory!). Max size is 90x90 pixels
+
+.added: Button "Exit" in MAWS browser panel
+
+.added: New "Special Effects" button in images tool bar with the following options:
+        - all image special effects from the preferences screen:
+          "Stretch / Stretch Larger / Aspect Ratio / Fixed Aspect Ratio / Transparency"
+        - "Show Info" -> show/hide the filename and resolution info text
+
+.added: Image info in the top left of the preview area
+
+.added: Settings for the new image info text (Preferences screen, Images tab)
+
+.changed: renamed all MAGE strings to AGEMAME
+
+.changed: Image types selector buttons (main toolbar and images tool bar) is now grayed
+          out when images is disabled
+
+.fixed: improved and fixed a few bugs in the initial setup when doing a clean install
+
+.removed: Games Legend screen (info is not "that" useful!)
+
+.removed: Images "special effects" box from Preferences screen
+
+.removed: Option "Minimize Frontend" (frontend ALWAYS minimizes before running games now)
+
+.changed: updated game custom command line / driver custom command line. Every system has
+          a folder now:
+          -> MAME    (customcmd\mame)    / (drvcustomcmd\mame)
+          -> ZiNc    (customcmd\zinc)    / (drvcustomcmd\zinc)
+          -> Daphne  (customcmd\daphne)  / (drvcustomcmd\daphne)
+          -> AGEMAME (customcmd\agemame) / (drvcustomcmd\mage)
+
+.changed: Format of custom appearance .ini files updated to support multiple emulators
+          Now there are 4 sections: [mame], [zinc], [daphne], [agemame]
+          Games must be placed on their correct section (in case a game have the exact
+          same name, but are from 2 different emulators
+        
+          -> "CustomDescription.ini" ---------<
+             [mame]
+             aquarush=Aquarush
+             aquarush_custom=Aquarush game desc (for MAME)
+
+             [zinc]
+             aquarush=Aquarush
+             aquarush_custom=Aquarush game (for ZiNc)
+
+          -> "CustomCategory.ini" ---------<
+             [mame]
+             aquarush=this game is coool and its for MAME
+
+             [zinc]
+             aquarush=this game is dabomb and its for ZiNc
+
+          -> "CustomFont.ini" ---------<
+             [aquarush¬mame]
+             Name=Tahoma
+
+             [aquarush¬zinc]
+             Name=Courie New
+
+.added: Support to run MAME games thru batch files (.bat), with a new feature called
+        "Alternate Batch Files" (Preferences screen, Emulators / MAME tab). This is for
+        advanced users only and only works with MAME games. Also, this feature is
+        intended to be used with Johnny5 Viewer
+
+.added: new file selection: "Alternate Batch File" (Preferences screen, Folders / Zip
+        Files tab). You need to select a .bat file before using "Alternate Batch Files"
+        feature
+
+.fixed: Frontend freezing if clicking button OK when emulator not found
+        ("Emulator Setup" screen)
+
+.fixed: mameinfo.dat and history.dat are now part of the frontend (Preferences screen)
+
+.removed: mameinfo and history read/write support from mame .ini files
+
+.fixed: Error "menu index out of range" when trying to run games, due to missing
+        "ctrlr" entry in "mame.ini"
+
+.fixed: Error when renaming and deleting files inside .zips
+
+.fixed: Verification of "ApplicationEXE.manifest" if filename of frontend's binary
+        is renamed by the user (WinXP themes only)
+
+.fixed: Error when unzipping files if the "temp" folder does not exist
+
+.fixed: Access violation when trying to re-audit a game (audit screen)
+
+.fixed: Selected game index does not reset anymore after adding a game into
+        parental lock, when parental lock is enabled
+
+.fixed: Dozens of preview images fixes due to the new Graphics32 version 1.7.1 :D
+
+.fixed: A few features were not working when running games
+
+.fixed: Error when total play time exceeds a 32-bit integer value (+ 2147483647)
+
+.fixed: Updated games filter to include the new source code filenames of
+        Sega System 16, System 18 and System 32
+
+.fixed: Megatons of minor bugs (both internal and visual)
+
+.fixed: MAMu_ icons works on Windows 9x system without any problems now
+        ...no more "Cannot Write TImageList To Stream" error
+
+.fixed: Error when extract file properties
+
+.fixed: Error when trying to save a file when a directory do not exist
+        Directories are automatically created now
+
+.change: Temporary folder moved to "frontend\temp"
+
+.change: All temporary files are created in the new temporary folder
+
+.change: Game size info merged into games list files
+
+.change: All games list files (.dat) merged into one big file and the extension
+         is renamed to ".el", except images and icons
+
+.change: New filename system. I recommend you to NOT edit those files manually...
+         unless you know what you're doing:
+         - "mame.el" -> MAME games list
+         - "mame_roms.el" -> MAME ROM files list
+         - "mame_samples.el" -> MAME sample files list
+         - "gameplaytime.el" -> times played and total play time of games
+         - "zinc.el" -> ZiNc games list
+         - "daphne.el" -> Daphne games list
+         - "agemame.el" -> AGEMAME games list
+         - "agemame_roms.el" -> AGEMAME ROM files list
+         - "cgames.el" -> custom games list (I give no support on this file!)
+         - "parental_lock.el" -> password protected list of games
+         - "default.el" -> default favorites list of games (all systems)
+
+.change: Core completely rewritten
+         - Details view mode now uses the same component as grouped tree
+           (Virtual TreeView)
+         - Entire games list is loaded only once
+         - "TreeView Settings" feature (view mode) now works with details view mode
+         - Custom description for image types
+         - Standard ListView replaced by CoolVirtualListView from Jim Kueneman
+         - All icons, except MAMu_ icons, are 24-bits (Win9x) and 32-bits
+           (WinXP / WinVista)
+         - Small icons (16x16) converted to 24x24 size, except games list icons
+
+.change: Column size and position work again in details view mode
+
+.change: Replaced the label progress by a real progress bar (status window)
+
+.change: Renamed items:
+         - "Grouped Mode" to "Grouped Tree"
+         - "Big Icons" to "Large Icons"
+         - "Grouped Mode Settings" to "TreeView Settings"
+
+.change: Lots and lots of visual updates in all screens
+
+.optimized: Entries and sections in "EmuLoader.ini" file
+
+.change: Frontend icons are merged into one folder and they all have descriptive names
+
+.change: Resized "NoSnapshot" file and all image types use the same image
+
+.change: "picture(s)" labels renamed to "image(s)"
+
+.change: Removed 8 chars limitation from name and clone columns
+
+.change: Reduced support to two (2) MAME binaries
+
+.change: Tool bar buttons moved to "Advanced Users" main menu, "MAME" section:
+         - "Save MAME to Wav"
+         - "System Bios"
+         - "Controllers"
+
+.change: File "gameplaytime.el" format changed to support multiple emulators
+
+.change: Favorite lists format changed to support multiple emulators
+
+.change: Sound clips for other systems must be placed into sub-folders of main sound
+         clips folder: "zinc", "daphne", "agemame"
+
+.change: MAMu_ icons are dynamically loaded. Icons will be loaded while scrolling the
+         games list. Many thanks goes to "Christophe De Vocht", coder of the great
+         EasyMAME frontend. Without his help this would never be done!
+
+.change: Game snapshot folder/zip file in Preferences screen for MAME and AGEMAME
+         emulators are for frontend usage only. All snaps folders/zip files information
+         are saved in "EmuLoader.ini". If you want to assign a snapshot folder for
+         these 2 emulators you MUST do it in "MAME Settings" screen
+
+.removed: Folder "resources\temp"
+
+.removed: A bunch of unused source codes and a lot of old and unused memory variables
+
+.removed: Download picture types. Use "MAWS Game Info" for viewing
+
+.removed: File "ParentalLock.pwd" (password is merged in "parental_lock.el" file)
+
+.removed: Extra "no snapshot" files
+
+.removed: Option: "Verify Emulator CRC32 Checksum". Enabled by default
+
+.removed: Folder "images\toolbar_xp"
+
+.removed: Option: "Hide Navigation Panel" (Preferences screen, Images tab)
+
+.removed: Option: "Create MAMu_ Icons List" (games popup menu)
+
+.removed: Option "Rename ROM File" (audit games), due to .Zip files being corrupted
+
+.removed: Emulators selection button in buttons toolbar
+
+.removed: Option "Recursive Folders"
+
+.optimized: Input box background image and window layout
+
+.optimized: Amazing speed-ups and optimizations of preview images display due to
+            Graphics32 v1.7.1 and GraphicEx II unofficial
+
+.optimized: Sound clips support have improved due to new FMOD v3.74
+
+.optimized: Create games routines
+
+.optimized: Game filters selection
+
+.optimized: Unzip files are faster
+
+.optimized: Frontend icons load process
+
+.optimized: Games view modes
+
+.optimized: Automatic scan of sub-folders when searching for games files
+            (except ZiNc and Daphne)
+
+.added: Option: "Fixed Aspect Ratio" (images tool bar, "Special Effects" button)
+        Resize image for a real aspect ratio. Mimic MAME's hardware stretch
+        "Aspect Ratio" must also be enabled!
+
+.added: Option: "Multiple Games Selection" (Preferences/Games). Use this to select
+        and add multiple games to parental lock at once or to add/delete multiple
+        games to/from favorites lists. Warning: Avoid enabling this feature for
+        normal frontend usage though
+
+.added: All updates for latest MAME including MAME Plus! (MAME Settings screen)
+
+.added: New image filter: "Draft" (same as Linear but it seems to be faster)
+
+.added: Support for newer compression specs of .gif;.jpg;.png images (zlib v1.2.2)
+
+.added: New column: "Hi-Score". Display if a game has support for high-scores, based
+        on "hiscore.dat" file.
+        note: only master games are scanned due to performance issues
+
+.added: Shift+left mouse click select previous image type
+
+.added: Support for ZiNc emulator
+        - merged games are NOT supported
+        - fill all columns with data (requires a MAME games list already created)
+        - only one emulator is supported
+        - support for long folder names
+        - field "merged" is used to store the number of the game so EL can run it,
+          based on ZiNc's internal index
+        - Default emulator configuration is saved in "zinc_el.cfg", ZiNc's main folder
+        - Support for settings in one line or in multiple lines (one setting per line)
+        - Audit feature is NOT supported
+
+.added: Support for Daphne emulator (laserdisc emulator)
+        - columns are empty because Daphne have only description and game name info
+        - merged games are NOT supported
+        - "DaphneLoaderInfo.ini" file required to create games list correctly
+        - only one emulator is supported
+        - Frame files must have the same name as its game name
+        - Audit feature is NOT supported
+        - Real laserdisc players are not supported yet
+
+.added: New games view modes. Now you have the following view modes to choose from:
+        - large icons (same as the old big icons)
+        - small icons
+        - list
+        - details
+        - thumbnails (unzipped images only... PNG format only)
+        - tiles
+        - grouped tree (same as the old grouped mode)
+        - group list by...
+
+.added: New group view feature: "Group List By" (view mode toolbar button)
+        This is a whole new way to group items. In the "Group List By" menu you will
+        find a bunch of options to choose from. Give it a try, I know you'll love it :D
+        Note that this has nothing to do with the already available grouped tree
+        (previously known as "grouped mode"), and it only works with the following view
+        modes supported: large icons, small icons, list, thumbnails and tiles
+
+.added: New option: "Re-Index Games File" (Advanced User menu). Fix bug if games are not
+        being grouped correctly ("grouped tree" view mode only)
+
+.added: New picture types (based on CrashTest's classifications), making a total of
+        14 image types (including 3 custom types):
+        - Select
+        - Versus
+        - Wallpapers
+        - Hardware
+        - Custom 1
+        - Custom 2
+        - Custom 3
+
+.added: Preferences options for ZiNc (Preferences screen, Emulators / ZiNc tab):
+        - "Break Settings in Config Files": separate each setting in "el_zinc.cfg" file
+        - "Use MAME Games Info": fill columns that don't have data (based on MAME)
+        - "Extra Command Line Parameters": run ZiNc with unsupported parameters
+
+.added: Images toolbar browser with following buttons with several buttons:
+        - Previous image
+        - Next image
+        - Previous image type
+        - Next image type
+        - Preferences and Sepcial Effects
+        - Image type selector
+
+.added: New Delphi components:
+        - IconTools v2.01 from Jan Peter Stotz: It's a replace for the very old and
+          very buddy built-in TIcon component from Borland Delphi. It makes possible to
+          load icons at any size, detect how many icons a .ico has, detect color depths
+          of every icon and even if an icon has alpha-channel
+        - madExcept v2.7g (madCollection 2.7g): Errors manager. Win9x will never
+          freeze again!
+
+.added: "Tool Bar Editor" / "Images Tool Bar Editor" menu items (Advanced User menu)
+        Hide buttons you don't want or the entire tool bar
+
+.added: Dozens of new visual customizations for games lists
+
+.added: Preliminary support for more speaker systems settings.
+
+.added: "Reload Icons" (MAMu_ icons) -> reload icons to update changes you may have
+        made in gamename.ico files
+
+.added: Each supported emulator can have its own set of image folders / zip files
+        (Preferences screen, Folders / Zip Files tab). Just select the system you want
+        and set the folder or zip files for each image type
+
+.added: Preferences options for Daphne (Preferences screen, Emulators / Daphne tab):
+        - "Don't Create Log File": don't send info to server (v99.6 and newer)
+        - "Extra Command Line Parameters": run Daphne with unsupported parameters
+
+.added: "Games List Not Found" (Preferences screen, Miscellaneous tab). What action
+        must be taken when you have an emulator setup in the frontend, but the games
+        list is not found:
+        - "Ask" -> always ask if you want to create the list or not
+        - "Auto-Create" -> create the list without asking the user
+        - "Skip" -> do not create the games list and do not ask the user
+
+.added: "New Binary (Preferences screen, Miscellaneous tab). What action must be
+        taken when you a new emulator binary is found (different checksum):
+        - "Ask" -> always ask if you want to create the new list or not
+        - "Auto-Create" -> create the new list without asking the user
+        - "Skip" -> do not create the new list and do not ask the user
+
+.added: "Re-Index Games List (Preferences screen, Miscellaneous tab). What action must
+        be taken when creating a MAME games list:
+        - "Ask" -> always ask if you want to re-index the games list
+        - "Auto-Create" -> re-index the games list without asking the user
+        - "Skip" -> do not re-index the games list and do not ask the user
+
+.added: "Use Emulator" (games popup menu). Select what emulator you want to use
+        (MAME only)
+
+.removed: DOS MAME Support
+
+.changed: extra command line parameters tool bar button to include all systems
+
+.fixed: Error when enabling parental lock without first creating the protected games
+        list, and hitting the cancel button while in parental lock editor
+
+.fixed: "Random Games Preview" feature had a few bugs due to changes in latest MAME
+
+.fixed: the random games preview's warning panel was not being shown after a game
+
+.removed: Options from random games preview feature:
+          - "Display Warning Message": The initial message is always shown when enabled
+          - "Display Warning Panel": The panel cannot be hidden anymore, so you can know
+                                   that this feature is enabled!
+
+.changed: Frontend guide file updated (see "el-quick-setup-quide.txt")
+
+.fixed: Image preview reload after exiting "MAWS Game Info"
+
+
+
+What's New - [Version 4.6.4]
+----------------------------    
+Tuesday, September 28, 2004 
+
+Fixed
+
+1. When in grouped mode with a background image enabled, after sorting a column, the gray background color does not blend with the image background so, this gray background color is now disabled when an image background is being used
+
+2. Bug when creating games list in Windows 9x systems (see addition #4 for more info)
+
+3. A couple of input query boxes from Windows were still being used (favorites manager screen)
+
+Changed
+
+1. Moved arcade controllers from Preferences screen back to buttons toolbar in main screen (special request)
+
+2. All temporary files are created / unzipped in a new folder, "resources\temp", instead of the Windows temp folder. Please do not delete this folder
+
+3. Updates in WinXP toolbar icons
+
+Removed
+
+1. Folder "help" since the frontend is now English only. File "emuloader.chm" must be placed in frontend's main folder now
+
+Added
+
+1. New audit feature: "Not Used Files"
+Check this option to list all files present inside gamename.zip that are not used by the game in question
+Note that this only works for non-merged games, and it only list files from the actual gamename .zip file, not parent gamename files. Also, all files are listed at the bottom of the game's node
+... for MAMu_ :D
+
+2. New feature: "Delete All Clones Snapshots" (pictures popup menu)
+Use this to delete game snapshots of all clone games of the selected master game. It works for zipped and unzipped files, main picture and extra pictures
+
+3. New data in Game Information screen: "Samples File" and "Game Files"
+The Sample File field shows the .zip filename of the external audio samples that the game plays, and the Game Files tab shows the complete list of the game ROMs / CHD (name, size, CRC32/MD5 checksums)
+
+4. New option: "Windows 9x Fix" (main menu "File")
+If using WinMe / Win98 / Win95 and you are getting an error when creating a games list, make sure to check this option
+Notes: 
+  - when doing a clean install, this option is automatically checked on Win9x systems
+  - on WinXP this option has no effect
+  - if you don't get any error in Win9x systems, it's recommended not to enable this option
+
+5. Cancel unzipping MAMu_ icons when creating the list of game icons (hitting ESC key)
+Note that the feature will not be canceled, and the icons that are already unzipped will still be used
+
+6. Support for the file "nplayers.ini" created by Nomax
+A new column has been added, displaying the number of players for each game. Make sure to place the file in the frontend's main folder (like catver.ini file).
+For updates go to http://www.arcadebelgium.be/nplayers/
+
+7. Input box and query input box screen now have a graphic background, just like the messages window
+New image required: "resources\images\InputBoxBackground.jpg"
+ 
+    
+What's New - [Version 4.6.3]
+----------------------------
+Saturday, August 23, 2004
+
+Changed
+
+1. Title snapshots and game snapshots links from MAWS updated
+
+2. Frontend update to MAME 0.86, including "MAME Plus!" support
+
+3. New component used: "jkSpinEdit"
+This component has been completely recreated and now the up/down buttons support the current Windows XP theme
+
+Added
+
+1. When downloading a game snapshot of any bios, the new "http://www.mameworld.net/maws/img/shots/hardware/gamename.png" link is used instead of the game snapshot link
+
+2. Two new options (Preferences screen, MAME tab):
+   - Extract MAME Data (MS-DOS Box)
+   - Run MAME (MS-DOS Box)
+These options just set the appearance of the DOS box, if you don't want to see them when running MAME.
+Warnings:
+- Use this ONLY with the Win32 command line version of MAME (main build)
+- Never use "minimized" and "hidden" states when running games in a window or the game window will also be affected
+- All operations are affected by this new feature (extract version, run games, run MAME binaries, create games list and possibly more)
+ 
+    
+What's New - [Version 4.6.2]
+----------------------------
+Saturday, August 14, 2004
+
+Fixed
+
+1. ROM names were not being handled correctly
+
+2. CRC32 checksum of merged games were not being handled correctly when refreshing games
+
+Changed
+
+1. All options in MAME Configuration screen can be used when creating custom settings for games, including "MAME Plus!" and "No Name MAME" builds :)
+
+2. When using "-listxml" to create a games list, the driver information is now extracted directly from this output (MAME 0.85 only!), making the "-listdetails" output needed only for older MAME versions that still use the old "-listinfo" output to create the games list
+
+Removed
+
+1. A few duplicated routines (merged into large ones)
+
+Optimized
+
+1. All data extracted from MAME listxml / listinfo output are correctly decoded (HTML tags)
+
+2. Read/write routines of MAME ini files and custom game ini files
+
+3. Extract controllers mapping list
+
+Added
+
+1. All new options from MAME 0.85
+
+2. Menu option: "Generate Sequels File" in "Advanced User" main menu
+Use it to create a "sequels.ini" file based on the "series.ini" file maintained by "PaolinoF15"
+
+3. Support for the new ctrlr files (.cfg extension and XML format)
+
+
+What's New - [Version 4.6]
+--------------------------
+Thursday, June 30, 2004
+
+Fixed
+
+1. Create games list was not working for MAME versions 0.84 and up ("-listinfo" removed from the emulator)
+
+2. Missing leading zeroes in CRC32 checksums (to always force 8 characters)
+
+3. All features that require the file "resources\ROMs.dat" will not be executed if file not found (refresh, audit, run game)
+
+4. Access violation when auditing a ROM with no given CRC32 and/or disk image with no given MD5
+
+5. When starting EL in full screen, the main menu was reappearing again after calling popup menus or opening screens
+I finally got rid of this nasty bug! :)
+
+6. Error when downloading game pictures from MAWS, if the destination directory didn't exist
+
+7. Several bugs in grouped mode
+
+8. Columns Editor works 100% now, for both normal and grouped lists :)
+Note: the same profile is used for all view modes
+
+9. Description column size can now be set in columns editor screen, but the column cannot be moved
+
+10. Windows XP interface style will not be activated is "EmuLoader.exe.manifest" file is not found (even if themes are enabled)
+
+Changed
+
+1. A bunch of texts (menus, messages)
+
+2. Each emulator now have its own section in "EmuLoader.ini"
+
+3. Sound clips folder now shares MAME wave write feature
+All wave outputs from MAME will be recorded in the same folder as sound clips
+
+4. For MAME v0.84 and up, the "-listxml" output will be used directly (file "xml2list.exe" is NOT required)
+Older versions of the emulator must use the old method though
+
+5. Reduced audio formats to 3 (.mp3; .wav; .ogg)... sound clips feature
+
+6. Menu items moved to "Advanced User" main menu:
+- "Random Game Preview" (from "Games")
+- "Columns Editor" (from "View")
+- "Save/load MAME input / INP Filename" in the new "MAME Input" sub-menu (from "Games")
+
+7. Arcade controller images are now zipped into one file, "resources\images\controllers.zip"
+
+8. Toolbar icon sets updated
+
+9. Game documents toolbar button moved to games popup menu
+
+10. Mouse / Light Gun toolbar buttons moved to "MAME" tab in "Preferences" screen
+These options are now loaded/saved in "EmuLoader.ini"
+
+11. Arcade Controller toolbar button moved to "M.A.M.E." tab in Preferences screen. This option is to be used with MAME
+
+12. Column profiles format changed
+New format for easier editing. I don't remember if this was already changed though, since I never used this feature...
+Also, all profiles are saved in "resources\columns" folder now. The file "EmuLoader.ini" now only keeps the profile filename being used so it can be loaded when restarting the frontend
+
+13. When saving audit results to html files, the output will be the same as the audit columns profile
+
+Removed
+
+1. Menu option: "Open Game's Internet Page"
+Not required anymore due to MAWS browser :)
+
+2. User profile completely removed due to a hard-drive crash (damn... again!) and because I'm not willing to rewrite it all over again (was in the middle of a full rewrite...) :_(
+
+3. Lots of duplicates... and triplicates (menu items, popup items, toolbar buttons)
+You don't have the same option copied in menu, popup and toolbar anymore... only in one place. This will make future updates a lot easier
+
+4. Main menu "Games"
+All items are in games popup menu
+
+5. Arcade controllers image file selection (Preferences screen)... see change #7
+
+6. Visit homepage buttons of the arcade controllers (Preferences screen)
+There are link to the web pages in "Help" main menu
+
+7. Toolbar buttons removed: "Game Documents", "Mouse", "Light Gun", "Arcade Controllers" (see changes for more info)
+
+Optimized
+
+1. Standardization of lots of texts (menus and buttons captions, feature names)
+
+2. Create games list feature
+
+3. Huge source code clean-ups and optimizations
+
+4. Windows XP icons are used by default if themes are available (on a clean installation)
+
+5. Read/write of "EmuLoader.ini" file... and a bunch of other files
+
+6. Audit games feature
+
+7. Columns editor feature
+Note: unchecked items are now grayed out
+
+8. Emulator detection routines
+
+Added
+
+1. Option: "Use XML" for each emulator binary (Emulator Setup screen)
+Enabled by default. Uncheck this box if you are using an emulator older than v0.84
+
+2. Write MAME output to wave file (MAME 0.84 and newer only!)
+To activate it, check the new toolbar button in main screen (last button)
+Files will be saved in the same folder as sound clips files (Preferences screen, "Folders / Zip Files" tab), and will use the name of the game, plus an index number of four digits, if a .wav file is already found (like snapshots).
+
+3. Audio formats for sound clips can be selectable (see the new "Audio Formats" box in "Sound Clips" tab, "Preferences" screen)
+Useful when using only one audio format, to make games scrolling faster
+
+4. New driver status: "Test" (for MAME v0.84 and up)
+
+5. New in audit screen:
+   - New menu item: "Show Icons Legend" (audit screen): Display a list of icons and their meaning...
+   - New file/game status icons: An entire new set of icons, now in 32x24 pixels size
+   - Audit columns editor: Same as games columns editor, but for the audit screen. You will find it in the audit popup menu
+
+
+What's New - [Version 4.5.1]
+----------------------------
+Thursday, June 10, 2004
+
+Fixed
+
+1. Sound clip VU meter / spectrum screen is not disabled when playing games anymore
+
+2. Automatic game info was not working properly
+
+3. Neo Geo clone games were being added as classic games (all of them!)
+
+4. Game size info of merged games does not show zero anymore (the parent .zip file size is used)
+
+5. Double-click in grouped mode is added again
+
+Changed
+
+1. Fake status bar replaced by the StatusBarPro component that can process click, each panel has its own hint and it can hold components inside panels
+
+2. FMOD library updated to v3.73
+
+Optimized
+
+1. Game size info
+
+2. Status bar panels have a fixed size now
+
+3. Location where downloaded game picture is saved is now shown in the message window
+
+
+What's New - [Version 4.5]
+--------------------------
+Thursday, June 06, 2004
+
+Fixed
+
+1. Proper detection of "Hyper Neo Geo 64" games into "Neo Geo" category / game filter
+
+2. Audit seems to work fine now. Still need to verify this though :)
+
+3. When auditing single games, every time you audit a new game without closing the audit window, the status bar info is correctly updated :)
+
+4. Options "Audit All Games" and "Audit All Available Games" getting disabled when closing the audit screen
+
+5. "Automatic Game Information" works 100% again (or so I think)
+
+6. Forgot to save the grouped mode background image info in "EmuLoader.ini"... heh, sorry :|
+
+7. "Times Played" "Total Play Time" not updated after quitting a game, when in grouped mode
+
+8. Audit screen not being freed from memory if closing it with the window close button instead of the "Close" button
+
+9. Very veird access violation bug in "Automatic Game Info" feature ven there are no info for a game (bug in all modches, exchept grouped modche)
+
+10. "Merged" status is now shown when auditing a merged game that is ok but the .chd file is missing (clone games only)
+
+11. "Save Bad Games To HTML File" works again
+
+12. A few "Parental Lock" bugs (thanks Marshall Brooks):
+    - Access violation in "Parental Lock Editor" when "catver.ini" is not found (category is always empty in this case)
+    - Games list not updating when enabling parental lock, after accessing "Parental Lock Editor"
+    - Message confirming changes loss after clicking "Ok" button (to save blocked list) in "Parental Lock Editor" (it should this ask only if clicking the "Cancel" button)
+    - Access violation when trying to run a game in the "Games Found" list in "Parental Lock Editor"
+
+13. A lot of cosmetic bugs
+
+14. Load and save MAME .ini / games custom .ini / delete custom game .ini files were not being correctly handled if emulator in folder different than frontend's main folder
+
+15. Bugs in the "Custom Game Description" / "Custom Game Category" features (thanks Marshall Brooks)
+
+16. Color of sorted column is properly set (grouped mode)
+
+17. Sorting in column "Times Played"
+
+18. Delete custom category was not working when in grouped mode (thanks Marshall Brooks)
+
+19. Function "FindGameName" was not working in grouped mode (needed in a couple cases)
+
+20. A bunch of string sentences in the frontend
+
+21. MP3 files with variant bitrates were not being played with 100% of accuracy
+
+22. Font in the windowed auto game info was not being updated (thanks Marshall Brooks)
+
+Changed
+
+1. Audit system:
+   - "Show Only Bad Games" now really hide good audited games :)
+     Also, this menu is now an ON/OFF option
+   - "Audit Game Again" now can be used at any time, even if you have thousands of audited games in the list... and the best part is that the selected game is really deleted from the audit list before it gets audited again!!!! :D
+   - Status bar info is simplified.
+     - Panel #1: Games being audited
+     - Panel #2: Audited games that are OK
+     - Panel #3: Audited games that contain errors
+     - Panel #4: Used to display a few messages. Pay attention to it when using "special" audit features (a progress bar might be added there in the future) ;)
+   - Popup menu replaced by a BcBar PopupMenu (same as main screen)
+
+2. All popup menus and main menu font names changed to "Tahoma" (it was "Ms Sans Serif" since day one)... the default font used in the entire frontend is "Tahoma" size 8
+
+3. mame.dk URL replaced by the almighty MAWS database
+
+4. The current selected emulator will always be used to create a new games list, not based on the "default emulator" selection in "Emulator Setup" screen anymore.
+So, if you want to create a list based on the third emulator, just make sure to select it before creating the new list
+
+5. Toolbar icons updated
+
+6. Recompiled with:
+   - FMOD v3.72
+   - ZipForge v2.54
+
+7. Merged "Custom Game Description", "Custom Game Category" and the new "Custom Game Font" in the same window
+But .ini files stay the same. This feature is now called "Custom Game Appearance"
+
+8. "Cheats File" now accept multiple files (MAME Configuration)
+
+9. Automatic Game Information moved above the game snapshot to fix other visual bugs
+
+10. Picture navigation panel relocated to inside the picture's area and it's now transparent. Picture number font is not customizable anymore
+
+11. Source file "spectrum.pas" modified for better support :)
+
+12. Dialog box for image files selection replaced by an image dialog box (it shows a sample of the selected image)
+
+13. Images support reduced to 10 snapshots per game (for each picture type, not 10 in total)
+Extra files go from "gamename.png" plus "gamename0000.png" to "gamename0008.png"
+
+14. Title snapshots and game snapshots support only the .png image format from now on (no point supporting other formats)
+
+15. "Automatic Game Info" in "Appearance" tab / Preferences screen is renamed to "Game Documents"
+The custom appearance (font and background color) works for all game info panels (auto game info above the snapshot and in the window, info, history, driver and faq window
+
+16. Renamed the "Use Virtual List" to "Show Total Pictures" (snapshots feature)
+Check this option if you want to view "0 of 10 pictures" label in pictures preview area instead of the current number of the snapshot. Also, the file "pictures.dat" is always entirely loaded into memory from now on
+
+17. Renamed "Create Pictures List" to "Create Total Pictures List"
+If you want to rescan your pictures files, just this menu
+
+18. Replaced a few input boxes by a custom and larger input box
+
+19. Buttons Yes / No / Ok when using arcade controllers are now set to player 7 buttons 6 and 7 (buttons 2 and 3 for Devastator II controller)
+
+20. Audit results to HTML is reformatted with more info
+
+Removed
+
+1. "Default Emulator" feature in "Emulator Setup" screen
+This has always been useless since you could not create a new games list based on the selected emulator in main screen
+
+2. Translation system. Emu Loader is now English only
+
+3. Keys Assignment
+
+4. Pictures navigation panel (see changes #10)
+
+Optimized
+
+1. Audit system
+
+2. Grouped mode
+
+3. Switching between view modes
+
+4. "Automatic Game Information" is loaded to memory at startup, before loading the games list (much faster)
+
+Added
+
+1. Hide columns in grouped mode works (Columns Editor)
+Be aware that re-positioning columns in the grouped mode does NOT work properly yet
+
+2. Updates for latest MAME source release
+
+3. Preliminary support for "MAME Plus!". See new options in "MAME Configuration" screen :D
+   Notes:
+     - "MAME32 Plus!" is not supported since it's a MAME32 build
+     - Palette colors are not customizable for each game (only general)
+
+4. Type "Standard" to the controller keys mapping list, both in main screen and MAME Configuration screen (for MAME Plus!)
+
+5. "Download Address" (audit)
+An internet address that works together with the new "Save Bad List Links For Download" feature (audit only) You'll find this in the "Audit" sub-menu, "Games" main menu, games list popup menu and in the audit screen popup menu. Saved in "EmuLoader.ini", section "Audit"
+
+6. "Save Bad List Links For Download"
+This is a new output that save in a HTML file, internet links with all games that are bad, for easy management. It works ONLY with the audit feature and you must define an internet address with "Download Address" (if you want this to work properly)
+This is the first feature I coded specially for myself since every time a new MAME is out, ROMs are changed. Just try it and see it for yourself ;)
+
+7. Toolbar button "Extra Command Line Parameters", for easy access
+Useful if you want to quickly test new/other MAME parameters (only for MAME binaries, not DOS MAME)
+
+8. Columns in "Parental Lock Editor" games lists can now be sorted
+
+9. Game font customization
+Customize the font size/type/color for each game in the list (for all view modes)
+You will find it in the new "Custom Game Appearance" which has the following features merged:
+   - Custom Game Description
+   - Custom Game Category
+   - Custom Game Font
+
+10. New file "GameFont.ini"
+This file holds the custom font for each game (see #9), and the file must be in the main folder of the frontend (like the others)
+
+11. Option "Use Custom Game Font" in "Preferences / Games" screen
+Enable/disable custom font for each game in the list (normal modes and grouped mode)
+
+12. Window size and column sizes in audit screen are now saved in "EmuLoader.ini", section "Audit" (new section)
+
+13. "Automatic Game Info" now use the entire pictures panel, when pictures are disabled
+
+14. Preliminary support for "No Name MAME" (including a custom icon made by me). See new options in "MAME Configuration" screen :D
+    Notes:
+    - Palette colors are not customizable for each game and you must use it from the "MAME Plus" (only general)
+    - Extract version info doesn't work because "No Name" has other strings at the top of the "-help" output :(
+
+15. New option: "Verify Emulator CRC32 Checksum"
+Enabled by default, it generates a CRC32 checksum for each emulator
+This is still preliminary. The only thing is does so far is avoid the extraction of the emulator version each time you use the "Emulator Setup" screen, when you only want to add/delete an emulator. Imagine all other possibilities... :D
+
+16. Emulators will be handled by the CRC32 checksum :D
+    Notes:
+      - It might take a second or two to generate the CRC32 for a binary (it depends on your hardware)
+Checksum strings are saved in "EmuLoader.ini"
+      - "Verify Emulator CRC32 Checksum" must be enabled
+
+17. "CRC32 Checksum" display in "Emulator Setup" screen
+
+18. New feature: "Random Game Preview" (preliminary)
+It keeps running random games with a limited time (15 minutes maximum), or until the user disable the feature
+See all available options for this feature in "Preference" screen, "Games" tab:
+  - "Display Warning Message": message before feature is enabled
+  - "Display Warning Panel": multicolored ribbon that stays in front of the frontend for "flighty" users, heh
+  - "Warning Panel Animation": panel changes color every second
+  - "Restore Selected Game": select the game that was selected before enabling this feature
+  - "How Many Games To Run": well, set the number of games you want to keep loading (random), duh!
+  - "Time To Run Game": how much time do you want each game to run
+  - "Use Available Games Only": number of search retries when an unavailable game is found (random)
+  - "Pause Between Games":  pause before selecting another random game (after quitting last MAME section)
+  - "Pause Before MAME Starts": pause before new selected game starts in MAME
+  - "Blend Preview Window Factor": makes entire preview ribbon transparent
+Activate/deactivate feature in "Games" main menu
+Warnings:
+  - Avoid using other frontend functions and/or MAME while this feature is enabled unless you set a large pause in feature settings (even so, I advise you not to mess with EL... disable it first!)
+  - If you want to play the game being shown, please exit the game, disable the preview feature and start the game again
+
+19. Button: Export "BlockedGames.dat"
+Use this button to export an unencrypted list of the protected games, alphabetically sorted
+
+20. Download game images from MAWS homepage directly into EL images folders (.png format only!) :D
+Go to main menu "Pictures" / new menu item "Download" (or pictures popup menu). Also, in "Preferences" screen, "Pictures" tab you'll find customizable URL links for each picture type (default to MAWS homepage).
+
+21. New feature: "Show MAWS Game Info"
+It shows the selected game's webpage from MAWS, replacing the local image files
+Notes:
+  - Automatic game information is disabled while this feature is being used
+  - Pictures are disabled while this feature is being used (obviously)
+
+22. FMOD (sound clips) has its own window now. It shows the known spectrum plus:
+    - Current audio position and total audio time
+    - VU meters for both left and right channels with a customizable image
+      click on them to change images (see vumeter.png file)
+    - Customizable spectrum image and its background
+      click on it to change spectrum type
+    - Transparent window (Windows XP / 2000 only)
+
+23. New sound clips options:
+    - "Show Spectrum and VU Meters": huh... it makes coffee
+    - "Spectrum Image": select a custom image for the spectrum bars
+    - "VU Meter Image": select a custom image for the VU meters (each block must have 80x65 pixels)
+    - "Spectrum Background Color": set the color you want to see if the back of the spectrum bars
+    - "Blend FMOD Window Factor": makes entire FMOD window transparent
+
+24. New folder: "resources\images\fmod". There are two kind of image files in there:
+    1. a .bmp file for the spectrum ("spectrum.bmp" is just a sample of the bitmap format and size)
+    2. a .png file for the VU meters animation (but can be any image format supported by the frontend)
+
+25. Game Sequels
+Feature designed for the grouped mode. Want to group sequels of a game ? Use this. You'll find a "Game Sequels" option in the grouped settings (view mode)
+There's also a new file "sequels.ini" (main folder of the frontend) with a list of games that you want to add as a sequel of a single game. Note that the clones of all sequels will be added normally indented into their parents. Edit this .ini file as you please (I will not maintain the file but I can add a custom .ini file with frontend releases)
+
+26. New option: "Keep Frontend Settings File Clean"
+Enabled by default, the file "EmuLoader.ini" is always deleted before being updated to make sure the file is free of unused sections / entries
+
+27. Rename files inside gamename.zip is re-added (audit only)
+This will automatically rename filenames inside a game's zip file when auditing, but only if the size and CRC32/MD5 are correct
+Use this with extreme caution, since it's in preliminary stages!

@@ -1,0 +1,60 @@
+  The file "console_computer\emulator_parameters.ini" have a list of valid command lines for emulators,
+so the frontend can run games properly, and the mount/unmount parameters for virtual drive applications
+
+  There are two (2) parameters for each media type. Media types are:
+- cartridges       : "ROM"      and "ROM2"
+- disc images      : "ISO"      and "ISO2"
+- boot mounted cd  : "DISC"     and "DISC2"
+- floppy disks     : "FLOPPY"   and "FLOPPY2"
+- cassette tapes   : "CASSETTE" and "CASSETTE2"
+- hard disk drives : "HARDDISK" and "HARDDISK2"
+
+  The  "%s"  tag will be replaced by the game filename.
+Its recommended that you surround this tag with quotes, unless the emulator doesn't work with quotes.
+  You can add any parameters in the command line, depending on the emulator.
+
+  You can use any virtual drive app if you don't like Daemon Tools (I use Elby Virtual CloneDrive).
+
+  Avoid editing this file manually, unless you really know what you're doing.
+This file is for reference only, containing the most basic command lines needed to run games
+for all the supported emulators.
+  You can change them in Emulators Setup screen.
+
+  All emulators listed in this file were personally tested by me to make sure they all work
+as intended.
+ 
+
+Format:
+
+[System Name]
+EmulatorFileName ROM=Parameter 1
+EmulatorFileName ROM2=Parameter 2
+EmulatorFileName ISO=Parameter 1
+EmulatorFileName ISO2=Parameter 2
+EmulatorFileName DISC=Parameter 1
+EmulatorFileName DISC2=Parameter 2
+EmulatorFileName FLOPPY=Parameter 1
+EmulatorFileName FLOPPY2=Parameter 2
+EmulatorFileName CASSETTE=Parameter 1
+EmulatorFileName CASSETTE2=Parameter 2
+EmulatorFileName HARDDISK=Parameter 1
+EmulatorFileName HARDDISK2=Parameter 2
+
+
+
+Notes:
+
+ - The emulator filename cannot contain the extension (".exe"; ".com"; ".bat"; ".cmd")
+
+ - Do not mix emulators of different systems in the same section, unless a certain emulator run games
+   from another system (example: EMU7800 can run Atari 2600 games)
+
+ - Snes9x and Nostalgia emulators require parameters before the cart filename (quotes required in cart filename)
+
+ - GeePee32 emulator: required file extensions: ".gxb; .fxe; .smc" and a special parameter at the end
+   of the command line: "/RUN" (without quotes). These special parameters are added internally by EmuCon
+   ... do not add them in the command line!
+
+ - Hu-Go! emulator: recommended extra parameters (no quotes): "-f 1 -s 1"... full screen and stereo ON
+
+ - File "emulator_parameters[default].ini" is required so the frontend can work properly. Do NOT delete or modify this file!!!

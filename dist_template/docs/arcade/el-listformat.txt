@@ -1,0 +1,249 @@
+﻿Games List Format
+-----------------
+
+Arcade/MAME Machine Files
+-------------------------
+
+[gamename]
+GameName=MediaType<title>GameTitle/><year>Year/><manuf>Manufacturer/><ctrl>Controls/><btn>ButtonsCount/><scrtype>ScreenType/>
+         <scrorient>ScreenOrientation/><scrres>ScreenResolution/><scrrefresh>ScreenRefreshRate/><audiotype>AudioType/>
+         <drvstat>DriverStatus/><bios>BiosName/><cloneof>CloneOf/><drvname>DriverName/><nplayer>NumberOfPlayers/><mechanic>
+         <size>GameSize/><emustat>EmulationStatus/><clrstat>ColorStatus/><sndstat>SoundStatus/><grpstat>GraphicStatus/><sta>SaveState/>
+
+[polepos]
+polepos=0<title>Pole Position (World)/><year>1982/><manuf>Namco/><ctrl>pedal,dial/><btn>1/><scrtype>0/><scrorient>0/><scrres>256x224/><scrrefresh>60.606061/><audiotype>1/><drvstat>0/><drvname>polepos.cpp/><nplayer>1/><size>193088/><sta>0/>
+poleposa1=0<title>Pole Position (Atari version 1)/><year>1982/><manuf>Namco (Atari license)/><ctrl>pedal,dial/><btn>1/><scrtype>0/><scrorient>0/><scrres>256x224/><scrrefresh>60.606061/><audiotype>1/><drvstat>0/><cloneof>polepos/><drvname>polepos.cpp/><nplayer>1/><size>176706/><sta>0/>
+poleposa2=0<title>Pole Position (Atari version 2)/><year>1982/><manuf>Namco (Atari license)/><ctrl>pedal,dial/><btn>1/><scrtype>0/><scrorient>0/><scrres>256x224/><scrrefresh>60.606061/><audiotype>1/><drvstat>0/><cloneof>polepos/><drvname>polepos.cpp/><nplayer>1/><size>176706/><sta>0/>
+
+[simpbowl]
+simpbowl=1<title>Simpsons Bowling (GQ829 UAA)/><year>2000/><manuf>Konami/><ctrl>joy8way,trackball/><btn>3/><scrtype>0/><scrorient>0/><scrres>640x480/><scrrefresh>60.000000/><audiotype>0/><drvstat>1/><bios>konamigv/><drvname>konamigv.cpp/><nplayer>4/><size>524416/><emustat>0/><clrstat>0/><sndstat>1/><grpstat>1/><sta>1/>
+
+[elevator]
+elevator=0<title>Elevator Action/><year>1983/><manuf>Taito Corporation/><ctrl>joy8way/><btn>2/><scrtype>0/><scrorient>0/><scrres>256x224/><scrrefresh>60.000000/><audiotype>0/><drvstat>0/><drvname>taitosj.cpp/><nplayer>2/><size>76032/><sta>1/>
+elevatorb=0<title>Elevator Action (bootleg)/><year>1983/><manuf>bootleg/><ctrl>joy8way/><btn>2/><scrtype>0/><scrorient>0/><scrres>256x224/><scrrefresh>60.000000/><audiotype>0/><drvstat>0/><cloneof>elevator/><drvname>taitosj.cpp/><nplayer>2/><size>78080/><sta>1/>
+
+
+MAME Software List Game Files
+-----------------------------
+
+[gamename]
+GameName=MediaType DriverStatus EmulationStatus
+         <title>GameTitle/><alt_title>AlternateGameTitle/><year>Year/><publisher>Manufacturer/><cloneof>CloneOf/><size>GameSize/>
+         <media>SoftwareExecParameter/><usage>SoftwareUsageTip/><compat>SoftwareCompatible/>
+
+software list: msx1_cart
+
+[goonies]
+goonies=000<title>The Goonies (Jpn)/><alt_title>グーニーズ/><year>1986/><publisher>Konami/><size>32768/><media>cart1/>
+gooniesa=000<title>The Goonies (Jpn, Alt)/><alt_title>グーニーズ/><year>1986/><publisher>Konami/><cloneof>goonies/><size>32768/><media>cart1/>
+gooniesb=000<title>The Goonies (Jpn, Alt 2)/><alt_title>グーニーズ/><year>1986/><publisher>Konami/><cloneof>goonies/><size>32768/><media>cart1/>
+
+
+Game Status Files (system_name.elstatus)
+----------------------------------------
+
+GameName=GameID GameSetStatus ScanMode IsMerged
+
+polepos=00000
+polepos2=00000
+polepos2a=01000
+simpbowl=00000
+elevator=00000
+elevatorb=05200
+
+goonies=04200
+gooniesa=05200
+gooniesb=01000
+
+
+
+Notes:
+ - Arcade, MAME machine: Each game entry must be finished by a " /> " tag or bad extraction data will occur, possible frontend crash
+
+ - Arcade, MAME machine: Multiple controls in a game must be separated with a " , " char (see "[polepos]" games).
+
+ - All games: Clones must be placed inside its parent section and "after" the parent game or the frontend will not work correctly
+   (see "polepos" and "goonies")
+
+ - All games: There must be no sections of clone games, device sets or bios sets
+
+ - Arcade, MAME machine: EmulationStatus, ColorStatus, SoundStatus, GraphicStatus, IsMechanical tags are for MAME/HBMAME only
+
+ - Arcade, all games: Merged sets support have limitations and should be avoided when possible
+
+ - All games: Fields with empty data or that use a default setting, defined by the frontend, are not added into the game details screen
+
+ - Arcade, ZiNc: "ScreenType" field is used to hold the index number for each game, based on the ZiNc emulator,
+   so games can be loaded properly
+
+ - Arcade, Daphne: the framefile filename must be the same as the game name or Emu Loader won't be able to load them
+
+ - Arcade, Supermodel3: clone games must have all ROMs including parent ROMs (no split/merged sets like MAME)
+
+ - Arcade, DICE: "BiosName" field is used to store the version added since this info is not present in EL's games files
+   When loading DICE games list, this info is properly moved to the "VersionAdded" field
+
+ - Arcade, Daphne: ScanMode tag makes no difference for Daphne as this system has no ROMs database
+
+ - All Games: GameSize is in Bytes
+
+ - Software List: field tags in game entry can be at any order except for "MediaType", "DriverStatus", "EmulationStatus", "ScreenType", "ScreenOrientation"
+
+ - All Games: fields are optional if there is no info for them, except "GameTitle", "GameName", "CloneOf", "SoftwareExecParameter"
+
+ - Game IDs 44, 45, 46, 47 are used by MAME software list games so custom icons are be displayed in the games list
+
+
+
+System Identification and Database Filenames
+--------------------------------------------
+
+ID   System Name                Filename
+
+ 1   MAME                       mame.el
+ 2   Supermodel: SEGA Model 3   supermodelsegamodel3.el
+ 3   Daphne                     daphne.el
+ 4   Demul                      demul.el
+ 5   HBMAME                     hbmame.el
+ 6   DICE                       dice.el
+ 7   SEGA Model 2               segamodel2.el
+ 8   ZiNc                       zinc.el
+
+
+
+Additional Database Filenames
+------------------------------
+  -> ROMs list filename.............: system_name.elrom
+  -> Game status filename...........: system_name.elstatus
+  -> Missing ROMs filename..........: system_name.elmiss
+  -> MAME audio samples filemame....: system_name.elsamples
+  -> MAME bios sets filename........: system_name_biossets.ini
+  -> MAME device sets filename......: system_name_devicesets.ini
+  -> CRC32 collisions filename......: system_name_crc32collision.txt
+  -> MAME softlist machines filename: system_name_machines.ini
+  -> MAME AlterMAME sets filename...: system_name_altermame.txt
+
+
+
+Game IDs
+--------
+
+ID   Description
+
+00   MAME Parent Set (have)
+01   MAME Clone Set  (have)
+02   MAME Bios Set   (have)
+03   MAME Device Set (have)
+04   MAME Parent Set (miss)
+05   MAME Clone Set  (miss)
+06   MAME Bios Set   (miss)
+07   MAME Device Set (miss)
+
+08   Supermodel 3 Parent Set (have)
+09   Supermodel 3 Clone Set  (have)
+10   Supermodel 3 Parent Set (miss)
+11   Supermodel 3 Clone Set  (miss)
+
+12   Daphne Parent Set (have)
+13   Daphne Clone Set  (have)
+14   Daphne Parent Set (miss)
+15   Daphne Clone Set  (miss)
+
+16   Demul Parent Set (have)
+17   Demul Clone Set  (have)
+18   Demul Bios Set   (have)
+19   Demul Parent Set (miss)
+20   Demul Clone Set  (miss)
+21   Demul Bios Set   (miss)
+
+22   HBMAME Parent Set (have)
+23   HBMAME Clone Set  (have)
+24   HBMAME Bios Set   (have)
+25   HBMAME Device Set (have)
+26   HBMAME Parent Set (miss)
+27   HBMAME Clone Set  (miss)
+28   HBMAME Bios Set   (miss)
+29   HBMAME Device Set (miss)
+
+30   DICE Parent Set (have)
+31   DICE Clone Set  (have)
+32   DICE Parent Set (miss)
+33   DICE Clone Set  (miss)
+
+34   SEGA Model 2 Parent Set (have)
+35   SEGA Model 2 Clone Set  (have)
+36   SEGA Model 2 Parent Set (miss)
+37   SEGA Model 2 Clone Set  (miss)
+
+38   ZiNc Parent Set (have)
+39   ZiNc Clone Set  (have)
+40   ZiNc Bios Set   (have)
+41   ZiNc Parent Set (miss)
+42   ZiNc Clone Set  (miss)
+43   ZiNc Bios Set   (miss)
+
+44   MAME Software List Parent Set (have)
+45   MAME Software List Clone Set  (have)
+46   MAME Software List Parent Set (miss)
+47   MAME Software List Clone Set  (miss)
+
+
+Codes
+-----
+
+Game Set Status
+  0 = Available, All ROMs OK
+  1 = Missing one or more ROMs/CHDs but game .zip/.7z file found
+  2 = Missing, ROMs/CHDs not found and game .zip/.7z file not found
+
+
+Scan Mode
+  0 = Full Scan (ROMs/CHDs full validation)
+  1 = Quick Scan (no validation, only search for main game files)
+  2 = Force Game Available (no validation or file search is done)
+
+
+Media Type (media category the game belongs to)
+  0 = ROM
+  1 = CHD
+
+
+Screen Type
+ -1 = (empty)
+  0 = Raster
+  1 = Vector
+  2 = LCD
+  3 = Unknown
+
+
+Screen Orientation
+ -1 = (empty)
+  0 = Horizontal
+  1 = Vertical
+  
+
+Audio Type
+  0 = Standard Audio (Sound Chip)
+  1 = Discrete Audio
+  2 = External Sound Samples (FLAC/WAV files)
+
+
+Driver Status, Emulation Status, Color Status, Sound Status, Graphic Status
+ -1 = (empty)
+  0 = Good
+  1 = Imperfect
+  2 = Preliminary
+
+
+Is Mechanical
+  0 = No
+  1 = Yes
+
+Save State
+ -1 = (empty)
+  0 = Unsupported
+  1 = Supported
+
+
+
+-- Master Control: "End of line." (quote from "TRON") --

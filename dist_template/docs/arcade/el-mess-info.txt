@@ -1,0 +1,208 @@
+This is a compilation of tips and ways of handling software lists and how to run console/handheld/computer games with MAME 0.162+
+For information and guidance so I can add support for it in Emu Loader
+
+
+"compatibility" tag in software lists:
+-------------------------------------
+
+the compatibility flag is not an easy concept because it is a compromise between being as user friendly as we can with non-expert users and being flexible enough to satisfy more expert users. E.g. if you launch a2600 emulation with a game that has NTSC or no compatibility flags the games load and run with no issues, both if you run it as "mame a2600 gamename" and as "mame a2600 -cart gamename". if you do the same with a game that only has PAL compatibility then mame will have two different behaviors depending on the command line options
+
+* expert usage: if you launch emulation with "mame a2600 -cart gamename" and gamename has PAL compatibility, the emulator gives you a warning at command line but it launches anyway the game, because it assumes that you are experienced enough to understand that if you get a black screen at start the cause is related to the warning you have been exposed to
+* noob usage: if you launch emulation with "mame a2600 gamename" (without the -cart switch) and gamename has PAL compatibility, the emulator assumes you are just here to play and thus refuses to load the game (mame actually *filters out* the game from the software list in this case, giving a best match message)
+
+the latter scenario prevents you to sit at a black screen in systems like a2600 and a7800, but for instance gives you no way to see the "wrong region" messages that many genesis and snes games contain, which might be instead interesting for developers (and thus experienced users have a way to load every game in every console region, by adding the media switch -cart)
+
+feel free to keep asking for clarifications: I understand very well that it's hard to digest all the available options at once
+
+....................
+Huh, now that you mentioned the compatible tag, I think it does.
+
+in the machine "a2600" (Atari 2600 NTSC) there this entry (-listxml):
+
+< softwarelist name="a2600" status="original" filter="NTSC" / >
+
+in the a2600p (Atari 2600 PAL) machine there's this entry (-listxml:
+
+< softwarelist name="a2600" status="original" filter="PAL" / >
+
+and in the atari2600.xml software list, some games have this entry:
+
+< sharedfeat name="compatibility" value="PAL" / >
+
+It probably means that these game are only compatible with the PAL version of Atari 2600. ?
+
+and other games have this entry:
+
+< sharedfeat name="compatibility" value="NTSC" / >
+.....................
+
+
+---------------------------------------------------------------
+> ... place arbitrary cards into slots of Apple II, PC, 86030 Mac. Can you give an
+> example ?
+
+Sure. Run mame apple2p -listslots. You'll see a list showing 8 slots, sl0 to sl7, of what cards are available for each slot, and what card is installed in that slot by default (if there is one). On the command line, you do -{slotname} {cardname}, so for instance "-sl3 videoterm" would put the "Videoterm" 80 column card into slot 3. This in turn will cause a second screen to attach to the driver and show the 80-column output when something activates it.
+
+If you try the same -listslots on e.g. ibm5160 or at486 you'll see options for familiar ISA cards like the Sound Blaster and AdLib.
+
+The one thing that's tricky about this is that slot devices can have their own slot connectors on them (e.g. the Sonic and Knuckles cartridge for the Sega Genesis/Megadrive famously has "lock-on"), so once you've added a card to a slot, you must call MAME with -listslots again to see if anything new has happened. We don't know in advance when something is going to add a card (this is equally a problem for the built-in GUI).
+
+Many consoles implement their controllers through this system, so for instance -listslots on the PSX driver will show player 1 and player 2 slots, with options for the stock controller, the analog controller, the DualShock, and other favorites. It's therefore worth implementing this feature even when it's not for computers.
+---------------------------------------------------------------
+
+
+
+> The one thing that's tricky about this is that slot devices can have their own slot
+> connectors on them (e.g. the Sonic and Knuckles cartridge for the Sega
+> Genesis/Megadrive famously has "lock-on"), so once you've added a card to a slot, you
+> must call MAME with -listslots again to see if anything new has happened. We don't
+> know in advance when something is going to add a card (this is equally a problem for
+> the built-in GUI).
+
+for Genesis/MegaDrive, though, the slot options are not user-configurable and are setup internally when you load the appropriate file in the first cartslot.
+in this case you can detect the new subslot which appears when you load the Sonic & Knuckles cart or the Game Genie cart, by parsing the output of -listmedia (base console has only -cart, while console with sk or ggenie mounted also has a -cart2)
+
+basically anytime you select an option or a media you have to re-parse -listslots and -listmedia to update the configurations
+or, even better, parse the -lx output in search of <device> and <slot> entries (stopping at the end of the first <machine> block, otherwise you would also parse the optional device and you'd get several unneeded entries).
+
+an example: compare the following snippet of the output of "mame genesis -lx"
+
+Code:
+
+<device type="cartridge" tag="mdslot" mandatory="1" interface="megadriv_cart">
+    <instance name="cartridge" briefname="cart"/>
+    <extension name="smd"/>
+    <extension name="bin"/>
+    <extension name="md"/>
+    <extension name="gen"/>
+</device>
+
+
+
+with the output of "mame genesis -cart sk -lx"
+
+Code:
+
+<device type="cartridge" tag="mdslot" mandatory="1" interface="megadriv_cart">
+    <instance name="cartridge1" briefname="cart1"/>
+    <extension name="smd"/>
+    <extension name="bin"/>
+    <extension name="md"/>
+    <extension name="gen"/>
+</device>
+<device type="cartridge" tag="mdslot:rom_sk:subslot" interface="megadriv_cart">
+    <instance name="cartridge2" briefname="cart2"/>
+    <extension name="smd"/>
+    <extension name="bin"/>
+    <extension name="md"/>
+    <extension name="gen"/>
+</device>
+
+
+
+you see that the presence of the specific "sk" cart has made appear a second cart slot.
+of course the "instance" parameters are the command line option that are available for that specific configuration (-cart1 and -cart2 in the second case, but emulation acknowledge also -cart and -cart2)
+
+another example: compare the following small piece of output for "mame ibm5150 -lx"
+
+Code:
+
+<slot name="isa1">
+    <slotoption name="mda" devname="isa_ibm_mda"/>
+    [...]
+    <slotoption name="sblaster1_0" devname="isa_sblaster1_0"/>
+    <slotoption name="sblaster1_5" devname="isa_sblaster1_5"/>
+    [...]
+    <slotoption name="pds" devname="isa_pds"/>
+</slot>
+<slot name="isa2">
+    [...]
+
+
+
+with the following one corresponding to "mame ibm5150 -isa1 sblaster1_0 -lx"
+
+Code:
+
+<slot name="isa1">
+    <slotoption name="mda" devname="isa_ibm_mda"/>
+    [...]
+    <slotoption name="sblaster1_0" devname="isa_sblaster1_0"/>
+    <slotoption name="sblaster1_5" devname="isa_sblaster1_5"/>
+    [...]
+    <slotoption name="pds" devname="isa_pds"/>
+</slot>
+<slot name="isa1:sblaster1_0:pc_joy">
+    <slotoption name="basic_joy" devname="basic_joy" default="yes"/>
+    <slotoption name="mssw_pad" devname="mssw_pad"/>
+</slot>
+<slot name="isa1:sblaster1_0:mdin">
+    <slotoption name="midiin" devname="midiin_port" default="yes"/>
+    </slot>
+    <slot name="isa1:sblaster1_0:mdout">
+    <slotoption name="midiout" devname="midiout_port" default="yes"/>
+</slot>
+<slot name="isa2">
+    [...]
+
+
+
+as you can see, having selected a soundblaster card in -isa1, you now have a MIDI In port, a MIDI out port and a new "-isa1:sblaster1_0:pc_joy" slot option that accepts the values "" (for empty port), "basic_joy" (for a basic joystick) and "mssw_pad" (for a MS Sidewinder joy). none of these were available in the original configuration because there was nothing mounted in the ISA1 slot
+---------------------------------------------------------------
+
+
+
+running "mame system __options__ -lx" is your best friend here. whenever you parse the output of this command, you will have a series of <machine> entries where the first one represents the actual running system and the latter ones (if any) represents all the possible entities that can be attached to the running system
+since the amount of attachable entities varies with the selected __options__ you might probably want to focus your parsing effort on the first <machine> block
+
+in such <machine> block, in addition to the options you're used to parse for the "classic" MAME (I guess roms and chds, plus maybe the number of controls and/or dipswitches and confsettings) you shall focus your attention on the <slot> and <device> nodes which represent respectively the available slot options and the available media switches. The former are used to configure hardware of the running system (making possible to greatly extend the standard emulated configuration), the latter are used to mount software on the running system. You need to consider them at once because specific slot options can create new media switches and new slot options (think to a c1541 floppy drive attached to a C64 expansion slot, which in turn has a serial port to attach additional floppy drives), and specific images mounted in media switches can create new slot options and add new media switches (think to a passthru cart, like a Game Genie, which has a slot to insert additional piggyback carts)
+
+therefore, let us examine the structure of the <slot> and <device> nodes.
+
+we start from "device" which is simpler. a standard occurrence of such a node in the -lx output is like the following one taken from a2600
+
+Code:
+
+<device type="cartridge" tag="cartslot" mandatory="1" interface="a2600_cart">
+    <instance name="cartridge" briefname="cart"/>
+    <extension name="bin"/>
+    <extension name="a26"/>
+</device>
+
+
+
+the device attribute (type, tag, mandatory, interface) are of internal use so you can skip them for the moment. what it really matters are instance and extension. the former tells you how to form the command line to mount a game image in this media: you can use either "-cartridge XXXX" or "-cart XXXX", with XXXX being either a shortname from softlist or the fullpath to a file image. the latter gives you a list of admissible extensions if you load an image from fullpath (from softlist, the extension is not checked because we often use the label markings as rom names and we get extension like .ic1, .u4, etc. which are not really enforceable). if your frontend does not filter files by extensions, the emulator will simply give a message of unrecognized file format
+
+concerning the "slot" options, instead, let's take a look to one of the ISA options, i.e. let's analyze (part of) the first occurrence of <slot> in the output of "mame ibm5150 -lx"
+
+Code:
+
+<slot name="isa1">
+    <slotoption name="mda" devname="isa_ibm_mda"/>
+    <slotoption name="cga" devname="cga" default="yes"/>
+    [...]
+    <slotoption name="com" devname="isa_com"/>
+    <slotoption name="fdc" devname="isa8_fdc_superio"/>
+    <slotoption name="fdc_xt" devname="isa8_fdc_xt"/>
+    [...]
+    <slotoption name="sblaster1_0" devname="isa_sblaster1_0"/>
+    <slotoption name="sblaster1_5" devname="isa_sblaster1_5"/>
+    [...]
+</slot>
+
+
+
+the name of the slot is the first important object to read, because it means that the emulator will accept an option "-isa1" at command line. the possible valued of this option are listed in the name attribute of the <slotoption> fields: so for instance, MAME will accept "-isa1 mda", "-isa1 com", "-isa1 fdc" attaching in each case a different piece of hardware to the running machine (a MDA graphic card in the first case, a serial COM adapter in the second, a floppy drive in the third).
+The default value for the option, if nothing is provided at command line, is the option with the default="yes" attribute so that in this case the option defaulted to "-isa1 cga" (mounting a CGA chipset).
+
+If you would like to explain to the users what each option corresponds to, you can get the devname attribute of each <slotoption> and search the rest of the <machine> entries for the corresponding description. E.g. if you want to know what is added by "-isa1 fdc_xt" you can search the rest of the -lx output for a <machine name="isa8_fdc_xt"> entry to find out that in fact with this option you are adding an "ISA 8bits XT FDC hookup".
+
+There are a few more advanced features, like the fact that you can use
+Code:
+
+mame ibm5150 -isa1 ""
+
+
+to launch emulation with empty ISA1 slot, or the fact that some slot options are not displayed because are not user-configurable (and thus internal only) and they could lead to <slot> entries without *any* slot options, but I think that getting accustomed to the above is more than enough for start
+---------------------------------------------------------------
+

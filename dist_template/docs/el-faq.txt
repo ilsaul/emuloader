@@ -1,0 +1,95 @@
+Frequently Asked Questions (FAQ) / Troubleshooting Guide
+--------------------------------------------------------
+
+   --> Important notes to myself <--
+
+01. When using EasyListView on tabs (TPageControl or TNotebook), the item captions are not accessible
+    unless the list gets visible on screen at least once (after every change to it!!!)
+    ... maybe because ELV is using another aproach: "TEasyItemStored"
+
+02. Splash screen's clock is stopped every time the splash screen is closed (FormStatus.Close)
+
+03. Cannot create a function inside a main function or you get memory leaks... Delphi 7 doesn't
+    work well this way, dunno why
+
+
+   --> To Users <--
+
+01. Can I use long filenames / folder names with Emu Loader ?
+    Yes, you can. The front-end is compatible with long names, but the emulator you are
+    using might not be.
+
+02. A MAME game is set as missing. I have the parent zip or bios zip or CHD file but do not have the game zip.
+    What is wrong ?
+    This is NOT a bug. If the gamename.zip is not found EL does not mark the game as "missing ROMs/CHD"!!!
+    This is to prevent listing games marked as "missing ROMs".
+
+03. I am a Delphi programmer. Can I help with the development of Emu Loader ?
+    Yes you can. Any help is more than welcome.
+
+04. Will you port Emu Loader to other operational systems like Linux or Macintosh ?
+    No.
+
+05. When I get a new MAME version and try to change the default options, some of them are
+    not saved on "mame.ini" file. What is going on ?
+    By default, Emu Loader never add new entries to the MAME configurations files
+    ("mame.ini"). This is to maintain some form of compatibility with older MAME versions.
+    You must delete "mame.ini" and re-create it manually (or let Emu Loader do it on a restart).
+
+06. I already have a MAME games list. Now I got a new MAME version, but the new games are not showing
+    in the list... Why ?
+    Emu Loader only detects new arcade binaries on startup and update their version info.
+    You must create the games list manually (main menu "File", "MAME/Arcade", "Create ArcadeGames List").
+    This is also valid for ther other arcade systems, not just MAME.
+
+07. I already have a list of games created for a console/computer/handheld  system. How can I add new games
+    to the list without deleting the existing ones ?
+    Just unckeck "Create a New List" checkbox on the select console/computer/handheld system dialog before creating the games list.
+    Arcade systems do not have this option!
+
+08. Can I use relative paths for games files in console/computer/handheld systems ?
+    No, you cannot. This is due to the fact the frontend support multiple games folders and
+    four emulators per system.
+    Arcade systems can have relative paths.
+
+09. When I create custom options for a MAME game, the options I set are not being saved when
+    I open the custom options screen again. What is going on ?
+    The "INI Path" folder is not valid (folder doesn't exist), or the ini folder is locked by Windows,
+    or there is already a game ini file there but is set as read-only.
+
+11. I have games filenames in Unicode format. Can I use them with the frontend ?
+    Yes you can. But remember that folder names and emulator filenames must still be in ANSI format. Zipped images filenames cannot be Unicode either.
+    This is for console/computer/handheld systems. Arcade systems do not support Unicode filenames.
+
+10. All my MAME games have a line thru them, not just games with preliminary drivers. What now ?
+    Try recreating the games list.
+    Another fix is to delete all configuration files (frontend only), or even make a clean
+    install. I still don't know why this happens for some users...
+
+11. Can I control Emu Loader with my gamepad ?
+    No you can't. USB devices are not supported and I don't know how to implement that... sorry.
+    As suggested by an user you can use a small utility called "Joy2Key".
+
+12. Columns do not get sorted when I click in header, while in grouped view mode.
+    Yes, the whole purpose of the grouped view mode is to group parent + clones together and the list
+    is sorted only by game title. There is no point in sorting the games list by other columns
+
+13. Frontend icons look ugly.
+    Emu Loader is built to run on Windows with themes enabled (WinXP) and on Windows 7 with the Aero
+    interface, so 32-bits icons can be properly loaded. This frontend doesn't have true color (24-bits)
+    icons, or 256 colors icons (8-bits), except for MAMu_ icons
+
+14. Frontend doesn't fit my screen.
+    Emu Loader requires a minimum resolution of 1280x720 (16:9) or 1024x768 (4:3). However, some screens
+    can fit 640x480 resolution.
+
+15. Arcade game docs feature cannot be enabled or it's not showing anything.
+    This is a MAME only feature. You must place the following files into MAME "\dats\" sub-folder or in root folder:
+    "mameinfo.dat" / "messinfo.dat" / "history.dat" / "story.dat / marp.dat"
+
+16. ZiNc is not working! It gives "Error code 1: Invalid function" message.
+    Make sure you install the plugin file "d3d-ogl12.zip". A few users reported ZiNc started working after
+    installing this plugin.
+
+
+-- Master Control: "End of line." (quote from "TRON") --

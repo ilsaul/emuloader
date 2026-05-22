@@ -1,0 +1,291 @@
+To-do List
+----------
+
+   This file is just a reference for what I need/want/will add/fix in future releases.
+The order of appearance does not matter, and it does not mean that it will be worked on.
+
+
+- IMPORTANT, FUTURE CHANGE. This will break the most basic of Emu Loader's features, specially games lists and game scan feature
+   -> update media type info for arcade games. include cart/flop/cass/disc/disk/flash/etc... into the media type
+                             -> this could be done when creating the games list, by analyzing the game's file types
+                                -> hard disk drive is always the general media type if game multiple CHDs of different media types
+
+  -> need to re-index media types
+
+     0 -> ROM (or EXE file ?)
+     1 -> Cartridge
+     2 -> Floppy Disk
+     3 -> Cassette Tape
+     4 -> Uncategorized media (general MAME CHD, HD, CD, "EXE file ???", etc) -> will use the chd.ico file for this one!!!
+     5 -> Hard Disk Drive
+     6 -> Disc (also MAME CHD CD/Laserdisc/GD-ROM/AudioCD/DVD/CED VideoDisc media type)
+     7 -> MAME CHD Flash Card
+     8 -> Video Tape (VHS)
+
+     -> currently, Emu Loader tags MAME CHD files as media_type=1 and ROMs as media_type=0
+        ... and extra media type "PER GAME FILE" is done in the ROMs database (Disc, HDD, Flash Card, general CHD)
+            -> game rom/chd, bios rom/chd, device rom/chd (different media indexes!!!!!)
+
+- [FUTURE???, MAYBE!!!] Create a basic setup wizard to configure initial settings in the 1st front-end run
+  and perhaps configure "rompath" "samplepath" / "snapshotpath" / "inipath" in mame.ini
+  ... this wizard is going to be hard work! Maybe create an external
+  "wizard.exe" to setup minimum emulator settings intead ?
+
+- NOTE: function uMain.SelectFileName() and dialog "FormSelectFile" are only used in MAME Settings screen to select files
+  perhaps replace this dialog by something else ?
+  - "FormSelectFile" is only used in MAME settings to select MAME font and artwork files since they can have multiple folder entries
+
+- [IMPORTANT!] separate "MenuShowImagesClick()" routines into a new function so EL does not need to keep
+               calling "Images" main menu every time the user change the image type...... show/hide elements in
+               images panel... partially done!
+
+- [MAYBE] improve "uMain.ApplyFilters", grouped filters like "Konami", "Capcom", perhaps by making a "record type"
+  to store all drivers and sets needed when selecting the group. currently they are manually checked on this
+  function. perhaps creating an external file containing the info ?
+  ... or putting this info directly into "ini_files\mame_filters.ini" (or start using the "mame_filters.xml" file)
+
+  [IMPROVEMENT ?] see uMain.SelectEasyItem() function... and perhaps adapt it so other screens can use it
+
+- [MAYBE ? impossible ?!] implement drag and drop for folder lists to reposition folders instead of delete/re-add (emulator setup
+  screens ROMs list... and maybe others)
+
+- [IMPORTANT] try to fix the thumb 'mouse drag' to apply the small change properly (float value)
+   TCustomGaugeBar2 component
+
+- Shortcut (F6) is not working for the new main menu button, except for full screen "Shift+F2"... why ?????????
+  April 29, 2018: still don't know why!
+
+- keep an eye for the Taito Type-X hardware to "MAYBE someday" separate Type-X from Type-X2, etc... (taitotx.c driver)
+  if MAME devs separate the bios ROMs into separate bios sets, then it will be a lot easier.
+
+- how MAME's built-in game selector works
+-----------------------------------------
+  if gamename.zip set is found, no matter if CHD file or bios/device set is available or not... game is VISIBLE
+- games with no game set (Taito GNET), the CHD file is audited SHA-1 checksum. if not good, game is NOT VISIBLE
+- Taito GNET, if CHD not found, game NOT VISIBLE
+
+- vcs multi-slot ? This is Atari 2600 'console' system, not arcade...
+  src/emu/bus/vcs/vcs_slot.c
+
+- update uMain.SearchCHDFolder() function to support WideString Unicode filenames ???
+
+- uMain.FindGameName() function used in uScanAudioSamples, uMAMu_IconsManager, uImagesManager
+
+- ???? implement uMain.GetGameTypeString() function... used by GameDetails, ScanGames, View Scan Results...
+       most are using "MemGameInfo" vars
+     
+- [improvement] update game details screen:
+  - [MAYBE ?] replace TShadowLabel controls by a EasyListView to show left panel texts ? it was like this before
+  - show emulator description in form caption ???
+  - add alternate title for software list games ?... read directly from "eldir\softwarelist\softlistname.el" files
+  - add a "expand list" label text with a link color and create a small form to show all software list names and their titles
+    ... only if there is more than one software list!!!!
+    ... this is only to avoid waste of space. !?
+    ... might be easier to use a TPanelEx and place labels in there
+
+- [MAYBE, improvement ?] create two main functions to set OnMouseEnter and OnMouseLeave for TShadowLabel texts and direct all call to these new
+  functions (uMain)
+  
+- [maybe] split "columns_profile.ini" and create "columnssoftlist_profile.ini" for when "machines list side panel" is enabled
+          use the same width or separate width for both files ?
+
+- [MAYBE] figure out a way to implement read/update MAME .ini files from multiple folders ????
+  see https://github.com/mamedev/mame/commit/28c9be35ea920d8d3ee69d2b3319cd1eadb79167
+
+- [MAYBE] read the player="" tag in <control entry ????? (see game "1941")
+
+- [MAYBE] read the new <author> tag from software list files (mamedir\hash\) ?
+
+- find a way to show fav icon in grouped view mode... manually draw the icon ? or perhaps using 32x16 icon ?
+  -> it can be done with custom icon drawing, see delete multiple games files (June 23, 2018)
+
+- [MAYBE]: show "selected machine" and "software list title" in the top banner, like the new "Run MAME with Extra Parameters" (lots of screens)
+
+- [MAYBE]: improve "delete game config file" confirm message box... show game title, name and extra info ???
+
+- [MAYBE] in screen "Select Machine to Run Game", add 3 new columns to show if there are input, save state and memory card files, so user can know
+          what machine to select... this will require some file scanning before showing the dialog
+
+  ---------------->> >>>> > > >>>>>>>>>>  >> > >>>> > > >
+
+  FormCopyMoveGameFiles dialog -> show software list title in the top header ????? like in RunMAME_ExtraParameters form
+
+- see this
+  Ballon tip  : http://www.delphitricks.com/source-code/forms/show_balloon_tooltips_in_my_delphi_program.html
+     alternate: http://www.delphipraxis.net/158509-balloon-tooltip.html
+
+  trayicon tip: http://www.swissdelphicenter.ch/en/showcode.php?id=1164
+
+---------------------------------------------------------------------------------------------------------------------------------
+- [IMPORTANT] Improve loading multiple sets with software list games further
+  -> http://www.mameworld.info/ubbthreads/showthreaded.php?Cat=&Number=359071&page=0&view=collapsed&sb=5&o=&fpart=1&vc=1
+
+  -> NOTE: odyssey2 "the voice" extended cart is not listed as a required set for any game listed in "\hash\odyssey2.xml"
+
+  -> you can load a cart and a cassette
+
+     I checked and you are able to select first "The Voice" cartridge via softlist File Manager, then go back and attach the cartridge
+     you wish to use in the passthrough device, for example "Attack of the Time Lord".
+
+     -> mame odyssey -cart1 voice -cart2 timelord
+---------------------------------------------------------------------------------------------------------------------------------
+ 
+- [needs more work ?]: make sure to add "systemID" in "FormMultiSlotGames" feature to support MAME and HBMAME
+  ... November 06, 2016 -> ongoing
+     -> ????: "FormMultiSlotGames
+
+- [future improvement] improve support to HBMAME in "Machine to Run Game" feature
+
+- [IMPORTANT] function uMain.TFormMain.LoadFolderSpecial_MAME() -> used by uMain.SelectFileName() function and in MAME Settings screen only (select artwork and font dialogs)
+
+- [MAYBE, future improvement ?] parse "<device" tags to count how many cartridge/floppydisk/cassette/cdrom devices a machine have... ??? HUH!? what is this ? (December 25, 2017)
+
+- [needs further investigation] multi floppy disks game need to get the "<part" name to know what floppy number it is !
+                                "  <feature name valu="disk_description"
+                                ... to know what disk to insert into a machine with multiple disk drives
+                                     -> see msx2_flop "amerisuc" game
+
+- list invalid images (Images Manager) doesn't sort images correctly, repeating groups with same folder name
+  - this feature needs a rewrite (February 24, 2018)
+
+- [double-check this] custom games / custom systems (EmuCon ported features) (February 24, 2018)
+  -> check uMain.SetPopupCustomEmulators; function and make sure to use 24x24 icons... HUH ???!
+
+- [MAYBE, improvement ???] if custom game doesn't have custom emulators to run, run it with MAME from "Arcade Emulators Setup" automatically ???
+                           ... or not ?
+
+- [needs more work ?!] games popup menu items might require more work... must check valid options for each system type; see "Run Game (Custom Emulators)" onClick() event
+
+- [need more research] convert some functions to Unicode (uCommon.pas)
+                       RenameFile, MoveFile, DeleteFile ???
+                       ... or use then ones from EasyListView ? ... see FileExistsW() function
+
+- [when aliens invade "Terra Prime"] bring back custom command line feature, last version supported is EL v6.1.2
+
+- DEMUL v0.7 (November 2017 build)
+  -> [MAYBE] support the new "merge" tag from -listxml output if not already implemented
+
+- [future improvement] create 256x256 icons for arcade/mame/mame softlist games list (resources\gameslist_icons\)
+                       -> add support for 256x256 icon in thumbnails view (no thumb image loaded)
+
+- try to modify EasyListView.pas and add a new "ImagesOverlay" TImageList so a small icon can be loaded on top of the icon as an overlay!!!
+  ... like the shortcut arrow icon in Windows desktop icons
+
+- [MAYBE ????] add a new "USB" media type... ??? region name="usb" (game "deathsm2", driver "gamepc.cpp")
+  -> 2019: only ONE game uses a USB "disk" entry, "deathsm2"
+  -> <machine name="nfs" have floppy disk media in it ?
+  -> <machine name="qofd3" sourcefile="chihiro.cpp" (check media types)
+
+- function uMain.IsMediaTypeHD() will probably be deleted and replaced by the new "uMain.IsMediaTypeCHD()" function, which is already being used by MAME and arcade systems
+  ... uMain.IsMediaTypeCHD() also support the expanded media types of EmuCon games (which are different than MAME and arcade games)
+
+- example of RetroArch command line parameters:
+  retroarch.exe -L "cores\mednafen_saturn_libretro.dll" "%s"
+
+- [already done but needs more work] create a function to detect the <disk "region" tag and return the proper media type title (CD, LaserDisc, DVD, CED VideoDisc, GD-ROM, etc...)
+     -> partially done for MAME, HBMAME, Demul, ZiNc; tags are texts not indexes
+     -> the tag for "DISC" media type is already done in uMain.FixFileIDRegionROMCHD() function... this fucntion works with MAME/HBMAME only, I think
+        -> need to create an array for the "MediaType_Tag" -> "cdrom", "dvd", "laserdisc", "gdrom", "audiocd", "ced_videodisc"
+     
+  -> this will be used only when creating MAME/HBMAME games lists
+  -> there's no need to create tags for HDD, Flashcards, VHS
+
+- [improvement ????] make changes to uMain.CallSelectArcadeSystem() function and use either an array[1..MaxArcadeSystems] or a TStringList (like in EmuCon "CreateGamesList() function) 
+                     to validate selected systems instead of just using a string in the function's result...
+  -> this function is used in uMain, uArcadeDeleteCloneImages, uArcadeMAMu_IconsManager, uArcadeSelectSystem
+
+- check "iUpdatedGames" var (uMain.pas) and perhaps use it to show a list of changed game sets and their previous/new status
+
+- use the new uMain.IsFileID????() functions in uGameDetails, uArcadeScanResults, uDeleteGamefiles... and check other places
+
+- [source code improvement] the following functions could be renamed to avoid conflict with "IsFileID_???()" functions:
+
+  - uMain.IsROM_Have()     ->  uMain.IsSet_Have()
+  - uMain.IsROM_Miss()     ->  uMain.IsSet_Miss()
+  - uMain.IsROM_Bios()     ->  uMain.IsSet_Bios()
+  - uMain.IsROM_Device()   ->  uMain.IsSet_Device()
+
+  - uMain.IsROM_HaveMissROMs()   ->  uMain.IsSet_HaveMissROMs()
+  - uMain.IsROM_UseDeviceROMs()  ->  uMain.IsSet_UseDeviceROMs()
+
+- keep an eye on "Vectrex"
+  - MAME 0.195: vectrex.cpp: Partially untangled console and arcade variants from each other.
+
+- create functions to detect CHD file types (HDD, Disc, Compact Flash Card, Video Tape VHS)
+  -> used in uMain.GetFileTypeText() and others (Game Details, Scan Games, Scan Results, ExecuteGame...)
+
+- where is uMain.LoadFolderSpecial_MAME() function used ?
+
+- [future improvement] if HBMAME starts using software lists, update uMain.PopupScanAllGames.OnClick() event
+
+- [future improvement] where can uMain.GetGameTypeString() be used ?
+  - Game Details screen
+
+- continue code cleaning at FormMain.MenuCreateMAMESoftwareListGamesClick(Sender: TObject);
+
+- [maybe] var uMain.ParentZipContents: THashedStringList
+  might not be needed anymore, ROMs of both parent set + clone set could be added to the uMain.ZipContents var; ParentZipContents must be emptied on EVERY new audited game anyway...
+
+- ??? add "DeviceName" param to uMain.SearchCHDSimpleScan() and uMain.SearchCHDFolder() functions... this might be needed for "Quick Scan" mode
+
+- parse <device type="cartridge" and count how many cart slots a machine has (neogeo, megatech, stvbios, playch10)
+  -> from -listxml
+  -> function uMain.ValidateMultiSlot() have hard-coded cart slot count 
+  -> all machines that have multiple "cartridge" devices will be listed in a new "mame_multislotcount.txt" (or something...)
+     - perhaps manually add Neo-Geo single slot machines (special case)
+  -> playch10 doesn't have this info yet, if ever
+  -> this is meant for arcade machines only (June 22, 2018)
+  -> make sure to support multi-cart systems only ?
+
+- ??? update "GetScreenTypeIndex" function in CreateGames_ListInfo() function to be like _ListXML()
+
+- [maybe] changes to games status bar settings:
+  - increase bar height (4 pixels ?)
+  - add font size (small, large, extra large) and use bigger icons accordingly (also increase bar height)
+
+- game CPS1 - Ghouls 'n Ghosts is not included in "CAPCOM 80s" filter ???
+
+  http://www.randomterrain.com/web-design-readability-and-backgrounds.html
+
+- Delete/Rename Image Files
+  -> add system icon to the left of system title text ?
+  -> check font color of software list from "Delete Game Files" and use the same colors in this screen ?
+
+  -> perhaps make the image paths with FULL path instead of relative; this is done every time you select a new game; why not just have the full path
+     loaded into RAM vars already ? when user change image folder settings, detect relative paths and fix it to use full path
+    (always relative to the emulator, never to the frontend)
+
+  -> it might be easier to have paths loaded in RAM only for the 4 images used, or less depending on the image layout setting. Currently all image
+     paths are always loaded into RAM (String vars)
+
+- [maybe] add "Sharp X68000 Computer" system
+
+- [maybe] add context menu to images popup menu and show the image in full screen; create a new window to display snapshot
+
+- Raine emulator:
+  - to create gamename list: "raine32.exe -listgame -nogui"
+  - to run games make sure to use -nogui...
+
+- FinalBurn Alpha:
+  - to create gamename list: "fba.exe -listinfo"
+  - to run games, no special parameter ?
+
+- here is this bug that crashes EL every time; in thumbs mode, select only mame in the gamelist, then in arcade filter select show only BIOS, then in my case
+  nothing will show up cuz in misc options i checked hide both bios n devices, but when i uncheck them to show them in the list, EL crashes all the time.
+  I would take a guess that is related to the thumbs since i could not reproduce that bug in details view. 
+
+- uCommon.SetSelectedComboBox()
+  -> replace TComboBoxEx by TComboBox2Ex in CustomCommandLine screen ??? and remove the code for the TComboBoxEx (Delphi standard control)
+
+- [MAYBE] move "SetPopupMenuNightColors()" to the public section and remove all calls from uMain.pas into other screens ?
+
+- add new stuff for MAME v0.213  
+  - new settings: "debugger_font" and "debugger_font_size" ?
+
+- [maybe] Integrate my TEditEx component into EasyListView, to allow custom border for the night mode ? class TEasyEdit (EasyListView.pas)
+
+- see this for MAME 0.217
+  - Enhanced -listxml, -listsoftware, -getsoflist and -romident to support software lists enabled by slot card devices. [Vas Crabb]
+
+- MAME 0.219 (verify these changes)
+  ->  naomi.cpp: Dumped Sega Atomiswave BIOS. [CoolFox, MetalliC]

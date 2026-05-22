@@ -1,0 +1,2390 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+   <head>
+      <title>Emu Loader Change Logs</title>
+      <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+      <meta http-equiv="Content-Language" content="en-us"/>
+      <link rel="stylesheet" type="text/css" media="all" href="changelog.css"/>      
+   </head>
+   <body>
+      <div id="changelog">
+         <h1>version 6.6 change log - December 23, 2012</h1>
+         <h2>Fixed</h2>
+            <h3>Applied a dirty fix for the "gamename.zip not found" message, for sets with no ROMs ("Game Details" screen)</h3>
+            <h3>"Ghost" effect not being applied to unchecked files in "Delete Selected Games" feature</h3>
+            <h3>MAME games with no ROMs were being handled as "missing ROMs" (pongf, ide_baseboard, hdd, and others from MAME Plus!)</h3>
+            <h3>Proper MAME NVRAM file type detection ("Delete Selected Games" feature). This is just a cosmetic fix, to display correct
+                file type descriptions...</h3>
+            <h3>Fixed my TShadowLabel component. It was cutting 3 pixels at the right side and 1 pixel at the bottom. The regular TLabel
+                component also does that when text have "Italic" style enabled or the component is set to "disabled"</h3>
+            <h3>Menu item caption was appearing as hints in some menus/popup menus</h3>
+            <h3>Button "Yes" being executed when pressing "ENTER" key, while button "No" is focused (MessageBox screen)</h3>
+         <h2>Changed</h2>
+            <h3>Rewrite of "Emulator Setup" screen. A new "glowing text" unit is in for testing (might be removed/replaced in a future build)<br/>
+                To avoid repaint crazyness (like TLabel component), the new "CreateGlowText()" function can only be used with TImage components</h3>
+            <h3>Visual updates on a few screens that have "emulator select" and "image category select" panels and/or screens</h3>
+            <h3>Rewrite of "Image Category / Image Layouts" settings screen and fixed a few visual bugs</h3>
+         <h2>Improved</h2>
+            <h3>Delete multiple games at once has been completely rewritten.<br/>
+                - Added game config files (cfg; nvram; eeprom; sram; flash) to "Delete Selected Games" feature. Also added ".flash" files
+                detection for Demul (nvram folder)<br/>
+                - ALL selected games are now scanned, not just available ones. This is necessary since config files are included in the
+                  search, and you might have config files but not the actual ROMs/CHDs files<br/>
+                - Files list no longer appear while scrolling the games list. Instead, a "Files Details" button is available
+                if you want to see the full files list (all games or selected games)<br/><br/>
+                IMPORTANT: You cannot select individual files per game to delete anymore. A new checkbox group has been created,
+                called "Check File Types to Delete".<br/>
+                There are three options: "ROMs", "CHDs" and "CFGs/NVRAMs". Just check the file types you want to delete and uncheck the
+                ones you want to keep. It's very simple
+            </h3>
+            <h3>Rewrite of "Show Game Details" screen and a few optimizations. Still not final... I'm not yet happy with how it looks</h3>
+            <h3>Buttons "No" / "Yes" re-arranged in MessageBox screen. Button "No" should be on the right side...</h3>
+            <h3>Replaced open/save file dialogs by Windows native dialogs. The proper dialogs are displayed now on Windows 7 :)</h3>
+            <h3>Finally found a way to compile the project with a high res icon with many resolutions, including 256x256</h3>
+
+         <h2>Removed</h2>
+            <h3>Feature "Delete Game Config Files" is no longer needed</h3>
+            <h3>Feature "Delete Not Used Game Config Files". It's way easier to manually empty config folders from all emulators anyway...</h3>
+         <h2>Added</h2>
+            <h3>Support for MAME v147u1 new "mame.ini" settings</h3>
+            <h3>It's bigger... it's better... zipped images is BACK!<br/>
+                - Files are extracted directly into a memory stream (RAM). No temporary files are created</br>
+                - All systems are supported<br/>
+                - If you modify any of the .zip files, Emu Loader must be restarted, or you can disable/enable images (F6 hot-key)</br>
+                - Files must be placed in the same folders as images, for each system<br/>
+                - None of the rename/delete features support zipped images, because it's ultra mega dog slow to update .zip files</br>
+                - Each .zip file is closed after the image is loaded. This prevent files from being locked and always opened...<br/>
+                - The priority is still unzipped images. If no unzipped images are found (both parent and clone), .zip files are searched<br/>
+                - Use of internal string lists for faster file searching<br/>
+                - Filenames for each image category (same as MAME Plus! / MAMEUI). Same filenames for all emulators as well:<br/>
+                &nbsp;&nbsp;&nbsp;- Title Snapshot: titles.zip<br/>
+                &nbsp;&nbsp;&nbsp;- In-Game Snapshot: snap.zip<br/>
+                &nbsp;&nbsp;&nbsp;- Marquee: marquees.zip<br/>
+                &nbsp;&nbsp;&nbsp;- Flyer: flyers.zip<br/>
+                &nbsp;&nbsp;&nbsp;- Cabinet: cabinets.zip<br/>
+                &nbsp;&nbsp;&nbsp;- Control Panel: cpanel.zip<br/>
+                &nbsp;&nbsp;&nbsp;- Control Panel Layout: cpanellayout.zip<br/>
+                &nbsp;&nbsp;&nbsp;- PCB: pcb.zip<br/>
+                &nbsp;&nbsp;&nbsp;- In-Game Artwork: snapartwork.zip<br/><br/>
+                Notes:<br/>
+                1. if you select the same image folder for different systems, the same .zip file will be used!<br/>
+                &nbsp;&nbsp;&nbsp;&nbsp;eg.: select same folder for snaps in MAME and ZiNc. EL will search images for both systems using the
+                same "snap.zip" file<br/>
+                2. Searching internal lists, it takes zero ms (milliseconds) on a list with 30 thousand items (15 ms on a list with 60
+                thousand items, 30 ms on a 120 thousand list... and up on larger lists)<br/>
+                &nbsp;&nbsp;&nbsp;&nbsp;Unzipping files takes between 15 ms to 50 ms, depending on how big or small the .zip file is. This
+                is measured on a Core I7 2600 3.4GHz)
+            </h3>
+      </div>
+
+      <br/><br/>
+      <div id="changelog">
+         <h1>version 6.5.4 change log - September 15, 2012</h1>
+         <h2>Fixed</h2>
+            <h3>Critical error: a few important features were not working due to new "TrkGlassButton" button types still being
+                handled as regular "TButton" on many functions</h3>
+            <h3>Several games filters were not working due to a glitch in the source code... sorry, my fault</h3>
+            <h3>Button "Image View Mode" is now the last button in images tool bar button... as it should have been from day one</h3>
+      </div>
+
+      <br/><br/>
+      <div id="changelog">
+         <h1>version 6.5.3 change log - May 27, 2012</h1>
+         <h2>Fixed</h2>
+            <h3>Rename/delete images was never possible, unless the main menu "Images" was accessed first</h3>
+            <h3>Rename/delete images with popup menu was not working while in layouts view mode</h3>
+            <h3>Minor UI bugs</h3>
+            <h3>Quiting the frontend in full screen mode. After restart EL and disable full screen mode, main window state was not
+                restored correctly</h3>
+            <h3>Images panel visible when restarting EL in thumbnails view mode</h3>
+            <h3>Feature "center image splitters" was not working correctly for some layouts (image layouts view)</h3>
+            <h3>Buttons / checkboxes / radiogroups components disappear when pressing the ALT key
+               (Windows themes support is buggy in Delphi 7 for some components)</h3>
+            <h3>Game selection's alpha blend setting was always disabled on restart</h3>
+            <h3>Panels in "Image Layout Settings" screen were not being correctly shown/hidden (visual bug only)</h3>
+            <h3>Splash screen's texts frame not moving along with splash screen while dragging it</h3>
+            <h3>Several UI bugs in MAME settings screen, including tooltips</h3>
+         <h2>Changed</h2>
+            <h3>Main menu bar is gone. All options are now in the first button at the main tool bar buttons. Can also be hidden</h3>
+            <h3>Modified my splitter component to accept a single color, a popup menu... and more goodies</h3>
+            <h3>Splitters in main screen set to "Office 2007 Luna" style by default. Customizable at preferences screen, "General" page</h3>
+            <h3>Replaced all top/bottom bars by my new TPanelEx component with vista grandient styles (external image files no longer needed)</h3>
+            <h3>Moved Daphne settings from preferences screen to its own config screen and added new settings. A new file is created:
+                "\emulator_ini\daphne_el.ini"</h3>
+            <h3>Moved "\images\msgbox_icons\" folder to "\resources\main_icons\msgbox_icons\" and converted into .ico files</h3>
+         <h2>Improved</h2>
+            <h3>Dual gradient selection bar visually improved (menus / popup menus)</h3>
+            <h3>Preferences screen make-up. Sections separated by pages</h3>
+            <h3>New hint control to mimic Windows 7 hints/tooltips (games list has its own custom hint, it cannot be changed)</h3>
+            <h3>More code cleanups and optimizations</h3>
+            <h3>Replaced all checkboxes, radiogroups and groupboxes by my new custom components. Custom label colors and shadow texts</h3>
+         <h2>Removed</h2>
+            <h3>Select random game feature on main tool bar buttons is gone. This feature never worked right while filters are enabled</h3>
+            <h3>The following files are no longer needed (all from "resources\images\" folder):<br/>
+                "msgbox_bottom.png", "msgbox_bottom_border_left.png", "msgbox_bottom_border_right.png", "checkbox_on.png", "checkbox_off.png",
+                "msgbox_top.png", "systembk_top.png", "textbar.png", "textbar2.png"
+            </h3>
+         <h2>Added</h2>
+            <h3>New settings for "Image Layouts View"<br/>
+                - "Show Splitter Grip Icon" -> toggle on/off grip dots in splitter (images popup menu)... enabled by default</br>
+                - "Customize Splitters" -> customize splitters appearance (images popup menu, preferences screen / "Images" section)</br>
+                - "Splitter Style" -> fixed gradient colors, "single color" style can be customized (preferences screen / "Images" section)<br/>
+                - "Center This Splitter" -> center only one splitter on a image layouts view (mouse right-click directly on the splitter)<br/>
+                - "Enable Layout Dimensions" -> show a window with the size of each image panel (in pixels), for extreme fine-tuning (images popup menu)
+            </h3>
+            <h3>Option "Category / Layout Settings" added in images popup menu for quicker access</h3>
+            <h3>New setting for main tool bar filters: "Bound To Games Panel". Check this option to limit the tool bar to the games
+                list panel. This will increase the size of the images panel even more (menu "View" / "Tool Bar" and in "Customize Tool Bar" screen<br/>
+                NOTE: if the games panel is too short, use the small tool bar buttons or increase the games panel width by using the splitter
+            </h3>
+            <h3>New setting: "Show Image Border" (enabled by default). Show a 7 pixels border around the image panel (images popup menu)</h3>
+      </div>
+
+      <br/><br/>
+      <div id="changelog">
+         <h1>version 6.5.2 change log - February 28, 2012</h1>
+         <h2>Fixed</h2>
+            <h3>Minor command line fix for Supermodel 0.3a (run games)</h3>
+         <h2>Added</h2>
+            <h3>Support for Demul v0.5.7</h3>
+      </div>
+
+      <br/><br/>
+      <div id="changelog">
+         <h1>version 6.5.1 change log - February 25, 2012</h1>
+         <h2>Fixed</h2>
+            <h3>Games with discrete audio were not being parsed correctly from -listxml output (MAME)</h3>
+            <h3>Feature "Delete Selected Game(s)" was not searching CHD filenames correctly and not listing them on the game files list</h3>
+         <h2>Improved</h2>
+            <h3>More source code cleanups</h3>
+         <h2>Removed</h2>
+            <h3>CHD Sub-filters removed. Only a single CHD filter is available from now on. File "chd_mediatypes.ini" no longer required</h3>
+            <h3>CHD compression type info completely removed from the project. Now only the header version is shown</h3>
+            <h3>Support for "Game FAQ Files" and "PCB Info Files" removed (preferences screen, game info feature)</h3>
+      </div>
+
+      <br/><br/>
+      <div id="changelog">
+         <h1>version 6.5 change log - February 21, 2012</h1>
+         <h2>Fixed</h2>
+            <h3>Since MAME 0.144u7 main CPU tags have a " : " char in the tag name (-listxml output). Dunno why they did this... :_(</h3>
+         <h2>Added</h2>
+            <h3>View game info from Progetto EMMA website, since MAWS is offline and there's no ETA on its return (if ever)<br/>
+                To change between them, go to main menu "Images", and select one of the options. "Progetto EMMA" will be the default
+                setting from now on
+            </h3>
+            <h3>Support MAME v0.145u1: new CHD header v5 detection (no compression type detection though)</h3>
+            <h3>Support new settings for the latest Supermodel 0.3a-WIP ("Supermodel Default Settings" and run games)</h3>
+      </div>
+      
+      <br/><br/>
+      <div id="changelog">
+         <h1>version 6.4.2 change log - January 28, 2012</h1>
+         <h2>Fixed</h2>
+            <h3>ROM status begin set as missing for available games. I guess I missed that small tiny detail. All is good now :)</h3>
+      </div>
+
+      <br/><br/>
+      <div id="changelog">
+         <h1>version 6.4.1 change log - January 22, 2012</h1>
+         <h2>Fixed</h2>
+            <h3>ROM CRC32 checksum was not being parsed correctly from mame's -listxml output (several sets).
+                This greatly affects game audit!</h3>
+            <h3>Game status not being properly set on missing sets, showing wrong info in "Game Details" screen and set status icon
+                at games list's status bar</h3>
+      </div>
+
+      <br/><br/>
+      <div id="changelog">
+         <h1>version 6.4 change log - January 10, 2012</h1>
+         <h2>Fixed</h2>
+            <h3>Minor cosmetic fixes in the user interface</h3>
+            <h3>Application crash after deleting a game .zip file... this bug has been there for months :_(</h3>
+            <h3>Events of several buttons and components in "MAME Settings" screen were missing (folders tabs). Not a single bug
+                report about this either :_(</h3>
+            <h3>Status bar not updated after single game scan (audit)</h3>
+            <h3>The folder for SEGA Model 2 Emu config file could not be located, as the folder was not being properly set. That
+                means NO ONE could run games with the frontend! Sadly, nobody reported this :_(</h3>
+            <h3>Games list was not being generated at startup, if games list file and ROMs database file were not found</h3>
+            <h3>Minor bug that was not properly adding merged clone "names" into "arcade\mame_merged.ini"</h3>
+         <h2>Changed</h2>
+            <h3>If option "Set All Games Available", only the games from the selected "scan games" option will be updated (not the entire
+                games list). But the "arcade\system_name.miss" file will not be updated</h3>
+            <h3>Selection bar updated</h3>
+            <h3>Blank icon renamed to "blank_icon.ico" and it's now a 32-bits icon ("resources" folder). "MAMu_ Icons Manager" feature
+                updated to use this new icon</h3>
+            <h3>Big core change 1! From now one, the entire ROMs database is loaded in RAM for easier and faster access. You must re-create
+                the games list for all systems!<br/>
+                - ROMs database changed again ("\arcade\systemname_roms.el" files). Used by following features: "scan games (audit)",
+                  "scan results" and "game details"<br/>
+                - no more "baddump" / "nodump" tags detection (this is not a ROM manager), although "nodump" is set if the checksum is empty<br/>
+                - the "is / is not device rom" tags are now placed before the rom name (MAME only)<br/>
+                - entries "gmtitle", "cloneof", "biosname" removed since they're not needed anymore<br/>
+                - an addition of 3 seconds to load the ROMs database, when loading the games list
+            </h3>
+            <h3>Features "Scan Games (Audit)" and "Scan Results" updated to use the new ROMs database format. The data needed
+                (game info and ROMs list) are read directly from the games list</h3>
+            <h3>Big core change 2! Game set status info expanded into three categories and added directly into game list files
+                ("arcade\system_name.el"), for easier access and game auditing. You must re-create the games list for all systems!<br/>
+                - code 0 -> available game<br/>
+                - code 1 -> missing ROMs/CHDs</br>
+                - code 2 -> missing (no .zip file found)<br/>
+                - file "arcade\system_name.miss" still used to display ROMs status in "Game Details" and "Scan Results" screens
+            </h3>
+         <h2>Improved</h2>
+            <h3>Code cleanups</h3>
+         <h2>Removed</h2>
+            <h3>The following "selection bar" settings were removed (preferences screen, "Selection Bar" frame box)<br/>
+                - "Full Item Paint" -> it's always enabled anyway<br/>
+                - "White Text Color" -> not needed anymore<br/>
+                - "Gradient Bar" -> gradient selection bar is always enabled now
+            </h3>
+         <h2>Added</h2>
+            <h3>New scan games option: audit multiple selected games at once :)<br/>
+                - only games from ONE system will be scanned (based on the first selected game)</br>
+                - option located below "Selected Game [Shift+F5]", called "Selected Games (Multiple)"... games popup menu,
+                  "Scan Games (Audit ROMs)" sub-menu or just use the hot-key "Shift+F6"
+            </h3>
+            <h3>New selection bar option: "Round Corners". Enable or disable the rounded corners in the selection bar (preferences screen)</h3>
+      </div>
+      
+      <br/><br/>
+      <div id="changelog">
+         <h1>version 6.3 change log - December 15, 2011</h1>
+         <h2>Fixed</h2>
+            <h3>Average FPS was not being shown after exiting a MAME game, if "Show Error Messages" was also checked
+                (main menu "View" / "Command Line")</h3>
+            <h3>Paiting bug when selecting items on large icons view mode</h3>
+         <h2>Changed</h2>
+            <h3>The -listxml output file is no longer deleted after creating a MAME games list. It is now a fixed file:
+                "elfolder\arcade\mame_listxml.xml"<br/>
+                It will only be updated if a new MAME build is used. It takes way too long for this file to be created<br/>
+                Avoid deleting this file manually...
+            </h3>
+            <h3>XP themes must be enabled from now on, so EL can work properly. Windows 7 needs aero interface. Otherwise, the UI will be all messed up</h3>
+            <h3>New screens for Delete/Rename image files</h3>
+         <h2>Improved</h2>
+            <h3>New rename/delete images dialog</h3>
+         <h2>Removed</h2>
+            <h3>No more true color icons (24-bits) support. EL was built for XP icons from day one (32-bits, alpha blend)<br/>
+                MAMu_ icons still supports 8 bits (256-colors), 24 bits (true-color) and 32 bits (XP-icons) and that will never change</h3>
+            <h3>Support for Win9x / WinMe is gone</h3>
+            <h3>Setting "Force Quotes (XP/Win7)" (main menu "View" / "Command Line"). It has been disabled for many builds</h3>
+            <h3>Setting "Disable Icon Stretch (48x48)". Not needed anymore (MAMu_ icons)</h3>
+            <h3>File "EmuLoader.exe.manifest" is not needed anymore. Themes is always enabled from now on and there's no way to turn them off</h3>
+         <h2>Added</h2>
+            <h3>Support for the new control tags format in -listxml output (MAME 0.144 and newer). Games with dual joysticks
+                are displayed correctly at "Game Details" screen. File "ini_files\control_type.ini" updated (MAME Plus! also supported)<br/>
+                Old MAME builds are still supported (minimum 0.84)
+            </h3>
+            <h3>Support 48x48 icons for MAMu_ icons (alpha blend-32 bits, true color-24 bits and 256 colors 8-bits)<br/>
+                Only when using tiles view mode or standard/grouped views with "extra large icons" settings enabled</h3>
+      </div>
+
+      <br/><br/>
+      <div id="changelog">
+         <h1>version 6.2.1 change log - Novermber 24, 2011</h1>
+         <h2>Fixed</h2>
+            <h3>Game sets that have no ROMs where being set as missing as there is no ROMs list for the audit feature. They are all set as
+                available sets from now on (pong, a2600, nes, etc). This fix only applies to "MAME Plus!"</h3>
+         <h2>Changed</h2>
+            <h3>Changes in "MAMu_ Icons Manager" feature:<br/>
+                - new "Mechanical" column in missing icons list<br/>
+                - icons do not get copied/updated when closing the screen with the window close button ("Copy zzz to Selected Games" setting)<br/>
+                - support for multiple zzz icon files for the missing icons list. Missing icons list will be checked against all zzz icon files
+                  found in icons folder. files naming MUST be "zzz_nameofyourfile.ico" (always start with "zzz_")<br/>
+                - icons in the "Delete Not Working Icon" screen are now properly loaded, due to multiple "zzz" files (right after scanning for
+                  missing icons)
+                - feature "Update Not Working Icons" is broken for now
+            </h3>
+            <h3>Updated "Delete Config Files" feature (games popup menu) to support the new nvram file system for MAME (nvram\gamename\*.*)<br/>
+                Notes:</br>
+                - this is only supported with single game selection!<br/>
+                - old .nv files are still supported...<br/>
+                - multiple folders support for games with multiple bioses, like NeoGeo... "systemname_biosnum.nv"<br/>
+                - delete config files when multiple games are selected, only the old "nvram\gamename.nv" method is supported
+            </h3>
+         <h2>Improved</h2>
+            <h3>3rd pass when creating MAME games list is way faster now</h3>
+      </div>
+
+      <br/><br/>
+      <div id="changelog">
+         <h1>version 6.2 change log - October 27, 2011</h1>
+         <h2>Fixed</h2>
+            <h3>Workaround for ROM names with equal char " = ". Due to the way the frontend was coded, this char cannot be used on ROM names.
+                ROMs are validated by CRC32 checksum only, ROM names are irrelevant. This applies to the "gamtor.c" driver only (for now)
+            </h3>
+         <h2>Changed</h2>
+            <h3>The available ClrMAME .dat file is now used to create Supermodel games list (file: "SupermodelSEGAModel3_xml.dat")<br/>
+                But game info is incomplete. A working MAME list is needed to fill the blanks (optional)</h3>
+            <h3>Changes in "MAMu_ Icons Manager" feature:<br/>
+                - new column in missing icons list: "Mechanical"<br/>
+                - icons do not get copied/updated when closing the screen with the window's close button ("Copy zzz to Selected Games" setting)<br/>
+                - support for multiple zzz icon files for the missing icons list. Missing icons list will be checked against all zzz icon files
+                  found in icons folder. files naming MUST be "zzz_nameofyourfile.ico" (always start with "zzz_")<br/>
+                - icons in the "Delete Not Working Icon" screen are not properly loaded, due to multiple "zzz" files (right after scanning for
+                  missing icons)
+            </h3>
+         <h2>Added</h2>
+            <h3>Support for new MAME 0.143u8 settings ("MAME Setting" screen)</h3>
+      </div>
+
+      <br/><br/>
+      <div id="changelog">
+         <h1>version 6.1.9 change log - September 27, 2011</h1>
+         <h2>Fixed</h2>
+            <h3>On a fresh install, large icons (32x32) are displayed instead of standard size (24x24)</h3>
+            <h3>Red alert! Red alert! CRC32 checksum for several Demul games have leading spaces (-listxml output), causing EL to
+                set these games as "found with missing roms". Funny, after many months, only ONE user reported this bug!!!<br/>
+                I don't use Demul so, I never got this problem</h3>
+         <h2>Added</h2>
+            <h3>Support for MAME v0.143u6</h3>
+            <h3>Support for Supermodel v0.2a (older builds are no longer supported!)<br/>
+                - emulator settings and custom game settings are saved on EL's own .ini files (folder "\emulator_ini\supermodel_ini\")<br/>
+                - settings from "emulator_folder\Config\Supermodel.ini" file are never read or used by the frontend<br/>
+                - a working MAME 0.143u6 games list is required to create a Supermodel games list (older versions are not supported)
+            </h3>
+      </div>
+
+      <br/><br/>
+      <div id="changelog">
+         <h1>version 6.1.8 change log - August 22, 2011</h1>
+         <h2>Fixed</h2>
+            <h3>Game titles in SEGA Model 2 XML file fixed. Many thanks go to user "Retroplay" from RetroRoms forum for fixing them</h3>
+         <h2>Added</h2>
+            <h3>Changes in the frontend's core to support MAME v0.143u3 new device sets ("mie", "namco50" and others)... from "-listxml" output<br/>
+                - new file, listing all games that use ROMs from device sets ("\arcade\mame_devicesets.ini")<br/>
+                - new "IsDeviceSet" field in games list files ("\arcade\system.el"). Also a new "devices" section is added, listing all device
+                  sets</br>
+                - new "IsDeviceROM" field in ROMs list files ("\arcade\system_roms.el")<br/>
+                - separate .zip sets support for these new devices when scanning/auditing games ("mie.zip", "namco50.zip" and others)
+            </h3>
+            <h3>New main filter: "Device Sets" that show only device sets (main filters button, right next to the Bios filter)</h3>
+            <h3>New "Devices" filter (extra filters tool bar button):<br/>
+                - "Show Games With Device ROMs" -> show all games that use device ROMs</br>
+                - "Show Games With No Device ROMs" -> show all games that do not use device ROMs</br>
+                - "Hide Device Sets" -> hide all device sets (same as "Hide Bios Sets")
+            </h3>
+            <h3>Feature "Game Details" (Ctrl+I hotkey / mouse right-click) have the following new information:</br>
+                - "Device Set / Yes" -> so you know it's a device set, not a game<br/>
+                - "Device ROMs / Yes", "Device Set #" -> if a game use device ROMs and the set names of the devices</br>
+                - "Device Zip" (in "Game Files" section) -> show if the .zip file for each device set is found or not</br>
+                - Text tag "Device ROM" on each ROM that's from a device set (ROMs list panel). This is only shown on games, not device sets
+            </h3>
+            <h3>Feature "View Missing ROMs/CHDs" (F8 hot-key) updated to list device names and "device_name.zip" found or missing<br/>
+                NOTE: this feature support a max of 10 device sets per game... for now (will be increased if needed for future MAME builds)</h3>
+      </div>
+      
+      <br/><br/>
+      <div id="changelog">
+         <h1>version 6.1.7 change log - July 09, 2011</h1>
+         <h2>Fixed</h2>
+            <h3>Window status (normal/maximized) not being correctly handled when switching between windowed/full screen mode</h3>
+            <h3>Main menu "Images" showing up when initializing the frontend in full screen mode</h3>
+            <h3>Selected game not visible on screen after resizing the main window or resizing the preview snapshots panel</h3>
+            <h3>Document files updated ("docs\" folder). Some of them had incorrect/incomplete information</h3>
+            <h3>In-game snapshot not being updated after exiting a game</h3>
+            <h3>Fixed a huge bug that was messing up image layout settings when switching between layouts, and when switching between
+                classic and layout view modes</h3>
+            <h3>game snapshots were not loading correctly in layouts view mode, if one of the images was not found</h3>
+            <h3>Application crash when changing image's "stretch" setting (classic view mode only)</h3>
+         <h2>Changed</h2>
+            <h3>Bios selection in "MAME Default" and "MAME Game/Driver Custom" settings screen only show sets for games that
+                have external bios sets, like "Neo-Geo", "PlayChoice-10" ("Miscellaneous" tab)<br/>
+                This way, a bios won't be selectable for games that do not use bios or for MAME default settings
+            </h3>
+            <h3>Renamed "Scan Results" to "View Missing ROMs/CHDs". This feature is ment to show you only available games with
+                missing ROMs/CHDs... not after using "Scan Games" feature</h3>
+            <h3>Favorites profiles removed. Only a single favorites list is supported from now on<br/>
+                Either create a new favorites list or rename one of the favorites files from "\ini_files\favorites\*.el" to
+                "\ini_files\favorites.ini"... and remove the "fav_username=" line (first entry in the file)<br/>
+                You can delete "\ini_files\favorites\" folder and its files<br/>
+                The "Validate Favorites File" option is at main menu "Settings" / "Maintenance"
+            </h3>
+            <h3>Replaced "Number of Screens" by "Audio Type" (only used by MAME)</h3>
+            <h3>Screen "Emulator Setup" re-write<br/>
+                - Simplified interface. Only emulator filename needs to be selected<br/>
+                - MD5 checksum info removed (useless)<br/>
+                - New "Update System" button. Useful if you change emulator file and have "New Emulator Detection" option disabled (preferences)
+            </h3>
+            <h3>ClrMAMEPro XML .dat files must be in frontend's main folder now, and named as follows:<br/>
+                - ZiNc: "ZiNc_xml.dat"<br/>
+                - SEGA Model 2 Emu: "SEGAModel2_xml.dat"<br/>
+                As of this version, both files will be released with frontend's binary package... no more .dat file hunting :-))
+            </h3>
+            <h3>Moved games scan result files (.miss) from "arcade\scan_results\" to "arcade\" folder</h3>
+            <h3>Control type entries in "\arcade\system_name.el" files have MAME's control names now<br/>
+                A new file is also available listing all control types ("\ini_files\control_type.ini"). You can expand this list
+                manually if a new MAME has a new control... even AFTER creating a MAME games list</h3>
+            <h3>If version info cannot be parsed from emulator binary, "Unknown" will be set automatically (no more user input)</h3>
+            <h3>New "game status" icon at games list status bar, next to the game name label<br/>
+                - green ball : available game (.zip found and ok)</br>
+                - black ball : missing game (.zip missing)<br/>
+                - yellow ball: have game with missing ROMs/CHDs (.zip found)
+            </h3>
+         <h2>Improved</h2>
+            <h3>Minor user interface tweaks... for consistency</h3>
+            <h3>Feature "Delete Clone Images" updated. Removed multi-screens support (main menu "Images" / "Maintenance")</h3>
+            <h3>Text filter bar updated. New visual, easier to use. More options available<br/>
+                To change options, click on "settings" button and select the desired filter. Remember, checking
+                "Include Tool Bar Filters", the filters from main tool bar buttons will also be applied
+            </h3>
+            <h3>Game snapshots were being loaded three (3) times over at startup!</h3>
+         <h2>Removed</h2>
+            <h3>Feature "Bios Sets [M.A.M.E.]" (main menu "Emulator"). Select a bios using custom game/driver settings</h3>
+            <h3>Feature "Convert Snapshots". Snap files are automatically renamed after exiting MAME anyway</h3>
+            <h3>Hidden games feature is no more. Wanna hide games from kids and stuff ? Easy... don't have the ROMs in your computer<br/>
+                ... or edit "\arcade\mame.el" manually and remove the games you don't want (NEVER remove the first game of each section!)</h3>
+            <h3>Multi-games loading feature removed (megatech, and others). This will not be supported by the frontend anymore.
+                The folder "arcade\multi-games\" and its files can be deleted</h3>
+            <h3>"Classic" filter is gone (arcade filters). It's an old filter, when MAME only had Neo-Geo as a driver with
+                external bios sets</h3>
+            <h3>Support for "Screen Resolution", "Save State", "Audio Samples" infos is no more (MAME has LOTS of games without resolution
+                info)</h3>
+            <h3>Option "Display Image Label Info" ...pointless</h3>
+            <h3>Support of following ZiNc features:<br/>
+                - Glide rendering settings ("ZiNc Settings" screen)<br/>
+                - Option "One Setting Per Line" from preferences screen (only single line settings from now on)<br/>
+                - Driver custom settings support (only game custom settings from now on)
+            </h3>
+            <h3>SEGA Model 2 Emulator default settings and custom game settings is no more. The settings file "emulator.ini" have a lot
+                of comments and they were being removed every time you changed something with the frontend. Most option can be changed
+                directly in the emulator anyway</h3>
+            <h3>Emulator default settings for Demul is gone. You can set ALL options directly into the emulator, including ROMs folders</h3>
+            <h3>Setting "Show Not Available Image" is gone. The "not available images" are always displayed now</h3>
+            <h3>Delphi component "VirtualTreeView" is not used anywhere on the project anymore... references and component links completely
+                removed from the project</h3>
+            <h3>More source code clean-up.</h3>
+         <h2>Added</h2>
+            <h3>Frontend documentation files accessible in "Help" main menu</h3>
+            <h3>Support for latest MAME build</h3>
+            <h3>New "Extra Filters" button in main tool bar. All filters from the main menu "Game Filters" are here now. The main reason ?
+                To remind you that these filters exist! They are also saved/restored on restart from now on</h3>
+            <h3>New filter: "Audio Type" (extra filters tool bar button):<br/>
+                - Standard Audio: most games, using sound chips<br/>
+                - Discrete Audio: games that use discrete sound circuits<br/>
+                - Wave Sample Audio: games that use external .wav samples for sound
+            </h3>
+            <h3>XML .dat file for "SEGA Model 2 Emu" v1.0 finally added :)</h3)
+      </div>
+
+      <br/><br/>
+      <div id="changelog">
+         <h1>version 6.1.6 change log - May 01, 2011</h1>
+         <h2>Fixed</h2>
+            <h3>Atomiswave games not loading with Demul emulator</h3>
+            <h3>Waste of RAM when switching view modes in "MAMu_ Icons Manager" screen (missing icons list)</h3>
+            <h3>Columns sorting was not working when columns positions changed</h3>
+         <h2>Changed</h2>
+            <h3>Removed multiple folders support for MAMu_ Icons feature. If you were using multiple folders, please select a folder
+                for each system again. Relative path support is also removed</h3>
+         <h2>Improved</h2>
+            <h3>Feature "MAMu_ Icons Manager" improved. More "Not Working" icons features</h3>
+      </div>
+
+      <br/><br/>
+      <div id="changelog">
+         <h1>version 6.1.5 change log - April 22, 2011</h1>
+         <h2>Fixed</h2>
+            <h3>Played column was not being sorted correctly. All other columns are sorted as strings so, they should sort correctly</h3>
+            <h3>When in grouped view mode, all columns were being indented (clone games). Only the title column should be indented</h3>
+            <h3>Games filters were messing games list up (main tool bar buttons, left panel filter, text bar filter)</h3>
+         <h2>Improved</h2>
+            <h3>After scaning a single game, left panel filter is re-applied if enabled</h3>
+         <h2>Added</h2>
+            <h3>New setting: "Disable Clone Indent" (main menu "View"). Check this option to prevent clone games indentation
+                (grouped view mode only)</h3>
+      </div>
+
+      <br/><br/>
+      <div id="changelog">
+         <h1>version 6.1.4 change log - April 19, 2011</h1>
+         <h2>Fixed</h2>
+            <h3>Supermodel games list not being created at a fresh install</h3>
+         <h2>Added</h2>
+            <h3>New feature: AlterMAME ("Emulator Setup" screen and games popup menu). You can select an anternate MAME build to run games<br/>
+                See the help button in emulator setup screen, "AlterMAME" panel (after selecting MAME system) for more info</h3>
+      </div>
+
+      <br/><br/>
+      <div id="changelog">
+         <h1>version 6.1.3 change log - April 18, 2011</h1>
+         <h2>Fixed</h2>
+            <h3>Custom settings were not being saved ("SEGA Model 2", custom game settings)</h3>
+         <h2>Changed</h2>
+            <h3>Fancy new splash screen with transparency and alpha blend effect!!! Also, new about screen</h3>
+            <h3>Custom settings (game and driver) are loaded automatically now, if the custom settings file is found<br/>
+                This is how MAME works, and that's how it will work for all other supported systems (except Daphne and Demul that do not
+                support custom game/driver settings)
+            </h3>
+            <h3>Custom game/driver settings files moved from "frontend\arcade\" path to a new folder: "frontend\emulator_ini\".<br/>
+                For easier access and to separate them from games list files. Old folders and files will be automatically move to the
+                new folder (ZiNc and SEGA Model 2)<br/>
+                Supported systems: ZiNc, SEGA Model 2, Supermodel: SEGA Model 3
+            </h3>
+            <h3>Removed all instances of VirtualTreeView component from the frontend, except from the "left panel" feature that requires a
+                TreeView component. Improvements made:<br/>
+                - standard and grouped view modes converted to use EasyListView component. all views use the same component now<br/>
+                - no need to reload the games list when switching view modes, except for grouped view that requires special handling<br/>
+                - slow games scrolling with mouse wheel fixed<br/>
+                - better integration with other features that need to extract game details info from the main games list
+            </h3>
+         <h2>Improved</h2>
+            <h3>Removed hourglass cursor from a few functions</h3>
+            <h3>Support for "Windows Clear Type Fonts" improved. I think all screens can show clear type fonts now</h3>
+            <h3>Changed all "CompareText()" function calls to "AnsiCompareText()" (multi-byte and accented characters support!) :)</h3>
+            <h3>Major source code cleanup</h3>
+         <h2>Removed</h2>
+             <h3>Scan games list cannot be stopped anymore, to avoid crashes and weird errors</h3>
+             <h3>Custom command line feature is "gone with the wind...". Blame those damn leechers that keep using my frontend for profit!<br/>
+                 ...plus, I've never ever used this feature anyway. Also, to prevent people from using unsupported emulators with the frontend</h3>
+             <h3>Folder "resources\images\topbars\" and all its .png files are gone as they are not needed anymore</h3>
+             <h3>Columns profile per system is gone (standard/grouped view modes). All systems share the same sort parameters<br/>
+                 Columns settings file renamed to "frontend\ini_files\columns_profile.ini"</h3>
+         <h2>Added</h2>
+            <h3>Support for Supermodel: A SEGA Model 3 Emulator<br/>
+                NOTES:<br/>
+                - you need a working MAME games list to use this new emulator (games and ROMs list extracted from MAME)<br/>
+                - emulator settings and custom game settings will be stored in "frontend_dir\emulator_ini\supermodel_ini\" folder<br/>
+                - emulator default setting stored in "supermodel.ini" file (frontend custom folder)<br/>
+                - custom game options stored in "gamename.ini" files (frontend custom folder)<br/>
+                - there is no support for custom driver options since Supermodel only has SEGA Model 3 games<br/>
+                - merged games are not supported and no split-merged sets either<br/>
+                - ROMs paths info is stored in "EmuLoader.ini" file, for now. Multiple paths are supported<br/>
+                - options "vertex shader" and "fragment shader" are available. use them at your own risk!<br/>
+            </h3>
+            <h3>New feature: "Save State Manager". View/delete/rename save states files of your MAME and Supermodel: SEGA Model 3 games
+                (main menu "Games List")</h3>
+            <h3>Feature "Show Not Available Image" is back. If setting enabled, will display a "Not Available" image instead of an empty
+                panel... when the image category for the selected game is not found (snapshot, cabinet, flyer, etc)<br/>
+                All images must be in .png format and they are placed in the new "frontend_dir\resources\images\no_image\" folder.<br/>
+                See "docs\el-notavailableimage.txt" for more details
+            </h3>
+      </div>
+
+      <br/><br/>
+      <div id="changelog">
+         <h1>version 6.1.2 change log - March 22, 2011</h1>
+         <h2>Fixed</h2>
+            <h3>Colors and transparency in MAMu_ icons not being handled correctly. White frame surrounding many icons is gone.<br/>
+                They are perfect now, and there is a small speed improvement in the loading function :)<br/>
+                Tiles view mode, with "Disable Icon Stretch" option checked</h3>
+            <h3>Removed the annoying "Devices for games are not supported, only for bios sets." message when creating MAME games lists</h3>
+            <h3>Timer in splash screen is back. Now it's really working properly... I swear :)</h3>
+            <h3>Minor fixes and tweaks in "MAMu_ Icons Manager"</h3>
+         <h2>Added</h2>
+            <h3>New preferences setting: "Text In Bold". Check this option to enable font style "Bold" in selected items (requested feature)</h3>
+            <h3>Features "Scan Missing Images" and "Scan Not Used Images" merged into "Images Manager" (main menu "Images").
+                Minor fixes and some optimizations were also made.<br/>
+                Like MAMu_ Icons Manager, you can work with both lists at the same time. Some key features:<br/>
+                - rename not used images<br/>
+                - ability to maximize the window for better visual<br/>
+                - columns width on missing images list are saved/restored in "el_extras.ini" file<br/>
+                - images are loaded as icons in not used images list<br/>
+                - not used images are separated by folders, shown in different groups, for easier access<br/>
+                - move not used icons to another folder
+            </h3>
+      </div>
+
+      <br/><br/>
+      <div id="changelog">
+         <h1>version 6.1.1 change log - March 13, 2011</h1>
+         <h2>Fixed</h2>
+            <h3>Folder "arcade\multi-games\" was not being created when creating MAME games list, crashing the frontend</h3>
+            <h3>Disabled the timer in splash screen (for now) to fix a bug when creating multiple games list at startup</h3>
+            <h3>Daphne games list was not being created, and the scan for .zip files was crashing the frontend.<br/>
+                Funny that no one ever reported this!</h3>
+      </div>
+
+      <br/><br/>
+      <div id="changelog">
+         <h1>version 6.1 change log - March 11, 2011</h1>
+         <h2>Fixed</h2>
+            <h3>Proper detection of MAMu_ icons (color depth and multiple icons inside .ico file):<br/>
+                - several icons were displaying white/black background colors in transparent areas<br/>
+                - only the 32x32 icon is loaded, regardless the view mode used<br/>
+                - icons are now loaded using their original color pallette (no conversion to 24-bit color depth)<br/>
+                - added support 32-bit icons (alpha blend)
+            </h3>
+            <h3>Feature "Scan For Missing MAMu_ Icons" was not loading game name icons, only bios icon or driver icon (options "Show Game
+                Bios Icons" / "Show Game Driver Icons" / "Reload Icons")</h3>
+            <h3>Text in auto game docs window was not being moved to top when selecting games</h3>
+            <h3>Access violation when trying to delete game config files (Demul system)</h3>
+            <h3>Feature "Not Used Game Config Files" was not working with Demul system and "Delete Files" button was not
+                working at all!!! (main menu "Settings", "Maintenance")</h3>
+            <h3>Delete files button in "Not Used Zip Files" feature was not working at all!!! (main menu "Settings", "Maintenance")</h3>
+            <h3>I totally forgot to implement the function to delete files on "Delete Clones Images" (main menu "Images", "Maintenance")</h3>
+         <h2>Changed</h2>
+            <h3>Convert screenshots feature re-write (main menu "Images", "Maintenance"). Replaced VirtualTreeView by EasyListView
+                and some performance tweaks</h3>
+            <h3>Updated EasyListView component to latest SVN (February 2011)</h3>
+            <h3>All splitters replaced by a custom gradient splitter, easier to resize panels (main screen and others)</h3>
+         <h2>Improved</h2>
+            <h3>Minor tweaks</h3>
+            <h3>Removed the hour glass cursor from a bunch of functions because they don't make sense</h3>
+            <h3>Text in games list status bar updated to display game name, clone name and bios name: "mslug3h [clone of mslug3] [bios: neogeo]"</h3>
+            <h3>Splash screen timer does not reset to zero when switching from creating games list to scanning games functions.
+                Now you can see the total time it takes to create games list/verify your games sets</h3>
+            <h3>Merged left panel populate functions into one since they are almost the same (main screen and left panel editor)</h3>
+            <h3>Added column "Bios" into the games list (left panel editor) and the width of game title column is now dynamically resized</h3>
+            <h3>Replaced Delphi 7 "RenameFile" function (it uses MoveFile() function) by a custom function that uses "MoveFileEx()" function...
+                it fixes errors in Windows 7 when renaming files</h3>
+         <h2>Removed</h2>
+             <h3>File "\ini_files\daphne.ini" not needed anymore (Daphne v1.0 is the lowest supported version)</h3>
+             <h3>Custom titles are no longer supported for image layouts feature</h3>
+             <h3>Custom labels for game columns is gone (details / grouped view modes). Pointless feature...</h3>
+         <h2>Added</h2>
+            <h3>New text filter bar (main tool bar buttons, right side). Yep, you can filter games by title, manufacturer or driver name now.
+                Just Type a partial description, hit ENTER key or press the apply button and BAM! :)<br/>
+                Main filter tool bar buttons are partially supported: "System", "Parent / Clone", "Have / Miss", "Working / Non-Working",
+                "Bios / No Bios" and "Hide Bios" from main menu games filters.<br/>
+                There are some options buttons below the text box: "Filter by title", "Filter by manufacturer", "Filter by driver name",
+                "Enable/disable filters on main tool bar buttons".<br/>
+                Clicking on the "Reset" button will reload the main filters (without this new text bar filter)
+            </h3>
+            <h3>New setting: "Setup Folders", image category tool bar button. Easier to know where to go to setup folders</h3>
+            <h3>Setting "Path to hash files" was missing in MAME settings screen</h3>
+            <h3>Support for SEGA Model 2 Emu v1.0 (scripts are not yet supported, if ever)</h3>
+            <h3>Support for the new mechanical tag on games list (MAME 0.141u1 and newer)</h3>
+            <h3>New filter: "Interface Type" with 2 options "Classic" and "Mechanical" ("Games Filters" main menu)<br/>
+                NOTE: unlike others, this setting is saved in "EmuLoader.ini" and restored when restarting the frontend</h3>
+            <h3>Support for MAME 0.141u3</h3>
+            <h3>Preliminary support for multi-cart games loading: megatech (MAME v0.141u3 and never only! Other emulators are not supported)<br/>
+                There is a new folder listing all supported systems (when creating a games list): "<elfolder>\arcade\multi-games\"<br/>
+                ... that's it for now. you cannot run multiple games with this frontend yet!!!
+            </h3>
+            <h3>Features "Scan Missing MAMu_ Icons" and "Scan Not Used MAMu_ Icons" merged into "MAMu_ Icons Manager" (MAMu_ tool bar button).
+                Minor fixes and some optimizations were also made.<br/>
+                Managing missing / not used icons is easier than ever!. Some key features:<br/>
+                - rename not used icons<br/>
+                - all new history system for not used icons, so you can keep track of changes made to each icon (.txt files located in
+                "resources\icons_history\ folder)<br/>
+                - when renaming a not used icon to a valid MAME game name, the icon is immediately loaded into the missing icons list<br/>
+                - ability to maximize the window for better visual<br/>
+                - columns width on missing icons list are saved/restored in "el_extras.ini" file
+            </h3>
+            <h3>New MAMu_ icons feature: "Switch Game Icons" (MAMu_ tool bar button). Have two game icons that you need to switch places
+                because MAME switched two games parent/clone, clone/parent ? This is what this feature is for</h3>
+      </div>
+      
+      <br/><br/>
+      <div id="changelog">
+         <h1>version 6.0 change log - December 02, 2010</h1>
+         <h2>Fixed</h2>
+            <h3>Features "Run Game (Custom)" and "Run Game (Extra)" were not working at all due to wrong indexes (games popup menu)</h3>
+            <h3>Emulator folders info used by EL not being reloaded into memory after acessing custom game settings (all systems)</h3>
+            <h3>Default bios setting not being selected on the list (MAME settings screen)</h3>
+            <h3>Feature "Not Used Zip Files" was not working correctly and other systems were fully dependable of a working
+                MAME setup (main menu "Settings" / "Maintenance"). It's also a little faster. Again, EL is NOT a ROM manager. Please use
+                ClrMAME or RomCenter to maintain your ROMs collection. Use it at your own risk!</h3>
+            <h3>Float values on MAME custom game options were being handled as strings (cosmetic fix)</h3>
+            <h3>Konami Viper game "ParaParaParadise 2nd Mix" (name: ppp2nd) was not being correctly detected</h3>
+            <h3>Entries "Game Zip" / "Parent Zip" being listed with "gamename.zip not found" for Taito G-NET. This system does not
+                use gamename.zip sets (Game Details screen)</h3>
+            <h3>Unwanted horizontal scroll when selecting games in Standard/grouped view modes</h3>
+         <h2>Changed</h2>
+            <h3>Updated settings screen to MAME 0.140u1</h3>
+            <h3>Updated FastMM library (Fast Memory Manager) to v4.97</h3>
+            <h3>Game docs (mameinfo.dat and others) support only at MAME's main folder from now on</h3>
+            <h3>Moved 'el_extras.ini' file to EL's main folder (makes more sense)</h3>
+         <h2>Improved</h2>
+            <h3>Several tweaks in the source code and user interface</h3>
+            <h3>You can now select an existing file for the effect overlay, using EL's file dialog box, or type the filename into the
+                edit box (MAME settings screen, "Options" / "Video 1" tab)</h3>
+            <h3>Extra game info extracted from MAME for all ClrMAME based systems, when creating ZiNc, Demul, SEGA Model 2 games lists</h3>
+            <h3>Controls info for Daphne games are extracted from MAME, if available (create Daphne games list)</h3>
+            <h3>Merged "uFilesUtil.pas" routines into "uCommon.pas" (file uFilesUtil.pas no longer available)</h3>
+            <h3>Auto game documents feature (preferences screen):<br/>
+                - duplicate settings not allowed anymore<br/>
+                - clear the checkbox to disable an info
+            </h3>
+            <h3>Relative path support for games list background image (preferences screen)</h3>
+         <h2>Removed</h2>
+             <h3>Support for the following systems completely removed from the project (EL is a M.A.M.E. frontend anyway):<br/>
+                 - AGEMAME: Merged into MAME<br/>
+                 - Mjolnir: Discontinued and old MAME drivers. The only game that can be fully played anyway is "Starblade"<br/>
+                 - PinMAME: Discontinued. Also, without the actual pinball tables, you can't play anything<br/>
+                 - HazeMD: MegaDrive/Master Systems games are in MAME for quite some time now, and the emulator will get no further updates<br/>
+                 - Another Arcade Emulator (AAE): Discontinued and its unique features might be implemented in MAME<br/>
+                 NOTE: you will have to re-create games list for "Demul" and "SEGA Model 2" systems
+             </h3>
+             <h3>Commented options support for mame.ini files is gone (using '  #  ' char, on old MAME builds)</h3>
+             <h3>Windows 7 cosmetic fixes removed from EasyListView and Virtual TreeView components as they were causing glitches</h3>
+             <h3>Custom description support for image categories is gone. There's no point editing their titles anyway</h3>
+             <h3>Label image info custom colors is gone</h3>
+             <h3>Option "Smooth Scroll (Double Buffering)" is gone (VirtualTreeView / EasyListView). I've never noticed any difference with
+                 this setting anyway</h3>
+         <h2>Added</h2>
+            <h3>New setting: "Disable Icon Stretch (48x48)", MAMu_ tool bar button. Enable this option to prevent MAMu_ icons from being
+                stretched when using "Tiles" view mode or "Standard / Grouped" view modes with "Extra Large" icons (48x48)</h3>
+            <h3>New left panel filter: "Discrete Audio": filter all games that use discrete audio (create file at "Left Panel" main menu)</h3>
+            <h3>Support for multiple MAME directories: "sample files", "artwork files", "font files", "crosshair files", "controller files"</h3>
+            <h3>New MAME option "Run Game with Effect Overlay", games popup menu "Run Game (Extra)". You can run games with an effect overlay
+                located in one of the artwork folders (unzipped PNG files only!). Useful to test effects without changing mame.ini</h3>
+            <h3>Small reminder button in game docs panel to open the hidden popup menu (top/left)... you can call the popup menu at any
+                position, not just this button!</h3>
+      </div>
+      
+      <br/><br/>
+      <div id="changelog">
+         <h1>version 5.9 change log - October 10, 2010</h1>
+         <h2>Fixed</h2>
+            <h3>Video output "GDI" setting on mame.ini misspelled (write)</h3>
+            <h3>Setting "ClrMAMEPro XML Data File" not clearing after pressing "Clear" button (Emulators Setup screen)</h3>
+            <h3>A few minor fixes</h3>
+            <h3>The following MAME filters now sort games correctly: "Naomi", "Naomi 2", "Naomi GD", "Naomi 2 GD"
+                (does not work 100% for Demul)</h3>
+            <h3>An empty file was being created when trying to load ROMs folders if file was not found (emulator main settings file)</h3>
+         <h2>Added</h2>
+            <h3>Updated MAME settings to v0.139u3</h3>
+            <h3>Preliminary support for a new emulator: Demul v0.5.6 (Sega Dreamcast / Naomi hardware):<br/>
+                - Since its games list output is based on ClrMAME database and the emulator itself can create the file, the
+                external "ClrMAMEPro XML Data File" is optional. If not selected, the internal "-listxml" output will be used<br/>
+                - Game column's missing entries are extracted from MAME's games list, if available<br/>
+                - Only zipped sets are supported (GD-ROM image must be inside game .zip file)<br/>
+                - MAME CHDs (v0.139u3) are NOT supported yet (GD-ROM based games)<br/>
+                - Feature "Delete Game Configs" (games popup menu) support both NVRAM files (.eeprom; .sram)
+                - Multiple ROMs folders support (native support on Demul)
+                - Multiple bios sets is not supported yet (and it might never be)
+                - No support for game custom options
+            </h3>
+            <h3>New games filter: "SAMMY Atomiswave"</h3>
+      </div>
+
+      <br/><br/>
+      <div id="changelog">
+         <h1>version 5.8.7 change log - June 02, 2010</h1>
+         <h2>Fixed</h2>
+            <h3>Access violation on "Not Used Zip Files" feature when MAME .zip files list is empty</h3>
+         <h2>Changed</h2>
+            <h3>Rollback VirtualTreeview component to version 4.7.4 as newer versions are messed up</h3>
+            <h3>Replaced VirtualTreeView games list for EasyListView... "Left Panel Editor" screen only (right panel)</h3>
+      </div>
+
+      <br/><br/>
+      <div id="changelog">
+         <h1>version 5.8.6.1 change log - April 23, 2010</h1>
+         <h2>Fixed</h2>
+            <h3>MAME create games list feature missing a new input type: "keyboard"; also, the new DVD-ROM CHD media type was not being
+                correctly assigned</h3>
+      </div>
+
+      <br/><br/>
+      <div id="changelog">
+         <h1>version 5.8.6 change log - April 22, 2010</h1>
+         <h2>Fixed</h2>
+            <h3>Website addresses updated on main menu "Help" / "Visit Homepage"</h3>
+         <h2>Improved</h2>
+            <h3>Updated components VirtualTreeView to v4.8.6 and EasyListView to v2.1.0 (latest SVN)<br/>
+                Front-end updated to meet some of the component's changes</h3>
+         <h2>Removed</h2>
+             <h3>none</h3>
+         <h2>Added</h2>
+            <h3>New mame.ini options for MAME 0.137u1 (MAME Settings / Options / Input tab)</h3>
+            <h3>New debugger option "Internal Debugger" (MAME Settings / Options / Miscellaneous tab)</h3>
+            <h3>New games filters: "CHD DVD-ROM" (CHD sub-filter); "System 246 / 256" (main filter); "Namco System 246 / 256" (Namco sub-filter)</h3>
+      </div>
+
+      <br/><br/>
+      <div id="changelog">
+         <h1>version 5.8.5 change log - February 12, 2010</h1>
+         <h2>Fixed</h2>
+            <h3>MAME game titles ending with ", The" were being wrongly parsed and the following game titles are fixed:<br/>
+            ssideki4<br/>lastblad<br/>lastbladh<br/>lastbld2<br/>
+            </h3>
+            <h3>HazeMD and PinMAME game titles ending with ", The" fixed. The full title is now parsed correctly</h3>
+            <h3>Game title fix not needed for systems based on ClrMAME Pro .xml database files (ZiNc, SEGA Model 2, AAE)</h3>
+      </div>
+
+      <br/><br/>
+      <div id="changelog">
+         <h1>version 5.8.4 change log - December 26, 2009</h1>
+         <h2>Added</h2>
+            <h3>Support for MAME v0.135u4 new feature: "Number of Processors" (3rd video tab, "MAME Settings" screen, "Performance")<br/>
+                In Emu Loader, this feature lists all CPUs that Windows detects. Info taken from Windows registry:<br/>
+                "HKEY_LOCAL_MACHINE\HARDWARE\DESCRIPTION\System\CentralProcessor\"</h3>
+      </div>
+
+      <br/><br/>
+      <div id="changelog">
+         <h1>version 5.8.3 change log - September 28, 2009</h1>
+         <h2>Fixed</h2>
+            <h3>Some weird user messages in "Not Used Zip Files" feature (main menu "Settings" / "Maintenance")</h3>
+            <h3>Delete/move selected files in "Not Used Zip Files" and "Not Used Game Config Files" features was freezing after
+                removing items from the list</h3>
+            <h3>User selected bios was not being added into the command line (MAME, multi-bios games)</h3>
+            <h3>Front-end freezing after running "BlinkBkEdit() function". It was using "GetTickCount()", not accurate on new
+                CPUs (Core2Duo, PhenomII, etc). "No one reported this since the function was added... FATALITY!"<br/>
+                Replaced by "Sleep()" function that can handle microseconds. Other functions do not require this.
+            </h3>
+            <h3>Function "Export Games List" was only working for "standard" and "grouped" view modes (left panel popup menu)<br/>
+                Again, no bug reports :_((</h3>
+         <h2>Changed</h2>
+            <h3>Updated EasyListView/CommonLibrary to latest SVN source (August 10, 2009)</h3>
+            <h3>File "\docs\el-readme.txt" updated with latest changes</h3>
+            <h3>FastMM library updated to version 4.94</h3>
+         <h2>Improved</h2>
+            <h3>Minor tweaks in the user interface and source code</h3>
+         <h2>Added</h2>
+            <h3>New feature: "Delete Game Config" (access on games popup menu or "Sift+DELETE" hot-key)<br/>
+                Use this to delete CFG/NVRAM files from MAME based emulators, NVDATA file from SEGA Model 2, CFG file from ZiNc and
+                Another Arcade Emulator (AAE)<br/>
+                When selecting one game, you are able to check/uncheck files. When in multi-selection screen, all games will be listed
+                and you will be able to check/uncheck what files you want to delete or keep. Also, use the "Check All CFGs" / "Check All
+                NVRAMs" buttons to check/uncheck all files for all games<br/>
+                Daphne system is not supported by this feature, and there's no recycle bin support!
+            </h3>
+            <h3>New feature: "Not Used Game Config Files" ("Settings" main menu, "Maintenance")<br/>
+                Scan all systems for not used configuration files (cfg and non-volatile RAM). It works similar to the "Not Used Zip Files"
+                feature. All systems supported, except from Daphne
+            </h3>
+      </div>
+
+      <br/><br/>
+      <div id="changelog">
+         <h1>version 5.8.2 change log - July 16, 2009</h1>
+         <h2>Added</h2>
+            <h3>Support for MAME v0.132u5</h3>
+      </div>
+
+      <br/><br/>
+      <div id="changelog">
+         <h1>version 5.8.1 change log - July 04, 2009</h1>
+         <h2>Fixed</h2>
+            <h3>EL standard game icons were not being reset after disabling MAMu_ icons (EasyListView view modes only)</h3>
+            <h3>Adding .zip files as folder in the select directory screen is back... :_((<br/>I thought I had it fixed but I was wrong.
+                The only way to really get rid of this annoying bug is to disable the "zip as folder" feature in Windows (who uses this
+                annoying feature anyway ???)</h3>
+            <h3>MAMu_ icon was not being loaded at startup on the selected game</h3>
+         <h2>Changed</h2>
+            <h3>Not used 24x24 icons removed from several .ico files ("\resources\main_icons\arcade_filters\" folder)<br/>
+                Some icons in "resources\main_icons\" folder also changed</h3>
+         <h2>Improved</h2>
+            <h3>ImageIndex value is not assigned directly into main games list anymore (game icons)</h3>
+            <h3>Minor and invisible bug fixes</h3>
+         <h2>Removed</h2>
+             <h3>Play custom from arcade controller layouts since it has been removed from the front-end quite a while ago</h3>
+             <h3>Support for the hidden "\arcade\customgames.el" file</h3>
+         <h2>Added</h2>
+            <h3>"Triforce" main games filter</h3>
+            <h3>New thumbnails setting: "Show Game Title". Disable this option to hide game titles while in thumbnails view mode
+                (main menu "Settings" / "Thumbnail Settings")</h3>
+            <h3>Added some missing widescreen resolutions to MAME and ZiNc settings screens (resolution drop-down buttons)</h3>
+            <h3>Move folder up/down buttons on the following screens: "MAME Settings", "ZiNc Settings", "SEGA Model 2 Settings",
+                "MAMu_ Folders"</h3>
+      </div>
+
+      <br/><br/>
+      <div id="changelog">
+         <h1>version 5.8 change log - June 02, 2009</h1>
+         <h2>Fixed</h2>
+            <h3>Taito G-NET games being set as found with missing ROMs/CHDs when the bios set if found and ok, but the CHD is missing<br/>
+                This is a special case to avoid all G-NET games being set as missing ROMs/CHDs since this system only use a bios set. The
+                Konami Viper system is similar but some of its games have a game set...</h3>
+            <h3>View game details was being called while multiple games selected</h3>
+            <h3>Left panel editor not working if MAME binary file is not defined</h3>
+            <h3>Selected game not visible on screen when switching between windowed/full screen modes</h3>
+            <h3>Wrong system being scanned: "Scan For Missing MAMu_ Icons / Images"; </h3>
+            <h3>Columns width in hidden games editor were not being updated correctly after manual resize</h3>
+         <h2>Changed</h2>
+            <h3>Delete game files improved (single/multiple selection). Now you have a files list of the game (Game .zip and CHDs). CHD
+                files are unchecked by default for safety (enable the "Always Select CHD Files" checkbox so they are checked automatically).
+                <br/>Only files that are found will be listed, even if the games is set as available. You can uncheck any file(s) you want
+                to keep :-))<br/>NOTES:<br/>
+                -> for single selection, the amount of CHD files is unlimited but for multiple selections, they are limited to 3 (three)
+                CHD files per game. If appear a game in MAME with more than 3 CHD files, the front-end will be updated...<br/>
+                -> the multiple selections screen is a little more complex, but filled with hints all over it<br/>
+                -> Recycle bin is NOT supported so, be very careful on the game files you want to delete!<br/>
+                -> only available games and found games with missing ROMs are supported<br/>
+                -> This feature is accessed by selecting one or more games and hitting the "DELETE" key or using the "Delete" option in
+                   games popup menu
+            </h3>
+            <h3>Replaced all select folder dialog calls by EL's custom folder dialog</h3>
+            <h3>Updated EasyListView component to latest SVN sources</h3>
+            <h3>Moved debug.ini custom options (Set/Delete) to "M.A.M.E. Only" sub-menu (games popup menu, "Custom Options")</h3>
+         <h2>Improved</h2>
+            <h3>No more zip files or hidden folders in browse for folder dialog</h3>
+            <h3>Generate .ini files for left panel is now based on the main games list, except "Refresh Rate" (still depends on MAME's
+                -listxml output)... they are lightning fast too (main menu "Left Panel")</h3>
+            <h3>Minor UI optimizations</h3>
+         <h2>Removed</h2>
+             <h3>Option "Enable Multiple Selection". Multi-select is always enabled</h3>
+             <h3>Daphne v0.99.7 pre 5 support removed</h3>
+         <h2>Added</h2>
+            <h3>New file when creating MAME/ZiNc games lists: "mame_chd.ini" and "zinc_chd.ini" ("frontend\arcade\" folder)<br/>
+                It contains a list of all CHD files for each game and the specific media type for each CHD (in case a game use more than
+                one CHD file and each of these files are in different formats (hard-disk, CD-ROM, GD-ROM, flash cards, etc...)<br/>
+                This file is used when deleting game files and might be used on other features for a quicker access (acessing
+                "\arcade\systemname_roms.el" is slow if the file size is too large!)
+            </h3>
+            <h3>Support MAME 0.131u3 new .ini files "horizont.ini" / "vertical.ini" (games popup menu, "Custom Options" / "M.A.M.E. Only")</h3>
+      </div>
+      
+      <br/><br/>
+      <div id="changelog">
+         <h1>version 5.7.6 change log - May 08, 2009</h1>
+         <h2>Fixed</h2>
+            <h3>Detection of large files (bigger than 1.7 GigaBytes) and sorting "file size" columns was not possible due to the range of
+                the "integer" variable type... updated all required variables in the project to "Int64" (64-bit integer)</h3>
+            <h3>Option "Move Selected to Folder" implemented (scan not used MAMu_ icons feature, popup menu)</h3>
+            <h3>When selecting parent or using the find game edit box in "delete multiple games files" window, the previous selections were
+                not being de-selected (games popup menu, "Delete" / "Game File")</h3>
+            <h3>All available Taito G-NET clones were being added in the merged sets list. Probably other games that use a bios set but no game
+                set is being added in the list as well (not fixed)</h3>
+         <h2>Changed</h2>
+            <h3>Simplified "delete multiple game .zip files" feature. No more checking games to delete. To keep any game just
+                remove it from the list using the "Remove Selected" button</h3>
+            <h3>Scan for not used MAMu_ icons only scan ".ico" files from now on... file "\ini_files\el_mamu_exclude.ini" updated to only
+                list files with .ico extension</h3>
+         <h2>Improved</h2>
+            <h3>Updated function "GetFileSize" (uFilesUtil.pas) to use Int64 (64-bit integer variable)</h3>
+            <h3>Files list of "delete not used zip files" feature now have columns that can be sorted (main menu "Settings" / "Maintenance" /
+                "Not Used Zip Files")</h3>
+         <h2>Added</h2>
+            <h3>A couple more details in the CHD info (game details screen, left panel)... also, file size for game .zip and .chd :)</h3>
+      </div>
+
+      <br/><br/>
+      <div id="changelog">
+         <h1>version 5.7.5 change log - May 04, 2009</h1>
+         <h2>Fixed</h2>
+            <h3>Game status not being updated after scanning games (only between "missing" and "found with missing ROMs/CHDs" status)</h3>
+            <h3>Main screen not being set active after exiting a game</h3>
+            <h3>The "Played x" captions in tiles view mode were being loaded without using virtual mode after exiting a game</h3>
+            <h3>Convert snapshots feature now support and rename up to 100 images per game</h3>
+            <h3>Scan games feature was not handling games with missing ROMs/CHDs correctly</h3>
+            <h3>Wrong CHD media type for some ZiNc games</h3>
+            <h3>ZiNc games set as available when all ROMs are found but .zip files are not in the same folder (not valid for ZiNc
+                emulator). All files (.zip / .chd) must be in the same folder, but the .chd file can be placed in a sub-folder with
+                the name of the gamename (like MAME). You do not need to add this sub-folder into the ROMs paths!<br/>
+                Remember that EL support multiple ROMs folders, even if ZiNc doen't, but to run games, all files of a particular game
+                must be in the same folder<br/>And NO MERGED sets!</h3>
+            <h3>A few games filters fixes (you need to create MAME games list again to apply them):<br/>
+                &nbsp;&nbsp;-> CHD tags "scsi0" and "scsi1" are moved to "CD-ROM" media type (\ini_files\chd_mediatypes.ini" file)...
+                               for now. This fixes all Konami System 573 games that were being set as hard-disk based games instead of CD-ROM<br/>
+                &nbsp;&nbsp;-> Konami Viper games were wrongly tagged as "Hard-Disk" CHD types. Changed them to "Compact Flash Card"...
+                               hard-coded into the "uMain.CreateGamesListXML" function!<br/>
+                &nbsp;&nbsp;-> American Laser Games were wrongly tagged as "Hard-Disk" CHD types as none of the discs are dumped yet.
+                               Changed them to "LaserDisc"... hard-coded into the "uMain.CreateGamesListXML" function!
+            </h3>
+            <h3>Taito G-NET games were not being correctly detected due to not using "gamename.zip" files, only bios sets. But now, games
+                that you do not have the .chd file are set as found with missing ROMs (Taito G-NET only) :_((<br/>
+                ...some other games do not use "gamename.zip" as well but are not on this fix ("Konami Viper" system)</h3>
+            <h3>Visual bug in the message box when vertical scrollbar is visible</h3>
+            <h3>The current favorite profile was not being correctly selected when opening the favorites profile editor</h3>
+            <h3>Image resampler not being applied at startup and when switching between classic/layout image view modes</h3>
+            <h3>Merged games were not being added into the merged list ("\arcade\systemname_merged.ini")</h3>
+         <h2>Changed</h2>
+            <h3>All ZiNc icons renewed</h3>
+            <h3>Only 1 system support for "Scan Missing Images / MAMu_ Icons", "Scan Not Used Images / MAMu_ Icons"<br/>
+                ...old screens with TreeView and multiple systems at once was a mess :_(
+            <h3>Scan not used MAMu_ icons: changed popup menu option "View Excluded List" to "View/Edit Excluded List" so
+                you can edit and use the updated files list in real time ("\ini_files\el_mamu_exclude.ini" file)</h3>
+            <h3>New setting in popup menu on scan missing MAMu_ icons screen: icon size 16x16 or 32x32 :)</h3>
+         <h2>Improved</h2>
+            <h3>Games details screen:<br/>
+                &nbsp;&nbsp;-> CHD files are always audited in games details screen, no matter the status of the game<br/>
+                &nbsp;&nbsp;-> The parent CHD info is displayed in the ROMs list if the CHD of the clone game is not found but the parent
+                CHD is (only if filenames are different)<br/>
+                &nbsp;&nbsp;-> Header version info for older CHD files (versions 1 and 2) are still displayed, but are not supported by
+                the front-end
+            </h3>
+            <h3>Minor optimizations to the scan results screen</h3>
+            <h3>Changes and optimizations in customize hidden games screen (main menu "Games Filters" / "Hidden Games" / "Customize")<br/>
+                &nbsp;&nbsp;-> Search patterns and columns width are saved in "el_extras.ini"<br/>
+                &nbsp;&nbsp;-> Games are now validated by "game name" and "system ID" tags only (no "clone of" anymore... kinda pointless)<br/>
+                &nbsp;&nbsp;-> Removed "Delete Duplicates" button. Done automatically when using "BEGIN SEARCH" button<br/>
+                &nbsp;&nbsp;-> All lists replaced by EasyListView components (cleaner and easier to work with)<br/>
+                &nbsp;&nbsp;-> This feature is main games list dependant now. External files ("\arcade\*.el" and "catver.ini")
+                               are no longer used to build the list in the editor. The scan is NOT affected by the main games filter<br/>
+                &nbsp;&nbsp;-> New layout :)<br/>
+                &nbsp;&nbsp;-> Fixed loading hidden games into the editor (very old bug!). It was not checking for the system tag. If
+                               there's a game with same name on different systems, they would all be added<br/>
+                &nbsp;&nbsp;-> System icon displayed with game icon on the first column
+            </h3>
+            <h3>Feature scan audio samples optimized and UI updated</h3>
+            <h3>Other features are also dependant on the current main games list instead of "\arcade\*.el" and extras. Main games list
+                is processed twice as fast and the progress bar became reduntant...<br/>
+                - "Scan for Missing Images / MAMu_ Icons"<br/>
+                - "Scan for Not Used Images / MAMu_ Icons"<br/>
+                - "Left Panel editor"<br/>
+                - "Scan Audio Samples"<br/>
+                - "Customize Hidden Games" <br/>
+                - "Not Used Zip Files"<br/>
+            </h3>
+            <h3>Heavy optimization on add/delete games to/from favorites/hidden list functions (10000 items in 2 seconds!)</h3>
+            <h3>Tweaks and optimizations to EL's custom select file dialog (virtual mode)</h3>
+         <h2>Removed</h2>
+            <h3>An extra (and invisible) background for the icons was being draw on top bars (all screens)... guess I forgot to remove
+                it from the source code</h3>
+            <h3>Revised and removed some more reduntant lines of code in the entire project</h3>
+         <h2>Added</h2>
+            <h3>Disk entry detection when creating games list for systems that use ClrMAME's external XML databases</h3>
+            <h3>Support for ROMs list on ZiNc (based on ClrMAME XML file). EL can detect missing ROMs/CHDs on this system now
+                ("\arcade\zinc_roms.el") :)<br/>
+                Get the ClrMAME XML file at Logiqx website (ZiNc v1.1 only!). The missing data is extracted from the MAME games list
+                (if available).<br/>Also updated file "\ini_files\zinc.ini", split in 2 sections: "[driver]" and "[gameindex]"<br/>
+                That makes Daphne the only system without ROMs list support...
+            </h3>
+            <h3>Support for ZiNc bios entries. Now you have "parent / clone / bios" games IDs. The ID for all other systems were
+                re-arranged, except MAME. You must re-create games list for all systems, except MAME. Also added 2 new icons for the
+                ZiNc bios: "ZiNcBios.ico" and "UnZiNcBios.ico"<br/>
+                Note that you cannot run ZiNc bioses, this is only to improve games scanning...
+            </h3>
+            <h3>New option to scan all games with missing ROMs/CHDs (games popup menu, "Scan Games" / "Missing ROMs/CHDs")<br/>
+                Support all systems, except Daphne</h3>
+            <h3>Support for MAME 0.131</h3>
+      </div>
+      
+      <br/><br/>
+      <div id="changelog">
+         <h1>version 5.7.4 change log - March 21, 2009</h1>
+         <h2>Fixed</h2>
+            <h3>Image resampler not working with layouts view mode</h3>
+      </div>
+
+      <br/><br/>
+      <div id="changelog">
+         <h1>version 5.7.3 change log - March 21, 2009</h1>
+         <h2>Fixed</h2>
+            <h3>ROMs were not being shown correctly in game details screen, when tagged with bad checksum (ROMs List)</h3>
+            <h3>Media type of CHD based games was not being set correctly when creating a MAME games list</h3>
+            <h3>Single game scans were not updating the games list file (.el) correctly in some cases</h3>
+            <h3>After adding/deleting games to/from favorites/hidden games list, the memory vars were not being updated with the new
+                game selection</h3>
+            <h3>Found ROMs info in game details screen was not including CHDs with bad checksum</h3>
+            <h3>Main window out of focus after exiting MAWS game info</h3>
+         <h2>Changed</h2>
+            <h3>CHD files are verified thru its SHA-1 checksum now (header version 3 and 4). Unfortunately, CHD files that use a header
+                version 1 or 2 are not supported by the front-end anymore!<br/>
+                You must create your MAME games list again</h3>
+         <h2>Improved</h2>
+            <h3>MAME CHD files are correctly validated now, by detecting the "MComprHD" tag and the header version. If the tag doesn't exist,
+                the CHD file is set as invalid, and the MD5/SHA1 checksum is not verified</h3>
+            <h3>Game details UI changed a little bit. CHD files are also listed in the "Game Files" section. It shows file found or missing
+                status, and the version of the header next to it... :-))
+            </h3>
+         <h2>Removed</h2>
+            <h3>Option "Generate ZiNc Driver File" from main menu "Settings" / "Maintenance"... no use for it anymore</h3>
+         <h2>Added</h2>
+            <h3>Support for MAME 0.130u1<br/>
+                Detection of the new version 4 header (CHD files). Headers version 1 and 2 are no longer supported by the front-end
+            </h3>
+            <h3>New CHD type added: "PCMCIA" in "\ini_files\chd_mediatype.ini" (used when creating MAME games list)</h3>
+            <h3>New games filters added: "Taito G-Net System" and "CHD - PCMCIA"</h3>
+      </div>
+
+      <br/><br/>
+      <div id="changelog">
+         <h1>version 5.7.2 change log - March 15, 2009</h1>
+         <h2>Fixed</h2>
+            <h3>Image resampler is updated correctly when switching between view modes (classic, layouts) and it is applied to all
+                panels when in layouts view mode</h3>
+            <h3>Selecting the already selected image resampler, the item was being set as unchecked</h3>
+            <h3>Internet link for MAWS game info updated to the mameworld.info server</h3>
+            <h3>Expand/collapse buttons on left panel tree were being disabled after toggling alpha blend</h3>
+            <h3>Image resampler correctly set at startup</h3>
+            <h3>Access violation on scan for missing images, missing MAMu_ icons, not used images and not used MAMu_ icons</h3>
+            <h3>Fatality! Evil Bug Wins... Game was not being properly re-selected after changing games filters...</h3>
+            <h3>CHD filename was not being shown correctly at game details screen if CHD name also contains the parent name ("_parentchd_" tag)</h3>
+            <h3>Year and manufacturer were not being detected on bios entries, leaving these infos blank in the games list (MAME based emulators)</h3>
+            <h3>Features to create .ini files for the left panel were missing a few games that has no information ("Left Panel" main menu)</h3>
+         <h2>Changed</h2>
+            <h3>Removed minimum size limitation from the screenshots panel</h3>
+            <h3>Main menu / popup menus font changed from "Segoe UI" to "Trebuchet MS"</h3>
+            <h3>Updated the convert snapshots to EL format feature. Only works with the "Gamename/Increment" naming format</h3>
+         <h2>Improved</h2>
+            <h3>Alpha blend and background color on all TreeView lists that contain a games list are updated to match the settings
+                of the main games list, except background image (hidden games list, MAMu_ missing icons, left panel editor, games list
+                font settings and some ListView lists)<br/>
+                This also improves visibility if using dark background color
+            </h3>
+            <h3>Selection bars colors and texts optimized for a large range of background colors</h3)
+            <h3>Some code merging to remove duplicated functions/procedures</h3>
+            <h3>Added a button in left panel editor's toolbar to restore default sizes for window, panels and columns width</h3>
+         <h2>Added</h2>
+            <h3>Button at preferences screen, "Folders" tab: "Setup Image Categories Folders", for those who cannot find the
+                folder setup screen in main menu "Images"</h3>
+            <h3>Setting: "White Text Color (For Dark Backgrounds)" that will paint selected text in white-ish instead of the blue/red
+                colors. It works only when alpha blend is enabled (preferences screen)<h3>
+            <h3>New games filter in main tool bar buttons: "Game Orientation" (Horizontal / Vertical)</h3>
+            <h3>New menu item in game documents popup menu (mouse right-click): "Customize Panel". A shortcut for those that
+                do not know about it ;)</h3>
+            <h3>Support for MAME v0.130... CHD files can be at any folder now. The old "romfolder\gamename\gamefile.chd" method is
+                still supported. I'm moving my 3 images to "c:\mame_roms\chd_files\" folder :)<br/>
+                NOTE: you still do not need to set folders for CHD files if using the old method</h3>
+            <h3>A few more options to create .ini files for the left panel:<br/>
+                - Screen refresh rate<br/>
+                - Year<br/>
+                - Manufacturer
+            </h3>
+            <h3>Search keywords in hidden games editor is now saved/restored in file: "\ini_files\hidden_games_keywords.txt"</h3>
+      </div>
+
+      <br/><br/>
+      <div id="changelog">
+         <h1>version 5.7.1 change log - February 18, 2009</h1>
+         <h2>Fixed</h2>
+            <h3>Some default front-end settings on a fresh install were incorrect (first run)</h3>
+            <h3>Colors of selected items (EasyListView and Virtual TreeView) were being set incorrectly</h3>
+            <h3>Selected game not being visible on the screen when in grouped view mode</h3>
+            <h3>Selecting next image category/layout with hot-key F10 was not working. Now changed to:<br/>
+                - Ctrl + F9 -> show previous<br/>
+                - F9 -> show next
+            </h3>
+            <h3>The array "image[???].NoImageLoaded" was not being reset correctly when the image to be loaded is not found</h3>
+            <h3>Some arcade controller hot-keys were not working. Also, keys assignments were changed to simplify future updates
+                and to use similar buttons on all controllers (Browse games with arcade controller feature)</h3>
+            <h3>Message about average FPS and error messages before running games showing for systems not based on MAME</h3>
+            <h3>Removed code redundancy and fixed possible bug when editing column settings in the customize columns screen</h3>
+            <h3>Some system specific items in games popup menu were enabled when they shouldn't. Also, they are now hidden
+                instead of disabled</h3>
+            <h3>UI bug in custom command line settings screen (paremeters list)</h3>
+            <h3>Width of left panel is automatically adjusted when resizing it. Horizontal scrollbar is not needed anymore</h3>
+         <h2>Changed</h2>
+            <h3>View ROMs paths have its own screen and you can view folders for all systems at once</h3>
+            <h3>Added a new screen for "games list font settings" more detailed and moved it from preferences screen to
+                main menu "Games List"</h3>
+            <h3>Moved "Image Category / Layout Auto Switch" setting from images popup menu to main menu "Images" (easier to find)</h3>
+            <h3>Delete multiple games files improved:<br/>
+                - added support for games with missing ROMs (.zip found but game set as missing)</br>
+                - added a checkbox on each game so you can uncheck all games you want to keep<br/>
+                - changed component to EasyListView<br/>
+                - view mode is set to tile and it shows in 2 lines:<br/>
+                  &nbsp;-> first line is the game's title<br/>
+                  &nbsp;-> second line is "game name [clone of], zip file with full path<br/>
+                NOTES:<br/>
+                - if game is merged, it will display "merged [parent zip file with full path]"
+                - if game is marked as missing ROMs/CHDs it the selection bar is red
+                - font settings are applied on this list (parent, clone, preliminary, miss ROMs/CHDs)
+                - Zip files are Merged games and games where the .zip file is not found are unckecked by default
+            </h3>
+         <h2>Improved</h2>
+            <h3>Daphne folder is now loaded into RAM to simplify a few functions calls</h3>
+            <h3>Optimized a few functions in uCommon.pas file and removed some redundant coding</h3>
+            <h3>More source code optimizations:<br/>
+                - Like in EasyListView, all general functions and procedures for VirtualTreeView will begin with "VTV_" to
+                group all of them into one place and to make it easier to read</h3>
+            <h3>Games have their defined fonts and selection bar colors on hidden games editor and left panel editor :)</h3>
+            <h3>Optimized hot-keys for games list and arcade controllers (when feature is activated)</h3>
+            <h3>Selection bar turns red on current selected filter (MAME Games Filters screen)</h3>
+            <h3>Updated EasyListView component to latest SVN source that fix a couple UI bugs</h3>
+         <h2>Removed</h2>
+            <h3>Main menu / popup menu themes is no more. Only the default theme is available from now on</h3>
+            <h3>Setting "Bold Font In Selected Game" is gone. Font of selected items are always in bold style</h3>
+            <h3>Selection bar colors customization (preferences screen). Only fixed colors are supported, blue for have/miss games
+                and red for games with missing ROMs/CHDs (red ribbon might be used on other screens, but for a different situation)</h3>
+            <h3>procedure uCommon.GetGamesFilesList() and function uCommon.ExtMatch() deleted as they are not being used anywhere</h3>
+            <h3>Alpha blend for EasyListView / VirtualTreeView components have a fixed factor of 128 from now on (half alpha blend)</h3>
+            <h3>Background color of sorted column is gone (games list treeview). No need since you have the sort icon in the
+                header (ascending/descending)</h3>
+         <h2>Added</h2>
+            <h3>New main menu "Settings". This menu item will hold several front-end settings<br/>
+                Menu items moved to the new settings main menu:<br/>
+                -> All items from main menu "Advanced User" (main menu also removed)<br/>
+                -> "Favorites - Profile Settings" moved from "View" main menu<br/>
+            </h3>
+            <h3>New feature: scan for not used zip files (main menu "Settings / Maintenance")<br/>
+                Use this to list all .zip files that are not being used by any game (all systems supported)<br/>
+                WARNING: if you share ROMs with different emulators on the same directory, take extra careful when deleting files.
+                Recycle bin is NOT supported by this feature<br/>
+                -> You can choose to delete files or move them to another folder
+            </h3>
+            <h3>Support for SEGA Model 2 Emulator v0.9 and its new settings (emulator.ini)</h3>
+            <h3>Features "delete current image" and "rename current image" support all 3 image panels when image layouts view mode is
+                enabled (images popup menu, mouse right-button click)<br/>
+                I finally found a way to verify what image component is calling the popup menu!!! :-))
+            </h3>
+      </div>
+
+      <br/><br/>
+      <div id="changelog">
+         <h1>version 5.7 change log - January 26, 2009</h1>
+         <h2>Fixed</h2>
+            <h3>Cheat settings updated to latest MAME build (MAME Settings screen)</h3>
+            <h3>Access violation when using Hidden Games feature and the file "hidden_games.ini" does not exist</h3>
+            <h3>Image info panel:<br/>
+                -> appearing when switching from layouts view mode to classic view mode, when setting is turned off<br/>
+                -> not being emptied when no image is found
+                -> not updating its text after turning on/off
+            </h3>
+            <h3>Scan audio samples feature was not working (main menu "Games List"). Apparently nobody use this thing because I never
+                got any bug reports on this bug</h3>
+            <h3>"Danger Will Robinson... DANGER!"<br/>
+                Columns profile editor load/save was not working correctly and, when closing the editor while viewing a different profile
+                than the actual profile being used on the games list, this new profile was being set and messing up data for all columns
+                when opening the columns editor again.<br/>
+                And even more disturbing... nobody reported this fatal bug for the last 18 months!
+            </h3>
+            <h3>Pixelated game icon on several screens. Also, they are now displayed directly into the TImage32 canvas :-))</h3>
+            <h3>Select file for left panel editor was not working correctly (custom EL select file dialog)</h3>
+            <h3>Glide renderer config now load/save keys settings (file "glide_renderer.cfg", ZiNc settings screen)</h3>
+            <h3>Glide renderer detection was not working, making EL load/save settings on the wrong renderer CFG file (ZiNc settings screen)</h3>
+            <h3>Some minor bugs in the favorites profiles editor</h3>
+            <h3>A bunch of small fixes everywhere... mostly UI</h3>
+            <h3>Transparency (alpha channel) and smoothness were not being applied corretly on any top and bottom bars</h3>
+            <h3>Incremetal search still working on EasyListView when "Control Games List With Arcade Controller" is enabled</h3>
+            <h3>Access violation when auto-selecting an item in TColorBox component if its OnSelect event is empty</h3>
+            <h3>Filter for "Sega System 24" was not showing any games (driver name on newer MAME builds have changed)</h3>
+         <h2>Changed</h2>
+            <h3>Several files renamed ("resources\main_icons\" folder)</h3>
+            <h3>Minimum screen resolution increased to 960x600 (16:10)... but you still can use EL at 800x600<br/>
+                I recommend 1024x768 as minimum resolution as this is a Windows application, not for arcade monitors</h3>
+            <h3>Front-end main icons reduced to 16x16 (tool bar icons are still 24x24)</h3>
+            <h3>Virtual TreeView component updated to v4.7.0 and to the latest SVN version</h3>
+            <h3>EasyListView component updated v2.0 and to the latest SVN version</h3>
+            <h3>Menu theme "Office 2007" renamed to "Default", but .ini entries remain the same</h3>
+            <h3>Several changes to columns profiles feature:<br/>
+                &nbsp;&nbsp;- Default profile name changed from "default.ini" to "col_profile_general.ini"<br/>
+                &nbsp;&nbsp;- Columns profiles folder is no more. All files will be saved in "resources\ini_files\" and must begin with
+                "<b>col_profile_</b><i>systemname</i>.ini"<br/>
+                &nbsp;&nbsp;- Profiles editor only works for the selected system (no more editing profiles for multiple systems at once)<br/>
+                &nbsp;&nbsp;- Only 2 profiles are available for each system: "General" for all systems (default) and "System" that can only
+                be used by the selected system
+            </h3>
+            <h3>View emulator versions and games list versions replaced by a new and single screen "File Versions" (main menu "View")</h3>
+            <h3>User interface on several screens are changed and lots of controls were replaced to simplify future updates in EL</h3>
+            <h3>Updated FastMM to version 4.9.2 (several fixes and full support for Delphi 2009)</h3>
+            <h3>Moved image layouts feature (title edit and visible layouts) and image category settings (category titles, visible categories
+                and folders settings) from preferences screen to a new "Category / Layout Settings" screen that can be accessed from main
+                menu "Images", "Category / Layout Settings"<br/>
+                This has been done to merge all features in one place and for easy access. Also to improve loading time of preferences
+                screen at startup and remove all these ListView components from sitting idle in RAM without reason
+            </h3>
+            <h3>Moved "Control Games List With Arcade Controllers" from preferences screen to main menu "Games List" and renamed it to
+                "Browse Games With". To disable this feature just select "Keyboard + Mouse"</h3>
+            <h3>Moved "Auto Rename Snapshots To Old Format" from preferences screen to main menu "Images". These 2 settings are enabled
+                by default and are for conveniece only. If you want to keep MAME snaps original filenames, disable it</h3>
+         <h2>Improved</h2>
+            <h3>Optimizations to popup menus (context menus), main menu, UI and a bunch of common functions</h3>
+            <h3>Aut-select previous/next visible game instead of the top game in the list after using certain features:
+                selete game, add/remove favorites and hidden list</h3>
+            <h3>Converted a lot of functions into procedures since they do not need to return a confirmation value. Don't know if
+                this saves memory or if the reduced memory usage is relevant</h3>
+            <h3>Some error/warning message boxes replaced by a blinking background in edit boxes (left panel editor screen,
+                favorites profiles screen, emulator setup screen). Other features will use this new function in the future</h3>
+            <h3>Optimized the icons loading at startup and merged a couple "ImageList" since they use the same icons</h3>
+            <h3>Some settings on EmuLoader.ini have been simplified and merged. Some other entries renamed</h3>
+            <h3>All ListView components replaced by EasyListView since it's safer and far easier to work with. By doing this, several
+                functionality and visual bugs were fixed</h3>
+            <h3>Height of top and bottom bars reduced</h3>
+            <h3>Browse for folder (multiple folders) dialog box now have a "Include Subfolders" checkbox and the dialog was completely
+                coded from scratch.<br/>
+                &nbsp;&nbsp;<i>[WARNING]</i> If you have "view zip as folder" feature enabled on your OS, when opening a folder with lots of .zip
+                files, the dialog will take some time to read sub-folders and display them on the screen. The only way to fix this is
+                to disable "zip as folder" from Windows. Google it and you'll find out how to do that</h3>
+            <h3>Browse for folder (single) and select file dialog boxes optimized to reduce redundant lines of code</h3>
+            <h3>Removed the "Close" button command from several screens since the TButton component have a "ModalResult" property that
+                closes the form automatically without a single line of code</h3>
+            <h3>MAME "snapshot_directory" entry in "mame.ini" is updated automatically when closing the new "Image Category / Layout Settings"
+                screen (all MAME based systems, if they are available)</h3>
+         <h2>Removed</h2>
+            <h3>Left-overs in "EmuLoader.ini" from previous builds</h3>
+            <h3>Some unused icons ("resources\main_icons\" folder)"</h3>
+            <h3>Unused variables and old codes thru the entire project (some functions are still there, commented out)</h3>
+            <h3>AnotherArcadeEmulator settings screen removed completely from the project</h3>
+         <h2>Added</h2>
+            <h3>Filter: "Missing ROMs/CHDs" (tool bar button "Have / Miss Games")<br/>
+                Select this filter to display all games that have one or more missing ROMs/CHDs</h3>
+            <h3>Feature: Customizable font for games found with 1 or more missing ROMs/CHDs (preferences screen, "Games" /
+                "Games List" tab, "Font Settings" box, "Missing ROMs/CHDs").</br>
+                Games where the .zip was found but there are ROMs or CHDs missing, will be displayed in a different
+                font. It uses the same files as the "Scan Results" feature (games popup menu)<br/>
+                Not all systems are supported!</h3>
+            <h3>PinMAME system is back (only Win32 binary is supported)<br/>
+                NOTE: I am NOT adding native support for "Visual PinMAME" tables so please, do not ask</h3>
+            <h3>New files added for PinMAME</h3>
+            <h3>Setting: "New Emulator Binaries Detection Enabled" (preferences screen, "General" tab, "Miscellaneous" tab, "Startup"
+                frame box)<br/>
+                Disable this option to prevent the front-end from verifying the checksum of available emulators, for a faster
+                start (enabled by default)
+            </h3>
+            <h3>Images tool bar buttons:<br/>
+                - toggle classic/layouts view mode<br/>
+                - delete snapshot of selected category (classic view mode only)</h3>
+            <h3>New .ttf font: "Consolas", used in the project (this font is way better than "Courier New")</h3>
+            <h3>The window position and size is restored on left panel editor screen ("ini_files\el_extras.ini" file)</h3>
+            <h3>Support for MAME 0.129u2 including new CHD types: "Video Home System" and "Compact Flash Card"</h3>
+      </div>
+      
+      <br/><br/>
+      <div id="changelog">
+         <h1>version 5.6.2 change log - October 22, 2008</h1>
+         <h2>Fixed</h2>
+            <h3>Front-end crashes on some systems with Vista x64 and 4GB RAM</h3>
+         <h2>Changed</h2>
+            <h3>Updates to "\ini_files\mame_filters.ini" file</h3>
+            <h3>Disabled AAE setup screen to avoid messing with "aae.ini" file and due to the fact that you can configure
+                the emulator directly in its own menu (why re-invent the wheel, right ?)</h3>
+         <h2>Improved</h2>
+            <h3>Some minor improvements on some screens and popup menus</h3>
+         <h2>Added</h2>
+            <h3>Expanded the "CHD" games filter with more options:<br/>
+                - "Hard-Drive" -> games that use a hard-drive device (ide, scsi, disk)<br/>
+                - "Laserdisc" -> games that use a laserdisc media<br/>
+                - "CD-ROM" -> games that use a CD-ROM media<br/>
+                - "GD-ROM" -> games that use a GD-ROM media
+            </h3>
+            <h3>New file to detect CHD correctly based on new CHD filters: "\ini_files\chd_mediatypes.ini".<br/>
+                This file contains a list of tags found on MAME's "listxml" output, and it's a temporary fix. If there is one
+                or more tags missing, you can add them into this file
+            </h3>
+            <h3>New Sega games filters:<br/>
+                - Sega Naomi GD-ROM<br/>
+                - Sega Naomi 2<br/>
+                - Sega Naomi 2 GD-ROM
+            </h3>
+            <h3>New files:<br/>
+                -> folder: "resources\main_icons\arcade_filters\"<br/>
+                &nbsp;&nbsp;"chd_hd.ico", "chd_laserdisc.ico", "chd_cdrom.ico", "chd_gdrom.ico"<br/>
+                &nbsp;&nbsp;"naomigd.ico", "naomi2.ico", "naomi2gd.ico"
+            </h3>
+      </div>
+      
+      <br/><br/>
+      <div id="changelog">
+         <h1>version 5.6.1 change log - August 07, 2008</h1>
+         <h2>Fixed</h2>
+            <h3>Could not select .avi file to record with MAME</h3>
+            <h3>Setting debugscript was being saved as comment if value is empty (MAME settings)</h3>
+         <h2>Changed</h2>
+            <h3>Read/write emulator/game full setting only works on MAME and AGEMAME. All other emulator have support for
+                paths only (this is for MAME based emulator only!)</h3>
+         <h2>Improved</h2>
+            <h3>Left panel files can now handle any word surrounded by asterisks. They will be converted into sub-nodes.<br/>
+                The section "[ROOT_FOLDER]" is not required anymore but if this section is not found, it will be added
+                automatically (required, so the tree nodes can be created correctly)</h3>
+         <h2>Removed</h2>
+            <h3>Support for "optionXx (NULL) (not set)" entries from MAME based emulators (mame.ini)<br/>
+                This means that configuring old MAME/AGEMAMGE builds and HazeMD/Mjolnir emus with EL is no longer possible
+                (I might do something about that in a future version, but can't promisse anything)</h3>
+         <h2>Added</h2>
+            <h3>Support for MAME 0.126u3</h3>
+      </div>
+
+      <br/><br/>
+      <div id="changelog">
+         <h1>version 5.6 change log - June 01, 2008</h1>
+         <h2>Changed</h2>
+            <h3>Create games list for "SEGA Model 2 Emu v0.8a" and "AAE beta 1 update 5" emulators are updated to use the
+                new XML files from Logix (ClrMAMEPro).<br/> Old .dat files are no longer supported!</h3>
+            <h3>AAE and SEGAModel2 games lists must be created again due to changes in the ROMs IDs (games list files)</h3>
+         <h2>Added</h2>
+            <h3>Support new settings for MAME 0.125u8</h3>
+            <h3>Support for SEGA Model 2 Emulator v0.8a. Emulator settings screen updated, but unfortunatelly the format and comments
+                of "emulator.ini" file cannot be maintained</h3>
+      </div>
+
+      <br/><br/>
+      <div id="changelog">
+         <h1>version 5.5.1 change log - May 23, 2008</h1>
+         <h2>Fixed</h2>
+            <h3>Option "Enable Image Label Info" not being disabled at startup</h3>
+            <h3>Access violation when viewing MAME game faqs (auto game docs)</h3>
+            <h3>Load/save MAME input, load MAME savestate was not working. Also removed warning message when
+                hitting the cancel button</h3>
+         <h2>Added</h2>
+            <h3>Support to create AVI output with MAME 0.125u1 (games popup menu)<br/>
+                ... files always created in "multimedia_files\" sub-folder of MAME's "snap" folder</h3>
+            <h3>Re-added empty bios value support (MAME settings) using a new checkbox named "Default = Empty Value"</h3>
+      </div>
+
+      <br/><br/>
+      <div id="changelog">
+         <h1>version 5.5 change log - May 13, 2008</h1>
+         <h2>Fixed</h2>
+            <h3>When exiting MAWS view, games list focus was not restored</h3>
+            <h3>MAME ini files not being generated when setting emulator options from "Emulator Setup"
+                screen, making settings all messed up</h3>
+            <h3>Error when loading image background in treeviews and listviews if file does not exist</h3>
+            <h3>Bug that did not always minimized the front-end when running games (when feature is enabled)</h3>
+            <h3>Weird bug when running Model 2 emu. Front-end window is now restored correctly</h3>
+            <h3>Vista taskbar / Vista Flip3D previews now show correctly when the front-end is minimized... yay!<h3>
+            <h3>Game name in status bar not properly set when switching between games filters</h3>
+            <h3>Minor visual bugs</h3>
+         <h2>Changed</h2>
+            <h3>All MAME WAV/MNG files are now created in the same folder: "mamesnaps\multimedia_files\"</h3>
+            <h3>No more folder restrictions for MAME playback/record input and save state files</h3>
+         <h2>Improved</h2>
+            <h3>No need for the arrow in drop-down buttons anymore (tool bar buttons)</h3>
+            <h3>Feature "select parent game" does nothing if parent is not found or is hidden</h3>
+            <h3>Save file dialogs merged and simplified</h3>
+         <h2>Removed</h2>
+            <h3>"Delete .wav / .mng Files" popup menus</h3>
+            <h3>Custom MAME wave output folder (preferences screen)</h3>
+         <h2>Added</h2>
+            <h3>Support for LCD screen type when creating MAME games lists (no support in screen type filter though)</h3>
+            <h3>Incremental search by game name now works for view modes that use EasyListView</h3>
+            <h3>Support for MAME 0.125</h3>
+      </div>
+      
+      <br/><br/>
+      <div id="changelog">
+         <h1>version 5.4.1 change log - March 23, 2008</h1>
+         <h2>Fixed</h2>
+            <h3>Menu theme, font color of selected item was not being applied</h3>
+            <h3>Snapshots not always displayed after image panel was set empty</h3>
+            <h3>Scan for missing icons was not running games in some view modes</h3>
+            <h3>Games list not being correctly sorted (left panel editor)</h3>
+            <h3>Access violations in scan missing/not used icons/images</h3>
+         <h2>Changed</h2>
+            <h3>Scan for not used images. Only files that are not used by any games are removed</h3>
+         <h2>Added</h2>
+            <h3>New setting: "Auto Rename Snapshots to Old Format" / "Delete Files After Rename"
+                (preferences, "Images" / "Categories" tab)<br/>
+                This will automatically rename snaps from new MAME format "\gamename\0000.png" to the old
+                format used by the front-end "full_gamename0000.png". Click on the "help" button next to its
+                checkbox for a more detailed info... disabled by default</h3>
+      </div>
+
+      <br/><br/>
+      <div id="changelog">
+         <h1>version 5.4 change log - March 07, 2008</h1>
+         <h2>Fixed</h2>
+            <h3>Select parent game was bugged</h3>
+            <h3>Access violation with columns profiles if a column index is invalid</h3>
+            <h3>Several visual bugs</h3>
+            <h3>Button "Resize screenshots area" was not working correctly in some layout</h3>
+            <h3>Prev/next images browse buttons were bugged (blue ones)</h3>
+            <h3>Image types auto cycle feature not working in some cases</h3>
+            <h3>Add/remove to/from favorites/hidden list was not working right</h3>
+            <h3>MAME features: "record .wav; .mng"; "record/play .inp; .sta" was not working.
+                Funny no one reported this... does anyone use these features ? :(</h3>
+            <h3>Button "Clear Selected" not working in "Delete Multiple Games Files"</h3>
+            <h3>Several cosmetic fixes (too many to list)</h3>
+            <h3>Open picture dialog, replaced by open file dialog</h3>
+         <h2>Changed</h2>
+            <h3>Image type is now known as "Image Category". Entries in "EmuLoader.ini are
+                changed as well</h3>
+            <h3>Renamed "Show Command Line Before Running Game" to "Run Game Confirmation Dialog"
+                (main menu "View")</h3>
+            <h3>Renamed "Auto Cycle Previous/Next Image Types" to "Image Category Prev/Next Auto Switch"
+                (images popup menu)</h3>
+            <h3>Column "Description" renamed to "Title"</h3>
+            <h3>Renamed "Resize screenshots area" to "Center Splitters (Resize Images)" (images popup
+                menu)</h3>
+            <h3>Feature "Automatic Game Documents" is now called "View Game Documents"</h3>
+            <h3>You cannot rename image files while in layouts view</h3>
+            <h3>Replaced game documents tool bar panel by a popup menu (mouse right-click)</h3>
+            <h3>Moved "\resources\msgbox_icons\" folder to "\resoureces\images\msgbox_icons\"</h3>
+         <h2>Improved</h2>
+            <h3>Columns positions ([Position] section) are not saved in profiles if their positions
+                are same as default... to prevent further errors</h3>
+            <h3>Major rewrite on prev/next image buttons. Only sequential image filenames are
+                supported from now on, meaning you no longer can have gaps in filenames like:<br/>
+                "galaga.png"; "galaga0002.png"; galaga0008.png"<br/>These files must be renamed as:<br/>
+                "galaga.png"; "galaga0000.png"; galaga0001.png"
+            </h3>
+            <h3>Even more source code cleanup and optimizations (again and again and again!!!) ^-^</h3>
+            <h3>Systems filter menus (tool bar button and main menu "Games Filters") are only visible if
+                the emulator and games list are valid)</h3>
+            <h3>Face lift and optimizations on all screens and some features</h3>
+         <h2>Removed</h2>
+            <h3>System view mode is gone. To view games by system use the system filter
+                (main tool bar buttons or "Games Filters" main menu)</h3>
+            <h3>Feature "Open in a window" (view game documents) is no more</h3>
+            <h3>File "\resources\images\NoSnapshot.png" is no longer used. A blank image panel is
+                displayed when no valid screenshot is found (for the 1st image only)
+            </h3>
+            <h3>Tray icon is no more. EL now stay minimized when running games. TrayIcon component
+                is also removed from the project</h3>
+            <h3>A bunch of images from "\resources\images\" folder and sub-folders (not used anymore)</h3>
+            <h3>Several icons from "\resources\main_icons\"folder that are not used anymore</h3>
+            <h3>Option: "Blend Clone Icons in 50%"</h3>
+         <h2>Added</h2>
+            <h3>Support for MAMEUI games icons</h3>
+            <h3>Large icons, small icons, tiles view modes are back! (EasyListView v1.72)<br/>
+                -> Everything works, except the following limitations / bugs:<br/>
+                &nbsp;&nbsp;- No virtual mode to keep it as simple as possible<br/>
+                &nbsp;&nbsp;- Incremental search does not support searching by game name<br/>
+                &nbsp;&nbsp;- Visual bugs that cannot be fixed (EasyListView's fault)<br/>
+                &nbsp;&nbsp;- No support for arcade controllers to navigate in the games list (still
+                              working on a solution for this one!)<br/>
+                &nbsp;&nbsp;- No hot-keys support for some actions<br/>
+                -> Some visual tweaks were added (preferences screen, "Games List" tab):<br/>
+                &nbsp;&nbsp;- "Gradient Selection Bar", a nice customizable gradient bar. Thumbnails view
+                              looks awesome with this...<br/>
+                &nbsp;&nbsp;- "Selected Full Item Paint" will select the entire cell (text + icon)
+            </h3>
+            <h3>Thumbnails view mode! (EasyListView v1.72)<br/>
+                This is an experimental feature. Only game snapshots are supported<br/>
+                -> Feature:<br/>
+                &nbsp;&nbsp;- Custom settings (main menu "View", "Thumbnail Settings"):<br/>
+                &nbsp;&nbsp;&nbsp;1. Size scale from 90x90 to 400x400<br/>
+                &nbsp;&nbsp;&nbsp;2. Enable/disable border and color customizable<br/>
+                &nbsp;&nbsp;&nbsp;3. "Show Parent if Thumb Not Found": Load parent snapshots if clone
+                snapshots are not found (enabled by default)<br/>
+                &nbsp;&nbsp;- All thumbs are processed within threads for faster loading<br/>
+                &nbsp;&nbsp;- You can delete game snapshots directly from this view mode. Just select
+                            all games you want and use the new "Delete Selected Game Snapshots" option
+                            in the games popup menu, new "Thumbnails" sub-menu<br/>
+                &nbsp;&nbsp;- MAMu_ icons are not displayed in this view mode<br/>
+                &nbsp;&nbsp;- Reload selected Thumb (games popup menu, "Thumbnails" sub-menu)<br/>
+                &nbsp;&nbsp;- Reload All Thumbnails (games popup menu, "Thumbnails" sub-menu)<br/>
+                &nbsp;&nbsp;- Images preview and game documents are disabled in this view mode.
+                            To convert snapshots, use the "Convert Snapshots" menu item from the
+                            "Thumbnails" sub-menu (games popup) <br/>
+                &nbsp;&nbsp;- Games filters are fully supported, including the left bar</br>
+                -> NOTES:<br/>
+                &nbsp;&nbsp;- If you keep switching between thumbnails and other view modes very
+                            fast, EL might crash<br/>
+                &nbsp;&nbsp;- This feature use A LOT of memory when viewing all games.
+                            About 240MB to load one thousand images, at 125x125 size. The bigger the
+                            thumbs, more memory will be used<br/>
+                &nbsp;&nbsp;- Thumbs are loaded only when games appear in the screen for the fist time
+                            to save memory, if you are using a filter with only a few games
+            </h3>
+            <h3>View modes for the images preview (main menu "Images", "View Mode" menu item):<br/>
+                -> "Classic Mode": old 1 image mode with no multi-screenshots or layouts support<br/>
+                -> "Layouts Mode": new view mode with multi-screenshots and layouts support
+            </h3>
+            <h3>Show/hide images layouts and change their title. To edit a title, select the one you want
+                 and hit "F2" hot-key (or use the "Edit Title" button), and type the new description
+                 directly into the list. Hit "ESC" key to abort or "ENTER" key to confirm the change
+                 (preferences screen, "Images" / "Layouts" sub-tab)<br/>
+                 Note: single layout cis always visible so do not try to hide it!
+            </h3>
+            <h3>New setting: "Layout Prev/Next Auto Switch" (images popup menu)<br/>
+                 Enable this so you can cycle between images and layouts with the prev/next blue button,
+                 while in layouts view mode (same as image category auto cycle)
+            </h3>
+            <h3>Ability to hide panels in the layouts customize screen (dual and triple layouts), so you
+                can view only 1 or 2 images in a triple layout and 1 image in a dual layout. <br/>
+                Panels sizes might not be saved/restored when restarting, and there can be weird results
+                when hiding panels (layouts were not ment to have hidden images!)
+            </h3>
+            <h3>Hidden games feature is changed into a filter now ("Games Filters"). Valid options are:<br/>
+                -> "List All": all games are visible<br/>
+                -> "Hidden Games": only games listed in the hidden list are visible<br/>
+                -> "No Hidden Games": all games are visible except the from in the hidden list
+            </h3>
+             <h3>New Delphi component: "ExTrackBar". A trackbar with labels and other stuff</h3>
+             <h3>New images resampler filter: "Scale2x". This one doubles the snapshots resolution, and
+                 support only title snapshots and game snapshots</h3>
+      </div>
+
+      <br/><br/>
+      <div id="changelog">
+         <h1>version 5.3.1 change log - February 11, 2008</h1>
+         <h2>Fixed</h2>
+            <h3>Screenshots alpha blend was disabled</h3>
+            <h3>Crash when scanning ZiNc and Daphne games lists</h3>
+            <h3>Games with multiple controls were not being properly filtered when using "Control Type"
+                filters (main menu "Games Filters")</h3>
+         <h2>Changed</h2>
+            <h3>Files renamed/moved:<br/>
+                -> from "\ini_files\favorites\default.ico" to "\resources\main_icons\favorite_user.ico"<br/>
+                -> from "\resources\tray_icons\el_icon1.ico" to "\resources\main_icons\trayicon.ico"
+            </h3>
+         <h2>Improved</h2>
+            <h3>"Bad Dump" / "No Dump" info in scan results screen for each ROM/CHD</h3>
+            <h3>Display screenshots is a lot faster</h3>
+            <h3>The "no snaphshot" image is shown only when the first screenshot is missing. When using
+                previous/next buttons, if screenshot is not found, the last one loaded is not removed
+            </h3>
+            <h3>Hint for previous/next screenshot buttons</h3>
+            <h3>Even more source code cleanup and optimizations</h3>
+         <h2>Removed</h2>
+            <h3>URL label link on top of game documents window/panel</h3>
+            <h3>Files deleted:<br/>
+                -> Folder: "\resources\main_icons\"<br/>
+                &nbsp;&nbsp;"leftpanel_root.ico"
+            </h3>
+            <h3>Folder and all its files "\resources\tray_icons\" deleted</h3>
+            <h3>New MAME snaps filename format. Only the old "fullgamename0000.ext" is supported from
+                now on (use the new "Convert Snapshots" feature to avoid renaming all files manually)</h3>
+            <h3>Icon files from favorites feature. No more custom favorites icons</h3>
+         <h2>Added</h2>
+            <h3>Multi-screenshots layouts!!!!!!!!!<br/>
+                View up to 3 screenshots at the same time<br/>
+                -> Features:<br/>
+                &nbsp;&nbsp;- set what image types to use for each layout using the "Customize" menu
+                              item in the new "layouts" tool bar button<br/>
+                &nbsp;&nbsp;- switch layouts easily using the new "layout" tool bar button<br/>
+                &nbsp;&nbsp;- resize each image using the splitters<br/>
+                &nbsp;&nbsp;- settings are saved in the new "[front-end]\ini_files\screenshot_layouts.ini"
+                              file<br/>
+                &nbsp;&nbsp;- each image panel use the background color configured in preferences screen<br/>
+                &nbsp;&nbsp;- each image panel have a hint with its type description so you know what is
+                              being shown (just pass the mouse thru the image)<br/>
+                &nbsp;&nbsp;- features disabled multi-screenshots is enabled: "filename / resolution label";
+                              "change image types"<br/>
+                &nbsp;&nbsp;- use the new "Reset Screenshots Sizes" menu item (images popup menu) to
+                              center the splitters into the screenshots preview area (current layout only!)<br/>
+                &nbsp;&nbsp;- use the same image type in more than one place
+            </h3>
+            <h3>New Delphi component, "RichEditURL". URL detection is within the game document text now :)<br/>
+                No HTML tags support though</h3>
+            <h3>New setting: "Set All Games as Available (Scan Games)" (preferences screen)
+                See the help button next to this setting for more info...</h3>
+            <h3>New feature: "convert snapshots from MAME to EL format" (main menu "Images")<br/>
+                Use this to convert all your "gamename\0000.png" snapshots to "fullgamename0000.png"</h3>
+            <h3>Added the "Screen Resolution" column back (1st screen only). You need to re-create your
+                games lists again. I will not add refresh rate though<br/>
+                Warning: you must delete all your games lists and columns profiles before using this
+                new build if you are upgrading from v5.3 or EL will crash!</h3>
+            <h3>New button in screenshots tool bar to resize its area so only description column is
+                visible</h3>
+            <h3>Driver "m52.c" into the "Irem Old School" filter for "Moon Patrol" game</h3>
+            <h3>New files:<br/>
+                -> Folder: "\resources\images\img_layouts\"<br/>
+                &nbsp;&nbsp;"img2_layout1.png"; "img2_layout2.png"; "img3_layout1.png"<br/>
+                &nbsp;&nbsp;"img3_layout2.png"; "img3_layout3.png"; "img3_layout4.png"<br/>
+                &nbsp;&nbsp;"img3_layout5.png"; "img3_layout6.png"<br/>
+                -> Folder: "\resources\main_icons\"<br/>
+                &nbsp;&nbsp;"img1_layout.ico"; "img2_layout1.ico"; "img2_layout2.ico";<br/>
+                &nbsp;&nbsp;"img3_layout1.ico"; "img3_layout2.ico"; "img3_layout3.ico"<br/>
+                &nbsp;&nbsp;"img3_layout4.ico"; "img3_layout5.ico"; "img3_layout6.ico"<br/>
+                -> Folder: "\resources\images\<br/>
+                &nbsp;&nbsp;"msgbox_top.png"
+            </h3>
+      </div>
+
+      <br/><br/>
+      <div id="changelog">
+         <h1>version 5.3 change log - January 26, 2008</h1>
+         <h2>Fixed</h2>
+            <h3>Clone games not showing in the list when using grouped view mode and
+                "show available only " or "show missing only" filters<br/>
+                This fix will show parent games in the list one way or another, so clones can be shown</h3>
+            <h3>Access violation when trying to delete .zip games while game is set as missing (MAME only)</h3>
+            <h3>Driver status info in "game details" screen was not showing for all systems</h3>
+            <h3>ClrMAMEPro .dat files info not being restored on restart</h3>
+            <h3>Input playback / record was not working</h3>
+            <h3>Add games to hidden list not working... also fixed re-select item if feature is enabled</h3>
+            <h3>Re-select item after deleting games from favorites lists</h3>
+            <h3>Random game button is finally fixed<br/>
+                Also, added a timer of 03 seconds. If no game is chosen by then, the first visible game on
+                the list is selected... to prevent front-end from freezing when games list is too small</h3>
+            <h3>System nodes still showing when they shouldn't (system view mode)</h3>
+            <h3>Game name not being reset when no games are selected</h3>
+            <h3>Threaded timer was not being stopped in some operations (splash screen)</h3>
+            <h3>Entries not being properly handled in scan result files (.miss)</h3>
+            <h3>10 seconds delay when running emulators in some systems</h3>
+
+         <h2>Changed</h2>
+            <h3>Support for the new MAME image format "\gamename\0000.png" is reduced to the first
+                2 image types (title snapshots / game snapshots). All other image types will only
+                use the old format "full_gamename0000.png"<br/>
+                </h3>
+            <h3>"Emu Loader image format (fullgamename0000.png) is always enabled now, and the new
+                 MAME format is optional. Removed the setting from "Images" main menu</h3>
+            <h3>Files renamed:<br/>
+                -> Folder: "\resources\main_icons\"<br/>
+                &nbsp;&nbsp;"image_07_gameartwork" to "image_08_gameartwork"<br/>
+                &nbsp;&nbsp;"image_08_maws" to "image_09_maws"<br/>
+                &nbsp;&nbsp;"filterarcade_10_aae.ico" to "filterarcade_09_aae.ico"<br/>
+                &nbsp;&nbsp;"filterarcade_09_mjolnir.ico" to "filterarcade_06_mjolnir.ico"<br/>
+            </h3>
+            <h3>Game details screen remade</h3>
+            <h3>Moved Mjolnir from 8th to 3rd system in the list</h3>
+            <h3>Playback / record input files are now read/written inside a game sub-folder<br/>
+                You only need to set the main folder for the inp files and EL will add the game name
+                sub-folder automatically (just the way the savestate feature works)</h3>
+            <h3>ROMs/CHDs marked as "nodump" are never checked and will be marked as valid since games
+                can run even when they are missing (mainly for MAME)</h3>
+            <h3>Format of "sysname_roms.el" files are changed. ROM size info is removed since it's
+                never used by the front-end when scanning the games list</h3>
+
+         <h2>Improved</h2>
+            <h3>Frame box label of image types folder selection show all possible file formats
+                for each type (preferences screen, "Images" tab)</h3>
+            <h3>Code optimizations and removal of some unused functions / variables</h3>
+            <h3>Status bar "game name" label now show "gamename [parent_gamename]"</h3>
+            <h3>Select item function is a lot faster and its implementation is 100% ghost-safe</h3>
+            <h3>Reduced image filters to 3 states: "off", "Linear" and "Lanczos"</h3>
+
+         <h2>Removed</h2>
+            <h3>Status bar panels: "game size"; "current favorite profile"</h3>
+            <h3>Status bar icons and customization</h3>
+            <h3>Files removed:<br/>
+                - Folder: "\resources\main_icons\"<br/>
+                &nbsp;&nbsp;"statusbar_game_size_emu.ico"; "statusbar_game_size_zip.ico"; "emu_pinmame.ico"<br/>
+                &nbsp;&nbsp;"filterarcade_06_pinmame.ico"; "unzipfile.ico"<br/>
+                - Folder: "\resources\gameslist_icons\"<br/>
+                &nbsp;&nbsp;"PinMAMEParent.ico"; "PinMAMEClone.ico"; "PinMAMEBios.ico"<br/>
+                &nbsp;&nbsp;"UnPinMAMEParent.ico"; "UnPinMAMEClone.ico"; "UnPinMAMEBios.ico"<br/>
+                - Folder: "\resources\images\topbars\"<br/>
+                &nbsp;&nbsp;"emu_pinmame.png"
+                - Folder: "\resources\images\"<br/>
+                &nbsp;&nbsp;"NoGamesAvailable.png"
+            </h3>
+            <h3>PinMAME system is gone...</h3>
+            <h3>ROMs list from game details screen. Not much useful...</h3>
+            <h3>ROM size info from "sysname_roms.el" file. EL never check ROM sizes anyway (you'll
+                need to re-create all your games lists...)</h3>
+            <h3>Game size info is gone. Wanna know a game's size ? Go to MAWS for that info</h3>
+            <h3>Setting "Display Zip Error Messages" since the new zip library does not open the file if
+                there are errors</h3>
+            <h3>"No Games Available" when games list is empty (unnecessary screenshot)</h3>
+
+         <h2>Added</h2>
+            <h3>PCB image type added back</h3>
+            <h3>New files:<br/>
+                -> folder: '\resources\main_icons\"<br/>
+                &nbsp;&nbsp;"image_07_pcb.ico"
+            </h3>
+            <h3>Some emulator settings for Daphne. Also added support for laserdisc players other
+                then the "Virtual" type (preferences screen, Emulators tab)</h3>
+      </div>
+
+      <br/><br/>
+      <div id="changelog">
+         <h1>version 5.2.1 change log - January 18, 2008</h1>
+         <h2>Fixed</h2>
+            <h3>No need to select a game in the main list to edit left panel filters</h3>
+            <h3>Left panel's node height fixed to 18 pixels (same as games list with 16x16 icons)</h3>
+            <h3>Main menu / popup menus not loading / using custom themes (preferences screen)</h3>
+      </div>
+
+      <br/><br/>
+      <div id="changelog">
+         <h1>version 5.2 change log - January 17, 2008</h1>
+         <h2>Fixed</h2>
+            <h3>Merged sets being added more than once in "\arcade\mame_merged.ini" file</h3>
+            <h3>MAME ROMs folder selection was auto-sorting the list</h3>
+            <h3>Scan games function now search all MAME folders for .chd files</h3>
+            <h3>System node were counting as games when using system view mode</h3>
+            <h3>All system nodes were visible when selecting one system (system view mode)</h3>
+            <h3>Random game button was bugged again (this feature is very slow when just a fewer games are visible)</h3>
+         <h2>Changed</h2>
+            <h3>Files updated:<br/>
+                -> folder: "\resources\images\"<br/>
+                &nbsp;&nbsp;"about.png"; "logo.png"<br/>
+                -> folder: "\resources\main_icons\"<br/>
+                &nbsp;&nbsp;"statusbar_game_size_emu.ico"; "statusbar_game_size_zip.ico"<br/>
+            </h3>
+            <h3>Files renamed:<br/>
+                -> folder: "\resources\main_icons\"<br/>
+                &nbsp;&nbsp;"image_12_gameartwork.ico" to "image_07_gameartwork.ico"<br/>
+                &nbsp;&nbsp;"image_13_maws.ico" to "image_08_maws.ico"
+            </h3>
+            <h3>Moved "number of screens" from main tool bar buttons to "Games Filters" main menu</h3>
+            <h3>Hot-key for "previous image type" is now F9 and for "next image type" is F10</h3>
+            <h3>Status bar "standard" size changed to 16x16 icons. 24x24 icons were removed</h3>
+            <h3>Image type #1 (game snapshot) cannot be disabled anymore (preferences screen)</h3>
+            <h3>Moved screenshots "stretch" and "display parent images" settings back to screenshots
+                popup menu and removed the "settings and special effects" button from the tool bar</h3>
+            <h3>Added a "ClrMAMEPro Data File" edit box in "Emulator Setup" screen so you can define
+                a .dat file for all systems that need it to create the games list. There is no
+                need to put a "SEGAModel2Emulator.dat" in "\ini_files\" folder anymore<br/>
+                If the file is not found or not defined, when creating the games list you will be
+                prompted to select one</h3>
+            <h3>Read/write resolution settings for "SEGA Model 2 Emulator" was bugged<br/>
+                Also, added support for custom resolutions</h3>
+            <h3>Remove "Show expanded Items" menu option from "View" main menu and added a new
+                "Collapse Tree" / "Expand Tree" to toggle between collapse and expanded</h3>
+            <h3>Merged sets are a MAME exclusive feature from now on. This front-end will not support merged sets
+                for any other system, including MAME based ones (AGEMAME, PinMAME, HazeMD, etc...)</h3>
+            <h3>The follwing options are now MAME exclusive features (games popup menu):<br/>
+                -> "Run Game and Playback Input"<br/>
+                -> "Run Game Game and Record Input"<br/>
+                -> "Run Game and Load a Save State"<br/>
+                -> "Run Game and Record Wave Output"<br/>
+                -> "Run Game and Record MNG Output"
+            </h3>
+            <h3>Game documents feature is a MAME only feature now (it always was)</h3>
+            <h3>Moved "Auto Previous/Next Image Type" from main menu "Images" to images popup menu</h3>
+            <h3>Audio samples, main chip, display, sound, input, driver status and savestate info are
+                now extracted from MAME's "-listxml" output... for bios entries</h3>
+            <h3>Read/write columns profiles were adding the full path twice on the filename string,
+                preventing the profile to be read/written</h3>
+         <h2>Improved</h2>
+            <h3>More code optimizations (again, no speed gains)</h3>
+            <h3>Display game screenshots is a little faster (not noticeable for most of you)</h3>
+            <h3>Support for "filter / Mature" entries in .ini files (left panel)</h3>
+            <h3>Only available systems can be selected when scanning the games list
+                (games popup menu)</h3>
+            <h3>Removed the "Delete Selected Games Files" option from games popup menu ("Delete" menu
+                item), and changed the "Delete "gamename.zip" menu option so it can handle multiple
+                selected games as well, using the same "Delete" keyboard hot-key</h3>
+            <h3>Treeview's FullExpand() command used instead of a loop (don't know why I never used
+                this command before...)</h3>
+            <h3>You can delete files in the "Select File" screen using the "Delete" keyboard hot-key</h3>
+            <h3>Centralized all the calls for the "\ini_files\" folder and its sub-folders into one
+                function</h3>
+            <h3>Updated the function that create games lists based on ClrMAMEPro .dat files so other
+                emulators can also use it</h3>
+         <h2>Removed</h2>
+            <h3>DOS box run mode. Games run with DOS box in normal state and extract games list / emulator version minimized</h3>
+            <h3>The following image types are gone: "Select"; "Versus"; "Wallpaper"; "Hardware"; "PCB"<br/>
+                Go to MAWS to check on these images...</h3>
+            <h3>Files deleted:<br/>
+                -> folder: "\resources\main_icons\"<br/>
+                &nbsp;&nbsp;"filter6_numscreens_all.ico"; "filter6_numscreens_1.ico"; "filter6_numscreens_2.ico";<br/>
+                &nbsp;&nbsp;"filter6_numscreens_3.ico"; "filter6_numscreens_4.ico"; "mamu_scanmiss.ico";<br/>
+                &nbsp;&nbsp;"mamu_scannotneeded.ico"; "binary.ico"; "statusbar_total_games.ico";<br/>
+                &nbsp;&nbsp;"create_gameslist.ico"; "emu_extrafiles.ico"; "image_07_select.ico";<br/>
+                &nbsp;&nbsp;"image_08_versus.ico"; "image_09_wallpaper.ico"; "image_10_hardware.ico"<br/>
+                &nbsp;&nbsp;"image_11_pcb.ico"; "image_nextno.ico"; "image_prevno.ico"
+             </h3>
+             <h3>Support for zipped images is gone... for good this time</h3>
+             <h3>Customize images tool bar. You can only show or hide this bar from now on</h3>
+             <h3>Image type button from main tool bar button. Now only available in images tool bar</h3>
+             <h3>Option: "Use MAME Games Info" for ZiNc system. If a MAME games list already exists, EL will get all extra info
+                 from it automatically</h3>
+             <h3>Option: "Delete All Visible Games" from favorites popup menu. If you want to delete all games from a favorites list,
+                 enable "Multiple Section", select all games and use "Delete / Delete All Selected Games Files" (games popup menu)</h3>
+             <h3>Several menu items from games popup menu "Delete" (sorry but you're gonna have to
+                 delete files manually from now on)<br/>
+                 -> "Config File"<br/>
+                 -> "Nvram File"<br/>
+                 -> "Input File"<br/>
+                 -> "Save State File"
+             </h3>
+             <h3>Number of screens column from the main games list... you still have the filter
+                 in the "Games Filters" main menu</h3>
+         <h2>Added</h2>
+            <h3>Support for a new emulator: "AAE - Another Arcade Emulator"<br/>
+                New emulator that run vector games using OpenGL width hardware acceleration, adding
+                some cool effects. A ClrMAMEPro .dat file is required for this system (go to "Logiqx")<br/>
+                Note: this system support only full split ROMs (no parent/clone relationships)!
+            </h3>
+            <h3>Main filter "Parent/Clone" is also applied in the left panel</h3>
+            <h3>New left panel popup items:<br/>
+                &nbsp;-> "Apply Main Tool Bar Filters": Use this option to re-apply main filters from
+                the tool bar buttons<br/>
+                &nbsp;-> "Export Games List": Export the current games list to a .ini file so you
+                can use it as a new filter for the left panel
+            </h3>
+            <h3>New button for the MAWS web browser tool bar: "Exit MAWS", to exit the browser and
+                load the game snapshot image type</h3>
+            <h3>New feature: "Left Panel Editor" (main menu "Left Panel" / left panel popup menu)<br/>
+                This is what you've been waiting for. A complete editor for all your custom filter needs<br/>
+                You can even edit existing filters like "catlist.ini", "artwork.ini", "series.ini" and
+                others. Read "docs\el-leftpanel.txt" file for a user guide<br/>
+                There are 2 possible options:<br/>
+                &nbsp;-> "Create a New Filter": the editor will open with a new filter already
+                initialized waiting for your input<br/>
+                &nbsp;-> "Edit a Filter": after selecting a .ini from the list, the editor will open
+                and load the filter so you can add/remove folders or games<br/>
+                &nbsp;The editor is very easy to use and visualize. See the "help" button at the
+                editor's tool bar for a small tutorial<br/>
+                &nbsp;Warning: only MAME is supported by the editor. Even if you select games from
+                other systems, they will not be added
+            </h3>
+            <h3>New files:<br/>
+                -> folder: "\resources\images\topbars\"<br/>
+                &nbsp;&nbsp;"filters.png"; "emu_aae.png"<br/>
+                -> folder: '\resources\main_icons\"<br/>
+                &nbsp;&nbsp;"emu_aae.ico"; "filterarcade_10_aae.ico";<br/>
+                &nbsp;&nbsp;"leftpanel_btn_add.ico"; "leftpanel_btn_delete.ico"; "leftpanel_btn_save.ico";<br/>
+                &nbsp;&nbsp;"leftpanel_btn_help.ico"; "leftpanel_btn_addgame.ico"; "leftpanel_btn_deletegame.ico";<br/>
+                &nbsp;&nbsp;"search.ico"<br/>
+                -> folder: "\resources\gameslist_icons\"<br/>
+                &nbsp;&nbsp;"AAEParent.ico"; "AAEClone.ico"; "UnAAEParent.ico"; "UnAAEClone.ico"
+            </h3>
+            <h3>Detection of available screen resolutions, based on your video card+monitor<br/>
+                Used in ZiNc settings screen, SEGA Model 2 settings screen, AAE settings screen</h3>
+            <h3>New filter: "Save State" in "Games Filters" main menu</h3>
+      </div>
+      
+      <br/><br/>
+      <div id="changelog">
+         <h1>version 5.1.9 change log - January 04, 2008</h1>
+         <h2>Fixed</h2>
+            <h3>File "\arcade\system_name.el" not updated correctly when doing a single game scan</h3>
+            <h3>Left panel custom background color not being set (same as games list)</h3>
+            <h3>Scan results was not checking for merged sets and adding all those games to its list</h3>
+            <h3>ZiNc games showing when using "Vector" filter</h3>
+            <h3>History label (top game documents panel) was bugged</h3>
+            <h3>Bad treeview colors in "check for missing images" and "check for missing MAMu_ icons"</h3>
+            <h3>Executing games with "Run Custom Game Settings By Default" enabled was searching only for
+                game custom command lines</h3>
+            <h3>Setting / deleting "debug.ini" for MAME was not working correctly</h3>
+         <h2>Changed</h2>
+            <h3>Scan results changed to not include games where "gamename.zip" is not found (for both
+                master and clone sets</h3>
+         <h2>Improved</h2>
+            <h3>Emulators setup screen UI updated for easier access</h3>
+            <h3>Fixed appearance of ListView lists in several screens (for Windows Vista)</h3>
+            <h3>Multi-selection enabled for the left panel filters. Select a bunch of filters 
+                and all games from those filters combined will be displayed in the list<br/>
+                Single selection is still supported... of course</h3>
+            <h3>Left panel now use the main filter "Have / Miss". Note that selecting this main
+                filter will overwrite the select filters from the left panel!</h3>
+            <h3>Columns editor UI improved a little bit for easier maintenance</h3>
+            <h3>Minor improvements to the left panel</h3>
+            <h3>More optimizations for easier maintenance (no speed improvements)</h3>
+            <h3>Reduced to 10 tries the "Random Game" feature so the front-end does not fall into
+                an endless loop. Useful if you are viewing a list where most games are hidden</h3>
+         <h2>Removed</h2>
+            <h3>Games list icons are not validated anymore. If there is one or more files
+                    missing, the icons in the games list will be messed up</h3>
+         <h2>Added</h2>
+            <h3>Support for MARP data file (http://marp.retrogames.com)... game documents feature<br/>
+                File is updated daily. Download it from this link: http://marp.retrogames.com/marp.dat<br/>
+                Place it in "[frontend]\ini_files\" folder or MAME root folder.
+            </h3>
+            <h3>New main menu: "Left Panel"<br/>
+                This menu will have some special options. One of them, create special filters using
+                Emu Loader's internal database, to be used with the left panel<br/>
+                Menu Items so far:<br/>
+                &nbsp;&nbsp;"Create Control Types File" -> create a "controltype.ini" with a list of all
+                MAME control types and its games. Some users might want to use this filter instead of the
+                one from "Games Filters" main menu
+            </h3>
+            <h3>More improvements to the left panel:<br/>
+                -> Left panel popup menu:<br/>
+                &nbsp;&nbsp;"Apply Selected Filters" -> use this menu item to enforce the left panel to
+                apply its selected filters (useful when multiple filters are selected and you used the
+                main filters and want to revert to the left panel)<br/>
+                &nbsp;&nbsp;"Collapse / Expand Tree" -> collapse or expand all items in the tree<br/>
+                &nbsp;&nbsp;"Reload TreeView" -> reload all .ini files into the treeview (no filters are applied!)<br/>
+                &nbsp;&nbsp;"Default Panel Size" -> restore the default width of the left panel
+            </h3>
+            <h3>New files:
+                -> folder: "\resources\main_icons\"<br/>
+                &nbsp;&nbsp;"leftpanel_root.ico"<br/>
+                -> folder: "\resources\gameslist_icons\"<br/>
+                &nbsp;&nbsp;"MAMEParent.ico"<br/>
+                &nbsp;&nbsp;"MAMEClone.ico"<br/>
+                &nbsp;&nbsp;"MAMEBios.ico"<br/>
+                &nbsp;&nbsp;"UnMAMEParent.ico"<br/>
+                &nbsp;&nbsp;"UnMAMEClone.ico"<br/>
+                &nbsp;&nbsp;"UnMAMEBios.ico"
+            </h3>
+      </div>
+
+      <br/><br/>
+      <div id="changelog">
+         <h1>version 5.1.8 change log - December 20, 2007</h1>
+         <h2>Fixed</h2>
+            <h3>When disabling left panel, main tool bar filters were not being applied again</h3>
+            <h3>Hidden games stay hidden when left panel and hidden games features are enabled at the
+                same time</h3>
+            <h3>Open/close button for root nodes in left panel disappearing when starting front-end
+                with left panel enabled</h3>
+            <h3>Memory leak in "game details" screen</h3>
+            <h3>Incremental search not working in several screens</h3>
+         <h2>Improved</h2>
+            <h3>Files that do not follow the standard format are not added into the left panel
+             (catver.ini for example)</h3>
+            <h3>Merged some more functions to remove unecessary code duplicates</h3>
+         <h2>Removed</h2>
+            <h3>Several audit icons from folder "\resources\main_icons\"</h3>
+            <h3>Artwork filters from "Games Filters" main menu. Also removed support for the now old
+                artwork.ini (thanks Mr. Do!)... "[frontend]\ini_files\artwork.ini" file<br/>
+                Only the new artwork.ini file is supported and is to be used with the left panel</h3>
+            <h3>Audit feature is completely removed from the project (see new feature "Scan Results"
+                for more info)
+         <h2>Added</h2>
+            <h3>Added a new main tool bar button: "Left Panel Filters" for easier access and removed
+                the menu item from the "Games Filters" main menu</h3>
+            <h3>Left panel now have a popup menu with some options</h3>
+            <h3>New files:
+                -> folder: "\resources\main_icons\"<br/>
+                &nbsp;&nbsp;"left_panel.ico"<br/>
+                &nbsp;&nbsp;"scanresult_ok.ico"<br/>
+                &nbsp;&nbsp;"scanresult_badcrc.ico"<br/>
+                &nbsp;&nbsp;"scanresult_notfound.ico"<br/>
+                &nbsp;&nbsp;"scanresult_game.ico"
+            </h3>
+            <h3>Support for custom background image and font for the left panel
+             Same background image as games list and font is the same as parent games font</h3>
+            <h3>New options for MAME 0.122 in MAME settings screen</h3>
+            <h3>Custom width for the left panel is now saved in "EmuLoader.ini"</h3>
+            <h3>New folder "font_ttf" with some custom fonts used by the front-end, in case
+                you don't have them</h3>
+            <h3>New feature: "Scan Results" (games popup menu)<br/>
+                Every time you scan the games list, files are created or updated in a new folder:
+                "[frontend]\arcade\scan_results\". Each system have a file with the ".miss" extension,
+                except for "ZiNc" and "Daphne" systems (no support for these 2). Only games that have
+                missing ROMs/CHD are added<br/>
+                There are 2 options for this feature:<br/>
+                &nbsp;&nbsp;1. Selected Game ("Shift+A" hotkey) -> view the results of a single game<br/>
+                &nbsp;&nbsp;2. All Missing Games ("F8" hotkey) -> view the results of all missing
+                games for all systems<br/>
+                NOTES:<br/>
+                &nbsp;&nbsp;- At least one ROM or CHD file must be found for each game or it will not
+                              be added in the list<br/>
+                &nbsp;&nbsp;- Green status is for "Ok" ROMs/CHD files<br/>
+                &nbsp;&nbsp;- Red status is for "bad checksum" and is for CHD files only (no ROMs)<br/>
+                &nbsp;&nbsp;- Gray status is for "missing" ROMs/CHD files<br/>
+                &nbsp;&nbsp;- If you download a new .zip file you must re-scan the games list since this
+                              feature does not do any scanning, it only read "system_name.miss" files
+            </h3>
+      </div>
+
+      <br/><br/>
+      <div id="changelog">
+         <h1>version 5.1.7 change log - December 04, 2007</h1>
+         <h2>Fixed</h2>
+            <h3>Some sample files being set as "not used" in "Scan Audio Samples" (main menu "Games List")</h3>
+            <h3>New history link label background color and font settings not updated with game docs settings</h3>
+            <h3>Cannot create a new favorites profile when "Default" profile is selected</h3>
+            <h3>Default ini file for MAME based emulators not created on a couple situations</h3>
+            <h3>Bug when editing ROM paths in emulators settings screens</h3>
+         <h2>Changed</h2>
+            <h3>Renamed "Bios Sets" to "Bios Sets Settings" and removed the "Default / User Define"
+                options. This feature is now enabled by default (non-default biosset is automatically
+                loaded when starting MAME games). Remember that this is a MAME only feature</h3>
+         <h2>Improved</h2>
+            <h3>Some code optimizations for easier maintenance and redundancy removal</h3>
+            <h3>More internal updates for the upcoming large icons view mode</h3>
+         <h2>Added</h2>
+            <h3>New system: Mjolnir - Arcade Emulator v0.4 [Namco's System 21, System 22,
+                and Super System 22 harware]<br/>
+                Another MAME based emulator. It works the same way as MAME. Enough said :-))
+                Ini files (mjolnir.ini; etc) might not be fully compatible though
+            </h3>
+            <h3>ROMs files format updated with one more field so EL can know if a specific ROM
+                is from a bios set or is a regular ROM. This will only be used by the new audit system
+                ("mame_roms.el", "agemame_roms.el", "pinmame_roms.el", "hazemd_roms.el", "mjolnir.el")<br/>
+                New format: <i>rom_name=rom_size¬rom_crc32¬rom_status¬is_bios_rom;</i><br/>
+                &nbsp;&nbsp;bios.ic23_l=65536¬e5693ce3¬baddump¬1;<br/>
+                &nbsp;&nbsp;pacmanh.6j=4096¬5c96a733¬¬;<br/></br>
+                Note that you don't have to recreate your games lists... at least not until I finish
+                rewriting and activate the new audit feature
+            </h3>
+            <h3>New feature: Left panel filters<br/>
+                Same panel as in MAME32 but with a huge difference... you can have as many sub-levels
+                as you like, all you need to do is create a section in the file like so:<br/>
+                file: 'catlist.ini'<br/>
+                &nbsp;&nbsp;[My filter / Maze / Top View / Multiplayer / Level 33.1 / Konami]<br/>
+                &nbsp;&nbsp;game1<br/>
+                &nbsp;&nbsp;game2<br/>
+                &nbsp;&nbsp;.<br/>
+                To toggle this feature ON/OFF, use the new "Enable Left Panel" setting in "Games Filters"
+                main menu (enabled by default)<br/>
+                NOTES:<br/>
+                &nbsp;&nbsp;- you do not need to add all sub-levels way down to the last one (EL will do that
+                automatically)<br/>
+                &nbsp;&nbsp;- all files must be placed in the new "[frontend]\leftpanel_filters\"
+                folder<br/>
+                &nbsp;&nbsp;- you can have a custom description for each root node (.ini file). Just
+                create a new section inside called <strong>[TITLE]</strong> with the following format:<br/>
+                &nbsp;&nbsp;&nbsp;&nbsp;[TITLE]<br/>
+                &nbsp;&nbsp;&nbsp;&nbsp;FolderTitle = Type any description you want here<br/>
+                &nbsp;&nbsp;- other files like "catver.ini", "nplayers.ini", "mameinfo.dat", etc... are
+                still located in "[frontend]\ini_files\" folder<br/>
+                &nbsp;&nbsp;- All files from MAME32 are supported, "rankings.ini", "series.ini",
+                "catlist.ini", "version.ini", "artwork.ini", and others<br/>
+                &nbsp;&nbsp;- Use mouse right-button click to call popup menu
+            </h3>
+      </div>
+      
+      <br/><br/>
+      <div id="changelog">
+         <h1>version 5.1.6 change log - August 27, 2007</h1>
+         <h2>Fixed</h2>
+            <h3>Auto game document #6 not being correctly read (preferences screen)</h3>
+            <h3>Painting bug when scrolling games list while auto game documents is enabled</h3>
+            <h3>Columns profile not being saved on certain cases (front-end startup)</h3>
+            <h3>Columns profile .ini file is always deleted before saving again... to fix bug</h3>
+            <h3>Games not being set correctly in grouped view mode. You'll need to re-create your games lists
+                to fix this bug</h3>
+            <h3>Custom driver options was setting game name instead of driver name</h3>
+            <h3>Entries with null value now do not have "# entry" (mame.ini)... ctrlr, mngwrite, etc</h3>
+            <h3>Couple bugs when scanning games list and CHD files</h3>
+            <h3>Accesss violation when deleting multiple .zip files (progress bar bug)</h3>
+            <h3>When favorites profile is empty, it was not being set as default at startup</h3>
+            <h3>A few internal bugs</h3>
+            <h3>The drop-down box # 6 (preferences screen) was reading the setting from the drop-down box #5</h3>
+         <h2>Changed</h2>
+            <h3>Renamed "Hidden Games Enabled" to "Activate Hidden Games" / "De-activate Hidden Games"</h3>
+            <h3>For MAME based systems, all driver .ini files will now be handled in
+                "[mame_inifolder]\source\" folder. For MAME builds older than v0.118u2, you will need to move
+                the files to "[mame_inifolder]" manually</h3>
+            <h3>ZiNc games now use the field "ScreenType" to hold the index of games, so EL can run them with ZiNc emulator</h3>
+            <h3>Games list files are changed again. Please re-create all your games lists</h3>
+            <h3>User interface in games filters selection screen has changed. Filters descriptions are now
+                displayed as hints as you move the mouse over each option</h3>
+         <h2>Improved</h2>
+            <h3>Feature "Scan Audio Samples" ("Games List" main menu)<br/>
+                It only shows a list of sample from missing games and sample files not used by any game</h3>
+            <h3>First change to start implementing large view mode, using "EasyListView" v1.60 component <br/>
+                On every game selection, the full game data will have to be redirected to memory variables <br/>
+                I just hope this does not generate the bug from old EL buids...</h3>
+            <h3>Removed systems lists from main menus to add them at runtime... much easier to add new
+                systems in the future since I don't need to manually add the menu items</h3>
+            <h3>Main buttons tool bar / images buttons tool bar / status bar customization simplified</h3>
+            <h3>Customize columns screen</h3>
+            <h3>Bios sets selection screen (main menu "Emulator", "Bios Set" menu item)</h3>
+         <h2>Removed</h2>
+            <h3>Menu setting: "Use Controller" (main menu "Emulator")</h3>
+            <h3>Menu theme selection from "View" main menu. To select a theme go to preferences screen,
+                "Front-end" tab, "Menu / Popup Themes" sub-tab</h3>
+            <h3>Game size (.zip file size)</h3>
+            <h3>Top bars and feature descriptions from some screens. Also some files from
+                "[front-end]\resources\images\topbars\" folder</h3>
+         <h2>Added</h2>
+            <h3>ROMs validation. All games are now fully scanned when updating the games list. If a
+                game is missing a single ROM, it will be set as unavailable<br/>
+                Notes:<br/>
+                - ROMs of bios sets can now be placed in game sets (parents and/or clones)<br/>
+                - ROMs of bios sets can now be placed in game sets (parents and/or clones)<br/>
+                - you can put ROMs of game sets into bios sets, but parent set must still exist<br/>
+                - you still cannot put ROMs of parent sets into clone sets<br/>
+                - ROMs for ZiNc and Daphne systems are not fully scanned (no ROMs list...)</h3>
+            <h3>Customize main menu and popup menu colors (preferences screen, "Front-end" main tab,
+                "Menu / Popup Themes" sub-tab)<br/>
+                Notes:<br/>
+                - You can create as many themes as you like. They will be saved in "\ini_files\menu_themes.ini" file<br/>
+                - Setting "Frame Round Corners" is used for both selection band and checked items<br/>
+                - You can set single color, 2 colors gradient or 4 colors gradient for the selection band<br/>
+                - Theme "Office 2007" cannot be modified
+            </h3>
+            <h3>A pretty timer in status screen so you can keep track on how long a task is taking.
+                This is my first piece of code that use a second thread! :-))<br/>
+                Only create/scan games use this timer for now
+            </h3>
+            <h3>Fix for clone games with CHD files. File "\arcade\mame_roms.el" is updated to support filenames
+                of clone CHD + filename of the parent CHD, using a '  _"parentchd"_  ' tag, like so:<br/><br/>
+                Game: konam80u<br/>
+                CHD : 826uaa01.chd<br/>
+                Parent CHD: 826eaa01.chd<br/><br/>
+                .. sample from "mame_roms.el"..<br/>
+                826uaa01.chd_"parentchd"_826eaa01.chd=0¬456f683c5d47dd73cfb73ce80b8a7351¬;<br/><br/>
+                This means that the front-end will detect both chd files and if found will set the game as
+                available... Make sure to create the games list again
+            </h3>
+            <h3>New files to keep track of merged games located in "[frontend]\arcade\" folder (MAME based systems only)<br/>
+                - mame_merged.ini<br/>
+                - agemame_merged.ini<br/>
+                - pinmame_merged.ini<br/>
+                - hazemd_merged.ini
+            </h3>
+            <h3>You can resize game columns directly into the list now. Columns profile will be saved when:<br/>
+                - exiting the front-end<br/>
+                - swicthing between system filters<br/>
+                - when opening columns customizer screen
+            </h3>
+            <h3>Support for html link on new history.dat (not directly into the richedit box, but with a label above it)</h3>
+            <h3>New menu option: Reload "catver.ini" / "nplayers.ini" / "artwork.ini" (main menu "Games List")<br/>
+                Use it to load the info from those files without restarting the front-end</h3>
+      </div>
+      <br/><br/>
+      <div id="changelog">
+         <h1>version 7.3.1 change log - August 25, 2013</h1>
+         <h2>Fixed</h2>
+            <h3>Misc filters were not being validated when using text filter bar</h3>
+      </div>
+
+      <br/><br/>
+      <div id="changelog">
+         <h1>version 7.3 change log - August 22, 2013</h1>
+         <h2>Fixed</h2>
+            <h3>HBMAME settings file was not being loaded if you have MAME and HBMAME in the same folder tree</h3>
+            <h3>Columns were not being updated after closing customize columns screen</h3>
+         <h2>Added</h2>
+            <h3>Number of players option added to the text bar filter</h3>
+      </div>
+
+      <br/><br/>
+      <div id="changelog">
+         <h1>version 7.2 change log - August 01, 2013</h1>
+         <h2>Fixed</h2>
+            <h3>Previous/next image buttons were not working correctly. Also, they do NOT work at all if the "load image with threads"
+                button is enabled</h3>
+         <h2>Added</h2>
+            <h3>New misc filter: Hide Device Sets with no ROMs<br/>
+                Check this option to hide all device sets that have no ROMs (for MAME and HBMAME). Note that this does not hide
+                device sets with ROMs (like mie and qsound)
+            </h3>
+            <h3>Support for MAME 0.149u1</h3>
+      </div>
+
+      <br/><br/>
+      <div id="changelog">
+         <h1>version 7.1 change log - July 11, 2013</h1>
+         <h2>Fixed</h2>
+            <h3>Crash fix for Demul 0.58 (create games list)</h3>
+            <h3>Some systems were still using media type index higher than 1. You must re-create games lists for all systems that
+                use CHDs or disc image files (Daphne, Demul... except MAME/HBMAME)
+            </h3>
+         <h2>Improved</h2>
+            <h3>Optimizations in view audit results feature. Support up to 19 devices per game. I doubt a game will use that much devices...
+                future proof :)</h3>
+         <h2>Added</h2>
+            <h3>New arcade filter: Taito Type-X System</h3>
+            <h3>New column "Game Status": available, missing ROMs/CHDS, missing</h3>
+            <h3>Extremely
+ultra mega preliminary support for 7-Zip files. This is an experimental
+feature. I recommend to keep your MAME/HBMAME/Demul collections in ZIP
+format though. With 7-zip you can save around 3GB of HDD space if you
+have ALL MAME games but c'mon... 500GB external HDDs USB 3.0 are so
+cheap these days!<br />
+                - for MAME/HBMAME and Demul only!!!<br />
+                - file "7z.dll" must be placed in same folder as EmuLoader.exe (file must be downloaded separately)<br />
+                - if you do not have ROM sets in 7-Zip format, you don't need "7z.dll" as Emu Loader works just fine without it<br />
+                - very high compression profiles will be slower to handle (compared to zipped sets)<br />
+- Zip and 7-Zip formats are supported at the same time. You can have
+mixed sets in both formats, no need to convert your entire ROMs
+collection<br /> - newer 7z compression
+profiles might not be compatible as the only Delphi library I could
+find compatible with Emu Loader's internal code was coded in 2011 (not
+by me...). There is no way to adapt EL's internal code without breaking
+the entire project!<br />
+                - MAME/HBMAME audio samples are also supported... are .7z samples supported in MAME ?<br />
+                - for information, the library source code is "source\sevenzip.pas" and 7z.dll version supported in v4.65.0.0
+            </h3>
+      </div>
+
+      <br /><br />
+      <div id="changelog">
+         <h1>version 7.0 change log - June 26, 2013</h1>
+         <h2>Fixed</h2>
+            <h3>-FATAL BUG: image zip content lists were not being re-initialized after switching images categories/layouts.
+                Only fixed by restarting the application</h3>
+            <h3>Application crash when creating games lists or auditing games. Equal chars ( = ) of ROM names replaced by by minus chars ( - )</h3>
+            <h3>All ROM names are now checked for HTML tags, fixing A LOT of unusual ROM names (cosmetic fix)</h3>
+            <h3>False "file not found" messages due to a couple variables not being handled correctly at frontend's startup (cosmetic fix)</h3>
+            <h3>Wrong system icon and game name in Emu Loader's "Select File" custom dialog (cosmetic fix)</h3>
+            <h3>Fatal bug haunting Emu Loader for more than a year! When game is already set as missing, ROMs list was not being updated
+                in "system_name.miss" files after auditing... games with device sets were the most affected<br />
+                This was a big problem as available ROMs were being shown as missing, making it impossible to update ROM sets<br />
+                I don't know how I could have missed this for so long!!!
+            </h3>
+            <h3>Several minor fixes, app settings and cosmetic fixes</h3>
+            <h3>Images layout feature was being initialized TWICE at startup!!!</h3>
+            <h3>Images splitter grip icon not being set at startup if setting was disabled</h3>
+            <h3>Minor bug preventing EL from deleting "arcade\systemname.miss"</h3>
+            <h3>Columns could be clicked while in grouped view... this mode does not allow sorting for obvious reasons</h3>
+         <h2>Changed</h2>
+            <h3>File "biosset.ini" is only used for MAME now. This file's purpose is to change the bios used on systems with multiple
+                bios sets (like Neo-Geo). This prevents other emulators from messing this file up
+            </h3>
+            <h3>MAMu_ icons folders unified into a single folder. Select folder is now in Preferences screen, "Games List" page.
+                Relative path is supported (relative to Emu Loader)<br />
+                - EL use the same icons for all systems, but the following systems can be in a sub-folder (not required):<br />
+                &nbsp;ZiNc: "mamu_icons_dir\zinc\"<br />
+                &nbsp;DICE: "mamu_icons_dir\dice\"
+            </h3>
+            <h3>Option "Run Game [AlterMAME]" is gone (games popup menu), and a new "Autorun Game with AlterMAME" menu item is added
+                (ON/OFF toggle). Feature is located in emulators setup screen and in games popup menu<br />
+                Just choose an alternate MAME build in Emulator Setup screen, run game normally. If it fails (MAME exit code 2),
+                Emu Loader will try to re-run the game using AlterMAME executable<br />
+                The AlterMAME feature now works as it was originally intended...
+            </h3>
+            <h3>Feature "Show Game Docs" now display info for MAME only. No point showing info on other systems</h3>
+         <h2>Improved</h2>
+            <h3>Several tweaks and optimizations everywhere</h3>
+            <h3>Favorites
+list is always loaded with games list now, regardless of the feature
+being enabled or not. This causes a tremendous speed up when switching
+favorites on/off. One downside... games list loading can be up to 2.5
+seconds slower if you favorites list is larger than three thousand games</h3>
+         <h2>Removed</h2>
+            <h3>Settings "Bold font style in selected games" is removed. Pointless feature...</h3>
+            <h3>MAME
+features "Show Average FPS" and "Show Error Messages" are no more. When
+running a game with missing ROMs, a error message will popup after
+exiting the emulator, and the "Game Details" screen can be open,
+showing what ROMs are missing for the game... this CANNOT be disabled
+and it's supported on all systems (except Daphne) </h3>
+            <h3>Button "Delete Image" removed from images tool bar. This feature can only be accessed in images popup menu (mouse right-click)</h3>
+         <h2>Added</h2>
+            <h3>Support for MAME 0.149</h3>
+            <h3>New emulator support: HBMAME (HomeBrew MAME), completely independant from MAME: http://hbmame.the-chronicles.org<br />
+                Most MAME based features are supported<br />
+                - support for games with multiple bios sets like Neo-Geo (biosset_hbmame.ini)<br />
+                - partial merged sets support (just like MAME)<br />
+                - game custom settings<br />
+                - game audio samples detection. also, scan for audio samples in "Games List" main menu<br />
+                - features from "Run Game (Extra)" games popup menu are supported
+                - NO support for mameinfo.dat, history.dat and other docs<br />
+                - support for catver.ini, languages.ini and others<br />
+                - detection of device sets and games with CHDs<br />
+                - AlterMAME is NOT supported
+            </h3>
+            <h3>New emulator support: DICE: Discrete Integrated Circuit Emulator<br />
+                - it uses an external ClrMAME XML games list "DICE_xml.dat", created by myself specially for Emu Loader.
+                  It has more game info compared to regular XML lists<br />
+                - ROMs folder cannot be customized. ROMs sets, zipped only, must be placed in DICE's own "roms" sub-folder<br />
+                - Games with no ROMs are set as available
+            </h3>
+            <h3>Display orientation, number of players and controls types are now extracted from external ClrMAME XML .dat files,
+                if available. This is mostly for DICE...
+            </h3>
+            <h3>Support for zipped MAMu_ Icons (icons.zip). YES you read it right!<br />
+                Notes:<br />
+                - for ZiNc games, icons from "icons\zinc\" sub-folder are used, if found but it's not required<br />
+- for DICE games, icons from "icons\dice\" sub-folder are used, if
+found, to avoid mixing with MAME icons (not required)<br />
+                - MAMEUI icons do not have those special sub-folders. Icons from the root .zip folder are used instead
+            </h3>
+            <h3>New setting: "Dark Font Selection Bar", for those who want to use a white font in games list
+            (preferences screen, Games List tab)</h3>
+            <h3>Multi-column sorting. Sort by 2 different columns at the same time (request). Usage: click on first column header, then
+                hold Ctrl key and click on a second column header<br />
+                Notes:<br />
+                - this is a hack and extremely experimental... not a true multi-column sort implementation!<br />
+                - it only works with ascending sort (A to Z)<br />
+                - only works with details view mode
+            </h3>
+            <h3>Re-added screen resolution and screen refresh rate info in games list columns</h3>
+      </div>
+
+      <br /><br />
+      <div id="changelog">
+         <h1>version 6.7 change log - February 20, 2013</h1>
+         <h2>Fixed</h2>
+            <h3>Random application crash after selecting games</h3>
+            <h3>Menu option "Enable MAMu_ Icons" was grayed out after selecting folders for icons</h3>
+            <h3>Image Layout "tripple 6" was not loading/saving image 3 width correctly</h3>
+            <h3>Games splitter bar disappears when making the games list panel too small</h3>
+            <h3>Auditing multiple selected games was showing the system selection window. It's not necessary as the system of the
+                first selected game is used. Games of different systems cannot be scanned together on this feature!</h3>
+            <h3>No more script error messages when using web browser game info (ProgettoEMMA) on certain games (88games and others)<br />
+                It was as simple as enabling the "silent" mode in the TWebBrowser component</h3>
+            <h3>A few buttons in images tool bar should not be visible when viewing game web info</h3>
+            <h3>Clicking the close button in message box window was not returning the correct "abort" message</h3>
+            <h3>Unfocused lists had wrong sized selection bar</h3>
+            <h3>Images tool bar buttons still visible after disabling preview images, while info game docs panel enabled</h3>
+            <h3>Images panel messed up when disabling preview images, while internet game info is being used</h3>
+            <h3>Preview images being loaded twice at startup. Startup is now 2 seconds faster</h3>
+         <h2>Changed</h2>
+            <h3>Button "Toggle view mode" in images tool bar moved to a fixed position (second button). Easier to switch between view
+                modes as it never moves to another position</h3>
+            <h3>Finally updated the Graphics32 component to latest v1.9.1. There are no speed improvements though</h3>
+            <h3>Renamed "Enable Layout Dimensions" to "Show Layout Dimensions" (images popup menu). You'll need to re-enable this setting</h3>
+            <h3>User interface back to the good old looks. No gradient backgrounds, glowing texts or glass buttons</h3>
+            <h3>Fixed background color of many controls to pure white RGB(255, 255, 255)</h3>
+            <h3>Main image panel does not change color anymore, it's always black... as it should have been</h3>
+            <h3>Replaced the last semicolon char " ; " by the special " ¬ " char. Now EL can have game titles with semicolon (Japan titles ?)<br />
+                Games list files are updated automatically at startup</h3>
+         <h2>Improved</h2>
+            <h3>Showing
+preview images on selected games is a bit faster. If the game image is
+already loaded in images panel, it is not loaded again (parent + clones
+related games). This is good for zipped images and when "load using
+threads" is disabled<br />
+eg.: selecting "Elevator Action" and its clones. If you only have the
+image for the parent game, selecting its clones will not reload the
+parent image... if it's already loaded</h3>
+            <h3>Switching between image layouts is lightning fast now!</h3>
+            <h3>Replaced the "Lanczos" resampler filter by "Hermite". It's faster and it looks better. No noise, phantom pixels
+                or over-sharpening added to the image</h3>
+            <h3>Expanded the "Interface Type" filter in "Misc" filters (tool bar button) to include fruit machines in the mechanical option, and
+                added a "Fruit Machine" option. Also, for better filtering, catver.ini is also used if available</h3>
+         <h2>Removed</h2>
+            <h3>Setting
+"Show Image Border" is gone. 7 pixels border in images panel is always
+enabled from now on. It looks more professional...</h3>
+         <h2>Added</h2>
+            <h3>Load preview images using threads<br />
+                - Preliminary feature, disabled by default. To enable it, check the first button in images tool bar buttons<br />
+                - It works great for images layout view mode and zipped images, as all 3 images load at the same time<br />
+                - Unzipped images are also supported, but the speed gain is less apparent<br />
+                - One nice side effect, no lag when scrolling the games list (if images panel is enabled)<br />
+- If you select games too fast, sometimes images of the last selected
+game might not load. This was necessary to prevent the application from
+crashing<br /> - a 2
+milliseconds delay was added before loading each image panel, to avoid
+crashes when switching between image layouts views<br />
+                - Best used with multi-core CPUs
+            </h3>
+            <h3>New filter: "Games ROMs" ("Misc" filter button) -&gt; you can choose to show only games with ROMs/CHDs or only games with no
+                ROMs (pong ?).<br />
+                For MAME Plus! this is handy since it has more than 30 games that do not use ROMs</h3>
+            <h3>Re-added the function to select random games. Access "Select a Random Game" in games popup menu (mouse right-click) or with
+                the "Ctrl+R" hot-key. There will be no tool bar button for this. It does NOT work with the grouped view mode!</h3>
+            <h3>Support for "languages.ini" from AntoPISA Progetto-SNAPS. Place file in "emuloader\ini_files\" folder<br />
+                - new column in games list (details, grouped views)<br />
+                - new "Language" option in "text bar" filter settings (tool bar buttons)
+            </h3>
+      </div>
+   </body>
+</html>

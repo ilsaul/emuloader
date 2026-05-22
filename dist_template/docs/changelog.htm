@@ -1,0 +1,685 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+   <head>
+      <title>Emu Loader Change Log</title><meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
+      <meta http-equiv="Content-Language" content="en-us"/>
+      <link rel="stylesheet" type="text/css" media="all" href="changelog.css"/>
+   </head>
+   <body>
+      <!--
+      <div id="changelog">
+         <h1>version 8.8.4 change log - May ??, 2020</h1>
+         <h2>Fixed</h2>
+            <h3>none</h3>
+         <h2>Changed</h2>
+            <h3>none</h3>
+         <h2>Removed</h2>
+            <h3>none</h3>
+         <h2>Added</h2>
+            <h3>none</h3>
+      </div>
+      
+      <br/><br/>
+      -->
+      <div id="changelog">
+         <h1>version 8.8.4 change log - May 21, 2020</h1>
+         <h2>Fixed</h2>
+            <h3>Frontend crash due to unsupported "&#10;" HTML entry in game "colasm" from "cgenie_cass.xml" software list<br/>
+                Since Emu Loader cannot show multi-lines "usage tips" texts, all those entries will be replaced by an empty space... for now
+            </h3>
+      </div>
+
+      <br/><br/>
+      <div id="changelog">
+         <h1>version 8.8.3 change log - December 07, 2019</h1>
+         <h2>Fixed</h2>
+            <h3>4th image panel internal vars not emptied when no image is showing</h3>
+            <h3>Word wrap was not working on image filename label (Rename/Delete Game Image screen)</h3>
+            <h3>Proper word wrap on labels, specially very long and spaceless CHD filenames (Game Details screen, left panel)</h3>
+         <h2>Changed</h2>
+            <h3>Added a new "WordWrapSpaceless" property to my TShadowLabel component<br/>
+                 - word wrap works properly on long texts with no spaces<br/>
+                 - this is done by using "DT_EDITCONTROL" flag in the DrawTextW() WinAPI<br/>
+                 - it even works with Unicode texts<br/>
+                 - for this to work, "WordWrap" property must be enabled and "AutoSize" property must be disabled
+            </h3>
+            <h3>Updates to "MAMu_ Icons Manager"<br/>
+                - buttons bar use same colors as games filters tool bar<br/>
+                - replaced all buttons by my custom TBitBtnEx and TSpeedButtonEx components<br/>
+                - removed bottom status bar and moved its contents to top bar<br/>
+                - updated missing games list to use same font colors and selection ribbon colors of main games list<br/>
+                - added support for night mode colors<br/>
+                - several source code tweaks and updates
+            </h3>
+            <h3>Tweaks to selection bar's inactive colors on EasyListView controls (night mode only)</h3>
+         <h2>Added</h2>
+            <h3>Support for new "mame.ini" setting: "Low Latency" ("MAME Settings" screen)<br/>
+                - located in "Video 2" tab, "Performance" box<br/>
+                - only enabled if setting is found in "mame.ini"
+            </h3>
+      </div>
+
+      <br/><br/>
+      <div id="changelog">
+         <h1>version 8.8.2 change log - September 30, 2019</h1>
+         <h2>Fixed</h2>
+            <h3>Setting "Use Image Single Background Color" not restored at startup</h3>
+            <h3>Screens "MAME Driver Filter" and "Miscellaneous Filters" not updated when changing between night mode profiles</h3>
+            <h3>Font color of hint texts not restored when switching back to light mode ("Miscellaneous Filters" tool bar button)</h3>
+            <h3>Several CheckBox and RadioButton controls still had shadow text enabled in night mode</h3>
+            <h3>A nasty bug in my TCheckBoxEx / TRadioButtonEx components: the icon area was not cleared when drawing new icon states,
+                overlapping existing icons and causing a "left-over" pixels effect, mostly noticeable in "RadioButton"</h3>
+            <h3>Startup crash when validating emulator binary if the .exe file is missing</h3>
+            <h3>Screen "Machine Type and System Filters" was not resizing correctly for resolutions lower than 1920x1080 (tool bar button)</h3>
+            <h3>Ansi WinAPI FileAge() doesn't work well on Windows 10, replaced by the Unicode API FileAgeW()</h3>
+            <h3>Play video preview feature was not working at all for the past 10 months... HOORAY!</h3>
+            <h3>Text of selected game was black color when editing fields directly in EasyListView controls (night mode only)</h3>
+            <h3>Game thumbnails fail to load in thumbnails view even if game snapshot file exists</h3>
+            <h3>No auto-update game thumbnails after changing game snapshot folders in "Image Category Settings" screen (thumbnails view only)</h3>
+         <h2>Changed</h2>
+            <h3>Tweaks to "Delete/Copy/Move Selected Games"<br/>
+                - size of "Delete" and "Cancel" buttons reduced<br/>
+                - size of "Destination Folder" edit box increased<br/>
+                - if less than 13 files are selected, only one column is shown to prevent waste of space<br/>
+                - checkboxes "Overwrite Files" and "Add System Folder" moved above "Destination Folder edit box"<br/>
+                - fixed controls alignment in bottom bar
+            </h3>
+            <h3>Darker color tweak to gradient bottom bars in night mode</h3>
+            <h3>Removed italic font style from texts in help message boxes</h3>
+            <h3>Text fonts tweak in several screens<br/>
+                - reduced size to 9 pixels<br/>
+                - changed fonts from "Segoe UI" to "Trebuchet MS" with "bold" style and removed "italic" style<br/>
+                - color tweaks in night mode
+            </h3>
+            <h3>Replaced all "ExTrackBar" controls by "XiTrackBar" from the "XiControls" pack; thanks "Eugene Genev"<br/>
+                - no more flickering<br/>
+                - colors customized for night mode<br/>
+                - used in "Customize Thumbnails", "MAME Settings" and "RGB Quick Edit" screens<br/>
+                - I've made some minor tweaks to XiTrackBar component, you need my modified version to compile the frontend
+            </h3>
+            <h3>New layout for "RGB Quick Edit"<br/>
+                - replaced TShape components by my flicker-free TPanelEx component (new color/current color boxes)<br/>
+                - added XiTrackBar controls for easier RGB color editing<br/>
+                - added form caller title to the caption bar so you know what screen you're currently editing<br/>
+                - internal code tweaks
+            </h3>
+         <h2>Removed</h2>
+            <h3>Shadow font setting of labels in "Search Games Panel Colors" is no more ("Customize Night Mode" screen)</h3>
+         <h2>Added</h2>
+            <h3>Custom CheckBox and RadioButton icons for night mode ("Customize Night Mode" screen)<br/>
+                - you can use custom icon files instead of Windows themed ones<br/>
+                - icons sets are located in "frontend_path\resources\checkbox_radiobutton\" folder<br/>
+                - each set must be placed in its own sub-folder and the folder name is used as the set's title (no Unicode folder name support)<br/>
+                - icons must be 13x13 pixels but can be at any color depth<br/>
+                - each night mode profile can have a different CheckBox / RadioButton set<br/>
+                - icons are applied to CheckBoxEx / RadioButtonEx / GroupBoxEx / EasyListView controls<br/>
+                - if an icon filename is missing, the Windows themed icon will be used instead
+            </h3>
+            <h3>New "Use Windows 10 Dark Scroll Bar in Games List" checkbox setting ("Customize Night Mode" screen)<br/>
+                - this is a hack to force Win10 dark themed scroll bars by using the Win10 API "SetWindowTheme(hWnd, 'DarkMode_Explorer', null)"<br/>
+                - dark scroll bars can be used even if Windows 10 is not setup with a dark theme<br/>
+                - it currently works on ListView, RichEdit, Memo, WebBrowser controls<br/>
+                - no support for ComboBox, ColorBox dropdown buttons as there's no way to access the ListBox control used internally (still working on this)<br/>
+                - horizontal scroll bar colors are bugged and it's caused by Windows 10, not the frontend<br/>
+                - there's a white box painting bug if both horizontal and vertical scroll bars are visible (fix your sh@t, Microsoft!)<br/>
+                - only Windows 10 build 1809 and newer builds are supported
+            </h3>
+            <h3>Customize splash screen (main menu "Customize Splash Screen")<br/>
+                - change font color of each text<br/>
+                - text shadow colors are now "black", it looks better<br/>
+                - remove text shadows with "Enable Text Shadows" checkbox (untick)<br/>
+                - new left-aligned texts layout with "Use Alternate Layout" checkbox<br/>
+                - use an alternate logo image with "Use Logo2 File" checkbox; filename must be "logo2.png" and located in "resources\images\" folder<br/>
+                - change version info text position (text is right-aligned); useful when using a different logo image<br/>
+                - progress bar replaced by the new XiProgressBar component to allow custom colors<br/>
+                - customize progress bar colors with several pre-defined color schemes or create your own color scheme (minimum resolution required 1280x720 / 1336x768)<br/>
+                - settings are in the right side of the splash screen<br/>
+                - close the splash screen with the "Close" button at bottom/right or with ESC key<br/>
+                - drag the splash screen with the mouse<br/>
+                - fixed "Lucida Console" font to match the font size of "Terminal" font<br/>
+                NOTE: the "Terminal" font used in Emu Loader is the "vgaoem.fon" file from Windows 7; Windows 10 doesn't have this font
+            </h3>
+            <h3>Support MAME v0.214 new "mame.ini" settings</h3>
+      </div>
+
+      <br/><br/>
+      <div id="changelog">
+         <h1>version 8.8.1 change log - August 18, 2019</h1>
+         <h2>Fixed</h2>
+            <h3>Icons in web info tool bar buttons were not loaded as disabled; font colors of disable buttons were wrong in night mode</h3>
+            <h3>Function to delete/copy/move files was in debug mode, not working... again</h3>
+      </div>
+
+      <br/><br/>
+      <h1>version 8.8 change log - August 14, 2019</h1>
+         <h2>Fixed</h2>
+            <h3>Fixed a bug in "TCustomColorBox" Delphi 7 class, "SetSelected()" procedure<br/>
+                - it was not repainting the control properly, and it was not caused by the frontend (damn you Delphi 7!)<br/>
+                - my custom TColorBoxEx component was also affected due to this "Delphi 7" bug<br/>
+                - the fix was taken from "Code Gear Delphi 2010" source code ("vlc\ExtCtrls.pas")
+            </h3>
+            <h3>Event "OnSelect()" was not properly executed on TColorBoxEx components (color dropdown buttons)</h3>
+            <h3>A few default settings in "EmuLoader.ini" and "nightmode.ini" were causing problems on a clean install</h3>
+            <h3>Colors for "Game Docs Status Bar" not updated when switching between light mode and night mode</h3>
+            <h3>Fixes for the night mode</br>
+                - search bar background had gradient always enabled even if the gradient setting was not ticked<br/>
+                - floating panel gradient background colors were not properly set, specially at startup<br/>
+                - TColorBoxEx were resetting to default colors at frontend startup when viewing the "2 pages" in night mode screen
+            </h3>
+            <h3>Hint box colors and style not updated when switching between light mode and night mode</h3>
+            <h3>Control "Buttons" was listed twice in "Game Details" screen when a game have multiple controls + buttons</h3>
+            <h3>Game selection bar colors and font colors were not correctly set in several screens, including in "Customize Game Fonts"</h3>
+            <h3>Font of column header was not properly set when night mode is enabled (MAME Machines Filter Panel)</h3>
+            <h3>My custom component TEditEx was not repainting the frame color when required</h3>
+            <h3>Pressed button custom colors were not applied to buttons in night mode</h3>
+            <h3>Font "Terminal" is used in a few places and if it's not installed in Windows, it will be replaced by "Lucida Console" (Windows 7 users don't have to worry about this)</h3>
+            <h3>App crash when trying to show game images if image category folders are not successfully loaded</h3>
+            <h3>Updates to my TAdvCheckBoxEx and TAdvRadioGroupEx components<br/>
+                - fixed icons positions as they were not drawn at the same position on Windows 7 and Windows 10<br/>
+                - RadioGroup icon updated with a 13x13 sized image when working with Delphi 7 in design time (easier to align controls)<br/>
+                - added a couple commands to get the correct CheckBox/RadioGroup icon sizes from Windows theme
+            </h3>
+            <h3>Metadata files are no longer used when mounting images on a "virtual drive" app (.cue, etc...) even if "use .cue" tool bar button is enabled (console/computer games)</h3>
+            <h3>Game image files failed to mount on a virtual drive, returning an error to the user (console/computer games)</h3>
+         <h2>Changed</h2>
+            <h3>Night mode is now enabled by default on a clean install or if "EmuLoader.ini" file is missing</h3>
+            <h3>Shadow texts are disabled in light mode for panel texts, tool bar panels, floating panels; it looks better this way</h3>
+            <h3>Improvements to night mode settings (night mode screen)<br/>
+                - added "Shadow Enabled" checkboxes for texts in "Search Games Panel Colors", so you can disable shadow texts<br/>
+                - added "Shadow Enabled" checkboxes for texts in "Panels Colors", so you can disable shadow texts<br/>
+                - added preview panels (click the "Preview" buttons) so you can see your color customizations<br/>
+                  &nbsp;&nbsp;- Games List Selection Bar<br/>
+                  &nbsp;&nbsp;- Panels Colors<br/>
+                  &nbsp;&nbsp;- Image Hint Box<br/>
+                  &nbsp;&nbsp;- Search Games Panel Colors<br/>
+                - tweaks to the layout
+            </h3>
+            <h3>Rounded corners in GroupBox frames are disabled for night mode</h3>
+            <h3>The overlay folder "Dark Gray" is no longer needed, these icons are now the default for night mode ("\resources\main_icons\overlay\Dark Gray\" folder can be deleted)</h3>
+            <h3>Blue overlay icons moved to a new "Blue" folder ("\resources\main_icons\overlay\Blue\")</h3>
+            <h3>If overlay files of a sub-folder are not found, the "Tool Bar Overlay Icons Folder" setting will reset to "Default" (night mode screen)</h3>
+            <h3>Improvements to "Image Hint Box" (preferences screen, night mode screen)<br/>
+                - setting "Show Unzipped/Zipped Icon" is gone, the icon is now mandatory<br/>
+                - added a "Italic" font style checkbox, so you can disable the italic style (disabled by default)<br/>
+                - text font size reduced to 10 pixels<br/>
+                - added a new "image resolution (image type)" text below the image category title; only font color can be customized<br/>
+                - added a "Larger Font Size" checkbox, for a 14 pixels font size like it was before (disabled by default)<br/>
+                - added a "Box Position" setting to choose where the hint box will appear; default position is "Middle/Left"<br/>
+                - fixed "middle vertical" position, it was not taking the hint box height into account<br/>
+            </h3>
+            <h3>Selection bar of menus/popup menus is a little darker, around 10%</h3>
+            <h3>Moved settings panel to a popup menu ("Favorites Manager" settings button)</h3>
+            <h3>Game details screen changes</br>
+                - removed shadow of texts in the left panel (night mode)<br/>
+                - removed dual border from ROMs list<br/>
+                - minor improvements to make sure border spaces are pixel perfect
+            </h3>
+            <h3>Removed shadow of texts in system title bars and replaced yellow font color by orange, on all screens (night mode only)</h3>
+            <h3>Removed shadow of texts from labels and checkboxes in almost all screens (night mode)</h3>
+            <h3>Color tweaks to texts font colors in "Delete/Rename Game Image File" screens (night mode)</h3>
+            <h3>Several source code optimizations to remove redundant duplicates, mostly for the night mode</h3>
+            <h3>Modified my TShadowLabel component to not show the shadow text if component is in "disabled" state and the "ShadowEnabled" property is unchecked</h3>
+            <h3>If a "Label", "CheckBox", "RadioButton", "GroupBox" component is in disabled state and the "ShadowEnabled" property is unchecked, the shadow text is no longer displayed<br/>
+                - it looks a lot better in night mode<br/>
+                - in light mode, the "3D effect" no longer applies, but texts still look good
+            </h3>
+            <h3>Games list in "Delete Multiple Games Files" screen now uses the same colors / background image as the main games list</h3>
+            <h3>Replaced "Consolas" font by "Calibri" in "MAME Game Docs" panel</h3>
+            <h3>Tons of interface tweaks, specially texts and their colors</h3>
+            <h3>New interface for preferences screen<br/>
+                - cleaner and easy to navigate, also to prevent waste of blank space<br/>
+                - page 1 is for frontend settings, page 2 is mostly for colors<br/>
+                - tweaks to existing settings so they are better aligned with panels
+            </h3>
+            <h3>Several settings moved from "EmuLoader.ini" to a new "\ini_files\LightMode.ini" file (preferences screen, mostly)<br/>
+                - they are all exclusive to the light mode<br/>
+                - now you can do a clean install and restore these settings easily<br/>
+                - most key names in .ini file were renamed to match key names from night mode preset files, you must modify your light mode settings again (sorry)<br/>
+                - some "MAME Game Docs" settings moved from "el_extras.ini" file into "LightMode.ini"
+            </h3>
+         <h2>Removed</h2>
+            <h3>The following is removed to simplify the interface<br/>
+                - frames of games list panel, images panel and game docs panel is kaput!<br/>
+                - setting "Games List Frame Colors" (preferences screen, night mode settings screen)<br/>
+                - setting "Games List Status Bar, Inner/Outer Frame" (preferences screen, night mode settings screen)<br/>
+                - setting "Games List Status Bar, Font Shadow Color" (preferences screen, night mode settings screen)<br/>
+                - setting "Game Docs Splitter Style / Colors"; same style/colors as image splitters is used, as it was before (preferences screen, night mode screen)<br/>
+                - setting "Image Panel Frame Colors" (preferences screen, night mode settings screen)<br/>
+                - setting "Enable Edit Box Custom Frame Color" is no more; custom frame is always enabled in night mode (night mode screen)<br/>
+                - setting "Games List Splitter" style is gone for night mode; only a single color is supported (night mode screen)<br/>
+                - setting "Tool Bar Inner/Outer Frame" is no more (night mode screen)
+            </h3>
+         <h2>Added</h2>
+            <h3>New games list background images, for both night mode and light mode ("\resources\images\")... thank you Fabian for the new images</h3>
+            <h3>New setting "Disable Aspect Ratio", to stretch the image on the entire image panel; requires "Image Stretch" setting to be enabled (popup menu "Images")</h3>
+            <h3>New setting "Round Corners" to "Games List Selection Bar" colors (preferences screen, night mode screen)</h3>
+            <h3>Night mode colors support for arcade emulator setup screens: MAME, HBMAME, Supermodel, Daphne, SEGA Model 2, ZiNc</h3>
+            <h3>New "Left Align Emulators Info and Games Info" setting to show message box texts aligned to the left instead of centered (preferences screen, "General" panel)</h3>
+            <h3>New setting to customize games filters tool bar in light mode (preferences screen)<br/>
+                - you can use gradient or solid colors<br/>
+                - new "Windows Theme" checkbox, so you can disable Windows themed tool bar painting
+            </h3>
+            <h3>Support for multiple night mode profiles<br/>
+                - change profiles with the new "Night Mode Profiles" box ("Customize Night Mode" screen, access thru main menu)<br/>
+                - all profiles are now stored in "frontend_path\nightmode\" folder<br/>
+                - file "nightmode.ini" moved to the new "\nightmode\" sub-folder and renamed to "Default.ini"<br/>
+                - setting "Tool Bar Overlay Icons Folder" can be different for each profile<br/>
+                - setting "Menus / Popup Menus" frame color can be different for each profile<br/>
+                - current profile is automatically saved to .ini file when switching between profiles or when closing the "Customize Night Mode" screen
+            </h3>
+            <h3>New "RGB Quick Edit" for color dropdown boxes "TColorBoxEx" (popup menu, mouse right-click)<br/>
+                - for an easy and quick way to select a RGB color manually<br/>
+                - screens that support this new popup menu<br/>
+                  &nbsp;&nbsp;- Customize Night Mode<br/>
+                  &nbsp;&nbsp;- Image Category Settings<br/>
+                  &nbsp;&nbsp;- Customize Game Fonts<br/>
+                  &nbsp;&nbsp;- Customize Thumbnails<br/>
+                  &nbsp;&nbsp;- Preferences screen
+            </h3>
+            <h3>Added "Show Font Name" setting in "Customize Game Fonts" screen<br/>
+                - access in popup menu (disabled by default)<br/>
+                - useful for high resolution screens (1080p or higher)
+            </h3>
+            <h3>Added a custom game fonts set for night mode, split from light mode<br/>
+                - have a set of game fonts for light mode and another for night mode</br>
+                - light mode filename: "\ini_files\sysgamecustomfont.ini"<br/>
+                - night mode filename: "\ini_files\sysgamecustomfont_nightmode.ini"<br/>
+                - updated "Customize Game Fonts" screen to load the night mode font settings if this mode is active (games popup menu, main menu "Games List")<br/>
+                - if file "sysgamecustomfont_nightmode.ini" doesn't exist, it is generated from "sysgamecustomfont.ini" at startup (useful for night mode)
+            </h3>
+            <h3>New "Use A Single Background Color" setting for image categories<br/>
+                - select a background color that will be used for all image categories ("Image Category Settings" screen)<br/>
+                - you no longer need to select the same color on each category if you want to use the same color for all of them<br/>
+                - toggle setting in main menu "Images", images popup menu or in "Image Category Settings" screen (disabled by default)
+            </h3>
+            <h3>Added options to customize games list header colors in night mode<br/>
+                - text font<br/>
+                - column background color, hot color, disabled color, pressed color<br/>
+                - settings in Night Mode screen, "Games List Column Header" panel
+            </h3>
+            <h3>MAME v0.212 support</h3>
+      </div>
+
+      <br/><br/>
+      <div id="changelog">
+         <h1>version 8.7.8 change log - June 24, 2019</h1>
+         <h2>Fixed</h2>
+            <h3>Event "OnChange()" was not executed in "TFontDialog" component after frontend recent changes</h3>
+            <h3>Black frame painted in tool bar filters background when gradient setting is disabled<h3>
+            <h3>Severe painting problems in my TPanelEx since last component update... damn you BitBlt()!</h3>
+         <h2>Changed</h2>
+            <h3>Icons of disabled menu items are now drawn with 50% blending effect instead of a grayscale icon, which looked terrible<br/>
+                - Delphi's TImageList component messes up with the icon's alpha channel<br/>
+                - source files "ImgList.pas" and "CommCtrl.pas" updated with new constants and functions for better support on Windows 7 and newer
+            </h3>
+            <h3>Replaced TToolBar + TToolButton controls by my custom TSpeedButtonEx so the buttons can have white font in night mode ("Favorites Manager" screen)</h3>
+            <h3>More tweaks to popup menus draw routine</h3>
+            <h3>Modified "TRangeBar" / "TGaugeBar" components from "Graphics32" library to add a custom color for the arrow, it was using the same color
+                as the border color
+            </h3>
+            <h3>Night mode updates<br/>
+                - moved all settings from preferences screen to its own window and updated its interface with dark colors; you'll find it on main menu "Customize Night Mode Colors"<br/>
+                - added new settings so you can have different ones from the light mode<br/>
+                  &nbsp;&nbsp;- games list splitter colors<br/>
+                  &nbsp;&nbsp;- images splitter colors<br/>
+                  &nbsp;&nbsp;- game docs colors and splitters<br/>
+                  &nbsp;&nbsp;- image background color and image<br/>
+                - new layout showing all settings without pages; high resolution only: 1280x1024 and higher<br/>
+                - added a new "Show Preview" button, showing a new floating window so you can see you customizations in real time<br/>
+                  &nbsp;&nbsp;- "Games List Selection Bar"<br/>
+                  &nbsp;&nbsp;- "Panels Colors"<br/>
+                  &nbsp;&nbsp;- "Image Hint Box"
+            </h3>
+         <h2>Added</h2>
+            <h3>Game Docs status bar (preferences screen, "Game Docs" page)<br/>
+                - for those who go berzerk on the fact that the bottom of the game docs panel is not aligned with the games list panel<br/>
+                - there's no useful info displayed there yet
+            </h3>
+      </div>
+
+      <br/><br/>
+      <div id="changelog">
+         <h1>version 8.7.7 change log - June 07, 2019</h1>
+         <h2>Fixed</h2>
+            <h3>Popup menus can now display Unicode texts, but this implementation is far from perfect</h3>
+            <h3>Copy/move/delete game ROMs was not working due to an "Exit" command I forgot to remove, preventing further code from executing</h3>
+            <h3>Removed some beeps playing while creating games lists</h3>
+            <h3>Fixed bad Windows theme painting in my TPanelEx component, affecting all components in it... highly noticeable in light mode</h3>
+            <h3>Hint text of separator lines were missing in popup menus</h3>
+         <h2>Changed</h2>
+            <h3>Improvements to my TBitBtnEx component<br/>
+                - font color is forced to black if button is not in "custom mode" and Windows theme is enabled<br/>
+                - BitBlt() function used to paint bitmap buffer into button canvas instead of Canvas.Draw() function<br/>
+                - replaced "Glyph" property by "Images" (TImageList container), for 32-bit+alpha channel icons (.ico)
+            </h3>
+            <h3>Improvements to my TSpeedButtonEx component<br/>
+                - font color is not changed when clicked (only applies if button style is set to "flat")<br/>
+                - font color is forced to black if button is not in "custom mode" and Windows theme is enabled<br/>
+                - BitBlt() function used to paint bitmap buffer into button canvas instead of Canvas.Draw() function<br/>
+                - replaced "Glyph" property by "Images" (TImageList container), for 32-bit+alpha channel icons (.ico)
+            </h3>
+         <h2>Added</h2>
+            <h3>Custom border for menu/popup menus<br/>
+                - night mode only<br/>
+                - you can customize the border color in preferences screen "Night Mode 2" page<br/>
+                - experimental feature, might be buggy on Windows 10
+            </h3>
+      </div>
+
+      <br/><br/>
+      <div id="changelog">
+         <h1>version 8.7.6 change log - May 31, 2019</h1>
+         <h2>Fixed</h2>
+            <h3>Crash caused by my custom TBitBtnEx / TSpeedButtonEx components when frontend is in light mode (default theme)</h3>
+      </div>
+
+      <br/><br/>
+      <div id="changelog">
+         <h1>version 8.7.5 change log - May 30, 2019</h1>
+         <h2>Fixed</h2>
+            <h3>Buttons font color was black when in night mode</h3>
+      </div>
+
+      <br/><br/>
+      <div id="changelog">
+         <h1>version 8.7.4 change log - May 29, 2019</h1>
+         <h2>Fixed</h2>
+            <h3>Media type of Daphne games was not set to "Disc"</h3>
+            <h3>Game icons/systems TImageList containers were not emptied before reloading icons</h3>
+            <h3>Hint box colors of image panel #4 were not updated after exiting preferences screen</h3>
+            <h3>Game files of many MAME software list games were not recognized, tagging the game as "Game With No ROMs" ("a800.xml" software list for one)</h3>
+            <h3>Tweaks to prevent splash screen from hiding/showing multiple times when creating games / auditing games; this fix also prevents the timer from resetting</h3>
+         <h2>Changed</h2>
+            <h3>First atempt to set the correct media type icon for MAME arcade games with CHD files (HDD, Disc, Compact Flash Card, Game Video Tape VHS)<br/>
+                - added an extra "ArcadeCHD_MediaType" game info tag just for this; tag is set when loading the ROMs database<br/>
+                - the new media type icons are used everywhere: game status bar, run game dialog, last played games, delete game snapshot dialog, thumbnails view and others<br/>
+                - HDD media type is set for games with multiple CHD files (HDD, CD, flash card) if at least one of them is HDD<br/>
+                - you must re-create MAME games list to update the frontend ROMs database files
+            </h3>
+            <h3>Improvements to the thumbnails view<br/>
+                - icons are no longer drawn in the thumb image<br/>
+                - icons are handled as overlays and, from now on, they are drawn in the top/left or top/right of the cell (depending on the "align" setting)<br/>
+                - added a "Media Type Icon" to the mix<br/>
+                - The system icon for MAME software lists is now the UME icon ("emu_ume.ico"), so you know that it's a MAME game but not arcade<br/>
+                - when changing icons settings but not the thumb cell dimensions, only the icons are updated in main games list; thumbnails already created no longer have to be re-created<br/>
+                - new setting "Show Icons With No Thumbnail", will display the overlay icons (system, game, media, favorite) even if no thumbnail is available<br/>
+                - Media type icon is now drawn after the system icon, moved the game icon below it<br/>
+                - new media/game/favorite icon size drop-down selection, no more fixed 24x24 size<br/>
+            </h3>
+            <h3>Further tweaks to the night mode</h3>
+         <h2>Added</h2>
+            <h3>New alternate sub-folders for frontend icons, arcade/console/computer systems and arcade games icons so you don't have to replace frontend's default icons<br/>
+                - toggle alternate icons on/off with the new "Use Alternate Frontend Icons" setting in main menu<br/>
+                - console/computer system icons go in a new "frontend_dir\console_computer\system_icons\alternate\" folder<br/>
+                - frontend icons and arcade system icons go in a new "frontend_dir\resources\main_icons\alternate\" folder<br/>
+                - arcade game icons go in a new "frontend_dir\resources\gameslist_icons\alternate\" folder<br/>
+                - message box icons go in a new "frontend_dir\resources\main_icons\msgbox_icons\alternate\" folder<br/>
+                NOTES:<br/>
+                  &nbsp;&nbsp;- tool bar filter icons, image category icons and image layout icons are not supported (basically all icons that use overlay icons)<br/>
+                  &nbsp;&nbsp;- all icons must be 32-bits color depth (RGB + alpha channel)<br/>
+                  &nbsp;&nbsp;- all required resolution icons must be added to the .ico file, or the frontend will show an "icon not found" error message<br/>
+                  &nbsp;&nbsp;- if you enable alternate icons without having them, the frontend will load the default ones
+            </h3>
+            <h3>New media type: "Video Game Music"<br/>
+                - initially used in MAME's "VGM Player" software list<br/>
+                - new icon file "resources\main_icons\media_videogamemusic.ico"
+            </h3>
+            <h3>New feature: "Special" tag<br/>
+                - you can tag a game for any reason: finished games, games you want to play, games you hate, games you are playing, games you want to hide...<br/>
+                - games list is stored in a new "\ini_files\special.txt" file and the file format is the same as favorites files so if you are using favorites list
+                  for things like this, you can safely copy and rename the favorite profile to this new filename<br/>
+                - there's a new column in details/grouped view named "Special"<br/>
+                - add/remove games to/from special list in games popup menu (below "Add/Remove Favorite" menu items)<br/>
+                - filter the games list with the new drop-down filter "Special List" in "Miscellaneous" tool bar filter<br/>
+                - you can enable/disable the special icon for thumbnails view ("thumbnail settings" screen)<br/>
+                - you can modify this new icon to your needs ("\resources\main_icons\special.ico" file)
+            </h3>
+            <h3>Night colors support for image hint boxes (preferences screen, "Night Mode 2" page)<br/>
+                - separate colors from light mode<br/>
+                - settings saved in "nightmode.ini" file
+            </h3>
+      </div>
+
+      <br/><br/>
+      <div id="changelog">
+         <h1>version 8.7.3 change log - April 30, 2019</h1>
+         <h2>Fixed</h2>
+            <h3>Parent .ico file not showing up in clone sets if clonename.ico doesn't exist ("MAMu_ icons" feature)</h3>
+            <h3>Buttons "OK" / "Cancel" were invisible when viewing the simpler "arcade system select" dialog</h3>
+            <h3>Wrong read/write of game info "playtime" / "last played" / "times played" if your have multiple games in the same system with same zipped filename
+                but of different media types<br/>
+                - example: 2 files named "Elevator Action (1995) (Nidecom).zip", both MSX1 games, one is cartridge media type and the other is floppy disk<br/>
+                - wrong game info written in played games files after exiting a console/computer game<br/>
+                - wrong game info read from played games files when loading games lists at startup<br/>
+                - the media type was missing when searching for the game entry<br/>
+                - bugs related to files located in "\console_computer\played_games\" folder<br/>
+                - arcade systems and MAME software lists do not suffer from this bug
+            </h3>
+            <h3>Wrong "extra game info" data parsing for "Games Editor" (main menu "Console/Computer")</h3>
+            <h3>Night mode was not toggled on/off correctly with the checkbox in messages dialog</h3>
+            <h3>PaneEx "inner border color" was not set correctly in procedure uCommon.SetPanelNightColors() causing it to be the same as outer border color</h3>
+            <h3>MAME arcade input files were not handled correctly in "Run Game (Extra Parameters)" screen<br/>
+                - files "arcade_name.inp" in the "inp" root folder were not added to the files list, only "inp\gamename\*.inp" files<br/>
+                - for arcade games only, excluding MAME softlist games
+            </h3>
+            <h3>MAME save state files were not handled correctly in "Run Game (Extra Parameters)" screen<br/>
+                - files from "sta\machine_name\softwarename\gamename\" folder were completely ignored<br/>
+                - for MAME software list games only, excluding arcade games
+            </h3>
+            <h3>The image layout currently in use could be disabled in "Layout Settings" screen, causing corruption in layouts .ini file read/write routine</h3>
+            <h3>Extra title/machine type text color of selected systems were hard to read in night mode; light gray color replaced by dark gray</h3>
+            <h3>Selection bar was not red color for CHDs with bad checksum ("Arcade Audit Results" screen)</h3>
+            <h3>"CPU Filter" edit box was not correctly painted in night mode</h3>
+            <h3>Search games floating panel was not showing up at startup</h3>
+         <h2>Changed</h2>
+            <h3>Improvements to "version info" detection in "Arcade Emulators Setup" screen and at frontend startup</h3>
+            <h3>Changes and tweaks to AlterMAME feature<br/>
+                - RAM variables were not initialized at startup, it could cause the frontend to crash<br/>
+                - added a second AlterMAME slot so you can use two alternate emulators to run MAME games ("Arcade Emulators Setup" screen)<br/>
+                  &nbsp;&nbsp;- new "Autorun Game With AlterMAME 2" checkbox ("Arcade Emulators Setup" screen and games popup menu)<br/>
+                  &nbsp;&nbsp;- if game cannot be run with "AlterMAME 1", it will try again with "AlterMAME 2"<br/>
+                  &nbsp;&nbsp;- new "Run Game With AlterMAME 2" option in games popup menu to run games directly with AlterMAME 2<br/>
+                - added proper detection for "FinalBurn Alpha" and "Raine" emulators in "Arcade Emulators Setup" screen and when running games<br/>
+                  &nbsp;&nbsp;- FBA website: https://www.fbalpha.com<br/>
+                  &nbsp;&nbsp;- Raine website: http://raine.1emulation.com<br/>
+                  &nbsp;&nbsp;- for Raine emulator, the "-nogui" parameter is added automatically to the execution command line and there's no way to toggle it off<br/>
+                - better handling of CreateProcessW() exit codes "0, 1, 2, 5" after exiting emulators<br/>
+                - Tweaks and fixes to texts in "run game confirmation" and "execution error" dialogs
+            </h3>
+            <h3>Renamed file "image_category_overlay.ico" to "image_category_overlay_light.ico" ("\resources\main_icons\overlay\" folder)</h3>
+            <h3>Image category/layout icons updated to support overlay icons ("resources\main_icons\" folder)</h3>
+            <h3>Icon files "option_check.ico" and "option_radiogroup_on.ico" replaced by better versions, suitable for light and dark backgrounds ("resources\main_icons\" folder)</h3>
+            <h3>Changes and fixes to menu/popupmenu drawing colors<br/>
+                - fixed a couple painting bugs in the selection bar outer border<br/>
+                - fixed unreadable shortcut text color in selected items<br/>
+                - added "help text" and "selected help text" in the colors array, changed them to "gray" to fix unreadable texts<br/>
+                - added inner frame color to the selected items, slightly darker than menu background color
+            </h3>
+            <h3>Replaced TEdit standard component by my custom "TEditEx" component, to be used in "night mode"<br/>
+                - new properties: "Color Frame", "Color Frame Focused", "Color Frame Disabled", "Round Frame"<br/>
+                - property "Use Custom Border" for an easy on/off toggle when changing between light/dark backgrounds; this property if OFF by default<br/>
+                - allow custom frame colors instead of the fixed Windows themed frame<br/>
+                - remove the fixed white inner frame when setting edit box background color to anything other than white
+            </h3>
+            <h3>Improvements to my custom "TShadowLabel" component for dark backgrounds compatibility<br/>
+                - added new "Disabled Font Color" and "Disabled Font Shadow Color" properties so you can change font colors when the component is in "not enabled" state<br/>
+                - added new "Use Disabled Font Color" property for an easy on/off toggle when changing between light/dark backgrounds; this property is OFF by default
+            </h3>
+            <h3>Modified image category/layout .ico files, removed monitor frames / texts to use with overlay .ico files ("resources\main_icons\" folder)</h3>
+            <h3>Moved "Tool Bar Overlay Icons Folder" setting to "Night Mode" page since this feature is not for the light mode (preferences screen)</h3>
+         <h2>Removed</h2>
+            <h3>All code related to "AlterMAME Default Emulator Settings" and "AlterMAME custom ini settings" completely removed from the source code</h3>
+         <h2>Added</h2>
+            <h3>New night mode .ico overlay files for image categories/layouts ("resources\main_icons\overlay\img_dark" folder)</h3>
+            <h3>Support custom game icons for MAME software list games; "MAMu_ Icons" feature<br/>
+                - file "\softwarename\gamename.ico" in arcade "icons.zip" is no longer supported<br/>
+                - zipped icons for each software list must be in:
+                  &nbsp;&nbsp;- "user_mame_icons_path\softwarename\icons.zip" filename or<br/>
+                  &nbsp;&nbsp;- "user_mame_icons_path\softwarename.zip" filename (alternate .zip name, exclusive Emu Loader feature!)<br/>
+                - unzipped icons must be in:<br/>
+                  &nbsp;&nbsp;- "user_mame_icons_path\softwarename\gamename.ico" or <br/>
+                  &nbsp;&nbsp;- "user_mame_icons_path\icons\softwarename\gamename.ico"<br/>
+                - minor tweaks to improve RAM usage and .zip files handling<br/>
+                - don't know what this is ? see this thread in MAMEWorld's "News" forum:<br/>
+                  http://www.mameworld.info/ubbthreads/showthreaded.php?Cat=&Number=380709&page=1&view=collapsed&sb=5&o=&fpart=1&vc=1&new=1549010727
+            </h3>
+            <h3>New setting "Show MAME Machines Status Bar" so you can hide the status bar of the machines list panel (setting is in machines list popup menu)</h3>
+            <h3>Night mode colors for several dialogs and screens; colors are fixed and cannot be customizable</h3>
+            <h3>Custom frame color settings for the edit box in search bar (preferences screen, "Night Mode" page, "Search Games Panel Colors" group box)
+            <h3>New handheld system to the "Console/Computer" list: "Nintendo Switch"<br/>
+                - only Yuzu emulator is supported: https://yuzu-emu.org<br/>
+                - you must use "yuzu-cmd.exe" file
+            </h3>
+            <h3>Tool bar menus, filter dialogs and popup menus in dark colors for the night mode<br/>
+                - you can disable the dark menu with "Show Dark Menu in Night Mode" setting in main menu if you prefer light colors<br/>
+                - colors cannot be customized<br/>
+                - tweaks to selection bar, made it a bit darker<br/>
+                - fixed function uMain.AddDefaultIcons(), it was not reloading overlay icons properly when switching between light/night modes and when
+                  changing "ToolBar Overlay Icons Folder" setting in preferences screen
+            </h3>
+            <h3>New setting "Use Italic Font Style in System Title Bars" so you can disable italic fonts in system title bars (enabled by default)</h3>
+            <h3>Added support for "VisualBoyAdvance-M" emulator and updated "\console_computer\emulator_parameters[default].ini" file</h3>
+      </div>
+
+      <br/><br/>
+      <div id="changelog">
+         <h1>version 8.7.2 change log - December 07, 2018</h1>
+         <h2>Fixed</h2>
+            <h3>Commented ROM / DISK entries were added as game files when creating MAME software games lists (softwarename.xml files)<br/>
+                - ROM or DISK entries ending with "-->" tag will not be added ("rocnrope" from "msx1_cart.xml" is one of the affected games)<br/>
+                - you must create MAME software list games again to fix this bug (main menu "Arcade", "Create MAME Software Games List")
+            </h3>
+         <h2>Changed</h2>
+            <h3>PDF game manual updates<br/>
+                - support for MAME software lists<br/>
+                - scan support for a sub-folder "\manuals\" added at the end of your selected PDF folder
+            </h3>
+            <h3>File "\console_computer\mame_systems_softwarelist.ini" updated to MAME .204</h3>
+         <h2>Removed</h2>
+            <h3>Some code cleanup, mostly commented out and deprecated</h3>
+         <h2>Added</h2>
+            <h3>"Search game" bar in "View Missing ROMs/CHDs" screen (audit results)<br/>
+                - the frontend searches the entered string in game title and then game name if title is not a match<br/>
+                - it works like the incremental search in the main games list, partial strings supported<br/>
+                - you can press ENTER key in the edit box instead of clicking the "search" button<br/>
+                - if there's no match, the edit box blinks red
+            </h3>
+      </div>
+
+      <br/><br/>
+      <div id="changelog">
+         <h1>version 8.7.1 change log - December 02, 2018</h1>
+         <h2>Fixed</h2>
+            <h3>Minor adjustment in the audit system; some clone games fell thru the cracks</h3>
+            <h3>ROMs info in Game Details screen was not correct for some ROMs</h3>
+      </div>
+      
+      <br/><br/>
+      <div id="changelog">
+         <h1>version 8.7 change log - December 02, 2018</h1>
+         <h2>Fixed</h2>
+            <h3>Audit system hotfix, round 2<br/>
+                - clone games you don't have wrongly tagged as "missing ROMs/CHDs"<br/>
+                - games with CHDs and no game ROMs were deleted from "arcade\games\mame.miss",
+                  not listing them in "View Missing ROMs/CHDs" screen (scan results)<br/>
+                - some good games were not removed from "arcade\games\mame.miss", listing them in "View Missing ROMs/CHDs" screen (scan results)<br/>
+                - wrong "gamename.zip found" info shown in "View Missing ROMs/CHDs" screen for sets with no game ROMs (scan results)
+            </h3>
+         <h2>Changed</h2>
+            <h3>Audit system adapted to scan clone sets the right way (and fixing some master games in the process)<br/>
+                - from now on, if one clone game ROM is found, merged into parent set and "clonegamename.zip" is not found,
+                  it will be tagged as "missing ROMs/CHDs"<br/>
+                - if no game ROMs/CHDs are found, but bios/device ROMs are present, the set is still tagged as "missing" (bios/device ROMs are not game ROMs)<br/>
+                - if you have all clone ROMs merged into parent set but have parent ROMs missing, the clone set is still tagged as "merged" (crazy mode ON)...
+            </h3>
+      </div>
+      
+      <br/><br/>
+      <div id="changelog">
+         <h1>version 8.6.9 change log - November 30, 2018</h1>
+         <h2>Fixed</h2>
+            <h3>Audit system was tagging clone games you don't have as "missing ROMs/CHDs", if you have the parent set</h3>
+            <h3>Merged tag is now properly displayed in "View Missing ROMs/CHDs" screen</h3>
+      </div>
+
+      <br/><br/>
+      <div id="changelog">
+         <h1>version 8.6.8 change log - November 29, 2018</h1>
+         <h2>Fixed</h2>
+            <h3>Setting "Add Leading Zero to Version Info Column" was always running after close preferences screen, even if you don't change it</h3>
+            <h3>Fixes and tweaks to MAME/HBMAME audit system; you must re-create MAME/HBMAME games lists to apply, no way around it<br/>
+                - merged tag was not set in several clones<br/>
+                - added two new fields in the game info to improve clone sets audit; generated in RAM while loading ROMs database "mame.elrom":<br/>
+                  &nbsp;&nbsp;- "Set with all game ROMs "nodump" state: just for the game ROMs (exclude bios/device ROMs and parent ROMs)<br/>
+                  &nbsp;&nbsp;- "Set with all parent game ROMs "nodump" state: check if parent set have only "nodump" ROMs (excludes bios/device ROMs and clone ROMs)<br/>
+                - several MAME sets that have game ROMs were tagged as "set with no game ROMs"<br/>
+                  &nbsp;&nbsp;- filter "Games With No Main Set" was showing games that shouldn't be there<br/>
+                  &nbsp;&nbsp;- games audit system was also affected, specially if clone sets were merged into their parent<br/>
+                  &nbsp;&nbsp;- most affected: games in "Konami System 573" and several other MAME machines with similar ROMs/CHDs configuration<br/>
+                - several MAME clone sets were not audited correctly because all game ROMs from parent set are tagged as "nodump" and the frontend
+                  could not finding "parentsetname.zip" file (not required by MAME when all ROMs are tagged as "nodump")<br/>
+                - sets were all game ROMs have "nodump" tags but also have CHD files were not audited correctly, showing up as "missing"<br/>
+                - Sega Chihiro games are now properly audited; SHA-1 checksum for "seganetw" device set wasn't handled correctly due missing to "CRC32 collision" tags<br/>
+            </h3>
+            <h3>Games popup menus "Select Set" were not working properly for bios/device sets</h3>
+         <h2>Changed</h2>
+            <h3>Tweaks to "Game Details" screen<br/>
+                - "Game Files" section now shows a green text if clone game is merged into parent set<br/>
+                - sets with all game ROMs tagged as "nodump" now show in green with a "(nodump)" text<br/>
+                - the ROMs list panel now shows "have/miss" proper info and icon even on "missing" games<br/>
+                - other minor tweaks
+            </h3>
+            <h3>Games list font settings do not change anymore when using "available/missing filter" in tool bar buttons</h3>
+         <h2>Added</h2>
+            <h3>Added "Arcade Italia" URL links to the "Internet Game Info" feature (Preferences screen, "General" tab)</h3>
+            <h3>Support for MAME PDF manuals (.pdf files)<br/>
+                - select a folder in MAME Settings screen, "Folders" tab or in Preferences screen, "MAME Game Docs" tab<br/>
+                - no zipped files support, .pdf files must be unzipped<br/>
+                - relative path support (relative to MAME base directory)<br/>
+                - default folder is "manuals"<br/>
+                - parent set manual can be opened with clone games<br/>
+                - files are opened with the Windows associated application for .pdf files (external utility)<br/>
+                - setting saved in "arcade\sysimagefolders_arcade.ini" file, "manuals_directory" entry in [MAME] section, but it's not part of the image categories<br/>
+                - access in games popup menu and in images tool bar buttons
+            </h3>
+            <h3>Support for "scores3.htm" so you can view MARP info again in "MAME Game Docs" feature<br/>
+                - you must download "http://replay.marpirc.net/txt/scores3.htm" link from internet and put file into MAME's "\dats\" folder or the folder you selected for data files<br/>
+                - the frontend will try to read the file and show the scores info<br/>
+                - file "marp.dat" is still supported, but cannot be used not together with "scores3.htm"... pick one
+            </h3>
+      </div>
+
+      <br/><br/>
+      <div id="changelog">
+         <h1>version 8.6.7 change log - November 06, 2018</h1>
+         <h2>Fixed</h2>
+            <h3>Renamed "Namco Super System 22" to proper "Namco System Super 22"</h3>
+            <h3>Fixes to MAME Settings screen<br/>
+                - "Select" button for "Path to BGFX Files" was doing nothing<br/>
+                - "Select" button for "BGFX Shadow Mask Texture" filename was assigned to a different TEdit control
+            </h3>
+            <h3>Audit fix: bios ROMs in game sets were not tagged as bios ROMs in case the ROM name in game set is different than ROM name in bios set, causing them to appear as missing ROMs</h3>
+         <h2>Changed</h2>
+            <h3>Updated madExcept library to v4.0.20<br/>
+                - for some weird reason, error dialogs show Windows 8 as the OS instead of Windows 10
+            </h3>
+         <h2>Added</h2>
+            <h3>Support for Supermodel SVN 741<br/>
+                - added new "Enable Quad Rendering" setting<br/>
+                - initial code for "NET" support; since this is preliminary emulator feature, not much can be done
+            </h3>
+            <h3>Support for MAME .202<br/>
+                - "Namco System 21" has been split into mulitple drivers, arcade filtering was not working anymore<br/>
+            </h3>
+            <h3>Support for MAME .203<br/>
+                - added "BGFX LUT Texture Name" setting<br/>
+                - added "HLSL Bloom LUT" settings
+            </h3>
+            <h3>Video previews for arcade games can be in an extra "\videosnaps\" sub-folder<br/>
+                - for arcade games only, MAME software lists and EmuCon systems are not supported<br/>
+                - you can select "d:\myvideos-mame-folder\" as your main vids folder; EL will automatically search videos in "d:\myvideos-mame-folder\videosnaps\")<br/>
+                - no support for multiple paths
+            </h3>
+      </div>
+   </body>
+</html>

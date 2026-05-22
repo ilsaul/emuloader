@@ -1,0 +1,185 @@
+Quick Setup Guide for Basic Features
+------------------------------------
+
+   This small tutorial will help those who want to get the frontend up and running without a fuss...
+Only the minimal required steps for a quick start are covered here.
+
+   NOTE: starting from version 8.3, MAME/arcade emulators and games are no longer required by the frontend.
+
+
+Installing
+----------
+
+01. Uncompress frontend's package anywhere you want ("Program Files" and "Users" folders are NOT recommended!)
+
+02. Copy extra files: catver.ini (or category.ini; version.ini), nplayers.ini, languages.ini to "frontend_dir\arcade\filters\" folder (MAME only, optional)
+
+03. Copy AntoPISA's mess.ini to "frontend_dir\arcade\filters\" folder for proper MAME non-arcade machines filtering (optional, MAME 0.162 or newer required)
+
+04. Get category.ini and version.ini for HBMAME (AntoPISA website), rename them to "category_hb.ini" and "version_hb.ini" and copy them to
+    "frontend_dir\arcade\filters\" folder (HBMAME only, optional)
+
+05. Copy docs files: mameinfo.dat, messinfo.dat, history.dat, story.dat (MAMEscore v2), scores3.htm, marp.dat to "mame_dir\dats\" folder or MAME's root folder (MAME only, optional)
+
+06. Run "EmuLoader.exe" to start the frontend
+    After the initialization screen, if there are no games list files in "frontend_dir\arcade\games\" or "frontend_dir\arcade\mame_softwarelist_games\" or
+    "frontend_dir\console_computer\games\" folders, the "clean install" dialog will appear. If not, the frontend will load available games and show the main screen
+
+07. On the clean install dialog, select the options you want and click "Continue" button.
+    To create an arcade games list, you must select an arcade emulator. to create console/computer/handheld games lists, you must select games folders. Emulators are optional.
+    You have the option to select emulators without creating games lists!
+
+08. On "Arcade Emulators Setup" screen, select the arcade system you want to setup
+
+09. Select an emulator file (.exe; .bat; .cmd)
+    "version info" will be filled automatically, except for batch files. You can edit emulator file and version info manually
+    NOTE: make sure to click "Update System" button if changing emulator file manually!
+
+10. If you need to configure emulator's default options, click "Default Settings" button (optional)
+
+11. Repeat steps #08 to #10 for the other systems
+
+10. Click on "OK" button
+
+11. A new dialog will show to select what scan mode you want (MAME and arcade), so game ROMs/CHDs can be validated (Emu Loader's own audit system)
+
+12. Optionally, you can select what type of MAME sets will be scanned in 'Scan MAME Sets' (MAME 0.162 or newer required)
+
+13. If you want to create a list of non-arcade MAME games (MAME software lists), enable 'Create Software List Games' checkbox (optional)
+    You can customize what software lists will be used by clicking in the 'custom' blue text; disabled software lists will not be created
+    or added to the games list (MAME 0.162 or newer required)
+
+14. If you want MAME/HBMAME device sets with no ROMs listed in your games list, enable 'Device Sets With No ROMs' checkbox (optional)
+    I recommend to leave it disabled as these sets are pointless for gamers, MAME can't run them and they are not required for games validation
+
+15. Click "OK" button
+
+16. Next, the Console/Computer Emulators Setup" screen will open, if you checked that option in the clean install dialog (systems ported from EmuCon frontend)
+
+17. Select the console or computer system you want to setup
+
+18. Select the emulator tab you want (you can use 4 emulator executables per system!)
+    Always use "Emulator 1" tab for the first emulator
+
+19. Select an emulator file (.exe; .bat; .cmd)
+    The media type parameters for cartridge, floppy disk, cassette tape, disc, hard disk drive will be filled automatically
+
+20. You may edit these parameters, if needed. They are saved in "console_computer\emulator_parameters.ini" file
+
+21. Repeat steps #17 to #20 for the other systems
+
+22. Click on "OK" button
+
+23. If you checked options to create gamess lists, EL will start the process for all available systems, one by one, including MAME software list games
+    This process should not take too long. Keep an eye on the timer next to the progress bar. You don't need to do anything... just wait until it finishes
+
+24. After games lists are created, EL will validate the arcade games based on the scan mode you chose.
+    MAME sets might take some time to be validated, depending on how many games you have. Please be patient
+
+25. After everything is done, frontend's main screen will show up. If you created games lists, they will be loaded
+    Available games have colored icons. Missing games have gray icons. Games with missing ROMs/CHDs have a red color text and gray icons (MAME and arcade systems only)
+
+26. Why are you still reading this ? Start playing!!! ^-^
+
+
+NOTES:
+  -> To select what MAME machine you want to run a software list game with, use "Machine to Run Game" option in games popup menu (mouse right-click)
+     If no machine is selected, the dialog will show up on the game's first run. Software list games are non-arcade games (console/computer/handheld). MAME v0.162 or newer is required
+
+  -> You can run MAME software list games using console/computer/handheld emulators (BlueMSX, WinUAE, WinVICE, Stella, ZSNES and many others)
+
+  -> You can run console/computer/handheld games ported from EmuCon frontend using the selected MAME in "Arcade Emulators Setup"; you can even select what MAME machine you want to play with
+
+  -> WARNING: MAME software list games are NOT recognized as console/computer/handheld games by the frontend!!!
+
+
+
+Setup Image Categories
+----------------------
+
+   This section tells you how to set snapshots folders for all your systems (folders for all image categories, not just game snapshots),
+   their visibility and background color.
+
+    Note 1: if the emulator already have a game snapshot path setting, EL will load this setting automatically (MAME, HBMAME).
+    Note 2: if MAME's "ui.ini" file is found (v0.172 or newer), image category path settings will be read from that file (titles, flyers, cabinets, etc...)
+            
+01. Go to main menu "Images", "Category Settings" (or call th popup menu in images panel). A new screen will open
+
+02. Select a system and then a category
+
+03. Choose a folder for the selected category (emulator relative paths are supported)
+    note 1: only backslash "\" chars are valid!
+    note 2: only ANSI folder names are supported
+
+04. Change category visibility and background color as needed (optional)
+
+05. Repeat the process for other systems (steps #02 thru #04)
+
+06. When you're done, click "Apply" button to confirm changes or click "Abort" button to cancel changes
+
+
+Change Image Layouts Settings
+-----------------------------
+
+    Layouts show multiple image categories at the same time. You can set image categories for each layout.
+
+01. Select the layout you want to edit
+
+02. Change layout visibility as needed (untick their checkboxes)
+
+03. To customize the categories for the selected layout, click on a category icon you wan to change and
+    choose the one you want (see the layout image sample next to the categories bars for more details)
+
+04. For layouts with multiple panels, you can hide the 2nd and/or 3rd panel
+
+05. Repeat the process for other layouts (steps #01 thru #04)
+
+06. When you're done, click "Apply" button to confirm changes or click "Abort" button to cancel changes
+
+
+NOTES:
+  -> You can use zipped images. Check "el-readme.txt" for their filenames ("Features" section)
+
+  -> Do not use the same image category more than once on a multiple panel layout or the frontend will crash
+
+  -> Game ROMs/CHDs for MAME software lists must be placed in sub-folders using same name as xml filenames from "mamedir\hash\" folder
+     Do not select these sub-folders in MAME ROMs paths (mame.ini)
+
+  -> Snapshots files for MAME software list games must be placed in sub-folders using same name as xml filenames from "mamedir\hash\" folder
+     
+     eg.: snap\msx1_cart\goonies.png
+          -> softlist game "The Goonies" ("msx1_cart.xml": MSX1 Cartridges)
+
+          snap\goonies.png
+          -> arcade game "Vs. The Goonies"
+
+
+
+How to enable MAMu_ Icons (custom game icons)
+-------------------------------------------
+
+   Can't find out how to display MAMu_ icons into the games list ? Follow the steps below.
+
+01. Make sure the icons path is correct. Click on main tool bar button "MAMu_ Icons" and select "Select Folder". The preferences screen will open
+    ... or open the preferences screen in main menu and go to "Games List / Columns" tab
+
+02. Click on "Select" button. Only a single folder can be selected and it will be used for all systems
+    If you are using MAME v0.172 or newer, this settings is automatically read from MAME's "ui.ini" file...
+
+03. After selecting folder, click on MAMu_ Icons tool bar buttons again (main screen)
+
+04. There are other settings to customize how icons are loaded, use them as you like. If unsure, leave them alone...
+
+05. Select "Enable MAMu_ Icons" to enable or disable this feature (or use "Ctrl+M" hotkey)
+
+NOTES:
+  -> You can have multiple size icons on each gamename.ico file (48x48, 32x32, 24x24, 16x16)
+     ... color depth from 256 colors to XP icons (RGB+alpha channel)
+
+  -> Zipped icons can also be used. Make sure to name it "icons.zip"
+
+  -> Relative paths are supported; the path is relative to MAME's directory
+
+
+
+-- Master Control: "End of line." (quote from "TRON") --

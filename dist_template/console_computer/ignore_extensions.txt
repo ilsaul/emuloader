@@ -1,0 +1,72 @@
+// This file contain all the extensions that should not be added in the games list
+//     You are free to modify this list. If you add/remove extensions here for
+// any reason, please contact me: emuloader@gmail.com
+//
+//     If you want to remove an extension of this list, simply add comment chars (double slash). No need to actually
+// delete them from this file. See examples of commented extensions below:
+
+   // .m3u -> Metadata file for Mednafen multiple CD/DVD layout
+   // .cue -> Metadata file with CD/DVD layout
+   // .toc -> Table of Contents for CDR-DAO files
+   // .mds -> Alcohol 120% metadata
+   // .ccd -> CloneDVD metadata
+
+
+.cue
+.toc
+.mds
+.ccd
+.m3u
+.mp3
+.ape
+.ogg
+.txt
+.nfo
+.info
+.htm
+.html
+.pdf
+.sub
+.tar
+.gzip
+.doc
+.flac
+.wma
+.avi
+.mpg
+.mpeg
+.wmv
+.flv
+.asf
+.mov
+.mkv
+.part
+.jc!
+.jpg
+.jpeg
+.gif
+.png
+.mng
+.bmp
+.ico
+.readme
+.vfl
+.uae
+.fs-uae
+.xml
+.config
+.cfg
+.ini
+.sram
+.cmos
+.dll
+.DS_Store
+.css
+.sav
+
+// from RetroArch
+.srm
+.mcr
+.bcr
+.bkr
+.smpc
