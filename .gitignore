@@ -131,6 +131,6 @@ lib/delphi7-components/Graphics32/Examples/
 lib/ComponentAce/ZipForge/Demos/
 lib/madCollection/*/install.log
 lib/madCollection/*/Demos/
-!lib/madCollection/*/*.dcu
-!lib/madCollection/*/*.bpl
-!lib/madCollection/*/*.dcp
+!lib/madCollection/*/Delphi 7/*.dcu
+!lib/madCollection/*/Delphi 7/*.bpl
+!lib/madCollection/*/Delphi 7/*.dcp
