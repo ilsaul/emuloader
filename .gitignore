@@ -134,3 +134,5 @@ lib/madCollection/*/Demos/
 !lib/madCollection/*/Delphi 7/*.dcu
 !lib/madCollection/*/Delphi 7/*.bpl
 !lib/madCollection/*/Delphi 7/*.dcp
+!/lib/delphi7-components/Delphi Unicode Controls/**/*.dcu
+
