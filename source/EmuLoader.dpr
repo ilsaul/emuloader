@@ -77,7 +77,7 @@ uses
   uFavoritesManagerCleanseProfile in 'uFavoritesManagerCleanseProfile.pas' {FormFavoritesManagerCleanseProfile},
   uNightMode in 'uNightMode.pas' {FormNightMode},
   uMessageBox_4K in '4K\uMessageBox_4K.pas' {FormMessageBox4K},
-  uZTestWorkbench in 'uZTestWorkbench.pas' {FormZTestWorkbench},
+  //uZTestWorkbench in 'uZTestWorkbench.pas' {FormZTestWorkbench},
   uCustomParameters in 'arcade\uCustomParameters.pas' {FormCustomParameters},
   uColorPickerEx in 'uColorPickerEx.pas' {FormColorPickerEx};
 
