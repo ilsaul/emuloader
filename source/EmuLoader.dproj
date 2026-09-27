@@ -14,8 +14,8 @@
     <DCC_IncludePath>$(ProjectDir);$(ProjectDir)arcade;$(ProjectDir)console_computer;..\lib\delphi7-components;..\lib\delphi7-components\Delphi Unicode Controls\Source;..\lib\delphi7-components\Mustangpeak\Common Library\Source;..\lib\delphi7-components\Mustangpeak\EasyListview\Source</DCC_IncludePath>
     <DCC_ResourcePath>$(ProjectDir);$(ProjectDir)arcade;$(ProjectDir)console_computer;..\lib\delphi7-components</DCC_ResourcePath>
     <DCC_ObjPath>$(ProjectDir);$(ProjectDir)arcade;$(ProjectDir)console_computer;..\lib\delphi7-components</DCC_ObjPath>
-    <DCC_ExeOutput>.in</DCC_ExeOutput>
-    <DCC_DcpOutput>.in</DCC_DcpOutput>
+    <DCC_ExeOutput>.\bin</DCC_ExeOutput>
+    <DCC_DcpOutput>.\bin</DCC_DcpOutput>
     <DCC_OutputDRCFile>true</DCC_OutputDRCFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Base)'!=''">
