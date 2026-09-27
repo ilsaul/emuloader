@@ -1,0 +1,60 @@
+package EmuLoaderComponents;
+
+{$R *.res}
+{$R '..\delphi7-components\PanelEx.dcr'}
+{$R '..\delphi7-components\SplitterEx.dcr'}
+{$R '..\delphi7-components\ShadowLabel.dcr'}
+{$R '..\delphi7-components\AdvComponents\AdvGroupBoxReg.dcr'}
+{$R '..\delphi7-components\AdvComponents\AdvOfficeButtonsReg.dcr'}
+{$IFDEF IMPLICITBUILDING This IFDEF should not be used by users}
+{$ALIGN 8}
+{$ASSERTIONS ON}
+{$BOOLEVAL OFF}
+{$DEBUGINFO OFF}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LOCALSYMBOLS ON}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION OFF}
+{$OVERFLOWCHECKS OFF}
+{$RANGECHECKS OFF}
+{$REFERENCEINFO ON}
+{$SAFEDIVIDE OFF}
+{$STACKFRAMES ON}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS ON}
+{$WRITEABLECONST OFF}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$DEFINE DEBUG}
+{$ENDIF IMPLICITBUILDING}
+{$DESCRIPTION 'EmuLoader custom components (Delphi 13)'}
+{$IMPLICITBUILD ON}
+
+requires
+  rtl,
+  vcl;
+
+contains
+  ShadowLabel in '..\delphi7-components\ShadowLabel.pas',
+  ButtonsEx in '..\delphi7-components\ButtonsEx.pas',
+  PanelEx in '..\delphi7-components\PanelEx.pas',
+  EditEx in '..\delphi7-components\EditEx.pas',
+  ColorBoxEx in '..\delphi7-components\ColorBoxEx.pas',
+  SplitterEx in '..\delphi7-components\SplitterEx.pas',
+  BevelEx in '..\delphi7-components\BevelEx.pas',
+  RichEditURL in '..\delphi7-components\RichEditURL.pas',
+  XiButton in '..\delphi7-components\XiControls\XiButton.pas',
+  XiProgressBar in '..\delphi7-components\XiControls\XiProgressBar.pas',
+  XiPanel in '..\delphi7-components\XiControls\XiPanel.pas',
+  XiTrackBar in '..\delphi7-components\XiControls\XiTrackBar.pas',
+  XiControls in '..\delphi7-components\XiControls\XiControls.pas',
+  AOBXPVS in '..\delphi7-components\AdvComponents\AOBXPVS.pas',
+  AdvGroupBox in '..\delphi7-components\AdvComponents\AdvGroupBox.pas',
+  AdvOfficeButtons in '..\delphi7-components\AdvComponents\AdvOfficeButtons.pas',
+  AdvGroupBoxReg in '..\delphi7-components\AdvComponents\AdvGroupBoxReg.pas',
+  AdvOfficeButtonsReg in '..\delphi7-components\AdvComponents\AdvOfficeButtonsReg.pas';
+
+end.

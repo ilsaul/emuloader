@@ -16,6 +16,8 @@
     <DCC_ObjPath>$(ProjectDir);$(ProjectDir)arcade;$(ProjectDir)console_computer;..\lib\delphi7-components</DCC_ObjPath>
     <DCC_ExeOutput>.\bin</DCC_ExeOutput>
     <DCC_DcpOutput>.\bin</DCC_DcpOutput>
+    <DCC_Namespace>System;Xml;Data;Datasnap;Web;Soap;Vcl;Vcl.Imaging;Vcl.Touch;Vcl.Samples;Vcl.Shell;Winapi;System.Win</DCC_Namespace>
+    <DCC_DcuOutput>.\dcu13\$(Platform)\$(Config)</DCC_DcuOutput>
     <DCC_OutputDRCFile>true</DCC_OutputDRCFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Base)'!=''">
