@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectGuid>{6B115B4E-FC10-4D8E-BD5F-0B6D039EDE9B}</ProjectGuid>
+    <ProjectVersion>19.5</ProjectVersion>
+    <FrameworkType>VCL</FrameworkType>
+    <MainSource>EmuLoader.dpr</MainSource>
+    <Config Condition="'$(Config)'==''">Debug</Config>
+    <Platform Condition="'$(Platform)'==''">Win32</Platform>
+    <DCC_DCCCompiler>DCC32</DCC_DCCCompiler>
+    <TargetedPlatforms>1</TargetedPlatforms>
+    <AppType>Application</AppType>
+    <DCC_UnitSearchPath>$(ProjectDir);$(ProjectDir)4K;$(ProjectDir)4K\designs;$(ProjectDir)4K\designs\console_computer;$(ProjectDir)arcade;$(ProjectDir)console_computer;..\lib\delphi7-components;..\lib\delphi7-components\AdvComponents;..\lib\delphi7-components\Delphi Unicode Controls\Source;..\lib\delphi7-components\Mustangpeak\Common Library\Source;..\lib\delphi7-components\Mustangpeak\EasyListview\Source;..\lib\delphi7-components\Graphics32;..\lib\madCollection\madBasic\Source;..\lib\ComponentAce\ZipForge\Source;..\lib\ComponentAce\ZipForge\Utils\Source\Archiver</DCC_UnitSearchPath>
+    <DCC_IncludePath>$(ProjectDir);$(ProjectDir)arcade;$(ProjectDir)console_computer;..\lib\delphi7-components;..\lib\delphi7-components\Delphi Unicode Controls\Source;..\lib\delphi7-components\Mustangpeak\Common Library\Source;..\lib\delphi7-components\Mustangpeak\EasyListview\Source</DCC_IncludePath>
+    <DCC_ResourcePath>$(ProjectDir);$(ProjectDir)arcade;$(ProjectDir)console_computer;..\lib\delphi7-components</DCC_ResourcePath>
+    <DCC_ObjPath>$(ProjectDir);$(ProjectDir)arcade;$(ProjectDir)console_computer;..\lib\delphi7-components</DCC_ObjPath>
+    <DCC_ExeOutput>.in</DCC_ExeOutput>
+    <DCC_DcpOutput>.in</DCC_DcpOutput>
+    <DCC_OutputDRCFile>true</DCC_OutputDRCFile>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Base)'!=''">
+    <Base>true</Base>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Config)'=='Debug'">
+    <DCC_DebugInfoInExe>true</DCC_DebugInfoInExe>
+    <DCC_Define>DEBUG</DCC_Define>
+    <DCC_Optimize>false</DCC_Optimize>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Config)'=='Release'">
+    <DCC_LocalDebugSymbols>false</DCC_LocalDebugSymbols>
+    <DCC_Define>RELEASE</DCC_Define>
+    <DCC_Optimize>true</DCC_Optimize>
+  </PropertyGroup>
+  <ItemGroup>
+    <DelphiCompile Include="EmuLoader.dpr">
+      <MainSource>MainSource</MainSource>
+    </DelphiCompile>
+  </ItemGroup>
+  <Import Project="$(BDS)\Bin\CodeGear.Delphi.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Delphi.Targets')" />
+</Project>
