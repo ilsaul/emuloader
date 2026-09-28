@@ -10,8 +10,8 @@
     <DCC_DCCCompiler>DCC32</DCC_DCCCompiler>
     <TargetedPlatforms>1</TargetedPlatforms>
     <AppType>Application</AppType>
-    <DCC_UnitSearchPath>$(ProjectDir);$(ProjectDir)4K;$(ProjectDir)4K\designs;$(ProjectDir)4K\designs\console_computer;$(ProjectDir)arcade;$(ProjectDir)console_computer;..\lib\delphi7-components;..\lib\delphi7-components\AdvComponents;..\lib\delphi7-components\Delphi Unicode Controls\Source;..\lib\delphi7-components\Mustangpeak\Common Library\Source;..\lib\delphi7-components\Mustangpeak\EasyListview\Source;..\lib\delphi7-components\Graphics32;..\lib\madCollection\madBasic\Source;..\lib\ComponentAce\ZipForge\Source;..\lib\ComponentAce\ZipForge\Utils\Source\Archiver</DCC_UnitSearchPath>
-    <DCC_IncludePath>$(ProjectDir);$(ProjectDir)arcade;$(ProjectDir)console_computer;..\lib\delphi7-components;..\lib\delphi7-components\Delphi Unicode Controls\Source;..\lib\delphi7-components\Mustangpeak\Common Library\Source;..\lib\delphi7-components\Mustangpeak\EasyListview\Source</DCC_IncludePath>
+    <DCC_UnitSearchPath>$(ProjectDir);$(ProjectDir)4K;$(ProjectDir)4K\designs;$(ProjectDir)4K\designs\console_computer;$(ProjectDir)arcade;$(ProjectDir)console_computer;..\lib\delphi7-components;..\lib\delphi7-components\AdvComponents;..\lib\delphi13\tnt-compat;..\lib\delphi7-components\Mustangpeak\Common Library\Source;..\lib\delphi7-components\Mustangpeak\EasyListview\Source;..\lib\delphi7-components\Graphics32;..\lib\madCollection\madBasic\Source;..\lib\ComponentAce\ZipForge\Source;..\lib\ComponentAce\ZipForge\Utils\Source\Archiver</DCC_UnitSearchPath>
+    <DCC_IncludePath>$(ProjectDir);$(ProjectDir)arcade;$(ProjectDir)console_computer;..\lib\delphi7-components;..\lib\delphi13\tnt-compat;..\lib\delphi7-components\Mustangpeak\Common Library\Source;..\lib\delphi7-components\Mustangpeak\EasyListview\Source</DCC_IncludePath>
     <DCC_ResourcePath>$(ProjectDir);$(ProjectDir)arcade;$(ProjectDir)console_computer;..\lib\delphi7-components</DCC_ResourcePath>
     <DCC_ObjPath>$(ProjectDir);$(ProjectDir)arcade;$(ProjectDir)console_computer;..\lib\delphi7-components</DCC_ObjPath>
     <DCC_ExeOutput>.\bin</DCC_ExeOutput>

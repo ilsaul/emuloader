@@ -55,6 +55,9 @@ contains
   AdvGroupBox in '..\delphi7-components\AdvComponents\AdvGroupBox.pas',
   AdvOfficeButtons in '..\delphi7-components\AdvComponents\AdvOfficeButtons.pas',
   AdvGroupBoxReg in '..\delphi7-components\AdvComponents\AdvGroupBoxReg.pas',
-  AdvOfficeButtonsReg in '..\delphi7-components\AdvComponents\AdvOfficeButtonsReg.pas';
+  AdvOfficeButtonsReg in '..\delphi7-components\AdvComponents\AdvOfficeButtonsReg.pas',
+  TntStdCtrls in 'tnt-compat\TntStdCtrls.pas',
+  TntComCtrls in 'tnt-compat\TntComCtrls.pas',
+  TntEditEx in '..\delphi7-components\TntEditEx.pas';
 
 end.
