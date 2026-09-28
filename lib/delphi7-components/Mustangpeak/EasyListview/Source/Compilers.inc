@@ -125,7 +125,20 @@
   {$endif DELPHI.NET_1}
 {$endif CLR}
 
-{$ifdef Win32}
+{$ifdef CONDITIONALEXPRESSIONS}
+  {$if CompilerVersion >= 37.0}
+    {$define MP_MODERN_DELPHI}
+  {$ifend}
+{$endif}
+
+{$ifdef WIN64}
+  {$define MP_WINDOWS}
+{$endif}
+{$ifdef WIN32}
+  {$define MP_WINDOWS}
+{$endif}
+
+{$ifdef MP_WINDOWS}
 
 // Compiler defines not specific to a particlular platform.
 
@@ -134,12 +147,9 @@
     {$define COMPILER_15}
   {$endif VER220}
 
-  {$ifdef CONDITIONALEXPRESSIONS}
-    {$if CompilerVersion >= 37.0}
-      {$define COMPILER_15}
-      {$define COMPILER_12_UP}
-    {$ifend}
-  {$endif CONDITIONALEXPRESSIONS}
+  {$ifdef MP_MODERN_DELPHI}
+    {$define COMPILER_15}
+  {$endif}
 
   // BDS 2010 (BDS 7.0) DELPHI and BCB are no longer defined, only COMPILER
   {$ifdef VER210}
@@ -378,7 +388,7 @@
     {$define KYLIX_3_UP}
   {$endif}
 
-{$endif Win32}
+{$endif MP_WINDOWS}
 
 
 {$ifdef COMPILER_1}

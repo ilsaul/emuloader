@@ -375,7 +375,7 @@ type
     csTypeString,     // A string.
     csTypeInt,        // An integer.
     csTypeDate,       // A date.
-    csOnByDefault,    // Should be shown by default in the Microsoft® Windows® Explorer Details view.
+    csOnByDefault,    // Should be shown by default in the Microsoftï¿½ Windowsï¿½ Explorer Details view.
     csSlow,           // Extracting information about the column can be time consuming.
     csExtended,       // Provided by a handler, not the folder object.
     csSecondaryUI,    // Not displayed in the context menu, but listed in the More dialog box.
@@ -1112,7 +1112,7 @@ type
     function GetIconIndex(OpenIcon: Boolean; IconSize: TIconSize; ForceLoad: Boolean = True): integer; virtual;
     function GetImage: TBitmap;  virtual;
     function VerifyPIDLRelationship(NamespaceArray: TNamespaceArray; Silent: Boolean = False): Boolean;
-    procedure HandleContextMenuMsg(Msg, wParam, lParam: Longint; var Result: LRESULT);  virtual;
+    procedure HandleContextMenuMsg(Msg: UINT; wParam: WPARAM; lParam: LPARAM; var Result: {$IFDEF WIN64}Int64{$ELSE}LRESULT{$ENDIF});  virtual;
     procedure InvalidateCache;  virtual;
     procedure InvalidateDetailsOfCache(FlushStrings: Boolean);
     procedure InvalidateNamespace(RefreshIcon: Boolean = True);  virtual;
@@ -1410,12 +1410,12 @@ type
   // IShellFolder
     function ParseDisplayName(hwndOwner: HWND; pbcReserved: Pointer; lpszDisplayName: POLESTR; out pchEaten: ULONG; out ppidl: PItemIDList; var dwAttributes: ULONG): HResult; stdcall;
     function EnumObjects(hwndOwner: HWND; grfFlags: DWORD; out EnumIDList: IEnumIDList): HResult; stdcall;
-    function BindToObject(pidl: PItemIDList; pbcReserved: Pointer; const riid: TIID; out ppvOut{$IFNDEF COMPILER_5_UP}: Pointer{$ENDIF}): HResult; stdcall;
-    function BindToStorage(pidl: PItemIDList; pbcReserved: Pointer; const riid: TIID; out ppvObj{$IFNDEF COMPILER_5_UP}: Pointer{$ENDIF}): HResult; stdcall;
+    function BindToObject(pidl: PItemIDList; pbcReserved: Pointer; const riid: TIID; out ppvOut{$IFNDEF MP_MODERN_DELPHI}{$IFDEF COMPILER_5_UP}: Pointer{$ENDIF}{$ENDIF}): HResult; stdcall;
+    function BindToStorage(pidl: PItemIDList; pbcReserved: Pointer; const riid: TIID; out ppvObj{$IFNDEF MP_MODERN_DELPHI}{$IFDEF COMPILER_5_UP}: Pointer{$ENDIF}{$ENDIF}): HResult; stdcall;
     function CompareIDs(lParam: LPARAM; pidl1, pidl2: PItemIDList): HResult; stdcall;
-    function CreateViewObject(hwndOwner: HWND; const riid: TIID; out ppvOut{$IFNDEF COMPILER_5_UP}: Pointer{$ENDIF}): HResult; stdcall;
+    function CreateViewObject(hwndOwner: HWND; const riid: TIID; out ppvOut{$IFNDEF MP_MODERN_DELPHI}{$IFDEF COMPILER_5_UP}: Pointer{$ENDIF}{$ENDIF}): HResult; stdcall;
     function GetAttributesOf(cidl: UINT; var apidl: PItemIDList; var rgfInOut: UINT): HResult; stdcall;
-    function GetUIObjectOf(hwndOwner: HWND; cidl: UINT; var apidl: PItemIDList; const riid: TIID; prgfInOut: Pointer; out ppvOut{$IFNDEF COMPILER_5_UP}: Pointer{$ENDIF}): HResult; stdcall;
+    function GetUIObjectOf(hwndOwner: HWND; cidl: UINT; var apidl: PItemIDList; const riid: TIID; prgfInOut: Pointer; out ppvOut{$IFNDEF MP_MODERN_DELPHI}{$IFDEF COMPILER_5_UP}: Pointer{$ENDIF}{$ENDIF}): HResult; stdcall;
     function GetDisplayNameOf(pidl: PItemIDList; uFlags: DWORD; var lpName: TStrRet): HResult; stdcall;
     function SetNameOf(hwndOwner: HWND; pidl: PItemIDList; lpszName: POLEStr; uFlags: DWORD; var ppidlOut: PItemIDList): HResult; stdcall;
     // IDropTarget
@@ -1458,7 +1458,7 @@ type
     {$ELSE}
     function FindCommandId(CmdID: UINT; var MenuItem: TMenuItem): Boolean;
     {$ENDIF}
-    procedure HandleContextMenuMsg(Msg, wParam, lParam: Longint; var Result: LRESULT); stdcall;
+    procedure HandleContextMenuMsg(Msg: UINT; wParam: WPARAM; lParam: LPARAM; var Result: {$IFDEF WIN64}Int64{$ELSE}LRESULT{$ENDIF}); stdcall;
     function InternalShowContextMenu(Owner: TWinControl; ParentPIDL: PItemIDList; ChildPIDLs: TAbsolutePIDLArray; Verb: WideString; Position: PPoint = nil; ShiftKeyState: TExecuteVerbShift = evsCurrent): Boolean;
     procedure LoadMultiFolderPIDLArray(Namespaces: TNamespaceArray; var PIDLs: TAbsolutePIDLArray);
     procedure LoadRegistryKeyStrings(Focused: TNamespace); virtual; abstract;
@@ -1976,7 +1976,11 @@ begin
 
       // Don't call this a MultiFolder Source if we created the data object and prepared it correctly
       // this saves some time with not dealing with formating the information as not to crash shell functions
+      {$IFDEF MP_MODERN_DELPHI}
+      if SysUtils.Supports(DataObject, ICommonDataObject2, CommonDataObj2) then
+      {$ELSE}
       if Supports(DataObject, ICommonDataObject2, CommonDataObj2) then
+      {$ENDIF}
         MultiFolderSource := (MultiFolderSource or CommonDataObj2.MultiFolder) and not CommonDataObj2.MultiFolderVerified;
 
       if MultiFolderSource then
@@ -6777,7 +6781,7 @@ begin
   Result := FShellIconOverlayInterface
 end;
 
-procedure TNamespace.HandleContextMenuMsg(Msg, wParam, lParam: Longint; var Result: LRESULT);
+procedure TNamespace.HandleContextMenuMsg(Msg: UINT; wParam: WPARAM; lParam: LPARAM; var Result: {$IFDEF WIN64}Int64{$ELSE}LRESULT{$ENDIF});
 { This is called when the ContextMenu calls back to its owner window to ask     }
 { questions to implement the addition of icons to the menu.  The messages sent  }
 { to the owner window are:  WM_INITMENUPOPUP, WM_DRAWITEM, or WM_MEASUREITEM.   }
@@ -9125,7 +9129,7 @@ begin
   inherited Destroy;
 end;
 
-function TCommonShellContextMenu.BindToObject(pidl: PItemIDList; pbcReserved: Pointer; const riid: TIID; out ppvOut{$IFNDEF COMPILER_5_UP}: Pointer{$ENDIF}): HResult;
+function TCommonShellContextMenu.BindToObject(pidl: PItemIDList; pbcReserved: Pointer; const riid: TIID; out ppvOut{$IFNDEF MP_MODERN_DELPHI}{$IFDEF COMPILER_5_UP}: Pointer{$ENDIF}{$ENDIF}): HResult;
 begin
   Result := ActiveFolder.BindToObject(pidl, pbcReserved, riid, ppvOut);
   {$IFDEF GXDEBUG_VIRTUALCONTEXTMENU}
@@ -9133,7 +9137,7 @@ begin
   {$ENDIF}
 end;
 
-function TCommonShellContextMenu.BindToStorage(pidl: PItemIDList; pbcReserved: Pointer; const riid: TIID; out ppvObj{$IFNDEF COMPILER_5_UP}: Pointer{$ENDIF}): HResult;
+function TCommonShellContextMenu.BindToStorage(pidl: PItemIDList; pbcReserved: Pointer; const riid: TIID; out ppvObj{$IFNDEF MP_MODERN_DELPHI}{$IFDEF COMPILER_5_UP}: Pointer{$ENDIF}{$ENDIF}): HResult;
 begin
   Result := ActiveFolder.BindToStorage(pidl, pbcReserved, riid, ppvObj);
   {$IFDEF GXDEBUG_VIRTUALCONTEXTMENU}
@@ -9149,7 +9153,7 @@ begin
   {$ENDIF}
 end;
 
-function TCommonShellContextMenu.CreateViewObject(hwndOwner: HWND; const riid: TIID; out ppvOut{$IFNDEF COMPILER_5_UP}: Pointer{$ENDIF}): HResult;
+function TCommonShellContextMenu.CreateViewObject(hwndOwner: HWND; const riid: TIID; out ppvOut{$IFNDEF MP_MODERN_DELPHI}{$IFDEF COMPILER_5_UP}: Pointer{$ENDIF}{$ENDIF}): HResult;
 begin
   Result := ActiveFolder.CreateViewObject(hwndOwner, riid, ppvOut);
   {$IFDEF GXDEBUG_VIRTUALCONTEXTMENU}
@@ -9611,7 +9615,7 @@ begin
   {$ENDIF}
 end;
 
-function TCommonShellContextMenu.GetUIObjectOf(hwndOwner: HWND; cidl: UINT; var apidl: PItemIDList; const riid: TIID; prgfInOut: Pointer; out ppvOut{$IFNDEF COMPILER_5_UP}: Pointer{$ENDIF}): HResult;
+function TCommonShellContextMenu.GetUIObjectOf(hwndOwner: HWND; cidl: UINT; var apidl: PItemIDList; const riid: TIID; prgfInOut: Pointer; out ppvOut{$IFNDEF MP_MODERN_DELPHI}{$IFDEF COMPILER_5_UP}: Pointer{$ENDIF}{$ENDIF}): HResult;
 var
   DataObject: IDataObject;
   NSList: TList;
@@ -10175,7 +10179,7 @@ begin
     OnShow(Self);
 end;
 
-procedure TCommonShellContextMenu.HandleContextMenuMsg(Msg, wParam, lParam: Longint; var Result: LRESULT);
+procedure TCommonShellContextMenu.HandleContextMenuMsg(Msg: UINT; wParam: WPARAM; lParam: LPARAM; var Result: {$IFDEF WIN64}Int64{$ELSE}LRESULT{$ENDIF});
 { This is called when the ContextMenu calls back to its owner window to ask     }
 { questions to implement the addition of icons to the menu.  The messages sent  }
 { to the owner window are:  WM_INITMENUPOPUP, WM_DRAWITEM, or WM_MEASUREITEM.   }
@@ -11058,12 +11062,6 @@ finalization
   CommonUnloadLibrary(Mpr);
   CoUninitialize;
 end.
-
-
-
-
-
-
 
 
 
