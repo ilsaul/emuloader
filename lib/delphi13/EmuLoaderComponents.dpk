@@ -7,6 +7,7 @@ package EmuLoaderComponents;
 {$R '..\delphi7-components\AdvComponents\AdvGroupBoxReg.dcr'}
 {$R '..\delphi7-components\AdvComponents\AdvOfficeButtonsReg.dcr'}
 {$R '..\delphi7-components\Mustangpeak\EasyListview\Design\EasyListviewReg.dcr'}
+{$R '..\delphi7-components\Graphics32\GR32_Reg.dcr'}
 {$IFDEF IMPLICITBUILDING This IFDEF should not be used by users}
 {$ALIGN 8}
 {$ASSERTIONS ON}
@@ -74,6 +75,32 @@ contains
   EasyListviewAccessible in '..\delphi7-components\Mustangpeak\EasyListview\Source\EasyListviewAccessible.pas',
   EasyMSAAIntf in '..\delphi7-components\Mustangpeak\EasyListview\Source\EasyMSAAIntf.pas',
   EasyListview in '..\delphi7-components\Mustangpeak\EasyListview\Source\EasyListview.pas',
-  EasyListviewReg in 'EasyListviewReg.pas';
+  EasyListviewReg in 'EasyListviewReg.pas',
+  GR32 in '..\delphi7-components\Graphics32\GR32.pas',
+  GR32_Math in '..\delphi7-components\Graphics32\GR32_Math.pas',
+  GR32_Backends in '..\delphi7-components\Graphics32\GR32_Backends.pas',
+  GR32_Backends_Generic in '..\delphi7-components\Graphics32\GR32_Backends_Generic.pas',
+  GR32_Backends_VCL in '..\delphi7-components\Graphics32\GR32_Backends_VCL.pas',
+  GR32_LowLevel in '..\delphi7-components\Graphics32\GR32_LowLevel.pas',
+  GR32_System in '..\delphi7-components\Graphics32\GR32_System.pas',
+  GR32_Containers in '..\delphi7-components\Graphics32\GR32_Containers.pas',
+  GR32_Blend in '..\delphi7-components\Graphics32\GR32_Blend.pas',
+  GR32_Transforms in '..\delphi7-components\Graphics32\GR32_Transforms.pas',
+  GR32_OrdinalMaps in '..\delphi7-components\Graphics32\GR32_OrdinalMaps.pas',
+  GR32_VectorMaps in '..\delphi7-components\Graphics32\GR32_VectorMaps.pas',
+  GR32_DrawingEx in '..\delphi7-components\Graphics32\GR32_DrawingEx.pas',
+  GR32_Filters in '..\delphi7-components\Graphics32\GR32_Filters.pas',
+  GR32_Layers in '..\delphi7-components\Graphics32\GR32_Layers.pas',
+  GR32_Image in '..\delphi7-components\Graphics32\GR32_Image.pas',
+  GR32_ExtImage in '..\delphi7-components\Graphics32\GR32_ExtImage.pas',
+  GR32_RangeBars in '..\delphi7-components\Graphics32\GR32_RangeBars.pas',
+  GR32_Polygons in '..\delphi7-components\Graphics32\GR32_Polygons.pas',
+  GR32_RepaintOpt in '..\delphi7-components\Graphics32\GR32_RepaintOpt.pas',
+  GR32_MicroTiles in '..\delphi7-components\Graphics32\GR32_MicroTiles.pas',
+  GR32_Rasterizers in '..\delphi7-components\Graphics32\GR32_Rasterizers.pas',
+  GR32_Resamplers in '..\delphi7-components\Graphics32\GR32_Resamplers.pas',
+  GR32_Bindings in '..\delphi7-components\Graphics32\GR32_Bindings.pas',
+  GR32_XPThemes in '..\delphi7-components\Graphics32\GR32_XPThemes.pas',
+  Graphics32Reg in 'Graphics32Reg.pas';
 
 end.
