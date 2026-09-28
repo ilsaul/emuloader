@@ -6,6 +6,7 @@ package EmuLoaderComponents;
 {$R '..\delphi7-components\ShadowLabel.dcr'}
 {$R '..\delphi7-components\AdvComponents\AdvGroupBoxReg.dcr'}
 {$R '..\delphi7-components\AdvComponents\AdvOfficeButtonsReg.dcr'}
+{$R '..\delphi7-components\Mustangpeak\EasyListview\Design\EasyListviewReg.dcr'}
 {$IFDEF IMPLICITBUILDING This IFDEF should not be used by users}
 {$ALIGN 8}
 {$ASSERTIONS ON}
@@ -35,7 +36,8 @@ package EmuLoaderComponents;
 
 requires
   rtl,
-  vcl;
+  vcl,
+  designide;
 
 contains
   ShadowLabel in '..\delphi7-components\ShadowLabel.pas',
@@ -58,6 +60,20 @@ contains
   AdvOfficeButtonsReg in '..\delphi7-components\AdvComponents\AdvOfficeButtonsReg.pas',
   TntStdCtrls in 'tnt-compat\TntStdCtrls.pas',
   TntComCtrls in 'tnt-compat\TntComCtrls.pas',
-  TntEditEx in '..\delphi7-components\TntEditEx.pas';
+  TntEditEx in '..\delphi7-components\TntEditEx.pas',
+  MPShellTypes in '..\delphi7-components\Mustangpeak\Common Library\Source\MPShellTypes.pas',
+  MPCommonUtilities in '..\delphi7-components\Mustangpeak\Common Library\Source\MPCommonUtilities.pas',
+  MPResources in '..\delphi7-components\Mustangpeak\Common Library\Source\MPResources.pas',
+  MPCommonObjects in '..\delphi7-components\Mustangpeak\Common Library\Source\MPCommonObjects.pas',
+  MPDataObject in '..\delphi7-components\Mustangpeak\Common Library\Source\MPDataObject.pas',
+  MPThreadManager in '..\delphi7-components\Mustangpeak\Common Library\Source\MPThreadManager.pas',
+  MPShellUtilities in '..\delphi7-components\Mustangpeak\Common Library\Source\MPShellUtilities.pas',
+  EasyLVResources in '..\delphi7-components\Mustangpeak\EasyListview\Source\EasyLVResources.pas',
+  EasyScrollFrame in '..\delphi7-components\Mustangpeak\EasyListview\Source\EasyScrollFrame.pas',
+  EasyTaskPanelForm in '..\delphi7-components\Mustangpeak\EasyListview\Source\EasyTaskPanelForm.pas',
+  EasyListviewAccessible in '..\delphi7-components\Mustangpeak\EasyListview\Source\EasyListviewAccessible.pas',
+  EasyMSAAIntf in '..\delphi7-components\Mustangpeak\EasyListview\Source\EasyMSAAIntf.pas',
+  EasyListview in '..\delphi7-components\Mustangpeak\EasyListview\Source\EasyListview.pas',
+  EasyListviewReg in 'EasyListviewReg.pas';
 
 end.

@@ -134,6 +134,13 @@
     {$define COMPILER_15}
   {$endif VER220}
 
+  {$ifdef CONDITIONALEXPRESSIONS}
+    {$if CompilerVersion >= 37.0}
+      {$define COMPILER_15}
+      {$define COMPILER_12_UP}
+    {$ifend}
+  {$endif CONDITIONALEXPRESSIONS}
+
   // BDS 2010 (BDS 7.0) DELPHI and BCB are no longer defined, only COMPILER
   {$ifdef VER210}
     {$define COMPILER_14}
