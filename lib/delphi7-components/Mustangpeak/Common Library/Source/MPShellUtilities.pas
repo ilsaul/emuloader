@@ -6790,16 +6790,15 @@ procedure TNamespace.HandleContextMenuMsg(Msg: UINT; wParam: WPARAM; lParam: LPA
 var
   ContextMenu3: IContextMenu3;
   {$IFDEF WIN64}
-  MenuResult: Int64;
+  MenuResult: Integer;
   {$ENDIF}
 begin
   if Assigned(CurrentContextMenu2) then
     if CurrentContextMenu2.QueryInterface(IContextMenu3, ContextMenu3) <> E_NOINTERFACE then
     begin
       {$IFDEF WIN64}
-      MenuResult := Result;
-      // Delphi declares the out parameter as Integer; Windows writes an LRESULT.
-      ContextMenu3.HandleMenuMsg2(Msg, wParam, lParam, PInteger(@MenuResult)^);
+      MenuResult := 0;
+      ContextMenu3.HandleMenuMsg2(Msg, wParam, lParam, MenuResult);
       Result := MenuResult;
       {$ELSE}
       ContextMenu3.HandleMenuMsg2(Msg, wParam, lParam, Result)
@@ -10200,15 +10199,15 @@ procedure TCommonShellContextMenu.HandleContextMenuMsg(Msg: UINT; wParam: WPARAM
 var
   ContextMenu3: IContextMenu3;
   {$IFDEF WIN64}
-  MenuResult: Int64;
+  MenuResult: Integer;
   {$ENDIF}
 begin   
   if Assigned(CurrentContextMenu2) then
     if CurrentContextMenu2.QueryInterface(IContextMenu3, ContextMenu3) <> E_NOINTERFACE then
     begin
       {$IFDEF WIN64}
-      MenuResult := Result;
-      Result := ContextMenu3.HandleMenuMsg2(Msg, wParam, lParam, PInteger(@MenuResult)^);
+      MenuResult := 0;
+      Result := ContextMenu3.HandleMenuMsg2(Msg, wParam, lParam, MenuResult);
       {$ELSE}
       Result := ContextMenu3.HandleMenuMsg2(Msg, wParam, lParam, Result)
       {$ENDIF}
@@ -11084,6 +11083,4 @@ finalization
   CommonUnloadLibrary(Mpr);
   CoUninitialize;
 end.
-
-
 
