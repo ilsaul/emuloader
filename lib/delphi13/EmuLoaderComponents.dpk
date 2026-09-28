@@ -8,6 +8,7 @@ package EmuLoaderComponents;
 {$R '..\delphi7-components\AdvComponents\AdvOfficeButtonsReg.dcr'}
 {$R '..\delphi7-components\Mustangpeak\EasyListview\Design\EasyListviewReg.dcr'}
 {$R '..\delphi7-components\Graphics32\GR32_Reg.dcr'}
+{$R '..\delphi7-components\barmenus\Source\BarMenuRegister.dcr'}
 {$IFDEF IMPLICITBUILDING This IFDEF should not be used by users}
 {$ALIGN 8}
 {$ASSERTIONS ON}
@@ -101,6 +102,16 @@ contains
   GR32_Resamplers in '..\delphi7-components\Graphics32\GR32_Resamplers.pas',
   GR32_Bindings in '..\delphi7-components\Graphics32\GR32_Bindings.pas',
   GR32_XPThemes in '..\delphi7-components\Graphics32\GR32_XPThemes.pas',
-  Graphics32Reg in 'Graphics32Reg.pas';
+  Graphics32Reg in 'Graphics32Reg.pas',
+  BcUtilities in '..\delphi7-components\barmenus\Source\BcUtilities.pas',
+  BarMenus in '..\delphi7-components\barmenus\Source\BarMenus.pas',
+  BarPopupMenuLayer in '..\delphi7-components\barmenus\Source\BarPopupMenuLayer.pas',
+  BcCustomDrawModule in '..\delphi7-components\barmenus\Source\BcCustomDrawModule.pas',
+  BcDrawModule in '..\delphi7-components\barmenus\Source\BcDrawModule.pas',
+  BcExceptions in '..\delphi7-components\barmenus\Source\BcExceptions.pas',
+  BcFontUtilities in '..\delphi7-components\barmenus\Source\BcFontUtilities.pas',
+  BcLayeredWindows in '..\delphi7-components\barmenus\Source\BcLayeredWindows.pas',
+  BcRectUtilities in '..\delphi7-components\barmenus\Source\BcRectUtilities.pas',
+  BarMenuRegister in '..\delphi7-components\barmenus\Source\BarMenuRegister.pas';
 
 end.
