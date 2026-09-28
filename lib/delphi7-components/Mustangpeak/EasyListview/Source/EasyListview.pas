@@ -10902,7 +10902,7 @@ begin
                    (Msg.message = WM_MBUTTONDOWN) or
                    (Msg.message = WM_RBUTTONDOWN) then
                 begin
-                  Pt := SmallPointToPoint(TSmallPoint(Msg.lParam));
+                  Pt := SmallPointToPoint(PSmallPoint(@Msg.lParam)^);
                   ClientToScreen(Msg.hwnd, Pt);
                   ScreenToClient(OwnerListview.Handle, Pt);
                   if not Editor.PtInEditControl(Pt) then
@@ -22103,7 +22103,7 @@ end;
 function TEasyHeader.GetViewWidth: Integer;
 begin
   if Positions.Count > 0 then
-    Result := Positions[Positions.Count - 1].DisplayRect.Right
+    Result := LastColumnByPosition.DisplayRect.Right
   else
     Result := 0
 end;
