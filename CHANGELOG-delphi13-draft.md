@@ -35,6 +35,8 @@ Move the verified entries into `CHANGELOG.md` when preparing the release.
 ## Fixed
 
 - Corrected malformed output paths in the Delphi 13 project file.
+- Added missing Delphi project IDE metadata (`BorlandProject`) required to
+  reopen and save the project in Delphi 13.
 - Resolved a modern Delphi `TPoint.Offset` name conflict in `ButtonsEx`.
 - Adjusted the component-package source so the Delphi 13 IDE can recognize
   controls referenced by `FormMain` without discarding them from the DFM.
