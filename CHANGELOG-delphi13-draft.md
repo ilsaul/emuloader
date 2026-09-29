@@ -49,6 +49,10 @@ Move the verified entries into `CHANGELOG.md` when preparing the release.
 - Replaced the Win32-only GraphicEx library in Delphi 13 builds with a
   compatibility unit that decodes PNG and GIF images through the VCL imaging
   units, enabling Win64 builds. Delphi 7 continues to use GraphicEx.
+- Made `uCommon` compile for Win64: Windows-only helpers now use `MSWINDOWS`
+  instead of `WIN32`, the Delphi 7 IA-32 assembly string/memory routines are
+  used only by Delphi 7 (modern builds use the Unicode RTL), and Windows API
+  calls use `PChar` and character-count buffer sizes.
 - Added the XiControls folder to the Delphi 13 project search path.
 - Added Win64 as a target platform in the Delphi 13 project file.
 - Adjusted the component-package source so the Delphi 13 IDE can recognize
