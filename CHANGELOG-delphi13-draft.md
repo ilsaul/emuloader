@@ -40,6 +40,8 @@ Move the verified entries into `CHANGELOG.md` when preparing the release.
 - Resolved a modern Delphi `TPoint.Offset` name conflict in `ButtonsEx`.
 - Preserved the full Win64 component pointer in `TSpeedButtonEx` group
   notifications to avoid an access violation while loading forms in the IDE.
+- Use Delphi's built-in memory manager instead of the Win32-only FastMM4
+  override when compiling with modern Delphi; retain it for Delphi 7.
 - Adjusted the component-package source so the Delphi 13 IDE can recognize
   controls referenced by `FormMain` without discarding them from the DFM.
 

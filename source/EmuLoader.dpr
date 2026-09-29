@@ -1,8 +1,10 @@
 program EmuLoader;
 
 uses
+  {$IF CompilerVersion < 20}
   FastMM4,
   SynFastWideString,
+  {$IFEND}
   madExcept,
   Forms,
   VersionHelpers,
@@ -137,4 +139,3 @@ begin
   Application.CreateForm(TFormPreferences, FormPreferences);
   Application.Run;
 end.
-
