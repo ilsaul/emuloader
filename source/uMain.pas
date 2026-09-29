@@ -2787,6 +2787,67 @@ uses
 
 {$R *.dfm}
 
+{$IF CompilerVersion >= 22}
+// Delphi 7 build used patched VCL units (source\vcl-d7) that exposed these
+// helpers; the stock modern VCL does not, so they are provided here.
+const
+  IDCOLORCMB = $473;
+  ColorToPrettyName: array[0..46] of TIdentMapEntry = (
+    (Value: clBlack; Name: 'Black'),
+    (Value: clMaroon; Name: 'Maroon'),
+    (Value: clGreen; Name: 'Green'),
+    (Value: clOlive; Name: 'Olive'),
+    (Value: clNavy; Name: 'Navy'),
+    (Value: clPurple; Name: 'Purple'),
+    (Value: clTeal; Name: 'Teal'),
+    (Value: clGray; Name: 'Gray'),
+    (Value: clSilver; Name: 'Silver'),
+    (Value: clRed; Name: 'Red'),
+    (Value: clLime; Name: 'Lime'),
+    (Value: clYellow; Name: 'Yellow'),
+    (Value: clBlue; Name: 'Blue'),
+    (Value: clFuchsia; Name: 'Fuchsia'),
+    (Value: clAqua; Name: 'Aqua'),
+    (Value: clWhite; Name: 'White'),
+    (Value: clMoneyGreen; Name: 'Money Green'),
+    (Value: clSkyBlue; Name: 'Sky Blue'),
+    (Value: clCream; Name: 'Cream'),
+    (Value: clMedGray; Name: 'Medium Gray'),
+    (Value: clActiveBorder; Name: 'Active Border'),
+    (Value: clActiveCaption; Name: 'Active Caption'),
+    (Value: clAppWorkSpace; Name: 'Application Workspace'),
+    (Value: clBackground; Name: 'Background'),
+    (Value: clBtnFace; Name: 'Button Face'),
+    (Value: clBtnHighlight; Name: 'Button Highlight'),
+    (Value: clBtnShadow; Name: 'Button Shadow'),
+    (Value: clBtnText; Name: 'Button Text'),
+    (Value: clCaptionText; Name: 'Caption Text'),
+    (Value: clDefault; Name: 'Default'),
+    (Value: clGrayText; Name: 'Gray Text'),
+    (Value: clHighlight; Name: 'Highlight Background'),
+    (Value: clHighlightText; Name: 'Highlight Text'),
+    (Value: clInactiveBorder; Name: 'Inactive Border'),
+    (Value: clInactiveCaption; Name: 'Inactive Caption'),
+    (Value: clInactiveCaptionText; Name: 'Inactive Caption Text'),
+    (Value: clInfoBk; Name: 'Info Background'),
+    (Value: clInfoText; Name: 'Info Text'),
+    (Value: clMenu; Name: 'Menu Background'),
+    (Value: clMenuText; Name: 'Menu Text'),
+    (Value: clNone; Name: 'None'),
+    (Value: clScrollBar; Name: 'Scroll Bar'),
+    (Value: cl3DDkShadow; Name: '3D Dark Shadow'),
+    (Value: cl3DLight; Name: '3D Light'),
+    (Value: clWindow; Name: 'Window Background'),
+    (Value: clWindowFrame; Name: 'Window Frame'),
+    (Value: clWindowText; Name: 'Window Text'));
+
+function GetColorPrettyName(iColor: TColor): String;
+begin
+  if not IntToIdent(iColor, Result, ColorToPrettyName) then
+     Result:= '';
+end;
+{$IFEND}
+
 constructor THintWindowDark.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
@@ -2883,7 +2944,7 @@ procedure TFontDialog.DoShow;
 const
   SMyColorName: PChar = 'Custom...';
 begin
-  SendDlgItemMessage(Handle, IDCOLORCMB, CB_INSERTSTRING, 0, Integer(SMyColorName));
+  SendDlgItemMessage(Handle, IDCOLORCMB, CB_INSERTSTRING, 0, LPARAM(SMyColorName));
   SendDlgItemMessage(Handle, IDCOLORCMB, CB_SETITEMDATA,  0, ColorToRGB(Font.Color));
   inherited;
 end;
@@ -6158,7 +6219,7 @@ begin
   case StopCurrentPlayback of
     True:
       begin
-        if Pos('%1', iParams) <> 0 then
+        if Pos(string('%1'), string(iParams)) <> 0 then
            iParams:= StringReplaceW(iParams, '%1', '"'+iFileName+'"', [rfIgnoreCase]);
       end;
     False: iParams:= StringReplaceW(iParams, '%1', '"'+iFileName+'"', [rfIgnoreCase]);
@@ -6740,7 +6801,7 @@ var
   hRead, hWrite: THandle;
   suiStartup: TStartupInfo;
   piProcess:  TProcessInformation;
-  pBuffer: array[0..CReadBuffer] of Char;
+  pBuffer: array[0..CReadBuffer] of AnsiChar;
   dRead, ErrorMsg: DWORD;
 
   pExecFile, pPipeCreated: Boolean;
@@ -37502,7 +37563,7 @@ begin
                 begin
                   if CategoryStr <> '' then
                      begin
-                       KeepGame:= Pos('mechanic', CategoryStr) = 0;
+                       KeepGame:= Pos(string('mechanic'), string(CategoryStr)) = 0;
                      end;
                 end;
            end;
@@ -41552,7 +41613,7 @@ var
                     if iPos2H <> 0 then
                        iPos2H:= iPos2H+13; // where score column finishes
                   end;
-               if Pos(MemGameInfo.eName+' ', TrimLeft(AutoMarpDATFile[iLoopH])) <> 0 then
+               if Pos(string(MemGameInfo.eName+' '), string(TrimLeft(AutoMarpDATFile[iLoopH]))) <> 0 then
                begin
                  LineIndex:= iLoopH;
                  Break;
@@ -49667,7 +49728,7 @@ begin
   end;
   if IsNightMode then
      iTitle:= PChar(iTitle+' (Night Mode)');
-  SendMessage(TFontDialog(Sender).Handle, WM_SETTEXT, 0, Integer('Select a Font'+iTitle));
+  SendMessage(TFontDialog(Sender).Handle, WM_SETTEXT, 0, LPARAM(PChar('Select a Font'+iTitle)));
   TFontDialog(Sender).Tag:= -1;
 end;
 

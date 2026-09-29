@@ -62,6 +62,12 @@ Move the verified entries into `CHANGELOG.md` when preparing the release.
   untouched, because a directive inside a `{ }` comment closes the comment.
 - Added `SysUtils` to the image category and layout selectors, which relied
   on the Delphi 7-only `UpperCase` helper in `uCommon`.
+- `uMain` fixes for Delphi 13:
+  - `IDCOLORCMB` and `GetColorPrettyName` are now defined locally. The
+    Delphi 7 build got them from the patched VCL copies in `source\vcl-d7`.
+  - Removed ambiguous `Pos` calls that mixed `WideString` and `string`.
+  - The console-capture buffer is now `AnsiChar`, as `OemToAnsi` expects.
+  - `SendMessage` string arguments are passed as pointer-sized `LPARAM`.
 - EasyListview columns now stream their alignment, sort direction and style
   as one byte each, the layout used by Delphi 7. This is intended to fix
   "Stream read error" on `GamesListView.Header.Columns.Items` when loading the
@@ -88,3 +94,7 @@ Move the verified entries into `CHANGELOG.md` when preparing the release.
   thumbnails and list backgrounds after the GraphicEx replacement.
 - Exercise the converted controls and forms at runtime on the intended
   Windows platforms before publishing these release notes.
+- The Delphi 7 build used patched VCL units (`source\vcl-d7`: ComCtrls,
+  StdCtrls, ExtCtrls and others) with small behaviour fixes; Delphi 13 uses
+  the stock VCL. Check progress bars, track bars, rich edit links and combo
+  box item heights.
