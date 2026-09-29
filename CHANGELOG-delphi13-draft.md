@@ -58,6 +58,12 @@ Move the verified entries into `CHANGELOG.md` when preparing the release.
   Pascal versions for modern builds.
 - Use `FormatSettings` for the decimal and thousand separators in modern
   Delphi (the global separator variables were removed); Delphi 7 is unchanged.
+  The commented-out legacy writer in `uSEGAModel2EmulatorSettings` is left
+  untouched, because a directive inside a `{ }` comment closes the comment.
+- Restored the `CustomIconsImages`, `CustomIconsImagesHD` and
+  `CaptionVertIndent` properties on the `TAdvGroupBoxEx` check box, so forms
+  such as the SEGA Model 2 settings load without "Property does not exist"
+  errors.
 - Registered the `TGaugeBar2` control (`uGR32Extra`) in the Delphi 13
   component package so the MAME settings forms can be loaded in the IDE.
 - Added the XiControls folder to the Delphi 13 project search path.

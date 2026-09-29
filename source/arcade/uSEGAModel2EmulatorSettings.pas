@@ -567,8 +567,8 @@ var
   end;
 
 begin
-  {$IF CompilerVersion >= 22}FormatSettings.{$IFEND}ThousandSeparator:= Char(',');
-  {$IF CompilerVersion >= 22}FormatSettings.{$IFEND}DecimalSeparator:= Char('.');
+  ThousandSeparator:= Char(',');
+  DecimalSeparator:= Char('.');
   CheckAndCreateFolder(ExtractFilePath(customIni));
   Model2MemIni:= TMemIniFile.Create(CustomIni);
   if FolderROMs.Items.Count > 0 then
