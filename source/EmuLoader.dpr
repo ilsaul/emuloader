@@ -4,8 +4,8 @@ uses
   {$IF CompilerVersion < 20}
   FastMM4,
   SynFastWideString,
-  {$IFEND}
   madExcept,
+  {$IFEND}
   Forms,
   VersionHelpers,
   uCommon in 'uCommon.pas',

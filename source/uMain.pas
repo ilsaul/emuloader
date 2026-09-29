@@ -8,7 +8,11 @@ uses
   FileCtrl, GraphicEx, GR32_Image, GR32, GR32_RangeBars, uGR32Extra, // RichEdit, //for AppendTextW()
   TntComCtrls, GR32_Resamplers {$IFDEF Ex},GR32_ResamplersEx {$ENDIF},
   ShellAPI, CommCtrl, JPEG, Themes, BarMenus, XPMan, UxTheme,
-  URLMon, OleCtrls, SHDocVw, madExceptVcl, unitExIcon, BcDrawModule,
+  URLMon, OleCtrls, SHDocVw,
+  {$IF CompilerVersion < 20}
+  madExceptVcl,
+  {$IFEND}
+  unitExIcon, BcDrawModule,
   BcCustomDrawModule, BcRectUtilities, ImgList, AdvGroupBox, AdvOfficeButtons,
   EditEx, ButtonsEx, ColorBoxEx, XiProgressBar, XiTrackBar,
   EasyListview, MPCommonObjects, MPCommonUtilities, MPThreadManager, Math, uCommon, uCommonCustom,

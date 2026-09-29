@@ -42,6 +42,8 @@ Move the verified entries into `CHANGELOG.md` when preparing the release.
   notifications to avoid an access violation while loading forms in the IDE.
 - Use Delphi's built-in memory manager instead of the Win32-only FastMM4
   override when compiling with modern Delphi; retain it for Delphi 7.
+- Excluded Delphi 7-only madExcept units from modern builds; Delphi 13 uses
+  VCL's standard exception handling until a compatible reporter is available.
 - Updated the WebBrowser navigation event signature for modern Delphi while
   retaining the form's event binding.
 - Adjusted the component-package source so the Delphi 13 IDE can recognize
