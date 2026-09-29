@@ -112,6 +112,8 @@ contains
   BcFontUtilities in '..\delphi7-components\barmenus\Source\BcFontUtilities.pas',
   BcLayeredWindows in '..\delphi7-components\barmenus\Source\BcLayeredWindows.pas',
   BcRectUtilities in '..\delphi7-components\barmenus\Source\BcRectUtilities.pas',
-  BarMenuRegister in '..\delphi7-components\barmenus\Source\BarMenuRegister.pas';
+  BarMenuRegister in '..\delphi7-components\barmenus\Source\BarMenuRegister.pas',
+  ZipForge in 'zip-compat\ZipForge.pas',
+  ZipForgeReg in 'ZipForgeReg.pas';
 
 end.

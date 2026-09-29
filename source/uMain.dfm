@@ -2639,19 +2639,7 @@ object FormMain: TFormMain
     end
   end
   object ZipForge: TZipForge
-    ExtractCorruptedFiles = False
-    CompressionLevel = clMax
-    CompressionMode = 9
-    CurrentVersion = '2.73 '
-    SpanningMode = smNone
-    SpanningOptions.AdvancedNaming = True
-    SpanningOptions.VolumeSize = vsAutoDetect
-    Options.CreateDirs = False
-    Options.FlushBuffers = True
-    Options.OEMFileNames = True
-    InMemory = False
     OnProcessFileFailure = ZipForgeProcessFileFailure
-    Zip64Mode = zmDisabled
     Left = 240
     Top = 256
   end
