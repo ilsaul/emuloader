@@ -6,11 +6,10 @@
     <FrameworkType>VCL</FrameworkType>
     <MainSource>EmuLoader.dpr</MainSource>
     <Config Condition="'$(Config)'==''">Debug</Config>
-    <Platform Condition="'$(Platform)'==''">Win32</Platform>
-    <DCC_DCCCompiler>DCC32</DCC_DCCCompiler>
-    <TargetedPlatforms>1</TargetedPlatforms>
+    <Platform Condition="'$(Platform)'==''">Win64</Platform>
+    <TargetedPlatforms>3</TargetedPlatforms>
     <AppType>Application</AppType>
-    <DCC_UnitSearchPath>$(ProjectDir);$(ProjectDir)4K;$(ProjectDir)4K\designs;$(ProjectDir)4K\designs\console_computer;$(ProjectDir)arcade;$(ProjectDir)console_computer;..\lib\delphi7-components;..\lib\delphi7-components\AdvComponents;..\lib\delphi13\tnt-compat;..\lib\delphi13\zip-compat;..\lib\delphi7-components\Mustangpeak\Common Library\Source;..\lib\delphi7-components\Mustangpeak\EasyListview\Source;..\lib\delphi7-components\Graphics32;..\lib\delphi7-components\barmenus\Source;..\lib\madCollection\madBasic\Source;..\lib\ComponentAce\ZipForge\Utils\Source\Archiver</DCC_UnitSearchPath>
+    <DCC_UnitSearchPath>$(ProjectDir);$(ProjectDir)4K;$(ProjectDir)4K\designs;$(ProjectDir)4K\designs\console_computer;$(ProjectDir)arcade;$(ProjectDir)console_computer;..\lib\delphi7-components;..\lib\delphi7-components\AdvComponents;..\lib\delphi13\tnt-compat;..\lib\delphi13\zip-compat;..\lib\delphi13\graphicex-compat;..\lib\delphi7-components\Mustangpeak\Common Library\Source;..\lib\delphi7-components\Mustangpeak\EasyListview\Source;..\lib\delphi7-components\Graphics32;..\lib\delphi7-components\barmenus\Source;..\lib\madCollection\madBasic\Source;..\lib\ComponentAce\ZipForge\Utils\Source\Archiver</DCC_UnitSearchPath>
     <DCC_IncludePath>$(ProjectDir);$(ProjectDir)arcade;$(ProjectDir)console_computer;..\lib\delphi7-components;..\lib\delphi13\tnt-compat;..\lib\delphi7-components\Mustangpeak\Common Library\Source;..\lib\delphi7-components\Mustangpeak\EasyListview\Source;..\lib\delphi7-components\barmenus\Source</DCC_IncludePath>
     <DCC_ResourcePath>$(ProjectDir);$(ProjectDir)arcade;$(ProjectDir)console_computer;..\lib\delphi7-components</DCC_ResourcePath>
     <DCC_ObjPath>$(ProjectDir);$(ProjectDir)arcade;$(ProjectDir)console_computer;..\lib\delphi7-components</DCC_ObjPath>
@@ -49,6 +48,7 @@
       </Delphi.Personality>
       <Platforms>
         <Platform value="Win32">True</Platform>
+        <Platform value="Win64">True</Platform>
       </Platforms>
     </BorlandProject>
     <ProjectFileVersion>12</ProjectFileVersion>

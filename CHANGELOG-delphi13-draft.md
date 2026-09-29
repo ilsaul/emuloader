@@ -46,6 +46,10 @@ Move the verified entries into `CHANGELOG.md` when preparing the release.
   VCL's standard exception handling until a compatible reporter is available.
 - Updated the WebBrowser navigation event signature for modern Delphi while
   retaining the form's event binding.
+- Replaced the Win32-only GraphicEx library in Delphi 13 builds with a
+  compatibility unit that decodes PNG and GIF images through the VCL imaging
+  units, enabling Win64 builds. Delphi 7 continues to use GraphicEx.
+- Added Win64 as a target platform in the Delphi 13 project file.
 - Adjusted the component-package source so the Delphi 13 IDE can recognize
   controls referenced by `FormMain` without discarding them from the DFM.
 
@@ -55,5 +59,7 @@ Move the verified entries into `CHANGELOG.md` when preparing the release.
   compiler errors.
 - Verify ZIP enumeration, CRC values, filenames and extraction (including
   archives containing directories) after the `System.Zip` migration.
+- Verify PNG (including transparency) and GIF loading for previews,
+  thumbnails and list backgrounds after the GraphicEx replacement.
 - Exercise the converted controls and forms at runtime on the intended
   Windows platforms before publishing these release notes.
