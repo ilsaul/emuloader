@@ -38,6 +38,8 @@ Move the verified entries into `CHANGELOG.md` when preparing the release.
 - Added missing Delphi project IDE metadata (`BorlandProject`) required to
   reopen and save the project in Delphi 13.
 - Resolved a modern Delphi `TPoint.Offset` name conflict in `ButtonsEx`.
+- Preserved the full Win64 component pointer in `TSpeedButtonEx` group
+  notifications to avoid an access violation while loading forms in the IDE.
 - Adjusted the component-package source so the Delphi 13 IDE can recognize
   controls referenced by `FormMain` without discarding them from the DFM.
 
