@@ -19623,6 +19623,10 @@ var
   i, ItemCount: Integer;
   StreamVersion: Integer;
   Cls: TClass;
+  {$IF CompilerVersion >= 22}
+  ClsName: string;
+  ItemStart: Int64;
+  {$IFEND}
 begin
   Clear;
   StreamVersion := StreamHelper.ReadInteger(Stream);
@@ -19635,6 +19639,23 @@ begin
     // object to make sure it creates the correct item type
     for i := 0 to ItemCount - 1 do
     begin
+      {$IF CompilerVersion >= 22}
+      // Temporary diagnostics for the Delphi 13 port: report where streaming fails
+      ItemStart := Stream.Position;
+      ClsName := string(StreamHelper.ReadString(Stream));
+      Cls := GetClass(ClsName);
+      if Cls = nil then
+        raise EReadError.CreateFmt('EasyListview: class "%s" not registered (item %d of %d, pos %d, size %d)',
+          [ClsName, i, ItemCount, ItemStart, Stream.Size]);
+      try
+        FItemClass := TEasyCollectionItemClass( Cls);
+        Add.LoadFromStream(Stream, StreamVersion);
+      except
+        on E: Exception do
+          raise EReadError.CreateFmt('EasyListview: %s: %s (item %d of %d, class %s, version %d, item pos %d, pos %d, size %d)',
+            [E.ClassName, E.Message, i, ItemCount, ClsName, StreamVersion, ItemStart, Stream.Position, Stream.Size]);
+      end;
+      {$ELSE}
       Cls := GetClass(StreamHelper.ReadString(Stream));
       Assert(Cls <> nil, 'If using custom item types for Item, Groups or Columns you must register them with the streaming system with RegisterClass(TMyEasyClassItemType)');
       if Assigned(Cls) then
@@ -19642,6 +19663,7 @@ begin
         FItemClass := TEasyCollectionItemClass( Cls);
         Add.LoadFromStream(Stream, StreamVersion);
       end
+      {$IFEND}
     end
   end else
   begin
