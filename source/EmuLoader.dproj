@@ -41,6 +41,7 @@
     <DCC_ResourcePath>$(ProjectDir);$(ProjectDir)arcade;$(ProjectDir)console_computer;..\lib\delphi7-components;$(DCC_ResourcePath)</DCC_ResourcePath>
     <DCC_ObjPath>$(ProjectDir);$(ProjectDir)arcade;$(ProjectDir)console_computer;..\lib\delphi7-components;$(DCC_ObjPath)</DCC_ObjPath>
     <DCC_ExeOutput>.\bin</DCC_ExeOutput>
+    <DCC_ExeOutput Condition="'$(EMULOADER_TEST_DIR)'!=''">$(EMULOADER_TEST_DIR)</DCC_ExeOutput>
     <DCC_DcpOutput>.\bin</DCC_DcpOutput>
     <DCC_DcuOutput>.\dcu13\$(Platform)\$(Config)</DCC_DcuOutput>
     <DCC_Namespace>System;Xml;Data;Datasnap;Web;Soap;Vcl;Vcl.Imaging;Vcl.Touch;Vcl.Samples;Vcl.Shell;Winapi;System.Win;$(DCC_Namespace)</DCC_Namespace>
