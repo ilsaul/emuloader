@@ -1,0 +1,49 @@
+# Emu Loader - Delphi 13 release notes (draft)
+
+Working draft for the next release. These changes are on the `delphi13-port`
+branch; the application build and runtime behavior have not yet been confirmed.
+Move the verified entries into `CHANGELOG.md` when preparing the release.
+
+## Added
+
+- Added `source/EmuLoader.dproj` for opening the existing application project
+  with Delphi 13, including source, component and resource search paths.
+- Added the Delphi 13 design-time package `EmuLoaderComponents` so the IDE can
+  load the custom controls used by the forms.
+- Added Unicode-native compatibility units for the Tnt edit and rich edit
+  controls used by Emu Loader, preserving the rich edit URL-click event.
+- Registered EasyListview, Graphics32 (`TImage32`, `TGaugeBar`) and Bluecave
+  BarMenus controls in the Delphi 13 component package.
+
+## Changed
+
+- Moved Delphi 7 VCL shadow units out of Delphi 13 search paths while retaining
+  them under `vcl-d7` for the legacy project.
+- Updated Mustang Peak compiler definitions, Windows shell interfaces, context
+  menu callbacks, thread IDs, wide-string utilities and pixel blending routines
+  for Delphi 13 Win64. The original x86 assembly remains available for Win32.
+- Updated EasyListview for Delphi 13's form properties, Win64 mouse coordinates
+  and typed header-column access.
+- Updated the Graphics32 compiler definitions and Bluecave menu compiler
+  directives for Delphi 13; added Bluecave source and include paths to the
+  application project.
+- Replaced the Delphi 7-only ZipForge binary dependency with a Delphi 13
+  component backed by `System.Zip` for read-only ZIP enumeration and extraction.
+  Removed obsolete ZipForge-specific properties from the main form definition.
+  ZIP behavior still requires build and runtime verification.
+
+## Fixed
+
+- Corrected malformed output paths in the Delphi 13 project file.
+- Resolved a modern Delphi `TPoint.Offset` name conflict in `ButtonsEx`.
+- Adjusted the component-package source so the Delphi 13 IDE can recognize
+  controls referenced by `FormMain` without discarding them from the DFM.
+
+## Pending verification
+
+- Build the application in the Delphi 13 IDE and resolve any remaining
+  compiler errors.
+- Verify ZIP enumeration, CRC values, filenames and extraction (including
+  archives containing directories) after the `System.Zip` migration.
+- Exercise the converted controls and forms at runtime on the intended
+  Windows platforms before publishing these release notes.
