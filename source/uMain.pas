@@ -6202,8 +6202,8 @@ var
 
   procedure ResetToFrontend;
   begin
-    ThousandSeparator:= Char(',');
-    DecimalSeparator:= Char('.');
+    {$IF CompilerVersion >= 22}FormatSettings.{$IFEND}ThousandSeparator:= Char(',');
+    {$IF CompilerVersion >= 22}FormatSettings.{$IFEND}DecimalSeparator:= Char('.');
     SetCurrentDir(FrontendPath);
     FocusGamesList;
   end;
@@ -11852,8 +11852,8 @@ var
     if MemGameInfo.eIsCustomGame then
        MemGameInfo.eSystemID:= -1;
     FreeAndNil(ScreenResolutions);
-    ThousandSeparator:= Char(',');
-    DecimalSeparator:= Char('.');
+    {$IF CompilerVersion >= 22}FormatSettings.{$IFEND}ThousandSeparator:= Char(',');
+    {$IF CompilerVersion >= 22}FormatSettings.{$IFEND}DecimalSeparator:= Char('.');
     SetCurrentDir(FrontendPath);
     TempGameVars.eName:= '';
     FocusGamesList;
@@ -13172,8 +13172,8 @@ begin
          end;
       IsRunningGame:= False;
 
-      ThousandSeparator:= Char(',');
-      DecimalSeparator:=  Char('.');
+      {$IF CompilerVersion >= 22}FormatSettings.{$IFEND}ThousandSeparator:= Char(',');
+      {$IF CompilerVersion >= 22}FormatSettings.{$IFEND}DecimalSeparator:=  Char('.');
 
       case FormMain.MemGameInfo.eIsCustomGame of
         True:
@@ -13722,8 +13722,8 @@ var
     ClearMemGameInfo(TempGameVars);
     FreeAndNil(ExtraParameters);
     FreeAndNil(ExtraDefaultParameters);
-    ThousandSeparator:= Char(',');
-    DecimalSeparator:= Char('.');
+    {$IF CompilerVersion >= 22}FormatSettings.{$IFEND}ThousandSeparator:= Char(',');
+    {$IF CompilerVersion >= 22}FormatSettings.{$IFEND}DecimalSeparator:= Char('.');
     SetCurrentDir(FrontendPath);
     FocusGamesList;
     Application.ProcessMessages;
@@ -14279,8 +14279,8 @@ var
   procedure ResetToFrontend;
   begin
     ClearMemGameInfo(TempGameVars);
-    ThousandSeparator:= Char(',');
-    DecimalSeparator:= Char('.');
+    {$IF CompilerVersion >= 22}FormatSettings.{$IFEND}ThousandSeparator:= Char(',');
+    {$IF CompilerVersion >= 22}FormatSettings.{$IFEND}DecimalSeparator:= Char('.');
     SetCurrentDir(FrontendPath);
     FocusGamesList;
   end;
@@ -34489,8 +34489,8 @@ begin
   TerminateEmuLoader:= False;
   IsRunningGame:= False;
 
-  ThousandSeparator:= Char(',');
-  DecimalSeparator:=  Char('.');
+  {$IF CompilerVersion >= 22}FormatSettings.{$IFEND}ThousandSeparator:= Char(',');
+  {$IF CompilerVersion >= 22}FormatSettings.{$IFEND}DecimalSeparator:=  Char('.');
 
   if Is4KMode then
      iIndex:= 2300

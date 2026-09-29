@@ -2920,8 +2920,8 @@ var
   end;
 
 begin
-   ThousandSeparator:= Char(',');
-   DecimalSeparator:= Char('.');
+   {$IF CompilerVersion >= 22}FormatSettings.{$IFEND}ThousandSeparator:= Char(',');
+   {$IF CompilerVersion >= 22}FormatSettings.{$IFEND}DecimalSeparator:= Char('.');
 
    if SkipWarnings.Enabled then
    begin

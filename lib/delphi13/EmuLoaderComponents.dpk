@@ -102,6 +102,7 @@ contains
   GR32_Resamplers in '..\delphi7-components\Graphics32\GR32_Resamplers.pas',
   GR32_Bindings in '..\delphi7-components\Graphics32\GR32_Bindings.pas',
   GR32_XPThemes in '..\delphi7-components\Graphics32\GR32_XPThemes.pas',
+  uGR32Extra in '..\delphi7-components\Graphics32\uGR32Extra.pas',
   Graphics32Reg in 'Graphics32Reg.pas',
   BcUtilities in '..\delphi7-components\barmenus\Source\BcUtilities.pas',
   BarMenus in '..\delphi7-components\barmenus\Source\BarMenus.pas',

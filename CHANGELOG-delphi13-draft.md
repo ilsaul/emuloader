@@ -55,6 +55,10 @@ Move the verified entries into `CHANGELOG.md` when preparing the release.
   calls use `PChar` and character-count buffer sizes.
 - Replaced the IA-32 assembly `Max3`/`Min3` helpers in `uColorUtils` with
   Pascal versions for modern builds.
+- Use `FormatSettings` for the decimal and thousand separators in modern
+  Delphi (the global separator variables were removed); Delphi 7 is unchanged.
+- Registered the `TGaugeBar2` control (`uGR32Extra`) in the Delphi 13
+  component package so the MAME settings forms can be loaded in the IDE.
 - Added the XiControls folder to the Delphi 13 project search path.
 - Added Win64 as a target platform in the Delphi 13 project file.
 - Adjusted the component-package source so the Delphi 13 IDE can recognize

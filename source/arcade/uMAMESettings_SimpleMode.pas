@@ -685,8 +685,8 @@ begin
   if not FileExists(IniFile) then
      Exit;
 
-   ThousandSeparator:= Char(',');
-   DecimalSeparator:= Char('.');
+   {$IF CompilerVersion >= 22}FormatSettings.{$IFEND}ThousandSeparator:= Char(',');
+   {$IF CompilerVersion >= 22}FormatSettings.{$IFEND}DecimalSeparator:= Char('.');
    cResolution:= '';
    cRefreshRate:= '';
    MAMEIniFile:= THashedStringList.Create;
