@@ -44,7 +44,7 @@ var
 
 implementation
 
-uses uMain, uCommon;
+uses SysUtils, uMain, uCommon;
 
 {$R *.dfm}
 

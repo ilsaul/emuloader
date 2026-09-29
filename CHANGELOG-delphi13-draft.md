@@ -60,6 +60,13 @@ Move the verified entries into `CHANGELOG.md` when preparing the release.
   Delphi (the global separator variables were removed); Delphi 7 is unchanged.
   The commented-out legacy writer in `uSEGAModel2EmulatorSettings` is left
   untouched, because a directive inside a `{ }` comment closes the comment.
+- Added `SysUtils` to the image category and layout selectors, which relied
+  on the Delphi 7-only `UpperCase` helper in `uCommon`.
+- EasyListview columns now stream their alignment, sort direction and style
+  as one byte each, the layout used by Delphi 7. This is intended to fix
+  "Stream read error" on `GamesListView.Header.Columns.Items` when loading the
+  main form in Delphi 13, and keeps DFMs saved by the new IDE readable by
+  Delphi 7.
 - Restored the `CustomIconsImages`, `CustomIconsImagesHD` and
   `CaptionVertIndent` properties on the `TAdvGroupBoxEx` check box, so forms
   such as the SEGA Model 2 settings load without "Property does not exist"

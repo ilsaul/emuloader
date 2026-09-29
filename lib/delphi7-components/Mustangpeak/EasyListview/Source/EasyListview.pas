@@ -10450,17 +10450,23 @@ begin
 end;
 
 procedure TEasyColumn.LoadFromStream(S: TStream; var AVersion: Integer);
+var
+  B: Byte;
 begin
   inherited LoadFromStream(S, AVersion);
-  S.ReadBuffer(FAlignment, SizeOf(FAlignment));
+  // Enumerations are streamed as one byte (Delphi 7 layout), whatever the enum size of the compiler
+  S.ReadBuffer(B, SizeOf(B));
+  FAlignment := TAlignment(B);
   S.ReadBuffer(FAutoSizeOnDblClk, SizeOf(FAutoSizeOnDblClk));
   if AVersion > 1 then
     S.ReadBuffer(FAutoSortOnClick, SizeOf(FAutoSortOnClick));
   S.ReadBuffer(FAutoSpring, SizeOf(FAutoSpring));
   S.ReadBuffer(FAutoToggleSortGlyph, SizeOf(FAutoToggleSortGlyph));
   S.ReadBuffer(FPosition, SizeOf(FPosition));
-  S.ReadBuffer(FSortDirection, SizeOf(FSortDirection));
-  S.ReadBuffer(FStyle, SizeOf(FStyle));
+  S.ReadBuffer(B, SizeOf(B));
+  FSortDirection := TEasySortDirection(B);
+  S.ReadBuffer(B, SizeOf(B));
+  FStyle := TEasyHeaderButtonStyle(B);
   S.ReadBuffer(FClickable, SizeOf(FClickable));
   S.ReadBuffer(FWidth, SizeOf(FWidth));
 
@@ -10571,16 +10577,21 @@ begin
 end;
 
 procedure TEasyColumn.SaveToStream(S: TStream; AVersion: Integer = EASYLISTVIEW_STREAM_VERSION);
+var
+  B: Byte;
 begin
   inherited SaveToStream(S);
-  S.WriteBuffer(FAlignment, SizeOf(FAlignment));
+  B := Ord(FAlignment);
+  S.WriteBuffer(B, SizeOf(B));
   S.WriteBuffer(FAutoSizeOnDblClk, SizeOf(FAutoSizeOnDblClk));
   S.WriteBuffer(FAutoSortOnClick, SizeOf(FAutoSortOnClick));
   S.WriteBuffer(FAutoSpring, SizeOf(FAutoSpring));
   S.WriteBuffer(FAutoToggleSortGlyph, SizeOf(FAutoToggleSortGlyph));
   S.WriteBuffer(FPosition, SizeOf(FPosition));
-  S.WriteBuffer(FSortDirection, SizeOf(FSortDirection));
-  S.WriteBuffer(FStyle, SizeOf(FStyle));
+  B := Ord(FSortDirection);
+  S.WriteBuffer(B, SizeOf(B));
+  B := Ord(FStyle);
+  S.WriteBuffer(B, SizeOf(B));
   S.WriteBuffer(FClickable, SizeOf(FClickable));
   S.WriteBuffer(FWidth, SizeOf(FWidth));
   S.WriteBuffer(FBkGndColor, SizeOf(FBkGndColor));
