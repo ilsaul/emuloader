@@ -1330,7 +1330,11 @@ type
     procedure PopupStartupGameSelectionGameSelectedClick(Sender: TObject);
     procedure ImagesToolBarButtonsCustomDraw(Sender: TToolBar; const ARect: TRect; var DefaultDraw: Boolean);
     procedure WebBrowserBeforeNavigate2(Sender: TObject;
+      {$IF CompilerVersion >= 20}
+      const pDisp: IDispatch; const URL, Flags, TargetFrameName, PostData,
+      {$ELSE}
       const pDisp: IDispatch; var URL, Flags, TargetFrameName, PostData,
+      {$IFEND}
       Headers: OleVariant; var Cancel: WordBool);
     procedure PanelWebBrowserResize(Sender: TObject);
     procedure PopupSelectScanGamesModeClick(Sender: TObject);
@@ -4531,7 +4535,7 @@ function TFormMain.GetFontHeightSize(iFont: TFont): Integer;
 var
   FontSize: TSize;
 begin
-  FontSize:= TextExtentW('ÁAq|[', iFont);
+  FontSize:= TextExtentW(#$C1 + 'Aq|[', iFont);
   Result:= FontSize.cy;
 end;
 
@@ -48896,7 +48900,11 @@ begin
 end;
 
 procedure TFormMain.WebBrowserBeforeNavigate2(Sender: TObject;
+  {$IF CompilerVersion >= 20}
+  const pDisp: IDispatch; const URL, Flags, TargetFrameName, PostData,
+  {$ELSE}
   const pDisp: IDispatch; var URL, Flags, TargetFrameName, PostData,
+  {$IFEND}
   Headers: OleVariant; var Cancel: WordBool);
 begin
   WebBrowserStatusPanel.Visible:= True;
@@ -56360,6 +56368,3 @@ begin
 }
 
 end.
-
-
-
