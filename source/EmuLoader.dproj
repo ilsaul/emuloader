@@ -2,7 +2,7 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <ProjectGuid>{6B115B4E-FC10-4D8E-BD5F-0B6D039EDE9B}</ProjectGuid>
-    <ProjectVersion>19.5</ProjectVersion>
+    <ProjectVersion>20.3</ProjectVersion>
     <FrameworkType>VCL</FrameworkType>
     <MainSource>EmuLoader.dpr</MainSource>
     <Config Condition="'$(Config)'==''">Debug</Config>
@@ -39,8 +39,8 @@
     </DelphiCompile>
   </ItemGroup>
   <ProjectExtensions>
-    <Borland.Personality>Delphi.Personality</Borland.Personality>
-    <Borland.ProjectType />
+    <Borland.Personality>Delphi.Personality.12</Borland.Personality>
+    <Borland.ProjectType>Application</Borland.ProjectType>
     <BorlandProject>
       <Delphi.Personality>
         <Source>
@@ -51,6 +51,7 @@
         <Platform value="Win32">True</Platform>
       </Platforms>
     </BorlandProject>
+    <ProjectFileVersion>12</ProjectFileVersion>
   </ProjectExtensions>
   <Import Project="$(BDS)\Bin\CodeGear.Delphi.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Delphi.Targets')" />
 </Project>
