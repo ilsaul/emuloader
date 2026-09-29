@@ -52,7 +52,8 @@ Move the verified entries into `CHANGELOG.md` when preparing the release.
 - Made `uCommon` compile for Win64: Windows-only helpers now use `MSWINDOWS`
   instead of `WIN32`, the Delphi 7 IA-32 assembly string/memory routines are
   used only by Delphi 7 (modern builds use the Unicode RTL), and Windows API
-  calls use `PChar` and character-count buffer sizes.
+  calls use `PChar` and character-count buffer sizes. The same `PChar`
+  correction applies to the icon copy in the MAMu icons manager.
 - Replaced the IA-32 assembly `Max3`/`Min3` helpers in `uColorUtils` with
   Pascal versions for modern builds.
 - Use `FormatSettings` for the decimal and thousand separators in modern

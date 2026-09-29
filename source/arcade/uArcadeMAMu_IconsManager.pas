@@ -1002,7 +1002,7 @@ begin
              end;
            1, 2: // copy / update "zzz" icon to games
              begin
-               if CopyFile(PAnsiChar(zzzIconFolder+SourceIconFile), PAnsiChar(FileStr), False) then
+               if CopyFile(PChar(zzzIconFolder+SourceIconFile), PChar(FileStr), False) then
                   SelectGameMissList;
              end;
          end;
