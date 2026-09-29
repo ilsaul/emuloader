@@ -138,3 +138,5 @@ lib/madCollection/*/Demos/
 !/lib/ComponentAce/ZipForge/Lib/**/*.dcu
 !/lib/delphi7-components/barmenus/**/*.dcu
 
+# Ignore intellij
+.idea/
