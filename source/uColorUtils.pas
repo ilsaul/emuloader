@@ -45,6 +45,7 @@ begin
   Result := (b shl 16) + (g shl 8) + r;
 end;
 
+{$IF CompilerVersion < 20}
 function Max3(const A, B, C: Integer): Integer;
 asm
   CMP EDX,EAX
@@ -60,6 +61,25 @@ asm
   CMP ECX,EAX
   CMOVL EAX,ECX
 end;
+{$ELSE}
+function Max3(const A, B, C: Integer): Integer;
+begin
+  Result:= A;
+  if B > Result then
+     Result:= B;
+  if C > Result then
+     Result:= C;
+end;
+
+function Min3(const A, B, C: Integer): Integer;
+begin
+  Result:= A;
+  if B < Result then
+     Result:= B;
+  if C < Result then
+     Result:= C;
+end;
+{$IFEND}
 
 procedure MinMax(const i,j,k: Byte; var min: Integer; var max: Word); // Inline;
 begin

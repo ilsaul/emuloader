@@ -53,6 +53,8 @@ Move the verified entries into `CHANGELOG.md` when preparing the release.
   instead of `WIN32`, the Delphi 7 IA-32 assembly string/memory routines are
   used only by Delphi 7 (modern builds use the Unicode RTL), and Windows API
   calls use `PChar` and character-count buffer sizes.
+- Replaced the IA-32 assembly `Max3`/`Min3` helpers in `uColorUtils` with
+  Pascal versions for modern builds.
 - Added the XiControls folder to the Delphi 13 project search path.
 - Added Win64 as a target platform in the Delphi 13 project file.
 - Adjusted the component-package source so the Delphi 13 IDE can recognize
