@@ -90,6 +90,12 @@ Move the verified entries into `CHANGELOG.md` when preparing the release.
   and exits. Previously the always-on-top splash screen hid the error
   message and the application appeared to hang.
 
+- Fixed EasyListview writing the column version field with `SizeOf` of an
+  unrelated identifier. On Win64 this wrote 4 extra bytes per column, so forms
+  saved by the Delphi 13 IDE could no longer be loaded ("Stream read error").
+- When a debugger is attached, the splash screen is no longer always on top,
+  so a stopped process no longer covers the IDE.
+
 ## Pending verification
 
 - Build the application in the Delphi 13 IDE and resolve any remaining

@@ -1093,6 +1093,10 @@ begin
 
   if FormStatus.Tag = 0 then
      begin
+       {$IF CompilerVersion >= 20}
+       // Not topmost under the debugger: a stopped process would cover the IDE with the splash screen
+       if not IsDebuggerPresent then
+       {$IFEND}
        SetWindowPos(FormStatus.Handle, hWnd_TopMost, 0, 0, 0, 0, SWP_NOACTIVATE+SWP_NOMOVE+SWP_NOSIZE); // this prevent form flicker (using Form.StayOnTop causes flicker)
        CallCenterWindow(FormStatus, Is4KMode and SplashScreen4KUltraSize.Checked);
        FormStatus.Tag:= 1;

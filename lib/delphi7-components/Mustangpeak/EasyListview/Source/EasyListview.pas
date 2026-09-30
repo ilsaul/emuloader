@@ -18883,7 +18883,7 @@ var
 begin
   Key := STREAM_ID_KEY;
   S.Write(Key, SizeOf(Key));
-  S.Write(AVersion, SizeOf(Version));
+  S.Write(AVersion, SizeOf(AVersion));
   Temp := State;
   // Only save certin states that should be persistent
   Temp := State * PERSISTENTOBJECTSTATES;
