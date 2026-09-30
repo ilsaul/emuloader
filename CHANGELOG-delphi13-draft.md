@@ -84,6 +84,12 @@ Move the verified entries into `CHANGELOG.md` when preparing the release.
 - Adjusted the component-package source so the Delphi 13 IDE can recognize
   controls referenced by `FormMain` without discarding them from the DFM.
 
+- Delphi 13 builds now include the version information and application
+  icon, so the splash screen shows the version number again.
+- When a Delphi 13 build fails during startup, EmuLoader now shows the error
+  and exits. Previously the always-on-top splash screen hid the error
+  message and the application appeared to hang.
+
 ## Pending verification
 
 - Build the application in the Delphi 13 IDE and resolve any remaining

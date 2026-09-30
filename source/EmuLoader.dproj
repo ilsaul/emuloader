@@ -46,6 +46,14 @@
     <DCC_DcuOutput>.\dcu13\$(Platform)\$(Config)</DCC_DcuOutput>
     <DCC_Namespace>System;Xml;Data;Datasnap;Web;Soap;Vcl;Vcl.Imaging;Vcl.Touch;Vcl.Samples;Vcl.Shell;Winapi;System.Win;$(DCC_Namespace)</DCC_Namespace>
     <DCC_OutputDRCFile>true</DCC_OutputDRCFile>
+    <Icon_MainIcon>EmuLoader.ico</Icon_MainIcon>
+    <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
+    <VerInfo_MajorVer>9</VerInfo_MajorVer>
+    <VerInfo_MinorVer>0</VerInfo_MinorVer>
+    <VerInfo_Release>1</VerInfo_Release>
+    <VerInfo_Build>0</VerInfo_Build>
+    <VerInfo_Locale>1033</VerInfo_Locale>
+    <VerInfo_Keys>CompanyName=;FileDescription=Emu Loader;FileVersion=9.0.1.0;InternalName=EmuLoader.exe;LegalCopyright=(C) Moreno Cattaneo;LegalTrademarks=;OriginalFilename=;ProductName=Emu Loader;ProductVersion=9;Comments=</VerInfo_Keys>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Cfg_1)'!=''">
     <DCC_Define>DEBUG;$(DCC_Define)</DCC_Define>

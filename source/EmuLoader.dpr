@@ -7,6 +7,9 @@ uses
   madExcept,
   {$IFEND}
   Forms,
+  {$IF CompilerVersion >= 20}
+  SysUtils,
+  {$IFEND}
   VersionHelpers,
   uCommon in 'uCommon.pas',
   uStatus in 'uStatus.pas' {FormStatus},
@@ -129,6 +132,9 @@ begin
   Application.HintPause:= 200; // fix for the hint pause timer
   Application.HintColor:= $00f8f4f3; //$00eeebe6;
 
+  {$IF CompilerVersion >= 20}
+  try
+  {$IFEND}
   FormStatus.MessageStr('Initializing main screen.');
   Application.CreateForm(TFormMain, FormMain); // application's main form
   FormMain.Caption:= FormMain.Caption+' '+FrontendVersion;
@@ -137,5 +143,11 @@ begin
   Application.CreateForm(TFormNightMode, FormNightMode);
   FormStatus.MessageStr('Initializing preferences screen.');
   Application.CreateForm(TFormPreferences, FormPreferences);
+  {$IF CompilerVersion >= 20}
+  except
+    on E: Exception do
+       AbortStartup(E.ClassName+': '+E.Message);
+  end;
+  {$IFEND}
   Application.Run;
 end.

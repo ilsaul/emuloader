@@ -172,6 +172,8 @@ var
   FormStatus: TFormStatus;
   mmResult, TimerCount: Integer; // for the thread clock
 
+procedure AbortStartup(const ErrorMsg: String);
+
 implementation
 
 uses uMain;
@@ -499,6 +501,23 @@ begin
   Inc(TimerCount, 1000);
   FormStatus.LabelTimer.Caption:= GetPlayTime(TimerCount, True);
   FormStatus.LabelTimer.Canvas.UnLock;
+end;
+
+// Startup failed: the splash screen is topmost and would hide the error dialog, leaving the app hung
+procedure AbortStartup(const ErrorMsg: String);
+begin
+  if mmResult <> 0 then
+     begin
+       TimeKillEvent(mmResult);
+       mmResult:= 0;
+     end;
+  if Assigned(FormStatus) and FormStatus.HandleAllocated then
+     begin
+       SetWindowPos(FormStatus.Handle, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOACTIVATE+SWP_NOMOVE+SWP_NOSIZE);
+       ShowWindow(FormStatus.Handle, SW_HIDE);
+     end;
+  MessageBox(0, PChar('Emu Loader could not start.'+#13#10#13#10+ErrorMsg), 'Emu Loader', MB_OK or MB_ICONERROR or MB_TOPMOST or MB_SETFOREGROUND);
+  ExitProcess(1);
 end;
 
 procedure TFormStatus.StartThreadClock;
