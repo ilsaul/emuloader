@@ -3056,7 +3056,7 @@ function RtlDeleteFunctionTable(FunctionTable: Pointer): ByteBool; stdcall;
 { ----------------------------------------------------------------------------- }
 function CreateStub(ObjectPtr: Pointer; MethodPtr: Pointer): Pointer;
 const
-  CodeHead: array[0..61] of Byte = (
+  CodeHead: array[0..58] of Byte = (
     $48, $83, $EC, StubFrameSize,                    // sub  rsp, $58
     $4C, $89, $4C, $24, $20,                         // mov  [rsp+$20], r9
     $48, $8B, $84, $24, $80, $00, $00, $00,          // mov  rax, [rsp+$80]
