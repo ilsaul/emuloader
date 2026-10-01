@@ -14,6 +14,10 @@ Move the verified entries into `CHANGELOG.md` when preparing the release.
   controls used by Emu Loader, preserving the rich edit URL-click event.
 - Registered EasyListview, Graphics32 (`TImage32`, `TGaugeBar`) and Bluecave
   BarMenus controls in the Delphi 13 component package.
+- Temporary startup trace in Delphi 13 builds: each splash screen message
+  and each step of `FormActivate` is appended to `startup_trace.log` next to
+  the exe. It is used to find where startup hangs, and is to be removed once
+  startup is stable.
 
 ## Changed
 

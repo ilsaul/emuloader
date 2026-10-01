@@ -179,6 +179,12 @@ var
   {$IFEND}
 
 procedure AbortStartup(const ErrorMsg: String);
+{$IF CompilerVersion >= 20}
+procedure StartupTrace(const Msg: String);
+
+var
+  StartupTraceEnabled: Boolean = True;
+{$IFEND}
 
 implementation
 
@@ -524,6 +530,33 @@ begin
 end;
 {$IFEND}
 
+{$IF CompilerVersion >= 20}
+// Delphi 13 port: appends each startup step to "startup_trace.log" next to the exe, to locate hangs
+procedure StartupTrace(const Msg: String);
+var
+  F: TextFile;
+  FileName: String;
+begin
+  if not StartupTraceEnabled then
+     Exit;
+  FileName:= ExtractFilePath(ParamStr(0))+'startup_trace.log';
+  try
+    AssignFile(F, FileName);
+    if FileExists(FileName) then
+       Append(F)
+    else
+       Rewrite(F);
+    try
+      Writeln(F, FormatDateTime('hh:nn:ss.zzz', Now)+'  '+Msg);
+    finally
+      CloseFile(F);
+    end;
+  except
+    StartupTraceEnabled:= False;
+  end;
+end;
+{$IFEND}
+
 // Startup failed: the splash screen is topmost and would hide the error dialog, leaving the app hung
 procedure AbortStartup(const ErrorMsg: String);
 begin
@@ -564,6 +597,9 @@ end;
 
 procedure TFormStatus.TitleStr(const TitleText: String; MergeCurrentText: Boolean = False);
 begin
+  {$IF CompilerVersion >= 20}
+  StartupTrace('[title] '+TitleText);
+  {$IFEND}
   LabelStatusType.Canvas.Lock;
   case MergeCurrentText of
     True : LabelStatusType.Caption:= LabelStatusType.Caption+' '+TitleText;
@@ -574,6 +610,9 @@ end;
 
 procedure TFormStatus.MessageStr(const MessageText: String; Refresh: Boolean = True);
 begin
+  {$IF CompilerVersion >= 20}
+  StartupTrace(MessageText);
+  {$IFEND}
   LabelMessage.Canvas.Lock; // help to reduce flickering if text changes too fast (parse MESS software lists)
   LabelMessage.Caption:= MessageText;
   LabelMessage.Canvas.UnLock;
