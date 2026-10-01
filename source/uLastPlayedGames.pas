@@ -271,6 +271,7 @@ var
   iTotalPlaytime: Int64;
   FavoriteList: THashedStringList;
 begin
+  FavoriteList:= nil;
   if FormMain.ValidateFile(FormMain.GetFavoritesFile) then
      begin
        FavoriteList:= THashedStringList.Create;

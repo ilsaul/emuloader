@@ -28719,6 +28719,8 @@ var
     ROMFileMemoryStream: TWideMemoryStream;
     CRC32CollisionList: THashedStringList;
   begin
+    CRC32CollisionList:= nil;
+    ROMFileMemoryStream:= nil;
     // this function will get CRC32 / SHA-1 from .zip files and store in lists (device and bios)
     Result:= TempSetsList.Count > 0;
     if not Result then
@@ -36456,6 +36458,7 @@ var
   EasyItemIndex: TEasyItem;
   StartTimer, EndTimer: Integer;
 begin
+  EasyItemIndex:= nil;
   if not CheckTotalVisible(ELV_Holder) then
      Exit;
   StartTimer:= GetTickCount;
@@ -42007,6 +42010,7 @@ var
   end;
 
 begin
+  ImageList:= nil;
   DefaultDraw:= False;
   Use4K:= Is4KMode and (ACanvas.Font.Size = 16);
   ACanvas.Lock;
@@ -42512,6 +42516,8 @@ var
   Loop: Integer;
   iDir: String;
 begin
+  tempList:= nil;
+  ListFolders:= nil;
   // FeatureIndex (all MAME related)
   // 20: Playback Input
   // 21: Record Input
@@ -50713,6 +50719,8 @@ var
   addItem: TEasyItem;
   ExcludedList: THashedStringList;
 begin
+  ExcludedList:= nil;
+  addGroup:= nil;
   if not ValidateFile(GetGamesFolderEL+GetSystemFileName(idMAME, 5)) then
      Exit;
   if not FileExists(GetGamesFolderEL+GetsystemFileName(idMAME)) then

@@ -100,6 +100,15 @@ Move the verified entries into `CHANGELOG.md` when preparing the release.
   ANSI export while receiving Unicode file names, so every icon failed to load
   and startup stopped with "Unable to Replace Image".
 
+- Startup no longer shows an access violation after "Reading image categories
+  settings". Some local object variables were checked with `Assigned` or freed
+  without first being set to `nil`. Delphi 7 happened to tolerate this, but on
+  Win64 they held garbage. The most visible case was `ExcludedList` in
+  `LoadMachinesListToSidePanel`: the crash left the machines panel blank and
+  the games list empty. The same fix is applied to the most-recently-played
+  list, the device/BIOS checksum scan, menu item drawing, random game selection
+  and `SelectFileName`.
+
 ## Pending verification
 
 - Build the application in the Delphi 13 IDE and resolve any remaining
