@@ -44,6 +44,15 @@ type
     procedure Execute; override;
   end;
 
+const
+  WD_THREAD_SUSPEND_RESUME = $0002;
+  WD_THREAD_GET_CONTEXT = $0008;
+  WD_THREAD_QUERY_INFORMATION = $0040;
+  WD_GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT = $00000002;
+  WD_GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS = $00000004;
+
+function WD_OpenThread(dwDesiredAccess: DWORD; bInheritHandle: BOOL; dwThreadId: DWORD): THandle; stdcall; external kernel32 name 'OpenThread';
+function WD_GetModuleHandleEx(dwFlags: DWORD; lpModuleName: Pointer; var phModule: HMODULE): BOOL; stdcall; external kernel32 name 'GetModuleHandleExW';
 function RtlLookupFunctionEntry(ControlPc: UInt64; var ImageBase: UInt64; HistoryTable: Pointer): Pointer; stdcall; external kernel32;
 function RtlVirtualUnwind(HandlerType: DWORD; ImageBase, ControlPc: UInt64; FunctionEntry: Pointer;
   var ContextRecord: TContext; var HandlerData: Pointer; var EstablisherFrame: UInt64; ContextPointers: Pointer): Pointer; stdcall; external kernel32;
@@ -255,7 +264,7 @@ var
 begin
   Result:= '$'+IntToHex(Addr, 16);
   Module:= 0;
-  if not GetModuleHandleEx(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS or GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT, PChar(Pointer(NativeUInt(Addr))), Module) then
+  if not WD_GetModuleHandleEx(WD_GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS or WD_GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT, Pointer(NativeUInt(Addr)), Module) then
      Exit;
   if Module <> HInstance then
      begin
@@ -347,7 +356,7 @@ begin
 
     for Id in Ids do
     begin
-      TH:= OpenThread(THREAD_SUSPEND_RESUME or THREAD_GET_CONTEXT or THREAD_QUERY_INFORMATION, False, Id);
+      TH:= WD_OpenThread(WD_THREAD_SUSPEND_RESUME or WD_THREAD_GET_CONTEXT or WD_THREAD_QUERY_INFORMATION, False, Id);
       if TH = 0 then
          Continue;
       try
