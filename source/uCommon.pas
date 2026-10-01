@@ -580,7 +580,12 @@ function  ShortDirStringW(const FileFullPath: WideString; MaxLength: Integer): W
 function  OpenSaveFileDialog(Parent: TWinControl; const DefExt, Filter, InitialDir, Title: String; var FileName: String;
                              MustExist, OverwritePrompt, NoChangeDir, DoOpen: Boolean): Boolean;
 
+{$IF CompilerVersion >= 20}
+// PChar is PWideChar since Delphi 2009: bind to the Unicode export
+function  PrivateExtractIcons (lpszFile: PChar;     nIconIndex, cxIcon, cyIcon: integer; phicon: PHANDLE; pIconId: PDWORD; nIcon, flags: DWORD): DWORD; stdcall ; external 'user32.dll' name 'PrivateExtractIconsW';
+{$ELSE}
 function  PrivateExtractIcons (lpszFile: PChar;     nIconIndex, cxIcon, cyIcon: integer; phicon: PHANDLE; pIconId: PDWORD; nIcon, flags: DWORD): DWORD; stdcall ; external 'user32.dll' name 'PrivateExtractIconsA';
+{$IFEND}
 function  PrivateExtractIconsW(lpszFile: PWideChar; nIconIndex, cxIcon, cyIcon: integer; phicon: PHANDLE; pIconId: PDWORD; nIcon, flags: DWORD): DWORD; stdcall ; external 'user32.dll' name 'PrivateExtractIconsW';
 
 procedure GetIconToImage(IconSource: HIcon; IconImageSource: TImage; iWidth, iHeight: Integer);

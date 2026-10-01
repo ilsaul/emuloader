@@ -96,6 +96,10 @@ Move the verified entries into `CHANGELOG.md` when preparing the release.
 - When a debugger is attached, the splash screen is no longer always on top,
   so a stopped process no longer covers the IDE.
 
+- Icons now load in Delphi 13 builds. `PrivateExtractIcons` was bound to the
+  ANSI export while receiving Unicode file names, so every icon failed to load
+  and startup stopped with "Unable to Replace Image".
+
 ## Pending verification
 
 - Build the application in the Delphi 13 IDE and resolve any remaining
