@@ -64,7 +64,11 @@ var
   MapSyms: TArray<TMapSym>;
   MapLines: TArray<TMapLine>;
   MapFiles: TStringList;
-  TextRva: Cardinal;
+  TextRva, TextSize: Cardinal;
+  // raw stack copy, filled while the target thread is suspended (no heap allocation allowed there)
+  StackCopy: array[0..(512*1024) div 8-1] of UInt64;
+  StackCopyCount: Integer;
+  StackCopyRsp: UInt64;
 
 procedure WriteLog(const S: string);
 var
@@ -99,7 +103,10 @@ begin
   for I:= 0 to Nt.FileHeader.NumberOfSections-1 do
   begin
     if CompareMem(@Sec.Name[0], PAnsiChar('.text'), 5) then
-       Exit(Sec.VirtualAddress);
+       begin
+         TextSize:= Sec.Misc.VirtualSize;
+         Exit(Sec.VirtualAddress);
+       end;
     Inc(Sec);
   end;
 end;
@@ -283,6 +290,69 @@ begin
      Result:= Result+'  ('+MapFiles[MapLines[Idx].FileIdx]+':'+IntToStr(MapLines[Idx].Line)+')';
 end;
 
+procedure CopyRawStack(Rsp: UInt64);
+var
+  MBI: TMemoryBasicInformation;
+  Top: UInt64;
+  N: UInt64;
+begin
+  StackCopyRsp:= Rsp;
+  if (Rsp = 0) or (VirtualQuery(Pointer(NativeUInt(Rsp)), MBI, SizeOf(MBI)) = 0) then
+     Exit;
+  Top:= UInt64(NativeUInt(MBI.BaseAddress))+MBI.RegionSize;
+  N:= (Top-(Rsp and not UInt64(7))) div 8;
+  if N > UInt64(Length(StackCopy)) then
+     N:= Length(StackCopy);
+  try
+    Move(Pointer(NativeUInt(Rsp and not UInt64(7)))^, StackCopy[0], N*8);
+    StackCopyCount:= N;
+  except
+    StackCopyCount:= 0;
+  end;
+end;
+
+// value looks like a return address in EmuLoader.exe: inside .text and preceded by a CALL instruction
+function IsReturnAddress(V: UInt64): Boolean;
+var
+  Lo: UInt64;
+  P: PByte;
+  function IsCallFF(Ofs: Integer): Boolean;
+  begin
+    Result:= (P[-Ofs] = $FF) and (((P[-Ofs+1] shr 3) and 7) = 2);
+  end;
+begin
+  Result:= False;
+  Lo:= UInt64(HInstance)+TextRva;
+  if (V < Lo+8) or (V >= Lo+TextSize) then
+     Exit;
+  P:= PByte(NativeUInt(V));
+  Result:= (P[-5] = $E8) or IsCallFF(2) or IsCallFF(3) or IsCallFF(6) or IsCallFF(7) or
+           ((P[-3] = $41) and (P[-2] = $FF)) or ((P[-4] = $41) and (P[-3] = $FF));
+end;
+
+procedure WriteRawStack;
+var
+  I, Shown: Integer;
+  Last: UInt64;
+begin
+  if not MapLoaded then
+     LoadMap;
+  WriteLog('  raw stack scan (EmuLoader.exe return addresses, innermost first; RSP=$'+IntToHex(StackCopyRsp, 16)+', '+IntToStr(StackCopyCount*8)+' bytes):');
+  Shown:= 0;
+  Last:= 0;
+  for I:= 0 to StackCopyCount-1 do
+  begin
+    if IsReturnAddress(StackCopy[I]) and (StackCopy[I] <> Last) then
+       begin
+         Last:= StackCopy[I];
+         WriteLog('    '+DescribeAddress(StackCopy[I]));
+         Inc(Shown);
+         if Shown >= 80 then
+            Break;
+       end;
+  end;
+end;
+
 // No memory allocation here: the target thread is suspended and may hold the memory manager lock
 procedure CaptureThreadStack(ThreadHandle: THandle; var Frames: TFrames);
 var
@@ -295,8 +365,11 @@ begin
   Ctx:= PContext((NativeUInt(@Buf[0])+15) and not NativeUInt(15));
   FillChar(Ctx^, SizeOf(TContext), 0);
   Ctx^.ContextFlags:= CONTEXT_FULL;
+  StackCopyCount:= 0;
+  StackCopyRsp:= 0;
   if not GetThreadContext(ThreadHandle, Ctx^) then
      Exit;
+  CopyRawStack(Ctx^.Rsp);
   try
     while (Frames.Count < MaxFrames) and (Ctx^.Rip <> 0) do
     begin
@@ -377,6 +450,8 @@ begin
       WriteLog('-- '+Title+' '+IntToStr(Id)+' --');
       for I:= 0 to Frames.Count-1 do
           WriteLog('  '+DescribeAddress(Frames.Addr[I]));
+      if Id = MainThreadID then
+         WriteRawStack;
     end;
   finally
     Ids.Free;
