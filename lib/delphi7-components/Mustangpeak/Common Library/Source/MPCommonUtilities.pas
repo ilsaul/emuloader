@@ -3013,6 +3013,113 @@ end;
 {  Now Stub can be passed as the callback pointer to any windows API          }
 {  Don't forget to call Dispose Stub when not needed        }
 { ----------------------------------------------------------------------------- }
+{$IFDEF CPUX64}
+// Win64 version. The original thunk below is 32 bit x86 code: on Win64 it
+// executes the high half of the Self pointer as instructions and jumps to a
+// truncated address. Win64 passes the first four arguments in RCX, RDX, R8, R9
+// and the rest on the stack, so the thunk opens a small frame, shifts every
+// argument one position to the right (up to 7 callback arguments), loads Self
+// in RCX and calls the method. Unwind info is registered so that exceptions
+// and stack walks can cross the thunk.
+const
+  StubFrameSize = $58;
+  StubCodeSize = 96;
+
+type
+  TStubRuntimeFunction = packed record
+    BeginAddress: DWORD;
+    EndAddress: DWORD;
+    UnwindData: DWORD;
+  end;
+
+  TStubUnwindInfo = packed record
+    VersionAndFlags: Byte;
+    SizeOfProlog: Byte;
+    CountOfCodes: Byte;
+    FrameRegisterAndOffset: Byte;
+    UnwindCode: array[0..1] of Word;
+  end;
+
+  TStub = packed record
+    Code: array[0..StubCodeSize - 1] of Byte;
+    RuntimeFunction: TStubRuntimeFunction;
+    Padding: DWORD;
+    UnwindInfo: TStubUnwindInfo;
+  end;
+  PStub = ^TStub;
+
+function RtlAddFunctionTable(FunctionTable: Pointer; EntryCount: DWORD;
+  BaseAddress: UInt64): ByteBool; stdcall; external 'kernel32.dll';
+function RtlDeleteFunctionTable(FunctionTable: Pointer): ByteBool; stdcall;
+  external 'kernel32.dll';
+
+{ ----------------------------------------------------------------------------- }
+function CreateStub(ObjectPtr: Pointer; MethodPtr: Pointer): Pointer;
+const
+  CodeHead: array[0..61] of Byte = (
+    $48, $83, $EC, StubFrameSize,                    // sub  rsp, $58
+    $4C, $89, $4C, $24, $20,                         // mov  [rsp+$20], r9
+    $48, $8B, $84, $24, $80, $00, $00, $00,          // mov  rax, [rsp+$80]
+    $48, $89, $44, $24, $28,                         // mov  [rsp+$28], rax
+    $48, $8B, $84, $24, $88, $00, $00, $00,          // mov  rax, [rsp+$88]
+    $48, $89, $44, $24, $30,                         // mov  [rsp+$30], rax
+    $48, $8B, $84, $24, $90, $00, $00, $00,          // mov  rax, [rsp+$90]
+    $48, $89, $44, $24, $38,                         // mov  [rsp+$38], rax
+    $4D, $89, $C1,                                   // mov  r9, r8
+    $49, $89, $D0,                                   // mov  r8, rdx
+    $48, $89, $CA,                                   // mov  rdx, rcx
+    $48, $B9);                                       // mov  rcx, imm64 (Self)
+  CodeTail: array[0..6] of Byte = (
+    $FF, $D0,                                        // call rax
+    $48, $83, $C4, StubFrameSize,                    // add  rsp, $58
+    $C3);                                            // ret
+var
+  Stub: PStub;
+  P: PByte;
+begin
+  Stub := VirtualAlloc(nil, SizeOf(TStub), MEM_COMMIT or MEM_RESERVE, PAGE_EXECUTE_READWRITE);
+  if Stub = nil then
+    RaiseLastOSError;
+  FillChar(Stub^, SizeOf(TStub), $CC);
+  P := @Stub^.Code[0];
+  Move(CodeHead, P^, SizeOf(CodeHead));
+  Inc(P, SizeOf(CodeHead));
+  PPointer(P)^ := ObjectPtr;
+  Inc(P, SizeOf(Pointer));
+  P^ := $48; Inc(P);                                 // mov  rax, imm64 (Method)
+  P^ := $B8; Inc(P);
+  PPointer(P)^ := MethodPtr;
+  Inc(P, SizeOf(Pointer));
+  Move(CodeTail, P^, SizeOf(CodeTail));
+  Inc(P, SizeOf(CodeTail));
+
+  // UNWIND_INFO v1: prolog = 4 bytes, one code: UWOP_ALLOC_SMALL (2) at
+  // offset 4 with OpInfo = (FrameSize - 8) div 8
+  Stub^.UnwindInfo.VersionAndFlags := 1;
+  Stub^.UnwindInfo.SizeOfProlog := 4;
+  Stub^.UnwindInfo.CountOfCodes := 1;
+  Stub^.UnwindInfo.FrameRegisterAndOffset := 0;
+  Stub^.UnwindInfo.UnwindCode[0] := 4 or ((2 or (((StubFrameSize - 8) div 8) shl 4)) shl 8);
+  Stub^.UnwindInfo.UnwindCode[1] := 0;
+  Stub^.RuntimeFunction.BeginAddress := 0;
+  Stub^.RuntimeFunction.EndAddress := DWORD(NativeUInt(P) - NativeUInt(Stub));
+  Stub^.RuntimeFunction.UnwindData := DWORD(NativeUInt(@Stub^.UnwindInfo) - NativeUInt(Stub));
+  RtlAddFunctionTable(@Stub^.RuntimeFunction, 1, UInt64(Stub));
+
+  FlushInstructionCache(GetCurrentProcess, Stub, SizeOf(TStub));
+  Result := Stub;
+end;
+{ ----------------------------------------------------------------------------- }
+
+{ ----------------------------------------------------------------------------- }
+procedure DisposeStub(Stub: Pointer);
+begin
+  if Stub = nil then
+    Exit;
+  RtlDeleteFunctionTable(@PStub(Stub)^.RuntimeFunction);
+  VirtualFree(Stub, 0, MEM_RELEASE);
+end;
+{$ELSE}
 const
   AsmPopEDX = $5A;
   AsmMovEAX = $B8;
@@ -3067,6 +3174,7 @@ begin
   // 1/10/04 Support for 64 bit, executable code must be in virtual space
   VirtualFree(Stub, SizeOf(TStub),MEM_DECOMMIT);
 end;
+{$ENDIF CPUX64}
 { ----------------------------------------------------------------------------- }
 
 {$IFNDEF COMPILER_5_UP}

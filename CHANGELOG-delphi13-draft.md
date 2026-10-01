@@ -129,6 +129,12 @@ Move the verified entries into `CHANGELOG.md` when preparing the release.
   timer thread. In Delphi 13 builds the callback posts a message and the label
   is updated in the main thread. The timer is also stopped before the splash
   form is freed on exit, which could hang or crash the application on close.
+- Fixed the application hanging on the splash screen in 64 bit builds while
+  "Applying filters". The Mustangpeak `CreateStub` helper, which turns an
+  object method into a plain Windows callback (thread manager window and
+  worker thread, list view timers, shell context menu), generated 32 bit x86
+  code. It now generates a Win64 thunk with unwind information; the 32 bit
+  version is unchanged.
 
 ## Pending verification
 
