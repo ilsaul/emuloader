@@ -60,6 +60,7 @@
     <DCC_DebugInfoInExe>true</DCC_DebugInfoInExe>
     <DCC_Optimize>false</DCC_Optimize>
     <DCC_GenerateStackFrames>true</DCC_GenerateStackFrames>
+    <DCC_MapFile>3</DCC_MapFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Cfg_2)'!=''">
     <DCC_Define>RELEASE;$(DCC_Define)</DCC_Define>

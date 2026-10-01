@@ -18,6 +18,11 @@ Move the verified entries into `CHANGELOG.md` when preparing the release.
   and each step of `FormActivate` is appended to `startup_trace.log` next to
   the exe. It is used to find where startup hangs, and is to be removed once
   startup is stable.
+- Temporary hang watchdog in Delphi 13 Win64 builds (`uHangWatchdog.pas`).
+  If the main thread stops processing messages for about 10 seconds, the
+  call stacks of all threads are written to `hang_trace.log`, resolved to
+  unit, procedure and line through the detailed map file that Debug builds
+  now generate.
 
 ## Changed
 

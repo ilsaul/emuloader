@@ -6,6 +6,7 @@ uses
   SynFastWideString,
   madExcept,
   {$IFEND}
+  uHangWatchdog in 'uHangWatchdog.pas',
   Forms,
   {$IF CompilerVersion >= 20}
   SysUtils,
