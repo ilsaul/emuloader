@@ -179,6 +179,7 @@ var
   iIconWidth, iIconHeight: Integer;
   iFile: String;
 begin
+  tmpIcon:= nil;
   MarkerIconIndex:= 0;
   if MarkerIconPath = '' then
      iFile:= ExtractFilePath(Application.ExeName)
@@ -368,6 +369,7 @@ var
   col: TColor;
   PalBmp: TBitmap;
 begin
+  PalBmp:= nil;
   // Paint 16 colors palette
   CreateImageBMP(PalBmp, imgPal);
   PalBmp.Canvas.Brush.Style:= bsClear;

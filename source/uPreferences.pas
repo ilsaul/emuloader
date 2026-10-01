@@ -400,6 +400,7 @@ var
   ListViewBk: TPNGGraphic;
   FileFullPath: String;
 begin
+  ListViewBk:= nil;
   case ImageEnabledCheckBox.Checked of
     True:
       begin

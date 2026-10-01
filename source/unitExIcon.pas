@@ -757,6 +757,7 @@ var
   maskInfo : PBitmapInfo;
   dc : HDC;
 begin
+  image:= nil;
   src := Nil;
   maskBmp := TBitmap.Create;
 
@@ -1305,6 +1306,7 @@ var
   strm1 : TCustomMemoryStream;
   p : PBitmapInfoHEader;
 begin
+  strm1:= nil;
   stream.read (hdr, SizeOf (hdr));
 
   if (self is TExIcon) <> (hdr.wType = 1) then
@@ -1547,6 +1549,7 @@ var
   BI : TBitmapInfoHeader;
   image : TExIconImage;
 begin
+  image:= nil;
   if GetIconInfo (value, iconInfo) then
   try
     image := TExIconImage.Create;

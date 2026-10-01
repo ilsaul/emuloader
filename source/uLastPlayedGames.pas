@@ -271,6 +271,7 @@ var
   iTotalPlaytime: Int64;
   FavoriteList: THashedStringList;
 begin
+  PlayedList:= nil;
   FavoriteList:= nil;
   if FormMain.ValidateFile(FormMain.GetFavoritesFile) then
      begin
@@ -510,6 +511,7 @@ var
   end;
 
 begin
+  elvItem:= nil; elvGroup:= nil;
   if not FormMain.CheckTotal(FormMain.GamesListView) then
      Exit;
   if not FormMain.CheckTotal(LastPlayedList) then
@@ -585,6 +587,7 @@ procedure TFormLastPlayedGames.SelectGameToPlay(Item_Source: TEasyItem; ExitDial
 var
   Item_MainGamesList: TEasyItem;
 begin
+  Item_MainGamesList:= nil;
   FormMain.FindGameName(TPlayedGameInfo(Item_Source).eName, Systems.Tag, TPlayedGameInfo(Item_Source).eMediaType, TPlayedGameInfo(Item_Source).eIsCustomGame,
                         TPlayedGameInfo(Item_Source).eSoftwareName, Item_MainGamesList, False);
 

@@ -154,6 +154,9 @@ type
     procedure UpdateVersionPos;
   protected
     procedure CreateParams(var Params: TCreateParams); override;
+    {$IF CompilerVersion >= 20}
+    procedure WMStatusClockTick(var Msg: TMessage); message WM_APP+101;
+    {$IFEND}
   public
     { Public declarations }
     //TaskBarHandle: HWND;
@@ -171,6 +174,9 @@ type
 var
   FormStatus: TFormStatus;
   mmResult, TimerCount: Integer; // for the thread clock
+  {$IF CompilerVersion >= 20}
+  StatusClockWnd: HWND; // the timer callback runs in a worker thread: it only posts a message here
+  {$IFEND}
 
 procedure AbortStartup(const ErrorMsg: String);
 
@@ -497,11 +503,26 @@ end;
 procedure TimeCallBack(TimerID, Msg: Uint; dwUser, dw1, dw2: DWORD); pascal;
 begin
   // Do something here. This procedure will be executed each 1000 ms
+  {$IF CompilerVersion < 20}
   FormStatus.LabelTimer.Canvas.Lock;
+  {$IFEND}
   Inc(TimerCount, 1000);
+  {$IF CompilerVersion >= 20}
+  if StatusClockWnd <> 0 then
+     PostMessage(StatusClockWnd, WM_APP+101, 0, 0);
+  {$ELSE}
   FormStatus.LabelTimer.Caption:= GetPlayTime(TimerCount, True);
   FormStatus.LabelTimer.Canvas.UnLock;
+  {$IFEND}
 end;
+
+{$IF CompilerVersion >= 20}
+procedure TFormStatus.WMStatusClockTick(var Msg: TMessage);
+begin
+  if mmResult <> 0 then
+     LabelTimer.Caption:= GetPlayTime(TimerCount, True);
+end;
+{$IFEND}
 
 // Startup failed: the splash screen is topmost and would hide the error dialog, leaving the app hung
 procedure AbortStartup(const ErrorMsg: String);
@@ -525,6 +546,9 @@ begin
   if mmResult <> 0 then
      Exit; // do nothing, timer is already running
   TimerCount:= 0;
+  {$IF CompilerVersion >= 20}
+  StatusClockWnd:= Handle;
+  {$IFEND}
   mmResult:= TimeSetEvent(1000, 0, @TimeCallBack, 0, TIME_PERIODIC);
 end;
 

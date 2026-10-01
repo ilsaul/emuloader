@@ -855,6 +855,7 @@ var
   ListViewBk: TPNGGraphic;
   FileFullPath: String;
 begin
+  ListViewBk:= nil;
   case GamesBackgroundImageEnable.Checked of
     True:
       begin
@@ -891,6 +892,7 @@ procedure TFormGamesListFontSettings.PopupShowAvailableSystemsOnlyClick(
 var
   Item: TEasyItem;
 begin
+  Item:= nil;
   GamesFont.BeginUpdate;
   GamesFont.Groups.MakeAllVisible;
   GamesFont.Groups.Rebuild(True); // need to rebuild or list gets messed up

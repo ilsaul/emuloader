@@ -458,6 +458,7 @@ var
   end;
   
 begin
+  gFile:= nil;
   fExt:= '.txt';
   if DuplicateFile = '' then
      defFile:= 'favorites'
@@ -533,6 +534,7 @@ var
   DeleteActiveProfile: Boolean;
   FoundTxtFile, DeleteTxtFile: Boolean;
 begin
+  Item:= nil; favList:= nil;
   if FormMain.PopupEnableFavorites.Checked then
      Exit; // is favorites filter is enabled, can't anything than selecting a different favorites profile!!!
 
@@ -754,6 +756,7 @@ var
   end;
 
 begin
+  FavoriteGamesList:= nil; gItem:= nil; addItem:= nil; gGroup:= nil;
   // this new function is all wrong!
   // need to create a list of valid games and then search for them in the fav.ini files...
   if not FormMain.CheckSelected(FavoritesList) then
@@ -1053,6 +1056,7 @@ var
   StrToSearch: String;
   FoundTxtFile: Boolean;
 begin
+  Item:= nil; Group:= nil;
   FoundTxtFile:= FileExists(FormMain.GetFavoritesFile);
   Result:= FoundTxtFile;
   if not Result then

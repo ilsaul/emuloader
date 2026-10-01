@@ -109,6 +109,18 @@ Move the verified entries into `CHANGELOG.md` when preparing the release.
   list, the device/BIOS checksum scan, menu item drawing, random game selection
   and `SelectFileName`.
 
+- Startup no longer fails with "Access violation ... Execution of address 0"
+  while "Adding games to games list". About 280 local object variables across
+  the project were tested with `Assigned`, `FreeAndNil` or `<> nil` before any
+  assignment; they are now set to `nil` first (a valid change for Delphi 7
+  too). In `AddGames`, `addGroup` moved from the nested `AddGameListView` to
+  the outer procedure: clones relied on the value left over from the previous
+  call (their parent's group), which only worked by accident.
+- The splash screen clock no longer updates the VCL label from the multimedia
+  timer thread. In Delphi 13 builds the callback posts a message and the label
+  is updated in the main thread. The timer is also stopped before the splash
+  form is freed on exit, which could hang or crash the application on close.
+
 ## Pending verification
 
 - Build the application in the Delphi 13 IDE and resolve any remaining

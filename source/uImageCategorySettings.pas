@@ -313,6 +313,7 @@ procedure TFormImageCategorySettings.ReadSnapDir_MAME;
     TextLine, iniFile, EntryString, ValueToRead: String;
     Loop: Integer;
   begin
+    MAMEIniFile:= nil;
     Result:= FormMain.ValidateArcadeEmulatorFile(sysID);
     if not Result then
        Exit;

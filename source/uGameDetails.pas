@@ -580,6 +580,7 @@ var
     IsCollision: Boolean;
     ROMFileMemoryStream: TWideMemoryStream;
   begin
+    ROMFileMemoryStream:= nil;
     Result:= FileExists(ZipFileName);
     if not Result then
        Exit;
@@ -641,6 +642,7 @@ var
     IsCollision: Boolean;
     ROMFileMemoryStream: TWideMemoryStream;
   begin
+    ROMFileMemoryStream:= nil;
     Result:= FileExists(SevenZipFileName);
     if not Result then
        Exit;
@@ -710,6 +712,7 @@ var
   end;
 
 begin
+  ListSamples:= nil; SamplesPathList:= nil;
   LeftPanelSize:= 0;
   LeftPanelLastText:= 0;
   LeftPanelLastTextHeight:= LabelYearValue.Height;
@@ -1699,6 +1702,7 @@ var
   end;
 
 begin
+  ZippedROMFile:= nil;
   if EmuConGameFileName = '' then
      begin
        ROMsListView.Visible:= False;

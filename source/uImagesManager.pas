@@ -361,6 +361,7 @@ var
   INIFile: TMemIniFile;
   Loop: Integer;
 begin
+  INIFile:= nil;
   try
     INIFile:= TMemIniFile.Create(FormMain.GetFrontendExtraIniFile);
     FormImagesManager.Tag:= Ord(INIFile.ReadString('ImagesManager', 'WindowState', 'Normal') = 'Maximized');
@@ -392,6 +393,7 @@ var
   INIFile: TMemIniFile;
   Loop: Integer;
 begin
+  INIFile:= nil;
   try
     INIFile:= TMemIniFile.Create(FormMain.GetFrontendExtraIniFile);
     INIFile.EraseSection('ImagesManager');
@@ -636,6 +638,7 @@ var
   end;
 
 begin
+  gItem:= nil; gGroup:= nil;
   Result:= FormMain.CheckTotal(FormMain.GamesListView);
   if not Result then
      Exit;
@@ -712,6 +715,7 @@ procedure TFormImagesManager.CreateImagePanelForm;
   var
     sIni: TMemIniFile;
   begin
+    sIni:= nil;
     if not FileExists(FormMain.GetFrontendExtraIniFile) then
        Exit;
 
@@ -762,6 +766,7 @@ procedure TFormImagesManager.FreeImagePanelForm;
   var
     sIni: TMemIniFile;
   begin
+    sIni:= nil;
     if CheckReadOnly(FormMain.GetFrontendExtraIniFile) then
        Exit;
 
@@ -892,6 +897,7 @@ var
   end;
 
 begin
+  gItem:= nil; gGroup:= nil;
   Result:= FormMain.CheckTotal(FormMain.GamesListView);
   if not Result then
      Exit;
@@ -1144,6 +1150,7 @@ var
   end;
 
 begin
+  gItem:= nil; gGroup:= nil;
   WindowTitleError:= 'Error: '+FormImagesManager.Caption;
   if not FormMain.CheckTotal(FormMain.GamesListView) then
      Exit;
@@ -1341,6 +1348,7 @@ var
   end;
 
 begin
+  DestImage:= nil;
   IconSize:= IL_NotUsedImages.Width;
 
   ImageToLoad:= TImage32.Create(nil);
@@ -1661,6 +1669,7 @@ var
   end;
 
 begin
+  GameEasy:= nil;
   if MissingImagesList.Selection.Count <> 1 then
      Exit;
 
@@ -1797,6 +1806,7 @@ var
   ListOutput: THashedStringList;
   FileStr: String;
 begin
+  Item:= nil;
   if not FormMain.CheckTotal(MissingImagesList) then
      Exit;
   FileStr:= FormMain.DialogSaveFile(4, 'Save Missing Images List To a File');
@@ -1909,6 +1919,7 @@ var
   Item: TEasyItem;
   FileFull: String;
 begin
+  Item:= nil;
   if not FormMain.CheckTotal(NotUsedImagesList) then
      Exit;
   if TMenuItem(Sender).Tag = 0 then
@@ -2009,6 +2020,7 @@ var
   ListOutput: THashedStringList;
   FileStr: String;
 begin
+  Item:= nil;
   if not FormMain.CheckTotal(NotUsedImagesList) then
      Exit;
   FileStr:= FormMain.DialogSaveFile(4, 'Save Images List of Missing Games To a File');
@@ -2072,6 +2084,7 @@ procedure TFormImagesManager.ButtonInvalidImagesDeleteFilesClick(
 var
   Item, ItemToDelete: TEasyItem;
 begin
+  Item:= nil;
    if not FormMain.CheckTotal(NotUsedImagesList) then
       begin
         NotUsedImagesList.SetFocus;
@@ -2217,6 +2230,7 @@ procedure TFormImagesManager.ButtonNotUsedImagesDeleteFilesClick(
 var
   Item, ItemToDelete: TEasyItem;
 begin
+  Item:= nil;
    if not FormMain.CheckTotal(NotUsedImagesList) then
       begin
         NotUsedImagesList.SetFocus;

@@ -2797,6 +2797,7 @@ var
   Checksum: TMessageDigest;
   Stream: TMemoryStream;
 begin
+  Checksum:= nil; Stream:= nil;
   // "No Authentication" mode
   Result:= '';
 
@@ -2824,6 +2825,7 @@ var
   Checksum: TMessageDigest;
   Stream: TWideFileStream;
 begin
+  Checksum:= nil; Stream:= nil;
   // "No Authentication" mode
   Result:= '';
   if ((Mode < Low(ChecksumMode)) or (Mode > High(ChecksumMode))) or
@@ -3964,6 +3966,7 @@ var
   IsAltSize: Boolean;
   iSize: Integer;
 begin
+  appIcon:= nil;
   Result:= -1;
   if not FileExistsW(appEmuFile) then
      Exit;
@@ -4947,6 +4950,7 @@ function Read4KSetting: Boolean;
 var
   iniFile: TMemIniFile;
 begin
+  iniFile:= nil;
   FrontendPath:= ExtractFilePath(Application.ExeName);
   Result:= Validate4KResolution;
   if Result then

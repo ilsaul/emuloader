@@ -128,6 +128,7 @@ var
   ActionStr: String;
   HasMAME: Boolean;
 begin
+  Item:= nil;
   Resize4K;
 
   if IsNightMode then
@@ -385,6 +386,7 @@ var
   end;
 
 begin
+  Item:= nil;
   CurrentFile:= 0; // for the progress bar
   AddLogHeader:= True;
   OperationErrors:= 0;

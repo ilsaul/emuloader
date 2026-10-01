@@ -100,6 +100,7 @@ var
     x: Integer;
     iBitmap: TBitmap;
   begin
+    iBitmap:= nil;
     //Assert(Bitmap.PixelFormat = pf32bit); // bitmap is always pf32bit
 
     //Bitmap.Canvas.Lock;
@@ -196,6 +197,7 @@ var
   end;
 
 begin
+  tmpIcon:= nil; FinalIcon:= nil; bmpIcon:= nil;
   Image1.Picture.Icon:= nil; // clear it first
 
   if ExtractIcon('D:\EmuLoader\resources\main_icons\image_01_gamesnap.ico', hIcon, nIconId, Image1.Width, Image1.Height) then
@@ -407,6 +409,7 @@ var
     iRect: TRect;
     oldColor, newColor: TRGB;
   begin
+    iBitmap:= nil; iBitmapMask:= nil;
     //Assert(Bitmap.PixelFormat = pf32bit); // bitmap is always pf32bit
     // get the front bitmap part to edit
     iBitmap:= TBitmap.Create;
@@ -478,6 +481,7 @@ var
   end;
 
 begin
+  tmpIcon:= nil; FinalIcon:= nil; bmpIcon:= nil; bmpMask:= nil;
   Image1.Picture.Icon:= nil; // clear it first
   Image2.Picture.Icon:= nil; // clear it first
   Image3.Picture.Icon:= nil; // clear it first

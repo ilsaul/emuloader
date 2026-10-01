@@ -3231,6 +3231,7 @@ var
   Item:  TEasyItem;
   iStr: String;
 begin
+  Item:= nil;
   Result:= IsGroupedView and (not FormPreferences.DisableCloneIndent.Checked);
   if not Result then
      Exit;
@@ -3513,6 +3514,7 @@ var
   Item: TEasyItem;
   StrResult: String;
 begin
+  Item:= nil;
   Result:= -1; // "cancel" is the default result
   // 0 -> all systems
   // 1..MaxArcadeSystems -> valid EL systems
@@ -4011,6 +4013,7 @@ var
   gifPic: TGIFGraphic;
   bmpPic: TBitmap;
 begin
+  jpgPic:= nil; gifPic:= nil; bmpPic:= nil;
   // Do the extraction here.... NOTICE this IS in the context of the thread so
   // think thread safety. If you have to access the form you will get into trouble.
   // Pass all the information you need here in the ThreadRequest object and you will
@@ -4711,6 +4714,7 @@ procedure TFormMain.GetLastSelectedItem(out EasyItemVar: TEasyItem);
 var
   NewEasyItem, selEasyItem: TEasyItem;
 begin
+  NewEasyItem:= nil;
   EasyItemVar:= nil;
   if GamesListView.Selection.Count in [0, 1] then
      Exit;
@@ -4973,6 +4977,7 @@ var
   Loop, iPos: Integer;
   tmpString: String;
 begin
+  TempFile:= nil; TempFileStatus:= nil;
   FileName:= GetSystemFileName(sysID, 0, SoftwareList);
   FileNameStatus:= GetSystemFileName(sysID, 2, SoftwareList);
   HolderStrings.BeginUpdate;
@@ -5031,6 +5036,7 @@ var
   Loop: Integer;
   tmpString: String;
 begin
+  TempFile:= nil;
   FileName:= SystemsListCustom[sysID, 2];
 
   HolderStrings.BeginUpdate;
@@ -5310,6 +5316,7 @@ var
   tIniFile: THashedStringList;
   UpdateFile: Boolean;
 begin
+  tIniFile:= nil;
   for sysLoop:=1 to MaxConsoleComputerSystems do
   begin
     PlayedFileName:= GetCustomGamePlayedFile(sysLoop);
@@ -5354,6 +5361,7 @@ var
   GamesFile: THashedStringList;
   UpdateFile: Boolean;
 begin
+  GamesFile:= nil;
   for sysLoop:= 1 to MaxConsoleComputerSystems do
   begin
     GameFileName:= GetCustomGamesFile(sysLoop);
@@ -5393,6 +5401,7 @@ var
   GamesFile: THashedStringList;
   UpdateFile: Boolean;
 begin
+  GamesFile:= nil;
   for sysLoop:= 1 to MaxConsoleComputerSystems do
   begin
     GameFileName:= FormMain.GetGamesFolderEL(3)+SystemsListCustom[sysLoop, 2];
@@ -5629,6 +5638,7 @@ var
   end;
   
 begin
+  SubFoldersList:= nil;
   Result:= False;
   ListHolder.SetFocus;
   if ELV_IsEditing(ListHolder) then
@@ -6997,6 +7007,7 @@ var
   fDate: Integer;
   ExecIndex: Integer;
 begin
+  iInfo:= nil;
   isStatusOpened:= FormStatus.Visible;
   SetCurrentDir(FrontendPath);
   Continue:= True;
@@ -7176,6 +7187,7 @@ var
   Loop: Byte;
   tmpString: String;
 begin
+  INIFile:= nil;
   try
     INIFile:= TMemIniFile.Create(GetFrontendExtraIniFile);
     with FormPreferences do
@@ -7237,6 +7249,7 @@ var
   INIFile: TMemIniFile;
   docItem: TEasyItem;
 begin
+  INIFile:= nil; docItem:= nil;
   if CheckReadOnly(GetFrontendExtraIniFile) then
      Exit;
 
@@ -7669,6 +7682,7 @@ var
   videoFile, iParameters: String;
   //SectionFound: Boolean;
 begin
+  INIFile:= nil;
   // this function is called only once at startup; "Video Preview Settings" dialog does NOT use this!!! (October 05, 2017)
   if not ValidateFile(GetVideoPreviewIniFile) then
      Exit;
@@ -7732,6 +7746,7 @@ var
   Loop: Byte;
   VideoFile, iParameters: String;
 begin
+  INIFile:= nil;
   if CheckReadOnly(GetVideoPreviewIniFile) then
      Exit;
   try
@@ -7795,6 +7810,7 @@ var
   ShowErrorMsg: Boolean;
   SectionString: String;
 begin
+  INIFile:= nil;
   // this function only executes at startup, when it's not a clean install...
   ShowErrorMsg:= False;
 
@@ -7952,6 +7968,7 @@ var
   end;
 
 begin
+  INIFile:= nil;
   // this function only executes at startup... it should not save the emulator filename back...
   try
     INIFile:= TMemIniFile.Create(GetArcadeEmulatorsFile);
@@ -8082,6 +8099,7 @@ var
     UpdateSetting: Boolean;
     FileMAME_ui: TStringList;
   begin
+    FileMAME_ui:= nil;
     // will save icons folder and image folders in "mamedir\ui.ini" file... August 01, 2016
     // if file "mamedir\ui.ini" is not found, settings will be saved in "eldir\arcade\image_categories.ini" but the settings names will be replaced by MAME names... for consistency (August 01, 2016)
     // move MAMu_ icons folder save to "eldir\arcade\image_categories.ini" file, into the "[MAME]" section since icons a for MAME anyway (August 01, 2016)
@@ -8288,6 +8306,7 @@ var
   end;
 
 begin
+  INIFile:= nil;
   ShowErrorMsg:= False;
   if FormStatus.Visible then
      FormStatus.MessageStr('Reading image categories settings.');
@@ -8359,6 +8378,7 @@ var
     UpdateSetting: Boolean;
     FileMAME_ui: TStringList;
   begin
+    FileMAME_ui:= nil;
     // will save icons folder and image folders in "mamedir\ui.ini" file... August 01, 2016
     // if file "mamedir\ui.ini" is not found, settings will be saved in "eldir\arcade\image_categories.ini" but the settings names will be replaced by MAME names... for consistency (August 01, 2016)
     // move MAMu_ icons folder save to "eldir\arcade\image_categories.ini" file, into the "[MAME]" section since icons a for MAME anyway (August 01, 2016)
@@ -8605,6 +8625,7 @@ var
   end;
 
 begin
+  FontIniFile:= nil; tmpFont:= nil;
   iFile:= GetCustomFontIniFile(ReadNightModeFile);
   if not ValidateFile(iFile) then
      Exit;
@@ -8679,6 +8700,7 @@ var
   end;
 
 begin
+  FontIniFile:= nil;
   iFile:= GetCustomFontIniFile(ReadNightModeFile);
   if CheckReadOnly(iFile) then
      Exit;
@@ -8715,6 +8737,7 @@ var
   INIFile: TMemIniFile;
   iCategory: Integer;
 begin
+  INIFile:= nil;
   iCategory:= -1;
   if ValidateFile(GetImageLayoutsFile) then
      begin
@@ -8782,6 +8805,7 @@ var
   Loop: Integer;
   iSection: String;
 begin
+  ImgIniFile:= nil;
   // called only from uMain.ReadIniFile
   if ValidateFile(GetImageCategorySettingsFile) then
      begin
@@ -8828,6 +8852,7 @@ procedure TFormMain.ReadLightModeSettings; // this is for light mode only
 var
   IniFile: TMemIniFile;
 begin
+  IniFile:= nil;
   if ValidateFile(GetLightModeFile) then
   begin
     IniFile:= TMemIniFile.Create(GetLightModeFile);
@@ -9067,6 +9092,7 @@ var
   end;
 
 begin
+  IniFile:= nil;
   if not ValidateFile(GetGamesFiltersFile) then
      Exit;
 
@@ -9258,6 +9284,7 @@ var
   iSectionStr: String;
   Loop, Index: Integer;
 begin
+  IniFile:= nil;
   if not ValidateFile(GetGamesFiltersFile) then
      Exit;
 
@@ -9328,6 +9355,7 @@ var
   IniFile: TMemIniFile;
   Loop, Index: Integer;
 begin
+  IniFile:= nil;
   if not ValidateFile(GetGamesFiltersFile) then
      Exit;
 
@@ -9419,6 +9447,7 @@ var
   iSectionStr: String;
   iSizeX, iSizeY: Integer;
 begin
+  IniFile:= nil;
   if not ValidateFile(GetGamesFiltersFile) then
      Exit;
 
@@ -9524,6 +9553,7 @@ var
   iUnicodeStr: WideString;
   Continue: Boolean;
 begin
+  INIFile:= nil;
   if FormStatus.Visible then
      FormStatus.MessageStr(ReadIniFileMsg);
 
@@ -9947,6 +9977,7 @@ var
   tmpString: String;
   gColumn: TEasyColumn;
 begin
+  INIFile:= nil; gColumn:= nil;
   WriteImageSingleBackground;
   if not CheckReadOnly(GetFrontendIniFile) then
   begin
@@ -10392,6 +10423,7 @@ var
   iFile: TStringList;
   iPos, iPos2: Integer;
 begin
+  iFile:= nil;
   Result:= '';
   if not FileExists(EmulatorFileName) then
      Exit;
@@ -10955,6 +10987,7 @@ var
   end;
 
 begin
+  ROMsList:= nil; tmpParentROMs:= nil; tmpCloneROMs:= nil; ParentROMsList:= nil; GameStatusList:= nil;
   EmuTitle:= GetArcadeEmulatorDescription(idSupermodel, True);
   TitleErrorMsg:= 'Error: Create Games List ['+EmuTitle+']';
 
@@ -11450,6 +11483,7 @@ var
   end;
 
 begin
+  MachinesIni:= nil;
   Result:= sysID in [idMAME, idHBMAME];
   if not Result then
      Exit;
@@ -11712,6 +11746,7 @@ var
   Item: TEasyItem;
   GameFound: Boolean;
 begin
+  Group:= nil; Item:= nil;
 
   Result:= '';
   GameFound:= False;
@@ -12233,6 +12268,7 @@ var
     end;
 
   begin
+    SupermodelIni:= nil;
     Result:= '';
     if not FileExists(GetFolderArcadeEmulatorIni(idSupermodel)+FileStr) then
        Exit;
@@ -12292,6 +12328,7 @@ var
     StrValue: String;
     IntValue: Integer;
   begin
+    DaphneIni:= nil;
     Result:= '';
     StrValue:= GetArcadeEmuIniFileName(idDaphne);
     if not FileExists(StrValue) then
@@ -12427,6 +12464,7 @@ var
   var
     tmpFile: TMemIniFile;
   begin
+    tmpFile:= nil;
     Result:= '-';
     if not FileExists(FormMain.GetGamesFolderEL+GetSystemFileName(sysID)) then
        Exit;
@@ -12458,6 +12496,7 @@ var
     iFile: TStrings;
     iPosM: Integer;
   begin
+    iFile:= nil;
     Result:= False;
     // MachineNameStr
     // SoftwareNameFolder
@@ -12537,6 +12576,7 @@ var
   end;
 
 begin
+  SupermodelSettings:= nil; msItem:= nil;
   // AlterMAME extra setting value is "1"
   Result:= 0; // all is well
   if not ValidateSelectedGame then
@@ -13769,6 +13809,7 @@ var
   var
     tmpFile: TMemIniFile;
   begin
+    tmpFile:= nil;
     // for MAME software lists
     Result:= '-';
     if not FileExists(GetGamesFolderEL+GetSystemFileName(sysID)) then
@@ -13791,6 +13832,7 @@ var
   end;
 
 begin
+  ExtraParameters:= nil; ExtraDefaultParameters:= nil;
   if not ValidateSelectedGame then
      Exit;
 
@@ -14982,6 +15024,7 @@ var
   end;
 
 begin
+  GamesFiles:= nil;
   CmdLineVar:= '';
   sysID:= MemGameInfo.eCustomSystemID; // use the system of the last selected game by the user
 
@@ -15602,6 +15645,7 @@ var
   end;
 
 begin
+  Item:= nil; Group:= nil;
   if LoadingGames then
      begin
        if NewTitleFormat.Checked then
@@ -16444,6 +16488,7 @@ procedure TFormMain.ELV_MoveItem(ELV_Holder: TEasyListView; MoveUp: Boolean);
 var
   selItem, newPosItem: TEasyItem;
 begin
+  newPosItem:= nil;
   if not FormMain.CheckSelected(ELV_Holder) then
      Exit;
   selItem:= ELV_Holder.Selection.First;
@@ -17194,6 +17239,7 @@ var
   Item: TEasyItem;
   iFound: Boolean;
 begin
+  Item:= nil;
   Result:= nil;
   iFound:= False;
   // Item.StateImageIndex = -1; // -1 -> Arcade; 1..MaxConsoleComputerSystems -> Console/Computer (EmuCon)
@@ -17829,6 +17875,7 @@ var
   MachinesIni: TMemIniFile;
   iSystemStr, iMediaStr: String;
 begin
+  MachinesIni:= nil;
   Result:= '';
   iSystemStr:= SystemsListCustom[CustomSystemID, 0];
   iMediaStr:=  MediaTypeCustom[CustomMediaTypeID, 2];
@@ -18146,6 +18193,7 @@ var
   end;
 
 begin
+  FavList:= nil;
   Result:= False;
   AddGame:= False;
   IsNewFile:= True;
@@ -18609,6 +18657,7 @@ var
   sFoldersList: TStringList;
   Loop, fCount: Integer;
 begin
+  emuCFG:= nil; sFoldersList:= nil;
   if EmuFileNameStr <> '' then
   begin
      ExeFileStr:= EmuFileNameStr;
@@ -18786,6 +18835,7 @@ var
   Loop: Integer;
   emuCFG: TMemIniFile;
 begin
+  MAMEIniFile:= nil; emuCFG:= nil;
   dirCFG:= '';
   dirNVRAM:= '';
   if not ValidateArcadeEmulatorFile(sysID) then
@@ -19382,6 +19432,7 @@ var
   iLoop: Integer;
   iFile: TStrings;
 begin
+  iFile:= nil;
    iVersion:= GetMAMEBuild(sysID);
    if iVersion < 162 then
       Exit; // MAME+MESS merged, starting MAME v0.162 (no software lists in MAME before that)
@@ -20643,6 +20694,7 @@ var
   end;
 
 begin
+  ROMsList:= nil; games_bios:= nil; ListCPU:= nil; SoftNameMachinesList:= nil; tmpList:= nil; SoftList:= nil; GameStatusList:= nil; MemCardMachineList:= nil; CRC32CollisionList:= nil; SHA1CollisionList:= nil; CRC32CollisionFile:= nil;
   EmuTitle:= GetArcadeEmulatorDescription(sysID, True);
   TitleErrorMsg:= 'Error: Create Games List ['+EmuTitle+']';
 
@@ -21715,6 +21767,7 @@ var
   end;
 
 begin
+  ROMsList:= nil; games_bios:= nil; tmpList:= nil; GameStatusList:= nil;
   EmuTitle:= GetArcadeEmulatorDescription(sysID, True);
   TitleErrorMsg:= 'Error: Create Games List ['+EmuTitle+']';
 
@@ -22225,6 +22278,7 @@ var
   iVersion: String;
   GameStatusList: TStringList;
 begin
+  GameStatusList:= nil;
   Result:= FileExists(EmulatorFile[idDaphne]);
   if not Result then
      Exit;
@@ -22658,6 +22712,7 @@ var
   end;
 
 begin
+  ListXML:= nil; ROMsList:= nil; games_bios:= nil; DemulDriverName:= nil; ListDuplicateROMs:= nil; GameStatusList:= nil; CRC32CollisionList:= nil; SHA1CollisionList:= nil; CRC32CollisionFile:= nil;
   TitleErrorMsg:= 'Error: Create Games List ['+GetArcadeEmulatorDescription(sysID)+']';
   if not FileExists(EmulatorFile[sysID]) then
      begin
@@ -23586,6 +23641,7 @@ var
   end;
 
 begin
+  ROMsList:= nil; tmpList:= nil; GameStatusList:= nil; RequirementList:= nil;
   EmuTitle:= GetArcadeEmulatorDescription(sysID, True);
   TitleErrorMsg:= 'Error: Create Software List ['+EmuTitle+']';
   if not FileExists(EmulatorFile[sysID]) then
@@ -23958,6 +24014,7 @@ var
   filters_file: THashedStringList;
   strFilter: String;
 begin
+  filters_file:= nil;
   if SelectedFilterName = 'favorites' then
      Exit;
   if not FileExists(GetFolderFull(43)+'mame_filters.ini') then
@@ -25243,6 +25300,7 @@ var
   LanguagesList: TMemIniFile;
   listSections, listValues: THashedStringList;
 begin
+  listValues:= nil;
   if not FileExists(GetFolderFull(43)+'languages.ini') then
      begin
        FreeAndNil(ListHolder);
@@ -25289,6 +25347,7 @@ var
     listSections, listValues: THashedStringList;
     IsMatureCat: Boolean;
   begin
+    MESSList:= nil; listSections:= nil; listValues:= nil;
 
     MESSList:= TMemIniFile.Create(GetFolderFull(43)+iFileName);
     listSections:= THashedStringList.Create;
@@ -25339,6 +25398,7 @@ var
   end;
 
 begin
+  AntoPISA_matureIni:= nil;
   // load category from category.ini into a HashedStringList "gamename=category" (from MAME 0.171, file contains categories for arcade/non-arcade (ALL sets)
   // load version from version.ini into a HashedStringList "gamename=version" (from MAME 0.171, file contains versions for arcade/non-arcade (ALL sets)
 
@@ -25845,6 +25905,7 @@ var
   Group: TEasyGroup;
   UpdateGamesList: Boolean;
 begin
+  Item:= nil; Group:= nil;
   if IsStartup then
      Exit;
   if not CheckTotal(GamesListView) then
@@ -25945,6 +26006,7 @@ var
   IsParentSetROMsNoDump: Boolean;
 
   MAMESoftListCustomSystems: array[1..MaxConsoleComputerSystems] of THashedStringList;
+  addGroup: TEasyGroup; // kept between AddGameListView calls: clones are added to their parent's group
 
   function GetSoftListCustomSystemID(const SoftwareName: String): Integer;
   var
@@ -26048,7 +26110,6 @@ var
   function AddGameListView: Boolean;
   var
     addItem: TEasyItem;
-    addGroup: TEasyGroup;
     LoopSoft: Integer;
   begin
     Result:= True;
@@ -26220,6 +26281,7 @@ var
   end;
 
 begin
+  iniNumPlayers:= nil; LanguagesList:= nil; CategoryAntoPISA:= nil; VersionAntoPISA:= nil; tempSoftList:= nil; NonArcadeMESSIni:= nil; PlayedListArcadeGames:= nil; PlayedListCustomGames:= nil; CRC32CollisionGames:= nil; CustomGamesExtraInfo:= nil; VersionInfoHBMAME:= nil; CategoryHBMAME:= nil; CategoriesList:= nil; SoftwareListMESS:= nil; DeviceSets:= nil; GameCPU_MAME:= nil; GameCPU_HBMAME:= nil; FavList:= nil; SpecialList:= nil;
   if ValidateFile(GetFavoritesFile) then
      begin
        FavList:= THashedStringList.Create;
@@ -26304,6 +26366,9 @@ begin
   CustomGamesMsgActive:= False;
 
   PlayedArcadeSysID:= -1; // for played games arcade
+  CRC32CollisionSysID:= -1;
+  addGroup:= nil;
+  FirstGroupIndex:= -1;
   PlayedCustomSysID:= -1; // for played games EmuCon
   CustomGameExtraInfoSysID:= -1; // for extra info games EmuCon
 
@@ -26679,6 +26744,7 @@ var
   end;
   
 begin
+  iCatFile:= nil; Group:= nil; Item:= nil;
   if not CheckTotal(GamesListView) then
      Exit;
 
@@ -27410,6 +27476,7 @@ var
   gifImg: TGIFGraphic;
   bmpImg: TBitmap;
 begin
+  pngImg:= nil; jpgImg:= nil; gifImg:= nil; bmpImg:= nil;
   Result:= ifUnknown;
   if not FileExistsW(iFile) then
      Exit;
@@ -28336,6 +28403,7 @@ var
   end;
 
 begin
+  MAMESoftwareListsToProcess:= nil; HBMAMESoftwareListsToProcess:= nil;
   // this function is only called at main menu 'Create Games List'
   if sysID = -1 then
      Exit;
@@ -28834,6 +28902,7 @@ var
   end;
 
 begin
+  MissingROMs:= nil; checkItem:= nil; checkGroup:= nil; TempDevsList:= nil; TempBiosList:= nil; MAMEList:= nil;
   Result:= 0;
   if sysID = -1 then
      Exit;
@@ -30182,6 +30251,7 @@ var
   end;
 
 begin
+  DeviceSetsList:= nil;
   CurrentGameStatus:= TempGameVars.eGameSetStatus;
   //iUpdateGamesText:= '';
   CurrentScanMode:= TEasyGameInfo(ItemAudit).eScanMode;
@@ -30714,6 +30784,7 @@ const
   end;
 
 begin
+  TestFile:= nil; CartMemoryStream:= nil;
   // this will read the first 4 bytes to check for "CART" tag. The format is first 4 bytes containing 'C' 'A' 'R' 'T'.
   Result:= FileExistsW(iFileName);
   if not Result then
@@ -30927,6 +30998,7 @@ const
   end;
 
 begin
+  TestFile:= nil;
   HeaderVersion:= 0;
   Result:= ValidateFile(DiskFileName);
   if not Result then
@@ -31534,6 +31606,7 @@ var
   columnFile: TMemIniFile;
   iSortDirection: Integer;
 begin
+  columnFile:= nil;
   if not FileExists(GetColumnProfile) then
      Exit;
   try
@@ -31658,6 +31731,7 @@ var
   FileIcon: TIcon;
   iImageList: TImageList;
 begin
+  FileIcon:= nil;
   // it seems to be used only in "uMain.PopulateMenuItemCustomEmuParameter" function
   iImageList:= SourceHolder;
   if Source2Holder <> nil then
@@ -32402,6 +32476,7 @@ var
     iRect: TRect;
     oldColor, newColor: uCommon.TRGB;
   begin
+    iBitmap:= nil; iBitmapMask:= nil;
     // get the front bitmap part to edit
     iBitmap:= TBitmap.Create;
     iRect:= bmpIcon.Canvas.ClipRect;
@@ -32475,6 +32550,7 @@ var
   end;
 
 begin
+  bmpIcon:= nil; bmpMask:= nil;
   // for debugging
   //Image1.Picture.Icon:= nil; Image2.Picture.Icon:= nil; Image3.Picture.Icon:= nil; // clear it first
 
@@ -32517,6 +32593,7 @@ var
   OverlayFolder, OverlayCustomFolder, OverlayFileName: String;
   HaveOverlay, HaveOverlayText: Boolean;
 begin
+  tmpIcon:= nil; tmpIconOverlay:= nil; MergedIcon:= nil;
   // OverlayIndex
   // -1 -> no overlay to load
   //  0 -> games filters tool bar multi icons - "main_icons\overlay\toolbar_overlay_multi_dark.ico" (replace by "_light.ico" in light mode)
@@ -32650,6 +32727,7 @@ var
   HaveOverlay, HaveOverlayText: Boolean;
   iIconWidth, iIconHeight: Integer;
 begin
+  tmpIcon:= nil; tmpIconOverlay:= nil; MergedIcon:= nil;
   // image category is the same OverlayIndex as image layout (June 22, 2021)
   // must make image category icons with round corners (update Select icon!!!!)
   // OverlayIndex
@@ -33168,6 +33246,7 @@ var
   var
     tmpIcon: TIcon;
   begin
+    tmpIcon:= nil;
     Icon32.CurrentImage:= icoLoop;
     tmpIcon:= TIcon.Create;
     tmpIcon.Width:= DestImgList.Width;
@@ -33292,6 +33371,7 @@ var
   nIconId: DWORD;
   tmpIcon: TIcon;
 begin
+  tmpIcon:= nil;
   //Result:= PrivateExtractIcons(PChar(IconFileName), 0,
   //                             DestImageList.Width, DestImageList.Height, @hIcon, @nIconId, 1, LR_LOADFROMFILE) <> 0;
 
@@ -33788,6 +33868,7 @@ var
   var
     nIcon: TIcon;
   begin
+    nIcon:= nil;
     nIcon:= TIcon.Create;
     nIcon.Width:= IconSize;
     nIcon.Height:= IconSize;
@@ -33812,6 +33893,7 @@ var
     icoBMP: TBitmap;
     fIcon: TExIcon;
   begin
+    icoBMP:= nil; fIcon:= nil;
     Icon32.CurrentImage:= icoLoop;
     if IconList.Width <> 48 then
        Result:= AddNormalIcon(IconList.Width)
@@ -33854,6 +33936,7 @@ var
   end;
 
 begin
+  Icon32:= nil;
   Result:= -1;
   FileToLoad:= GetMAMu_IconFileName(sysID, romID, GameName, CloneName, DriverName, BiosName, SoftwareName, False); // unzipped icon
   if FileToLoad = '' then
@@ -34331,6 +34414,7 @@ var
   CurrentLeadingZeroVerInfo, CurrentDisableCloneIndentGroupedMode: Boolean;
   elIni: TMemIniFile;
 begin
+  elIni:= nil;
   CurrentFolder:= FormPreferences.MAMu_IconsFolder.Text;
   CurrentLastPlayedHideSeconds:= FormPreferences.LastPlayedHideSeconds.Checked;
   CurrentTotalPlayTimeHideSeconds:= FormPreferences.TotalPlayTimeHideSeconds.Checked;
@@ -34543,6 +34627,7 @@ var
   iStr: WideString;
   iIndex: Integer;
 begin
+  INIFile:= nil;
   // Override Delphi's ugly hand cursor with the nice Windows hand cursor
   Screen.Cursors[crHandPoint]:= LoadCursor(0, IDC_HAND);
   
@@ -34829,6 +34914,7 @@ procedure TFormMain.CheckDefaultFavProfile;
 var
   favFile: TStringList;
 begin
+  favFile:= nil;
   if not FileExists(GetFavoritesFolder+'favorites.txt') then
      begin
        favFile:= TStringList.Create;
@@ -34961,6 +35047,7 @@ var
     vIniFile: TMemIniFile;
     vLoop: Integer;
   begin
+    vIniFile:= nil;
     Result:= True;
     if CheckReadOnly(GetArcadeEmulatorsFile) then
        Exit;
@@ -35051,6 +35138,7 @@ var
     cLoop: Integer;
     IgnoreFileExtension: THashedStringList;
   begin
+    IgnoreFileExtension:= nil;
     Result:= True;
     IgnoreFileExtension:= THashedStringList.Create;
     PopulateIgnoreFileExt_ConsoleComputer(IgnoreFileExtension);
@@ -35076,6 +35164,7 @@ var
   var
     extraIni: TMemIniFile;
   begin
+    extraIni:= nil;
     if not FileExists(GetFrontendExtraIniFile) then
        Exit;
     extraIni:= TMemIniFile.Create(GetFrontendExtraIniFile);
@@ -35093,6 +35182,7 @@ var
   var
     extraIni: TMemIniFile;
   begin
+    extraIni:= nil;
     if (not FormCleanInstallGuide.Option_SelectArcadeEmulators.Checked) and
        (not FormCleanInstallGuide.Option_CreateArcadeGamesList.Checked) and
        (not FormCleanInstallGuide.Option_SelectConsoleComputerEmulators.Checked) and
@@ -35118,6 +35208,7 @@ var
   end;
 
 begin
+  MAMESoftwareListsToProcess:= nil; HBMAMESoftwareListsToProcess:= nil;
   if TerminateEmuLoader then
      begin
        ForceApplicationTerminate;
@@ -35833,6 +35924,7 @@ var
   Loop: Integer;
   ExcludedList: THashedStringList;
 begin
+  ExcludedList:= nil;
   case FreeLists of
     True:
       begin
@@ -36500,6 +36592,7 @@ var
   Item: TEasyItem;
   Group: TEasyGroup;
 begin
+  Item:= nil; Group:= nil;
   Result:= nil;
   if (GameName = '') or (not CheckTotalVisible(GamesListView)) then
      Exit;
@@ -37821,6 +37914,7 @@ var
   end;
 
 begin
+  elvGroup:= nil;
   if not CheckTotal(GamesListView) then
      Exit;
 
@@ -37990,6 +38084,7 @@ var
   end;
 
 begin
+  elvGroup:= nil;
   if not CheckTotal(GamesListView) then
      Exit;
 
@@ -38224,6 +38319,7 @@ var
   Loop: Integer;
   SoftwareGames: THashedStringList;
 begin
+  SoftwareGames:= nil;
   if FormStatus.Visible then
      begin
        FormStatus.TitleStr('Load Games List');
@@ -38847,6 +38943,7 @@ begin
   FreeAndNil(FormArcadeFiltersExtra);
   FreeAndNil(FormArcadeFiltersDriverStatus);
 
+  FormStatus.StopThreadClock(True); // the clock callback must not run on a freed form
   FreeAndNil(FormStatus);
 
   HideFilterMsgBox;
@@ -39645,6 +39742,7 @@ var
   Item: TEasyItem;
   Group: TEasyGroup;
 begin
+  Item:= nil; Group:= nil;
   if IsStartup then
      Exit;
   if ReloadDefaultIcons then
@@ -39729,6 +39827,7 @@ var
   Group: TEasyGroup;
   ReinitItem: Boolean;
 begin
+  Item:= nil; Group:= nil;
   if IsStartup then
      Exit;
 
@@ -40553,6 +40652,7 @@ var
   tmpIcon: TIcon;
   iFolder: String;
 begin
+  tmpIcon:= nil;
   iFolder:= GetFolderFull(32);
   if not IsMainIconFolder then
      iFolder:= iFolder+'msgbox_icons\';
@@ -40992,6 +41092,7 @@ var
   var
     tmpFile: THashedStringList;
   begin
+    tmpFile:= nil;
     Result:= pathFile <> '';
     if Result then
        Result:= FileExists(pathFile);
@@ -41044,6 +41145,7 @@ var
   end;
 
 begin
+  mameIni:= nil; emuDATPaths:= nil;
   ResetGameDocsQuickMenus;
 
   case Enabled of
@@ -41984,6 +42086,7 @@ var
     P: TPoint;
     OldBrushColor: TColor;
   begin
+    Glyph:= nil;
     Glyph := TBitmap.Create;
     try
       Glyph.Transparent := True;
@@ -42785,6 +42888,7 @@ procedure TFormMain.ViewModeToggle;
   var
     Column: TEasyColumn;
   begin
+    Column:= nil;
     Column:= GamesListView.Header.FirstColumn;
     Result:= Column.Clickable = Enabled;
     if Result then
@@ -43238,6 +43342,7 @@ var
   end;
 
 begin
+  Item:= nil;
   ChangedGames:= False;
   if TMenuItem(Sender).Tag in [3, 5] then
      begin
@@ -43485,6 +43590,7 @@ var
   missFile: TMemIniFile;
   sFile: String;
 begin
+  missFile:= nil;
   if GamesListView.Selection.Count <> 1 then
      Exit;
   if not ValidateSelectedGame then
@@ -46511,6 +46617,7 @@ var
     sysID: Integer;
     MediaType: ShortInt;
   begin
+    lvItem:= nil;
     if not ValidateSelectedGame then
        Exit;
     if not GameIsClone(MemGameInfo.eClone) then
@@ -46635,6 +46742,7 @@ var
   end;
 
 begin
+  Item:= nil;
   // 0: Keyboard+Mouse
   // 1: Devastator II
   // 2: HotRod SE
@@ -46867,6 +46975,7 @@ var
     INIFile: TMemIniFile;
     SectionStr: String;
   begin
+    INIFile:= nil;
     Result:= FileExists(GetFrontendExtraIniFile);
     if not Result then
        Exit;
@@ -47437,6 +47546,7 @@ var
   end;
 
 begin
+  Item:= nil; Group:= nil;
   if not PanelFilterCPU.Visible then
      Exit;
 
@@ -47685,6 +47795,7 @@ var
   end;
 
 begin
+  elvGroup:= nil;
   if PanelSearchGames_ToolBar.Visible then
      begin
        if FilterGameTitle_ToolBar.Text = '' then
@@ -48410,6 +48521,7 @@ var
   ListXML, NewControlTypes, ctype, waysList: THashedStringList;
   CheckControl: Boolean;
 begin
+  ListXML:= nil; NewControlTypes:= nil;
   if ShowMessageBox('INFO', 'Search new control types.',
                     '   MAME''s -listxml output will scan the control type entries.'+
                     ' If there are new control types, '+
@@ -49404,6 +49516,7 @@ var
   MediaType: ShortInt;
   iStr: String;
 begin
+  lvItem:= nil;
   if not ValidateSelectedGame then
      Exit;
 
@@ -49878,6 +49991,7 @@ var
   SoftListReqFile: TMemIniFile;
   FoundReqFile: Boolean;
 begin
+  SoftListReqFile:= nil;
   // CreateListMode
   // 0 -> disabled, delete all software list files
   // 1 -> create, update mode, delete software list files only from "SourceList" list var
@@ -50172,6 +50286,7 @@ var
   end;
 
 begin
+  LastUsedMachine:= nil;
   ShowFilterMsgBox('Select MAME Machine to Run '+GetSystemTypeTitle(CustomSystemID, False)+' Game', 'Building compatible machines list, please wait...', IsGroupedView);
 
   iCurrentMachineName:= '';
@@ -50438,6 +50553,7 @@ var
   sFileName, TempStr: String;
   SoftGamesList: THashedStringList;
 begin
+  SoftGamesList:= nil;
   GotMediaType:= False;
   ExecParam:= '';
   Result:= '';
@@ -50535,6 +50651,7 @@ var
   columnFile: TMemIniFile;
   ColumnsArray: Boolean;
 begin
+  columnFile:= nil;
   GamesListView.BeginUpdate;
 
   for Loop:= 1 to GamesListView.Header.Columns.Count-1 do
@@ -50671,6 +50788,7 @@ var
   Item: TEasyItem;
   Group: TEasyGroup;
 begin
+  Item:= nil;
   Result:= nil;
   if (MachineName = '') or (not CheckTotalVisible(MachinesListSidePanel)) then
      Exit;
@@ -50863,6 +50981,7 @@ var
   elvGroup: TEasyGroup;
   elvItem, FirstItem: TEasyItem;
 begin
+  elvItem:= nil;
   if not CheckTotal(MachinesListSidePanel) then
      Exit;
 
@@ -51178,6 +51297,7 @@ var
   Item: TEasyItem;
   Group: TEasyGroup;
 begin
+  Item:= nil; Group:= nil;
   if TMenuItem(Sender).Tag = MenuGameTitleExtraInfo.Tag then
      begin
        TMenuItem(Sender).Checked:= True;
@@ -51707,6 +51827,7 @@ function TFormMain.CallSelectConsCompSystem(FeatureType: ShortInt = -1; SelectSy
 var
   Item: TEasyItem;
 begin
+  Item:= nil;
   Result:= -1;
   if not Assigned(FormConsCompSystemSelector) then
      FormConsCompSystemSelector:= TFormConsCompSystemSelector.Create(nil);
@@ -51906,6 +52027,7 @@ var
   end;
 
 begin
+  ExistingGames:= nil;
   Result:= False;
   SystemFileName:= GetGamesFolderEL(2)+SystemsListCustom[SystemID, 2];
   MsgTitle:= SystemsListCustom[SystemID, 0]+#13#10+'Create Games List';
@@ -52590,6 +52712,7 @@ var
   Loop, tIndex, ArcadeFilesCopied, ConsCompFilesCopied, ConsCompProfilesMerged: Integer;
   DestinationFavProfile, ConsCompFavProfile: THashedStringList;
 begin
+  DestinationFavProfile:= nil; ConsCompFavProfile:= nil;
   OldArcadeFavFolder:= FrontendPath+'ini_files\favorites\';
   ConsCompFavFolder:= GetConsoleComputerFolder+'favorites\';
   InitMessageBox;
@@ -56103,6 +56226,7 @@ procedure TFormMain.PopupCustomParametersClick(Sender: TObject);
     iIndex: Integer;
     IsClone: Byte;
   begin
+    iIcon:= nil;
     Result:= True;
     iSoftwareName:= MemGameInfo.eSoftwareName;
     iFolder:= GetCustomParamsFolder;
@@ -56256,6 +56380,7 @@ var
     Group: TEasyGroup;
     ItemSearch: TEasyItem;
   begin
+    Group:= nil;
     Result:= False;
     //ShowFilterMsgBox('Game Info', 'Scanning games list for "'+SetName+'", please wait...', IsGroupedView);
     TempGameVars.eName:= SetName;
