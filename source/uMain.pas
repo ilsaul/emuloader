@@ -1959,9 +1959,6 @@ type
 
     { Public declarations }
   public
-    {$IF CompilerVersion >= 20}
-    destructor Destroy; override;
-    {$IFEND}
     IsStartup, CreatingGamesList: Boolean;
 
     Font_Parent, Font_Clone, Font_Preliminary, Font_MissingROMs, Font_MissingROMsPreliminary: TFont;
@@ -2057,6 +2054,9 @@ type
     // thumbnail view mode settings
     ThumbnailSettings: TThumbnailSettings;
 
+    {$IF CompilerVersion >= 20}
+    destructor Destroy; override;
+    {$IFEND}
     procedure SetWindowStayOnTop(FormSource: TForm; SetParentWindow: Boolean = False); // do not set TForm.FormStyle = fsStayOnTop, it causes flicker; use this function
 
     // custom parameters (2021)
