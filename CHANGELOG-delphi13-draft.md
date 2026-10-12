@@ -59,6 +59,11 @@ Move the verified entries into `CHANGELOG.md` when preparing the release.
 
 ## Fixed
 
+- Reserve the actual custom/themed glyph width before checkbox and radio-button
+  captions in Delphi 13, honoring CaptionIndent and custom icon height. Prevent
+  HD selection symbols from covering text in Preferences and emulator setup.
+  Preserve the legacy Delphi 7 caption spacing.
+
 - Restore native main-toolbar hover painting in Delphi 13 by disabling its
   double buffering. Draw the original short labels at runtime after native
   button painting, independently of icon pixels, including changing view/filter

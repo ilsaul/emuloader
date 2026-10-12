@@ -217,7 +217,8 @@ type
     procedure DrawParentImage (Control: TControl; Dest: TCanvas);
   protected
     procedure Notification(AComponent: TComponent; AOperation: TOperation); override;
-    procedure DrawCheck(ACanvas: TCanvas);
+    procedure DrawCheck(ACanvas: TCanvas); overload;
+    procedure DrawCheck(ACanvas: TCanvas; var GlyphWidth: Integer); overload;
     procedure Paint; override;
     procedure SetChecked(Value: Boolean); virtual;
     function  GetChecked: Boolean; virtual;
@@ -404,7 +405,8 @@ type
     procedure LoadCustomIcons; // added by Ciro Alfredo Consentino (August 16, 2019)
     procedure DrawParentImage (Control: TControl; Dest: TCanvas);
   protected
-    procedure DrawRadio(ACanvas: TCanvas);
+    procedure DrawRadio(ACanvas: TCanvas); overload;
+    procedure DrawRadio(ACanvas: TCanvas; var GlyphWidth: Integer); overload;
     procedure Paint; override;
     procedure Notification(AComponent: TComponent; AOperation: TOperation); override;
     procedure MouseDown(Button: TMouseButton; Shift: TShiftState; X, Y: Integer); override;
@@ -987,6 +989,14 @@ end;
 
 procedure TCustomAdvOfficeCheckBox.DrawCheck(ACanvas: TCanvas);
 var
+  GlyphWidth: Integer;
+begin
+  GlyphWidth:= BW;
+  DrawCheck(ACanvas, GlyphWidth);
+end;
+
+procedure TCustomAdvOfficeCheckBox.DrawCheck(ACanvas: TCanvas; var GlyphWidth: Integer);
+var
   bmp: TBitmap;
   BL,BT: Integer;
   icoHeight: Integer;
@@ -1084,6 +1094,10 @@ begin
       LoadedCustom := not ico.Empty;
       if LoadedCustom then
       begin
+        {$IF CompilerVersion >= 20}
+        icoHeight:= ico.Height;
+        GlyphWidth:= ico.Width;
+        {$IFEND}
         case FBtnVAlign of
           tlTop:    BT := 2 + (ACanvas.TextHeight('gh') - icoHeight) div 2;
           tlCenter: BT := (ClientRect.Bottom - ClientRect.Top) div 2 - (icoHeight div 2);
@@ -1091,7 +1105,11 @@ begin
         end;
 
         if (FAlignment = taRightJustify) or UseRightToLeftAlignment then
+          {$IF CompilerVersion >= 20}
+          BL := ClientRect.Right - GlyphWidth - 1
+          {$ELSE}
           BL := ClientRect.Right - icoHeight - 1
+          {$IFEND}
         else
           BL := 0;
 
@@ -1109,6 +1127,10 @@ begin
   begin
     HTheme := OpenThemeData(Self.Handle,'button');
     Err:= GetThemePartSize(HTheme, Self.Handle, BP_CHECKBOX, CBS_CHECKEDNORMAL, nil, TS_TRUE, iSize); // added by Ciro Alfredo Consentino (August 05, 2019)
+    {$IF CompilerVersion >= 20}
+    if Succeeded(Err) then
+       GlyphWidth:= iSize.cy;
+    {$IFEND}
 
     // new code added by Ciro Alfredo Consentino (August 05, 2019)
     case FBtnVAlign of
@@ -1223,6 +1245,9 @@ begin
       end;
 
       bmp.LoadFromResourceName(hInstance, resStr);
+      {$IF CompilerVersion >= 20}
+      GlyphWidth:= bmp.Width;
+      {$IFEND}
       bmp.TransparentColor:= clFuchsia; // added by Ciro Alfredo Consentino (July 30, 2019)
       bmp.Transparent := True;
       bmp.TransparentMode := tmFixed;//  tmAuto; // modified by Ciro Alfredo Consentino (July 30, 2019)
@@ -1251,6 +1276,7 @@ var
   R: TRect;
   text: String;
   ExtraBW: Integer;
+  GlyphWidth: Integer;
   FontColor: TColor;
   CanvasBMP: TBitmap;
 begin
@@ -1297,19 +1323,25 @@ begin
     CanvasBMP.Canvas.Brush.Style := bsClear;
     Text := Caption;
 
-    DrawCheck(CanvasBMP.Canvas);
+    GlyphWidth:= BW;
+    DrawCheck(CanvasBMP.Canvas, GlyphWidth);
 
     ExtraBW := 4;
+    {$IF CompilerVersion >= 20}
+    GlyphWidth:= Max(GlyphWidth+ExtraBW, CaptionIndent);
+    {$ELSE}
+    GlyphWidth:= BW+ExtraBW;
+    {$IFEND}
 
     R := GetClientRect;
 
     if (FAlignment = taRightJustify) or UseRightToLeftAlignment then
     begin
       r.Left := 0;
-      r.Right := r.Right - BW - ExtraBW;
+      r.Right := r.Right - GlyphWidth;
     end
     else
-      r.Left := r.Left + BW + ExtraBW;
+      r.Left := r.Left + GlyphWidth;
 
     r.top := r.top + 2;
 
@@ -1894,6 +1926,14 @@ end;
 
 procedure TCustomAdvOfficeRadioButton.DrawRadio(ACanvas: TCanvas);
 var
+  GlyphWidth: Integer;
+begin
+  GlyphWidth:= 13;
+  DrawRadio(ACanvas, GlyphWidth);
+end;
+
+procedure TCustomAdvOfficeRadioButton.DrawRadio(ACanvas: TCanvas; var GlyphWidth: Integer);
+var
   bmp: TBitmap;
   BT, BL: Integer;
   i: Integer;
@@ -1976,6 +2016,10 @@ begin
       LoadedCustom := not ico.Empty;
       if LoadedCustom then
       begin
+        {$IF CompilerVersion >= 20}
+        icoHeight:= ico.Height;
+        GlyphWidth:= ico.Width;
+        {$IFEND}
         case FBtnVAlign of
           //tlTop: BT := 4;
           tlTop: BT    := 2 + (ACanvas.TextHeight('gh') - icoHeight) div 2;
@@ -1984,7 +2028,11 @@ begin
         end;
 
         if (FAlignment = taRightJustify) or UseRightToLeftAlignment then
+          {$IF CompilerVersion >= 20}
+          BL := ClientRect.Right - GlyphWidth
+          {$ELSE}
           BL := ClientRect.Right - icoHeight
+          {$IFEND}
         else
           BL := 0;
 
@@ -2002,6 +2050,10 @@ begin
   begin
     HTheme := OpenThemeData(Self.Handle, 'button');
     Err:= GetThemePartSize(HTheme, Self.Handle, BP_RADIOBUTTON, RBS_CHECKEDNORMAL, nil, TS_TRUE, iSize); // added by Ciro Alfredo Consentino (August 05, 2019)
+    {$IF CompilerVersion >= 20}
+    if Succeeded(Err) then
+       GlyphWidth:= iSize.cy;
+    {$IFEND}
 
     case FBtnVAlign of
     //tlTop: BT := 4;
@@ -2085,6 +2137,9 @@ begin
     end;
 
     bmp.LoadFromResourceName(hInstance, resStr);
+    {$IF CompilerVersion >= 20}
+    GlyphWidth:= bmp.Width;
+    {$IFEND}
     bmp.Transparent:= True;
     bmp.TransparentMode:= tmAuto;
 
@@ -2160,16 +2215,21 @@ begin
   begin
     CanvasBMP.Canvas.Brush.Style := bsClear;
     BR := 13;
-    DrawRadio(CanvasBMP.Canvas);
+    DrawRadio(CanvasBMP.Canvas, BR);
+    {$IF CompilerVersion >= 20}
+    BR:= Max(BR+3, CaptionIndent);
+    {$ELSE}
+    Inc(BR, 3);
+    {$IFEND}
 
     r := GetClientRect;
     if (FAlignment = taRightJustify) or UseRightToLeftAlignment then
     begin
       r.Left := 0;
-      r.Right := r.Right - BR - 3; // fix to match Delphi's VCL theme RadioButton's text
+      r.Right := r.Right - BR;
     end
     else
-      r.Left := r.Left + BR + 3; // fix to match Delphi's VCL theme RadioButton's text
+      r.Left := r.Left + BR;
 
     r.Top := r.Top + 4;
 
