@@ -46,6 +46,11 @@ Move the verified entries into `CHANGELOG.md` when preparing the release.
 
 ## Fixed
 
+- Supply explicit grayscale toolbar images for disabled buttons in Delphi 13,
+  preserving icon transparency instead of relying on automatic disabled drawing.
+  Keep these images synchronized when toolbar icons, sizes or themes change;
+  commands remain disabled according to the existing application rules.
+
 - Corrected malformed output paths in the Delphi 13 project file.
 - Added missing Delphi project IDE metadata (`BorlandProject`) required to
   reopen and save the project in Delphi 13.

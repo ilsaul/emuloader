@@ -1496,6 +1496,10 @@ type
     procedure PopupDeleteGameCustomParametersClick(Sender: TObject);
   { Private declarations }
   private
+    {$IF CompilerVersion >= 20}
+    FDisabledToolBarImages: TImageList;
+    procedure UpdateDisabledToolBarIcons(IconIndex: Integer = -1);
+    {$IFEND}
     //FileIcon: TIcon;
     //iMAMu_Icon: TIcon;
     LastColumnSorted: Integer;
@@ -31964,6 +31968,101 @@ begin
       AddDefaultIcons(ImageCategoryArray[Loop, 0]+'.ico', tempFolder, IL_Holder, 3);
 end;
 
+{$IF CompilerVersion >= 20}
+procedure TFormMain.UpdateDisabledToolBarIcons(IconIndex: Integer = -1);
+var
+  SourceIcon, DisabledIcon: TIcon;
+  Bitmap: TBitmap;
+  Info: TIconInfo;
+  DisabledHandle: HICON;
+  Pixel: PRGBQuad;
+  I, FirstIndex, LastIndex, X, Y, Gray: Integer;
+begin
+  if FDisabledToolBarImages = nil then
+     begin
+       FDisabledToolBarImages:= TImageList.Create(Self);
+       FDisabledToolBarImages.ColorDepth:= cd32Bit;
+       ToolBarButtons.DisabledImages:= FDisabledToolBarImages;
+     end;
+
+  if (IconIndex = -1) or
+     (FDisabledToolBarImages.Width <> IL_ToolBarButtons.Width) or
+     (FDisabledToolBarImages.Height <> IL_ToolBarButtons.Height) or
+     (FDisabledToolBarImages.Count <> IL_ToolBarButtons.Count) then
+     begin
+       FDisabledToolBarImages.Clear;
+       Set4KImageListSpecs(FDisabledToolBarImages, IL_ToolBarButtons.Width, IL_ToolBarButtons.Height);
+       FirstIndex:= 0;
+       LastIndex:= IL_ToolBarButtons.Count-1;
+     end
+  else
+     begin
+       FirstIndex:= IconIndex;
+       LastIndex:= IconIndex;
+     end;
+
+  SourceIcon:= TIcon.Create;
+  try
+    DisabledIcon:= TIcon.Create;
+    try
+      Bitmap:= TBitmap.Create;
+      try
+        for I:= FirstIndex to LastIndex do
+        begin
+          IL_ToolBarButtons.GetIcon(I, SourceIcon);
+          if not GetIconInfo(SourceIcon.Handle, Info) then
+             RaiseLastOSError;
+          try
+            // Preserve the icon's alpha and AND mask; only desaturate RGB.
+            Bitmap.Handle:= Info.hbmColor;
+            Info.hbmColor:= 0; // the bitmap now owns this handle
+            Bitmap.PixelFormat:= pf32bit;
+            for Y:= 0 to Bitmap.Height-1 do
+            begin
+              Pixel:= Bitmap.ScanLine[Y];
+              for X:= 0 to Bitmap.Width-1 do
+              begin
+                Gray:= (Integer(Pixel^.rgbRed)*30+Integer(Pixel^.rgbGreen)*59+
+                        Integer(Pixel^.rgbBlue)*11) div 100;
+                Pixel^.rgbRed:= Gray;
+                Pixel^.rgbGreen:= Gray;
+                Pixel^.rgbBlue:= Gray;
+                Inc(Pixel);
+              end;
+            end;
+            Info.hbmColor:= Bitmap.Handle;
+            try
+              DisabledHandle:= CreateIconIndirect(Info);
+              if DisabledHandle = 0 then
+                 RaiseLastOSError;
+              DisabledIcon.Handle:= DisabledHandle;
+            finally
+              Info.hbmColor:= 0;
+            end;
+            if I < FDisabledToolBarImages.Count then
+               FDisabledToolBarImages.ReplaceIcon(I, DisabledIcon)
+            else
+               if FDisabledToolBarImages.AddIcon(DisabledIcon) <> I then
+                  raise Exception.Create('Could not add disabled toolbar icon '+IntToStr(I));
+          finally
+            if Info.hbmColor <> 0 then
+               DeleteObject(Info.hbmColor);
+            if Info.hbmMask <> 0 then
+               DeleteObject(Info.hbmMask);
+          end;
+        end;
+      finally
+        Bitmap.Free;
+      end;
+    finally
+      DisabledIcon.Free;
+    end;
+  finally
+    SourceIcon.Free;
+  end;
+end;
+{$IFEND}
+
 procedure TFormMain.LoadToolBarButtons(ImageList_Holder: TImageList);
 var
   tempFolder, tempFolderFilters: String;
@@ -31990,6 +32089,10 @@ begin
   AddDefaultIcons('games_mru.ico',                     tempFolderFilters, ImageList_Holder, 1); // 13
   AddDefaultIcons('emulators.ico',                     tempFolderFilters, ImageList_Holder, 1); // 14
   AddDefaultIcons('filter_search_text.ico',            tempFolderFilters, ImageList_Holder, 1); // 15
+  {$IF CompilerVersion >= 20}
+  if ImageList_Holder = IL_ToolBarButtons then
+     UpdateDisabledToolBarIcons;
+  {$IFEND}
 end;
 
 procedure TFormMain.LoadCustomEmulatorsIconsPopupMenu;
@@ -32776,6 +32879,10 @@ begin
        tmpIcon.ReleaseHandle;
        FreeAndNil(tmpIcon);
        IconLoaded:= True;
+       {$IF CompilerVersion >= 20}
+       if (IconList = IL_ToolBarButtons) and (IconIndex >= 0) and (IconIndex < IconList.Count) then
+          UpdateDisabledToolBarIcons(IconIndex);
+       {$IFEND}
      end;
   DestroyIcon(hIcon);
   {$IF CompilerVersion >= 20}
