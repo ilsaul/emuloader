@@ -1,4 +1,4 @@
-# Emu Loader - Delphi 13 release notes (draft)
+# Emu Loader 10.0.0 - Delphi 13 release notes (draft)
 
 Working draft for the next release. These changes are on the `delphi13-port`
 branch; the application build and runtime behavior have not yet been confirmed.
@@ -33,6 +33,10 @@ Move the verified entries into `CHANGELOG.md` when preparing the release.
   now generate.
 
 ## Changed
+
+- Set the Delphi 13 file/product version to 10.0.0.0 with the Windows
+  Pre-release flag enabled for all configurations until the stable release.
+  Display v10.0.0 in the application and logs without a beta suffix.
 
 - Moved Delphi 7 VCL shadow units out of Delphi 13 search paths while retaining
   them under `vcl-d7` for the legacy project.

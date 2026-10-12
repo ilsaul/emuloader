@@ -27,6 +27,10 @@ In summary, EmuLoader is the ideal tool if you want a powerful and dedicated int
 
 ## Diagnostic logging (Delphi 13)
 
+The Delphi 13 port is version **10.0.0**, with file/product version `10.0.0.0`
+and the Windows **Pre-release** flag enabled until the stable release. The flag
+does not add a beta suffix to the version displayed in the application or logs.
+
 Logging is disabled by default. Enable **Enable Diagnostic Log (Troubleshooting)**
 in **Preferences > General**, or launch the application with:
 

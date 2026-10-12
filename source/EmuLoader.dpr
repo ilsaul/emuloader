@@ -106,10 +106,16 @@ begin
   IsNightMode:= True;
   Is4KMode:= Read4KSetting; // validates 4K resolution and read setting from "EmuLoader.ini", if found; also sets "FrontendPath:= ExtractFilePath(Application.ExeName);"
   FrontendVersion:= 'v'+GetFileInfo2(Application.ExeName, VersionInfo[3]);
+  {$IF CompilerVersion >= 20}
+  // Hide only the zero build component, retaining major.minor.release.
+  if Copy(FrontendVersion, Length(FrontendVersion)-1, 2) = '.0' then
+     Delete(FrontendVersion, Length(FrontendVersion)-1, 2);
+  {$ELSE}
   if PosEx('.0.0', FrontendVersion) = 0 then
      Delete(FrontendVersion, Length(FrontendVersion)-1, 2)
   else
      Delete(FrontendVersion, Length(FrontendVersion)-3, 4);
+  {$IFEND}
 
   //CreateSplashIniFile;       // remove splash settings from "ini_files\lightmode.ini" [Splash] section and create "ini_files\splash.ini"
   //CreateGamesFiltersIniFile; // remove tool bar filters settings from "emuloader.ini" and create "ini_files\games_filters.ini"
