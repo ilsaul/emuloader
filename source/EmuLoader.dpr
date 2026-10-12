@@ -156,7 +156,11 @@ begin
   {$IFEND}
   FormStatus.MessageStr('Initializing main screen.');
   Application.CreateForm(TFormMain, FormMain); // application's main form
+  {$IF CompilerVersion >= 20}
+  FormMain.Caption:= FormMain.Caption+' '+FrontendVersionCaption;
+  {$ELSE}
   FormMain.Caption:= FormMain.Caption+' '+FrontendVersion;
+  {$IFEND}
 
   FormStatus.MessageStr('Initializing night mode screen.');
   Application.CreateForm(TFormNightMode, FormNightMode);
