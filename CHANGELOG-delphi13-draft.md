@@ -51,6 +51,11 @@ Move the verified entries into `CHANGELOG.md` when preparing the release.
 
 ## Fixed
 
+- Keep the EasyListview incremental-search callback allocated until its manager
+  is destroyed on Win64. Expiring or resetting the timer no longer frees the
+  thunk while its return instructions are still executing, preventing a DEP
+  execution violation after the search timeout. The legacy Win32 path is unchanged.
+
 - Supply explicit grayscale toolbar images for disabled buttons in Delphi 13,
   preserving icon transparency instead of relying on automatic disabled drawing.
   Keep these images synchronized when toolbar icons, sizes or themes change;

@@ -29578,6 +29578,10 @@ end;
 destructor TEasyIncrementalSearchManager.Destroy;
 begin
   EndTimer;
+  {$IFDEF CPUX64}
+  DisposeStub(FTimerStub);
+  FTimerStub := nil;
+  {$ENDIF}
   inherited
 end;
 
@@ -29608,9 +29612,15 @@ begin
     begin
       hTimer := 0;
       Exclude(FState, eissTimerRunning);
+      {$IFNDEF CPUX64}
       DisposeStub(FTimerStub);
+      {$ENDIF}
     end else
+      {$IFDEF CPUX64}
+      raise Exception.Create('Can not Destroy Incremental Search Timer');
+      {$ELSE}
       Exception.Create('Can not Destroy Incremental Search Timer');
+      {$ENDIF}
   end
 end;
 
@@ -29955,8 +29965,16 @@ procedure TEasyIncrementalSearchManager.StartTimer;
 begin
   if Enabled and not(eissTimerRunning in State) then
   begin
+    {$IFDEF CPUX64}
+    // EndTimer runs inside TimerProc; the Win64 thunk must survive its return.
+    if not Assigned(TimerStub) then
+    {$ENDIF}
     TimerStub := CreateStub(Self, @TEasyIncrementalSearchManager.TimerProc);
     hTimer := SetTimer(0, 0, ResetTime, TimerStub);
+    {$IFDEF CPUX64}
+    if hTimer = 0 then
+      raise Exception.Create('Can not Create Incremental Search Timer');
+    {$ENDIF}
     Include(FState, eissTimerRunning);
   end
 end;
