@@ -4,6 +4,14 @@ To-do List
    This file is just a reference for what I need/want/will add/fix in future releases.
 The order of appearance does not matter, and it does not mean that it will be worked on.
 
+- [DELPHI 13, PENDING] Manage frontend UI texts through external language files,
+  including the runtime main-toolbar labels and their dynamic filter captions.
+  Check whether the historical .lng translation system can be recovered/reused
+  before adding a new system. CHANGELOG.md mentions it, but no .lng files or
+  active frontend translation loader were found in the current source tree.
+  The existing LoadLanguagesList/languages.ini describes game languages, not UI
+  translations. Support Unicode, stable text keys, English defaults for missing
+  translations, a persisted language selection, and readable DPI-aware layouts.
 
 - IMPORTANT, FUTURE CHANGE. This will break the most basic of Emu Loader's features, specially games lists and game scan feature
    -> update media type info for arcade games. include cart/flop/cass/disc/disk/flash/etc... into the media type
