@@ -52,8 +52,21 @@ Move the verified entries into `CHANGELOG.md` when preparing the release.
 ## Fixed
 
 - Restore native main-toolbar hover painting in Delphi 13 by disabling its
-  double buffering. Supply synchronized hot images with black lettering on the
-  light hover background, preserving normal icons, alpha and disabled images.
+  double buffering. Draw the original short labels at runtime after native
+  button painting, independently of icon pixels, including changing view/filter
+  labels and the crossed-out non-working label. Fit text to native DPI-scaled
+  image dimensions and choose contrasting normal/hot/pressed/disabled colors from
+  the painted background. Generate synchronized text-free normal/hot and grayscale disabled
+  images, preserving alpha (or legacy icon masks) and button dimensions.
+  Reserve a readable label band by proportionally fitting the artwork above it;
+  the original small toolbar remains icon-only. Toolbar customization captions,
+  menus, the editor's icon previews, source ICOs and Delphi 7 drawing are unchanged.
+  Windows compilation and visual/DPI verification are still required.
+
+- Fix the Delphi 13 main-toolbar missing-icon fallback when the supplied folder
+  is already `arcade_filters`, and reset an empty arcade filter to the default
+  icon instead of retaining the previous one. Accept the bundled alternate
+  filename for the missing-games/missing-ROMs filter icon.
 
 - Keep the EasyListview incremental-search callback allocated until its manager
   is destroyed on Win64. Expiring or resetting the timer no longer frees the

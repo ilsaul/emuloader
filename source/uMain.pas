@@ -1497,8 +1497,11 @@ type
   { Private declarations }
   private
     {$IF CompilerVersion >= 20}
+    FNormalToolBarImages: TImageList;
     FDisabledToolBarImages: TImageList;
-    FHotToolBarImages: TImageList;
+    FToolBarWindowProc: TWndMethod;
+    FToolBarDrawDC: HDC;
+    FToolBarDrawRect: TRect;
     {$IFEND}
     //FileIcon: TIcon;
     //iMAMu_Icon: TIcon;
@@ -1558,6 +1561,13 @@ type
     FDrawBuffer, FDrawBufferBottom: TBitmap;
     {$IF CompilerVersion >= 20}
     procedure UpdateToolBarStateIcons(IconIndex: Integer = -1);
+    function ToolBarIconTextTop(IconHeight: Integer): Integer;
+    function ToolBarLabelHeight(IconHeight: Integer): Integer;
+    function ToolBarButtonLabel(Button: TToolButton): String;
+    procedure ToolBarButtonsWindowProc(var Message: TMessage);
+    procedure ToolBarButtonsDrawLabel(Sender: TToolBar; Button: TToolButton;
+      State: TCustomDrawState; Stage: TCustomDrawStage;
+      var Flags: TTBCustomDrawFlags; var DefaultDraw: Boolean);
     {$IFEND}
     function  GetDrawBuffer: TBitmap;
     function  GetDrawBufferBottom: TBitmap;
@@ -1949,6 +1959,9 @@ type
 
     { Public declarations }
   public
+    {$IF CompilerVersion >= 20}
+    destructor Destroy; override;
+    {$IFEND}
     IsStartup, CreatingGamesList: Boolean;
 
     Font_Parent, Font_Clone, Font_Preliminary, Font_MissingROMs, Font_MissingROMsPreliminary: TFont;
@@ -32006,18 +32019,302 @@ begin
 end;
 
 {$IF CompilerVersion >= 20}
+destructor TFormMain.Destroy;
+begin
+  if (ToolBarButtons <> nil) and Assigned(FToolBarWindowProc) then
+     begin
+       ToolBarButtons.OnAdvancedCustomDrawButton:= nil;
+       ToolBarButtons.WindowProc:= FToolBarWindowProc;
+     end;
+  inherited Destroy;
+end;
+
+function TFormMain.ToolBarIconTextTop(IconHeight: Integer): Integer;
+begin
+  Result:= IconHeight;
+  // Strip the whole caption panel, not just the glyph rows recolored by
+  // IconChangeFontColor (the shipped 48/68 ICO panels start at rows 41/59).
+  case IconHeight of
+    128: Result:= 100;
+     68: Result:= 59;
+     48: Result:= 41;
+     40: Result:= 34;
+     32: Result:= 27;
+  else
+    if IconHeight > 32 then
+       Result:= MulDiv(IconHeight, 41, 48);
+  end;
+end;
+
+function TFormMain.ToolBarLabelHeight(IconHeight: Integer): Integer;
+begin
+  if ToolBarIconTextTop(IconHeight) = IconHeight then
+     Result:= 0 // the original small toolbar is icon-only
+  else
+     Result:= Max(IconHeight-ToolBarIconTextTop(IconHeight),
+                  MulDiv(IconHeight, 11, 48));
+end;
+
+function TFormMain.ToolBarButtonLabel(Button: TToolButton): String;
+const
+  ViewLabels: array[0..5] of String =
+    ('DETAILS', 'GROUPED', 'SMALL', 'LARGE', 'TILES', 'THUMBNAIL');
+  ParentLabels: array[0..2] of String = ('LIST BOTH', 'PARENT', 'CLONE');
+  HaveLabels: array[0..5] of String =
+    ('LIST ALL', 'HAVE', 'MISSING', 'MISS ROMS', 'MISSROMS?', 'MISSROMS?');
+  DriverLabels: array[0..4] of String =
+    ('LIST ALL', 'WORKING', 'WORKING', 'IMPERFECT', 'WORKING');
+  // These are the short captions in the shipped ICOs, not menu descriptions.
+  ArcadeLabels: array[0..82, 0..1] of String = (
+    ('allgames', 'LIST ALL'), ('arcadia', 'ARCADIA'), ('atari', 'ATARI'),
+    ('atari_90s', 'ATARI 90s'), ('atari_mix1', 'ATARI MIX'),
+    ('atarisy1', 'ATARI SYS 1'), ('atarisy2', 'ATARI SYS 2'),
+    ('awbios', 'ATOMISWAVE'), ('biossets', 'BIOS SETS'), ('capcom', 'CAPCOM'),
+    ('capcom_80s', 'CAPCOM 80s'), ('chd', 'CHD'), ('chihiro', 'CHIHIRO'),
+    ('cps1', 'CPS-1'), ('cps2', 'CPS-2'), ('cps3', 'CPS-3'),
+    ('cpzn1', 'CPZN-1'), ('cpzn2', 'CPZN-2'), ('decocass', 'DECO TAPE'),
+    ('devicesets', 'DEVICES'), ('globalvr', 'GLOBAL VR'),
+    ('hornet_gticlub', 'HORNET/GTI'), ('irem', 'IREM MISC'), ('konami', 'KONAMI'),
+    ('konami_80s', 'KONAMI 80s'), ('konami_90s', 'KONAMI 90s'),
+    ('konamigq', 'KONAMI GQ'), ('konamigv', 'KONAMI GV'),
+    ('konamigx', 'KONAMI GX'), ('ksys573', 'KONAMI 573'),
+    ('megaplay', 'MEGA PLAY'), ('megatech', 'MEGA TECH'), ('midway', 'MIDWAY'),
+    ('model1', 'MODEL 1'), ('model2', 'MODEL 2'), ('model3', 'MODEL 3'),
+    ('namco', 'NAMCO'), ('namco_90s', 'NAMCO 90s'), ('namco_mix1', 'NAMCO MIX'),
+    ('namcops2', 'SYS246/256'), ('namcos1', 'SYSTEM 1'),
+    ('namcos2', 'SYSTEM 2'), ('namcos11', 'SYS 10/11'), ('namcos12', 'SYSTEM 12'),
+    ('namcos21', 'SYSTEM 21'), ('namcos22', 'SYS 22/23'),
+    ('naomi', 'NAOMI'), ('naomi2', 'NAOMI 2'), ('naomi2gd', 'NAOMI 2 GD'),
+    ('naomigd', 'NAOMI GD'), ('neogeo', 'NEO-GEO'), ('nintendo', 'NINTENDO'),
+    ('nintendo_nostalgia', 'NOSTALGIA'), ('no_icon', 'NO ICON'), ('nss', 'SUPER SYS'),
+    ('pgm', 'PGM'), ('playch10', 'PLAYCH-10'), ('seattle', 'SEATTLE'),
+    ('sega', 'SEGA'), ('segac2', 'SEGA C/C2'), ('segaxybd', 'SEGA X/Y'),
+    ('simpl156', 'SIMPLE 156'), ('ssv', 'SSV'), ('stv', 'ST-V'),
+    ('system1', 'SEGA 1/2'), ('system16', 'SEGA 16'), ('system18', 'SEGA 18'),
+    ('system24', 'SEGA 24'), ('system32', 'SEGA 32'), ('taito', 'TAITO'),
+    ('taito_f2', 'TAITO F2'), ('taito_f3', 'TAITO F3'), ('taito_fx1', 'TAITO FX-1'),
+    ('taito_misc', 'TAITO MISC'), ('taito_mix1', 'TAITO MIX 1'),
+    ('taito_mix2', 'TAITO MIX 2'), ('taitogn', 'G-NET'), ('taitotx', 'TYPE X'),
+    ('triforce', 'TRIFORCE'), ('vector', 'VECTOR'), ('vegas', 'VEGAS'),
+    ('viper', 'VIPER'), ('vsnes', 'VS SYSTEM'));
+var
+  FilterName: String;
+  I: Integer;
+begin
+  Result:= '';
+  case Button.ImageIndex of
+    1: if (ButtonViewMode.Tag >= Low(ViewLabels)) and
+          (ButtonViewMode.Tag <= High(ViewLabels)) then
+          Result:= ViewLabels[ButtonViewMode.Tag];
+    2: Result:= 'MACHINES';
+    3: Result:= 'SYS QUICK';
+    4: Result:= 'FAVORITES';
+    5: begin
+         if ButtonArcadeGamesFilters.Enabled then
+            FilterName:= SelectedFilterName
+         else
+            FilterName:= LastFilterName;
+         FilterName:= ChangeFileExt(ExtractFileName(FilterName), '');
+         if FilterName = '' then
+            FilterName:= 'allgames';
+         Result:= 'NO ICON';
+         for I:= Low(ArcadeLabels) to High(ArcadeLabels) do
+             if SameText(FilterName, ArcadeLabels[I, 0]) then
+                begin
+                  Result:= ArcadeLabels[I, 1];
+                  Break;
+                end;
+       end;
+    6: if (ButtonGameFilterParentClone.Tag >= Low(ParentLabels)) and
+          (ButtonGameFilterParentClone.Tag <= High(ParentLabels)) then
+          Result:= ParentLabels[ButtonGameFilterParentClone.Tag];
+    7: if (ButtonGameFilterHaveMiss.Tag >= Low(HaveLabels)) and
+          (ButtonGameFilterHaveMiss.Tag <= High(HaveLabels)) then
+          Result:= HaveLabels[ButtonGameFilterHaveMiss.Tag];
+    8: if (ButtonGameFilterDriverStatus.Tag >= Low(DriverLabels)) and
+          (ButtonGameFilterDriverStatus.Tag <= High(DriverLabels)) then
+          Result:= DriverLabels[ButtonGameFilterDriverStatus.Tag];
+    9: Result:= 'MAMU';
+   10: Result:= 'MISC';
+   11: Result:= 'USE .CUE';
+   12: Result:= 'USE PARAM';
+   13: Result:= 'PLAYED';
+   14: Result:= 'EMULATORS';
+   15: Result:= 'SEARCH';
+  end;
+end;
+
+procedure TFormMain.ToolBarButtonsWindowProc(var Message: TMessage);
+var
+  SavedDC: HDC;
+  SavedRect: TRect;
+begin
+  SavedDC:= FToolBarDrawDC;
+  SavedRect:= FToolBarDrawRect;
+  try
+    if (Message.Msg = CN_NOTIFY) and (Message.LParam <> 0) then
+       if PNMHdr(Message.LParam)^.code = NM_CUSTOMDRAW then
+          begin
+            FToolBarDrawDC:= PNMCustomDraw(Message.LParam)^.hdc;
+            FToolBarDrawRect:= PNMCustomDraw(Message.LParam)^.rc;
+          end;
+    FToolBarWindowProc(Message);
+  finally
+    FToolBarDrawDC:= SavedDC;
+    FToolBarDrawRect:= SavedRect;
+  end;
+end;
+
+procedure TFormMain.ToolBarButtonsDrawLabel(Sender: TToolBar; Button: TToolButton;
+  State: TCustomDrawState; Stage: TCustomDrawStage;
+  var Flags: TTBCustomDrawFlags; var DefaultDraw: Boolean);
+var
+  Text: String;
+  ButtonRect, TextRect: TRect;
+  DC: HDC;
+  SavedDC, LabelHeight, FontHeight, ImageLeft, ImageTop: Integer;
+  ImageWidth, ImageHeight, Shade: Integer;
+  Luminance: Double;
+  FontHandle: HFONT;
+  TextSize: TSize;
+  Background, TextColor: COLORREF;
+  StrikeOut: DWORD;
+
+  function LinearChannel(Value: Byte): Double;
+  begin
+    if Value <= 10 then
+       Result:= Value/(255*12.92)
+    else
+       Result:= Power((Value/255+0.055)/1.055, 2.4);
+  end;
+
+  function RelativeLuminance(Color: COLORREF): Double;
+  begin
+    Result:= 0.2126*LinearChannel(GetRValue(Color))+
+             0.7152*LinearChannel(GetGValue(Color))+
+             0.0722*LinearChannel(GetBValue(Color));
+  end;
+
+begin
+  // Let the native toolbar paint backgrounds, icons, borders and hot tracking.
+  if (Stage <> cdPostPaint) or (Sender <> ToolBarButtons) or
+     (FNormalToolBarImages = nil) or
+     (Button.Style in [tbsSeparator, tbsDivider]) then
+     Exit;
+  LabelHeight:= ToolBarLabelHeight(FNormalToolBarImages.Height);
+  Text:= ToolBarButtonLabel(Button);
+  if (LabelHeight = 0) or (Text = '') then
+     Exit;
+  if not ImageList_GetIconSize(HIMAGELIST(Sender.Perform(TB_GETIMAGELIST, 0, 0)),
+                              ImageWidth, ImageHeight) then
+     Exit;
+  // Use native pixel dimensions when VCL supplies a DPI-scaled image list.
+  LabelHeight:= MulDiv(LabelHeight, ImageHeight, FNormalToolBarImages.Height);
+  DC:= FToolBarDrawDC;
+  if DC = 0 then
+     Exit;
+  ButtonRect:= FToolBarDrawRect;
+  ImageLeft:= ButtonRect.Left+(ButtonRect.Right-ButtonRect.Left-ImageWidth) div 2;
+  if Button.Style = tbsDropDown then
+     Dec(ImageLeft, GetSystemMetrics(SM_CXMENUCHECK) div 2);
+  ImageTop:= ButtonRect.Top+(ButtonRect.Bottom-ButtonRect.Top-ImageHeight) div 2;
+  TextRect:= Rect(ImageLeft+1, ImageTop+ImageHeight-LabelHeight,
+                 ImageLeft+ImageWidth-1, ImageTop+ImageHeight);
+  if (not ThemeServices.ThemesEnabled) and
+     ((cdsSelected in State) or (cdsChecked in State)) then
+     OffsetRect(TextRect, 1, 1);
+  // VCL versions differ in whether Canvas is attached during item post-paint.
+  // Paint into the actual notification DC, even if native painting is buffered.
+  SavedDC:= SaveDC(DC);
+  if SavedDC = 0 then
+     Exit;
+  try
+      IntersectClipRect(DC, ButtonRect.Left, ButtonRect.Top, ButtonRect.Right, ButtonRect.Bottom);
+      SetBkMode(DC, TRANSPARENT);
+      Background:= GetPixel(DC, TextRect.Left, TextRect.Top);
+      if Background = CLR_INVALID then
+         Background:= ColorToRGB(Sender.Color);
+      Luminance:= RelativeLuminance(Background);
+      if Luminance < 0.179 then
+         begin
+           TextColor:= RGB(255, 255, 255);
+           if (not Button.Enabled) or (cdsDisabled in State) or (cdsGrayed in State) then
+              begin
+                Shade:= 190;
+                while (Shade < 255) and
+                      ((RelativeLuminance(RGB(Shade, Shade, Shade))+0.05)/(Luminance+0.05) < 3) do
+                      Inc(Shade, 5);
+                TextColor:= RGB(Shade, Shade, Shade);
+              end;
+         end
+      else
+         begin
+           TextColor:= RGB(0, 0, 0);
+           if (not Button.Enabled) or (cdsDisabled in State) or (cdsGrayed in State) then
+              begin
+                Shade:= 90;
+                while (Shade > 0) and
+                      ((Luminance+0.05)/(RelativeLuminance(RGB(Shade, Shade, Shade))+0.05) < 3) do
+                      Dec(Shade, 5);
+                TextColor:= RGB(Shade, Shade, Shade);
+              end;
+         end;
+      SetTextColor(DC, TextColor);
+      FontHeight:= Max(6, LabelHeight-2);
+      StrikeOut:= Ord((Button.ImageIndex = 8) and (ButtonGameFilterDriverStatus.Tag = 4));
+      repeat
+        FontHandle:= CreateFont(-FontHeight, 0, 0, 0, FW_NORMAL, 0, 0, StrikeOut,
+                               DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
+                               ANTIALIASED_QUALITY, DEFAULT_PITCH or FF_SWISS, 'Tahoma');
+        if FontHandle = 0 then
+           RaiseLastOSError;
+        SelectObject(DC, FontHandle);
+        try
+          if not GetTextExtentPoint32(DC, PChar(Text), Length(Text), TextSize) then
+             RaiseLastOSError;
+          if (TextSize.cx <= TextRect.Right-TextRect.Left) or (FontHeight <= 6) then
+             begin
+               DrawText(DC, PChar(Text), Length(Text), TextRect,
+                        DT_CENTER or DT_VCENTER or DT_SINGLELINE or DT_NOPREFIX);
+               Break;
+             end;
+        finally
+          SelectObject(DC, GetStockObject(SYSTEM_FONT));
+          DeleteObject(FontHandle);
+        end;
+        Dec(FontHeight);
+      until False;
+  finally
+    RestoreDC(DC, SavedDC);
+  end;
+end;
+
 procedure TFormMain.UpdateToolBarStateIcons(IconIndex: Integer = -1);
 var
   SourceIcon, StateIcon: TIcon;
-  Bitmap: TBitmap;
+  Bitmap, Artwork: TBitmap;
   I, FirstIndex, LastIndex: Integer;
 
   procedure UpdateStateIcon(Images: TImageList; Disabled: Boolean);
   var
     Info: TIconInfo;
     IconHandle: HICON;
-    Pixel: PRGBQuad;
-    X, Y, Gray, TextTop: Integer;
+    Pixel, SourceRow, NextRow: PRGBQuad;
+    X, Y, Gray, TextTop, ArtHeight, ArtWidth, ArtLeft: Integer;
+    SourceX, SourceY, NextX, NextY, WeightX, WeightY, Channel: Integer;
+    Samples: array[0..3] of PRGBQuad;
+    Values: array[0..3] of PByte;
+    MaskDC: HDC;
+    OldMask: HGDIOBJ;
+    HasAlpha: Boolean;
+    MaskInfo: packed record
+      Header: TBitmapInfoHeader;
+      Colors: array[0..1] of TRGBQuad;
+    end;
+    MaskBits: Pointer;
+    NewMask: HBITMAP;
+    MaskStride: Integer;
+    MaskByte: PByte;
   begin
     if not GetIconInfo(SourceIcon.Handle, Info) then
        RaiseLastOSError;
@@ -32025,14 +32322,100 @@ var
       Bitmap.Handle:= Info.hbmColor;
       Info.hbmColor:= 0; // the bitmap now owns this handle
       Bitmap.PixelFormat:= pf32bit;
-      // Match the text band used by IconChangeFontColor; small icons have no text.
-      TextTop:= Bitmap.Height;
-      case Bitmap.Height of
-        128: TextTop:= 100;
-         68: TextTop:= 61;
-         48: TextTop:= 43;
-         40: TextTop:= 35;
-         32: TextTop:= 27;
+      HasAlpha:= False;
+      for Y:= 0 to Bitmap.Height-1 do
+      begin
+        Pixel:= Bitmap.ScanLine[Y];
+        for X:= 0 to Bitmap.Width-1 do
+        begin
+          HasAlpha:= HasAlpha or (Pixel^.rgbReserved <> 0);
+          Inc(Pixel);
+        end;
+      end;
+      if not HasAlpha then
+      begin
+        // Custom/legacy ICOs can supply transparency only through their mask.
+        MaskDC:= CreateCompatibleDC(0);
+        if MaskDC = 0 then
+           RaiseLastOSError;
+        try
+          OldMask:= SelectObject(MaskDC, Info.hbmMask);
+          for Y:= 0 to Bitmap.Height-1 do
+          begin
+            Pixel:= Bitmap.ScanLine[Y];
+            for X:= 0 to Bitmap.Width-1 do
+            begin
+              if GetPixel(MaskDC, X, Y) = RGB(0, 0, 0) then
+                 Pixel^.rgbReserved:= 255
+              else
+                 FillChar(Pixel^, SizeOf(TRGBQuad), 0);
+              Inc(Pixel);
+            end;
+          end;
+          SelectObject(MaskDC, OldMask);
+        finally
+          DeleteDC(MaskDC);
+        end;
+      end;
+      TextTop:= ToolBarIconTextTop(Bitmap.Height);
+      ArtHeight:= Bitmap.Height-ToolBarLabelHeight(Bitmap.Height);
+      if I = 0 then
+      begin
+        TextTop:= Bitmap.Height; // the application orb has no caption
+        ArtHeight:= Bitmap.Height;
+      end;
+      ArtWidth:= MulDiv(Bitmap.Width, ArtHeight, TextTop);
+      ArtLeft:= (Bitmap.Width-ArtWidth) div 2;
+      if TextTop < Bitmap.Height then
+      begin
+        Artwork.PixelFormat:= pf32bit;
+        Artwork.SetSize(Bitmap.Width, Bitmap.Height);
+        for Y:= 0 to Bitmap.Height-1 do
+           Move(Bitmap.ScanLine[Y]^, Artwork.ScanLine[Y]^, Bitmap.Width*SizeOf(TRGBQuad));
+        // Keep the artwork's aspect ratio, reserving readable text space inside
+        // the existing image/button dimensions. Interpolate all four channels.
+        for Y:= 0 to Bitmap.Height-1 do
+        begin
+          Pixel:= Bitmap.ScanLine[Y];
+          if Y < ArtHeight then
+          begin
+            SourceY:= (Y*256*TextTop) div ArtHeight;
+            WeightY:= SourceY mod 256;
+            SourceY:= SourceY div 256;
+            NextY:= Min(SourceY+1, TextTop-1);
+            SourceRow:= Artwork.ScanLine[SourceY];
+            NextRow:= Artwork.ScanLine[NextY];
+          end;
+          for X:= 0 to Bitmap.Width-1 do
+          begin
+            if (Y < ArtHeight) and (X >= ArtLeft) and (X < ArtLeft+ArtWidth) then
+            begin
+              SourceX:= ((X-ArtLeft)*256*Artwork.Width) div ArtWidth;
+              WeightX:= SourceX mod 256;
+              SourceX:= SourceX div 256;
+              NextX:= Min(SourceX+1, Artwork.Width-1);
+              Samples[0]:= PRGBQuad(NativeUInt(SourceRow)+NativeUInt(SourceX*SizeOf(TRGBQuad)));
+              Samples[1]:= PRGBQuad(NativeUInt(SourceRow)+NativeUInt(NextX*SizeOf(TRGBQuad)));
+              Samples[2]:= PRGBQuad(NativeUInt(NextRow)+NativeUInt(SourceX*SizeOf(TRGBQuad)));
+              Samples[3]:= PRGBQuad(NativeUInt(NextRow)+NativeUInt(NextX*SizeOf(TRGBQuad)));
+              for Channel:= 0 to 3 do
+              begin
+                Values[0]:= PByte(NativeUInt(Samples[0])+NativeUInt(Channel));
+                Values[1]:= PByte(NativeUInt(Samples[1])+NativeUInt(Channel));
+                Values[2]:= PByte(NativeUInt(Samples[2])+NativeUInt(Channel));
+                Values[3]:= PByte(NativeUInt(Samples[3])+NativeUInt(Channel));
+                PByte(NativeUInt(Pixel)+NativeUInt(Channel))^:=
+                  (Integer(Values[0]^)*(256-WeightX)*(256-WeightY)+
+                   Integer(Values[1]^)*WeightX*(256-WeightY)+
+                   Integer(Values[2]^)*(256-WeightX)*WeightY+
+                   Integer(Values[3]^)*WeightX*WeightY+32768) div 65536;
+              end;
+            end
+            else
+               FillChar(Pixel^, SizeOf(TRGBQuad), 0);
+            Inc(Pixel);
+          end;
+        end;
       end;
       for Y:= 0 to Bitmap.Height-1 do
       begin
@@ -32046,17 +32429,38 @@ var
                Pixel^.rgbRed:= Gray;
                Pixel^.rgbGreen:= Gray;
                Pixel^.rgbBlue:= Gray;
-             end
-          else
-             if (Y >= TextTop) and
-                (Pixel^.rgbRed = Pixel^.rgbGreen) and
-                (Pixel^.rgbGreen = Pixel^.rgbBlue) then
-                begin
-                  // Include antialiased white text without changing its alpha.
-                  Pixel^.rgbRed:= 0;
-                  Pixel^.rgbGreen:= 0;
-                  Pixel^.rgbBlue:= 0;
-                end;
+             end;
+          Inc(Pixel);
+        end;
+      end;
+      // Rebuild the AND mask as well: transparent text pixels must never be
+      // resurrected by masked drawing, including an entirely transparent ICO.
+      FillChar(MaskInfo, SizeOf(MaskInfo), 0);
+      MaskInfo.Header.biSize:= SizeOf(TBitmapInfoHeader);
+      MaskInfo.Header.biWidth:= Bitmap.Width;
+      MaskInfo.Header.biHeight:= -Bitmap.Height;
+      MaskInfo.Header.biPlanes:= 1;
+      MaskInfo.Header.biBitCount:= 1;
+      MaskInfo.Colors[1].rgbRed:= 255;
+      MaskInfo.Colors[1].rgbGreen:= 255;
+      MaskInfo.Colors[1].rgbBlue:= 255;
+      NewMask:= CreateDIBSection(0, PBitmapInfo(@MaskInfo)^, DIB_RGB_COLORS, MaskBits, 0, 0);
+      if NewMask = 0 then
+         RaiseLastOSError;
+      DeleteObject(Info.hbmMask);
+      Info.hbmMask:= NewMask;
+      MaskStride:= ((Bitmap.Width+31) div 32)*4;
+      FillChar(MaskBits^, MaskStride*Bitmap.Height, 0);
+      for Y:= 0 to Bitmap.Height-1 do
+      begin
+        Pixel:= Bitmap.ScanLine[Y];
+        for X:= 0 to Bitmap.Width-1 do
+        begin
+          if Pixel^.rgbReserved = 0 then
+             begin
+               MaskByte:= PByte(NativeUInt(MaskBits)+NativeUInt(Y*MaskStride+X div 8));
+               MaskByte^:= MaskByte^ or ($80 shr (X mod 8));
+             end;
           Inc(Pixel);
         end;
       end;
@@ -32083,31 +32487,34 @@ var
   end;
 
 begin
+  if FNormalToolBarImages = nil then
+     begin
+       FNormalToolBarImages:= TImageList.Create(Self);
+       FNormalToolBarImages.ColorDepth:= cd32Bit;
+       FToolBarWindowProc:= ToolBarButtons.WindowProc;
+       ToolBarButtons.WindowProc:= ToolBarButtonsWindowProc;
+       ToolBarButtons.Images:= FNormalToolBarImages;
+       ToolBarButtons.HotImages:= FNormalToolBarImages;
+       ToolBarButtons.OnAdvancedCustomDrawButton:= ToolBarButtonsDrawLabel;
+     end;
   if FDisabledToolBarImages = nil then
      begin
        FDisabledToolBarImages:= TImageList.Create(Self);
        FDisabledToolBarImages.ColorDepth:= cd32Bit;
        ToolBarButtons.DisabledImages:= FDisabledToolBarImages;
      end;
-  if FHotToolBarImages = nil then
-     begin
-       FHotToolBarImages:= TImageList.Create(Self);
-       FHotToolBarImages.ColorDepth:= cd32Bit;
-       ToolBarButtons.HotImages:= FHotToolBarImages;
-     end;
-
   if (IconIndex = -1) or
      (FDisabledToolBarImages.Width <> IL_ToolBarButtons.Width) or
      (FDisabledToolBarImages.Height <> IL_ToolBarButtons.Height) or
      (FDisabledToolBarImages.Count <> IL_ToolBarButtons.Count) or
-     (FHotToolBarImages.Width <> IL_ToolBarButtons.Width) or
-     (FHotToolBarImages.Height <> IL_ToolBarButtons.Height) or
-     (FHotToolBarImages.Count <> IL_ToolBarButtons.Count) then
+     (FNormalToolBarImages.Width <> IL_ToolBarButtons.Width) or
+     (FNormalToolBarImages.Height <> IL_ToolBarButtons.Height) or
+     (FNormalToolBarImages.Count <> IL_ToolBarButtons.Count) then
      begin
        FDisabledToolBarImages.Clear;
        Set4KImageListSpecs(FDisabledToolBarImages, IL_ToolBarButtons.Width, IL_ToolBarButtons.Height);
-       FHotToolBarImages.Clear;
-       Set4KImageListSpecs(FHotToolBarImages, IL_ToolBarButtons.Width, IL_ToolBarButtons.Height);
+       FNormalToolBarImages.Clear;
+       Set4KImageListSpecs(FNormalToolBarImages, IL_ToolBarButtons.Width, IL_ToolBarButtons.Height);
        FirstIndex:= 0;
        LastIndex:= IL_ToolBarButtons.Count-1;
      end
@@ -32123,11 +32530,16 @@ begin
     try
       Bitmap:= TBitmap.Create;
       try
-        for I:= FirstIndex to LastIndex do
-        begin
-          IL_ToolBarButtons.GetIcon(I, SourceIcon);
-          UpdateStateIcon(FDisabledToolBarImages, True);
-          UpdateStateIcon(FHotToolBarImages, False);
+        Artwork:= TBitmap.Create;
+        try
+          for I:= FirstIndex to LastIndex do
+          begin
+            IL_ToolBarButtons.GetIcon(I, SourceIcon);
+            UpdateStateIcon(FNormalToolBarImages, False);
+            UpdateStateIcon(FDisabledToolBarImages, True);
+          end;
+        finally
+          Artwork.Free;
         end;
       finally
         Bitmap.Free;
@@ -32138,6 +32550,7 @@ begin
   finally
     SourceIcon.Free;
   end;
+  ToolBarButtons.Invalidate;
 end;
 {$IFEND}
 
@@ -32149,6 +32562,10 @@ begin
   tempFolder:= GetFolderFull(32);
   tempFolderFilters:= GetFolderFull(40);
 
+  {$IF CompilerVersion >= 20}
+  if ImageList_Holder = IL_ToolBarButtons then
+     ImageList_Holder.ColorDepth:= cd32Bit;
+  {$IFEND}
   ClearImageList(ImageList_Holder);
   AddDefaultIcons('EmuLoader_Orb.ico',                 tempFolder,        ImageList_Holder);    // 00
   AddDefaultIcons('viewmode_01_details.ico',           tempFolderFilters, ImageList_Holder, 1); // 01
@@ -32830,7 +33247,7 @@ var
   tmpIcon, tmpIconOverlay, MergedIcon: TIcon;
   IconLoaded: Boolean;
   FileExt: String;
-  OverlayFolder, OverlayCustomFolder, OverlayFileName: String;
+  OverlayFolder, OverlayCustomFolder, OverlayFileName, ActualIconFolder: String;
   HaveOverlay, HaveOverlayText: Boolean;
 begin
   tmpIcon:= nil; tmpIconOverlay:= nil; MergedIcon:= nil;
@@ -32852,16 +33269,35 @@ begin
   // load the overlay icon
 
   FileExt:= '.ico';
+  ActualIconFolder:= IconFolder;
   if PosEx('.ico', LowerCase(IconFileName)) <> 0 then
      FileExt:= '';
 
-  if not FileExists(IconFolder+IconFileName+FileExt) then
-     IconFileName:= 'arcade_filters\no_icon';
-
+  {$IF CompilerVersion >= 20}
+  if (IconList = IL_ToolBarButtons) and (IconIndex = 5) and
+     (IconFileName = '') then
+     IconFileName:= 'allgames';
+  {$IFEND}
   if not FileExists(IconFolder+IconFileName+FileExt) then
      begin
        {$IF CompilerVersion >= 20}
-       StartupTrace('[icons] Replace: file and fallback missing: '+IconFolder+IconFileName+FileExt);
+       if IconList = IL_ToolBarButtons then
+          begin
+            StartupTrace('[icons] Replace: missing '+IconFolder+IconFileName+FileExt+
+                         '; using arcade_filters\no_icon.ico');
+            ActualIconFolder:= GetFolderFull(32)+'arcade_filters\';
+            IconFileName:= 'no_icon.ico';
+            FileExt:= '';
+          end
+       else
+       {$IFEND}
+       IconFileName:= 'arcade_filters\no_icon';
+     end;
+
+  if not FileExists(ActualIconFolder+IconFileName+FileExt) then
+     begin
+       {$IF CompilerVersion >= 20}
+       StartupTrace('[icons] Replace: file and fallback missing: '+ActualIconFolder+IconFileName+FileExt);
        {$IFEND}
        Exit;
      end;
@@ -32902,6 +33338,10 @@ begin
        end;
   end;
 
+  {$IF CompilerVersion >= 20}
+  if IconList = IL_ToolBarButtons then
+     HaveOverlayText:= False; // main-toolbar captions are drawn at runtime
+  {$IFEND}
   if HaveOverlay then
   begin
     HaveOverlay:= ExtractIcon(OverlayFolder+OverlayCustomFolder+OverlayFileName, hIconOverlay, nIconIdOverlay, IconList.Width, IconList.Height);
@@ -32920,13 +33360,13 @@ begin
   end;
 
   IconLoaded:= False;
-  if ExtractIcon(IconFolder+IconFileName+FileExt, hIcon, nIconId, IconList.Width, IconList.Height) then
+  if ExtractIcon(ActualIconFolder+IconFileName+FileExt, hIcon, nIconId, IconList.Width, IconList.Height) then
      begin
        tmpIcon:= TIcon.Create;
        tmpIcon.Handle:= hIcon;
 
        {$IF CompilerVersion >= 20}
-       TraceToolbarIcon('Replace source '+IconFolder+IconFileName+FileExt, hIcon);
+       TraceToolbarIcon('Replace source '+ActualIconFolder+IconFileName+FileExt, hIcon);
        {$IFEND}
        if HaveOverlay or HaveOverlayText then
           begin
@@ -33108,6 +33548,10 @@ begin
        end;
   end;
 
+  {$IF CompilerVersion >= 20}
+  if IconList = IL_ToolBarButtons then
+     HaveOverlayText:= False;
+  {$IFEND}
   if HaveOverlay then
   begin
     HaveOverlay:= ExtractIcon(OverlayFolder+OverlayCustomFolder+OverlayFileName, hIconOverlay, nIconIdOverlay, iIconWidth, iIconHeight);
@@ -38845,6 +39289,12 @@ begin
          4: tempString:= 'filter3_05_have_and_missroms.ico';
          5: tempString:= 'filter3_06_miss_and_missroms.ico';
        end;
+       {$IF CompilerVersion >= 20}
+       if (ButtonGameFilterHaveMiss.Tag = 5) and
+          (not FileExists(GetFolderFull(40)+tempString)) and
+          FileExists(GetFolderFull(40)+'filter3_05_miss_and_missroms.ico') then
+          tempString:= 'filter3_05_miss_and_missroms.ico';
+       {$IFEND}
        SetToolBarIcon(tempString, GetFolderFull(40), IL_ToolBarButtons, 7, Ord(ButtonGameFilterHaveMiss.Tag <> 0));
      end
   else
