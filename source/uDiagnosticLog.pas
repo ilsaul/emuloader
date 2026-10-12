@@ -13,7 +13,7 @@ procedure DiagnosticLogException(const Context: String; E: Exception; Address: P
 
 implementation
 
-uses Windows, Classes, Forms, Controls, IniFiles, SyncObjs;
+uses Windows, Messages, Classes, Forms, Controls, IniFiles, SyncObjs;
 
 const
   MaxLogSize = 5 * 1024 * 1024;
@@ -244,6 +244,9 @@ begin
   DiagnosticLog('exception', Context+': '+E.ClassName+': '+E.Message+
                 '; address=$'+IntToHex(NativeUInt(Address), SizeOf(Pointer)*2));
 end;
+
+initialization
+  Logger:= nil;
 
 finalization
   FreeAndNil(Logger);
