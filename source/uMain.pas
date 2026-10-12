@@ -1498,6 +1498,7 @@ type
   private
     {$IF CompilerVersion >= 20}
     FDisabledToolBarImages: TImageList;
+    FHotToolBarImages: TImageList;
     {$IFEND}
     //FileIcon: TIcon;
     //iMAMu_Icon: TIcon;
@@ -1556,7 +1557,7 @@ type
     MAMEFolderManualPDF: String;
     FDrawBuffer, FDrawBufferBottom: TBitmap;
     {$IF CompilerVersion >= 20}
-    procedure UpdateDisabledToolBarIcons(IconIndex: Integer = -1);
+    procedure UpdateToolBarStateIcons(IconIndex: Integer = -1);
     {$IFEND}
     function  GetDrawBuffer: TBitmap;
     function  GetDrawBufferBottom: TBitmap;
@@ -32005,14 +32006,82 @@ begin
 end;
 
 {$IF CompilerVersion >= 20}
-procedure TFormMain.UpdateDisabledToolBarIcons(IconIndex: Integer = -1);
+procedure TFormMain.UpdateToolBarStateIcons(IconIndex: Integer = -1);
 var
-  SourceIcon, DisabledIcon: TIcon;
+  SourceIcon, StateIcon: TIcon;
   Bitmap: TBitmap;
-  Info: TIconInfo;
-  DisabledHandle: HICON;
-  Pixel: PRGBQuad;
-  I, FirstIndex, LastIndex, X, Y, Gray: Integer;
+  I, FirstIndex, LastIndex: Integer;
+
+  procedure UpdateStateIcon(Images: TImageList; Disabled: Boolean);
+  var
+    Info: TIconInfo;
+    IconHandle: HICON;
+    Pixel: PRGBQuad;
+    X, Y, Gray, TextTop: Integer;
+  begin
+    if not GetIconInfo(SourceIcon.Handle, Info) then
+       RaiseLastOSError;
+    try
+      Bitmap.Handle:= Info.hbmColor;
+      Info.hbmColor:= 0; // the bitmap now owns this handle
+      Bitmap.PixelFormat:= pf32bit;
+      // Match the text band used by IconChangeFontColor; small icons have no text.
+      TextTop:= Bitmap.Height;
+      case Bitmap.Height of
+        128: TextTop:= 100;
+         68: TextTop:= 61;
+         48: TextTop:= 43;
+         40: TextTop:= 35;
+         32: TextTop:= 27;
+      end;
+      for Y:= 0 to Bitmap.Height-1 do
+      begin
+        Pixel:= Bitmap.ScanLine[Y];
+        for X:= 0 to Bitmap.Width-1 do
+        begin
+          if Disabled then
+             begin
+               Gray:= (Integer(Pixel^.rgbRed)*30+Integer(Pixel^.rgbGreen)*59+
+                       Integer(Pixel^.rgbBlue)*11) div 100;
+               Pixel^.rgbRed:= Gray;
+               Pixel^.rgbGreen:= Gray;
+               Pixel^.rgbBlue:= Gray;
+             end
+          else
+             if (Y >= TextTop) and
+                (Pixel^.rgbRed = Pixel^.rgbGreen) and
+                (Pixel^.rgbGreen = Pixel^.rgbBlue) then
+                begin
+                  // Include antialiased white text without changing its alpha.
+                  Pixel^.rgbRed:= 0;
+                  Pixel^.rgbGreen:= 0;
+                  Pixel^.rgbBlue:= 0;
+                end;
+          Inc(Pixel);
+        end;
+      end;
+      Info.hbmColor:= Bitmap.Handle;
+      try
+        IconHandle:= CreateIconIndirect(Info);
+        if IconHandle = 0 then
+           RaiseLastOSError;
+        StateIcon.Handle:= IconHandle;
+      finally
+        Info.hbmColor:= 0;
+      end;
+      if I < Images.Count then
+         Images.ReplaceIcon(I, StateIcon)
+      else
+         if Images.AddIcon(StateIcon) <> I then
+            raise Exception.Create('Could not add toolbar state icon '+IntToStr(I));
+    finally
+      if Info.hbmColor <> 0 then
+         DeleteObject(Info.hbmColor);
+      if Info.hbmMask <> 0 then
+         DeleteObject(Info.hbmMask);
+    end;
+  end;
+
 begin
   if FDisabledToolBarImages = nil then
      begin
@@ -32020,14 +32089,25 @@ begin
        FDisabledToolBarImages.ColorDepth:= cd32Bit;
        ToolBarButtons.DisabledImages:= FDisabledToolBarImages;
      end;
+  if FHotToolBarImages = nil then
+     begin
+       FHotToolBarImages:= TImageList.Create(Self);
+       FHotToolBarImages.ColorDepth:= cd32Bit;
+       ToolBarButtons.HotImages:= FHotToolBarImages;
+     end;
 
   if (IconIndex = -1) or
      (FDisabledToolBarImages.Width <> IL_ToolBarButtons.Width) or
      (FDisabledToolBarImages.Height <> IL_ToolBarButtons.Height) or
-     (FDisabledToolBarImages.Count <> IL_ToolBarButtons.Count) then
+     (FDisabledToolBarImages.Count <> IL_ToolBarButtons.Count) or
+     (FHotToolBarImages.Width <> IL_ToolBarButtons.Width) or
+     (FHotToolBarImages.Height <> IL_ToolBarButtons.Height) or
+     (FHotToolBarImages.Count <> IL_ToolBarButtons.Count) then
      begin
        FDisabledToolBarImages.Clear;
        Set4KImageListSpecs(FDisabledToolBarImages, IL_ToolBarButtons.Width, IL_ToolBarButtons.Height);
+       FHotToolBarImages.Clear;
+       Set4KImageListSpecs(FHotToolBarImages, IL_ToolBarButtons.Width, IL_ToolBarButtons.Height);
        FirstIndex:= 0;
        LastIndex:= IL_ToolBarButtons.Count-1;
      end
@@ -32039,59 +32119,21 @@ begin
 
   SourceIcon:= TIcon.Create;
   try
-    DisabledIcon:= TIcon.Create;
+    StateIcon:= TIcon.Create;
     try
       Bitmap:= TBitmap.Create;
       try
         for I:= FirstIndex to LastIndex do
         begin
           IL_ToolBarButtons.GetIcon(I, SourceIcon);
-          if not GetIconInfo(SourceIcon.Handle, Info) then
-             RaiseLastOSError;
-          try
-            // Preserve the icon's alpha and AND mask; only desaturate RGB.
-            Bitmap.Handle:= Info.hbmColor;
-            Info.hbmColor:= 0; // the bitmap now owns this handle
-            Bitmap.PixelFormat:= pf32bit;
-            for Y:= 0 to Bitmap.Height-1 do
-            begin
-              Pixel:= Bitmap.ScanLine[Y];
-              for X:= 0 to Bitmap.Width-1 do
-              begin
-                Gray:= (Integer(Pixel^.rgbRed)*30+Integer(Pixel^.rgbGreen)*59+
-                        Integer(Pixel^.rgbBlue)*11) div 100;
-                Pixel^.rgbRed:= Gray;
-                Pixel^.rgbGreen:= Gray;
-                Pixel^.rgbBlue:= Gray;
-                Inc(Pixel);
-              end;
-            end;
-            Info.hbmColor:= Bitmap.Handle;
-            try
-              DisabledHandle:= CreateIconIndirect(Info);
-              if DisabledHandle = 0 then
-                 RaiseLastOSError;
-              DisabledIcon.Handle:= DisabledHandle;
-            finally
-              Info.hbmColor:= 0;
-            end;
-            if I < FDisabledToolBarImages.Count then
-               FDisabledToolBarImages.ReplaceIcon(I, DisabledIcon)
-            else
-               if FDisabledToolBarImages.AddIcon(DisabledIcon) <> I then
-                  raise Exception.Create('Could not add disabled toolbar icon '+IntToStr(I));
-          finally
-            if Info.hbmColor <> 0 then
-               DeleteObject(Info.hbmColor);
-            if Info.hbmMask <> 0 then
-               DeleteObject(Info.hbmMask);
-          end;
+          UpdateStateIcon(FDisabledToolBarImages, True);
+          UpdateStateIcon(FHotToolBarImages, False);
         end;
       finally
         Bitmap.Free;
       end;
     finally
-      DisabledIcon.Free;
+      StateIcon.Free;
     end;
   finally
     SourceIcon.Free;
@@ -32127,7 +32169,7 @@ begin
   AddDefaultIcons('filter_search_text.ico',            tempFolderFilters, ImageList_Holder, 1); // 15
   {$IF CompilerVersion >= 20}
   if ImageList_Holder = IL_ToolBarButtons then
-     UpdateDisabledToolBarIcons;
+     UpdateToolBarStateIcons;
   {$IFEND}
 end;
 
@@ -32917,7 +32959,7 @@ begin
        IconLoaded:= True;
        {$IF CompilerVersion >= 20}
        if (IconList = IL_ToolBarButtons) and (IconIndex >= 0) and (IconIndex < IconList.Count) then
-          UpdateDisabledToolBarIcons(IconIndex);
+          UpdateToolBarStateIcons(IconIndex);
        {$IFEND}
      end;
   DestroyIcon(hIcon);
@@ -35137,7 +35179,12 @@ begin
   end;
   
   // fix flicker when resizing the tool bars (2018)
+  {$IF CompilerVersion >= 20}
+  // Native toolbar hot tracking paints directly to its window DC.
+  ToolBarButtons.DoubleBuffered:= False;
+  {$ELSE}
   ToolBarButtons.DoubleBuffered:= True;
+  {$IFEND}
   ImagesToolBarButtons.DoubleBuffered:= True;
 end;
 

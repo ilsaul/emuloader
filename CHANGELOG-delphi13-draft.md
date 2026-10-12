@@ -51,6 +51,10 @@ Move the verified entries into `CHANGELOG.md` when preparing the release.
 
 ## Fixed
 
+- Restore native main-toolbar hover painting in Delphi 13 by disabling its
+  double buffering. Supply synchronized hot images with black lettering on the
+  light hover background, preserving normal icons, alpha and disabled images.
+
 - Keep the EasyListview incremental-search callback allocated until its manager
   is destroyed on Win64. Expiring or resetting the timer no longer frees the
   thunk while its return instructions are still executing, preventing a DEP
