@@ -57010,6 +57010,10 @@ begin
   FreeAndNil(FormStatus);
   FormStatus:= TFormStatus.Create(nil); // recreate the form
   FormStatus.LabelVersion.Caption:= FrontendVersion;
+  {$IF CompilerVersion >= 20}
+  FormStatus.LabelVersion.Caption:= FrontendVersionCaption;
+  FormStatus.LabelVersion.AutoSize:= True;
+  {$IFEND}
   InitSplashScreen;
 
   Resize4KNightMode(True);

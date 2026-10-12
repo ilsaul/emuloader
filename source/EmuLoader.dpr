@@ -124,6 +124,7 @@ begin
   //HideAppFormTaskBarButton2; // this is to show a secondary task bar button for forms
 
   {$IF CompilerVersion >= 20}
+  FrontendPreRelease:= IsFilePreRelease(Application.ExeName);
   InitializeDiagnosticLog(FrontendVersion);
   try
   SysUtils.DeleteFile(ExtractFilePath(ParamStr(0))+'startup_trace.log');
@@ -132,6 +133,10 @@ begin
   FormStatus:= TFormStatus.Create(nil); // create splash screen here to show as soon as possible: "this is not the app's main Form you're looking for!" (May 01, 2021)
   //FormStatus.Caption:= FormStatus.Caption+' '+FrontendVersion;
   FormStatus.LabelVersion.Caption:= FrontendVersion;
+  {$IF CompilerVersion >= 20}
+  FormStatus.LabelVersion.Caption:= FrontendVersionCaption;
+  FormStatus.LabelVersion.AutoSize:= True;
+  {$IFEND}
   FormStatus.TitleStr('Initializing');
   FormStatus.MessageStr('Loading primary settings.', False);
 

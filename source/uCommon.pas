@@ -407,6 +407,9 @@ var
   IsNightMode, Is4KMode:  Boolean;
   MsgTxtColors: TMsgBoxColors;
   FrontendPath, FrontendVersion: String;
+  {$IF CompilerVersion >= 20}
+  FrontendPreRelease: Boolean;
+  {$IFEND}
 
 procedure HideAppFormTaskBarButton2;
 
@@ -427,6 +430,10 @@ procedure WinGradient(ACanvas: TCanvas; ARect: TRect; FColor1, FColor2: TColor);
 
 function  GetFileVersion(const sFile: String; MinorVersionOnly: Boolean = False): String;
 function  GetFileInfo2(FName, InfoType: String): String;
+{$IF CompilerVersion >= 20}
+function IsFilePreRelease(const FileName: String): Boolean;
+function FrontendVersionCaption: String;
+{$IFEND}
 function  GetFileSize(const AFileName: String): Int64;
 
 {$IFDEF MSWINDOWS}
@@ -1578,6 +1585,36 @@ begin
   GRect.LowerRight:= 1;
   GradientFill(ACanvas.Handle, @Vertexs, 2, @GRect, 1, GRADIENT_FILL_RECT_V);
 end;
+
+{$IF CompilerVersion >= 20}
+function IsFilePreRelease(const FileName: String): Boolean;
+var
+  Info: TBytes;
+  InfoSize, ValueSize, Dummy: DWORD;
+  Value: PVSFixedFileInfo;
+begin
+  InfoSize:= GetFileVersionInfoSize(PChar(FileName), Dummy);
+  if InfoSize = 0 then
+     RaiseLastOSError;
+  SetLength(Info, InfoSize);
+  if not GetFileVersionInfo(PChar(FileName), 0, InfoSize, @Info[0]) then
+     RaiseLastOSError;
+  if not VerQueryValue(@Info[0], '\', Pointer(Value), ValueSize) then
+     raise Exception.Create('Cannot read executable version flags: '+FileName);
+  if ValueSize < SizeOf(Value^) then
+     raise Exception.Create('Invalid executable version information: '+FileName);
+  if Value^.dwSignature <> $FEEF04BD then
+     raise Exception.Create('Invalid executable version information: '+FileName);
+  Result:= (Value^.dwFileFlags and Value^.dwFileFlagsMask and VS_FF_PRERELEASE) <> 0;
+end;
+
+function FrontendVersionCaption: String;
+begin
+  Result:= FrontendVersion;
+  if FrontendPreRelease then
+     Result:= Result+' (Pre-release)';
+end;
+{$IFEND}
 
 function GetFileVersion(const sFile: String; MinorVersionOnly: Boolean = False): String;
 var

@@ -6,6 +6,10 @@ Move the verified entries into `CHANGELOG.md` when preparing the release.
 
 ## Added
 
+- Read the executable's Windows Pre-release flag at startup and display
+  "(Pre-release)" beside the version in the splash screen and About dialog
+  only when that flag is set.
+
 - Optional runtime diagnostic logging in Delphi 13, enabled in Preferences >
   General or with `--debug-log`. Records lifecycle, status, UI controls, list
   loading/filtering, process launches/results, message dialogs and VCL exceptions
