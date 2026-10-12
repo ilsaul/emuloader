@@ -25,6 +25,35 @@ EmuLoader is valued for its clean interface and a set of specific functionalitie
 
 In summary, EmuLoader is the ideal tool if you want a powerful and dedicated interface to organize and launch your M.A.M.E. and Demul game collections efficiently and attractively.
 
+## Diagnostic logging (Delphi 13)
+
+Logging is disabled by default. Enable **Enable Diagnostic Log (Troubleshooting)**
+in **Preferences > General**, or launch the application with:
+
+```bat
+EmuLoader.exe --debug-log
+```
+
+The command-line option forces logging for that session, even if the preference
+is off. The preference takes effect immediately and is saved when the preferences
+dialog closes. It is also read before the splash screen on subsequent starts.
+
+`diagnostic.log` is written beside `EmuLoader.exe`, in UTF-8. It records session
+information, startup/status messages, clicked window controls, list loading and
+filtering, emulator launches and exit codes, application message dialogs, VCL
+event exceptions (including their addresses), and normal shutdown milestones.
+Logging is serialized across threads. At 5 MiB, the log rolls over to
+`diagnostic.log.1`, retaining only one previous file. A write failure disables
+logging and displays a warning; normal error dialogs are still shown.
+
+For a bug report, enable logging, reproduce the problem, and include both log
+files if present. **Review them before sharing:** they can contain local paths,
+game names and emulator command lines. No keyboard text is captured. A hard
+process termination or an unhandled worker-thread crash may leave only the last
+operation, not an exception or shutdown record; this is not a crash dump or a
+full stack-trace reporter. The temporary `startup_trace.log` and `hang_trace.log`
+used during the migration remain separate.
+
 ## History
 
 This Repository was created to continue the work of *Ciro Alfredo Consentino*, who developed this front-end for over 20 years, providing us with an excellent product without ever asking for anything in return.

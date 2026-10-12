@@ -2761,6 +2761,9 @@ implementation
 
 uses
   uPreferences, uStatus,
+  {$IF CompilerVersion >= 20}
+  uDiagnosticLog,
+  {$IFEND}
   uAbout, uMessageBox, uMessageBox_4K,
   uGameDetails, uArcadeEmulatorsSetup,
   uZiNcSettings, uToolBarEditor,
@@ -6685,6 +6688,9 @@ var
   AnsiStr: String;
   UnicodeStr, pExecFile: Boolean;
 begin
+  {$IF CompilerVersion >= 20}
+  DiagnosticLog('process', 'Launching: '+String(AppPath)+'; wait='+BoolToStr(MustWait, True));
+  {$IFEND}
   AnsiStr:= AppPath;
   UnicodeStr:= True; //UnicodeStr:= AnsiStr <> AppPath;
   if UnicodeStr then
@@ -6725,6 +6731,9 @@ begin
   if not pExecFile then
      begin
        ErrorMsg:= GetLastError;
+       {$IF CompilerVersion >= 20}
+       DiagnosticLog('error', 'CreateProcess failed: '+IntToStr(ErrorMsg)+': '+SysErrorMessage(ErrorMsg));
+       {$IFEND}
        InitMessageBox;
        AddMsgText('    Failed to create the process.'+#13#10);
        AddMsgText(AppPath, MsgTxtColors.colorFileName, [fsBold]);
@@ -6755,6 +6764,10 @@ begin
      end;
 
   CloseHandle(Proc);
+  {$IF CompilerVersion >= 20}
+  if MustWait and pExecFile then
+     DiagnosticLog('process', 'Process finished; exit code='+IntToStr(Result));
+  {$IFEND}
   Sleep(10); // give some milliseconds to update the screen after exiting the emulator
   if IsRunningGame then
      begin
@@ -6822,6 +6835,9 @@ var
 
   pExecFile, pPipeCreated: Boolean;
 begin
+  {$IF CompilerVersion >= 20}
+  DiagnosticLog('process', 'Launching with console capture: '+AppPath);
+  {$IFEND}
   saSecurity.nLength := SizeOf(TSecurityAttributes);
   saSecurity.bInheritHandle := True;
   saSecurity.lpSecurityDescriptor := nil;
@@ -6830,6 +6846,9 @@ begin
   if not pPipeCreated then
      begin
        ErrorMsg:= GetLastError;
+       {$IF CompilerVersion >= 20}
+       DiagnosticLog('error', 'CreatePipe failed: '+IntToStr(ErrorMsg)+': '+SysErrorMessage(ErrorMsg));
+       {$IFEND}
        InitMessageBox;
        AddMsgText('    Failed to create the pipe to capture the console output.'+#13#10);
        AddMsgText(AppPath, MsgTxtColors.colorFileName, [fsBold]);
@@ -6853,6 +6872,9 @@ begin
   if not pExecFile then
      begin
        ErrorMsg:= GetLastError;
+       {$IF CompilerVersion >= 20}
+       DiagnosticLog('error', 'CreateProcess with console capture failed: '+IntToStr(ErrorMsg)+': '+SysErrorMessage(ErrorMsg));
+       {$IFEND}
        InitMessageBox;
        AddMsgText('    Failed to create the process.'+#13#10);
        AddMsgText(AppPath, MsgTxtColors.colorFileName, [fsBold]);
@@ -6906,6 +6928,9 @@ begin
        //until (dRunning <> STILL_ACTIVE);//WAIT_TIMEOUT); // WAIT_TIMEOUT does not work, freezes into an endless loop
        CloseHandle(piProcess.hProcess);
        CloseHandle(piProcess.hThread);
+       {$IF CompilerVersion >= 20}
+       DiagnosticLog('process', 'Console process finished; exit code='+IntToStr(Result));
+       {$IFEND}
      end;
 
   CloseHandle(hRead);
@@ -10148,6 +10173,9 @@ begin
 
         INIFile.WriteInteger('Preferences', 'DisableMinimize',  Ord(DisableMinimize.Checked));
         INIFile.WriteInteger('Preferences', 'AllowOneInstance', Ord(AllowOnlyOneInstance.Checked));
+        {$IF CompilerVersion >= 20}
+        INIFile.WriteInteger('Preferences', 'DiagnosticLog', Ord(EnableDiagnosticLog.Checked));
+        {$IFEND}
 
         INIFile.WriteInteger('Preferences', 'IgnoreExitCode1InvalidFunction',      Ord(IgnoreExitCode1InvalidFunction.Checked));
         INIFile.WriteInteger('Preferences', 'LeftAlignEmulatorGameTextMessageBox', Ord(LeftAlignEmulatorGameTextMessageBox.Checked));
@@ -13569,6 +13597,9 @@ function TFormMain.ShowMessageBox(const WindowMessage, TitleMessage: WideString;
                                   MessageType: Integer = 2; DefaultButtonNo: Boolean = False;
                                   IconIndex: Integer = 0; GameSetStatus: Integer = -1): Integer;
 begin
+  {$IF CompilerVersion >= 20}
+  DiagnosticLog('dialog', String(WindowMessage)+'; '+String(TitleMessage)+'; '+String(DescriptionMessage));
+  {$IFEND}
   // icon index:
   // -1 -> Game Icon
   // 00 -> Info (default icon)
@@ -13588,6 +13619,9 @@ begin
           FormMessageBox.NightMode.Visible:= False;
        Result:=   GenerateMessage(WindowMessage, TitleMessage, DescriptionMessage, MessageType, DefaultButtonNo, IconIndex, GameSetStatus);
      end;
+  {$IF CompilerVersion >= 20}
+  DiagnosticLog('dialog', 'Dialog result='+IntToStr(Result));
+  {$IFEND}
 end;
 
 procedure TFormMain.ChangeMsgBoxButtonCaptions;
@@ -32479,7 +32513,7 @@ var
   ColorBitmap, MaskBitmap: tagBitmap;
   ColorBytes, MaskBytes: Integer;
 begin
-  if not StartupTraceEnabled then
+  if not StartupTraceEnabled and not DiagnosticLogEnabled then
      Exit;
   if not GetIconInfo(IconHandle, Info) then
      begin
@@ -32509,7 +32543,7 @@ procedure TraceToolbarButton(Button: TToolButton; Icons: TImageList);
 var
   Icon: TIcon;
 begin
-  if not StartupTraceEnabled then
+  if not StartupTraceEnabled and not DiagnosticLogEnabled then
      Exit;
   StartupTrace('[icons] Button '+Button.Name+' enabled='+BoolToStr(Button.Enabled, True)+
                ' visible='+BoolToStr(Button.Visible, True)+' index='+IntToStr(Button.ImageIndex)+
@@ -34648,6 +34682,9 @@ begin
 
   FormPreferences.ShowModal;
 
+  {$IF CompilerVersion >= 20}
+  DiagnosticLog('preferences', 'Preferences dialog closed');
+  {$IFEND}
   if FormStatus.LabelSoftwareScanCount.Visible then
      SetLabelSoftwareScanCountVisible(False);
      
@@ -34678,6 +34715,9 @@ begin
   begin
     elIni:= TMemIniFile.Create(GetFrontendIniFile);
     elIni.WriteInteger('Preferences', 'AllowOneInstance', Ord(FormPreferences.AllowOnlyOneInstance.Checked));
+    {$IF CompilerVersion >= 20}
+    elIni.WriteInteger('Preferences', 'DiagnosticLog', Ord(FormPreferences.EnableDiagnosticLog.Checked));
+    {$IFEND}
     elIni.WriteInteger('Preferences', 'DisableCloneIndent', Ord(FormPreferences.DisableCloneIndent.Checked));
     elIni.WriteInteger('Images', 'DisableThreadedLoading', Ord(FormPreferences.ImageDisableThreadedLoading.Checked));
     elIni.UpdateFile;
@@ -38137,8 +38177,17 @@ var
 
 begin
   elvGroup:= nil;
+  {$IF CompilerVersion >= 20}
+  DiagnosticLog('filters', 'ApplyFilters started; filter='+SelectedFilterName+
+                '; items='+IntToStr(GamesListView.Groups.ItemCount));
+  {$IFEND}
   if not CheckTotal(GamesListView) then
-     Exit;
+     begin
+       {$IF CompilerVersion >= 20}
+       DiagnosticLog('filters', 'ApplyFilters skipped: empty games list');
+       {$IFEND}
+       Exit;
+     end;
 
   if FormStatus.Visible then
      FormStatus.MessageStr('Applying filters.');
@@ -38211,6 +38260,9 @@ begin
        UpdateStatusBarGame;
      end;
   RestoreHorizontalBarPos(sbPos);
+  {$IF CompilerVersion >= 20}
+  DiagnosticLog('filters', 'ApplyFilters completed; visible='+IntToStr(GamesListView.Groups.VisibleItemCount));
+  {$IFEND}
 end;
 
 function TFormMain.MachinesListIndexOf(const MachineName: String; const MachinesList: TSoftwareListMESS): Integer;
@@ -38311,6 +38363,10 @@ begin
      Exit;
 
   // this filter show/hide games in main games list, not in machines list filter panel
+  {$IF CompilerVersion >= 20}
+  DiagnosticLog('filters', 'ApplyFiltersMachinesList started; filter='+SelectedFilterName+
+                '; machine='+SelectedMachineListName);
+  {$IFEND}
   if FormStatus.Visible then
      FormStatus.MessageStr('Applying filters.');
 
@@ -38374,6 +38430,9 @@ begin
        UpdateStatusBarGame;
      end;
   RestoreHorizontalBarPos(sbPos);
+  {$IF CompilerVersion >= 20}
+  DiagnosticLog('filters', 'ApplyFiltersMachinesList completed; visible='+IntToStr(GamesListView.Groups.VisibleItemCount));
+  {$IFEND}
 end;
 
 procedure TFormMain.HideGroupsFilter(ELV_Holder: TEasyListView);
@@ -38541,6 +38600,12 @@ var
   Loop: Integer;
   SoftwareGames: THashedStringList;
 begin
+  {$IF CompilerVersion >= 20}
+  DiagnosticLog('games', 'LoadGames started; arcade='+BoolToStr(LoadArcade, True)+
+                '; software lists='+BoolToStr(LoadSoftwareListMESS, True)+
+                '; custom='+BoolToStr(LoadCustomGames, True)+
+                '; clear='+BoolToStr(ClearGamesList, True));
+  {$IFEND}
   SoftwareGames:= nil;
   if FormStatus.Visible then
      begin
@@ -38630,6 +38695,9 @@ begin
 
   if FormStatus.Visible then
      FormStatus.SetFocus;
+  {$IF CompilerVersion >= 20}
+  DiagnosticLog('games', 'LoadGames completed; items='+IntToStr(GamesListView.Groups.ItemCount));
+  {$IFEND}
 end;
 
 procedure TFormMain.SetMainToolBarIcon(const ButtonName: TToolButton);
@@ -39128,6 +39196,9 @@ procedure TFormMain.FormCloseQuery(Sender: TObject; var CanClose: Boolean);
 var
   Loop, Loop2: Integer;
 begin
+  {$IF CompilerVersion >= 20}
+  DiagnosticLog('lifecycle', 'Main form close requested; saving settings and freeing resources');
+  {$IFEND}
   ShowFilterMsgBox('Exit Frontend', 'Updating config files and freeing resources.', True);
   VideoPreviewPlayDummy(True);
   // free any created vars, arrays, etc
@@ -39232,6 +39303,9 @@ begin
   HideFilterMsgBox;
   FreeAndNil(FormApplyFilterMsgBox);
   FreeAndNil(FormNightMode);
+  {$IF CompilerVersion >= 20}
+  DiagnosticLog('lifecycle', 'Main form shutdown cleanup completed');
+  {$IFEND}
 end;
 
 procedure TFormMain.MenuVisitEmuLoaderHomepageClick(Sender: TObject);
@@ -41216,6 +41290,9 @@ procedure TFormMain.AddMsgText(const iTextToAdd: WideString; iFontColor: TColor 
                                iFontSize: Integer = -1; const iFontName: String = 'default'; iTextBackgroundColor: TColor = -1;
                                const iFontCharSet: TFontCharSet = DEFAULT_CHARSET);
 begin
+  {$IF CompilerVersion >= 20}
+  DiagnosticLog('dialog-text', String(iTextToAdd));
+  {$IFEND}
   //AppendText(FormMessageBox.LabelMessage, iTextToAdd, iFontColor, iFontStyle, iTextAlign, iFontName, iFontSize, iFontCharSet);
   if Assigned(FormMessageBox) then
      AppendTextW(FormMessageBox.LabelMessageW, iTextToAdd, iFontColor, iFontStyle, iTextAlign, iTextBackgroundColor, iFontName, iFontSize, iFontCharSet)
@@ -55733,6 +55810,9 @@ begin
 
     SetBoxCheckBox(DisableMinimize, 46, 480);
     SetBoxCheckBox(AllowOnlyOneInstance, 92, 265);
+    {$IF CompilerVersion >= 20}
+    SetBoxCheckBox(EnableDiagnosticLog, 378, 475);
+    {$IFEND}
     SetBoxCheckBox(IgnoreExitCode1InvalidFunction, 138, 380);
     Set4KLabelSpecs(IgnoreExitCode1InvalidFunctionLabel, 37, IgnoreExitCode1InvalidFunction.Top+35, -1, -1, 16);
 

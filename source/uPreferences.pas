@@ -145,6 +145,7 @@ type
     LeftAlignEmulatorGameTextMessageBoxLabel: TShadowLabel;
     DisableMinimize: TAdvOfficeCheckBoxEx;
     AllowOnlyOneInstance: TAdvOfficeCheckBoxEx;
+    EnableDiagnosticLog: TAdvOfficeCheckBoxEx;
     IgnoreExitCode1InvalidFunction: TAdvOfficeCheckBoxEx;
     LeftAlignEmulatorGameTextMessageBox: TAdvOfficeCheckBoxEx;
     GamesListBox: TPanelEx;
@@ -306,6 +307,7 @@ type
     procedure SearchGamesPanelEditBoxFontColorSelect(Sender: TObject);
     procedure SearchGamesPanelEditBoxBackgroundColorSelect(
       Sender: TObject);
+    procedure EnableDiagnosticLogClick(Sender: TObject);
   private
     { Private declarations }
     procedure UpdateGamesBackgroundImage(ImageEnabledCheckBox: TAdvOfficeCheckBoxEx; ImageFileNameEditBox: TEditEx; NightModeControls: Boolean);
@@ -320,7 +322,10 @@ var
 
 implementation
 
-uses uMain, uStatus, uCommon;
+uses uMain, uStatus, uCommon
+  {$IF CompilerVersion >= 20}
+  , uDiagnosticLog
+  {$IFEND};
 
 {$R *.DFM}
 
@@ -514,6 +519,10 @@ end;
 
 procedure TFormPreferences.FormCreate(Sender: TObject);
 begin
+  {$IF CompilerVersion >= 20}
+  EnableDiagnosticLog.Visible:= True;
+  EnableDiagnosticLog.Checked:= DiagnosticLogPreference;
+  {$IFEND}
   PanelPage2.Left:= 0;
   PanelPage2.Top:= PanelPage1.Top;
   PanelPage2.Visible:= False;
@@ -527,6 +536,13 @@ begin
        GameListHeaderFont_Setting.Font.Size:= 16;
        GameDocsFont_Setting.Font.Size:= 16;
      end;
+end;
+
+procedure TFormPreferences.EnableDiagnosticLogClick(Sender: TObject);
+begin
+  {$IF CompilerVersion >= 20}
+  SetDiagnosticLogPreference(EnableDiagnosticLog.Checked);
+  {$IFEND}
 end;
 
 procedure TFormPreferences.GameDocsButtonResetClick(
@@ -1132,4 +1148,3 @@ begin
 end;
 
 end.
-

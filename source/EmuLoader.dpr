@@ -10,6 +10,7 @@ uses
   Forms,
   {$IF CompilerVersion >= 20}
   SysUtils,
+  uDiagnosticLog in 'uDiagnosticLog.pas',
   {$IFEND}
   VersionHelpers,
   uCommon in 'uCommon.pas',
@@ -117,6 +118,8 @@ begin
   //HideAppFormTaskBarButton2; // this is to show a secondary task bar button for forms
 
   {$IF CompilerVersion >= 20}
+  InitializeDiagnosticLog(FrontendVersion);
+  try
   SysUtils.DeleteFile(ExtractFilePath(ParamStr(0))+'startup_trace.log');
   StartupTrace('EmuLoader '+FrontendVersion+' starting');
   {$IFEND}
@@ -151,8 +154,21 @@ begin
   {$IF CompilerVersion >= 20}
   except
     on E: Exception do
-       AbortStartup(E.ClassName+': '+E.Message);
+       begin
+         DiagnosticLogException('Creating application forms', E, ExceptAddr);
+         AbortStartup(E.ClassName+': '+E.Message);
+       end;
   end;
   {$IFEND}
   Application.Run;
+  {$IF CompilerVersion >= 20}
+  DiagnosticLog('lifecycle', 'Application.Run returned; normal shutdown completed');
+  except
+    on E: Exception do
+       begin
+         DiagnosticLogException('Unhandled application failure', E, ExceptAddr);
+         raise;
+       end;
+  end;
+  {$IFEND}
 end.

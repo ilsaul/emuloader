@@ -188,7 +188,10 @@ var
 
 implementation
 
-uses uMain;
+uses uMain
+  {$IF CompilerVersion >= 20}
+  , uDiagnosticLog
+  {$IFEND};
 
 {$R *.DFM}
 
@@ -537,6 +540,7 @@ var
   F: TextFile;
   FileName: String;
 begin
+  DiagnosticLog('status', Msg);
   if not StartupTraceEnabled then
      Exit;
   FileName:= ExtractFilePath(ParamStr(0))+'startup_trace.log';
@@ -560,6 +564,9 @@ end;
 // Startup failed: the splash screen is topmost and would hide the error dialog, leaving the app hung
 procedure AbortStartup(const ErrorMsg: String);
 begin
+  {$IF CompilerVersion >= 20}
+  DiagnosticLog('fatal', 'Startup aborted: '+ErrorMsg);
+  {$IFEND}
   if mmResult <> 0 then
      begin
        TimeKillEvent(mmResult);
