@@ -1498,7 +1498,6 @@ type
   private
     {$IF CompilerVersion >= 20}
     FDisabledToolBarImages: TImageList;
-    procedure UpdateDisabledToolBarIcons(IconIndex: Integer = -1);
     {$IFEND}
     //FileIcon: TIcon;
     //iMAMu_Icon: TIcon;
@@ -1556,6 +1555,9 @@ type
 
     MAMEFolderManualPDF: String;
     FDrawBuffer, FDrawBufferBottom: TBitmap;
+    {$IF CompilerVersion >= 20}
+    procedure UpdateDisabledToolBarIcons(IconIndex: Integer = -1);
+    {$IFEND}
     function  GetDrawBuffer: TBitmap;
     function  GetDrawBufferBottom: TBitmap;
 
