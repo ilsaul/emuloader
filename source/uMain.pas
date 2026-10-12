@@ -32177,7 +32177,7 @@ var
   Luminance: Double;
   FontHandle: HFONT;
   TextSize: TSize;
-  Background, TextColor: COLORREF;
+  TextColor: COLORREF;
   StrikeOut: DWORD;
 
   function LinearChannel(Value: Byte): Double;
@@ -32231,10 +32231,12 @@ begin
   try
       IntersectClipRect(DC, ButtonRect.Left, ButtonRect.Top, ButtonRect.Right, ButtonRect.Bottom);
       SetBkMode(DC, TRANSPARENT);
-      Background:= GetPixel(DC, TextRect.Left, TextRect.Top);
-      if Background = CLR_INVALID then
-         Background:= ColorToRGB(Sender.Color);
-      Luminance:= RelativeLuminance(Background);
+      // Use the configured toolbar mode rather than sampling the first text
+      // pixel; checked buttons can otherwise produce a different sample.
+      if IsNightMode then
+         Luminance:= 0
+      else
+         Luminance:= 1;
       if Luminance < 0.179 then
          begin
            TextColor:= RGB(255, 255, 255);
