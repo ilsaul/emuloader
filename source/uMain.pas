@@ -32367,6 +32367,58 @@ begin
       AddDefaultIcons(MediaTypeCustom[Loop, 1], tempFolder, IconList);
 end;
 
+{$IF CompilerVersion >= 20}
+procedure TraceToolbarIcon(const Stage: String; IconHandle: HICON);
+var
+  Info: TIconInfo;
+  ColorBitmap, MaskBitmap: tagBitmap;
+  ColorBytes, MaskBytes: Integer;
+begin
+  if not StartupTraceEnabled then
+     Exit;
+  if not GetIconInfo(IconHandle, Info) then
+     begin
+       StartupTrace('[icons] '+Stage+' handle=$'+IntToHex(NativeUInt(IconHandle), SizeOf(Pointer)*2)+
+                    ' GetIconInfo failed: '+IntToStr(GetLastError));
+       Exit;
+     end;
+  try
+    FillChar(ColorBitmap, SizeOf(ColorBitmap), 0);
+    FillChar(MaskBitmap, SizeOf(MaskBitmap), 0);
+    ColorBytes:= GetObject(Info.hbmColor, SizeOf(ColorBitmap), @ColorBitmap);
+    MaskBytes:= GetObject(Info.hbmMask, SizeOf(MaskBitmap), @MaskBitmap);
+    StartupTrace('[icons] '+Stage+' handle=$'+IntToHex(NativeUInt(IconHandle), SizeOf(Pointer)*2)+
+                 ' color='+IntToStr(ColorBitmap.bmWidth)+'x'+IntToStr(ColorBitmap.bmHeight)+
+                 '/'+IntToStr(ColorBitmap.bmBitsPixel)+'bpp GetObject='+IntToStr(ColorBytes)+
+                 ' mask='+IntToStr(MaskBitmap.bmWidth)+'x'+IntToStr(MaskBitmap.bmHeight)+
+                 '/'+IntToStr(MaskBitmap.bmBitsPixel)+'bpp GetObject='+IntToStr(MaskBytes));
+  finally
+    if Info.hbmColor <> 0 then
+       DeleteObject(Info.hbmColor);
+    if Info.hbmMask <> 0 then
+       DeleteObject(Info.hbmMask);
+  end;
+end;
+
+procedure TraceToolbarButton(Button: TToolButton; Icons: TImageList);
+var
+  Icon: TIcon;
+begin
+  if not StartupTraceEnabled then
+     Exit;
+  StartupTrace('[icons] Button '+Button.Name+' enabled='+BoolToStr(Button.Enabled, True)+
+               ' visible='+BoolToStr(Button.Visible, True)+' index='+IntToStr(Button.ImageIndex)+
+               ' list='+Icons.Name+' count='+IntToStr(Icons.Count));
+  Icon:= TIcon.Create;
+  try
+    Icons.GetIcon(Button.ImageIndex, Icon);
+    TraceToolbarIcon('ImageList '+Button.Name, Icon.Handle);
+  finally
+    Icon.Free;
+  end;
+end;
+{$IFEND}
+
 function TFormMain.CombineIcons(FrontIcon, BackIcon: HIcon): HIcon;
 var                            // overlay      icon
   WinDC: HDC;
@@ -32378,6 +32430,10 @@ var                            // overlay      icon
   BackSv: HBITMAP;
   BmpObj: tagBitmap;
 begin
+  {$IF CompilerVersion >= 20}
+  TraceToolbarIcon('CombineIcons front', FrontIcon);
+  TraceToolbarIcon('CombineIcons back', BackIcon);
+  {$IFEND}
   WinDC := GetDC(0);
 
   GetIconInfo(FrontIcon, FrontInfo);
@@ -32396,6 +32452,9 @@ begin
   DrawIconEx(BackDC, 0, 0, FrontIcon, 0, 0, 0, 0, DI_NORMAL);
 
   Result := CreateIconIndirect(BackInfo);
+  {$IF CompilerVersion >= 20}
+  TraceToolbarIcon('CombineIcons result', Result);
+  {$IFEND}
 
   SelectObject(FrontDC, FrontSv);
   DeleteDC(FrontDC);
@@ -32594,6 +32653,13 @@ var
   HaveOverlay, HaveOverlayText: Boolean;
 begin
   tmpIcon:= nil; tmpIconOverlay:= nil; MergedIcon:= nil;
+  hIcon:= 0;
+  hIconOverlay:= 0;
+  {$IF CompilerVersion >= 20}
+  StartupTrace('[icons] Replace '+IconList.Name+' index='+IntToStr(IconIndex)+
+               ' count='+IntToStr(IconList.Count)+' size='+IntToStr(IconList.Width)+'x'+IntToStr(IconList.Height)+
+               ' overlay='+IntToStr(OverlayIndex)+' file='+IconFolder+IconFileName);
+  {$IFEND}
   // OverlayIndex
   // -1 -> no overlay to load
   //  0 -> games filters tool bar multi icons - "main_icons\overlay\toolbar_overlay_multi_dark.ico" (replace by "_light.ico" in light mode)
@@ -32612,7 +32678,12 @@ begin
      IconFileName:= 'arcade_filters\no_icon';
 
   if not FileExists(IconFolder+IconFileName+FileExt) then
-     Exit;
+     begin
+       {$IF CompilerVersion >= 20}
+       StartupTrace('[icons] Replace: file and fallback missing: '+IconFolder+IconFileName+FileExt);
+       {$IFEND}
+       Exit;
+     end;
 
   HaveOverlay:= False;
   HaveOverlayText:= False;
@@ -32653,6 +32724,11 @@ begin
   if HaveOverlay then
   begin
     HaveOverlay:= ExtractIcon(OverlayFolder+OverlayCustomFolder+OverlayFileName, hIconOverlay, nIconIdOverlay, IconList.Width, IconList.Height);
+    {$IF CompilerVersion >= 20}
+    StartupTrace('[icons] Replace overlay file='+OverlayFolder+OverlayCustomFolder+OverlayFileName+
+                 ' extracted='+BoolToStr(HaveOverlay, True));
+    TraceToolbarIcon('Replace overlay', hIconOverlay);
+    {$IFEND}
     if HaveOverlay then
        begin
          tmpIconOverlay:= TIcon.Create;
@@ -32668,6 +32744,9 @@ begin
        tmpIcon:= TIcon.Create;
        tmpIcon.Handle:= hIcon;
 
+       {$IF CompilerVersion >= 20}
+       TraceToolbarIcon('Replace source '+IconFolder+IconFileName+FileExt, hIcon);
+       {$IFEND}
        if HaveOverlay or HaveOverlayText then
           begin
             if HaveOverlayText then
@@ -32699,6 +32778,10 @@ begin
        IconLoaded:= True;
      end;
   DestroyIcon(hIcon);
+  {$IF CompilerVersion >= 20}
+  StartupTrace('[icons] Replace finished index='+IntToStr(IconIndex)+
+               ' loaded='+BoolToStr(IconLoaded, True)+' count='+IntToStr(IconList.Count));
+  {$IFEND}
 
   if HaveOverlay then
      begin
@@ -32728,6 +32811,15 @@ var
   iIconWidth, iIconHeight: Integer;
 begin
   tmpIcon:= nil; tmpIconOverlay:= nil; MergedIcon:= nil;
+  hIcon:= 0;
+  hIconOverlay:= 0;
+  IconAdded:= False;
+  {$IF CompilerVersion >= 20}
+  if IconList = IL_ToolBarButtons then
+     StartupTrace('[icons] Add '+IconList.Name+' index='+IntToStr(IconList.Count)+
+                  ' size='+IntToStr(IconList.Width)+'x'+IntToStr(IconList.Height)+
+                  ' overlay='+IntToStr(OverlayIndex)+' file='+IconsFolder+IconFileName);
+  {$IFEND}
   // image category is the same OverlayIndex as image layout (June 22, 2021)
   // must make image category icons with round corners (update Select icon!!!!)
   // OverlayIndex
@@ -32762,6 +32854,10 @@ begin
 
   if (not FileExists(iIconFolder+IconFileName+FileExt)) then
      begin
+       {$IF CompilerVersion >= 20}
+       if IconList = IL_ToolBarButtons then
+          StartupTrace('[icons] Add: file missing: '+iIconFolder+IconFileName+FileExt);
+       {$IFEND}
        AddIconToErrorList(iIconFolder+IconFileName+FileExt);
        Exit;
      end;
@@ -32830,6 +32926,14 @@ begin
   if HaveOverlay then
   begin
     HaveOverlay:= ExtractIcon(OverlayFolder+OverlayCustomFolder+OverlayFileName, hIconOverlay, nIconIdOverlay, iIconWidth, iIconHeight);
+    {$IF CompilerVersion >= 20}
+    if IconList = IL_ToolBarButtons then
+       begin
+         StartupTrace('[icons] Add overlay file='+OverlayFolder+OverlayCustomFolder+OverlayFileName+
+                      ' extracted='+BoolToStr(HaveOverlay, True));
+         TraceToolbarIcon('Add overlay', hIconOverlay);
+       end;
+    {$IFEND}
     if HaveOverlay then
        begin
          tmpIconOverlay:= TIcon.Create;
@@ -32844,6 +32948,10 @@ begin
        tmpIcon:= TIcon.Create;
        tmpIcon.Handle:= hIcon;
 
+       {$IF CompilerVersion >= 20}
+       if IconList = IL_ToolBarButtons then
+          TraceToolbarIcon('Add source '+iIconFolder+IconFileName+FileExt, hIcon);
+       {$IFEND}
        if (not HaveOverlay) and (not HaveOverlayText) then
        begin
          if IconList <> nil then
@@ -32883,6 +32991,11 @@ begin
        IconAdded:= True;
      end;
   DestroyIcon(hIcon);
+  {$IF CompilerVersion >= 20}
+  if IconList = IL_ToolBarButtons then
+     StartupTrace('[icons] Add finished file='+iIconFolder+IconFileName+FileExt+
+                  ' loaded='+BoolToStr(Result, True)+' count='+IntToStr(IconList.Count));
+  {$IFEND}
   if HaveOverlay then
      begin
        tmpIconOverlay.ReleaseHandle;
@@ -38892,6 +39005,12 @@ begin
   SetWindowStayOnTop(FormApplyFilterMsgBox, True);
   {$IF CompilerVersion >= 20}
   StartupTrace('FormActivate: done');
+  TraceToolbarButton(ButtonArcadeGamesFilters, IL_ToolBarButtons);
+  TraceToolbarButton(ButtonExtraFilters, IL_ToolBarButtons);
+  TraceToolbarButton(ButtonCustomEmuParameterToUse, IL_ToolBarButtons);
+  TraceToolbarButton(ButtonGameFilterFavorites, IL_ToolBarButtons);
+  StartupTrace('[icons] Toolbar enabled='+BoolToStr(ToolBarButtons.Enabled, True)+
+               ' custom disabled images='+BoolToStr(Assigned(ToolBarButtons.DisabledImages), True));
   StartupTraceEnabled:= False;
   {$IFEND}
 end;

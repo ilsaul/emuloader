@@ -18,6 +18,9 @@ Move the verified entries into `CHANGELOG.md` when preparing the release.
   and each step of `FormActivate` is appended to `startup_trace.log` next to
   the exe. It is used to find where startup hangs, and is to be removed once
   startup is stable.
+- Temporary toolbar icon diagnostics in Delphi 13 builds: `startup_trace.log`
+  records resource paths, extraction results, image list indices and counts,
+  and bitmap dimensions/formats before and after icon composition during startup.
 - Temporary hang watchdog in Delphi 13 Win64 builds (`uHangWatchdog.pas`).
   If the main thread stops processing messages for about 10 seconds, the
   call stacks of all threads are written to `hang_trace.log`, resolved to
