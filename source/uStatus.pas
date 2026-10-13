@@ -722,6 +722,16 @@ begin
   VersionPos.Left4Kx2:= IniFile.ReadInteger('Splash', 'VersionInfoPositionX_4Kx2', VersionPos.Left4Kx2);// 70);
   VersionPos.Top4Kx2:=  IniFile.ReadInteger('Splash', 'VersionInfoPositionY_4Kx2', VersionPos.Top4Kx2); //698);
 
+  {$IF CompilerVersion >= 20}
+  // Move only the original defaults; preserve user-positioned captions.
+  if (VersionPos.Left = 6) and (VersionPos.Top = 228) then
+     VersionPos.Top:= 260;
+  if (VersionPos.Left4K = 32) and (VersionPos.Top4K = 456) then
+     VersionPos.Top4K:= 520;
+  if (VersionPos.Left4Kx2 = 70) and (VersionPos.Top4Kx2 = 698) then
+     VersionPos.Top4Kx2:= 780;
+  {$IFEND}
+
   FormStatus.SplashScreenShowTextShadows.Checked:= Boolean(IniFile.ReadInteger('Splash', 'ShowTextShadows', 1));
   FormStatus.SplashScreenEnableTextsAlternateLayout.Checked:= Boolean(IniFile.ReadInteger('Splash', 'EnableTextsAlternateLayout', 0));
 
@@ -1050,18 +1060,30 @@ begin
        if SplashScreen4KUltraSize.Checked then
           begin
             iLeft:= 70;
+            {$IF CompilerVersion >= 20}
+            iTop:= 780;
+            {$ELSE}
             iTop:= 698;
+            {$IFEND}
           end
        else
           begin
             iLeft:= 32;
+            {$IF CompilerVersion >= 20}
+            iTop:= 520;
+            {$ELSE}
             iTop:= 456;
+            {$IFEND}
           end;
      end
   else
      begin
        iLeft:=  6;
+       {$IF CompilerVersion >= 20}
+       iTop:= 260;
+       {$ELSE}
        iTop:= 228;
+       {$IFEND}
      end;
   SplashScreenVersionInfoPositionX.Position:= iLeft;
   SplashScreenVersionInfoPositionY.Position:= iTop;
@@ -1078,13 +1100,25 @@ begin
 
   // set default values of "Version Info" label
   VersionPos.Left:=   6;
+  {$IF CompilerVersion >= 20}
+  VersionPos.Top:= 260;
+  {$ELSE}
   VersionPos.Top:=  228;
+  {$IFEND}
 
   VersionPos.Left4K:= 32;
+  {$IF CompilerVersion >= 20}
+  VersionPos.Top4K:= 520;
+  {$ELSE}
   VersionPos.Top4K:= 456;
+  {$IFEND}
 
   VersionPos.Left4Kx2:= 70;
+  {$IF CompilerVersion >= 20}
+  VersionPos.Top4Kx2:= 780;
+  {$ELSE}
   VersionPos.Top4Kx2:= 698;
+  {$IFEND}
 
   VersionPos.ShadowOffset:=   1; // all labels
   VersionPos.ShadowOffset4K:= 3; // all labels
