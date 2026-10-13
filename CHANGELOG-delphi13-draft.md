@@ -59,6 +59,9 @@ Move the verified entries into `CHANGELOG.md` when preparing the release.
 
 ## Fixed
 
+- Separate radio glyphs, status icons and captions in the Driver Status Filter,
+  measuring the actual glyph and text widths in standard and 4K layouts.
+
 - Support MAME 0.278 and newer decimal `audio_latency` values, including
   MAME 0.283's `0.0` default, when opening, editing and saving settings.
   Allow the full 0–50 audio-frame range without rounding (1 frame = 20 ms;

@@ -49304,6 +49304,9 @@ begin
          FormMain.Set4KButtonSpecs(ButtonCancel, 130, 8, 89, 25, 9, 0);
        end;
      end;
+  {$IF CompilerVersion >= 20}
+  FormArcadeFiltersDriverStatus.AdjustStatusLayout;
+  {$IFEND}
 end;
 
 procedure TFormMain.SetExtraFilter(LabelHolder: TShadowLabel; ComboBoxHolder: TComboBox2Ex);
@@ -50357,6 +50360,9 @@ begin
   FormArcadeFiltersDriverStatus.Left:= LeftPos;
   FormArcadeFiltersDriverStatus.Top:= FormMain.Top+28+10+ToolBarButtons.ButtonHeight+1;
 
+  {$IF CompilerVersion >= 20}
+  FormArcadeFiltersDriverStatus.AdjustStatusLayout;
+  {$IFEND}
   if FormArcadeFiltersDriverStatus.ShowModal = mrOk then
      begin
        UpdateFilters:= False;
