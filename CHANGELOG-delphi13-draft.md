@@ -59,6 +59,14 @@ Move the verified entries into `CHANGELOG.md` when preparing the release.
 
 ## Fixed
 
+- Support MAME 0.278 and newer decimal `audio_latency` values, including
+  MAME 0.283's `0.0` default, when opening, editing and saving settings.
+  Allow the full 0–50 audio-frame range without rounding (1 frame = 20 ms;
+  0 selects the sound module default), validate decimal-point input before
+  saving, and reset to `0.0`. Retain the legacy integer-level selector and
+  default 2 for older MAME versions. Windows compilation and runtime/normal
+  and 4K layout verification are still required.
+
 - Handle an empty MAME language option without indexing an empty string when
   opening settings; retain the default language and safely strip quoted values.
 
