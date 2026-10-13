@@ -2998,24 +2998,26 @@ begin
                begin
                  Value:= GetStringValue;
                  FolderControllerDefinitions.Text:= Value;
-                 FormMain.ExtractFolders2MAME(sysID, Value, FoldersList, True, emuFileExec); // add to HashedStringList in RAM with FULL path...
-                 if FoldersList.Count > 0 then
-                    begin
-                      for Loop2:= 0 to FoldersList.Count-1 do
+                 FoldersList:= nil;
+                 try
+                   FormMain.ExtractFolders2MAME(sysID, Value, FoldersList, True, emuFileExec);
+                   if Assigned(FoldersList) then
                       begin
                         ctrlrDefinitionsList:= THashedStringList.Create;
-                        GenerateControllerDefinitionsFilesList(FoldersList[Loop2], ctrlrDefinitionsList);
+                        try
+                          for Loop2:= 0 to FoldersList.Count-1 do
+                              GenerateControllerDefinitionsFilesList(FoldersList[Loop2], ctrlrDefinitionsList);
+                          Loop2:= ctrlrDefinitionsList.IndexOf('standard');
+                          if Loop2 <> -1 then
+                             ctrlrDefinitionsList.Delete(Loop2);
+                          ControllerDefinitions.Items.AddStrings(ctrlrDefinitionsList);
+                        finally
+                          ctrlrDefinitionsList.Free;
+                        end;
                       end;
-                      if ctrlrDefinitionsList.Count > 0 then
-                         begin
-                           Loop2:= ctrlrDefinitionsList.IndexOf('standard');
-                           if Loop2 <> -1 then
-                              ctrlrDefinitionsList.Delete(Loop2);
-                           ControllerDefinitions.Items.AddStrings(ctrlrDefinitionsList);
-                         end;
-                      FreeAndNil(ctrlrDefinitionsList);
-                    end;
-                 FreeAndNil(FoldersList);
+                 finally
+                   FoldersList.Free;
+                 end;
                end
             else
             if (EntryString = 'inipath ') and EmuDefaultSettings then

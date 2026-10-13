@@ -59,6 +59,10 @@ Move the verified entries into `CHANGELOG.md` when preparing the release.
 
 ## Fixed
 
+- Initialize and safely release controller-path lists when opening MAME
+  settings, preventing an invalid Free during ctrlrpath parsing. Handle empty
+  paths and collect controller definitions from every configured folder.
+
 - Choose main-toolbar label contrast from several text-free samples of the
   rendered label background, including native hover/pressed/checked fills and
   custom gradients. Keep enabled labels equally contrasted even when Windows
