@@ -3904,14 +3904,15 @@ begin
                  Value:= GetStringValue;
                  if FormMain.CheckTotal(DisplayLanguageList) then
                  begin
-                   if SameText(Value, 'English') then
+                   if (Value = '') or SameText(Value, 'English') then
                       FormMain.ELV_SelectItem(DisplayLanguageList, 0)
                    else
                    begin
-                     if Value[1] = '"' then
+                     if Copy(Value, 1, 1) = '"' then
                         begin
                           Delete(Value, 1, 1);
-                          Delete(Value, Length(Value), 1);
+                          if Copy(Value, Length(Value), 1) = '"' then
+                             Delete(Value, Length(Value), 1);
                         end;
                      FormMain.ELV_SelectItem(DisplayLanguageList, 0, Value);
                      if not FormMain.CheckSelected(DisplayLanguageList) then

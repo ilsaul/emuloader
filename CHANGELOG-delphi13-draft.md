@@ -59,6 +59,9 @@ Move the verified entries into `CHANGELOG.md` when preparing the release.
 
 ## Fixed
 
+- Handle an empty MAME language option without indexing an empty string when
+  opening settings; retain the default language and safely strip quoted values.
+
 - Initialize and safely release controller-path lists when opening MAME
   settings, preventing an invalid Free during ctrlrpath parsing. Handle empty
   paths and collect controller definitions from every configured folder.
