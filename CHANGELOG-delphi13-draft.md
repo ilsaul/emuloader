@@ -59,6 +59,20 @@ Move the verified entries into `CHANGELOG.md` when preparing the release.
 
 ## Fixed
 
+- Choose main-toolbar label contrast from several text-free samples of the
+  rendered label background, including native hover/pressed/checked fills and
+  custom gradients. Keep enabled labels equally contrasted even when Windows
+  reports an indeterminate state; mute labels only for disabled commands.
+- Align checkbox/radio subtitle labels to the same measured caption inset in
+  Delphi 13, after custom icons and normal/4K layouts have been applied.
+  Recognize the existing subtitle naming conventions across Preferences,
+  Night Mode, filters, system selection/export and MAME settings; preserve
+  inline tips in emulator setup. Expand clipped single-line captions only into
+  free space within their parent/column, and widen the 4K Preferences status
+  column without overlapping the neighboring options. Preserve explicit
+  CaptionIndent minimums and Delphi 7 layout. Windows build and visual
+  normal/4K verification remain required.
+
 - Reserve the actual custom/themed glyph width before checkbox and radio-button
   captions in Delphi 13, honoring CaptionIndent and custom icon height. Prevent
   HD selection symbols from covering text in Preferences and emulator setup.

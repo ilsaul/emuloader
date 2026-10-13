@@ -32195,6 +32195,53 @@ var
              0.0722*LinearChannel(GetBValue(Color));
   end;
 
+  function LabelBackgroundLuminance: Double;
+  var
+    Samples: array[0..5] of Double;
+    Count, Row, Side, X, Y, I, J: Integer;
+    Pixel: COLORREF;
+    Value: Double;
+  begin
+    Count:= 0;
+    // The label band contains no icon artwork. Sample both margins outside
+    // the text rectangle, not glyphs, old text or the native button border.
+    for Row:= 1 to 3 do
+    begin
+      Y:= TextRect.Top+MulDiv(TextRect.Bottom-TextRect.Top-1, Row, 4);
+      for Side:= 0 to 1 do
+      begin
+        if Side = 0 then
+           X:= TextRect.Left-1
+        else
+           X:= TextRect.Right;
+        if (X <= ButtonRect.Left) or (X >= ButtonRect.Right-1) or
+           (Y <= ButtonRect.Top) or (Y >= ButtonRect.Bottom-1) then
+           Continue;
+        Pixel:= GetPixel(DC, X, Y);
+        if Pixel = CLR_INVALID then
+           Continue;
+        Value:= RelativeLuminance(Pixel);
+        J:= Count;
+        for I:= Count-1 downto 0 do
+        begin
+          if Samples[I] <= Value then
+             Break;
+          Samples[I+1]:= Samples[I];
+          J:= I;
+        end;
+        Samples[J]:= Value;
+        Inc(Count);
+      end;
+    end;
+    if Count = 0 then
+       Result:= RelativeLuminance(ColorToRGB(Sender.Color))
+    else
+    if Odd(Count) then
+       Result:= Samples[Count div 2]
+    else
+       Result:= (Samples[Count div 2-1]+Samples[Count div 2])/2;
+  end;
+
 begin
   // Let the native toolbar paint backgrounds, icons, borders and hot tracking.
   if (Stage <> cdPostPaint) or (Sender <> ToolBarButtons) or
@@ -32231,16 +32278,11 @@ begin
   try
       IntersectClipRect(DC, ButtonRect.Left, ButtonRect.Top, ButtonRect.Right, ButtonRect.Bottom);
       SetBkMode(DC, TRANSPARENT);
-      // Use the configured toolbar mode rather than sampling the first text
-      // pixel; checked buttons can otherwise produce a different sample.
-      if IsNightMode then
-         Luminance:= 0
-      else
-         Luminance:= 1;
+      Luminance:= LabelBackgroundLuminance;
       if Luminance < 0.179 then
          begin
            TextColor:= RGB(255, 255, 255);
-           if (not Button.Enabled) or (cdsDisabled in State) or (cdsGrayed in State) then
+           if not Button.Enabled then
               begin
                 Shade:= 190;
                 while (Shade < 255) and
@@ -32252,7 +32294,7 @@ begin
       else
          begin
            TextColor:= RGB(0, 0, 0);
-           if (not Button.Enabled) or (cdsDisabled in State) or (cdsGrayed in State) then
+           if not Button.Enabled then
               begin
                 Shade:= 90;
                 while (Shade > 0) and
@@ -56242,6 +56284,14 @@ begin
 end;
 
 procedure TFormMain.Resize4KPreferences(SetDarkScrollBars: Boolean);
+const
+  {$IF CompilerVersion >= 20}
+  StatusColumnLeft = 625;
+  StatusColumnWidth = 384;
+  {$ELSE}
+  StatusColumnLeft = 665;
+  StatusColumnWidth = 350;
+  {$IFEND}
 var
   Loop: Integer;
 
@@ -56357,13 +56407,13 @@ begin
     SetBoxCheckBox(ShowGrayscaleIconGamesMissROMsCHDs, 268, 560);
     Set4KLabelSpecs(ShowGrayscaleIconGamesMissROMsCHDsLabel, 37, ShowGrayscaleIconGamesMissROMsCHDs.Top+35, -1, -1, 16);
 
-    SetBoxCheckBox(DisableCloneIndent,               46, 350, 665);
-    SetBoxCheckBox(DisableDriverStatusIcons,         92, 350, 665);
-    SetBoxCheckBox(HideDriverStatusTexts,           138, 350, 665);
-    SetBoxCheckBox(DriverStatusShowFirstLetterOnly, 184, 350, 665);
-    SetBoxCheckBox(ShortDriverColumnTitles,         230, 350, 665);
-    SetBoxCheckBox(LastPlayedHideSeconds,           276, 350, 665);
-    SetBoxCheckBox(TotalPlayTimeHideSeconds,        322, 350, 665);
+    SetBoxCheckBox(DisableCloneIndent,               46, StatusColumnWidth, StatusColumnLeft);
+    SetBoxCheckBox(DisableDriverStatusIcons,         92, StatusColumnWidth, StatusColumnLeft);
+    SetBoxCheckBox(HideDriverStatusTexts,           138, StatusColumnWidth, StatusColumnLeft);
+    SetBoxCheckBox(DriverStatusShowFirstLetterOnly, 184, StatusColumnWidth, StatusColumnLeft);
+    SetBoxCheckBox(ShortDriverColumnTitles,         230, StatusColumnWidth, StatusColumnLeft);
+    SetBoxCheckBox(LastPlayedHideSeconds,           276, StatusColumnWidth, StatusColumnLeft);
+    SetBoxCheckBox(TotalPlayTimeHideSeconds,        322, StatusColumnWidth, StatusColumnLeft);
 
     // MAME Game Docs
     Set4KBoxLabel(Setting_MAMEGameDocsBox,
