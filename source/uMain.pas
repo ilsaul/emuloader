@@ -41990,6 +41990,13 @@ begin
   end;
 end;
 
+procedure GameDocsLog(const Msg: String);
+begin
+  {$IF CompilerVersion >= 20}
+  DiagnosticLog('gamedocs', Msg);
+  {$IFEND}
+end;
+
 procedure TFormMain.ToggleGameDocuments(Enabled: Boolean);
 var
   pathFile, emuPath, ValueStr: String;
@@ -42030,6 +42037,7 @@ var
        begin
          if not Assigned(StringListHolder) then
             StringListHolder:= THashedStringList.Create;
+         GameDocsLog('Loading '+pathFile);
          case MergeFileContents of
            True:
              begin
@@ -42045,7 +42053,10 @@ var
              end;
            False: StringListHolder.LoadFromFile(pathFile);
          end;
-       end;
+         GameDocsLog('Loaded '+pathFile+'; lines='+IntToStr(StringListHolder.Count));
+       end
+    else
+       GameDocsLog('DAT not found: '+pathFile);
   end;
 
   function FixHistoryXML_NameEntries: Boolean;
@@ -42076,6 +42087,7 @@ var
 begin
   mameIni:= nil; emuDATPaths:= nil;
   ResetGameDocsQuickMenus;
+  GameDocsLog('ToggleGameDocuments Enabled='+BoolToStr(Enabled, True));
 
   case Enabled of
     True:
@@ -42108,6 +42120,7 @@ begin
              emuDATPaths:= THashedStringList.Create;
              emuDATPaths.Insert(0, emuPath);
            end;
+        GameDocsLog('emuPath='+emuPath+'; historypath='+ValueStr+'; DAT folders='+StringReplace(emuDATPaths.Text, #13#10, ' | ', [rfReplaceAll]));
 
         pathFile:= LocateDATFile('mameinfo.dat');
         LoadDAT(AutoMAMEInfoDATFile[0]);
@@ -42140,6 +42153,8 @@ begin
         FreeAndNil(emuDATPaths);
         PanelGameDocuments.Visible:= True;
         UpdateScreenshotsPanel;
+        GameDocsLog('PanelGameDocuments visible='+BoolToStr(PanelGameDocuments.Visible, True)+
+                    '; align='+IntToStr(Ord(PanelGameDocuments.Align))+'; size='+IntToStr(PanelGameDocuments.Width)+'x'+IntToStr(PanelGameDocuments.Height));
       end;
     False:
       begin
@@ -42192,6 +42207,9 @@ begin
        if not IsGameDocsSinglePanelDisplay then
           Result:= ButtonDocsPanelToggle.Down;
      end;
+  GameDocsLog('ShowGameInfoValidate='+BoolToStr(Result, True)+'; processing='+BoolToStr(ProcessingGameDocuments, True)+
+              '; auto='+BoolToStr(PopupAutomaticGameInformation.Checked, True)+'; singlePanel='+BoolToStr(IsGameDocsSinglePanelDisplay, True)+
+              '; docsToggle='+BoolToStr(ButtonDocsPanelToggle.Down, True));
 end;
 
 procedure TFormMain.ShowGameInfoAll;
@@ -42452,6 +42470,7 @@ var
               TagStringEndChar:= '/>'; // remove the space for the "end" entry tag... just in case
               Loop:= AutoHistoryDATFile.IndexOf(TagString+TagStringEndChar);
             end;
+         GameDocsLog('HistoryXML search ['+TagString+TagStringEndChar+'] index='+IntToStr(Loop));
 
          if Loop <> -1 then
             begin
@@ -42499,7 +42518,10 @@ var
               until FoundTagEnd or (Loop >= AutoHistoryDATFile.Count);
               IsLastDocLineEmpty:= LastLineEmpty;
             end;
-       end;
+         GameDocsLog('HistoryXML FoundData='+BoolToStr(FoundData, True)+'; FoundTagEnd='+BoolToStr(FoundTagEnd, True));
+       end
+    else
+       GameDocsLog('HistoryXML: history file not loaded');
     GameDocsGoToHistory.Visible:= GameDocsGoToHistory.Tag <> -1;
   end;
 
@@ -42773,6 +42795,7 @@ var
 
   procedure LoadText(Index: Integer);
   begin
+    GameDocsLog('LoadText doc='+IntToStr(Index));
     case Index of
       1: InformationData;
       2: HistoryXML;
@@ -42790,13 +42813,18 @@ begin
   GameDocsGoToStory.Tag:= -1;
   GameDocsGoToMarp.Tag:= -1;
   GameDocsGoToGameInit.Tag:= -1;
+  GameDocsLog('ShowGameInfoAll game='+MemGameInfo.eName+'; software='+MemGameInfo.eSoftwareName+'; startup='+BoolToStr(IsStartup, True));
   if IsStartup then
      Exit;
   if not ValidateSelectedGame(False) then
-     Exit;
+     begin
+       GameDocsLog('ShowGameInfoAll: ValidateSelectedGame failed');
+       Exit;
+     end;
 
   if not IsMAMEBasedSys(MemGameInfo.eSystemID) then
      begin
+       GameDocsLog('ShowGameInfoAll: not a MAME based system');
        ClearGameInfoRichEdit;
        Exit;
      end;
@@ -42809,6 +42837,7 @@ begin
   MAMEDocsText.Lines.Clear;
   MAMEDocsText.Lines.BeginUpdate;
   try
+  try
     NoFilesMsg:= True;
     docItem:= FormPreferences.GameDocs.Groups.FirstItem;
     repeat
@@ -42816,14 +42845,26 @@ begin
          LoadText(docItem.Tag);
       docItem:= FormPreferences.GameDocs.Groups.NextItem(docItem);
     until docItem = nil;
+    GameDocsLog('ShowGameInfoAll NoFilesMsg='+BoolToStr(NoFilesMsg, True));
     if NoFilesMsg then
        AddTextLine('    No .dat files were found!'+#13#10+'Place files in "mamedir\dats\" folder or change the "historypath" entry in MAME''s "ui.ini" file.')
     else
        MAMEDocsText.SelStart:= 0; // move caret to the beginning of the text; fixes "Go To doc x" popup menus; no need to move scrol blar to the top anymore
+  except
+    on E: Exception do
+    begin
+      GameDocsLog('ShowGameInfoAll exception: '+E.ClassName+': '+E.Message);
+      raise;
+    end;
+  end;
   finally
     MAMEDocsText.Lines.EndUpdate;
     MAMEDocsText.ReadOnly:= True;
     ProcessingGameDocuments:= False;
+    GameDocsLog('ShowGameInfoAll done; lines='+IntToStr(MAMEDocsText.Lines.Count)+'; textLen='+IntToStr(MAMEDocsText.GetTextLen)+
+                '; visible='+BoolToStr(MAMEDocsText.Visible, True)+'; size='+IntToStr(MAMEDocsText.Width)+'x'+IntToStr(MAMEDocsText.Height)+
+                '; color=$'+IntToHex(MAMEDocsText.Color, 8)+'; fontColor=$'+IntToHex(MAMEDocsText.Font.Color, 8)+
+                '; panelVisible='+BoolToStr(PanelGameDocuments.Visible, True)+'; panelSize='+IntToStr(PanelGameDocuments.Width)+'x'+IntToStr(PanelGameDocuments.Height));
   end;
 end;
 
