@@ -42268,14 +42268,36 @@ var
     Result:= iFileTxt = '$end';
   end;
 
+  function DocIndexOf(List: TStrings; const S: String): Integer;
+  var
+    i: Integer;
+  begin
+    Result:= List.IndexOf(S);
+    if Result <> -1 then
+       Exit;
+    // fallback: the hashed lookup can miss lines (encoding/line-break/hash issues); do a plain scan
+    for i:= 0 to List.Count-1 do
+      if SameText(Trim(List[i]), S) then
+      begin
+        Result:= i;
+        GameDocsLog('DocIndexOf: hashed IndexOf missed ['+S+'], linear scan found it at '+IntToStr(i));
+        Exit;
+      end;
+    if List.Count > 0 then
+       GameDocsLog('DocIndexOf: ['+S+'] not found; lines='+IntToStr(List.Count)+
+                   '; first line=['+Copy(List[0], 1, 120)+']')
+    else
+       GameDocsLog('DocIndexOf: ['+S+'] not found; list is empty');
+  end;
+
   function SearchInfoData(IsFileMESS: Integer): Integer;
   begin
     //Result = -1; // not found, IndexOf() = failed
-    Result:= AutoMAMEInfoDATFile[IsFileMESS].IndexOf('$info='+MemGameInfo.eName);
+    Result:= DocIndexOf(AutoMAMEInfoDATFile[IsFileMESS], '$info='+MemGameInfo.eName);
     if Result = -1 then
        begin
          if GameIsClone(MemGameInfo.eClone) then
-            Result:= AutoMAMEInfoDATFile[IsFileMESS].IndexOf('$info='+MemGameInfo.eClone);
+            Result:= DocIndexOf(AutoMAMEInfoDATFile[IsFileMESS], '$info='+MemGameInfo.eClone);
        end;
   end;
 
@@ -42464,13 +42486,22 @@ var
             TagString:= '<item list="'+MemGameInfo.eSoftwareName+'" name="'+MemGameInfo.eName+'"';
 
          TagStringEndChar:= ' />';
-         Loop:= AutoHistoryDATFile.IndexOf(TagString+TagStringEndChar);
+         Loop:= DocIndexOf(AutoHistoryDATFile, TagString+TagStringEndChar);
          if Loop = -1 then
             begin
               TagStringEndChar:= '/>'; // remove the space for the "end" entry tag... just in case
-              Loop:= AutoHistoryDATFile.IndexOf(TagString+TagStringEndChar);
+              Loop:= DocIndexOf(AutoHistoryDATFile, TagString+TagStringEndChar);
             end;
          GameDocsLog('HistoryXML search ['+TagString+TagStringEndChar+'] index='+IntToStr(Loop));
+         if Loop = -1 then
+         begin
+           for webIndex:= 0 to AutoHistoryDATFile.Count-1 do
+             if PosEx('name="'+MemGameInfo.eName+'"', AutoHistoryDATFile[webIndex]) <> 0 then
+             begin
+               GameDocsLog('HistoryXML raw line '+IntToStr(webIndex)+': ['+AutoHistoryDATFile[webIndex]+'] len='+IntToStr(Length(AutoHistoryDATFile[webIndex])));
+               Break;
+             end;
+         end;
 
          if Loop <> -1 then
             begin
@@ -42539,7 +42570,7 @@ var
          begin
            NoFilesMsg:= False;
            AddLine:= False;
-           LineIndex:= AutoMAMEInfoDATFile[IsFileMESS].IndexOf('$info='+MemGameInfo.eDriverName);
+           LineIndex:= DocIndexOf(AutoMAMEInfoDATFile[IsFileMESS], '$info='+MemGameInfo.eDriverName);
            Result:= LineIndex <> -1;
          end;
 
@@ -42551,7 +42582,7 @@ var
            begin
              NoFilesMsg:= False;
              AddLine:= False;
-             LineIndex:= AutoMAMEInfoDATFile[IsFileMESS].IndexOf('$info='+MemGameInfo.eDriverName);
+             LineIndex:= DocIndexOf(AutoMAMEInfoDATFile[IsFileMESS], '$info='+MemGameInfo.eDriverName);
              Result:= LineIndex <> -1;
            end;
       end;
@@ -42602,7 +42633,7 @@ var
          begin
            NoFilesMsg:= False;
            AddLine:= False;
-           LineIndex:= AutoStoryDATFile.IndexOf('$info='+MemGameInfo.eName);
+           LineIndex:= DocIndexOf(AutoStoryDATFile, '$info='+MemGameInfo.eName);
            Result:= LineIndex <> -1;
            if Result then
               begin
@@ -42700,7 +42731,7 @@ var
            else
            begin
              // marp.dat
-             LineIndex:= AutoMarpDATFile.IndexOf('$info='+MemGameInfo.eName);
+             LineIndex:= DocIndexOf(AutoMarpDATFile, '$info='+MemGameInfo.eName);
              Result:= LineIndex <> -1;
              if Result then
                 begin
@@ -42749,14 +42780,14 @@ var
       if Result then
          begin
            NoFilesMsg:= False;
-           LineIndex:= AutoGameInitDATFile.IndexOf('$info='+MemGameInfo.eName);
+           LineIndex:= DocIndexOf(AutoGameInitDATFile, '$info='+MemGameInfo.eName);
            Result:= LineIndex <> -1;
 
            if not Result then
               begin
                 if GameIsClone(MemGameInfo.eClone) then
                    begin
-                     LineIndex:= AutoGameInitDATFile.IndexOf('$info='+MemGameInfo.eClone);
+                     LineIndex:= DocIndexOf(AutoGameInitDATFile, '$info='+MemGameInfo.eClone);
                      Result:= LineIndex <> -1;
                    end;
               end;
