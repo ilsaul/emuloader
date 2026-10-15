@@ -59,6 +59,19 @@ Move the verified entries into `CHANGELOG.md` when preparing the release.
 
 ## Fixed
 
+- Show MAME History again with current `history.xml` files, which write
+  extra attributes such as `<system name="frogger" game="yes" />`. Emu Loader
+  only recognized the exact `<system name="frogger" />` form, so no history was
+  shown (this also affected the Delphi 7 build). System and software-list
+  entry tags are now reduced to their name/list attributes when the file is
+  loaded. Verified at runtime with Frogger on Windows.
+- Decode HTML entities in game documents without keeping character pointers
+  across string changes, which could crash or corrupt text when a line had
+  several entities. Bound history parsing to the end of the file, handle
+  `<text>...</text>` on a single line, and always end the rich-edit update
+  even if loading a document fails. Game documents loading is logged under
+  `gamedocs` in `diagnostic.log`.
+
 - Separate radio glyphs, status icons and captions in the Driver Status Filter,
   measuring the actual glyph and text widths in standard and 4K layouts.
 
