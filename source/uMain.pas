@@ -19325,73 +19325,101 @@ begin
 end;
 
 function TFormMain.DecodeHTML(const s: String): String;
-const
-  ChrMapStr = '&quot;&lt;&gt;&apos;&amp;&nbsp;';
-type
-  TCharSet = set of Char;
-var
-  j: Integer;
-  pp,pe: PChar;
-  tmp: String;
 
-  function TrimSpaces(const str: String; ChrSpace: TCharSet = [#9, #10, #13, #32]): String;
+  function IsSpaceChr(c: Char): Boolean;
+  begin
+    Result:= (c = #9) or (c = #10) or (c = #13) or (c = #32);
+  end;
+
+  function TrimSpaces(const str: String): String;
   var
     i, l: Integer;
   begin
     l:= Length(str);
     i:= 1;
-    while (i <= l) and (str[i] in ChrSpace) do Inc(i);
-    if i > l then
-       Result:= ''
-    else
-      begin
-        while (str[l] in ChrSpace) do Dec(l);
-        Result:= Copy(str, i, l-i+1);
-      end;
+    while (i <= l) and IsSpaceChr(str[i]) do Inc(i);
+    while (l >= i) and IsSpaceChr(str[l]) do Dec(l);
+    Result:= Copy(str, i, l-i+1);
   end;
 
-begin
-  if Pos('&#10;', s) <> 0 then
-     begin
-       Result:= StringReplace(s, '&#10;', ' ', [rfIgnoreCase, rfReplaceAll]); // for game "colasm" from "cgenie_cass.xml" software list (May 20, 2020)
-       Result:= TrimSpaces(Result);
-     end
-  else
-     Result:= TrimSpaces(s);
-  if Result = '' then Exit;
-
-  pp:= PChar(Result);
-  repeat
-    pp:= StrScan(pp, '&');
-    if pp = nil then Exit;
-    Inc(pp);
-    j:= pp-PChar(Result);
-    pe:= pp;
-    while ((pe^ <> #0) and not (pe^ in [' ', ';'])) do Inc(pe);
-    if (pp^='#') then
+  function CodePointToStr(CodePoint: Integer): String;
+  begin
+    if (CodePoint <= 0) or (CodePoint > $10FFFF) or ((CodePoint >= $D800) and (CodePoint <= $DFFF)) then
+       CodePoint:= 32;
+    {$IF CompilerVersion >= 20}
+    if CodePoint > $FFFF then
        begin
-         if UpCase((pp+1)^) = 'X' then
-            (pp+1)^:= '$';
-         SetString(tmp, pp+1, pe-pp-1);
-         Result[j]:= chr(StrToIntDef(tmp, 32));
-         Delete(Result, j+1, pe-pp+1);
+         Dec(CodePoint, $10000);
+         Result:= Char($D800 + (CodePoint shr 10)) + Char($DC00 + (CodePoint and $3FF));
        end
     else
+       Result:= Char(CodePoint);
+    {$ELSE}
+    if CodePoint > 255 then
+       CodePoint:= 32;
+    Result:= Chr(CodePoint);
+    {$IFEND}
+  end;
+
+  function DecodeEntity(const Entity: String; out Decoded: String): Boolean;
+  var
+    Code: Integer;
+  begin
+    Result:= True;
+    if (Length(Entity) > 1) and (Entity[1] = '#') then
        begin
-         SetString(tmp, pp-1, pe-pp+1);
-         case PosEx(tmp, ChrMapStr) of
-            1: Result[j]:= '"';
-            7: Result[j]:= '<';
-           11: Result[j]:= '>';
-           15: Result[j]:= '''';
-           21: Result[j]:= '&';
-           26: Result[j]:= ' ';
+         if (Entity[2] = 'x') or (Entity[2] = 'X') then
+            Code:= StrToIntDef('$'+Copy(Entity, 3, MaxInt), -1)
          else
-           Continue;
-         end;
-         Delete(Result, j+1, pe-pp+1);
-       end;
-  until False;
+            Code:= StrToIntDef(Copy(Entity, 2, MaxInt), -1);
+         Result:= Code <> -1;
+         if Result then
+            Decoded:= CodePointToStr(Code);
+       end
+    else if Entity = 'quot' then Decoded:= '"'
+    else if Entity = 'lt'   then Decoded:= '<'
+    else if Entity = 'gt'   then Decoded:= '>'
+    else if Entity = 'apos' then Decoded:= ''''
+    else if Entity = 'amp'  then Decoded:= '&'
+    else if Entity = 'nbsp' then Decoded:= ' '
+    else Result:= False;
+  end;
+
+var
+  src, decoded: String;
+  i, e, len, runStart: Integer;
+begin
+  // index-based decoding; the old PChar version kept stale pointers after Delete() and could crash (history.xml)
+  if Pos('&#10;', s) <> 0 then
+     Result:= TrimSpaces(StringReplace(s, '&#10;', ' ', [rfIgnoreCase, rfReplaceAll])) // for game "colasm" from "cgenie_cass.xml" software list (May 20, 2020)
+  else
+     Result:= TrimSpaces(s);
+  if Pos('&', Result) = 0 then
+     Exit;
+
+  src:= Result;
+  Result:= '';
+  len:= Length(src);
+  runStart:= 1;
+  i:= 1;
+  while i <= len do
+  begin
+    if src[i] = '&' then
+    begin
+      e:= i+1;
+      while (e <= len) and (e-i <= 10) and (src[e] <> ';') and (src[e] <> '&') and not IsSpaceChr(src[e]) do
+        Inc(e);
+      if (e <= len) and (src[e] = ';') and (e > i+1) and DecodeEntity(Copy(src, i+1, e-i-1), decoded) then
+      begin
+        Result:= Result + Copy(src, runStart, i-runStart) + decoded;
+        i:= e+1;
+        runStart:= i;
+        Continue;
+      end;
+    end;
+    Inc(i);
+  end;
+  Result:= Result + Copy(src, runStart, len-runStart+1);
 end;
 
 function TFormMain.FixDriverSourceName(const DriverStr: String): String;
@@ -42382,7 +42410,7 @@ var
                   end;
                 end;
                 Inc(Loop);
-              until iText = TagEndInfo;
+              until (iText = TagEndInfo) or (Loop >= AutoHistoryDATFile.Count);
               iText:= Trim(AutoHistoryDATFile[Loop-2]);
               IsLastDocLineEmpty:= iText = '';
             end;
@@ -42392,9 +42420,9 @@ var
 
   function HistoryXML: Boolean;
   var
-    Loop, webIndex: Integer;
+    Loop, webIndex, TextPos, EndPos: Integer;
     TagString, TagStringEndChar, TagEndInfo: String;
-    FoundData, FoundTagEnd: Boolean;
+    FoundData, FoundTagEnd, IsFirstTextLine, LastLineEmpty: Boolean;
     TagStartInfo: WideString;
   begin
     Result:= Assigned(AutoHistoryDATFile);
@@ -42428,49 +42456,48 @@ var
          if Loop <> -1 then
             begin
               TagEndInfo:= '</text>';
-              repeat
+              while (Loop < AutoHistoryDATFile.Count) and not FoundData do
+              begin
                 TagStartInfo:= Trim(AutoHistoryDATFile[Loop]);
-                if not FoundData then
-                   FoundData:= PosEx('<text>', TagStartInfo) <> 0; // "TagStartInfo" replace "AutoHistoryDATFile[Loop]"
-
+                if PosEx('</entry>', TagStartInfo) <> 0 then
+                   Break;
+                TextPos:= PosEx('<text>', TagStartInfo);
+                FoundData:= TextPos <> 0;
                 if FoundData then
-                    begin
-                    Delete(TagStartInfo, 1, Length('<text>'));
-                     if TagStartInfo <> '' then
-                        webIndex:= Loop    // some entries are in the same line as the '<text>' tag :(
-                     else
-                        webIndex:= Loop+1; // info stars on next line
-                     //Break; // get out of the loop; this is commented... huh ? (May 31, 2021)
-                   end;
-                Inc(Loop);
-              until FoundData;
+                   Delete(TagStartInfo, 1, TextPos+Length('<text>')-1) // some entries start in the same line as the '<text>' tag
+                else
+                   Inc(Loop);
+              end;
             end;
 
          if FoundData then
             begin
-              Loop:= webIndex;
               GameDocsGoToHistory.Tag:= AddTitleTextLine(' ---------- History Data ---------- ');
+              IsFirstTextLine:= True;
+              LastLineEmpty:= False;
               repeat
-                if TagStartInfo = '' then
+                if not IsFirstTextLine then
                    TagStartInfo:= Trim(AutoHistoryDATFile[Loop]);
-                TagStartInfo:= DecodeHTML(TagStartInfo);
-                TagStartInfo:= DecodeUnicodeStr(TagStartInfo);
+                EndPos:= PosEx(TagEndInfo, TagStartInfo);
+                FoundTagEnd:= EndPos <> 0;
+                if FoundTagEnd then
+                   TagStartInfo:= TrimRight(Copy(TagStartInfo, 1, EndPos-1));
 
-                webIndex:= PosEx('<a href=', TagStartInfo);
-                if webIndex <> 0 then
-                   AddHistoryURL(TagStartInfo, webIndex)
-                else
-                   AddTextLine(TagStartInfo);
-
+                if not ((IsFirstTextLine or FoundTagEnd) and (TagStartInfo = '')) then
+                begin
+                  TagStartInfo:= DecodeHTML(TagStartInfo);
+                  TagStartInfo:= DecodeUnicodeStr(TagStartInfo);
+                  webIndex:= PosEx('<a href=', TagStartInfo);
+                  if webIndex <> 0 then
+                     AddHistoryURL(TagStartInfo, webIndex)
+                  else
+                     AddTextLine(TagStartInfo);
+                  LastLineEmpty:= TagStartInfo = '';
+                end;
+                IsFirstTextLine:= False;
                 Inc(Loop);
-                TagStartInfo:= '';
-
-                if PosEx(TagEndInfo, AutoHistoryDATFile[Loop]) <> 0 then
-                   FoundTagEnd:= True;
-              until FoundTagEnd;
-
-              TagEndInfo:= Trim(AutoHistoryDATFile[Loop-1]);
-              IsLastDocLineEmpty:= TagEndInfo = '';
+              until FoundTagEnd or (Loop >= AutoHistoryDATFile.Count);
+              IsLastDocLineEmpty:= LastLineEmpty;
             end;
        end;
     GameDocsGoToHistory.Visible:= GameDocsGoToHistory.Tag <> -1;
@@ -42777,26 +42804,27 @@ begin
   IsLastDocLineEmpty:= True; // do not add an empty line before the DOC title
   ProcessingGameDocuments:= True;
 
+  IsFirstLine:= True;
   MAMEDocsText.ReadOnly:= False; // using suplied richedit20.dll, empty lines are not added if control is ReadOnly = True... HUH!? :_((
   MAMEDocsText.Lines.Clear;
   MAMEDocsText.Lines.BeginUpdate;
-
-  NoFilesMsg:= True;
-  docItem:= FormPreferences.GameDocs.Groups.FirstItem;
-  repeat
-    if docItem.Checked then
-       LoadText(docItem.Tag);
-    docItem:= FormPreferences.GameDocs.Groups.NextItem(docItem);
-  until docItem = nil;
-  if NoFilesMsg then
-     AddTextLine('    No .dat files were found!'+#13#10+'Place files in "mamedir\dats\" folder or change the "historypath" entry in MAME''s "ui.ini" file.')
-  else
-     MAMEDocsText.SelStart:= 0; // move caret to the beginning of the text; fixes "Go To doc x" popup menus; no need to move scrol blar to the top anymore
-
-  MAMEDocsText.Lines.EndUpdate;
-  MAMEDocsText.ReadOnly:= True;
-
-  ProcessingGameDocuments:= False;
+  try
+    NoFilesMsg:= True;
+    docItem:= FormPreferences.GameDocs.Groups.FirstItem;
+    repeat
+      if docItem.Checked then
+         LoadText(docItem.Tag);
+      docItem:= FormPreferences.GameDocs.Groups.NextItem(docItem);
+    until docItem = nil;
+    if NoFilesMsg then
+       AddTextLine('    No .dat files were found!'+#13#10+'Place files in "mamedir\dats\" folder or change the "historypath" entry in MAME''s "ui.ini" file.')
+    else
+       MAMEDocsText.SelStart:= 0; // move caret to the beginning of the text; fixes "Go To doc x" popup menus; no need to move scrol blar to the top anymore
+  finally
+    MAMEDocsText.Lines.EndUpdate;
+    MAMEDocsText.ReadOnly:= True;
+    ProcessingGameDocuments:= False;
+  end;
 end;
 
 procedure TFormMain.PopupAutomaticGameInformationClick(Sender: TObject);
