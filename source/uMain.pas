@@ -42059,6 +42059,28 @@ var
        GameDocsLog('DAT not found: '+pathFile);
   end;
 
+  function NormalizeHistoryNameTag(const Line: String): String;
+  var
+    p: Integer;
+  begin
+    // newer history.xml files add extra attributes (e.g. '<system name="x" game="yes" />');
+    // keep only the identifying ones so IndexOf() matches '<system name="x" />' and '<item list="l" name="x" />'
+    Result:= TrimLeft(Line);
+    if Copy(Result, 1, 14) = '<system name="' then
+       p:= PosEx('"', Result, 15)
+    else
+    if Copy(Result, 1, 12) = '<item list="' then
+       begin
+         p:= PosEx(' name="', Result, 13);
+         if p <> 0 then
+            p:= PosEx('"', Result, p+7);
+       end
+    else
+       p:= 0;
+    if p <> 0 then
+       Result:= Copy(Result, 1, p)+' />';
+  end;
+
   function FixHistoryXML_NameEntries: Boolean;
   var
     xLoop: Integer;
@@ -42075,11 +42097,8 @@ var
     for xLoop:=0 to AutoHistoryDATFile.Count-1 do
     begin
       xStr:= AutoHistoryDATFile[xLoop];
-      if PosEx('<system name="', Xstr) <> 0 then
-         AutoHistoryDATFile[xLoop]:= TrimLeft(xStr)
-      else
-      if PosEx('<item list="', Xstr) <> 0 then
-         AutoHistoryDATFile[xLoop]:= TrimLeft(xStr);
+      if (PosEx('<system name="', xStr) <> 0) or (PosEx('<item list="', xStr) <> 0) then
+         AutoHistoryDATFile[xLoop]:= NormalizeHistoryNameTag(xStr);
     end;
     AutoHistoryDATFile.EndUpdate;
   end;
@@ -42269,25 +42288,10 @@ var
   end;
 
   function DocIndexOf(List: TStrings; const S: String): Integer;
-  var
-    i: Integer;
   begin
     Result:= List.IndexOf(S);
-    if Result <> -1 then
-       Exit;
-    // fallback: the hashed lookup can miss lines (encoding/line-break/hash issues); do a plain scan
-    for i:= 0 to List.Count-1 do
-      if SameText(Trim(List[i]), S) then
-      begin
-        Result:= i;
-        GameDocsLog('DocIndexOf: hashed IndexOf missed ['+S+'], linear scan found it at '+IntToStr(i));
-        Exit;
-      end;
-    if List.Count > 0 then
-       GameDocsLog('DocIndexOf: ['+S+'] not found; lines='+IntToStr(List.Count)+
-                   '; first line=['+Copy(List[0], 1, 120)+']')
-    else
-       GameDocsLog('DocIndexOf: ['+S+'] not found; list is empty');
+    if Result = -1 then
+       GameDocsLog('DocIndexOf: ['+S+'] not found; lines='+IntToStr(List.Count));
   end;
 
   function SearchInfoData(IsFileMESS: Integer): Integer;
@@ -42493,15 +42497,6 @@ var
               Loop:= DocIndexOf(AutoHistoryDATFile, TagString+TagStringEndChar);
             end;
          GameDocsLog('HistoryXML search ['+TagString+TagStringEndChar+'] index='+IntToStr(Loop));
-         if Loop = -1 then
-         begin
-           for webIndex:= 0 to AutoHistoryDATFile.Count-1 do
-             if PosEx('name="'+MemGameInfo.eName+'"', AutoHistoryDATFile[webIndex]) <> 0 then
-             begin
-               GameDocsLog('HistoryXML raw line '+IntToStr(webIndex)+': ['+AutoHistoryDATFile[webIndex]+'] len='+IntToStr(Length(AutoHistoryDATFile[webIndex])));
-               Break;
-             end;
-         end;
 
          if Loop <> -1 then
             begin
