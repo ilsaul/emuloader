@@ -56,8 +56,8 @@ procedure TraceTaskbarIcons;
     TraceIcon(Name+' WM_GETICON big', HICON(SendMessage(Wnd, WM_GETICON, ICON_BIG, 0)));
     TraceIcon(Name+' WM_GETICON small', HICON(SendMessage(Wnd, WM_GETICON, ICON_SMALL, 0)));
     TraceIcon(Name+' WM_GETICON small2', HICON(SendMessage(Wnd, WM_GETICON, ICON_SMALL2, 0)));
-    TraceIcon(Name+' class big', HICON(GetClassLongPtr(Wnd, GCLP_HICON)));
-    TraceIcon(Name+' class small', HICON(GetClassLongPtr(Wnd, GCLP_HICONSM)));
+    TraceIcon(Name+' class big', HICON(GetClassLongPtr(Wnd, GCL_HICON)));
+    TraceIcon(Name+' class small', HICON(GetClassLongPtr(Wnd, GCL_HICONSM)));
   end;
 
 var
