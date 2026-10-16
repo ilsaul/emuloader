@@ -28718,6 +28718,37 @@ var
   SevenZipDLLHandle: HMODULE = 0;
   SevenZipDLLPath: String = '';
 
+function PEMachineName(const FileName: String): String;
+var
+  F: TFileStream;
+  PEOffset: LongInt;
+  Sig: DWORD;
+  Machine: Word;
+begin
+  Result:= 'unknown';
+  try
+    F:= TFileStream.Create(FileName, fmOpenRead or fmShareDenyNone);
+    try
+      F.Position:= $3C;
+      F.ReadBuffer(PEOffset, SizeOf(PEOffset));
+      F.Position:= PEOffset;
+      F.ReadBuffer(Sig, SizeOf(Sig));
+      F.ReadBuffer(Machine, SizeOf(Machine));
+      case Machine of
+        $014C: Result:= 'x86 (32-bit)';
+        $8664: Result:= 'x64';
+        $AA64: Result:= 'ARM64';
+        $A641: Result:= 'ARM64EC';
+      else
+        Result:= '$'+IntToHex(Machine, 4);
+      end;
+    finally
+      F.Free;
+    end;
+  except
+  end;
+end;
+
 function TFormMain.ValidateSevenZipDLL: Boolean;
 var
   fHandle: HMODULE;
@@ -28754,7 +28785,7 @@ begin
            LastErr:= GetLastError;
            {$IF CompilerVersion >= 20}
            if LastErr = ERROR_BAD_EXE_FORMAT then
-              DiagnosticLog('7zip', 'cannot load ['+libFile+']: wrong architecture (32-bit DLL in a 64-bit build or vice versa)')
+              DiagnosticLog('7zip', 'cannot load ['+libFile+']: wrong architecture; DLL='+PEMachineName(libFile)+', EmuLoader='+{$IFDEF WIN64}'x64'{$ELSE}'x86 (32-bit)'{$ENDIF})
            else
               DiagnosticLog('7zip', 'cannot load ['+libFile+']: error '+IntToStr(LastErr)+' '+SysErrorMessage(LastErr));
            {$IFEND}
