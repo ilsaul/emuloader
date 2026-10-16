@@ -126,6 +126,7 @@ begin
   {$IF CompilerVersion >= 20}
   FrontendPreRelease:= IsFilePreRelease(Application.ExeName);
   InitializeDiagnosticLog(FrontendVersion);
+  SetExplicitAppUserModelID; // must happen before any window is created
   try
   // Keep VCL's icon state consistent with the embedded resource before showing any forms.
   Application.Icon.LoadFromResourceName(HInstance, 'MAINICON');

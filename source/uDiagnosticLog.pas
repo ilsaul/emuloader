@@ -11,6 +11,7 @@ function DiagnosticLogEnabled: Boolean;
 procedure DiagnosticLog(const Category, Msg: String);
 procedure DiagnosticLogException(const Context: String; E: Exception; Address: Pointer);
 procedure TraceTaskbarIcons;
+procedure SetExplicitAppUserModelID;
 
 implementation
 
@@ -23,6 +24,17 @@ const
 
 function ReadProcessAppUserModelID(out AppID: PWideChar): HRESULT; stdcall;
   external 'shell32.dll' name 'GetCurrentProcessExplicitAppUserModelID';
+
+function WriteProcessAppUserModelID(AppID: PWideChar): HRESULT; stdcall;
+  external 'shell32.dll' name 'SetCurrentProcessExplicitAppUserModelID';
+
+procedure SetExplicitAppUserModelID;
+var
+  HR: HRESULT;
+begin
+  HR:= WriteProcessAppUserModelID('EmuLoader.Frontend');
+  DiagnosticLog('taskbar', 'SetCurrentProcessExplicitAppUserModelID HRESULT=$'+IntToHex(HR, 8));
+end;
 
 procedure TraceTaskbarShellProperties(const Name: String; Wnd: HWND);
 var

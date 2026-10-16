@@ -90,7 +90,9 @@ Move the verified entries into `CHANGELOG.md` when preparing the release.
   Extended the diagnostic build to read the process's explicit AppUserModelID
   and each window's shell AppUserModel properties (ID, relaunch icon, command,
   display name and pinning flag), reporting unset values and API errors.
-  These diagnostics do not change shell identity or taskbar behavior.
+  Experimental: the process now sets an explicit AppUserModelID
+  (`EmuLoader.Frontend`) before any window is created, so Windows does not
+  have to infer the taskbar identity; the result is logged under `[taskbar]`.
 - Show MAMu_ game icons (loose `.ico` files and `icons.zip`) in Delphi 13
   builds instead of the generic system icon. `unitExIcon` used `PChar` as a
   byte pointer, which is two bytes wide in Unicode Delphi, so icon bitmap and
