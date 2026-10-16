@@ -28714,18 +28714,64 @@ begin
      UseSevenZip:= ValidateSevenZipDLL;
 end;
 
+var
+  SevenZipDLLHandle: HMODULE = 0;
+  SevenZipDLLPath: String = '';
+
 function TFormMain.ValidateSevenZipDLL: Boolean;
 var
-  fHandle: THandle;
-  libFile: String;
+  fHandle: HMODULE;
+  libFile, PFDir: String;
+  Candidates: TStringList;
+  Loop: Integer;
+  LastErr: DWORD;
 begin
-  libFile:= FrontendPath+'7z.dll';
-  Result:= FileExists(libFile);
-  if not Result then
+  Result:= SevenZipDLLHandle <> 0;
+  if Result then
      Exit;
-  fHandle:= LoadLibrary(PChar(libFile));
-  Result:= FHandle <> 0;
-  FreeLibrary(fHandle);
+  Candidates:= TStringList.Create;
+  try
+    Candidates.Add(FrontendPath+'7z.dll');
+    PFDir:= GetEnvironmentVariable('ProgramW6432');
+    if PFDir <> '' then
+       Candidates.Add(IncludeTrailingPathDelimiter(PFDir)+'7-Zip\7z.dll');
+    PFDir:= GetEnvironmentVariable('ProgramFiles');
+    if PFDir <> '' then
+       Candidates.Add(IncludeTrailingPathDelimiter(PFDir)+'7-Zip\7z.dll');
+    for Loop:=0 to Candidates.Count-1 do
+    begin
+      libFile:= Candidates[Loop];
+      if not FileExists(libFile) then
+         begin
+           {$IF CompilerVersion >= 20}
+           DiagnosticLog('7zip', 'not found ['+libFile+']');
+           {$IFEND}
+           Continue;
+         end;
+      fHandle:= LoadLibrary(PChar(libFile));
+      if fHandle = 0 then
+         begin
+           LastErr:= GetLastError;
+           {$IF CompilerVersion >= 20}
+           if LastErr = ERROR_BAD_EXE_FORMAT then
+              DiagnosticLog('7zip', 'cannot load ['+libFile+']: wrong architecture (32-bit DLL in a 64-bit build or vice versa)')
+           else
+              DiagnosticLog('7zip', 'cannot load ['+libFile+']: error '+IntToStr(LastErr)+' '+SysErrorMessage(LastErr));
+           {$IFEND}
+           Continue;
+         end;
+      // kept loaded: later LoadLibrary('7z.dll') calls resolve to this module by name
+      SevenZipDLLHandle:= fHandle;
+      SevenZipDLLPath:= libFile;
+      Result:= True;
+      {$IF CompilerVersion >= 20}
+      DiagnosticLog('7zip', 'loaded ['+libFile+']');
+      {$IFEND}
+      Break;
+    end;
+  finally
+    Candidates.Free;
+  end;
 end;
 
 //var
@@ -40679,7 +40725,7 @@ begin
             end;
          if not ValidateSevenZipDLL then
             begin
-              Log7z('icons.7z found ['+ArchiveFile+'] but 7z.dll is missing or not valid for this build (Win64 needs the 64-bit 7z.dll next to EmuLoader.exe)');
+              Log7z('icons.7z found ['+ArchiveFile+'] but 7z.dll is missing or not valid for this build (see [7zip] lines; Win64 needs the 64-bit 7z.dll)');
               Exit;
             end;
          Log7z('extracting ['+ArchiveFile+'] to ['+CacheFolder+']');
@@ -40687,7 +40733,7 @@ begin
          try
            try
              ForceDirectories(CacheFolder);
-             Archive7z:= CreateInArchive(CLSID_CFormat7z, FrontendPath+'7z.dll');
+             Archive7z:= CreateInArchive(CLSID_CFormat7z, SevenZipDLLPath);
              Archive7z.OpenFile(ArchiveFile);
              Archive7z.ExtractTo(CacheFolder);
              Archive7z.Close;

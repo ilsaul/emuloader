@@ -10,7 +10,9 @@ Move the verified entries into `CHANGELOG.md` when preparing the release.
   archive is found in the MAMu_ icons folder it is extracted once with `7z.dll`
   to `cache\mamu_icons\` next to the executable and used as loose `.ico` files.
   It is extracted again only when the archive size or date changes. Win64
-  builds need the 64-bit `7z.dll`.
+  builds need the 64-bit `7z.dll`; when it is not next to the executable, the
+  one installed in `Program Files\7-Zip\` is used. The diagnostic log
+  (`[7zip]`) reports where the DLL was found or why it could not be loaded.
 - Read the executable's Windows Pre-release flag at startup and display
   "(Pre-release)" beside the version in the splash screen and About dialog
   only when that flag is set.
