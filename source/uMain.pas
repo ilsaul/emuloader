@@ -1641,6 +1641,7 @@ type
     procedure ResetMAMu_Icons;
     function  GetMAMu_ZipContents(var IconsListSource: THashedStringList; const SoftwareName: String = ''): Boolean;
     procedure InitMAMu_Zip;
+    procedure PrepareMAMu_7zCache(ExtractIfNeeded: Boolean);
     procedure FreeMAMu_ZipVars;
     procedure MAMu_CloseZipArchives;
     procedure ResetMAMu_ImageList(ReloadDefaultIcons: Boolean; ResetThumbnails: Boolean = False);
@@ -40598,6 +40599,95 @@ begin
      FreeAndNil(IconsListSource); // no valid .ico files inside "icons.zip" or "softwarename.zip"
 end;
 
+procedure TFormMain.PrepareMAMu_7zCache(ExtractIfNeeded: Boolean);
+var
+  Loop: Integer;
+  ArchiveFile, CacheFolder, StampFile, StampStr: String;
+  SR: TSearchRec;
+  Stamp: TStringList;
+  Archive7z: I7zInArchive;
+
+  procedure Log7z(const Msg: String);
+  begin
+    {$IF CompilerVersion >= 20}
+    DiagnosticLog('icons', Msg);
+    {$IFEND}
+  end;
+
+begin
+  // MAMu_ icons distributed as "icons.7z": extracted once to a local cache folder, then used as loose .ico files
+  if not Assigned(MAMu_FoldersList) then
+     Exit;
+  CacheFolder:= FrontendPath+'cache\mamu_icons\';
+  StampFile:= CacheFolder+'emuloader_source.txt';
+
+  ArchiveFile:= '';
+  for Loop:=0 to MAMu_FoldersList.Count-1 do
+  begin
+    if Trim(MAMu_FoldersList[Loop]) = '' then
+       Continue;
+    if FileExists(IncludeTrailingPathDelimiter(Trim(MAMu_FoldersList[Loop]))+'icons.7z') then
+       begin
+         ArchiveFile:= IncludeTrailingPathDelimiter(Trim(MAMu_FoldersList[Loop]))+'icons.7z';
+         Break;
+       end;
+  end;
+  if ArchiveFile = '' then
+     Exit;
+
+  if FindFirst(ArchiveFile, faAnyFile, SR) <> 0 then
+     Exit;
+  StampStr:= ArchiveFile+'|'+IntToStr(SR.Size)+'|'+IntToStr(SR.Time);
+  FindClose(SR);
+
+  Stamp:= TStringList.Create;
+  try
+    if FileExists(StampFile) then
+       Stamp.LoadFromFile(StampFile);
+    if (Stamp.Count = 0) or (Stamp[0] <> StampStr) then
+       begin
+         if not ExtractIfNeeded then
+            Exit;
+         if not ValidateSevenZipDLL then
+            begin
+              Log7z('icons.7z found ['+ArchiveFile+'] but 7z.dll is missing or not valid for this build (Win64 needs the 64-bit 7z.dll next to EmuLoader.exe)');
+              Exit;
+            end;
+         Log7z('extracting ['+ArchiveFile+'] to ['+CacheFolder+']');
+         ShowFilterMsgBox('MAMu_ Icons', 'Extracting icons.7z, please wait...', True);
+         try
+           try
+             ForceDirectories(CacheFolder);
+             Archive7z:= CreateInArchive(CLSID_CFormat7z, FrontendPath+'7z.dll');
+             Archive7z.OpenFile(ArchiveFile);
+             Archive7z.ExtractTo(CacheFolder);
+             Archive7z.Close;
+             Archive7z:= nil;
+             Stamp.Clear;
+             Stamp.Add(StampStr);
+             Stamp.SaveToFile(StampFile);
+             Log7z('icons.7z extracted');
+           except
+             on E: Exception do
+               begin
+                 Log7z('icons.7z extraction failed: '+E.Message);
+                 Exit;
+               end;
+           end;
+         finally
+           Archive7z:= nil;
+           HideFilterMsgBox;
+         end;
+       end;
+  finally
+    Stamp.Free;
+  end;
+
+  if MAMu_FoldersList.IndexOf(CacheFolder) = -1 then
+     MAMu_FoldersList.Add(CacheFolder);
+  Log7z('icons.7z cache folder in use ['+CacheFolder+']');
+end;
+
 procedure TFormMain.InitMAMu_Zip;
 var
   Loop: Integer;
@@ -40609,6 +40699,7 @@ begin
         if not Assigned(ZipForgeIcons) then
            ZipForgeIcons:= TZipForge.Create(nil);
 
+        PrepareMAMu_7zCache(True);
         GetMAMu_ZipContents(MAMu_IconsList); // load arcade "icons.zip" contents to RAM (THashedStringList)
         {$IF CompilerVersion >= 20}
         if Assigned(MAMu_FoldersList) then
@@ -44252,6 +44343,7 @@ begin
     False: MAMu_FoldersList:= TStringList.Create;
   end;
   ExtractFolders2MAME(idMAME, FolderString, MAMu_FoldersList, True); // emulator full path already generated in TStringList
+  PrepareMAMu_7zCache(False);
 end;
 
 function TFormMain.UpdateMAMu_ScanFolder: Boolean;

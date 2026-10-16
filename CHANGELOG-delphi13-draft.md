@@ -6,6 +6,11 @@ Move the verified entries into `CHANGELOG.md` when preparing the release.
 
 ## Added
 
+- MAMu_ icons can be read from `icons.7z` (the format MAMu_ ships): when the
+  archive is found in the MAMu_ icons folder it is extracted once with `7z.dll`
+  to `cache\mamu_icons\` next to the executable and used as loose `.ico` files.
+  It is extracted again only when the archive size or date changes. Win64
+  builds need the 64-bit `7z.dll`.
 - Read the executable's Windows Pre-release flag at startup and display
   "(Pre-release)" beside the version in the splash screen and About dialog
   only when that flag is set.
