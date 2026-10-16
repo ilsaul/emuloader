@@ -10,10 +10,85 @@ function DiagnosticLogPreference: Boolean;
 function DiagnosticLogEnabled: Boolean;
 procedure DiagnosticLog(const Category, Msg: String);
 procedure DiagnosticLogException(const Context: String; E: Exception; Address: Pointer);
+procedure TraceTaskbarIcons;
 
 implementation
 
-uses Windows, Messages, Classes, Forms, Controls, IniFiles, SyncObjs;
+uses Windows, Messages, Classes, Forms, Controls, IniFiles, SyncObjs, ShellAPI;
+
+procedure TraceTaskbarIcons;
+
+  procedure TraceIcon(const Name: String; IconHandle: HICON);
+  var
+    Info: TIconInfo;
+    Bitmap: Windows.TBitmap;
+  begin
+    DiagnosticLog('taskbar', Name+' handle=$'+IntToHex(NativeUInt(IconHandle), SizeOf(Pointer)*2));
+    if IconHandle = 0 then
+       Exit;
+    if not GetIconInfo(IconHandle, Info) then
+       begin
+         DiagnosticLog('taskbar', Name+' GetIconInfo failed: '+SysErrorMessage(GetLastError));
+         Exit;
+       end;
+    try
+      if (Info.hbmColor <> 0) and
+         (GetObject(Info.hbmColor, SizeOf(Bitmap), @Bitmap) <> 0) then
+         DiagnosticLog('taskbar', Name+' color='+IntToStr(Bitmap.bmWidth)+'x'+
+           IntToStr(Bitmap.bmHeight)+'/'+IntToStr(Bitmap.bmBitsPixel)+'bpp');
+    finally
+      if Info.hbmColor <> 0 then
+         DeleteObject(Info.hbmColor);
+      if Info.hbmMask <> 0 then
+         DeleteObject(Info.hbmMask);
+    end;
+  end;
+
+  procedure TraceWindow(const Name: String; Wnd: HWND);
+  var
+    Title: array[0..255] of Char;
+  begin
+    GetWindowText(Wnd, Title, Length(Title));
+    DiagnosticLog('taskbar', Name+' hwnd=$'+IntToHex(NativeUInt(Wnd), SizeOf(Pointer)*2)+
+      '; title=['+String(Title)+']; visible='+BoolToStr(IsWindowVisible(Wnd), True)+
+      '; owner=$'+IntToHex(NativeUInt(GetWindow(Wnd, GW_OWNER)), SizeOf(Pointer)*2)+
+      '; exstyle=$'+IntToHex(GetWindowLong(Wnd, GWL_EXSTYLE), 8));
+    TraceIcon(Name+' WM_GETICON big', HICON(SendMessage(Wnd, WM_GETICON, ICON_BIG, 0)));
+    TraceIcon(Name+' WM_GETICON small', HICON(SendMessage(Wnd, WM_GETICON, ICON_SMALL, 0)));
+    TraceIcon(Name+' WM_GETICON small2', HICON(SendMessage(Wnd, WM_GETICON, ICON_SMALL2, 0)));
+    TraceIcon(Name+' class big', HICON(GetClassLongPtr(Wnd, GCLP_HICON)));
+    TraceIcon(Name+' class small', HICON(GetClassLongPtr(Wnd, GCLP_HICONSM)));
+  end;
+
+var
+  BigIcon, SmallIcon: HICON;
+  Count: UINT;
+begin
+  if not DiagnosticLogEnabled then
+     Exit;
+  DiagnosticLog('taskbar', 'Startup complete; exe=['+Application.ExeName+
+    ']; MainFormOnTaskbar='+BoolToStr(Application.MainFormOnTaskbar, True));
+  TraceWindow('Application', Application.Handle);
+  TraceIcon('Application.Icon', Application.Icon.Handle);
+  if Assigned(Application.MainForm) then
+     begin
+       TraceWindow('MainForm', Application.MainForm.Handle);
+       TraceIcon('MainForm.Icon', Application.MainForm.Icon.Handle);
+     end;
+  BigIcon:= 0;
+  SmallIcon:= 0;
+  Count:= ExtractIconEx(PChar(Application.ExeName), 0, BigIcon, SmallIcon, 1);
+  try
+    DiagnosticLog('taskbar', 'ExtractIconEx count='+IntToStr(Count));
+    TraceIcon('EXE big', BigIcon);
+    TraceIcon('EXE small', SmallIcon);
+  finally
+    if BigIcon <> 0 then
+       DestroyIcon(BigIcon);
+    if SmallIcon <> 0 then
+       DestroyIcon(SmallIcon);
+  end;
+end;
 
 const
   MaxLogSize = 5 * 1024 * 1024;

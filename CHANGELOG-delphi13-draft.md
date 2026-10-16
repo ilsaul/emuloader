@@ -83,7 +83,10 @@ Move the verified entries into `CHANGELOG.md` when preparing the release.
   the earlier `WM_SETICON` workaround, which left VCL's icon properties
   unchanged and did not resolve the generic taskbar icon on the test VM.
   Icon assignment is logged under `[icons]`; the revised fix still needs
-  Windows runtime confirmation.
+  Windows runtime confirmation. The test VM still shows a generic taskbar
+  icon with both VCL icon properties populated. Added `[taskbar]` diagnostics
+  at the end of startup: window owners/styles, `WM_GETICON`, class icons,
+  VCL icon handles and dimensions, and icons extracted from the executable.
 - Show MAMu_ game icons (loose `.ico` files and `icons.zip`) in Delphi 13
   builds instead of the generic system icon. `unitExIcon` used `PChar` as a
   byte pointer, which is two bytes wide in Unicode Delphi, so icon bitmap and
