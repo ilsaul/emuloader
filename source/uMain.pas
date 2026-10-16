@@ -40617,7 +40617,10 @@ var
 begin
   // MAMu_ icons distributed as "icons.7z": extracted once to a local cache folder, then used as loose .ico files
   if not Assigned(MAMu_FoldersList) then
-     Exit;
+     begin
+       Log7z('icons.7z check skipped: no MAMu_ folders');
+       Exit;
+     end;
   CacheFolder:= FrontendPath+'cache\mamu_icons\';
   StampFile:= CacheFolder+'emuloader_source.txt';
 
@@ -40633,10 +40636,30 @@ begin
        end;
   end;
   if ArchiveFile = '' then
-     Exit;
+     begin
+       for Loop:=0 to MAMu_FoldersList.Count-1 do
+       begin
+         if Trim(MAMu_FoldersList[Loop]) = '' then
+            Continue;
+         StampStr:= IncludeTrailingPathDelimiter(Trim(MAMu_FoldersList[Loop]));
+         if FindFirst(StampStr+'*.7z', faAnyFile, SR) = 0 then
+            begin
+              repeat
+                Log7z('icons.7z not found; other .7z in folder: ['+StampStr+SR.Name+']');
+              until FindNext(SR) <> 0;
+              FindClose(SR);
+            end
+         else
+            Log7z('icons.7z not found in ['+StampStr+'] (exists='+BoolToStr(DirectoryExists(StampStr), True)+')');
+       end;
+       Exit;
+     end;
 
   if FindFirst(ArchiveFile, faAnyFile, SR) <> 0 then
-     Exit;
+     begin
+       Log7z('icons.7z FindFirst failed ['+ArchiveFile+']');
+       Exit;
+     end;
   StampStr:= ArchiveFile+'|'+IntToStr(SR.Size)+'|'+IntToStr(SR.Time);
   FindClose(SR);
 
@@ -40647,7 +40670,10 @@ begin
     if (Stamp.Count = 0) or (Stamp[0] <> StampStr) then
        begin
          if not ExtractIfNeeded then
-            Exit;
+            begin
+              Log7z('icons.7z found ['+ArchiveFile+']; extraction deferred until MAMu_ icons are enabled');
+              Exit;
+            end;
          if not ValidateSevenZipDLL then
             begin
               Log7z('icons.7z found ['+ArchiveFile+'] but 7z.dll is missing or not valid for this build (Win64 needs the 64-bit 7z.dll next to EmuLoader.exe)');
