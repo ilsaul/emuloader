@@ -39845,6 +39845,7 @@ begin
   SetWindowStayOnTop(FormApplyFilterMsgBox, True);
   {$IF CompilerVersion >= 20}
   StartupTrace('FormActivate: done');
+  ApplyTaskbarIdentity(Handle);
   TraceTaskbarIcons;
   TraceToolbarButton(ButtonArcadeGamesFilters, IL_ToolBarButtons);
   TraceToolbarButton(ButtonExtraFilters, IL_ToolBarButtons);

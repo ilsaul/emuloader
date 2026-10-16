@@ -2,7 +2,7 @@ unit uDiagnosticLog;
 
 interface
 
-uses SysUtils;
+uses SysUtils, Windows;
 
 procedure InitializeDiagnosticLog(const Version: String);
 procedure SetDiagnosticLogPreference(Enabled: Boolean);
@@ -12,6 +12,7 @@ procedure DiagnosticLog(const Category, Msg: String);
 procedure DiagnosticLogException(const Context: String; E: Exception; Address: Pointer);
 procedure TraceTaskbarIcons;
 procedure SetExplicitAppUserModelID;
+procedure ApplyTaskbarIdentity(Wnd: HWND);
 
 implementation
 
@@ -34,6 +35,42 @@ var
 begin
   HR:= WriteProcessAppUserModelID('EmuLoader.Frontend');
   DiagnosticLog('taskbar', 'SetCurrentProcessExplicitAppUserModelID HRESULT=$'+IntToHex(HR, 8));
+end;
+
+procedure ApplyTaskbarIdentity(Wnd: HWND);
+var
+  Store: IPropertyStore;
+  ExePath: String;
+
+  procedure SetProperty(const PropertyName: String; const Key: TPropertyKey; const Text: String);
+  var
+    Value: TPropVariant;
+    HR: HRESULT;
+  begin
+    HR:= InitPropVariantFromString(PWideChar(Text), Value);
+    if Succeeded(HR) then
+       try
+         HR:= Store.SetValue(Key, Value);
+       finally
+         PropVariantClear(Value);
+       end;
+    DiagnosticLog('taskbar', 'Set '+PropertyName+'=['+Text+'] HRESULT=$'+IntToHex(HR, 8));
+  end;
+
+var
+  HR: HRESULT;
+begin
+  ExePath:= ParamStr(0);
+  HR:= SHGetPropertyStoreForWindow(Wnd, IPropertyStore, Pointer(Store));
+  if Failed(HR) then
+     begin
+       DiagnosticLog('taskbar', 'Apply identity: property store HRESULT=$'+IntToHex(HR, 8));
+       Exit;
+     end;
+  // Windows ignores these unless all three relaunch properties are set together
+  SetProperty('AppUserModel.RelaunchCommand', PKEY_AppUserModel_RelaunchCommand, '"'+ExePath+'"');
+  SetProperty('AppUserModel.RelaunchIconResource', PKEY_AppUserModel_RelaunchIconResource, ExePath+',0');
+  SetProperty('AppUserModel.RelaunchDisplayNameResource', PKEY_AppUserModel_RelaunchDisplayNameResource, 'Emu Loader');
 end;
 
 procedure TraceTaskbarShellProperties(const Name: String; Wnd: HWND);

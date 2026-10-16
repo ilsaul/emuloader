@@ -93,6 +93,9 @@ Move the verified entries into `CHANGELOG.md` when preparing the release.
   Experimental: the process now sets an explicit AppUserModelID
   (`EmuLoader.Frontend`) before any window is created, so Windows does not
   have to infer the taskbar identity; the result is logged under `[taskbar]`.
+  The explicit ID alone left the grouped taskbar button generic (window and
+  EXE icons are valid), so the main window now also gets the relaunch command,
+  relaunch icon (`EmuLoader.exe,0`) and display name shell properties.
 - Show MAMu_ game icons (loose `.ico` files and `icons.zip`) in Delphi 13
   builds instead of the generic system icon. `unitExIcon` used `PChar` as a
   byte pointer, which is two bytes wide in Unicode Delphi, so icon bitmap and
