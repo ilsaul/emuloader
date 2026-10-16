@@ -65,6 +65,11 @@ Move the verified entries into `CHANGELOG.md` when preparing the release.
   shown (this also affected the Delphi 7 build). System and software-list
   entry tags are now reduced to their name/list attributes when the file is
   loaded. Verified at runtime with Frogger on Windows.
+- Show the Emu Loader icon on the Windows taskbar button in Delphi 13 builds.
+  The main form owns the taskbar button, but only received the small
+  title-bar icon, so the taskbar displayed a generic one. Both the large and
+  small `MAINICON` sizes are now assigned when the main window is created.
+  Windows build and runtime verification are still required.
 - Show MAMu_ game icons (loose `.ico` files and `icons.zip`) in Delphi 13
   builds instead of the generic system icon. `unitExIcon` used `PChar` as a
   byte pointer, which is two bytes wide in Unicode Delphi, so icon bitmap and
