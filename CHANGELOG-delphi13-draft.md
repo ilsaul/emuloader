@@ -1,7 +1,7 @@
 # Emu Loader 10.0.0 - Delphi 13 release notes (draft)
 
 Working draft for the next release. These changes are on the `delphi13-port`
-branch; the application build and runtime behavior have not yet been confirmed.
+branch; see the verified and pending verification sections for the current status.
 Move the verified entries into `CHANGELOG.md` when preparing the release.
 
 ## Added
@@ -256,10 +256,24 @@ Move the verified entries into `CHANGELOG.md` when preparing the release.
   code. It now generates a Win64 thunk with unwind information; the 32 bit
   version is unchanged.
 
+## Verified on Windows (Delphi 13 Win64)
+
+- Application builds and starts on the Windows test VM.
+- Launching a game works, as reported by the tester.
+- MAME History displays correctly with current `history.xml` files (Frogger).
+- MAMu_ game icons load from `icons.7z` with a compatible x64 `7z.dll`.
+  Reusing the extraction cache after restarting remains to be checked.
+- Only one application window appears in the taskbar previews.
+  The taskbar button still displays a generic icon; this issue remains open.
+
 ## Pending verification
 
-- Build the application in the Delphi 13 IDE and resolve any remaining
-  compiler errors.
+- Launch and exit several games, checking that focus returns to Emu Loader.
+- Restart the frontend and check that preferences and paths are retained,
+  and that the MAMu_ extraction cache is reused without extracting again.
+- Verify game-list creation/update, ROM auditing, search, filters and favorites.
+- Verify software-list games and parent/clone icon selection.
+- Resolve the remaining generic application icon on the taskbar.
 - Verify ZIP enumeration, CRC values, filenames and extraction (including
   archives containing directories) after the `System.Zip` migration.
 - Verify PNG (including transparency) and GIF loading for previews,
