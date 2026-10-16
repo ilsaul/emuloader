@@ -14,7 +14,56 @@ procedure TraceTaskbarIcons;
 
 implementation
 
-uses Windows, Messages, Classes, Forms, Controls, IniFiles, SyncObjs, ShellAPI;
+uses Windows, Messages, Classes, Forms, Controls, IniFiles, SyncObjs, ShellAPI,
+  ActiveX, Winapi.PropSys, Winapi.PropKey;
+
+procedure TraceTaskbarShellProperties(const Name: String; Wnd: HWND);
+var
+  Store: IPropertyStore;
+  HR: HRESULT;
+
+  procedure TraceProperty(const PropertyName: String; const Key: TPropertyKey);
+  var
+    Value: TPropVariant;
+    Text: array[0..2047] of WideChar;
+    ResultCode: HRESULT;
+  begin
+    FillChar(Value, SizeOf(Value), 0);
+    try
+      ResultCode:= Store.GetValue(Key, Value);
+      if Failed(ResultCode) then
+         begin
+           DiagnosticLog('taskbar', Name+' '+PropertyName+' GetValue HRESULT=$'+
+             IntToHex(ResultCode, 8));
+           Exit;
+         end;
+      if Value.vt = VT_EMPTY then
+         begin
+           DiagnosticLog('taskbar', Name+' '+PropertyName+'=<not set>');
+           Exit;
+         end;
+      ResultCode:= PropVariantToString(Value, Text, Length(Text));
+      if Failed(ResultCode) then
+         DiagnosticLog('taskbar', Name+' '+PropertyName+' vt='+IntToStr(Value.vt)+
+           '; conversion HRESULT=$'+IntToHex(ResultCode, 8))
+      else
+         DiagnosticLog('taskbar', Name+' '+PropertyName+'=['+String(Text)+']');
+    finally
+      PropVariantClear(Value);
+    end;
+  end;
+
+begin
+  HR:= SHGetPropertyStoreForWindow(Wnd, IPropertyStore, Store);
+  DiagnosticLog('taskbar', Name+' shell property store HRESULT=$'+IntToHex(HR, 8));
+  if Failed(HR) then
+     Exit;
+  TraceProperty('AppUserModel.ID', PKEY_AppUserModel_ID);
+  TraceProperty('AppUserModel.RelaunchIconResource', PKEY_AppUserModel_RelaunchIconResource);
+  TraceProperty('AppUserModel.RelaunchCommand', PKEY_AppUserModel_RelaunchCommand);
+  TraceProperty('AppUserModel.RelaunchDisplayNameResource', PKEY_AppUserModel_RelaunchDisplayNameResource);
+  TraceProperty('AppUserModel.PreventPinning', PKEY_AppUserModel_PreventPinning);
+end;
 
 procedure TraceTaskbarIcons;
 
@@ -58,16 +107,30 @@ procedure TraceTaskbarIcons;
     TraceIcon(Name+' WM_GETICON small2', HICON(SendMessage(Wnd, WM_GETICON, ICON_SMALL2, 0)));
     TraceIcon(Name+' class big', HICON(GetClassLongPtr(Wnd, GCL_HICON)));
     TraceIcon(Name+' class small', HICON(GetClassLongPtr(Wnd, GCL_HICONSM)));
+    TraceTaskbarShellProperties(Name, Wnd);
   end;
 
 var
   BigIcon, SmallIcon: HICON;
   Count: UINT;
+  AppID: PWideChar;
+  HR: HRESULT;
 begin
   if not DiagnosticLogEnabled then
      Exit;
   DiagnosticLog('taskbar', 'Startup complete; exe=['+Application.ExeName+
     ']; MainFormOnTaskbar='+BoolToStr(Application.MainFormOnTaskbar, True));
+  AppID:= nil;
+  HR:= GetCurrentProcessExplicitAppUserModelID(AppID);
+  try
+    if Succeeded(HR) and (AppID <> nil) then
+       DiagnosticLog('taskbar', 'Process explicit AppUserModelID=['+String(AppID)+']')
+    else
+       DiagnosticLog('taskbar', 'Process explicit AppUserModelID unavailable; HRESULT=$'+
+         IntToHex(HR, 8)+' (no explicit ID can be normal; Windows infers one)');
+  finally
+    CoTaskMemFree(AppID);
+  end;
   TraceWindow('Application', Application.Handle);
   TraceIcon('Application.Icon', Application.Icon.Handle);
   if Assigned(Application.MainForm) then
