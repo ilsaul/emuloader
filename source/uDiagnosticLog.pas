@@ -16,7 +16,7 @@ procedure ApplyTaskbarIdentity(Wnd: HWND);
 
 implementation
 
-uses Windows, Messages, Classes, Forms, Controls, IniFiles, SyncObjs, ShellAPI,
+uses Messages, Classes, Forms, Controls, IniFiles, SyncObjs, ShellAPI,
   ActiveX, Winapi.PropSys, Winapi.PropKey;
 
 const
