@@ -17,6 +17,13 @@ implementation
 uses Windows, Messages, Classes, Forms, Controls, IniFiles, SyncObjs, ShellAPI,
   ActiveX, Winapi.PropSys, Winapi.PropKey;
 
+const
+  TaskbarPreventPinningKey: TPropertyKey = (
+    fmtid: '{9F4C2855-9F79-4B39-A8D0-E1D42DE1D5F3}'; pid: 9);
+
+function ReadProcessAppUserModelID(out AppID: PWideChar): HRESULT; stdcall;
+  external 'shell32.dll' name 'GetCurrentProcessExplicitAppUserModelID';
+
 procedure TraceTaskbarShellProperties(const Name: String; Wnd: HWND);
 var
   Store: IPropertyStore;
@@ -54,7 +61,7 @@ var
   end;
 
 begin
-  HR:= SHGetPropertyStoreForWindow(Wnd, IPropertyStore, Store);
+  HR:= SHGetPropertyStoreForWindow(Wnd, IPropertyStore, Pointer(Store));
   DiagnosticLog('taskbar', Name+' shell property store HRESULT=$'+IntToHex(HR, 8));
   if Failed(HR) then
      Exit;
@@ -62,7 +69,7 @@ begin
   TraceProperty('AppUserModel.RelaunchIconResource', PKEY_AppUserModel_RelaunchIconResource);
   TraceProperty('AppUserModel.RelaunchCommand', PKEY_AppUserModel_RelaunchCommand);
   TraceProperty('AppUserModel.RelaunchDisplayNameResource', PKEY_AppUserModel_RelaunchDisplayNameResource);
-  TraceProperty('AppUserModel.PreventPinning', PKEY_AppUserModel_PreventPinning);
+  TraceProperty('AppUserModel.PreventPinning', TaskbarPreventPinningKey);
 end;
 
 procedure TraceTaskbarIcons;
@@ -121,7 +128,7 @@ begin
   DiagnosticLog('taskbar', 'Startup complete; exe=['+Application.ExeName+
     ']; MainFormOnTaskbar='+BoolToStr(Application.MainFormOnTaskbar, True));
   AppID:= nil;
-  HR:= GetCurrentProcessExplicitAppUserModelID(AppID);
+  HR:= ReadProcessAppUserModelID(AppID);
   try
     if Succeeded(HR) and (AppID <> nil) then
        DiagnosticLog('taskbar', 'Process explicit AppUserModelID=['+String(AppID)+']')
