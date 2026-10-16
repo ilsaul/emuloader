@@ -78,10 +78,12 @@ Move the verified entries into `CHANGELOG.md` when preparing the release.
   use `Application.MainFormOnTaskbar` and skip the Delphi 7 workaround that
   re-showed the application window.
 - Show the Emu Loader icon on the Windows taskbar button in Delphi 13 builds.
-  The main form owns the taskbar button, but only received the small
-  title-bar icon, so the taskbar displayed a generic one. Both the large and
-  small `MAINICON` sizes are now assigned when the main window is created.
-  Windows build and runtime verification are still required.
+  Explicitly load embedded `MAINICON` into `Application.Icon` before showing
+  any forms and assign it to the main form's `Icon` property. This replaces
+  the earlier `WM_SETICON` workaround, which left VCL's icon properties
+  unchanged and did not resolve the generic taskbar icon on the test VM.
+  Icon assignment is logged under `[icons]`; the revised fix still needs
+  Windows runtime confirmation.
 - Show MAMu_ game icons (loose `.ico` files and `icons.zip`) in Delphi 13
   builds instead of the generic system icon. `unitExIcon` used `PChar` as a
   byte pointer, which is two bytes wide in Unicode Delphi, so icon bitmap and

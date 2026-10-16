@@ -127,6 +127,8 @@ begin
   FrontendPreRelease:= IsFilePreRelease(Application.ExeName);
   InitializeDiagnosticLog(FrontendVersion);
   try
+  // Keep VCL's icon state consistent with the embedded resource before showing any forms.
+  Application.Icon.LoadFromResourceName(HInstance, 'MAINICON');
   SysUtils.DeleteFile(ExtractFilePath(ParamStr(0))+'startup_trace.log');
   StartupTrace('EmuLoader '+FrontendVersion+' starting');
   {$IFEND}
@@ -160,6 +162,9 @@ begin
   FormStatus.MessageStr('Initializing main screen.');
   Application.CreateForm(TFormMain, FormMain); // application's main form
   {$IF CompilerVersion >= 20}
+  FormMain.Icon.Assign(Application.Icon);
+  DiagnosticLog('icons', 'Application and main form icons assigned from MAINICON; applicationEmpty='+
+    BoolToStr(Application.Icon.Empty, True)+'; formEmpty='+BoolToStr(FormMain.Icon.Empty, True));
   FormMain.Caption:= FormMain.Caption+' '+FrontendVersionCaption;
   {$ELSE}
   FormMain.Caption:= FormMain.Caption+' '+FrontendVersion;

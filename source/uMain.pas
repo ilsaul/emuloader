@@ -1953,9 +1953,6 @@ type
   protected
     // fixes for Windows Vista / Sev7n / 8ight / 10, not needed for Delphi 2009 and newer compilers
     procedure CreateParams(var Params: TCreateParams); override;
-    {$IF CompilerVersion >= 20}
-    procedure CreateWnd; override;
-    {$IFEND}
     procedure WMSysCommand(var Message: TWmSysCommand); message WM_SYSCOMMAND;
     procedure WMActivate(var Message: TWMActivate); message WM_ACTIVATE;
 
@@ -3202,23 +3199,6 @@ begin
   inherited CreateParams(Params);
   Params.ExStyle := Params.ExStyle and not not WS_EX_TOOLWINDOW or WS_EX_APPWINDOW;
 end;
-
-{$IF CompilerVersion >= 20}
-// the main form owns the taskbar button (WS_EX_APPWINDOW); modern VCL only gives it the
-// small title-bar icon, so the taskbar showed a generic one. Assign both sizes from MAINICON.
-procedure TFormMain.CreateWnd;
-var
-  hBig, hSmall: HICON;
-begin
-  inherited CreateWnd;
-  hBig:= LoadImage(HInstance, 'MAINICON', IMAGE_ICON, GetSystemMetrics(SM_CXICON), GetSystemMetrics(SM_CYICON), LR_DEFAULTCOLOR or LR_SHARED);
-  hSmall:= LoadImage(HInstance, 'MAINICON', IMAGE_ICON, GetSystemMetrics(SM_CXSMICON), GetSystemMetrics(SM_CYSMICON), LR_DEFAULTCOLOR or LR_SHARED);
-  if hBig <> 0 then
-     SendMessage(Handle, WM_SETICON, ICON_BIG, LPARAM(hBig));
-  if hSmall <> 0 then
-     SendMessage(Handle, WM_SETICON, ICON_SMALL, LPARAM(hSmall));
-end;
-{$IFEND}
 
 procedure TFormMain.WMActivate(var Message: TWMActivate);
 begin
