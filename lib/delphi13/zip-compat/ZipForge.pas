@@ -5,6 +5,7 @@ interface
 uses
   System.Classes,
   System.SysUtils,
+  System.Generics.Collections,
   System.Zip;
 
 type
@@ -26,6 +27,8 @@ type
   private
     FArchive: TZipFile;
     FFileName: string;
+    FFullNameIndex: TDictionary<string, Integer>;
+    FShortNameIndex: TDictionary<string, Integer>;
     FSearchIndex: Integer;
     FSearchAttributes: Integer;
     FOnProcessFileFailure: TZFProcessFileFailure;
@@ -33,6 +36,8 @@ type
     function GetFileCount: Integer;
     procedure SetActive(Value: Boolean);
     function NextItem(var Item: TZFArchiveItem): Boolean;
+    procedure BuildNameIndex;
+    function FindEntry(const EntryName: string): Integer;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
@@ -56,11 +61,15 @@ constructor TZipForge.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
   FArchive := TZipFile.Create;
+  FFullNameIndex := TDictionary<string, Integer>.Create;
+  FShortNameIndex := TDictionary<string, Integer>.Create;
 end;
 
 destructor TZipForge.Destroy;
 begin
   FArchive.Free;
+  FFullNameIndex.Free;
+  FShortNameIndex.Free;
   inherited Destroy;
 end;
 
@@ -93,12 +102,46 @@ begin
     raise EZipException.Create('Only read-only ZIP archives are supported');
   FArchive.Open(FFileName, zmRead);
   FSearchIndex := 0;
+  BuildNameIndex;
 end;
 
 procedure TZipForge.CloseArchive;
 begin
   if Active then
     FArchive.Close;
+  FFullNameIndex.Clear;
+  FShortNameIndex.Clear;
+end;
+
+// Name lookups are case-insensitive and keep the first matching entry, like
+// the previous linear search; archives such as icons.zip hold tens of thousands
+// of entries and are queried once per game.
+procedure TZipForge.BuildNameIndex;
+var
+  I: Integer;
+  Name: string;
+begin
+  FFullNameIndex.Clear;
+  FShortNameIndex.Clear;
+  FFullNameIndex.Capacity := FArchive.FileCount;
+  for I := 0 to FArchive.FileCount - 1 do
+  begin
+    Name := AnsiLowerCase(StringReplace(FArchive.FileName[I], '/', '\', [rfReplaceAll]));
+    FFullNameIndex.TryAdd(Name, I);
+    FShortNameIndex.TryAdd(ExtractFileName(Name), I);
+  end;
+end;
+
+function TZipForge.FindEntry(const EntryName: string): Integer;
+var
+  Key: string;
+begin
+  Key := AnsiLowerCase(EntryName);
+  if FFullNameIndex.TryGetValue(Key, Result) then
+    Exit;
+  if (Pos('\', Key) = 0) and FShortNameIndex.TryGetValue(Key, Result) then
+    Exit;
+  Result := -1;
 end;
 
 function TZipForge.FindFirst(const Mask: string; var Item: TZFArchiveItem;
@@ -156,24 +199,12 @@ end;
 procedure TZipForge.ExtractToStream(const EntryName: string; Destination: TStream);
 var
   Index: Integer;
-  Name: string;
   Data: TBytes;
   Action: TZFAction;
-  I: Integer;
 begin
   if not Active then
     raise EZipException.Create('ZIP archive is not open');
-  Index := -1;
-  for I := 0 to FArchive.FileCount - 1 do
-  begin
-    Name := StringReplace(FArchive.FileName[I], '/', '\', [rfReplaceAll]);
-    if SameText(Name, EntryName) or
-      ((Pos('\', EntryName) = 0) and SameText(ExtractFileName(Name), EntryName)) then
-    begin
-      Index := I;
-      Break;
-    end;
-  end;
+  Index := FindEntry(EntryName);
   if Index < 0 then
     raise EZipException.CreateFmt('ZIP entry not found: %s', [EntryName]);
   try

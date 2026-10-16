@@ -34529,6 +34529,7 @@ var
 
   function LoadZippedIcon(var ZipForgeSource: TZipForge): Boolean;
   begin
+    Result:= True; // was never set on success; Delphi 7 only worked because of a leftover register value
     with ZipForgeSource do // ZipForgeIcons do
     begin
       try
@@ -34752,6 +34753,8 @@ var
 begin
   Icon32:= nil;
   Result:= -1;
+  SearchZip:= False; // a loose .ico must not be loaded as a zipped one
+  ZipIndex:= -1;
   FileToLoad:= GetMAMu_IconFileName(sysID, romID, GameName, CloneName, DriverName, BiosName, SoftwareName, False); // unzipped icon
   if FileToLoad = '' then
      begin
@@ -34790,8 +34793,18 @@ begin
 
   if FileToLoad <> '' then
      begin
-       if LoadMAMu_Icon(FileToLoad, Icon32, icoLoop, SearchZip, iZipPath, SoftwareName, IconList.Width, ZipIndex) then
-          Result:= AddIcon(IconList);
+       try
+         if LoadMAMu_Icon(FileToLoad, Icon32, icoLoop, SearchZip, iZipPath, SoftwareName, IconList.Width, ZipIndex) then
+            Result:= AddIcon(IconList);
+       except
+         on E: Exception do
+         begin
+           {$IF CompilerVersion >= 20}
+           DiagnosticLog('icons', 'Failed to load icon '+FileToLoad+' for '+GameName+': '+E.ClassName+': '+E.Message);
+           {$IFEND}
+           Result:= -1;
+         end;
+       end;
        FreeAndNil(Icon32);
      end;
 end;
@@ -40577,6 +40590,16 @@ begin
            ZipForgeIcons:= TZipForge.Create(nil);
 
         GetMAMu_ZipContents(MAMu_IconsList); // load arcade "icons.zip" contents to RAM (THashedStringList)
+        {$IF CompilerVersion >= 20}
+        if Assigned(MAMu_FoldersList) then
+           DiagnosticLog('icons', 'MAMu_ folder setting=['+MAMu_Folder+']; folders='+StringReplace(MAMu_FoldersList.Text, #13#10, ' | ', [rfReplaceAll]))
+        else
+           DiagnosticLog('icons', 'MAMu_ folder setting=['+MAMu_Folder+']; no folders');
+        if Assigned(MAMu_IconsList) then
+           DiagnosticLog('icons', 'icons.zip='+MAMu_IconsList[0]+'; icons='+IntToStr(MAMu_IconsList.Count-1))
+        else
+           DiagnosticLog('icons', 'icons.zip not found or empty');
+        {$IFEND}
         MAMu_SoftwareNameZipList:= THashedStringList.Create;
         GetValidMAMESoftLists(MAMu_SoftwareNameZipList, False);
         if MAMu_SoftwareNameZipList.Count > 0 then

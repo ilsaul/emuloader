@@ -65,6 +65,16 @@ Move the verified entries into `CHANGELOG.md` when preparing the release.
   shown (this also affected the Delphi 7 build). System and software-list
   entry tags are now reduced to their name/list attributes when the file is
   loaded. Verified at runtime with Frogger on Windows.
+- Show MAMu_ game icons (loose `.ico` files and `icons.zip`) in Delphi 13
+  builds instead of the generic system icon. `unitExIcon` used `PChar` as a
+  byte pointer, which is two bytes wide in Unicode Delphi, so icon bitmap and
+  mask offsets were doubled; it now uses `PAnsiChar`. The zipped-icon loader
+  never set its success result and a loose icon could be read as zipped
+  because `SearchZip` was not initialized; both only worked by accident in
+  Delphi 7. ZIP entries are now looked up through a name index instead of a
+  full archive scan per icon. Icon folder, `icons.zip` and load failures are
+  logged under `icons` in `diagnostic.log`. Windows build and runtime
+  verification are still required.
 - Decode HTML entities in game documents without keeping character pointers
   across string changes, which could crash or corrupt text when a line had
   several entities. Bound history parsing to the end of the file, handle
