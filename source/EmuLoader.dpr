@@ -148,6 +148,9 @@ begin
   Application.Initialize;
 
   Application.Title := 'Emu Loader: Multiple Systems Frontend';
+  {$IF CompilerVersion >= 20}
+  Application.MainFormOnTaskbar:= True; // single taskbar button owned by the main form
+  {$IFEND}
   Application.HintPause:= 200; // fix for the hint pause timer
   Application.HintColor:= $00f8f4f3; //$00eeebe6;
 

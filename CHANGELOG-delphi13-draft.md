@@ -70,6 +70,11 @@ Move the verified entries into `CHANGELOG.md` when preparing the release.
   shown (this also affected the Delphi 7 build). System and software-list
   entry tags are now reduced to their name/list attributes when the file is
   loaded. Verified at runtime with Frogger on Windows.
+- Show a single Emu Loader taskbar button in Delphi 13 builds. The hidden
+  application window (titled "Emu Loader: Multiple Systems Frontend") was
+  shown as a second taskbar entry next to the main form; Delphi 13 builds now
+  use `Application.MainFormOnTaskbar` and skip the Delphi 7 workaround that
+  re-showed the application window.
 - Show the Emu Loader icon on the Windows taskbar button in Delphi 13 builds.
   The main form owns the taskbar button, but only received the small
   title-bar icon, so the taskbar displayed a generic one. Both the large and
