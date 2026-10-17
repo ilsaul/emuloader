@@ -77,18 +77,37 @@ end;
 procedure ApplyMainWindowIcons(Wnd: HWND);
 var
   BigIcon, SmallIcon: HICON;
+
+  procedure SendIcons;
+  begin
+    if SmallIcon <> 0 then
+       SendMessage(Wnd, WM_SETICON, ICON_SMALL, LPARAM(SmallIcon));
+    if BigIcon <> 0 then
+       SendMessage(Wnd, WM_SETICON, ICON_BIG, LPARAM(BigIcon));
+  end;
+
 begin
   // The icons VCL assigns are not accepted by the taskbar button (it stays generic);
-  // explicit size-matched icons from the embedded resource are.
+  // explicit size-matched icons from the embedded resource are. These handles belong
+  // to the process and are intentionally never destroyed.
   BigIcon:= HICON(LoadImage(HInstance, 'MAINICON', IMAGE_ICON, 48, 48, LR_DEFAULTCOLOR));
   SmallIcon:= HICON(LoadImage(HInstance, 'MAINICON', IMAGE_ICON, GetSystemMetrics(SM_CXSMICON),
                               GetSystemMetrics(SM_CYSMICON), LR_DEFAULTCOLOR));
   DiagnosticLog('taskbar', 'ApplyMainWindowIcons big=$'+IntToHex(NativeUInt(BigIcon), SizeOf(Pointer)*2)+
     ' small=$'+IntToHex(NativeUInt(SmallIcon), SizeOf(Pointer)*2));
-  if SmallIcon <> 0 then
-     SendMessage(Wnd, WM_SETICON, ICON_SMALL, LPARAM(SmallIcon));
-  if BigIcon <> 0 then
-     SendMessage(Wnd, WM_SETICON, ICON_BIG, LPARAM(BigIcon));
+  SendIcons;
+  // The taskbar button may not exist yet at this point: send again once it has settled.
+  TThread.CreateAnonymousThread(
+    procedure
+    begin
+      Sleep(2500);
+      TThread.Queue(nil,
+        procedure
+        begin
+          SendIcons;
+          DiagnosticLog('taskbar', 'ApplyMainWindowIcons resent after delay');
+        end);
+    end).Start;
 end;
 
 procedure TraceTaskbarShellProperties(const Name: String; Wnd: HWND);
