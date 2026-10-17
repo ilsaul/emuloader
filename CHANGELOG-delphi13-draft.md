@@ -94,9 +94,9 @@ Move the verified entries into `CHANGELOG.md` when preparing the release.
   Neither an explicit AppUserModelID nor the relaunch shell properties changed
   it (both were removed again). What fixes it is sending `WM_SETICON` to the
   main window with icons extracted from the EXE with `PrivateExtractIcons`
-  (48 px and 16 px), with fresh handles, shortly after startup (immediately,
-  after 2.5 s and after 6.5 s; the button updates a few seconds after the
-  window appears). Logged under `[taskbar]` as `ApplyMainWindowIcons`.
+  (48 px and 16 px), with fresh handles, shortly after startup (immediately
+  and again after 2.5 s; the button updates a few seconds after the
+  window appears; confirmed on the test VM). Logged under `[taskbar]` as `ApplyMainWindowIcons`.
 - Show MAMu_ game icons (loose `.ico` files and `icons.zip`) in Delphi 13
   builds instead of the generic system icon. `unitExIcon` used `PChar` as a
   byte pointer, which is two bytes wide in Unicode Delphi, so icon bitmap and
