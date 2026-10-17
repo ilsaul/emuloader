@@ -3231,9 +3231,6 @@ end;
 
 procedure TFormMain.HideAppFormTaskBarButton;
 begin
-  {$IF CompilerVersion >= 20}
-  Exit; // MainFormOnTaskbar is set in the .dpr: re-showing Application.Handle would add a second taskbar button
-  {$IFEND}
   // all Windows versions need this
   ShowWindow(Application.Handle, SW_HIDE);
   SetWindowLong(Application.Handle, GWL_EXSTYLE, GetWindowLong(Application.Handle, GWL_EXSTYLE) and not WS_EX_APPWINDOW or WS_EX_TOOLWINDOW);
