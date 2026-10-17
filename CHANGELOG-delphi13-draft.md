@@ -282,14 +282,14 @@ Move the verified entries into `CHANGELOG.md` when preparing the release.
   button shows the Emu Loader icon (also in the Release build).
 - Release build (Win64) on the test VM: game list loads, filters work, MAME
   History and snapshot images display, games launch and focus returns to
-  Emu Loader when a game exits.
+  Emu Loader when a game exits. Software-list games and parent/clone icon
+  selection also work.
 
 ## Pending verification
 
 - Restart the frontend and check that preferences and paths are retained,
   and that the MAMu_ extraction cache is reused without extracting again.
 - Verify game-list creation/update, ROM auditing, search, filters and favorites.
-- Verify software-list games and parent/clone icon selection.
 - Verify ZIP enumeration, CRC values, filenames and extraction (including
   archives containing directories) after the `System.Zip` migration.
 - Verify PNG (including transparency) and GIF loading for previews,
