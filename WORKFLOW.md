@@ -23,11 +23,29 @@
 2. Run the app on the VM desktop and check the visible behaviour (taskbar icon).
 3. Say whether the symptom changed, so the next step can be chosen.
 
+## Typical loop
+1. Copilot edits and commits on the Mac (never compiled locally).
+2. Developer runs `git push` and says so.
+3. Copilot over SSH: `git restore .`, `git fetch`, `git merge --ff-only origin/delphi13-port`.
+4. Developer closes EmuLoader, builds from the IDE (Debug, Win64) and launches it; compiler errors are pasted to Copilot.
+5. Copilot reads `C:\Games\EmuLoader13\diagnostic.log` over SSH; developer reports what is visible on the VM desktop.
+
+## Runtime tests from outside the process (over SSH)
+- The SSH session is not the desktop session: to act on the running app, copy a PowerShell script to the VM and run it with a scheduled task in the interactive session: `schtasks /create /tn X /tr "powershell -NoProfile -ExecutionPolicy Bypass -File ..." /sc once /st 00:00 /it /ru moreno /f` then `schtasks /run /tn X`.
+- Find windows by process id (`EnumWindows`), not `FindWindow`. Icons created by the script die when it exits, so they cannot be used for a lasting test.
+- Always delete the task and the scripts afterwards.
+
+## Local tooling
+- Mac needs the Xcode license accepted (`sudo xcodebuild -license accept`) for `python3` and `sed`.
+- Source files may have CRLF line endings and a BOM: preserve them when scripting edits (prefer the edit tool).
+
 ## Open issue: generic taskbar icon (Delphi 13)
-- Window icons are valid (`WM_GETICON`, Alt+Tab correct); only the taskbar button is generic.
-- Renaming the EXE did not help; shell AppUserModel properties are all unset.
-- Current attempt: explicit AppUserModelID (`EmuLoader.Frontend`) set before any window is created.
-- Next ideas if it fails: icon cache / pinned shortcut check on the VM, test a minimal VCL app on the same VM.
+- Symptom: the taskbar button shows a generic icon; the icon of the window inside the group is correct.
+- Excluded: EXE icon resources (identical to the working Delphi 7 build), manifest, EXE name and folder, Win32 vs Win64, VM icon cache, launching from the IDE.
+- Findings: VCL-assigned icons are valid in `WM_GETICON` but the taskbar button stays generic. `MainFormOnTaskbar=False` showed the right icon on the hidden application window but gave two entries in the preview.
+- Explicit `WM_SETICON` with size-matched icons (16 px and 48 px from the EXE) sent to the main window fixed the preview title icon; the button needed a later resend.
+- Current attempt: `ApplyMainWindowIcons` (`uDiagnosticLog.pas`) sends them at the end of `FormActivate` and again after 2.5 s. Runtime result pending.
+- Still in the code from earlier attempts, to remove if not needed once fixed: explicit AppUserModelID `EmuLoader.Frontend` and relaunch properties (`ApplyTaskbarIdentity`).
 
 ## VM rules (standing permissions from the developer)
 - SSH to the VM is allowed: `ssh -i ~/.ssh/emuloader_vm moreno@10.211.55.16` (repo in `C:\Develop\Emuloader`, branch `delphi13-port`, output in `C:\Games\EmuLoader13`).
