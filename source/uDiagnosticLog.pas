@@ -78,44 +78,43 @@ function ExtractExeIcons(lpszFile: PWideChar; nIconIndex, cxIcon, cyIcon: Intege
   phicon: PHANDLE; pIconId: PDWORD; nIcons, flags: UINT): UINT; stdcall;
   external 'user32.dll' name 'PrivateExtractIconsW';
 
-procedure SendMainWindowIcons(Wnd: HWND; BigIcon, SmallIcon: HICON);
-begin
-  if SmallIcon <> 0 then
-     SendMessage(Wnd, WM_SETICON, ICON_SMALL, LPARAM(SmallIcon));
-  if BigIcon <> 0 then
-     SendMessage(Wnd, WM_SETICON, ICON_BIG, LPARAM(BigIcon));
-end;
-
-procedure ApplyMainWindowIcons(Wnd: HWND);
+procedure SendMainWindowIcons(Wnd: HWND; const Stage: String);
 var
   BigIcon, SmallIcon: HICON;
   IconId: DWORD;
   ExePath: String;
 begin
-  // The icons VCL assigns are not accepted by the taskbar button (it stays generic);
-  // icons extracted from the EXE with PrivateExtractIcons are (same call as the
-  // working external test). These handles belong to the process and are never destroyed.
+  // The taskbar button seems to refresh only when the icon handle changes, so every
+  // send extracts fresh icons. These handles belong to the process and are never destroyed.
   ExePath:= ParamStr(0);
   BigIcon:= 0;
   SmallIcon:= 0;
   ExtractExeIcons(PWideChar(ExePath), 0, 48, 48, @BigIcon, @IconId, 1, 0);
   ExtractExeIcons(PWideChar(ExePath), 0, 16, 16, @SmallIcon, @IconId, 1, 0);
-  DiagnosticLog('taskbar', 'ApplyMainWindowIcons big=$'+IntToHex(NativeUInt(BigIcon), SizeOf(Pointer)*2)+
-    ' small=$'+IntToHex(NativeUInt(SmallIcon), SizeOf(Pointer)*2));
-  SendMainWindowIcons(Wnd, BigIcon, SmallIcon);
-  // The taskbar button may not exist yet at this point: send again once it has settled.
+  if SmallIcon <> 0 then
+     SendMessage(Wnd, WM_SETICON, ICON_SMALL, LPARAM(SmallIcon));
+  if BigIcon <> 0 then
+     SendMessage(Wnd, WM_SETICON, ICON_BIG, LPARAM(BigIcon));
+  DiagnosticLog('taskbar', 'ApplyMainWindowIcons '+Stage+': big=$'+
+    IntToHex(NativeUInt(BigIcon), SizeOf(Pointer)*2)+' small=$'+
+    IntToHex(NativeUInt(SmallIcon), SizeOf(Pointer)*2)+'; WM_GETICON big=$'+
+    IntToHex(SendMessage(Wnd, WM_GETICON, ICON_BIG, 0), SizeOf(Pointer)*2)+' small=$'+
+    IntToHex(SendMessage(Wnd, WM_GETICON, ICON_SMALL, 0), SizeOf(Pointer)*2));
+end;
+
+procedure ApplyMainWindowIcons(Wnd: HWND);
+begin
+  SendMainWindowIcons(Wnd, 'initial');
+  // The taskbar button may not exist yet: send again, with new handles, once it has settled.
   TThread.CreateAnonymousThread(
     procedure
     begin
       Sleep(2500);
-      TThread.Queue(nil,
-        procedure
-        begin
-          SendMainWindowIcons(Wnd, BigIcon, SmallIcon);
-          DiagnosticLog('taskbar', 'ApplyMainWindowIcons resent after delay; WM_GETICON big=$'+
-            IntToHex(SendMessage(Wnd, WM_GETICON, ICON_BIG, 0), SizeOf(Pointer)*2)+
-            ' small=$'+IntToHex(SendMessage(Wnd, WM_GETICON, ICON_SMALL, 0), SizeOf(Pointer)*2));
-        end);
+      TThread.Queue(nil, procedure begin SendMainWindowIcons(Wnd, 'after 2.5 s'); end);
+      Sleep(4000);
+      TThread.Queue(nil, procedure begin SendMainWindowIcons(Wnd, 'after 6.5 s'); end);
+      Sleep(8000);
+      TThread.Queue(nil, procedure begin SendMainWindowIcons(Wnd, 'after 14.5 s'); end);
     end).Start;
 end;
 
