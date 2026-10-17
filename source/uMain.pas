@@ -39860,12 +39860,30 @@ end;
 procedure TFormMain.FormCloseQuery(Sender: TObject; var CanClose: Boolean);
 var
   Loop, Loop2: Integer;
+  {$IF CompilerVersion >= 20}
+  ShutdownStarted, PhaseStarted: UInt64;
+
+  procedure TraceShutdownPhase(const Phase: String);
+  var
+    NowTick: UInt64;
+  begin
+    NowTick:= GetTickCount64;
+    DiagnosticLog('shutdown', Phase+'; phase_ms='+UIntToStr(NowTick-PhaseStarted)+
+      '; total_ms='+UIntToStr(NowTick-ShutdownStarted));
+    PhaseStarted:= GetTickCount64;
+  end;
+  {$IFEND}
 begin
   {$IF CompilerVersion >= 20}
+  ShutdownStarted:= GetTickCount64;
+  PhaseStarted:= ShutdownStarted;
   DiagnosticLog('lifecycle', 'Main form close requested; saving settings and freeing resources');
   {$IFEND}
   ShowFilterMsgBox('Exit Frontend', 'Updating config files and freeing resources.', True);
   VideoPreviewPlayDummy(True);
+  {$IF CompilerVersion >= 20}
+  TraceShutdownPhase('Exit dialog and video preview stopped');
+  {$IFEND}
   // free any created vars, arrays, etc
   FreeAndNil(FDrawBuffer);
   FreeAndNil(FDrawBufferBottom);
@@ -39877,12 +39895,21 @@ begin
   ClearImageList(FormNightMode.IL_NightModeCheckBoxRadioButtonIcons);
   ClearImageList(FormNightMode.IL_NightModeCheckBoxRadioButtonIconsHD);
 
+  {$IF CompilerVersion >= 20}
+  TraceShutdownPhase('Draw buffers and UI image lists freed');
+  {$IFEND}
   GlobalThreadManager.FlushMessageCache(GamesListView, TID_START); // flush images threads cache (opened/pending threads)
+  {$IF CompilerVersion >= 20}
+  TraceShutdownPhase('Image thread message cache flushed');
+  {$IFEND}
 
   ZipForge.CloseArchive; // make sure there are no .zip files opened
   ZipForge.FileName:= '';
 
   ClearScreenshots;
+  {$IF CompilerVersion >= 20}
+  TraceShutdownPhase('ZIP archive closed and screenshots cleared');
+  {$IFEND}
 
   if not TerminateEmuLoader then
      begin
@@ -39890,9 +39917,15 @@ begin
        //WriteSplashSettings;
        UpdateExtraIni;
        UpdateIniFile(False);
+       {$IF CompilerVersion >= 20}
+       TraceShutdownPhase('Light mode and main configuration saved');
+       {$IFEND}
 
        if FileExists(GetSysEmulators) then
           UpdateCustomEmulatorsInfo(False); // update emulator to use, param index, never update emulators filenames here
+       {$IF CompilerVersion >= 20}
+       TraceShutdownPhase('Custom emulator settings saved');
+       {$IFEND}
 
        if not PanelMachinesList.Visible then
           UpdateColumnProfile
@@ -39906,8 +39939,14 @@ begin
        if IsNightMode then
           WriteNightModeSettings;
      end;
+  {$IF CompilerVersion >= 20}
+  TraceShutdownPhase('Column profile and night mode settings completed');
+  {$IFEND}
 
   DeInitEmulatorVariables;
+  {$IF CompilerVersion >= 20}
+  TraceShutdownPhase('Emulator variables freed');
+  {$IFEND}
 
   for Loop:=1 to MaxConsoleComputerSystems do
   begin
@@ -39915,6 +39954,9 @@ begin
         FreeAndNil(sysCustomFolders[Loop, Loop2]);
     FreeAndNil(Font_ConsoleComputer[Loop]);
   end;
+  {$IF CompilerVersion >= 20}
+  TraceShutdownPhase('Console folders and fonts freed');
+  {$IFEND}
 
   if not TerminateEmuLoader then
      begin
@@ -39927,23 +39969,47 @@ begin
                UpdateScreenshotLayout(ButtonScreenshotLayouts.Tag); // save current multiple layout, if images is enabled
           end;
      end;
+  {$IF CompilerVersion >= 20}
+  TraceShutdownPhase('Screenshot layout settings completed');
+  {$IFEND}
 
   // games list must be cleared here, not above or below, or frontend crashes in thumbnails view (November 20, 2016)
   FormMain.ClearMemGameInfo(MemGameInfo);
   FormMain.ClearMemGameInfo(TempGameVars);
+  {$IF CompilerVersion >= 20}
+  TraceShutdownPhase('Game information memory cleared');
+  {$IFEND}
 
   ClearListView(GamesListView);
+  {$IF CompilerVersion >= 20}
+  TraceShutdownPhase('Games list view cleared');
+  {$IFEND}
   ClearListView(MachinesListSidePanel);
+  {$IF CompilerVersion >= 20}
+  TraceShutdownPhase('Machines side list cleared');
+  {$IFEND}
 
   InitImgZipLists(True);
   InitImgSoftwareNameZipLists(True);
   InitImgSoftwareNameZipLists_SL(True);
+  {$IF CompilerVersion >= 20}
+  TraceShutdownPhase('Image ZIP lists cleared');
+  {$IFEND}
 
   FreeImageZipVars;
+  {$IF CompilerVersion >= 20}
+  TraceShutdownPhase('Image ZIP variables freed');
+  {$IFEND}
   FreeMAMu_ZipVars;
   FreeAndNil(MAMu_FoldersList); // multiple paths support StringList
+  {$IF CompilerVersion >= 20}
+  TraceShutdownPhase('MAMu ZIP variables and folder list freed');
+  {$IFEND}
 
   DestroyImageLayoutControls;
+  {$IF CompilerVersion >= 20}
+  TraceShutdownPhase('Image layout controls destroyed');
+  {$IFEND}
 
   if PopupAutomaticGameInformation.Checked then
      PopupAutomaticGameInformation.Click;
@@ -39961,14 +40027,21 @@ begin
 
   FreeAndNil(FormArcadeFiltersExtra);
   FreeAndNil(FormArcadeFiltersDriverStatus);
+  {$IF CompilerVersion >= 20}
+  TraceShutdownPhase('Automatic info, profile, fonts and filter forms cleaned up');
+  {$IFEND}
 
   FormStatus.StopThreadClock(True); // the clock callback must not run on a freed form
   FreeAndNil(FormStatus);
+  {$IF CompilerVersion >= 20}
+  TraceShutdownPhase('Splash clock stopped and splash form freed');
+  {$IFEND}
 
   HideFilterMsgBox;
   FreeAndNil(FormApplyFilterMsgBox);
   FreeAndNil(FormNightMode);
   {$IF CompilerVersion >= 20}
+  TraceShutdownPhase('Exit dialog and night mode form freed');
   DiagnosticLog('lifecycle', 'Main form shutdown cleanup completed');
   {$IFEND}
 end;

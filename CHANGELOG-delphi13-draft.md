@@ -22,6 +22,9 @@ Move the verified entries into `CHANGELOG.md` when preparing the release.
   loading/filtering, process launches/results, message dialogs and VCL exceptions
   without replacing normal error handling. Keeps `diagnostic.log` and one rotated
   backup (5 MiB each) beside the executable; logging failures display a warning.
+- Shutdown diagnostics (`[shutdown]`) report each cleanup phase in milliseconds
+  (`phase_ms`) and elapsed time since the close request (`total_ms`), including
+  settings, game lists, MAMu_ resources and form cleanup.
 - Added `source/EmuLoader.dproj` for opening the existing application project
   with Delphi 13, including source, component and resource search paths.
 - Added the Delphi 13 design-time package `EmuLoaderComponents` so the IDE can
