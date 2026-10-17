@@ -278,8 +278,10 @@ Move the verified entries into `CHANGELOG.md` when preparing the release.
 - MAME History displays correctly with current `history.xml` files (Frogger).
 - MAMu_ game icons load from `icons.7z` with a compatible x64 `7z.dll`.
   Reusing the extraction cache after restarting remains to be checked.
-- Only one application window appears in the taskbar previews.
-  The taskbar button still displays a generic icon; this issue remains open.
+- Only one application window appears in the taskbar previews, and the taskbar
+  button shows the Emu Loader icon (also in the Release build).
+- Release build (Win64) on the test VM: game list loads, filters work, MAME
+  History and snapshot images display, and games launch.
 
 ## Pending verification
 
@@ -288,7 +290,6 @@ Move the verified entries into `CHANGELOG.md` when preparing the release.
   and that the MAMu_ extraction cache is reused without extracting again.
 - Verify game-list creation/update, ROM auditing, search, filters and favorites.
 - Verify software-list games and parent/clone icon selection.
-- Resolve the remaining generic application icon on the taskbar.
 - Verify ZIP enumeration, CRC values, filenames and extraction (including
   archives containing directories) after the `System.Zip` migration.
 - Verify PNG (including transparency) and GIF loading for previews,
