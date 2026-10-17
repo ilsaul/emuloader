@@ -113,8 +113,6 @@ begin
       TThread.Queue(nil, procedure begin SendMainWindowIcons(Wnd, 'after 2.5 s'); end);
       Sleep(4000);
       TThread.Queue(nil, procedure begin SendMainWindowIcons(Wnd, 'after 6.5 s'); end);
-      Sleep(8000);
-      TThread.Queue(nil, procedure begin SendMainWindowIcons(Wnd, 'after 14.5 s'); end);
     end).Start;
 end;
 
