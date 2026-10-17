@@ -74,18 +74,17 @@ begin
   SetProperty('AppUserModel.RelaunchDisplayNameResource', PKEY_AppUserModel_RelaunchDisplayNameResource, 'Emu Loader');
 end;
 
+procedure SendMainWindowIcons(Wnd: HWND; BigIcon, SmallIcon: HICON);
+begin
+  if SmallIcon <> 0 then
+     SendMessage(Wnd, WM_SETICON, ICON_SMALL, LPARAM(SmallIcon));
+  if BigIcon <> 0 then
+     SendMessage(Wnd, WM_SETICON, ICON_BIG, LPARAM(BigIcon));
+end;
+
 procedure ApplyMainWindowIcons(Wnd: HWND);
 var
   BigIcon, SmallIcon: HICON;
-
-  procedure SendIcons;
-  begin
-    if SmallIcon <> 0 then
-       SendMessage(Wnd, WM_SETICON, ICON_SMALL, LPARAM(SmallIcon));
-    if BigIcon <> 0 then
-       SendMessage(Wnd, WM_SETICON, ICON_BIG, LPARAM(BigIcon));
-  end;
-
 begin
   // The icons VCL assigns are not accepted by the taskbar button (it stays generic);
   // explicit size-matched icons from the embedded resource are. These handles belong
@@ -95,7 +94,7 @@ begin
                               GetSystemMetrics(SM_CYSMICON), LR_DEFAULTCOLOR));
   DiagnosticLog('taskbar', 'ApplyMainWindowIcons big=$'+IntToHex(NativeUInt(BigIcon), SizeOf(Pointer)*2)+
     ' small=$'+IntToHex(NativeUInt(SmallIcon), SizeOf(Pointer)*2));
-  SendIcons;
+  SendMainWindowIcons(Wnd, BigIcon, SmallIcon);
   // The taskbar button may not exist yet at this point: send again once it has settled.
   TThread.CreateAnonymousThread(
     procedure
@@ -104,7 +103,7 @@ begin
       TThread.Queue(nil,
         procedure
         begin
-          SendIcons;
+          SendMainWindowIcons(Wnd, BigIcon, SmallIcon);
           DiagnosticLog('taskbar', 'ApplyMainWindowIcons resent after delay');
         end);
     end).Start;
