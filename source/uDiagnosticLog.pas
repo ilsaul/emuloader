@@ -74,6 +74,10 @@ begin
   SetProperty('AppUserModel.RelaunchDisplayNameResource', PKEY_AppUserModel_RelaunchDisplayNameResource, 'Emu Loader');
 end;
 
+function ExtractExeIcons(lpszFile: PWideChar; nIconIndex, cxIcon, cyIcon: Integer;
+  phicon: PHANDLE; pIconId: PDWORD; nIcons, flags: UINT): UINT; stdcall;
+  external 'user32.dll' name 'PrivateExtractIconsW';
+
 procedure SendMainWindowIcons(Wnd: HWND; BigIcon, SmallIcon: HICON);
 begin
   if SmallIcon <> 0 then
@@ -85,13 +89,17 @@ end;
 procedure ApplyMainWindowIcons(Wnd: HWND);
 var
   BigIcon, SmallIcon: HICON;
+  IconId: DWORD;
+  ExePath: String;
 begin
   // The icons VCL assigns are not accepted by the taskbar button (it stays generic);
-  // explicit size-matched icons from the embedded resource are. These handles belong
-  // to the process and are intentionally never destroyed.
-  BigIcon:= HICON(LoadImage(HInstance, 'MAINICON', IMAGE_ICON, 48, 48, LR_DEFAULTCOLOR));
-  SmallIcon:= HICON(LoadImage(HInstance, 'MAINICON', IMAGE_ICON, GetSystemMetrics(SM_CXSMICON),
-                              GetSystemMetrics(SM_CYSMICON), LR_DEFAULTCOLOR));
+  // icons extracted from the EXE with PrivateExtractIcons are (same call as the
+  // working external test). These handles belong to the process and are never destroyed.
+  ExePath:= ParamStr(0);
+  BigIcon:= 0;
+  SmallIcon:= 0;
+  ExtractExeIcons(PWideChar(ExePath), 0, 48, 48, @BigIcon, @IconId, 1, 0);
+  ExtractExeIcons(PWideChar(ExePath), 0, 16, 16, @SmallIcon, @IconId, 1, 0);
   DiagnosticLog('taskbar', 'ApplyMainWindowIcons big=$'+IntToHex(NativeUInt(BigIcon), SizeOf(Pointer)*2)+
     ' small=$'+IntToHex(NativeUInt(SmallIcon), SizeOf(Pointer)*2));
   SendMainWindowIcons(Wnd, BigIcon, SmallIcon);
@@ -104,7 +112,9 @@ begin
         procedure
         begin
           SendMainWindowIcons(Wnd, BigIcon, SmallIcon);
-          DiagnosticLog('taskbar', 'ApplyMainWindowIcons resent after delay');
+          DiagnosticLog('taskbar', 'ApplyMainWindowIcons resent after delay; WM_GETICON big=$'+
+            IntToHex(SendMessage(Wnd, WM_GETICON, ICON_BIG, 0), SizeOf(Pointer)*2)+
+            ' small=$'+IntToHex(SendMessage(Wnd, WM_GETICON, ICON_SMALL, 0), SizeOf(Pointer)*2));
         end);
     end).Start;
 end;
