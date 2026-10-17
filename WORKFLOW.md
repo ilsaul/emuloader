@@ -28,6 +28,7 @@
 2. Developer runs `git push` and says so.
 3. Copilot over SSH: `git restore .`, `git fetch`, `git merge --ff-only origin/delphi13-port`.
 4. Developer closes EmuLoader, builds from the IDE (Debug, Win64) and launches it; compiler errors are pasted to Copilot.
+   Copilot must always say which build is needed: the application (`source/EmuLoader.dproj`) or the component package (`lib/delphi13/EmuLoaderComponents.dproj`, the palette components). Rule of thumb: changes under `lib/` need the package build first, then the application; changes only under `source/` need just the application.
 5. Copilot reads `C:\Games\EmuLoader13\diagnostic.log` over SSH; developer reports what is visible on the VM desktop.
 
 ## Runtime tests from outside the process (over SSH)
