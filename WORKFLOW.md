@@ -44,9 +44,9 @@
 - Symptom: the taskbar button shows a generic icon; the icon of the window inside the group is correct.
 - Excluded: EXE icon resources (identical to the working Delphi 7 build), manifest, EXE name and folder, Win32 vs Win64, VM icon cache, launching from the IDE.
 - Findings: VCL-assigned icons are valid in `WM_GETICON` but the taskbar button stays generic. `MainFormOnTaskbar=False` showed the right icon on the hidden application window but gave two entries in the preview.
-- Explicit `WM_SETICON` with size-matched icons (16 px and 48 px from the EXE) sent to the main window fixed the preview title icon; the button needed a later resend.
-- Current attempt: `ApplyMainWindowIcons` (`uDiagnosticLog.pas`) sends them at the end of `FormActivate` and again after 2.5 s. Runtime result pending.
-- Still in the code from earlier attempts, to remove if not needed once fixed: explicit AppUserModelID `EmuLoader.Frontend` and relaunch properties (`ApplyTaskbarIdentity`).
+- Fix found: `WM_SETICON` on the main window with icons from `PrivateExtractIcons` (48 px and 16 px, fresh handles each time) fixes the button a few seconds after startup; `LoadImage` icons or a single early send did not.
+- Implemented in `ApplyMainWindowIcons` (`uDiagnosticLog.pas`): sends at once, after 2.5 s and after 6.5 s. Explicit AppUserModelID and relaunch properties were tried and removed.
+- Pending: runtime confirmation of the cleaned-up build; the button still updates with a short delay.
 
 ## VM rules (standing permissions from the developer)
 - SSH to the VM is allowed: `ssh -i ~/.ssh/emuloader_vm moreno@10.211.55.16` (repo in `C:\Develop\Emuloader`, branch `delphi13-port`, output in `C:\Games\EmuLoader13`).

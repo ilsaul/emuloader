@@ -11,8 +11,6 @@ function DiagnosticLogEnabled: Boolean;
 procedure DiagnosticLog(const Category, Msg: String);
 procedure DiagnosticLogException(const Context: String; E: Exception; Address: Pointer);
 procedure TraceTaskbarIcons;
-procedure SetExplicitAppUserModelID;
-procedure ApplyTaskbarIdentity(Wnd: HWND);
 procedure ApplyMainWindowIcons(Wnd: HWND);
 
 implementation
@@ -26,53 +24,6 @@ const
 
 function ReadProcessAppUserModelID(out AppID: PWideChar): HRESULT; stdcall;
   external 'shell32.dll' name 'GetCurrentProcessExplicitAppUserModelID';
-
-function WriteProcessAppUserModelID(AppID: PWideChar): HRESULT; stdcall;
-  external 'shell32.dll' name 'SetCurrentProcessExplicitAppUserModelID';
-
-procedure SetExplicitAppUserModelID;
-var
-  HR: HRESULT;
-begin
-  HR:= WriteProcessAppUserModelID('EmuLoader.Frontend');
-  DiagnosticLog('taskbar', 'SetCurrentProcessExplicitAppUserModelID HRESULT=$'+IntToHex(HR, 8));
-end;
-
-procedure ApplyTaskbarIdentity(Wnd: HWND);
-var
-  Store: IPropertyStore;
-  ExePath: String;
-
-  procedure SetProperty(const PropertyName: String; const Key: TPropertyKey; const Text: String);
-  var
-    Value: TPropVariant;
-    HR: HRESULT;
-  begin
-    HR:= InitPropVariantFromString(PWideChar(Text), Value);
-    if Succeeded(HR) then
-       try
-         HR:= Store.SetValue(Key, Value);
-       finally
-         PropVariantClear(Value);
-       end;
-    DiagnosticLog('taskbar', 'Set '+PropertyName+'=['+Text+'] HRESULT=$'+IntToHex(HR, 8));
-  end;
-
-var
-  HR: HRESULT;
-begin
-  ExePath:= ParamStr(0);
-  HR:= SHGetPropertyStoreForWindow(Wnd, IPropertyStore, Pointer(Store));
-  if Failed(HR) then
-     begin
-       DiagnosticLog('taskbar', 'Apply identity: property store HRESULT=$'+IntToHex(HR, 8));
-       Exit;
-     end;
-  // Windows ignores these unless all three relaunch properties are set together
-  SetProperty('AppUserModel.RelaunchCommand', PKEY_AppUserModel_RelaunchCommand, '"'+ExePath+'"');
-  SetProperty('AppUserModel.RelaunchIconResource', PKEY_AppUserModel_RelaunchIconResource, ExePath+',0');
-  SetProperty('AppUserModel.RelaunchDisplayNameResource', PKEY_AppUserModel_RelaunchDisplayNameResource, 'Emu Loader');
-end;
 
 function ExtractExeIcons(lpszFile: PWideChar; nIconIndex, cxIcon, cyIcon: Integer;
   phicon: PHANDLE; pIconId: PDWORD; nIcons, flags: UINT): UINT; stdcall;
