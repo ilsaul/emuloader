@@ -5731,6 +5731,12 @@ procedure TFormMain.ClearListView(ListHolder: TEasyListView);
 var
   Started, Finished, Frequency: Int64;
 
+  procedure TraceControlPhase(const Phase: String; Ticks: Int64);
+  begin
+    DiagnosticLog('shutdown-control', Phase+'; total_ms='+
+      FormatFloat('0.000', Ticks*1000.0/Frequency));
+  end;
+
   procedure TraceListPhase(const Phase: String);
   begin
     if not FProfileListShutdown then
@@ -5763,10 +5769,31 @@ begin
   try
   {$IF CompilerVersion >= 20}
   TraceListPhase('BeginUpdate');
+  if FProfileListShutdown then
+     begin
+       FillChar(EasyClearProfile, SizeOf(EasyClearProfile), 0);
+       EasyClearProfile.Enabled:= True;
+     end;
+  try
   {$IFEND}
   ListHolder.Groups.Clear;
   {$IF CompilerVersion >= 20}
+  finally
+    if FProfileListShutdown then
+       EasyClearProfile.Enabled:= False;
+  end;
   TraceListPhase('Groups.Clear');
+  if FProfileListShutdown then
+     begin
+       DiagnosticLog('shutdown-control', 'Groups destroyed='+
+         IntToStr(EasyClearProfile.GroupsDestroyed));
+       TraceControlPhase('Group preparation', EasyClearProfile.GroupPrepareTicks);
+       TraceControlPhase('Group item collections destroyed', EasyClearProfile.GroupItemsTicks);
+       TraceControlPhase('Group base destructor and views freed', EasyClearProfile.GroupFinishTicks);
+       TraceControlPhase('Item flags reset (within item collections)', EasyClearProfile.ItemFlagsTicks);
+       TraceControlPhase('Item destructors (within item collections)', EasyClearProfile.ItemDestroyTicks);
+       TraceControlPhase('Item collection finalization (within item collections)', EasyClearProfile.ItemFinalizeTicks);
+     end;
   {$IFEND}
   finally
   ListHolder.EndUpdate(False);

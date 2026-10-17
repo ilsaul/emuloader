@@ -6269,6 +6269,19 @@ procedure FillStringsWithEasyListStyles(Strings: TStrings);
 procedure FillStringsWithEasySortAlgorithms(Strings: TStrings);
 function HeaderClipFormat: TFormatEtc;
 
+{$IF CompilerVersion >= 20}
+type
+  TEasyClearProfile = record
+    Enabled: Boolean;
+    GroupsDestroyed: Integer;
+    GroupPrepareTicks, GroupItemsTicks, GroupFinishTicks: Int64;
+    ItemFlagsTicks, ItemDestroyTicks, ItemFinalizeTicks: Int64;
+  end;
+
+var
+  EasyClearProfile: TEasyClearProfile;
+{$IFEND}
+
 var
   AlphaBlender: TEasyAlphaBlender;
 
@@ -8620,17 +8633,49 @@ begin
 end;
 
 destructor TEasyGroup.Destroy;
+{$IF CompilerVersion >= 20}
+var
+  ProfileStarted, ProfileNow: Int64;
+{$IFEND}
 begin
+  {$IF CompilerVersion >= 20}
+  if EasyClearProfile.Enabled then
+    QueryPerformanceCounter(ProfileStarted);
+  {$IFEND}
   SetDestroyFlags;
   if OwnerListview.Selection.FocusedGroup = Self then
     OwnerListview.Selection.FocusedGroup := nil;
   Selected := False;
   Focused := False;
+  {$IF CompilerVersion >= 20}
+  if EasyClearProfile.Enabled then
+  begin
+    QueryPerformanceCounter(ProfileNow);
+    Inc(EasyClearProfile.GroupPrepareTicks, ProfileNow-ProfileStarted);
+    ProfileStarted := ProfileNow;
+  end;
+  {$IFEND}
   FItems.Free;  // don't nil the reference the items may need it as they are destroyed.
+  {$IF CompilerVersion >= 20}
+  if EasyClearProfile.Enabled then
+  begin
+    QueryPerformanceCounter(ProfileNow);
+    Inc(EasyClearProfile.GroupItemsTicks, ProfileNow-ProfileStarted);
+    ProfileStarted := ProfileNow;
+  end;
+  {$IFEND}
   inherited;
   FreeAndNil(FGrid);
   FreeAndNil(FVisibleItems);
   FreeAndNil(FView);
+  {$IF CompilerVersion >= 20}
+  if EasyClearProfile.Enabled then
+  begin
+    QueryPerformanceCounter(ProfileNow);
+    Inc(EasyClearProfile.GroupFinishTicks, ProfileNow-ProfileStarted);
+    Inc(EasyClearProfile.GroupsDestroyed);
+  end;
+  {$IFEND}
 end;
 
 function TEasyGroup.BoundsRectBottomMargin: TRect;
@@ -19526,11 +19571,22 @@ end;
 procedure TEasyCollection.Clear(FreeItems: Boolean = True);
 var
   i: Integer;
+  {$IF CompilerVersion >= 20}
+  ProfileItems: Boolean;
+  ProfileStarted, ProfileNow: Int64;
+  {$IFEND}
 begin
+  {$IF CompilerVersion >= 20}
+  ProfileItems := EasyClearProfile.Enabled and (Self is TEasyItems);
+  {$IFEND}
   if FList.Count > 0 then
   begin
     BeginUpdate(False);
     try
+      {$IF CompilerVersion >= 20}
+      if ProfileItems then
+        QueryPerformanceCounter(ProfileStarted);
+      {$IFEND}
       // Need to make sure all items are valid so nothing unexpected happens in the
       // controls events when the item state changes
       for i := 0 to FList.Count - 1 do
@@ -19540,9 +19596,25 @@ begin
         TEasyCollectionItem(FList[i]).Selected := False;
       end;
 
+      {$IF CompilerVersion >= 20}
+      if ProfileItems then
+      begin
+        QueryPerformanceCounter(ProfileNow);
+        Inc(EasyClearProfile.ItemFlagsTicks, ProfileNow-ProfileStarted);
+        ProfileStarted := ProfileNow;
+      end;
+      {$IFEND}
       if FreeItems then
         for i := FList.Count - 1 downto 0 do   // Walk backwards
           TEasyCollectionItem(FList[i]).Free;
+      {$IF CompilerVersion >= 20}
+      if ProfileItems then
+      begin
+        QueryPerformanceCounter(ProfileNow);
+        Inc(EasyClearProfile.ItemDestroyTicks, ProfileNow-ProfileStarted);
+        ProfileStarted := ProfileNow;
+      end;
+      {$IFEND}
     finally
       FList.Clear;
       FVisibleList.Clear;
@@ -19553,6 +19625,13 @@ begin
         OwnerListview.Scrollbars.OffsetY := 0;
       end;
       EndUpdate;
+      {$IF CompilerVersion >= 20}
+      if ProfileItems then
+      begin
+        QueryPerformanceCounter(ProfileNow);
+        Inc(EasyClearProfile.ItemFinalizeTicks, ProfileNow-ProfileStarted);
+      end;
+      {$IFEND}
     end;
   end;
 end;

@@ -29,6 +29,9 @@ Move the verified entries into `CHANGELOG.md` when preparing the release.
   boundaries and group destruction, with an aggregate count and duration of
   game item cleanup callbacks. These detailed measurements run only during
   shutdown with diagnostic logging enabled.
+  Aggregate `[shutdown-control]` counters further split EasyListview group
+  destruction into preparation, item collections and group views, with nested
+  timings for item flags, destructors and collection finalization.
 - Added `source/EmuLoader.dproj` for opening the existing application project
   with Delphi 13, including source, component and resource search paths.
 - Added the Delphi 13 design-time package `EmuLoaderComponents` so the IDE can
