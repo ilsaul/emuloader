@@ -13,6 +13,7 @@ procedure DiagnosticLogException(const Context: String; E: Exception; Address: P
 procedure TraceTaskbarIcons;
 procedure SetExplicitAppUserModelID;
 procedure ApplyTaskbarIdentity(Wnd: HWND);
+procedure ApplyMainWindowIcons(Wnd: HWND);
 
 implementation
 
@@ -71,6 +72,23 @@ begin
   SetProperty('AppUserModel.RelaunchCommand', PKEY_AppUserModel_RelaunchCommand, '"'+ExePath+'"');
   SetProperty('AppUserModel.RelaunchIconResource', PKEY_AppUserModel_RelaunchIconResource, ExePath+',0');
   SetProperty('AppUserModel.RelaunchDisplayNameResource', PKEY_AppUserModel_RelaunchDisplayNameResource, 'Emu Loader');
+end;
+
+procedure ApplyMainWindowIcons(Wnd: HWND);
+var
+  BigIcon, SmallIcon: HICON;
+begin
+  // The icons VCL assigns are not accepted by the taskbar button (it stays generic);
+  // explicit size-matched icons from the embedded resource are.
+  BigIcon:= HICON(LoadImage(HInstance, 'MAINICON', IMAGE_ICON, 48, 48, LR_DEFAULTCOLOR));
+  SmallIcon:= HICON(LoadImage(HInstance, 'MAINICON', IMAGE_ICON, GetSystemMetrics(SM_CXSMICON),
+                              GetSystemMetrics(SM_CYSMICON), LR_DEFAULTCOLOR));
+  DiagnosticLog('taskbar', 'ApplyMainWindowIcons big=$'+IntToHex(NativeUInt(BigIcon), SizeOf(Pointer)*2)+
+    ' small=$'+IntToHex(NativeUInt(SmallIcon), SizeOf(Pointer)*2));
+  if SmallIcon <> 0 then
+     SendMessage(Wnd, WM_SETICON, ICON_SMALL, LPARAM(SmallIcon));
+  if BigIcon <> 0 then
+     SendMessage(Wnd, WM_SETICON, ICON_BIG, LPARAM(BigIcon));
 end;
 
 procedure TraceTaskbarShellProperties(const Name: String; Wnd: HWND);

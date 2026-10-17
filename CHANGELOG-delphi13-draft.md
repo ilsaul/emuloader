@@ -96,6 +96,11 @@ Move the verified entries into `CHANGELOG.md` when preparing the release.
   The explicit ID alone left the grouped taskbar button generic (window and
   EXE icons are valid), so the main window now also gets the relaunch command,
   relaunch icon (`EmuLoader.exe,0`) and display name shell properties.
+  The generic icon persisted whenever the main window appeared, even with valid
+  `WM_GETICON` handles. Sending `WM_SETICON` from outside the process with
+  size-matched icons (16 px and 48 px from the EXE) corrected the taskbar button
+  at runtime, so the main window now sends the same explicit icons after startup
+  (`ApplyMainWindowIcons`, logged under `[taskbar]`). Needs runtime confirmation.
 - Show MAMu_ game icons (loose `.ico` files and `icons.zip`) in Delphi 13
   builds instead of the generic system icon. `unitExIcon` used `PChar` as a
   byte pointer, which is two bytes wide in Unicode Delphi, so icon bitmap and

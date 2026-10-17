@@ -39843,6 +39843,7 @@ begin
   {$IF CompilerVersion >= 20}
   StartupTrace('FormActivate: done');
   ApplyTaskbarIdentity(Handle);
+  ApplyMainWindowIcons(Handle);
   TraceTaskbarIcons;
   TraceToolbarButton(ButtonArcadeGamesFilters, IL_ToolBarButtons);
   TraceToolbarButton(ButtonExtraFilters, IL_ToolBarButtons);
