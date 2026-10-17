@@ -1502,6 +1502,9 @@ type
     FToolBarWindowProc: TWndMethod;
     FToolBarDrawDC: HDC;
     FToolBarDrawRect: TRect;
+    FProfileListShutdown: Boolean;
+    FShutdownItemsFreed: Integer;
+    FShutdownItemFreeTicks: Int64;
     {$IFEND}
     //FileIcon: TIcon;
     //iMAMu_Icon: TIcon;
@@ -5724,13 +5727,57 @@ begin
 end;}
 
 procedure TFormMain.ClearListView(ListHolder: TEasyListView);
+{$IF CompilerVersion >= 20}
+var
+  Started, Finished, Frequency: Int64;
+
+  procedure TraceListPhase(const Phase: String);
+  begin
+    if not FProfileListShutdown then
+       Exit;
+    QueryPerformanceCounter(Finished);
+    DiagnosticLog('shutdown-list', Phase+'; phase_ms='+
+      FormatFloat('0.000', (Finished-Started)*1000.0/Frequency));
+    QueryPerformanceCounter(Started);
+  end;
+{$IFEND}
 begin
   if ELV_IsEditing(ListHolder) then
      Exit;
+  {$IF CompilerVersion >= 20}
+  if FProfileListShutdown then
+     begin
+       FShutdownItemsFreed:= 0;
+       FShutdownItemFreeTicks:= 0;
+       QueryPerformanceFrequency(Frequency);
+       DiagnosticLog('shutdown-list', 'Starting; items='+IntToStr(ListHolder.Items.Count)+
+         '; groups='+IntToStr(ListHolder.Groups.Count));
+       QueryPerformanceCounter(Started);
+     end;
+  {$IFEND}
   ListHolder.Selection.ClearAll;
+  {$IF CompilerVersion >= 20}
+  TraceListPhase('Selection.ClearAll');
+  {$IFEND}
   ListHolder.BeginUpdate;
+  try
+  {$IF CompilerVersion >= 20}
+  TraceListPhase('BeginUpdate');
+  {$IFEND}
   ListHolder.Groups.Clear;
+  {$IF CompilerVersion >= 20}
+  TraceListPhase('Groups.Clear');
+  {$IFEND}
+  finally
   ListHolder.EndUpdate(False);
+  end;
+  {$IF CompilerVersion >= 20}
+  TraceListPhase('EndUpdate');
+  if FProfileListShutdown then
+     DiagnosticLog('shutdown-list', 'ItemFreeing callbacks; count='+
+       IntToStr(FShutdownItemsFreed)+'; total_ms='+
+       FormatFloat('0.000', FShutdownItemFreeTicks*1000.0/Frequency));
+  {$IFEND}
 end;
 
 function TFormMain.GetGameDataListView(Item: TEasyItem): Boolean;
@@ -39980,8 +40027,15 @@ begin
   TraceShutdownPhase('Game information memory cleared');
   {$IFEND}
 
+  {$IF CompilerVersion >= 20}
+  FProfileListShutdown:= DiagnosticLogEnabled;
+  try
+  {$IFEND}
   ClearListView(GamesListView);
   {$IF CompilerVersion >= 20}
+  finally
+    FProfileListShutdown:= False;
+  end;
   TraceShutdownPhase('Games list view cleared');
   {$IFEND}
   ClearListView(MachinesListSidePanel);
@@ -46924,7 +46978,15 @@ end;
 
 procedure TFormMain.GamesListViewItemFreeing(Sender: TCustomEasyListview;
   Item: TEasyItem);
+{$IF CompilerVersion >= 20}
+var
+  Started, Finished: Int64;
+{$IFEND}
 begin
+  {$IF CompilerVersion >= 20}
+  if FProfileListShutdown then
+     QueryPerformanceCounter(Started);
+  {$IFEND}
   TEasyGameInfo(Item).eThumbnail.Free;
   TEasyGameInfo(Item).eThumbnail:= nil;
   FreeAndNil(TEasyGameInfo(Item).fThumbnail);
@@ -46956,6 +47018,14 @@ begin
 
   if Item = SelectedEasyItem then
      SelectedEasyItem:= nil;
+  {$IF CompilerVersion >= 20}
+  if FProfileListShutdown then
+     begin
+       QueryPerformanceCounter(Finished);
+       Inc(FShutdownItemsFreed);
+       Inc(FShutdownItemFreeTicks, Finished-Started);
+     end;
+  {$IFEND}
 end;
 
 procedure TFormMain.GamesListViewItemSelectionChanged(
