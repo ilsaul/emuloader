@@ -281,11 +281,11 @@ Move the verified entries into `CHANGELOG.md` when preparing the release.
 - Only one application window appears in the taskbar previews, and the taskbar
   button shows the Emu Loader icon (also in the Release build).
 - Release build (Win64) on the test VM: game list loads, filters work, MAME
-  History and snapshot images display, and games launch.
+  History and snapshot images display, games launch and focus returns to
+  Emu Loader when a game exits.
 
 ## Pending verification
 
-- Launch and exit several games, checking that focus returns to Emu Loader.
 - Restart the frontend and check that preferences and paths are retained,
   and that the MAMu_ extraction cache is reused without extracting again.
 - Verify game-list creation/update, ROM auditing, search, filters and favorites.
