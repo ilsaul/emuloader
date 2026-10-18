@@ -319,12 +319,11 @@ Move the verified entries into `CHANGELOG.md` when preparing the release.
   Emu Loader when a game exits. Software-list games and parent/clone icon
   selection also work.
 - After a restart Emu Loader keeps the view mode (small icons), day/night
-  mode, the sort column (year) and the last selected game.
+  mode, the sort column (year), column widths and the last selected game.
 
 ## Pending verification
 
-- Restart the frontend and check that the remaining preferences and paths
-  are retained (column widths, night mode back on), and that the MAMu_
+- Restart the frontend and check that paths are retained and that the MAMu_
   extraction cache is reused without extracting again.
 - Verify game-list creation/update, ROM auditing, search, filters and favorites.
 - Verify ZIP enumeration, CRC values, filenames and extraction (including
