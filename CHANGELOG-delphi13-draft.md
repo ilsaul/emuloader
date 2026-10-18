@@ -81,6 +81,12 @@ Move the verified entries into `CHANGELOG.md` when preparing the release.
 
 ## Fixed
 
+- Show the games list in day mode when `ini_files\sysgamecustomfont.ini` does
+  not exist. The font loader exited without applying the day-mode defaults, so
+  the night-mode white text stayed on the white background and only the
+  selected game was visible. The same code is in v9.0.1 (Delphi 7). Runtime
+  verification is pending.
+
 - Make threaded thumbnail resampling (`TMyThreadRequest.MakeThumbNail`) safe
   on Win64: scanline offsets use pointer-sized integers, images smaller than
   2x2 pixels are left unscaled, and a failure is logged as `[thumbnail]` with

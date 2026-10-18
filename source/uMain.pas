@@ -8719,10 +8719,9 @@ var
 begin
   FontIniFile:= nil; tmpFont:= nil;
   iFile:= GetCustomFontIniFile(ReadNightModeFile);
-  if not ValidateFile(iFile) then
-     Exit;
-
-  if FormStatus.Visible then
+  // A missing file must still apply the default colors of the selected mode,
+  // otherwise the previous mode's fonts remain (e.g. white text in day mode)
+  if FormStatus.Visible and ValidateFile(iFile) then
      FormStatus.MessageStr('Loading systems custom fonts file "'+ExtractFileName(iFile)+'".');
 
   if not IsStartup then
