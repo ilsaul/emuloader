@@ -84,6 +84,12 @@ Move the verified entries into `CHANGELOG.md` when preparing the release.
 
 ## Fixed
 
+- Correct the Win64 layout of the threaded thumbnail callback message
+  (`TWMThreadRequest`): align WParam/LParam with `TMessage` and use a
+  pointer-sized result. The old Win32 layout interpreted request ID 1 as
+  the request pointer, causing an access violation in thumbnail view.
+  Win32 layout is unchanged; runtime verification is pending.
+
 - Show MAME History again with current `history.xml` files, which write
   extra attributes such as `<system name="frogger" game="yes" />`. Emu Loader
   only recognized the exact `<system name="frogger" />` form, so no history was

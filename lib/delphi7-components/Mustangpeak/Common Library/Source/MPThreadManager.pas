@@ -75,9 +75,15 @@ type
   // TMessage definition for how the data is passed to the target window via PostMessage
   TWMThreadRequest = packed record
     Msg: Cardinal;
+    {$IFDEF WIN64}
+    // Match TMessage: WParam and LParam start at offsets 8 and 16 on Win64.
+    MsgPadding: Cardinal;
+    RequestID: WPARAM;
+    {$ELSE}
     RequestID: Longint;
+    {$ENDIF}
     Request: TCommonThreadRequest;
-    Result: Longint;
+    Result: LRESULT;
   end;
 
   TCommonThreadDirection = (
