@@ -88,13 +88,14 @@ Move the verified entries into `CHANGELOG.md` when preparing the release.
   on Win64: scanline offsets use pointer-sized integers, images smaller than
   2x2 pixels are left unscaled, and a failure is logged as `[thumbnail]` with
   file name and dimensions instead of silently stopping the thumbnail thread.
-  Runtime verification is pending.
+  Verified on Windows (Debug Win64): thumbnail view no longer crashes; the
+  1x1 pixel `snap.zip\aleck64.png` that triggered it is logged and skipped.
 
 - Correct the Win64 layout of the threaded thumbnail callback message
   (`TWMThreadRequest`): align WParam/LParam with `TMessage` and use a
   pointer-sized result. The old Win32 layout interpreted request ID 1 as
   the request pointer, causing an access violation in thumbnail view.
-  Win32 layout is unchanged; runtime verification is pending.
+  Win32 layout is unchanged. Verified on Windows: thumbnails load in Win64.
 
 - Show MAME History again with current `history.xml` files, which write
   extra attributes such as `<system name="frogger" game="yes" />`. Emu Loader
