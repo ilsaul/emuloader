@@ -84,8 +84,8 @@ Move the verified entries into `CHANGELOG.md` when preparing the release.
 - Show the games list in day mode when `ini_files\sysgamecustomfont.ini` does
   not exist. The font loader exited without applying the day-mode defaults, so
   the night-mode white text stayed on the white background and only the
-  selected game was visible. The same code is in v9.0.1 (Delphi 7). Runtime
-  verification is pending.
+  selected game was visible. The same code is in v9.0.1 (Delphi 7). Verified
+  on the Windows test VM: the list is readable in day mode.
 
 - Make threaded thumbnail resampling (`TMyThreadRequest.MakeThumbNail`) safe
   on Win64: scanline offsets use pointer-sized integers, images smaller than
@@ -318,11 +318,14 @@ Move the verified entries into `CHANGELOG.md` when preparing the release.
   History and snapshot images display, games launch and focus returns to
   Emu Loader when a game exits. Software-list games and parent/clone icon
   selection also work.
+- After a restart Emu Loader keeps the view mode (small icons), day/night
+  mode, the sort column (year) and the last selected game.
 
 ## Pending verification
 
-- Restart the frontend and check that preferences and paths are retained,
-  and that the MAMu_ extraction cache is reused without extracting again.
+- Restart the frontend and check that the remaining preferences and paths
+  are retained (column widths, night mode back on), and that the MAMu_
+  extraction cache is reused without extracting again.
 - Verify game-list creation/update, ROM auditing, search, filters and favorites.
 - Verify ZIP enumeration, CRC values, filenames and extraction (including
   archives containing directories) after the `System.Zip` migration.
