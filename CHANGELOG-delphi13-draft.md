@@ -60,8 +60,10 @@ Move the verified entries into `CHANGELOG.md` when preparing the release.
   On the Windows ARM64 VM (Release Win64, 184,633 items and 112,874 groups),
   the first runtime comparison reduced Groups.Clear from 37.781 s to 1.992 s,
   item destruction from 25.200 s to 0.643 s, and the instrumented shutdown
-  sequence from 39.593 s to 3.828 s. Functional regression checks and a repeat
-  timing run are still pending.
+  sequence from 39.593 s to 3.828 s. A second run (Debug Win64, details view
+  with a single group) took 2.516 s, with item destruction stable at 0.646 s.
+  Verified afterwards: games launch, column sorting in details view and
+  thumbnail view work. Titles with non-Latin characters are still unchecked.
 
 - Set the Delphi 13 file/product version to 10.0.0.0 with the Windows
   Pre-release flag enabled for all configurations until the stable release.
