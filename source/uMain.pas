@@ -3807,8 +3807,15 @@ var
   // pointers for scanline access
   liPByte, loPByte, p: PByte;
   // offset increment
-  liSize, loSize: integer;
+  {$IF CompilerVersion >= 20}
+  liSize, loSize: NativeInt;
+  {$ELSE}
+  liSize, loSize: Integer;
+  {$IFEND}
 begin
+  // Bilinear sampling needs at least two source rows and columns
+  if (abmp.Width < 2) or (abmp.Height < 2) or (NuWidth < 1) or (NuHeight < 1) then
+     Exit;
   abmp.PixelFormat:= pf24bit;
   bTmp:= TPNGGraphic.Create;
   bTmp.PixelFormat:= pf24bit;
@@ -3818,9 +3825,20 @@ begin
   xscale:= bTmp.Width / (abmp.Width - 1);
   yscale:= bTmp.Height / (abmp.Height - 1);
   liPByte:= abmp.Scanline[0];
-  liSize:= Integer(abmp.Scanline[1]) - Integer(liPByte);
   loPByte:= bTmp.Scanline[0];
-  loSize:= Integer(bTmp.Scanline[1]) - Integer(loPByte);
+  {$IF CompilerVersion >= 20}
+  liSize:= NativeInt(abmp.Scanline[1]) - NativeInt(liPByte);
+  if bTmp.Height > 1 then
+     loSize:= NativeInt(bTmp.Scanline[1]) - NativeInt(loPByte)
+  else
+     loSize:= 0;
+  {$ELSE}
+  liSize:= Integer(abmp.Scanline[1]) - Integer(liPByte);
+  if bTmp.Height > 1 then
+     loSize:= Integer(bTmp.Scanline[1]) - Integer(loPByte)
+  else
+     loSize:= 0;
+  {$IFEND}
   for to_y:= 0 to bTmp.Height - 1 do
   begin
     sfrom_y:= to_y / yscale;
@@ -4156,6 +4174,12 @@ begin
   if Image.PixelFormat <> pf32bit then
      Image.PixelFormat:=  pf32bit;
 
+  {$IF CompilerVersion >= 20}
+  if (Image.Width < 2) or (Image.Height < 2) then
+     DiagnosticLog('thumbnail', 'Image too small to resample; file='+FileName+
+       '; zip='+ZipFile+'; width='+IntToStr(Image.Width)+'; height='+IntToStr(Image.Height));
+  try
+  {$IFEND}
   if MaintainAspectRatio then
      begin
         if (Image.Width/Image.Height) <= (Width/Height) then
@@ -4174,6 +4198,18 @@ begin
   else
      MakeThumbNail(Image, Width, Height);
      //BiReSample(Image, Width, Height, True); // doesn't work... accces violation!!!
+  {$IF CompilerVersion >= 20}
+  except
+    on E: Exception do
+      begin
+        // An escaped exception would silently stop the thumbnail thread
+        DiagnosticLog('thumbnail', 'Thumbnail creation failed; file='+FileName+
+          '; zip='+ZipFile+'; width='+IntToStr(Image.Width)+'; height='+IntToStr(Image.Height)+
+          '; pixelformat='+IntToStr(Ord(Image.PixelFormat))+'; '+E.ClassName+': '+E.Message);
+        Image.Assign(nil);
+      end;
+  end;
+  {$IFEND}
 
 // this code is no longer used (draws the icons inside the image file, not as overlay icons)
 {

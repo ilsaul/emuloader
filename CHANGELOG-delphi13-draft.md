@@ -84,6 +84,12 @@ Move the verified entries into `CHANGELOG.md` when preparing the release.
 
 ## Fixed
 
+- Make threaded thumbnail resampling (`TMyThreadRequest.MakeThumbNail`) safe
+  on Win64: scanline offsets use pointer-sized integers, images smaller than
+  2x2 pixels are left unscaled, and a failure is logged as `[thumbnail]` with
+  file name and dimensions instead of silently stopping the thumbnail thread.
+  Runtime verification is pending.
+
 - Correct the Win64 layout of the threaded thumbnail callback message
   (`TWMThreadRequest`): align WParam/LParam with `TMessage` and use a
   pointer-sized result. The old Win32 layout interpreted request ID 1 as
