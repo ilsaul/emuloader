@@ -5793,6 +5793,11 @@ begin
        TraceControlPhase('Item flags reset (within item collections)', EasyClearProfile.ItemFlagsTicks);
        TraceControlPhase('Item destructors (within item collections)', EasyClearProfile.ItemDestroyTicks);
        TraceControlPhase('Item collection finalization (within item collections)', EasyClearProfile.ItemFinalizeTicks);
+       TraceControlPhase('Item destructor: reference cleanup', EasyClearProfile.ItemRefsTicks);
+       TraceControlPhase('Item destructor: Visible:=False', EasyClearProfile.ItemVisibleTicks);
+       TraceControlPhase('Item destructor: inherited', EasyClearProfile.ItemInheritedTicks);
+       TraceControlPhase('Item destructor: ReleaseSelectionGroup', EasyClearProfile.ItemSelGroupTicks);
+       TraceControlPhase('Item destructor: view freed', EasyClearProfile.ItemViewTicks);
      end;
   {$IFEND}
   finally

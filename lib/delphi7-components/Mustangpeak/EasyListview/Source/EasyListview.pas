@@ -6276,6 +6276,7 @@ type
     GroupsDestroyed: Integer;
     GroupPrepareTicks, GroupItemsTicks, GroupFinishTicks: Int64;
     ItemFlagsTicks, ItemDestroyTicks, ItemFinalizeTicks: Int64;
+    ItemRefsTicks, ItemVisibleTicks, ItemInheritedTicks, ItemSelGroupTicks, ItemViewTicks: Int64;
   end;
 
 var
@@ -27238,7 +27239,25 @@ begin
 end;
 
 destructor TEasyItem.Destroy;
+{$IF CompilerVersion >= 20}
+var
+  PT0, PT1: Int64;
+
+  procedure Lap(var Total: Int64);
+  begin
+    if EasyClearProfile.Enabled then
+    begin
+      QueryPerformanceCounter(PT1);
+      Inc(Total, PT1-PT0);
+      PT0 := PT1;
+    end;
+  end;
+{$IFEND}
 begin
+  {$IF CompilerVersion >= 20}
+  if EasyClearProfile.Enabled then
+    QueryPerformanceCounter(PT0);
+  {$IFEND}
   SetDestroyFlags;
   if Assigned(OwnerListview) then
   begin
@@ -27255,10 +27274,25 @@ begin
     if OwnerListview.IncrementalSearch.NextSearchItem = Self then
       OwnerListview.IncrementalSearch.NextSearchItem := nil;
   end;
+  {$IF CompilerVersion >= 20}
+  Lap(EasyClearProfile.ItemRefsTicks);
+  {$IFEND}
   Visible := False;  // will UnSelect and UnFocus if necessary
+  {$IF CompilerVersion >= 20}
+  Lap(EasyClearProfile.ItemVisibleTicks);
+  {$IFEND}
   inherited;
+  {$IF CompilerVersion >= 20}
+  Lap(EasyClearProfile.ItemInheritedTicks);
+  {$IFEND}
   ReleaseSelectionGroup;
+  {$IF CompilerVersion >= 20}
+  Lap(EasyClearProfile.ItemSelGroupTicks);
+  {$IFEND}
   FreeAndNil(FView);
+  {$IF CompilerVersion >= 20}
+  Lap(EasyClearProfile.ItemViewTicks);
+  {$IFEND}
 end;
 
 function TEasyItem.AllowDrag(ViewportPt: TPoint): Boolean;
