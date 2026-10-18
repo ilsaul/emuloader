@@ -311,7 +311,7 @@ Move the verified entries into `CHANGELOG.md` when preparing the release.
 - Launching a game works, as reported by the tester.
 - MAME History displays correctly with current `history.xml` files (Frogger).
 - MAMu_ game icons load from `icons.7z` with a compatible x64 `7z.dll`.
-  Reusing the extraction cache after restarting remains to be checked.
+  After a restart the extraction cache is reused without extracting again.
 - Only one application window appears in the taskbar previews, and the taskbar
   button shows the Emu Loader icon (also in the Release build).
 - Release build (Win64) on the test VM: game list loads, filters work, MAME
@@ -319,12 +319,11 @@ Move the verified entries into `CHANGELOG.md` when preparing the release.
   Emu Loader when a game exits. Software-list games and parent/clone icon
   selection also work.
 - After a restart Emu Loader keeps the view mode (small icons), day/night
-  mode, the sort column (year), column widths and the last selected game.
+  mode, the sort column (year), column widths, the last selected game and
+  the configured paths.
 
 ## Pending verification
 
-- Restart the frontend and check that paths are retained and that the MAMu_
-  extraction cache is reused without extracting again.
 - Verify game-list creation/update, ROM auditing, search, filters and favorites.
 - Verify ZIP enumeration, CRC values, filenames and extraction (including
   archives containing directories) after the `System.Zip` migration.
