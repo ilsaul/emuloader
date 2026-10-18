@@ -321,10 +321,12 @@ Move the verified entries into `CHANGELOG.md` when preparing the release.
 - After a restart Emu Loader keeps the view mode (small icons), day/night
   mode, the sort column (year), column widths, the last selected game and
   the configured paths.
+- Incremental search in the list, the title filter and favorites work;
+  after a restart the favorites filter and the favorite game are kept.
 
 ## Pending verification
 
-- Verify game-list creation/update, ROM auditing, search, filters and favorites.
+- Verify game-list creation/update and ROM auditing.
 - Verify ZIP enumeration, CRC values, filenames and extraction (including
   archives containing directories) after the `System.Zip` migration.
 - Verify PNG (including transparency) and GIF loading for previews,
