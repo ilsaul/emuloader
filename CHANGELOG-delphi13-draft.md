@@ -57,8 +57,11 @@ Move the verified entries into `CHANGELOG.md` when preparing the release.
 
 - Trial UnicodeString storage for the 11 WideString fields of `TEasyGameInfo`
   in Delphi 13, retaining WideString in Delphi 7 and the normal shutdown path.
-  Shutdown timing comparison and functional regression checks are pending;
-  BSTR cleanup has not yet been confirmed as the source of the shutdown delay.
+  On the Windows ARM64 VM (Release Win64, 184,633 items and 112,874 groups),
+  the first runtime comparison reduced Groups.Clear from 37.781 s to 1.992 s,
+  item destruction from 25.200 s to 0.643 s, and the instrumented shutdown
+  sequence from 39.593 s to 3.828 s. Functional regression checks and a repeat
+  timing run are still pending.
 
 - Set the Delphi 13 file/product version to 10.0.0.0 with the Windows
   Pre-release flag enabled for all configurations until the stable release.
