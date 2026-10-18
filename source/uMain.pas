@@ -262,6 +262,13 @@ type
     property eSoftwareName: String read fSoftwareName write fSoftwareName;
   end;
 
+  {$IF CompilerVersion >= 20}
+  // Qualify System: SevenZip declares UnicodeString as an alias for WideString.
+  TGameInfoText = System.UnicodeString;
+  {$ELSE}
+  TGameInfoText = WideString;
+  {$IFEND}
+
   TEasyGameInfo = class(TEasyItemStored)
   private
     //fSortIndex: Integer;
@@ -283,16 +290,16 @@ type
     fThumbnailLoading: Boolean;
     FThumbnailLeftMargin,
     fThumbnailTopMargin: Byte;
-    fThumbnailFileName: WideString;
+    fThumbnailFileName: TGameInfoText;
     fThumbnailIsZipped: Boolean;
 
     fThumbTempVars: TThumbnailTempVars;
 
-    fTitle: WideString;
-    fTitleAlternate: WideString;
-    fTitleShort: WideString;
+    fTitle: TGameInfoText;
+    fTitleAlternate: TGameInfoText;
+    fTitleShort: TGameInfoText;
     fYear: String;
-    fManufacturer: WideString;
+    fManufacturer: TGameInfoText;
     fControls: String;
     fButtonsCount: Byte;
     fAudioType: ShortInt;
@@ -313,10 +320,10 @@ type
     fNetwork: ShortInt;
     fRequiresArtwork: Boolean; 
 
-    fCategory: WideString;
+    fCategory: TGameInfoText;
     fVersionAdded: String;
-    fLanguage: WideString;
-    fName:     WideString;
+    fLanguage: TGameInfoText;
+    fName:     TGameInfoText;
     fClone:      String;
     fDriverName: String;
     fBiosName:   String;
@@ -341,9 +348,9 @@ type
     fSoftwareList: TSoftwareListMESS; // dynamic SetLength if '<softwarelist' tag found in mame -listxml output
     fSoftwareName: String;            // softwarelist name msx1_cart (for all the games from MSX1 cartridge software list); a800; vectrex; empty: is arcade game or MESS machine
     fSoftwareExecParameter: String;   // list MESS parameter for each media type -cart; -flop1; -cass1; etc; for each softlist based game, not a MESS machine
-    fSoftwareCompatible: WideString;  // compatibility tag for MESS games from hash\softwarelist.xml files...
-    fSoftwareUsageTip:   WideString;    // usage info for MESS software list games
-    fNotes: WideString;
+    fSoftwareCompatible: TGameInfoText;  // compatibility tag for MESS games from hash\softwarelist.xml files...
+    fSoftwareUsageTip:   TGameInfoText;    // usage info for MESS software list games
+    fNotes: TGameInfoText;
 
     fScanMode: Byte;
     fIsMerged: Boolean;
@@ -381,15 +388,15 @@ type
     property eThumbnailLoading: Boolean read fThumbnailLoading write fThumbnailLoading;
     property eThumbnailLeftMargin: Byte read FThumbnailLeftMargin write FThumbnailLeftMargin;
     property eThumbnailTopMargin: Byte read fThumbnailTopMargin write fThumbnailTopMargin;
-    property eThumbnailFileName: WideString read fThumbnailFileName write fThumbnailFileName;
+    property eThumbnailFileName: TGameInfoText read fThumbnailFileName write fThumbnailFileName;
     property eThumbnailIsZipped: Boolean read fThumbnailIsZipped write fThumbnailIsZipped;
     //property eThumbTempVars: TThumbnailTempVars read fThumbTempVars write fThumbTempVars; // temp vars for thumbnails view
 
-    property eTitle: WideString read fTitle write fTitle;
-    property eTitleAlternate: WideString read  fTitleAlternate write fTitleAlternate;
-    property eTitleShort: WideString read fTitleShort write fTitleShort;
+    property eTitle: TGameInfoText read fTitle write fTitle;
+    property eTitleAlternate: TGameInfoText read  fTitleAlternate write fTitleAlternate;
+    property eTitleShort: TGameInfoText read fTitleShort write fTitleShort;
     property eYear: String read fYear write fYear;
-    property eManufacturer: WideString read fManufacturer write fManufacturer;
+    property eManufacturer: TGameInfoText read fManufacturer write fManufacturer;
     property eControls: String read fControls write fControls;
     property eButtonsCount: Byte read fButtonsCount write fButtonsCount;
     property eAudioType: ShortInt read fAudioType write fAudioType;
@@ -409,10 +416,10 @@ type
     property eNetwork: ShortInt read fNetwork write fNetwork; // MAME/HBMAME -1 -> none; 0 -> Good; 1 -> imperfect; unnemulated --- Supermodel3 -1 -> no; 0-> yes
     property eRequiresArtwork: Boolean read fRequiresArtwork write fRequiresArtwork;
 
-    property eCategory: WideString read fCategory write fCategory;
-    property eLanguage: WideString read fLanguage write fLanguage;
+    property eCategory: TGameInfoText read fCategory write fCategory;
+    property eLanguage: TGameInfoText read fLanguage write fLanguage;
     property eVersionAdded: String read fVersionAdded write fVersionAdded;
-    property eName:  WideString read fName write fName;
+    property eName:  TGameInfoText read fName write fName;
     property eClone: String read fClone write fClone;
     property eDriverName: String read fDriverName write fDriverName;
     property eBiosName:   String read fBiosName write fBiosName;
@@ -439,9 +446,9 @@ type
     property eSoftwareList: TSoftwareListMESS read fSoftwareList write fSoftwareList; // for all '<softwarelist' entries (mame -listxml)
     property eSoftwareName: String read fSoftwareName write fSoftwareName; // softwarelist name msx1_cart; a800; vectrex; empty: is arcade game or MESS machine
     property eSoftwareExecParameter: String read fSoftwareExecParameter write fSoftwareExecParameter; // list MESS parameter for each media type -cart1; -flop1; -cass1; etc
-    property eSoftwareCompatible: WideString read fSoftwareCompatible write fSoftwareCompatible; // compatibility tag for MESS games from hash\softwarelist.xml files
-    property eSoftwareUsageTip: WideString read fSoftwareUsageTip write fSoftwareUsageTip;   // usage info for MESS software list games
-    property eNotes: WideString read fNotes write fNotes;
+    property eSoftwareCompatible: TGameInfoText read fSoftwareCompatible write fSoftwareCompatible; // compatibility tag for MESS games from hash\softwarelist.xml files
+    property eSoftwareUsageTip: TGameInfoText read fSoftwareUsageTip write fSoftwareUsageTip;   // usage info for MESS software list games
+    property eNotes: TGameInfoText read fNotes write fNotes;
 
     property eScanMode: Byte read fScanMode write fScanMode;    // 0 -> full scan; 1 -> quick scan (file search only); 2 -> force available
     property eIsMerged: Boolean read fIsMerged write fIsMerged; // for MAME and software list games / HBMAME

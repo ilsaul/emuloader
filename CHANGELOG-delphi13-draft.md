@@ -55,6 +55,11 @@ Move the verified entries into `CHANGELOG.md` when preparing the release.
 
 ## Changed
 
+- Trial UnicodeString storage for the 11 WideString fields of `TEasyGameInfo`
+  in Delphi 13, retaining WideString in Delphi 7 and the normal shutdown path.
+  Shutdown timing comparison and functional regression checks are pending;
+  BSTR cleanup has not yet been confirmed as the source of the shutdown delay.
+
 - Set the Delphi 13 file/product version to 10.0.0.0 with the Windows
   Pre-release flag enabled for all configurations until the stable release.
   Display v10.0.0 in the application and logs without a beta suffix.
