@@ -327,13 +327,16 @@ Move the verified entries into `CHANGELOG.md` when preparing the release.
 - ZIP reading through the `System.Zip` replacement: snapshots load from
   `snap.zip`, and Game Details lists the ROM files of a zipped set with their
   CRC values, all found.
+- PNG loading after the GraphicEx replacement: snapshots display, and PNGs
+  with transparency (`about.png` in About, `emuloader.png` for games without
+  a snapshot) show clean edges.
 
 ## Pending verification
 
 - Verify ZIP archives containing directories and the Full Scan audit after
   the `System.Zip` migration.
-- Verify PNG (including transparency) and GIF loading for previews,
-  thumbnails and list backgrounds after the GraphicEx replacement.
+- Verify GIF loading and the list background image after the GraphicEx
+  replacement (no GIF is shipped with Emu Loader).
 - Exercise the converted controls and forms at runtime on the intended
   Windows platforms before publishing these release notes.
 - The Delphi 7 build used patched VCL units (`source\vcl-d7`: ComCtrls,
