@@ -80,7 +80,7 @@ Move the verified entries into `CHANGELOG.md` when preparing the release.
 
 ## Fixed
 
-- Help > Visit Homepage > Emu Loader now opens https://www.emuloader.com
+- Help > Visit Homepage > Emu Loader now opens https://emuloader.com
   instead of the old emuloader.mameworld.info address. The readme files
   point to the new address too.
 - Removed the MAMEWorld entry from Help > Visit Homepage; the site no longer

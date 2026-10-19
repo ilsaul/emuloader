@@ -4,7 +4,7 @@
 
 EmuLoader is a *front-end* application for game emulators, mainly specialized in platforms like **M.A.M.E.** (Multiple Arcade Machine Emulator) and **Demul** (a Sega Dreamcast and arcade emulator).
 
-The main website is <https://www.emuloader.com>
+The main website is <https://emuloader.com>
 
 ### 🎮 What is an Emulator Front-End?
 

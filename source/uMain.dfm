@@ -3754,7 +3754,7 @@ object FormMain: TFormMain
         Caption = 'Visit Homepage'
         object MenuVisitEmuLoaderHomepage: TMenuItem
           Caption = 'Emu Loader'
-          Hint = 'https://www.emuloader.com'
+          Hint = 'https://emuloader.com'
           OnClick = MenuVisitEmuLoaderHomepageClick
         end
         object N16: TMenuItem
