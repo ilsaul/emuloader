@@ -637,6 +637,7 @@ type
     PopupDeleteFromFavorites: TMenuItem;
     N15: TMenuItem;
     MenuVisitEmuLoaderHomepage: TMenuItem;
+    MenuVisitEmuLoaderForum: TMenuItem;
     N35: TMenuItem;
     PopupShowFirstImage: TMenuItem;
     MenuRestoreMainScreenDefaultScreenSizePosition: TMenuItem;

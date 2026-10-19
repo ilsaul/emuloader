@@ -3757,6 +3757,11 @@ object FormMain: TFormMain
           Hint = 'https://emuloader.com'
           OnClick = MenuVisitEmuLoaderHomepageClick
         end
+        object MenuVisitEmuLoaderForum: TMenuItem
+          Caption = 'Forum'
+          Hint = 'https://forum.emuloader.com'
+          OnClick = MenuVisitEmuLoaderHomepageClick
+        end
         object N16: TMenuItem
           Caption = '-'
           Hint = 'Emulators'
