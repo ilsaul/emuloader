@@ -77,7 +77,6 @@ Move the verified entries into `CHANGELOG.md` when preparing the release.
 - Replaced the Delphi 7-only ZipForge binary dependency with a Delphi 13
   component backed by `System.Zip` for read-only ZIP enumeration and extraction.
   Removed obsolete ZipForge-specific properties from the main form definition.
-  ZIP behavior still requires build and runtime verification.
 
 ## Fixed
 
@@ -325,11 +324,14 @@ Move the verified entries into `CHANGELOG.md` when preparing the release.
   after a restart the favorites filter and the favorite game are kept.
 - Creating the arcade games list and the ROM audit (Quick Scan of a single
   game and of all games) complete without exceptions.
+- ZIP reading through the `System.Zip` replacement: snapshots load from
+  `snap.zip`, and Game Details lists the ROM files of a zipped set with their
+  CRC values, all found.
 
 ## Pending verification
 
-- Verify ZIP enumeration, CRC values, filenames and extraction (including
-  archives containing directories) after the `System.Zip` migration.
+- Verify ZIP archives containing directories and the Full Scan audit after
+  the `System.Zip` migration.
 - Verify PNG (including transparency) and GIF loading for previews,
   thumbnails and list backgrounds after the GraphicEx replacement.
 - Exercise the converted controls and forms at runtime on the intended
