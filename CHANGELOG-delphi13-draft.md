@@ -323,10 +323,11 @@ Move the verified entries into `CHANGELOG.md` when preparing the release.
   the configured paths.
 - Incremental search in the list, the title filter and favorites work;
   after a restart the favorites filter and the favorite game are kept.
+- Creating the arcade games list and the ROM audit (Quick Scan of a single
+  game and of all games) complete without exceptions.
 
 ## Pending verification
 
-- Verify game-list creation/update and ROM auditing.
 - Verify ZIP enumeration, CRC values, filenames and extraction (including
   archives containing directories) after the `System.Zip` migration.
 - Verify PNG (including transparency) and GIF loading for previews,
