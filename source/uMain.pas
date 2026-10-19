@@ -844,7 +844,6 @@ type
     MenuHelpMAMEDocsWiki: TMenuItem;
     MenuVisitMrDoArcadeHomepage: TMenuItem;
     MenuVisitProgettoEMMAHomepage: TMenuItem;
-    MenuVisitMAMEWorldHomepage: TMenuItem;
     MenuVisitClrMAMEProHomepage: TMenuItem;
     ArcadeControllers1: TMenuItem;
     MenuVisitZiNcHomepage: TMenuItem;

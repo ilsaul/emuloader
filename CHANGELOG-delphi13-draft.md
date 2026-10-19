@@ -83,6 +83,8 @@ Move the verified entries into `CHANGELOG.md` when preparing the release.
 - Help > Visit Homepage > Emu Loader now opens https://www.emuloader.com
   instead of the old emuloader.mameworld.info address. The readme files
   point to the new address too.
+- Removed the MAMEWorld entry from Help > Visit Homepage; the site no longer
+  exists.
 
 - Show the games list in day mode when `ini_files\sysgamecustomfont.ini` does
   not exist. The font loader exited without applying the day-mode defaults, so
