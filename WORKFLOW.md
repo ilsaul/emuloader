@@ -15,6 +15,10 @@
   2. Regenerate the packaged changelog with `python3 tools/changelog_to_htm.py` (updates `dist_template/docs/changelog.htm` from `CHANGELOG.md`; run it again after every `CHANGELOG.md` change, including the date) and commit both files.
   3. `dist_template/7z.dll` must be the x64 7-Zip DLL (update `dist_template/docs/7-Zip-License.txt` with it).
   4. Build Release Win64 and check the exe is not flagged pre-release.
+  5. Packages, like Ciro's (`elXYZ-bin` full and `elXYZupd-bin` upgrade):
+     - full `elXYZ-win64.zip`: `git archive` of `dist_template/` at the release commit plus `EmuLoader.exe`; test it on a clean folder (no startup errors).
+     - upgrade `elXYZupd-bin-win64.zip`: `EmuLoader.exe` plus the `dist_template` files changed since the previous release (always `docs/changelog.htm`, `el-readme.txt`, `el-todo.txt`; `7z.dll` and `docs/7-Zip-License.txt` when coming from 8.9.4/9.x, which shipped the 32-bit DLL).
+     - `dist_template` is based on Ciro's complete 8.9.4 package; compare with `el894-bin`/`el894upd-bin` before adding or removing files.
 - Finishing a release: merge `release/vX.Y.Z` into `master` (`--no-ff`), tag `vX.Y.Z`, merge the tag back into `develop`, delete the release branch. Then set `VerInfo_PreRelease` back to `true` on `develop` for the next cycle.
 - `hotfix/vX.Y.Z`: branched from `master`, finished like a release.
 - The VM follows the branch currently under test (`release/vX.Y.Z` during a release).
