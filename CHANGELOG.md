@@ -22,7 +22,7 @@ Full technical notes of the port are in `docs/delphi13-port-notes.md`.
 - Main toolbar: correct fallback icon for empty arcade filters, readable labels on every button state, and transparent grayscale icons for disabled buttons.
 - Checkbox and radio-button captions no longer overlap their glyphs, also in 4K layouts.
 - Driver Status Filter: glyphs, icons and captions no longer overlap.
-- Errors during startup are shown instead of being hidden behind the always-on-top splash screen.
+- Errors and warnings during startup (for example missing icon files) are shown in front of the always-on-top splash screen instead of being hidden behind it, which made startup look stuck (also affected v9.0.1).
 - Help > Visit Homepage links updated:
   - Emu Loader: https://emuloader.com
   - New Forum entry (https://forum.emuloader.com) replaces MAMEWorld, which no longer exists.

@@ -77,6 +77,12 @@ release time.
 
 ## Fixed
 
+- Message boxes (`GenerateMessage`, `GenerateMessage4K`) temporarily remove
+  the topmost style from visible topmost forms (the splash screen) while they
+  are shown, and restore it afterwards. The missing-icons error at startup
+  stayed hidden behind the splash, so startup looked stuck. Same code in
+  Delphi 7. Found in the release package test.
+
 - Show the splash screen progress bar when the "Custom Colors" scheme has no
   colors set, or on screens narrower than 1280 pixels (where the custom
   colors cannot be edited). Unset colors were applied as `clNone` and the bar
