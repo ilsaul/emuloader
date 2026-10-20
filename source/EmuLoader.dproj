@@ -52,7 +52,7 @@
     <VerInfo_MinorVer>0</VerInfo_MinorVer>
     <VerInfo_Release>0</VerInfo_Release>
     <VerInfo_Build>0</VerInfo_Build>
-    <VerInfo_PreRelease>false</VerInfo_PreRelease>
+    <VerInfo_PreRelease>true</VerInfo_PreRelease>
     <VerInfo_Locale>1033</VerInfo_Locale>
     <VerInfo_Keys>CompanyName=;FileDescription=Emu Loader;FileVersion=10.0.0.0;InternalName=EmuLoader.exe;LegalCopyright=(C) Moreno Cattaneo;LegalTrademarks=;OriginalFilename=;ProductName=Emu Loader;ProductVersion=10.0.0.0;Comments=</VerInfo_Keys>
   </PropertyGroup>
