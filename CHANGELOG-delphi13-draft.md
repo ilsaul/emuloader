@@ -43,7 +43,9 @@ Move the verified entries into `CHANGELOG.md` when preparing the release.
   traces, and the hang watchdog (`uHangWatchdog.pas`, `hang_trace.log` and
   the Debug map file). Splash screen titles and messages, `[shutdown]`
   timings and the other categories stay in the optional `diagnostic.log`.
-  Build and runtime verification are pending.
+  Verified on the Windows test VM: builds without errors, the taskbar and
+  toolbar icons are correct, no trace files are created, and `diagnostic.log`
+  is not created unless enabled in Preferences or with `--debug-log`.
 - Trial UnicodeString storage for the 11 WideString fields of `TEasyGameInfo`
   in Delphi 13, retaining WideString in Delphi 7 and the normal shutdown path.
   On the Windows ARM64 VM (Release Win64, 184,633 items and 112,874 groups),
