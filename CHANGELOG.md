@@ -45,7 +45,7 @@ Full technical notes of the port are in `docs/delphi13-port-notes.md`.
 
 ### Added
 
-- **MAMu_ icons from `icons.7z`** (the format MAMu_ ships): the archive is extracted once with `7z.dll` to `cache\mamu_icons\` and extracted again only when it changes. The 64-bit build needs the 64-bit `7z.dll`, next to the executable or installed in `Program Files\7-Zip\`.
+- **MAMu_ icons from `icons.7z`** (the format MAMu_ ships): the archive is extracted once with `7z.dll` to `cache\mamu_icons\` and extracted again only when it changes. The 64-bit build needs the 64-bit `7z.dll` (7-Zip 26.04 x64, now included next to the executable, with its license in `docs\7-Zip-License.txt`); otherwise the one installed in `Program Files\7-Zip\` is used.
 - **Optional diagnostic log** (`diagnostic.log`), enabled in Preferences > General or with the `--debug-log` command-line option. It records startup, list loading, filters, game launches, dialogs, errors and shutdown timings, with one rotated backup (5 MiB each). Review it before sharing: it can contain local paths and game names.
 
 ## [9.0.1] - 2026-05-21
