@@ -344,6 +344,10 @@ release time.
 
 ## Pending verification
 
+- Release test of the package on a clean Windows installation (no previous
+  ini files, 64-bit `7z.dll` from the package).
+- Delphi 7 build after the changes to the shared units (`uStatus`, `uMain`,
+  `uDiagnosticLog`).
 - Verify ZIP archives containing directories and the Full Scan audit after
   the `System.Zip` migration.
 - Verify GIF loading and the list background image after the GraphicEx

@@ -2,7 +2,7 @@
 
 All significant changes to this project will be documented in this file.
 
-## [10.0.0] - Unreleased
+## [10.0.0] - 2026-10-20
 
 First release built with Delphi 13 as a native 64-bit (Win64) application.
 Full technical notes of the port are in `docs/delphi13-port-notes.md`.
