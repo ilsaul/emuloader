@@ -17,7 +17,7 @@
 ## Copilot can
 - Read, search and edit source files (`source/`, `lib/`, changelogs, docs).
 - Run git locally: diff, status, log, commit (with the `Co-authored-by` trailer).
-- Prepare diagnostic builds, add `DiagnosticLog` traces and update `CHANGELOG-delphi13-draft.md`.
+- Prepare diagnostic builds, add `DiagnosticLog` traces and update `CHANGELOG.md` (user-facing summary) and `docs/delphi13-port-notes.md` (technical notes).
 - Over SSH on the VM (when asked): pull, build, read `diagnostic.log`, inspect files.
 - Analyse logs and compiler errors and propose fixes.
 
