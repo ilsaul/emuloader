@@ -10,6 +10,11 @@
 - `master`: released versions only; each release is a `--no-ff` merge plus a tag `vX.Y.Z` (no prefix).
 - `develop`: integration branch; feature branches (e.g. the former `delphi13-port`) are merged or fast-forwarded into it.
 - `release/vX.Y.Z`: branched from `develop` (also set `gitflow.branch.release/vX.Y.Z.base develop`). Only release preparation goes here: `VerInfo_PreRelease` set to `false` in `source/EmuLoader.dproj`, final changelog, release fixes. The release package is built from this branch.
+- Release checklist (on `release/vX.Y.Z`):
+  1. `CHANGELOG.md`: user-facing entry for the version; set its date (replacing `Unreleased`) in the last commit before finishing.
+  2. Regenerate the packaged changelog with `python3 tools/changelog_to_htm.py` (updates `dist_template/docs/changelog.htm` from `CHANGELOG.md`; run it again after every `CHANGELOG.md` change, including the date) and commit both files.
+  3. `dist_template/7z.dll` must be the x64 7-Zip DLL (update `dist_template/docs/7-Zip-License.txt` with it).
+  4. Build Release Win64 and check the exe is not flagged pre-release.
 - Finishing a release: merge `release/vX.Y.Z` into `master` (`--no-ff`), tag `vX.Y.Z`, merge the tag back into `develop`, delete the release branch. Then set `VerInfo_PreRelease` back to `true` on `develop` for the next cycle.
 - `hotfix/vX.Y.Z`: branched from `master`, finished like a release.
 - The VM follows the branch currently under test (`release/vX.Y.Z` during a release).
@@ -17,7 +22,7 @@
 ## Copilot can
 - Read, search and edit source files (`source/`, `lib/`, changelogs, docs).
 - Run git locally: diff, status, log, commit (with the `Co-authored-by` trailer).
-- Prepare diagnostic builds, add `DiagnosticLog` traces and update `CHANGELOG-delphi13-draft.md`.
+- Prepare diagnostic builds, add `DiagnosticLog` traces and update `CHANGELOG.md` (user-facing summary) and `docs/delphi13-port-notes.md` (technical notes).
 - Over SSH on the VM (when asked): pull, build, read `diagnostic.log`, inspect files.
 - Analyse logs and compiler errors and propose fixes.
 

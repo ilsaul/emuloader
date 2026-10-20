@@ -2,6 +2,72 @@
 
 All significant changes to this project will be documented in this file.
 
+## [10.0.0] - 2026-10-20
+
+First release built with Delphi 13 as a native 64-bit (Win64) application.
+Full technical notes of the port are in `docs/delphi13-port-notes.md`.
+
+### Fixed
+
+- MAME History is shown again with current `history.xml` files (also affected v9.0.1).
+- Games list readable in day mode when `ini_files\sysgamecustomfont.ini` does not exist (also affected v9.0.1).
+- Splash screen progress bar drawn black when the "Custom Colors" scheme has no colors set or the screen is narrower than 1280 pixels (also affected v9.0.1).
+- MAME settings:
+  - Support for the decimal `audio_latency` values of MAME 0.278 and newer (0-50 frames, `0.0` default).
+  - No crash with an empty language option or empty controller paths (`ctrlrpath`); controller definitions are collected from every configured folder.
+- Game documents: HTML entities are decoded safely and history parsing no longer reads past the end of the file.
+- Taskbar: a single Emu Loader button with the Emu Loader icon.
+- Thumbnail view no longer crashes on very small images (e.g. 1x1 pixel snapshots).
+- Incremental search no longer crashes after the search timeout.
+- Main toolbar: correct fallback icon for empty arcade filters, readable labels on every button state, and transparent grayscale icons for disabled buttons.
+- Checkbox and radio-button captions no longer overlap their glyphs, also in 4K layouts.
+- Driver Status Filter: glyphs, icons and captions no longer overlap.
+- Errors during startup are shown instead of being hidden behind the always-on-top splash screen.
+- Help > Visit Homepage links updated:
+  - Emu Loader: https://emuloader.com
+  - New Forum entry (https://forum.emuloader.com) replaces MAMEWorld, which no longer exists.
+  - HBMAME (https://hbmame.1emulation.com), Supermodel (https://github.com/trzy/Supermodel) and X-Arcade (https://shop.xgaming.com).
+
+### Changed
+
+- **Ported to Delphi 13, 64-bit (Win64).** The Delphi 7 project remains in the repository.
+- **Much faster exit with large games lists**: closing Emu Loader with about 185,000 games went from about 40 seconds to about 4 seconds.
+- Strings are Unicode (the native string type of Delphi 13).
+- MAMu_ game icons (loose `.ico` and `icons.zip`) load faster through a name index of the ZIP archive.
+- ZIP archives are read with the Delphi `System.Zip` library (replaces ZipForge).
+- PNG and GIF images are decoded with the standard VCL imaging units (replaces GraphicEx).
+- Uses the Delphi built-in memory manager and standard exception handling (FastMM4 and madExcept remain only in the Delphi 7 build).
+- The splash screen and About dialog show "(Pre-release)" beside the version only for pre-release builds.
+
+### Removed
+
+- MAMEWorld entry in Help > Visit Homepage (site no longer exists).
+
+### Added
+
+- **MAMu_ icons from `icons.7z`** (the format MAMu_ ships): the archive is extracted once with `7z.dll` to `cache\mamu_icons\` and extracted again only when it changes. The 64-bit build needs the 64-bit `7z.dll` (7-Zip 26.04 x64, now included next to the executable, with its license in `docs\7-Zip-License.txt`); otherwise the one installed in `Program Files\7-Zip\` is used.
+- **Optional diagnostic log** (`diagnostic.log`), enabled in Preferences > General or with the `--debug-log` command-line option. It records startup, list loading, filters, game launches, dialogs, errors and shutdown timings, with one rotated backup (5 MiB each). Review it before sharing: it can contain local paths and game names.
+
+## [9.0.1] - 2026-05-21
+
+### Fixed
+
+- Added the `GhostedItemBlend25` property missing from `TEasyListview`.
+
+## [9.0.0] - 2026-05-04
+
+First release built from the recovered source code, continuing the work of Ciro Alfredo Consentino.
+
+### Changed
+
+- Source code moved to a git repository, with line endings normalized.
+- Restored the extended components by Ciro (AdvOfficeButtons, EasyListview, TileDetail and caption indents, HD custom icons) so the project compiles again with Delphi 7.
+- Fixed the madCollection setup and the ZipForge and TntComCtrls dependencies needed for the build.
+
+### Removed
+
+- Demo files of the bundled libraries.
+
 ## [8.9.4] - 2021-10-27 U
 
 ### Fixed

@@ -73,7 +73,8 @@ Features
 
 - Create multiple favorites profiles (no limit)
   
-- Support for 7-Zip ROMs. It requires an external 7z.dll file to work. MAME, HBMAME and Demul emulators only
+- Support for 7-Zip ROMs. It requires the 7z.dll file, included next to EmuLoader.exe. MAME, HBMAME and Demul emulators only
+  The 64-bit Emu Loader needs the 64-bit (x64) 7z.dll. It is also used to read MAMu_ icons from icons.7z
   Its recommended to stay with .zip files as games will be validated faster
 
 - Console/Computer/Handheld: Support any file format, depending only on the emulator. Games files are not validated,
@@ -340,6 +341,10 @@ Bugs reporters and everyone else I forgot to mention here, for helping in the im
 of this frontend.
 
 Special thanks to MAMEWorld for hosting Emu Loader's website!
+
+7z.dll is part of 7-Zip, Copyright (C) 1999-2026 Igor Pavlov, distributed under the
+GNU LGPL with the unRAR license restriction and BSD licenses (see 7-Zip-License.txt).
+Source code: https://www.7-zip.org
 
 
 How to Contact Me

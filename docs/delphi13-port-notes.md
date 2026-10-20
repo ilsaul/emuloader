@@ -1,8 +1,9 @@
-# Emu Loader 10.0.0 - Delphi 13 release notes (draft)
+# Emu Loader 10.0.0 - Delphi 13 port: technical notes
 
-Working draft for the next release. These changes are on the `delphi13-port`
-branch; see the verified and pending verification sections for the current status.
-Move the verified entries into `CHANGELOG.md` when preparing the release.
+Full technical notes of the port from Delphi 7 to Delphi 13 (Win64), kept as
+documentation. The user-facing summary is in `CHANGELOG.md` under [10.0.0].
+The verified and pending verification sections record the test status at
+release time.
 
 ## Added
 
@@ -343,6 +344,10 @@ Move the verified entries into `CHANGELOG.md` when preparing the release.
 
 ## Pending verification
 
+- Release test of the package on a clean Windows installation (no previous
+  ini files, 64-bit `7z.dll` from the package).
+- Delphi 7 build after the changes to the shared units (`uStatus`, `uMain`,
+  `uDiagnosticLog`).
 - Verify ZIP archives containing directories and the Full Scan audit after
   the `System.Zip` migration.
 - Verify GIF loading and the list background image after the GraphicEx
