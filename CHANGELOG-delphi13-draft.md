@@ -88,7 +88,8 @@ Move the verified entries into `CHANGELOG.md` when preparing the release.
 - Updated moved links in Help > Visit Homepage: HBMAME
   (https://hbmame.1emulation.com), Supermodel
   (https://github.com/trzy/Supermodel, the old site no longer exists) and
-  X-Arcade (https://shop.xgaming.com).
+  X-Arcade (https://shop.xgaming.com). Verified on the Windows test VM: the
+  Emu Loader, Forum and updated entries open the new addresses.
 
 - Show the games list in day mode when `ini_files\sysgamecustomfont.ini` does
   not exist. The font loader exited without applying the day-mode defaults, so
