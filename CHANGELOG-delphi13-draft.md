@@ -348,6 +348,9 @@ Move the verified entries into `CHANGELOG.md` when preparing the release.
 - PNG loading after the GraphicEx replacement: snapshots display, and PNGs
   with transparency (`about.png` in About, `emuloader.png` for games without
   a snapshot) show clean edges.
+- Converted controls with the stock Delphi 13 VCL (Delphi 7 used patched
+  units in `source\vcl-d7`): the splash progress bar fills, sliders work,
+  links in the History text open, and combo box items are readable.
 
 ## Pending verification
 
@@ -355,9 +358,5 @@ Move the verified entries into `CHANGELOG.md` when preparing the release.
   the `System.Zip` migration.
 - Verify GIF loading and the list background image after the GraphicEx
   replacement (no GIF is shipped with Emu Loader).
-- Exercise the converted controls and forms at runtime on the intended
-  Windows platforms before publishing these release notes.
-- The Delphi 7 build used patched VCL units (`source\vcl-d7`: ComCtrls,
-  StdCtrls, ExtCtrls and others) with small behaviour fixes; Delphi 13 uses
-  the stock VCL. Check progress bars, track bars, rich edit links and combo
-  box item heights.
+- Exercise the converted controls and forms on other Windows platforms
+  (x64 Intel/AMD, other DPI settings) before publishing these release notes.
