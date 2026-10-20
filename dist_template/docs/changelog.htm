@@ -691,7 +691,8 @@
       </div>
 
       <br/><br/>
-      <h1>version 8.8 change log - August 14, 2019</h1>
+      <div id="changelog">
+         <h1>version 8.8 change log - August 14, 2019</h1>
          <h2>Fixed</h2>
             <h3>Fixed a bug in "TCustomColorBox" Delphi 7 class, "SetSelected()" procedure<br/>
                 - it was not repainting the control properly, and it was not caused by the frontend (damn you Delphi 7!)<br/>
@@ -701,7 +702,7 @@
             <h3>Event "OnSelect()" was not properly executed on TColorBoxEx components (color dropdown buttons)</h3>
             <h3>A few default settings in "EmuLoader.ini" and "nightmode.ini" were causing problems on a clean install</h3>
             <h3>Colors for "Game Docs Status Bar" not updated when switching between light mode and night mode</h3>
-            <h3>Fixes for the night mode</br>
+            <h3>Fixes for the night mode<br/>
                 - search bar background had gradient always enabled even if the gradient setting was not ticked<br/>
                 - floating panel gradient background colors were not properly set, specially at startup<br/>
                 - TColorBoxEx were resetting to default colors at frontend startup when viewing the "2 pages" in night mode screen
@@ -749,7 +750,7 @@
             </h3>
             <h3>Selection bar of menus/popup menus is a little darker, around 10%</h3>
             <h3>Moved settings panel to a popup menu ("Favorites Manager" settings button)</h3>
-            <h3>Game details screen changes</br>
+            <h3>Game details screen changes<br/>
                 - removed shadow of texts in the left panel (night mode)<br/>
                 - removed dual border from ROMs list<br/>
                 - minor improvements to make sure border spaces are pixel perfect
@@ -821,7 +822,7 @@
                 - useful for high resolution screens (1080p or higher)
             </h3>
             <h3>Added a custom game fonts set for night mode, split from light mode<br/>
-                - have a set of game fonts for light mode and another for night mode</br>
+                - have a set of game fonts for light mode and another for night mode<br/>
                 - light mode filename: "\ini_files\sysgamecustomfont.ini"<br/>
                 - night mode filename: "\ini_files\sysgamecustomfont_nightmode.ini"<br/>
                 - updated "Customize Game Fonts" screen to load the night mode font settings if this mode is active (games popup menu, main menu "Games List")<br/>
@@ -845,7 +846,7 @@
          <h1>version 8.7.8 change log - June 24, 2019</h1>
          <h2>Fixed</h2>
             <h3>Event "OnChange()" was not executed in "TFontDialog" component after frontend recent changes</h3>
-            <h3>Black frame painted in tool bar filters background when gradient setting is disabled<h3>
+            <h3>Black frame painted in tool bar filters background when gradient setting is disabled</h3>
             <h3>Severe painting problems in my TPanelEx since last component update... damn you BitBlt()!</h3>
          <h2>Changed</h2>
             <h3>Icons of disabled menu items are now drawn with 50% blending effect instead of a grayscale icon, which looked terrible<br/>
@@ -1065,7 +1066,7 @@
             </h3>
             <h3>New setting "Show MAME Machines Status Bar" so you can hide the status bar of the machines list panel (setting is in machines list popup menu)</h3>
             <h3>Night mode colors for several dialogs and screens; colors are fixed and cannot be customizable</h3>
-            <h3>Custom frame color settings for the edit box in search bar (preferences screen, "Night Mode" page, "Search Games Panel Colors" group box)
+            <h3>Custom frame color settings for the edit box in search bar (preferences screen, "Night Mode" page, "Search Games Panel Colors" group box)</h3>
             <h3>New handheld system to the "Console/Computer" list: "Nintendo Switch"<br/>
                 - only Yuzu emulator is supported: https://yuzu-emu.org<br/>
                 - you must use "yuzu-cmd.exe" file
