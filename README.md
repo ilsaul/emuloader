@@ -55,8 +55,7 @@ files if present. **Review them before sharing:** they can contain local paths,
 game names and emulator command lines. No keyboard text is captured. A hard
 process termination or an unhandled worker-thread crash may leave only the last
 operation, not an exception or shutdown record; this is not a crash dump or a
-full stack-trace reporter. The temporary `startup_trace.log` and `hang_trace.log`
-used during the migration remain separate.
+full stack-trace reporter.
 
 ## History
 
