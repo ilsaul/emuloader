@@ -85,6 +85,10 @@ Move the verified entries into `CHANGELOG.md` when preparing the release.
   point to the new address too.
 - Replaced the MAMEWorld entry in Help > Visit Homepage, which no longer
   exists, with Forum (https://forum.emuloader.com).
+- Updated moved links in Help > Visit Homepage: HBMAME
+  (https://hbmame.1emulation.com), Supermodel
+  (https://github.com/trzy/Supermodel, the old site no longer exists) and
+  X-Arcade (https://shop.xgaming.com).
 
 - Show the games list in day mode when `ini_files\sysgamecustomfont.ini` does
   not exist. The font loader exited without applying the day-mode defaults, so

@@ -3793,12 +3793,12 @@ object FormMain: TFormMain
         end
         object MenuVisitSupermodelHomepage: TMenuItem
           Caption = 'Supermodel'
-          Hint = 'http://www.supermodel3.com'
+          Hint = 'https://github.com/trzy/Supermodel'
           OnClick = MenuVisitEmuLoaderHomepageClick
         end
         object MenuVisitHBMAMEHomepage: TMenuItem
           Caption = 'HBMAME'
-          Hint = 'http://hbmame.the-chronicles.org'
+          Hint = 'https://hbmame.1emulation.com'
           OnClick = MenuVisitEmuLoaderHomepageClick
         end
         object MenuVisitDICEHomepage: TMenuItem
@@ -3844,7 +3844,7 @@ object FormMain: TFormMain
           end
           object MenuVisitXArcadeHomepage: TMenuItem
             Caption = 'X-Arcade'
-            Hint = 'http://www.x-arcade.com'
+            Hint = 'https://shop.xgaming.com'
             OnClick = MenuVisitEmuLoaderHomepageClick
           end
         end
