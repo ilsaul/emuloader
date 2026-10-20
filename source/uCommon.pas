@@ -691,12 +691,25 @@ begin
        end;
 end;
 
+function IsScreenForm(Form: Pointer): Boolean;
+var
+  i: Integer;
+begin
+  Result:= False;
+  for i:= 0 to Screen.FormCount-1 do
+    if Screen.Forms[i] = Form then
+       begin
+         Result:= True;
+         Exit;
+       end;
+end;
+
 procedure RestoreTopmostForms(var Forms: TList);
 var
   i: Integer;
 begin
   for i:= 0 to Forms.Count-1 do
-    if Screen.IndexOf(TForm(Forms[i])) >= 0 then
+    if IsScreenForm(Forms[i]) then
        if TForm(Forms[i]).HandleAllocated and IsWindowVisible(TForm(Forms[i]).Handle) then
           SetWindowPos(TForm(Forms[i]).Handle, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOACTIVATE+SWP_NOMOVE+SWP_NOSIZE);
   FreeAndNil(Forms);
