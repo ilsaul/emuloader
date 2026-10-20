@@ -35,21 +35,15 @@ Move the verified entries into `CHANGELOG.md` when preparing the release.
   controls used by Emu Loader, preserving the rich edit URL-click event.
 - Registered EasyListview, Graphics32 (`TImage32`, `TGaugeBar`) and Bluecave
   BarMenus controls in the Delphi 13 component package.
-- Temporary startup trace in Delphi 13 builds: each splash screen message
-  and each step of `FormActivate` is appended to `startup_trace.log` next to
-  the exe. It is used to find where startup hangs, and is to be removed once
-  startup is stable.
-- Temporary toolbar icon diagnostics in Delphi 13 builds: `startup_trace.log`
-  records resource paths, extraction results, image list indices and counts,
-  and bitmap dimensions/formats before and after icon composition during startup.
-- Temporary hang watchdog in Delphi 13 Win64 builds (`uHangWatchdog.pas`).
-  If the main thread stops processing messages for about 10 seconds, the
-  call stacks of all threads are written to `hang_trace.log`, resolved to
-  unit, procedure and line through the detailed map file that Debug builds
-  now generate.
 
 ## Changed
 
+- Removed the temporary diagnostics used during the port: `startup_trace.log`
+  (splash messages and `FormActivate` steps), the toolbar and taskbar icon
+  traces, and the hang watchdog (`uHangWatchdog.pas`, `hang_trace.log` and
+  the Debug map file). Splash screen titles and messages, `[shutdown]`
+  timings and the other categories stay in the optional `diagnostic.log`.
+  Build and runtime verification are pending.
 - Trial UnicodeString storage for the 11 WideString fields of `TEasyGameInfo`
   in Delphi 13, retaining WideString in Delphi 7 and the normal shutdown path.
   On the Windows ARM64 VM (Release Win64, 184,633 items and 112,874 groups),
@@ -133,21 +127,14 @@ Move the verified entries into `CHANGELOG.md` when preparing the release.
   any forms and assign it to the main form's `Icon` property. This replaces
   the earlier `WM_SETICON` workaround, which left VCL's icon properties
   unchanged and did not resolve the generic taskbar icon on the test VM.
-  Icon assignment is logged under `[icons]`; the revised fix still needs
-  Windows runtime confirmation. The test VM still shows a generic taskbar
-  icon with both VCL icon properties populated. Added `[taskbar]` diagnostics
-  at the end of startup: window owners/styles, `WM_GETICON`, class icons,
-  VCL icon handles and dimensions, and icons extracted from the executable.
-  Extended the diagnostic build to read the process's explicit AppUserModelID
-  and each window's shell AppUserModel properties (ID, relaunch icon, command,
-  display name and pinning flag), reporting unset values and API errors.
-  The taskbar button stayed generic while the window's own icons were valid.
+  Icon assignment is logged under `[icons]`. The taskbar button stayed
+  generic while the window's own icons were valid.
   Neither an explicit AppUserModelID nor the relaunch shell properties changed
   it (both were removed again). What fixes it is sending `WM_SETICON` to the
   main window with icons extracted from the EXE with `PrivateExtractIcons`
   (48 px and 16 px), with fresh handles, shortly after startup (immediately
   and again after 2.5 s; the button updates a few seconds after the
-  window appears; confirmed on the test VM). Logged under `[taskbar]` as `ApplyMainWindowIcons`.
+  window appears; confirmed on the test VM), in `ApplyMainWindowIcons`.
 - Show MAMu_ game icons (loose `.ico` files and `icons.zip`) in Delphi 13
   builds instead of the generic system icon. `unitExIcon` used `PChar` as a
   byte pointer, which is two bytes wide in Unicode Delphi, so icon bitmap and

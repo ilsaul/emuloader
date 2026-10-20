@@ -10,26 +10,17 @@ function DiagnosticLogPreference: Boolean;
 function DiagnosticLogEnabled: Boolean;
 procedure DiagnosticLog(const Category, Msg: String);
 procedure DiagnosticLogException(const Context: String; E: Exception; Address: Pointer);
-procedure TraceTaskbarIcons;
 procedure ApplyMainWindowIcons(Wnd: HWND);
 
 implementation
 
-uses Messages, Classes, Forms, Controls, IniFiles, SyncObjs, ShellAPI,
-  ActiveX, Winapi.PropSys, Winapi.PropKey;
-
-const
-  TaskbarPreventPinningKey: TPropertyKey = (
-    fmtid: '{9F4C2855-9F79-4B39-A8D0-E1D42DE1D5F3}'; pid: 9);
-
-function ReadProcessAppUserModelID(out AppID: PWideChar): HRESULT; stdcall;
-  external 'shell32.dll' name 'GetCurrentProcessExplicitAppUserModelID';
+uses Messages, Classes, Forms, Controls, IniFiles, SyncObjs;
 
 function ExtractExeIcons(lpszFile: PWideChar; nIconIndex, cxIcon, cyIcon: Integer;
   phicon: PHANDLE; pIconId: PDWORD; nIcons, flags: UINT): UINT; stdcall;
   external 'user32.dll' name 'PrivateExtractIconsW';
 
-procedure SendMainWindowIcons(Wnd: HWND; const Stage: String);
+procedure SendMainWindowIcons(Wnd: HWND);
 var
   BigIcon, SmallIcon: HICON;
   IconId: DWORD;
@@ -46,159 +37,18 @@ begin
      SendMessage(Wnd, WM_SETICON, ICON_SMALL, LPARAM(SmallIcon));
   if BigIcon <> 0 then
      SendMessage(Wnd, WM_SETICON, ICON_BIG, LPARAM(BigIcon));
-  DiagnosticLog('taskbar', 'ApplyMainWindowIcons '+Stage+': big=$'+
-    IntToHex(NativeUInt(BigIcon), SizeOf(Pointer)*2)+' small=$'+
-    IntToHex(NativeUInt(SmallIcon), SizeOf(Pointer)*2)+'; WM_GETICON big=$'+
-    IntToHex(SendMessage(Wnd, WM_GETICON, ICON_BIG, 0), SizeOf(Pointer)*2)+' small=$'+
-    IntToHex(SendMessage(Wnd, WM_GETICON, ICON_SMALL, 0), SizeOf(Pointer)*2));
 end;
 
 procedure ApplyMainWindowIcons(Wnd: HWND);
 begin
-  SendMainWindowIcons(Wnd, 'initial');
+  SendMainWindowIcons(Wnd);
   // The taskbar button may not exist yet: send again, with new handles, once it has settled.
   TThread.CreateAnonymousThread(
     procedure
     begin
       Sleep(2500);
-      TThread.Queue(nil, procedure begin SendMainWindowIcons(Wnd, 'after 2.5 s'); end);
+      TThread.Queue(nil, procedure begin SendMainWindowIcons(Wnd); end);
     end).Start;
-end;
-
-procedure TraceTaskbarShellProperties(const Name: String; Wnd: HWND);
-var
-  Store: IPropertyStore;
-  HR: HRESULT;
-
-  procedure TraceProperty(const PropertyName: String; const Key: TPropertyKey);
-  var
-    Value: TPropVariant;
-    Text: array[0..2047] of WideChar;
-    ResultCode: HRESULT;
-  begin
-    FillChar(Value, SizeOf(Value), 0);
-    try
-      ResultCode:= Store.GetValue(Key, Value);
-      if Failed(ResultCode) then
-         begin
-           DiagnosticLog('taskbar', Name+' '+PropertyName+' GetValue HRESULT=$'+
-             IntToHex(ResultCode, 8));
-           Exit;
-         end;
-      if Value.vt = VT_EMPTY then
-         begin
-           DiagnosticLog('taskbar', Name+' '+PropertyName+'=<not set>');
-           Exit;
-         end;
-      ResultCode:= PropVariantToString(Value, Text, Length(Text));
-      if Failed(ResultCode) then
-         DiagnosticLog('taskbar', Name+' '+PropertyName+' vt='+IntToStr(Value.vt)+
-           '; conversion HRESULT=$'+IntToHex(ResultCode, 8))
-      else
-         DiagnosticLog('taskbar', Name+' '+PropertyName+'=['+String(Text)+']');
-    finally
-      PropVariantClear(Value);
-    end;
-  end;
-
-begin
-  HR:= SHGetPropertyStoreForWindow(Wnd, IPropertyStore, Pointer(Store));
-  DiagnosticLog('taskbar', Name+' shell property store HRESULT=$'+IntToHex(HR, 8));
-  if Failed(HR) then
-     Exit;
-  TraceProperty('AppUserModel.ID', PKEY_AppUserModel_ID);
-  TraceProperty('AppUserModel.RelaunchIconResource', PKEY_AppUserModel_RelaunchIconResource);
-  TraceProperty('AppUserModel.RelaunchCommand', PKEY_AppUserModel_RelaunchCommand);
-  TraceProperty('AppUserModel.RelaunchDisplayNameResource', PKEY_AppUserModel_RelaunchDisplayNameResource);
-  TraceProperty('AppUserModel.PreventPinning', TaskbarPreventPinningKey);
-end;
-
-procedure TraceTaskbarIcons;
-
-  procedure TraceIcon(const Name: String; IconHandle: HICON);
-  var
-    Info: TIconInfo;
-    Bitmap: Windows.TBitmap;
-  begin
-    DiagnosticLog('taskbar', Name+' handle=$'+IntToHex(NativeUInt(IconHandle), SizeOf(Pointer)*2));
-    if IconHandle = 0 then
-       Exit;
-    if not GetIconInfo(IconHandle, Info) then
-       begin
-         DiagnosticLog('taskbar', Name+' GetIconInfo failed: '+SysErrorMessage(GetLastError));
-         Exit;
-       end;
-    try
-      if (Info.hbmColor <> 0) and
-         (GetObject(Info.hbmColor, SizeOf(Bitmap), @Bitmap) <> 0) then
-         DiagnosticLog('taskbar', Name+' color='+IntToStr(Bitmap.bmWidth)+'x'+
-           IntToStr(Bitmap.bmHeight)+'/'+IntToStr(Bitmap.bmBitsPixel)+'bpp');
-    finally
-      if Info.hbmColor <> 0 then
-         DeleteObject(Info.hbmColor);
-      if Info.hbmMask <> 0 then
-         DeleteObject(Info.hbmMask);
-    end;
-  end;
-
-  procedure TraceWindow(const Name: String; Wnd: HWND);
-  var
-    Title: array[0..255] of Char;
-  begin
-    GetWindowText(Wnd, Title, Length(Title));
-    DiagnosticLog('taskbar', Name+' hwnd=$'+IntToHex(NativeUInt(Wnd), SizeOf(Pointer)*2)+
-      '; title=['+String(Title)+']; visible='+BoolToStr(IsWindowVisible(Wnd), True)+
-      '; owner=$'+IntToHex(NativeUInt(GetWindow(Wnd, GW_OWNER)), SizeOf(Pointer)*2)+
-      '; exstyle=$'+IntToHex(GetWindowLong(Wnd, GWL_EXSTYLE), 8));
-    TraceIcon(Name+' WM_GETICON big', HICON(SendMessage(Wnd, WM_GETICON, ICON_BIG, 0)));
-    TraceIcon(Name+' WM_GETICON small', HICON(SendMessage(Wnd, WM_GETICON, ICON_SMALL, 0)));
-    TraceIcon(Name+' WM_GETICON small2', HICON(SendMessage(Wnd, WM_GETICON, ICON_SMALL2, 0)));
-    TraceIcon(Name+' class big', HICON(GetClassLongPtr(Wnd, GCL_HICON)));
-    TraceIcon(Name+' class small', HICON(GetClassLongPtr(Wnd, GCL_HICONSM)));
-    TraceTaskbarShellProperties(Name, Wnd);
-  end;
-
-var
-  BigIcon, SmallIcon: HICON;
-  Count: UINT;
-  AppID: PWideChar;
-  HR: HRESULT;
-begin
-  if not DiagnosticLogEnabled then
-     Exit;
-  DiagnosticLog('taskbar', 'Startup complete; exe=['+Application.ExeName+
-    ']; MainFormOnTaskbar='+BoolToStr(Application.MainFormOnTaskbar, True));
-  AppID:= nil;
-  HR:= ReadProcessAppUserModelID(AppID);
-  try
-    if Succeeded(HR) and (AppID <> nil) then
-       DiagnosticLog('taskbar', 'Process explicit AppUserModelID=['+String(AppID)+']')
-    else
-       DiagnosticLog('taskbar', 'Process explicit AppUserModelID unavailable; HRESULT=$'+
-         IntToHex(HR, 8)+' (no explicit ID can be normal; Windows infers one)');
-  finally
-    CoTaskMemFree(AppID);
-  end;
-  TraceWindow('Application', Application.Handle);
-  TraceIcon('Application.Icon', Application.Icon.Handle);
-  if Assigned(Application.MainForm) then
-     begin
-       TraceWindow('MainForm', Application.MainForm.Handle);
-       TraceIcon('MainForm.Icon', Application.MainForm.Icon.Handle);
-     end;
-  BigIcon:= 0;
-  SmallIcon:= 0;
-  Count:= ExtractIconEx(PChar(Application.ExeName), 0, BigIcon, SmallIcon, 1);
-  try
-    DiagnosticLog('taskbar', 'ExtractIconEx count='+IntToStr(Count));
-    TraceIcon('EXE big', BigIcon);
-    TraceIcon('EXE small', SmallIcon);
-  finally
-    if BigIcon <> 0 then
-       DestroyIcon(BigIcon);
-    if SmallIcon <> 0 then
-       DestroyIcon(SmallIcon);
-  end;
 end;
 
 const

@@ -182,9 +182,6 @@ var
 procedure AbortStartup(const ErrorMsg: String);
 {$IF CompilerVersion >= 20}
 procedure StartupTrace(const Msg: String);
-
-var
-  StartupTraceEnabled: Boolean = True;
 {$IFEND}
 
 implementation
@@ -535,30 +532,10 @@ end;
 {$IFEND}
 
 {$IF CompilerVersion >= 20}
-// Delphi 13 port: appends each startup step to "startup_trace.log" next to the exe, to locate hangs
+// Delphi 13 port: splash screen titles and messages go to the optional diagnostic log
 procedure StartupTrace(const Msg: String);
-var
-  F: TextFile;
-  FileName: String;
 begin
   DiagnosticLog('status', Msg);
-  if not StartupTraceEnabled then
-     Exit;
-  FileName:= ExtractFilePath(ParamStr(0))+'startup_trace.log';
-  try
-    AssignFile(F, FileName);
-    if FileExists(FileName) then
-       Append(F)
-    else
-       Rewrite(F);
-    try
-      Writeln(F, FormatDateTime('hh:nn:ss.zzz', Now)+'  '+Msg);
-    finally
-      CloseFile(F);
-    end;
-  except
-    StartupTraceEnabled:= False;
-  end;
 end;
 {$IFEND}
 

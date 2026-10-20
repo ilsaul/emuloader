@@ -6,7 +6,6 @@ uses
   SynFastWideString,
   madExcept,
   {$IFEND}
-  uHangWatchdog in 'uHangWatchdog.pas',
   Forms,
   {$IF CompilerVersion >= 20}
   SysUtils,
@@ -129,7 +128,6 @@ begin
   try
   // Keep VCL's icon state consistent with the embedded resource before showing any forms.
   Application.Icon.LoadFromResourceName(HInstance, 'MAINICON');
-  SysUtils.DeleteFile(ExtractFilePath(ParamStr(0))+'startup_trace.log');
   StartupTrace('EmuLoader '+FrontendVersion+' starting');
   {$IFEND}
   FormStatus:= TFormStatus.Create(nil); // create splash screen here to show as soon as possible: "this is not the app's main Form you're looking for!" (May 01, 2021)
