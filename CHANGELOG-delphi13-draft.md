@@ -84,8 +84,8 @@ Move the verified entries into `CHANGELOG.md` when preparing the release.
   colors set, or on screens narrower than 1280 pixels (where the custom
   colors cannot be edited). Unset colors were applied as `clNone` and the bar
   was drawn black. Unset or unavailable custom colors now fall back to the
-  Desert scheme. The same code is in v9.0.1 (Delphi 7). Runtime verification
-  is pending.
+  Desert scheme. The same code is in v9.0.1 (Delphi 7). Verified on the
+  Windows test VM: the bar is visible and fills while creating the games list.
 
 - Help > Visit Homepage > Emu Loader now opens https://emuloader.com
   instead of the old emuloader.mameworld.info address. The readme files
