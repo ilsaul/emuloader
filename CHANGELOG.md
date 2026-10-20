@@ -23,6 +23,7 @@ Full technical notes of the port are in `docs/delphi13-port-notes.md`.
 - Checkbox and radio-button captions no longer overlap their glyphs, also in 4K layouts.
 - Driver Status Filter: glyphs, icons and captions no longer overlap.
 - Errors and warnings during startup (for example missing icon files) are shown in front of the always-on-top splash screen instead of being hidden behind it, which made startup look stuck (also affected v9.0.1).
+- The full package contains every file of the 8.9.4 distribution again (some icons were missing, so a clean install showed an error at startup).
 - Help > Visit Homepage links updated:
   - Emu Loader: https://emuloader.com
   - New Forum entry (https://forum.emuloader.com) replaces MAMEWorld, which no longer exists.
