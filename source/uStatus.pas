@@ -145,6 +145,7 @@ type
     procedure StatusChangeLayout;
     procedure ToggleProgressBarColorBox;
     procedure SetProgressBarColorBox;
+    function  CanApplyCustomProgressBarColor(Color: TColor): Boolean;
     procedure ChangeTextShadowColor;
     procedure ResizeLowResolution;
     procedure Resize4K(UpdateForm, UpdateControls: Boolean);
@@ -1443,7 +1444,8 @@ end;
 procedure TFormStatus.SplashScreenProgressBarColorSchemeSelect(
   Sender: TObject);
 begin
-  if (SplashScreenProgressBarColorScheme.ItemIndex = 0) and (not CustomProgressBar) then
+  // custom colors start from Desert, so colors that are not set or cannot be edited (low resolution) keep a visible bar
+  if SplashScreenProgressBarColorScheme.ItemIndex = 0 then
      ProgressBar.ColorScheme:= csDesert
   else
      ProgressBar.ColorScheme:= TColorScheme(SplashScreenProgressBarColorScheme.ItemIndex);
@@ -1463,7 +1465,8 @@ begin
   if SplashScreenProgressBarColorScheme.ItemIndex = 0 then
      begin
        SplashScreenProgressBarColorBackTop.NoneColorColor:= SplashScreenProgressBarColorBackTop.Selected;
-       ProgressBar.BackColorFace:= SplashScreenProgressBarColorBackTop.Selected;
+       if CanApplyCustomProgressBarColor(SplashScreenProgressBarColorBackTop.Selected) then
+          ProgressBar.BackColorFace:= SplashScreenProgressBarColorBackTop.Selected;
      end;
 end;
 
@@ -1473,7 +1476,8 @@ begin
   if SplashScreenProgressBarColorScheme.ItemIndex = 0 then
      begin
        SplashScreenProgressBarColorBackDown.NoneColorColor:= SplashScreenProgressBarColorBackDown.Selected;
-       ProgressBar.BackColorGrad:= SplashScreenProgressBarColorBackDown.Selected;
+       if CanApplyCustomProgressBarColor(SplashScreenProgressBarColorBackDown.Selected) then
+          ProgressBar.BackColorGrad:= SplashScreenProgressBarColorBackDown.Selected;
      end;
 end;
 
@@ -1483,7 +1487,8 @@ begin
   if SplashScreenProgressBarColorScheme.ItemIndex = 0 then
      begin
        SplashScreenProgressBarColorBackBorder.NoneColorColor:= SplashScreenProgressBarColorBackBorder.Selected;
-       ProgressBar.ColorBorder:= SplashScreenProgressBarColorBackBorder.Selected;
+       if CanApplyCustomProgressBarColor(SplashScreenProgressBarColorBackBorder.Selected) then
+          ProgressBar.ColorBorder:= SplashScreenProgressBarColorBackBorder.Selected;
      end;
 end;
 
@@ -1493,7 +1498,8 @@ begin
   if SplashScreenProgressBarColorScheme.ItemIndex = 0 then
      begin
        SplashScreenProgressBarColorBarTop.NoneColorColor:= SplashScreenProgressBarColorBarTop.Selected;
-       ProgressBar.ForeColorFace:= SplashScreenProgressBarColorBarTop.Selected;
+       if CanApplyCustomProgressBarColor(SplashScreenProgressBarColorBarTop.Selected) then
+          ProgressBar.ForeColorFace:= SplashScreenProgressBarColorBarTop.Selected;
      end;
 end;
 
@@ -1503,8 +1509,14 @@ begin
   if SplashScreenProgressBarColorScheme.ItemIndex = 0 then
      begin
        SplashScreenProgressBarColorBarDown.NoneColorColor:= SplashScreenProgressBarColorBarDown.Selected;
-       ProgressBar.ForeColorGrad:= SplashScreenProgressBarColorBarDown.Selected;
+       if CanApplyCustomProgressBarColor(SplashScreenProgressBarColorBarDown.Selected) then
+          ProgressBar.ForeColorGrad:= SplashScreenProgressBarColorBarDown.Selected;
      end;
+end;
+
+function TFormStatus.CanApplyCustomProgressBarColor(Color: TColor): Boolean;
+begin
+  Result:= CustomProgressBar and (Color <> clNone) and (Color <> clDefault);
 end;
 
 procedure TFormStatus.ProgressBarCopyCurrentColorsToCustomButtonClick(
