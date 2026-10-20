@@ -28,7 +28,7 @@ MAME Software List Game Files
 
 [gamename]
 GameName=MediaType DriverStatus EmulationStatus
-         <title>GameTitle/><alt_title>AlternateGameTitle/><year>Year/><publisher>Manufacturer/><cloneof>CloneOf/><size>GameSize/>
+         <title>GameTitle/><alt_title>AlternateGameTitle/><year>Year/><publisher>Manufacturer/><notes>GameNotes/><cloneof>CloneOf/><size>GameSize/>
          <media>SoftwareExecParameter/><usage>SoftwareUsageTip/><compat>SoftwareCompatible/>
 
 software list: msx1_cart

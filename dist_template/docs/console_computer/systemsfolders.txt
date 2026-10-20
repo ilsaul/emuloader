@@ -69,6 +69,7 @@ Sega SF-7000
 Nintendo Satellaview
 Nintendo Wii U
 Nintendo 3DS
+Nintendo Switch
 
 
 Media Type Titles and Folder Names
@@ -81,3 +82,4 @@ Floppy Disk       flop
 Cassette Tape     cass
 Hard Disk Drive   hard
 Disc Image        disc
+Video Game Music  quick

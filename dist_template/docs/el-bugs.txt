@@ -31,9 +31,7 @@ Known bugs and Limitations
 08. Limitation: Feature "Category Prev/Next Auto Swtich" (main menu Images) might not work properly if you click the "Next/Previous Image"
     buttons too quickly
 
-09. RichEdit controls do not show Unicode strings
+09. Last 25 played games lists cannot be cleared
 
-10. Last 25 played games lists cannot be cleared
-
-11. At startup, there's a 2 seconds freeze when the application is creating FormPrerences form (EmuLoader.dpr)
-    There's nothing to be done as this form has tons of controls in it... may too much for my taste!
+10. At startup, there's a 3 seconds freeze when the application is creating FormPrerences and FormNightMode forms (EmuLoader.dpr)
+    There's nothing to be done as these forms have tons of controls in them... too much for my taste!

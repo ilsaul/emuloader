@@ -1,15 +1,32 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
    <head>
-      <title>Emu Loader Change Log</title><meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
-      <meta http-equiv="Content-Language" content="en-us"/>
-      <link rel="stylesheet" type="text/css" media="all" href="changelog.css"/>
+      <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type"><title>Emu Loader Change Log</title>
+      <meta content="Ciro Alfredo Consentino" name="author">
+      <link rel="stylesheet" type="text/css" media="all" href="page_styles.css">
    </head>
    <body>
       <!--
+      <div id="inner_box">
+      <div id="contents_title">Version 8.9.4 Change Log - October ??, 2021</div>
+      <div id="contents_text">
+         <h2>Fixed</h2>
+            <h3>none</h3>
+         <h2>Changed</h2>
+            <h3>none</h3>
+         <h2>Removed</h2>
+            <h3>none</h3>
+         <h2>Added</h2>
+            <h3>none</h3>
+      </div>
+      <div class="TRON2"></div>
+      </div>
+      <br/>
+      -->
       <!-- BEGIN generated from CHANGELOG.md by tools/changelog_to_htm.py: do not edit -->
-      <div id="changelog">
-         <h1>version 10.0.0 change log - October 20, 2026</h1>
+      <div id="inner_box">
+      <div id="contents_title">Version 10.0.0 Change Log - October 20, 2026</div>
+      <div id="contents_text">
          <p>First release built with Delphi 13 as a native 64-bit (Win64) application. Full technical notes of the port are in <code>docs/delphi13-port-notes.md</code>.</p>
          <h2>Fixed</h2>
             <h3>MAME History is shown again with current <code>history.xml</code> files (also affected v9.0.1).</h3>
@@ -45,17 +62,21 @@
             <h3><b>MAMu_ icons from <code>icons.7z</code></b> (the format MAMu_ ships): the archive is extracted once with <code>7z.dll</code> to <code>cache\mamu_icons\</code> and extracted again only when it changes. The 64-bit build needs the 64-bit <code>7z.dll</code> (7-Zip 26.04 x64, now included next to the executable, with its license in <code>docs\7-Zip-License.txt</code>); otherwise the one installed in <code>Program Files\7-Zip\</code> is used.</h3>
             <h3><b>Optional diagnostic log</b> (<code>diagnostic.log</code>), enabled in Preferences &gt; General or with the <code>--debug-log</code> command-line option. It records startup, list loading, filters, game launches, dialogs, errors and shutdown timings, with one rotated backup (5 MiB each). Review it before sharing: it can contain local paths and game names.</h3>
       </div>
-
-      <br/><br/>
-      <div id="changelog">
-         <h1>version 9.0.1 change log - May 21, 2026</h1>
+      <div class="TRON2"></div>
+      </div>
+      <br/>
+      <div id="inner_box">
+      <div id="contents_title">Version 9.0.1 Change Log - May 21, 2026</div>
+      <div id="contents_text">
          <h2>Fixed</h2>
             <h3>Added the <code>GhostedItemBlend25</code> property missing from <code>TEasyListview</code>.</h3>
       </div>
-
-      <br/><br/>
-      <div id="changelog">
-         <h1>version 9.0.0 change log - May 04, 2026</h1>
+      <div class="TRON2"></div>
+      </div>
+      <br/>
+      <div id="inner_box">
+      <div id="contents_title">Version 9.0.0 Change Log - May 04, 2026</div>
+      <div id="contents_text">
          <p>First release built from the recovered source code, continuing the work of Ciro Alfredo Consentino.</p>
          <h2>Changed</h2>
             <h3>Source code moved to a git repository, with line endings normalized.</h3>
@@ -64,457 +85,627 @@
          <h2>Removed</h2>
             <h3>Demo files of the bundled libraries.</h3>
       </div>
-
-      <br/><br/>
-      <div id="changelog">
-         <h1>version 8.9.4 change log - October 27, 2021</h1>
-         <h2>Fixed</h2>
-            <h3>Search bar edit box was not receiving keyboard input:<br/>
-                - Caused by a custom function that removes "Delphi 7 hidden form trickery," which made the edit box always focused but locked at startup.<br/>
-                - You can now hit the <b>TAB</b> key to alternate between the main games list and the search bar edit box.</h3>
-            <h3>Games list "out of focus" at startup:<br/>
-                - Fixed by moving the <code>HideAppFormTaskBarButton</code> function from the <code>OnActivate</code> event to the <code>OnShow</code> event of the main form. "Thank you" for this bug, Delphi 7!</h3>
-            <h3>Splash screen no longer appears on top of other applications when creating/scanning a games list:<br/>
-                - You can safely use other applications without the Emu Loader splash screen popping up on top of them.<br/>
-                - This fix only works if you create/scan the games list manually after the frontend's main window shows up (Games List window).<br/>
-                - On a clean install, the splash screen still sticks on top of other applications; I am still trying to find a workaround for it.</h3>
-            <h3>Splash screen now displays properly in the Windows taskbar's "thumbnail preview."</h3>
-            <h3>Visibility checkup for the splash screen to prevent the timer from resetting in the middle of a function with multiple tasks.</h3>
-            <h3>The following panels/windows no longer appear on top of other applications:<br/>
-                - "Games list filter" message panel.<br/>
-                - "MAMu_ Icons Manager" window.</h3>
-         <h2>Changed</h2>
-            <h3>Replaced the <code>TNotebook</code> component with <code>TPanelEx</code> in the "Run MAME Game (Extra)" screen for easier source code maintenance and future improvements.</h3>
-            <h3>Updates to my <b>ColorBoxEx</b> drop-down button:<br/>
-                - Moving the mouse over it doesn't make the button flicker anymore.<br/>
-                - Replaced the mega-useless "down arrow button" with an <b>RGB picker button</b> (you can still click anywhere in the button to open the colors listbox).<br/>
-                - Minor drawing tweaks.</h3>
-            <h3>Updates to my <b>ComboBox2Ex</b> drop-down button:<br/>
-                - Moving the mouse over it doesn't make the button flicker anymore.<br/>
-                - Minor drawing tweaks.</h3>
-            <h3>Tweaks to the startup process; it is now a little faster.</h3>
-            <h3>Removed the <code>.exe</code> file extension requirement for emulators; any file extension can be used (except batch files!) or none at all.</h3>
-            <h3><b>"Show Image Layout Dimensions" improvements (Images popup menu):</b><br/>
-                - Panel colors are always in Night Mode.<br/>
-                - No more floating window; the panel is now fixed on the games list (top-right position) and cannot be moved.<br/>
-                - *Note:* The floating window was always on top of other applications, just like the splash screen. This feature is intended for fine-tuning image panel sizes and is not meant to be always visible.</h3>
-            <h3>If <code>mame_listxml.xml</code> or <code>hbmame_listxml.xml</code> already exists in the <code>\temp\</code> folder, Emu Loader won't regenerate the file when creating MAME/HBMAME games lists.<br/>
-                - After the games list is created, the XML file is deleted to prevent leftovers and allow for new MAME builds.</h3>
-         <h2>Removed</h2>
-            <h3><b>Batch files support completely removed</b> from the project (<code>.bat</code>, <code>.cmd</code>).</h3>
-            <h3>Checkboxes "Use Large Icons" / "Use Large Text" in several screens (no longer needed).</h3>
-            <h3>Checkbox "Small Icons" in the "Select Emulators" toolbar button is gone.</h3>
-            <h3>Minor source code cleaning; some deprecated functions have been deleted.</h3>
-            <h3>Font size setting in the "Favorites Manager" screen is no longer needed.</h3>
-         <h2>Added</h2>
-            <h3><b>New "RGB Color Picker":</b><br/>
-                - My newest creation, made from scratch!<br/>
-                - Fast, lightweight, and includes a <b>HEX edit box</b> to enter colors in HEX format.<br/>
-                - Used as a replacement for the "jurassic" Windows color picker in ColorBox drop-down buttons.<br/>
-                - Features:<br/>
-                &nbsp;&nbsp;- 16 basic colors panel for easy picking.<br/>
-                &nbsp;&nbsp;- 16 or 64 shades of color; enabling these buttons shows shades of the selected color from white to black.<br/>
-                &nbsp;&nbsp;- Click the "current" color box to reset.<br/>
-                &nbsp;&nbsp;- Full Night Mode and 4K layout support.<br/>
-                - New icon <code>resources\ColorPickerEx-marker.ico</code> for the marker cursor (mostly for 4K mode). An internal icon is used if the file is missing.<br/>
-                - *Note:* You can modify the "Alpha" channel, but Emu Loader does not use it yet.</h3>
-            <h3>The "RGB Quick Edit" feature is gone, as it is no longer required (previously in the colorbox buttons popup menu).</h3>
-            <h3><b>Support for new MAME software list tags (MAME 0.237 minimum):</b><br/>
-                - "Alternate title" (<code>alt_title</code>), currently visible only in the "Game Details" screen.<br/>
-                - "Notes", currently visible only in the "Game Details" screen.<br/>
-                - *Note:* You must re-create MAME software games lists (Overwrite Mode) to see this new info.</h3>
+      <div class="TRON2"></div>
       </div>
-
-      <br/><br/>
-      <div id="changelog">
-         <h1>version 8.9.3 change log - September 29, 2021</h1>
+      <br/>
+      <!-- END generated from CHANGELOG.md -->
+	  <div id="inner_box">
+      <div id="contents_title">Version 8.9.4 Change Log - October 27, 2021</div>
+      <div id="contents_text">
          <h2>Fixed</h2>
-            <h3>Set fonts to default was not validating font size in Night Mode / 4K Mode.</h3>
-            <h3>Search bar was not filtering games correctly with the "Have/Miss" toolbar filter.</h3>
-            <h3>Settings "Show Border" and "Border Color" were not updating when clicking the "Update" button in "Thumbnails Settings".</h3>
-            <h3>View mode menu options "Game Icon Size" and "Tiles View Cell Size" were not properly initialized at startup.</h3>
-            <h3>Edit boxes not resizing correctly in "Supermodel Settings" screen (4K mode).</h3>
+            <h3>Search bar edit box not receiving keyboard input<br/>
+               - caused by a custom function that removes "Delphi 7 hidden form trickery", making the edit box always focused and locked at startup<br/>
+               - you can hit TAB key to alternate between main games list and search bar edit box<br/>
+            </h3>
+            <h3>Games list "out of focus" at startup; fixed by moving "HideAppFormTaskBarButton" function from OnActivate to OnShow main form's event; "thank you" for this bug, Delphi 7</h3>
+            <h3>Splash screen no longer appears on top of other applications when creating/scanning games list<br/>
+                - you can safely use other applications whithout Emu Loader's splash screen poping up on top of them<br/>
+                - this fix only works if you create/scan games list manually after the frontend's main window shows up (games list window)<br/>
+                - on a clean install, splash screen still sticks on top of other applications; I'm still trying to find a workaround for it<br/>
+                - splash screen now displays properly in Windows taskbar's "thumbnail preview"
+            </h3>
+            <h3>Visibility checkup for the splash screen, to prevent the timer from resetting in the middle of a function with multiple tasks</h3>
+            <h3>The following no longer appear on top of other applications<br/>
+                - "games list filter" message panel<br/>
+                - "MAMu_ Icons Manager" window
+            </h3>
          <h2>Changed</h2>
-            <h3>Tiles view "Ultra Large" cell width increased to 550 pixels.</h3>
+            <h3>Replaced TNotebook component by TPanelEx in "Run MAME Game (Extra)" screen for easier source code maintenance and future improvements</h3>
+            <h3>Updates to my ColorBoxEx drop-down button<br/>
+                - moving the mouse over it doesn't make the button flicker anymore<br/>
+                - replaced the mega-useless "down arrow button" by a RGB picker button (you can click anywhere in the button to open the colors listbox anyway)<br/>
+                - minor drawing tweaks
+            </h3>
+            <h3>Updates to my ComboBox2Ex drop-down button<br/>
+                - moving the mouse over it doesn't make the button flicker anymore<br/>
+                - minor drawing tweaks
+            </h3>
+            <h3>Tweaks to the startup process; it's a little faster</h3>
+            <h3>Removed the .exe file extension requirement for emulators; any file extension can be used (except batch files!)... or none</h3>
+            <h3>Feature "Show Image Layout Dimensions" improvements (images popup menu)<br/>
+                - panel colors are always in night mode
+                - no more floating window, now the panel is on the games list, top/right position, and cannot be moved<br/>
+                  &nbsp;&nbsp;(floating window was always on top of other applications, just like the splash screen)<br/>
+                - this is just used to fine-tune image panel sizes and is not meant to be always visible
+            </h3>
+            <h3>If "frontend_dir\temp\mame_listxml.xml" / "frontend_dir\temp\hbmame_listxml.xml" file already exists, Emu Loader won't generate
+                the listxml file when creating a MAME / HBMAME games lists<br/>
+                - after games list is created, the listxml file is deleted to prevent left-overs and allow to create a games list for a new MAME build
+            </h3>
          <h2>Removed</h2>
-            <h3>Custom component RichEditURL no longer needed.</h3>
-            <h3>Redundant label "Filter by" removed from search bar caption text.</h3>
-            <h3>Unused icon files from "\resources\main_icons\": savetofile.ico, savestate.ico, toolbar.ico, reserved.ico.</h3>
+            <h3>Batch files support completely removed from the project (.bat; .cmd)</h3>
+            <h3>Checkboxes "Use Large Icons" / "Use Large Text" in several screens are no longer needed</h3>
+            <h3>Checkbox "Small Icons" in "Select Emulators" tool bar button is no more</h3>
+            <h3>Minor source code cleaning; some deprecated functions deleted</h3>
+            <h3>Font size in "Favorites Manager" screen is no longer needed</h3>
          <h2>Added</h2>
-            <h3>New "Audio Compressor" setting in mame.ini ("MAME Settings" screen, Audio panel).</h3>
+            <h3>A new "RGB Color Picker"<br/>
+                - my newest creation, made from scratch!<br/>
+                - used in ColorBox drop-down buttons<br/>
+                - fast, lightweight and with a HEX edit box so you can enter a color in HEX format<br/>
+                - 16 basic colors panel for easy picking<br/>
+                - 16 shades of color / 64 shades of color<br/>
+                  &nbsp;&nbsp;by enabling one of those buttons you can see shades of the selected color from white to black<br/>
+                - if you want to reset to the current color, just click the "current" color box<br/>
+                - night mode colors support<br/>
+                - 4K layout support<br/>
+                - improvements can be made in the future<br/>
+                - replacement for the jurassic Windows color picker<br/>
+                - there's a new "resources\ColorPickerEx-marker.ico" icon with the marker cursor, mostly for 4K mode<br/>
+                  &nbsp;&nbsp;(if this file is not found, an internal marker icon is used)<br/>
+                - the "RGB Quick Edit" feature is gone, no longer required (colorbox buttons popup menu, mouse right-click)<br/>
+                note: you can modify the "Alpha" channel, but Emu Loader does not use it
+            </h3>
+            <h3>Added support for the following MAME software lists tags (MAME 0.237 minimum)<br/>
+                - "alternate title" (alt_title), visible only in "Game Details" screen (for now)<br/>
+                - "notes", visible only in "Game Details" screen<br/>
+                NOTE: you must re-create MAME software games lists to add the new info (main menu "MAME/Arcade", sub-menu "Create MAME Software Games List" or "Create Arcade Games List"<br/>
+                      &nbsp;&nbsp;(select "Overwrite Mode" to create all software lists!)
+            </h3>
+            
       </div>
-
-      <br/><br/>
-      <div id="changelog">
-         <h1>version 8.9.2 change log - September 01, 2021</h1>
-         <h2>Fixed</h2>
-            <h3>Several popup menus were not resizing correctly to 4K resolution.</h3>
-            <h3>Failed to detect feature tags "sound", "graphic", "palette" for MAME device and bios sets when creating a games list (-listxml output).</h3>
-            <h3>Columns sorting in "Select Machine To Run Game" screen was borked (games popup menu).</h3>
-            <h3>Emulator title not showing in "Run Confirmation Dialog" message box when the emulator filename is not found (console/computer emulators).</h3>
-         <h2>Changed</h2>
-            <h3>Improved system icons in <code>\console_computer\system_icons\</code> folder:<br/>
-                - Some icons were outdated and needed a refresh.<br/>
-                - Added 256x256 resolution support; these might be used in thumbnails view when no thumb image is shown, if the thumb cell is big enough.</h3>
-            <h3>If needed, game info top bar expands to show more details in message boxes (game name/game file + emulator + usage tips).</h3>
-            <h3>Main menu icons are now 16x16 when not in 4K mode (previously 24x24), using an existing icons list (TImageList) to reduce RAM usage.</h3>
-            <h3>Tweaks to preview image hint box; in 4K mode, icon size is increased to 32x32.</h3>
-            <h3>Tiles view "details text" font size changed to 16 pixels when tiles cell size is set to "Insane 128x128" ("View Mode" tool bar button).</h3>
-            <h3>Split <code>mameinfo.dat</code> and <code>messinfo.dat</code> content into two separate StringLists ("Show MAME Game Documents" feature):<br/>
-                - Game info / driver info is first read from <code>mameinfo.dat</code>; if not found, it then looks for data in <code>messinfo.dat</code>.<br/>
-                - This prevents showing wrong info due to duplicate game entries (avoiding merged lists).<br/>
-                - Added "(source).dat file info" after the text type title to identify the source.<br/>
-                - Minor tweaks to parsing routines.</h3>
-         <h2>Removed</h2>
-            <h3>Files <code>usagerules.ico</code> and <code>savestate.ico</code> are no longer used (<code>resources\main_icons\</code> folder).</h3>
-            <h3>Setting "Larger Font Size" in "Image Hint Box" is gone ("Night Mode Settings" screen and Preferences screen).</h3>
-            <h3>Removed a couple of redundant TImageList containers with duplicate icons being loaded into RAM.</h3>
-         <h2>Added</h2>
-            <h3>MAME/HBMAME sets additional info (requires creating a new MAME games list):<br/>
-                - Cocktail mode support and cocktail status, shown in "Game Details" screen.<br/>
-                - Driver "protection" tag, shown in "Game Details" screen.<br/>
-                - "requiresartwork" tag to list all games that need external artwork to function properly.<br/>
-                - "lan" tag for future frontend improvements; shows "Local Network" info in "Game Details" screen.<br/>
-                - New "Arcade Misc Filters": "Cocktail Mode" and "Artwork Required" (tool bar buttons).</h3>
-            <h3>Support for several <code>mame.ini</code> settings:<br/>
-                - Directory To Share With Emulated Machines (<code>-share</code>).<br/>
-                - Path To Loose Software (<code>-swpath</code>).<br/>
-                - Path For LUA Plugins To Store Data, Read/Write (<code>-share_directory</code>).</h3>
-            <h3>Support for <code>ramoption</code> tag in -listxml output for future frontend improvements (MAME/HBMAME only):<br/>
-                - New file <code>\arcade\games\mame_ramsize.ini</code>.<br/>
-                - Used in MAME machine custom settings for machines that support RAM settings.<br/>
-                - Replaced manual edit box with a combo box showing only valid options.</h3>
-            <h3>New games list files <code>mame_listslots.txt</code> and <code>mame_listmedia.txt</code> when creating MAME games list (MAME v0.162 minimum).</h3>
-            <h3>New "Machine Slots / Media Info" panel in "Custom Parameters" screen:<br/>
-                - Minimum screen resolution supported: 1024x768 (1600x900 recommended).<br/>
-                - Shows slot and/or media options for the selected software list machine.<br/>
-                - Custom command modification supported in the machines edit box.<br/>
-                - "Run Command" button executes MAME and creates a "pipe" to capture console output text ("stdout") directly, without external temp files.</h3>
+      <div class="TRON2"></div>
       </div>
-
-      <br/><br/>
-      <div id="changelog">
-         <h1>version 8.9.1 change log - August 13, 2021</h1>
+      <br/>
+      <div id="inner_box">
+      <div id="contents_title">Version 8.9.3 Change Log - September 29, 2021</div>
+      <div id="contents_text">
          <h2>Fixed</h2>
-            <h3>Enabled PNG compression in console/computer system icons (<code>\console_computer\system_icons\</code> folder).</h3>
-            <h3>Fixed visibility of "Video 3" panels (BGFX, HLSL, GLSL) which were not showing up.</h3>
-            <h3>Included updated and tweaked splash <code>logo.png</code> for standard resolution (<code>\resources\images\</code> folder).</h3>
-            <h3>Requirements for a software list game no longer appear empty when the required item is a machine device that must be attached in a slot.</h3>
-            <h3>Several tweaks to software/device requirements detection used by software list games.</h3>
+            <h3>Set fonts to default was not validating font size in Night Mode / 4K Mode ("Games List Font Settings" screen, games popup menu)</h3>
+            <h3>Search bar was not filtering games correctly with the "Have/Miss" tool bar filter</h3>
+            <h3>Settings "Show Border" and "Border Color" were not updating if you click "Update" button in "Thumbnails Settings" screen</h3>
+            <h3>View mode menu options "Game Icon Size" and "Tiles View Cell Size" were not properly initialized at frontend startup</h3>
+            <h3>Edit boxes no resizing correctly in "Supermodel Settings" screen, 4K mode</h3>
          <h2>Changed</h2>
-            <h3>New and improved "Nintendo Wii U" system icon (<code>\console_computer\system_icons\</code>).</h3>
+            <h3>Tiles view "Ultra Large" cell width increased to 550 pixels</h3>
          <h2>Removed</h2>
-            <h3>Support for the following JAVA emulators (as they require JAVA installed and only run via .bat files):<br/>
-                - Java PSP emulator "jpcsp".<br/>
-                - Java Apple Computer Emulator "JACE".<br/>
-                - *Note: The frontend is moving away from .bat / .cmd files for emulator filenames.*</h3>
+            <h3>My custom component RichEditURL no longer needed</h3>
+            <h3>Redundant label "Filter by" removed from search bar caption text (tool bar filters)</h3>
+            <h3>Icon files no longer used (folder "\resources\main_icons\)<br/>
+                - savetofile.ico<br/>
+                - savestate.ico<br/>
+                - toolbar.ico<br/>
+                - reserved.ico
+            </h3>
          <h2>Added</h2>
-            <h3>New "Don't Show This Again" checkbox in message boxes to disable the "Run Game Confirmation Dialog".</h3>
-            <h3>Support for "microM8 Apple II Emulator" (Apple II computer system).</h3>
-            <h3>Support for "GSplus" Apple IIgs Emulator (Win32 and SDL builds).</h3>
-            <h3>New icon <code>resources\main_icons\terminal.ico</code> used in games popup menu for "Custom Parameters" feature.</h3>
-            <h3>New "Select Machine [machine_name]" item for "Select Set" sub-menu (for software lists).</h3>
-            <h3><b>New Feature: Custom Parameters (MAME only):</b><br/>
-                - Accessible via games popup menu; always enabled.<br/>
-                - Create custom strings to attach devices into slots.<br/>
-                - Support for software list games, software lists, and MAME machines.<br/>
-                - Media parameters and game names are added automatically.<br/>
-                - Files located in <code>\arcade\custom_params\mame\</code> and sub-folders.<br/>
-                - Search order: <code>gamename.txt</code> -&gt; <code>parent_gamename.txt</code> -&gt; <code>softwarelist_name.txt</code> -&gt; <code>machinename.txt</code>.</h3>
-            <h3>Added "DirectX 12" and "Vulkan" options to "BGFX Backend" setting (MAME v0.235+)<br/>
+            <h3>New "Audio Compressor" setting in mame.ini ("MAME Settings" screen, Audio panel)</h3>
+      </div>
+      <div class="TRON2"></div>
+      </div>
+      <br/>
+      <div id="inner_box">
+      <div id="contents_title">Version 8.9.2 Change Log - September 01, 2021</div>
+      <div id="contents_text">
+         <h2>Fixed</h2>
+            <h3>Several popup menus were not resizing to 4K</h3>
+            <h3>Fail to detect feature tags "sound", "graphic", "palette" for MAME device and bios sets when creating a games list (-listxml output)</h3>
+            <h3>Columns sorting in "Select Machine To Run Game" screen was borked (games popup menu)</h3>
+            <h3>Emulator title not showing in "Run Confirmation Dialog" message box when the emulator filename is not found (console/computer emulators)</h3>
+         <h2>Changed</h2>
+            <h3>Improved system icons in "\console_computer\system_icons\" folder<br/>
+                - some icons were outdated and needed a refresh<br/>
+                - added 256x256 resolution, they might be used in thumbnails view when no thumb image is shown, if thumb cell is big enough
+            </h3>
+            <h3>If needed, game info top bar expands to show more details in message boxes (game name/game file  + emulator + usage tips)</h3>
+            <h3>Main menu icons are now 16x16 when not in 4K mode, like in games popup menu, using an existing icons list (TImageList) to reduce RAM usage (used to be 24x24)</h3>
+            <h3>Tweaks to preview image hint box; and in 4K mode, icon size is increased to 32x32</h3>
+            <h3>Tiles view "details text" font size changed to 16 pixels when tiles cell size is set to "Insane 128x128" ("View Mode" tool bar button)</h3>
+            <h3>Split mameinfo.dat and messinfo.dat content into 2 separate StringLists ("Show MAME Game Documents" feature, games popup menu)<br/>
+                - game info / driver info is first read from mameinfo.dat, if not found, then look for the data in messinfo.dat<br/>
+                - some games were showing wrong info due to duplicate game entries (both .dat files were merged into one big list)<br/>
+                - added "(source).dat file info" after the text type title so you know if the info came from mameinfo.dat or messinfo.dat<br/>
+                - minor tweaks
+            </h3>
+         <h2>Removed</h2>
+            <h3>Files "usagerules.ico" and "savestate.ico" are no longer used ("resources\main_icons\" folder)</h3>
+            <h3>Setting "Larger Font Size" in "Image Hint Box" is gone ("Night Mode Settings" screen; Preferences screen)</h3>
+            <h3>Removed a couple redundant TImageList containers with duplicate icons being loaded into RAM</h3>
+         <h2>Added</h2>
+            <h3>MAME/HBMAME sets additional info (create a new MAME games list required)<br/>
+                - cocktail mode support and cocktail status, shown in "Game Details" screen<br/>
+                - driver "protection" tag, shown in "Game Details" screen<br/>
+                - "requiresartwork" tag, to list all games that need external artwork to function properly<br/>
+                - "lan" tag for future frontend improvements; for now, it shows "Local Network" info in "Game Details" screen<br/>
+                - new "Arcade Misc Filters": "Cocktail Mode" and "Artwork Required" (tool bar buttons)
+            </h3>
+            <h3>I missed a few mame.ini settings over the past months (oopsie)</br>
+                - Directory To Share With Emulated Machines (-share)<br/>
+                - Path To Loose Software (-swpath)<br/>
+                - Path For LUA Plugins To Store Data, Read/Write (-share_directory)
+            </h3>
+            <h3>Support "ramoption" tag in -listxml output for future frontend improvements (MAME/HBMAME only)<br/>
+                - new file "\arcade\games\mame_ramsize.ini"<br/>
+                - used in MAME machine custom settings, for machines that support RAM setting (MAME Settings screen)<br/>
+                - you can no longer enter invalid RAM sizes, the edit box was replaced by a combo box showing only valid options (MAME shows an error if you do anyway...)
+            </h3>
+            <h3>New games list files "mame_listslots.txt" and "mame_listmedia.txt" when creating MAME games list, to be used with custom parameters feature<br/>
+                - minimum MAME v0.162 required; older builds will not generate these files (no software lists support)<br/>
+                - do not modify the files in any way or the frontend will fail to show slots/media info in custom parameters screen
+            </h3>
+            <h3>New "Machine Slots / Media Info" panel in "Custom Parameters" screen<br/>
+                - minimum screen resolution supported 1024x768; minimum resolution recommended 1600x900
+                - you can see a list of all supported machines for software list / softlist game being edited<br/>
+                - selecting a machine will show slots options and/or media options, you can choose which one by using the "Slots" / "Media" radio buttons<br/>
+                - you can modify the command in the machines edit box to expose more details for an attached device (info not shown in MAME's -listslots output)<br/>
+                  &nbsp;&nbsp;(to show supported file formats for Atari800 cassette device): -sio cassette -listmedia<br/>
+                - the "Run Command" button will execute "mame.exe machine_name -cmd_params" with CreateProcess() WinAPI but also create a "pipe" to capture
+                  MAME's console output text ("stdout"), no external temp files are created!<br/>
+                <br/>
+                Notes:<br/>
+                  &nbsp;&nbsp;- changing the machine in "machines list" panel will not overwrite the one you previously chose in "Select Machine to Run Game" (games popup menu)<br/>
+                  &nbsp;&nbsp;- if you are editing a MAME machine instead of a softlist game, only one machine is listed<br/>
+                  &nbsp;&nbsp;- do not enter a machine name in machine's "Edit Command" edit box, select one from the list above<br/>
+                  &nbsp;&nbsp;- console output text is shown in the RichEdit, including MAME's error messages if you type an invalid command<br/>
+                  &nbsp;&nbsp;- "save state" info is not available in if your screen resolution is lower than 1366x768
+            </h3>
+      </div>
+      <div class="TRON2"></div>
+      </div>
+      <br/>
+
+      <div id="inner_box">
+      <div id="contents_title">Version 8.9.1 Change Log - August 13, 2021</div>
+      <div id="contents_text">
+         <h2>Fixed</h2>
+            <h3>An oopsie, I made. Forgot to enable PNG compression in console/computer system icons ("\console_computer\system_icons\" folder)</h3>
+            <h3>Panels of "Video 3" were not showing up (BGFX, HLSL, GLSL)... oopsie!</h3>
+            <h3>Forgot to include the updated and tweaked splash "logo.png" for standard resolution ("\resources\images\" folder)</h3>
+            <h3>Requirements for a software list game is empty if the required is a machine device that must be attached in a slot</h3>
+            <h3>Several tweaks to software/device requirements detection, use by software list games</h3>
+         <h2>Changed</h2>
+            <h3>New and improved "Nintendo Wii U" system icon ("\console_computer\system_icons\")</h3>
+         <h2>Removed</h2>
+            <h3>The following JAVA emulators are no longer supported (it requires JAVA installed in Windows)<br>
+                - Java PSP emulator "jpcsp"<br/>
+                - Java Apple Computer Emulator "JACE"
+                Notes:<br/>
+                  &nbsp;&nbsp;- removed because they only run thru .bat files<br/>
+                  &nbsp;&nbsp;- the frontend is "slowly but surely" moving away from .bat / .cmd files, it was never meant to be used as emulator filenames in the first place<br/>
+                  &nbsp;&nbsp;- MAME games/machines can use custom parameters now, .bat files are no longer needed
+            </h3>
+         <h2>Added</h2>
+            <h3>New "Don't Show This Again" checkbox in message box to disable "Run Game Configurmation Dialog"<br/>
+                - this checkbox only appears when running games, nowhere else<br/>
+                - main menu setting "Run Game Configurmation Dialog" is enabled by default now
+            </h3>
+            <h3>Support for "microM8 Apple II Emulator"<br/>
+                - get it at https://paleotronic.com/software/microm8/<br/>
+                - it can load 2-disk games from command line (untested)<br/>
+                - to be used in the "Apple II" computer system
+            </h3>
+            <h3>Support for "GSplus" Apple IIgs Emulator<br/>
+                - get it at https://apple2.gs/plus/<br/>
+                - both Win32 and SDL builds are supported<br/>
+                - it works the same as GSport and KEGS32
+            </h3>
+            <h3>New icon: "resources\main_icons\terminal.ico" used in games popup menu, "Custom Parameters" feature (so far)</h3>
+            <h3>New "Select Machine [machine_name]" item for "Select Set" sub-menu<br/>
+                - for software lists, and only shows up if there is a MAME machine assigned to that software list<br/>
+            </h3>
+            <h3>New feature: Custom Parameters (MAME only)<br/>
+                - accessible in games popup menu "Custom Parameters" sub-menu<br/>
+                - there is no on/off switch, this feature is always enabled<br/>
+                - create a custom paramaters string to attach devices and stuff into slots (its main purpose)<br/>
+                - made for software list games, software lists and MAME machines<br/>
+                - media parameter and game name are added automatically at the end of the command line (only when running games)<br/>
+                - if you use the game's media parameter, make sure to add it at the end or it will not work (-cart; -flop2; -cass; etc)<br/>
+                - for rare cases, you may use a "< game>" tag along with the media parameter, it will be replaced by the game name<br/>
+                - you can overwrite the machine name for a specific softlist game by adding the machine name before the custom parameters<br/>
+                - file format is in plain .txt (ANSI only)<br/>
+                - files are located in a new "\arcade\custom_params\mame\" folder, and "\softwarename\" sub-folders for software lists<br/>
+                - file contents should be "custom_params=parameters-text" format (without quotes)<br/>
+                - if you create a custom parameter for the parent set, its clone sets will inherit the custom parameter<br/>
+                - if you create a custom parameter for a software list, so all its games will use it (filenames are the same as .xml files from "mame\hash\" folder)<br/>
+                - if you create a custom parameter for a MAME machine, all software lists assigned to that machine will use it<br/>
+                - take a peek at the "Custom Parameters Samples" panel, you'll find some usage examples in there :)<br/>
+                - files search order:<br/>
+                  &nbsp;&nbsp;gamemane.txt<br/>
+                  &nbsp;&nbsp;parent_gamemane.txt<br/>
+                  &nbsp;&nbsp;softwarelist_name.txt (in case the game is from a software list)<br/>
+                  &nbsp;&nbsp;machinename.txt (machine assigned to run the softlist game with)
+            </h3>
+            <h3>Added "DirectX 12" an "Vulkan" options to "BGFX Backend" setting (MAME Settings, "Video 3" tab)<br/>
                 - for the upcoming MAME v0.235 (got them from MAME github)<br/>
                 - DirectX 12 requires Windows 10 / Windows 11<br/>
-                - replaced options texts with detailed ones</h3>
+                - replaced options texts with detailed ones
+            </h3>
       </div>
-
-      <br/><br/>
-      <div id="changelog">
-         <h1>version 8.9 change log - August 04, 2021</h1>
+      <div class="TRON2"></div>
+      </div>
+      <br/>
+      
+      <div id="inner_box">
+      <div id="contents_title">Version 8.9 Change Log - August 04, 2021</div>
+      <div id="contents_text">
          <h2>Fixed</h2>
-            <h3>Some top bar labels were invisible in message boxes, caused by the new 4K mode (oopsie!).</h3>
-            <h3>Heavy flickering when selecting text with mouse on my TEditEx control (it's a component bug, not a frontend bug).</h3>
-            <h3>"Arcade Systems" selector colors in main menu "View" / "Arcade ROMs Folders" were not properly set in night mode.</h3>
-            <h3>Some artwork checkbox settings in "MAME Settings" screen were still enabled even though MAME doesn't support them anymore.</h3>
-            <h3>Nasty bug: Every time the message box was called, "Night Mode" checkbox component would trigger the night mode's initialization function, resetting interface colors and components appearances; it's been there ever since night mode was implemented... D'OH!</h3>
-            <h3>Added "Atari 2600" to the "cassette tape" supported systems list (oopsie!):<br/>
-                - This makes it possible to run MAME cassette tape games with "Stella" Atari 2600 emulator.<br/>
-                - Added <code>Stella CASSETTE="%s"</code> entry in "emulator_parameters[default].ini" file.</h3>
+            <h3>Some top bar labels were invisible in message boxes, caused by the new 4K mode (oopsie!)</h3>
+            <h3>Heavy flickering when selecting text with mouse on my TEditEx control (it's a component bug, not a frontend bug)</h3>
+            <h3>"Arcade Systems" selector colors in main menu "View" / "Arcade ROMs Folders" were not properly set in night mode</h3>
+            <h3>Some artwork checkbox settings in "MAME Settings" screen were still enabled even though MAME doesn't support them anymore</h3>
+            <h3>Nasty bug. Every time the message box was called, "Night Mode" checkbox component would trigger the night mode's initialization function,
+                resetting interface colors and components appearances; it's been there ever since night mode was implemented... D'OH!</h3>
+            <h3>Added "Atari 2600" to the "cassette tape" supported systems list (oopsie!)<br/>
+                &nbsp;&nbsp;- this makes possible to run MAME cassette tape games with "Stella" Atari 2600 emulator<br/>
+                &nbsp;&nbsp;- added "Stella CASSETTE="%s" entry in "emulator_parameters[default].ini" file
+            </h3>
             <h3>Fixes and improvements to my custom components "TComboBoxEx2" and "TColorBoxEx" (Night Mode only):<br/>
-                - Finally found a way to draw Win10 dark scroll bars, using "GetComboBoxInfo()" WinAPI to access the component's internal drop-down list handle (HWND).<br/>
-                - Fixed a repaint issue not triggering after mouse hover "on/off".<br/>
-                - Fixed an issue where the drop-down arrow was not vertically centered.</h3>
-            <h3>Unicode game names and titles were not working correctly for Console/Computer/Handheld systems (ported from EmuCon):<br/>
-                - The frontend will decode strings when parsing entries from games ".el" files and set the "IsUnicode" tag directly.<br/>
-                - The "IsUnicode" tag in .el files is no longer necessary (files in "\console_computer\games\" folder).<br/>
-                - Games were displaying incorrect Unicode titles and filenames in the games list.</h3>
-            <h3>Console/Computer/Handheld games lists were being tagged as "updated with new games" if "Create a New List" checkbox was ticked, even though no new games were found.</h3>
-            <h3><b>Frontend's button in Windows taskbar not showing up at startup:</b><br/>
-                - A small code is executed at startup to remove the "double taskbar button" in Windows Vista and newer, caused by the Delphi 7 compiler, but it makes the taskbar button disappear until the main form shows up.<br/>
-                - To mitigate this issue, that code is executed right before the main form is shown (this is the point where the taskbar button doubles itself).</h3>
-            <h3>Fixed the bottom color of emulator/game top bars in several screens while in light mode.</h3>
-            <h3>Text color in systems list panels was not properly painted when the panel was out of focus and when a system was disabled/unchecked.</h3>
-            <h3>Not all games were being added in "Scan MAME/HBMAME Game Samples" feature (main menu "Games List").</h3>
-            <h3>Fixed a bug that would crash the frontend when trying to update "played info" .ini files after exiting a game:<br/>
-                - If the frontend still crashes after exiting a game, you'll need to clear its played info ("Reset Selected Game Info" menu in games popup menu).</h3>
-            <h3>Changing "Tiles View Cell Size" setting in "View Mode" toolbar button now changes the icon size properly (48x48; 68x68; 128x128).</h3>
-            <h3>Modifying the following settings does not reset "MAMu_ icons" cache if the view mode is not the correct one ("Game Icon Size", "Tiles View Cell Size").</h3>
+                &nbsp;&nbsp;- finally found a way to draw Win10 dark scroll bars, using "GetComboBoxInfo()" WinAPI to access the component's internal drop-down list handle (HWND)<br/>
+                &nbsp;&nbsp;- fixed a repaint issue not triggering after mouse hover "on/off"<br/>
+                &nbsp;&nbsp;- fixed an issue were the drop-down arrow was not vertically centered
+            </h3>
+            <h3>Unicode game names and titles was not working correctly for Console/Computer/Handheld systems (ported from EmuCon)<br/>
+                &nbsp;&nbsp;- the frontend will decode strings when parsing entries from games ".el" files and set the "IsUnicode" tag directly<br/>
+                &nbsp;&nbsp;(the "IsUnicode" tag in .el files is no longer necessary (files in "\console_computer\games\" folder)<br/>
+                             &nbsp;&nbsp;- games were displaying incorrect Unicode titles and filenames in games list
+            </h3>
+            <h3>Console/Computer/Handheld games lists were being tagged as "updated with new games" if "Create a New List" checkbox was ticked,
+                even though no new games were found</h3>
+            <h3>Frontend's button in Windows taskbar button not showing up at startup<br/>
+                - a small code is executed at startup to remove the "double taskbar button" in Windows Vista and newer, caused by Delphi 7 compiler,<br/>
+                  but it makes the taskbar button dissapear until the main form shows up<br/>
+                - to mitigate this issue, that code is executed right before the main form is shown
+                  (this is the point where the taskbar button doubles itself)
+            </h3>
+            <h3>Fixed from bottom color of emulator/game top bars in several screens while in light mode</h3>
+            <h3>Text color in systems list panels were not properly painted when panel is out of focus and when a system is disabled/unchecked</h3>
+            <h3>Not all games were being added in "Scan MAME/HBMAME Game Samples" feature (main menu "Games List")</h3>
+            <h3>Fixed a bug that would crash the frontend when trying to update "played info" .ini files after exiting a game<br/>
+                - if the frontend still crashes after exiting a game, you'll need to clear its played info ("Reset Selected Game Info" menu in games popup menu)
+            </h3>
+            <h3>Changing "Tiles View Cell Size" setting in "View Mode" tool bar button now changes the icon size properly (48x48; 68x68; 128x128)</h3>
+            <h3>Modifying the following settings do not reset "MAMu_ icons" cache if the view mode is not the correct one<br/>
+                &nbsp;&nbsp;("Game Icon Size", "Tiles View Cell Size")
+            </h3>
          <h2>Changed</h2>
-            <h3>New "Show Grayscale Icon In Game With Missing ROMs/CHDs" setting (Preferences screen, "Games List" panel):<br/>
-                - By default, available games with missing ROMs/CHDs will show colored icons from now on.<br/>
-                - These sets have a custom font to help you see the "have with missing ROMs" status.<br/>
-                - Why should a gray icon be displayed for sets you have, but there might be ONE tiny ROM missing? It looks better this way; I myself confuse them with "missing sets" (sets you don't have) quite a lot.<br/>
-                - For arcade systems only, including MAME software lists.<br/>
-                - You can go back to the old gray icon by ticking the new checkbox setting in the Preferences screen.</h3>
-            <h3>Color of "disabled" button state updated with darker colors and a black font; the old one was too bright (Night Mode).</h3>
-            <h3>Massive frontend icons update (<code>\resources\main_icons\</code> folder tree):<br/>
-                - Added 128x128 resolution icons for the 4K mode (and some 256x256 icons for future use... maybe).<br/>
-                - Icons text color changed to white as default: "image category", "layout category", "toolbar filters", "arcade filters" icons.<br/>
-                - Overlay icons for "image category" and "layout category" are no longer required; no need for this trickery anymore as the frontend can change the text font color of .ico files on the fly! (folder <code>main_icons\overlay\img_dark\</code> and its files are no longer required).<br/>
-                - "Background band" behind texts in toolbar icons is no longer needed.<br/>
-                - Replaced text silver pixels with 25% opaque pixels in 32x32 and 48x48 toolbar filter icons.<br/>
-                - Image category 32x24 icons are no more; they haven't been used in quite a while.<br/>
-                - Image category 32x32 icon new size; it's used in the images toolbar and in 4K mode.<br/>
-                - All frontend icons must be 32-bit color depth or hell will break loose (crashes all around and all kinds of weird behavior).<br/>
-                - If the .ico file doesn't have the requested icon resolution, icons are automatically upscaled thanks to the <code>PrivateExtractIcons()</code> WinAPI.</h3>
-            <h3>Proper 10 pixels border for game info/emu info top bar (4K mode).</h3>
-            <h3>Disabled systems are now painted with 25% blend; it makes them easier to spot in systems lists (EasyListView).</h3>
+            <h3>New "Show Grayscale Icon In Game With Missing ROMs/CHDs" setting (preferences screen, "Games List" panel)<br/>
+                - by default, available games with missing ROMs/CHDs will show colored icons from now on<br/>
+                - these sets have a custom font to help you see the "have with missing ROMs" status<br/>
+                - why should a gray icon be displyed for sets you have, but there might be ONE tiny ROM missing ?<br/>
+                - it looks better this way; I myself confuse them with "missing sets" quite a lot (sets you don't have)<br/>
+                - for arcade systems only, including MAME software lists<br/>
+                - you can go back to the old gray icon by ticking the new checkbox setting in preferences screen
+            </h3>
+            <h3>Color of "disabled" button state updated with darker colors and a black font; the old one was too bright (night mode)</h3>
+            <h3>Massive frontend icons update ("frontend_dir\resources\main_icons\" folder tree)<br/>
+                - added 128x128 resolution icons for the 4K mode (and some 256x256 icons for future use... maybe)<br/>
+                - icons texts color changed to white as default: "image category", "layout category", "tool bar filters", "arcade filters" icons<br/>
+                - overlay icons "image category" and "layout category" icons are no longer required, no need for this trickery anymore as the frontend can
+                  change text font color of .ico files on the fly!<br/>
+                  &nbsp;&nbsp; (folder "main_icons\overlay\img_dark\" and files are no longer required)<br/>
+                - "background band" behind texts in tool bar icons are no longer needed<br/>
+                - replaced text silver pixels by a 25% opaque pixels in 32x32 and 48x48 tool bar filter icons<br/>
+                - image category 32x24 icons are no more; it hasn't been used in quite a while<br/>
+                - image category 32x32 icon new size; it's used in images tool bar and in 4K mode<br/>
+                - all frontend icons must be 32-bits color depth or hell will break loose (crashes all around and all kinds of weird behavior)<br/>
+                - if the .ico file doesn't have the requested icon resolution, icons are automatically upcaled thanks to the "PrivateExtractIcons() WinAPI
+            </h3>
+            <h3>Proper 10 pixels border for game info/emu info top bar (4K mode)</h3>
+            <h3>Disabled systems are now painted with 25% blend, it makes them easier to spot in systems lists (EasyListView)</h3>
             <h3>Thumbnail view updates and fixes:<br/>
-                - Support for 48x48 system background icons when thumb cell is smaller than 68x68.<br/>
-                - Minor tweaks and fixes in the thumb generation/loading functions.<br/>
-                - Painting bug fix in EasyListView if the thumbnail cell is too small.<br/>
-                - Minor tweaks to fix misaligned overlay icons, especially if you use overlays of different sizes.</h3>
-            <h3>Moved checkbox "Create a New List" to the center of the lower bar so it's easier to spot ("Create Console/Computer/Handheld Games List").</h3>
-            <h3>Removed "IsUnicode" tag from games list files (Console/Computer/Handheld systems):<br/>
-                - This tag is now validated and set at runtime (tag might be removed in a future build).<br/>
-                - The following files will be updated automatically at startup (done only once):<br/>
-                &nbsp;&nbsp;- Games files in <code>\console_computer\games\</code> folder.<br/>
-                &nbsp;&nbsp;- Played games files in <code>\console_computer\played_games\</code> folder.<br/>
-                &nbsp;&nbsp;- Games extra info files in <code>\console_computer\games_extra_data\</code> folder.</h3>
-            <h3>Modified TntCustomEdit component to fix heavy flickering when selecting text with the mouse (TNT Unicode Delphi Components Pack):<br/>
-                - The same fix as my TEditEx component was applied here.</h3>
-            <h3>Source code files for all 4K mode forms are stored in <code>source\4K\</code> folder:<br/>
-                - RAM usage will not increase since forms are initialized only when used, then freed from RAM on exit.<br/>
-                - Files not used by the project but used for layout designs are stored in <code>source\4K\designs\</code> folder.</h3>
-            <h3>Library "unitExIcon.pas" has been replaced by Microsoft's "forbidden" WinAPI <code>PrivateExtractIcons()</code>:<br/>
-                - There's a weird bug in the ExIcon unit that causes an "out of resources" error under Windows 10... this unit is so old; great, but old. (I've been using this unit for many years and never had any problems until I started using Windows 10!).<br/>
-                - The API <code>PrivateExtractIcons()</code> can extract icons of any resolution from 16x16 to 512x512 with just a couple of lines of code and is much easier to use than the ExIcon library; I hope Microsoft doesn't remove this API from Windows. (Why Microsoft never created an "official" WinAPI capable of doing this job is beyond me!).<br/>
-                - "Load MAMu_ icons" functions are still using TExIcon; it requires a rewrite.</h3>
-            <h3>Game Details updates:<br/>
-                - Fixed a crash when calling this feature for the same game twice in a row (open/close details screen, open it again... BOOM!).<br/>
-                - Other minor fixes and tweaks here and there.</h3>
-            <h3>A couple more tweaks to "MAME Game Docs" parsing routines; they are 12ms faster.</h3>
-            <h3>New "TNT Unicode" component "TntEditEx", based on "TntEdit" but with custom frame drawing, just like my "EditEx" component:<br/>
-                - An edit box that can display Unicode texts, used in "Rename Game Image" feature for console/computer games.<br/>
-                - New "TntEditEx.pas" file added to the TNT's "runtime" package (same package as "TntStdCtrls.pas", easier to compile and cleaner code).<br/>
-                - This component was made for the "Night Mode".<br/>
-                - Better to create a new component and leave the original "TntEdit" unmodified.</h3>
-            <h3>Several edit boxes replaced by the <code>TTntEditEx</code> component in the project to accept Unicode texts (English / Non-English mixed).</h3>
-            <h3>Changes, updates, and fixes to Delphi components (TAdvOfficeCheckBoxEx / TAdvOfficeRadioButtonEx / TEasyListView):<br/>
-                - Added support for 23x23 HD CheckBox/RadioButton icons, used by the new 4K mode (it looks so pretty...).<br/>
-                - New component property "CustomEnableIconHD" to toggle "HD icons" on/off (NOT available as a frontend setting). (This only works with external icons, not with Windows-themed ones).<br/>
-                - Fixed CheckBox/RadioButton vertical alignment code in the EasyListView component so "HD icons" align correctly.<br/>
-                - Icons are now extracted from .ico files using the <code>PrivateExtractIcons()</code> WinAPI.<br/>
-                - New component properties "CustomIconsImages" and "CustomIconImagesHD" to assign external TImageLists, so the same CheckBox/RadioButton icons set can be shared by hundreds of controls in the same TForm using a single TImageList (one for regular 13x13 icons and one for HD 23x23 icons). (This prevents every control from loading the same set of .ico files; imagine a TForm with 50 CheckBox components in it... loading the same 12 icons!).<br/>
-                - Added a small tutorial text in "TAdvOfficeCheckBox" source code with instructions on how to use custom icons and the new external TImageList properties.<br/>
-                - All .ico files from the <code>resources\checkbox_radiobutton\</code> folder tree updated with the new 23x23 icons.</h3>
-            <h3>Tons of source code optimizations and removal of duplicate functions.</h3>
-            <h3>Custom CheckBox / RadioButton default profile changed to "Night Mode 1 Black" (as it should have been from day 1).</h3>
-            <h3>Custom CheckBox icons set in "Customize Night Mode" and "Customize SplashScreen" changed from "Night Mode 1" to "Night Mode 1 Black"; it looks better (cannot be customized).</h3>
-            <h3>Custom CheckBox/RadioButton "Night Mode 1" icons profile is gone (folder <code>\resources\checkbox_radiobutton\</code>).</h3>
-            <h3>Updates/changes to "Night Mode Settings":<br/>
-                - Setting "Use Windows 10 Dark Scroll Bar in Games List" removed.<br/>
-                - Removed "Floating Panel" / "Caption Font" setting from "Search Games Panel Colors".<br/>
-                - Source code optimizations, some internal fixes, and improved stability.</h3>
-            <h3>Splash screen optimizations:<br/>
-                - Form is now created directly in the project's DPR file before anything else, including the main Form. It should show up faster.<br/>
-                - Some functions moved from the main unit file to the splash screen's unit file.<br/>
-                - Moved splash settings from <code>ini_files\lightmode.ini</code> into a new <code>ini_files\splash.ini</code> file (done once at startup if "splash.ini" is not found).<br/>
-                - Settings are the same for normal mode, 4K mode, and "4K extra" mode, except "Version Info" label position and "Shadow Distance" settings.<br/>
-                - You can drag and drop the version info text with the mouse instead of using the Left/Top position bars (experimental).<br/>
-                - You can drag the splash screen around with the mouse now.<br/>
-                - Logo image updated with new sprites and some minor tweaking.<br/>
-                - Simplified the initialization code.</h3>
-            <h3>Updates and fixes to "View Missing ROMs/CHDs" feature (previously known as "Arcade Scan Results"):<br/>
-                - Some ROM types were not detected correctly; fixed the ROM/CHD types validation list and included "vgmplay" software list detection. (Games scan/validation routine was not affected by this when creating a games list).<br/>
-                - Fixed flicker on systems toolbar buttons.<br/>
-                - Added new checkboxes filtering options:<br/>
-                &nbsp;&nbsp;- "CHDs Only": show/hide sets with CHDs, with or without ROMs (HDD, CD, Flash Card, VHS).<br/>
-                &nbsp;&nbsp;- "Device ROMs": show/hide sets that have device ROMs.<br/>
-                &nbsp;&nbsp;- "Bios ROMs": show/hide sets that have bios ROMs.<br/>
-                &nbsp;&nbsp;- NOTE: unchecking "ROMs" filter will hide sets that only have game ROMs (no CHDs, devices, bios).<br/>
-                - Renamed options in "MAME set type drop-down" filter to "Arcade Games" and "Software List Games".</h3>
-            <h3>The following toolbar filter settings were moved from <code>EmuLoader.ini</code> to <code>ini_files\games_filters.ini</code>:<br/>
-                - Thumbnail view settings; "Machines/Systems Filter"; "Systems Quick Filter"; "MAME/Arcade Games Filter"; "Misc Filters".<br/>
-                - This way you don't lose them in a clean install or if <code>EmuLoader.ini</code> gets deleted.<br/>
-                - Filters moved into proper sections so they are not all mixed up into a single section.<br/>
-                - This process is done once at startup if <code>games_filters.ini</code> is not found.<br/>
-                - Improved: toolbar settings are saved into the .ini file right after you change them (Safe Mode ON).</h3>
-            <h3>Updates to "Arcade Controller Layout" images ("Browse Games With..." sub-menu in main menu "Games List"):<br/>
-                - Files moved to a new <code>\images\browse_controls\</code> folder.<br/>
-                - File format changed from JPG to PNG because they just look better: <code>X-Arcade.png</code>, <code>HotRodSE.png</code>, <code>SlikStik.png</code>, <code>Devastator2.png</code>.<br/>
-                - Images updated; some buttons captions were wrong and/or no longer assigned to anything.</h3>
-            <h3>Main menu "View" removed to prevent clutter; its items moved to proper sub-menus.</h3>
+                - support for 48x48 system background icons when thumb cell if smaller than 68x68<br/>
+                - minor tweaks and fixes in the thumb generation/loading functions<br/>
+                - painting bug fix in EasyListView if thumbnail cell is too small<br/>
+                - minor tweaks to fix misaligned overlay icons, specially if you use overlays of different sizes
+            </h3>
+            <h3>Moved checkbox "Create a New List" to the center of the lower bar so it's easier to spot ("Create Console/Computer/Handheld Games List")</h3>
+            <h3>Removed "IsUnicode" tag from games list files (console/computer/handheld systems)<br/>
+                - this tag is now validated and set at runtime (tag might be removed in a future build)<br/>
+                - the following files will be updated automatically at startup (done only once)<br/>
+                  &nbsp;&nbsp;- games files in "\console_computer\games\" folder<br/>
+                  &nbsp;&nbsp;- played games files in "\console_computer\played_games\" folder<br/>
+                  &nbsp;&nbsp;- games extra info files in "\console_computer\games_extra_data\" folder
+            </h3>
+            <h3>Modified TntCustomEdit component to fix heavy flickering when selecting text with mouse (TNT Unicode Delphi Components Pack)<br/>
+                - same fix as my TEditEx component was applied here
+            </h3>
+            <h3>Source code files for all 4K mode forms are stored in "source\4K\" folder<br/>
+                - RAM usage will not increase since forms are initialized only when used, then freed from RAM on exit<br/>
+                - files not used by the project, but used for layout designs are stored in "source\4K\designs\" folder
+            </h3>
+            <h3>Library "unitExIcon.pas" has been replaced by Microsoft's "forbidden" WinAPI "PrivateExtractIcons()"<br/>
+                - there's a weird bug in ExIcon unit that causes "out of resources" error under Windows 10... this unit is sooo old; great, but old<br/>
+                  &nbsp;&nbsp;(I've been using this unit for many years and never had any problems, until I started using Windows 10!)<br/>
+                - the API PrivateExtractIcons() can extract icons of any resolution from 16x16 to 512x512 with just a couple lines of code,
+                  and is so much easier to use than ExIcon library; I hope Microsoft doesn't remove this API from Windows<br/>
+                  &nbsp;&nbsp;(why Microsoft never created an "official" WinAPI capable of doing this job, is beyond me!)<br/>
+                - "Load MAMu_ icons" functions are still using TExIcon; it requires a rewrite
+            </h3>
+            <h3>Game Details updates<br/>
+                - fixed a crash when calling this feature for the same game twice in a row (open/close details screen, open it again... BOOM!)<br/>
+                - other minor fixes and tweaks here and there
+            </h3>
+            <h3>A couple more tweaks to "MAME Game Docs" parsing routines, they are 12ms faster</h3>
+            <h3>New "TNT Unicode" component "TntEditEx", based on "TntEdit" but with custom frame drawing, just like my "EditEx" component<br/>
+                - an edit box that can display Unicode texts, used in "Rename Game Image" feature, for console/computer games<br/>
+                - new "TntEditEx.pas" file added to the TNT's "runtime" package (same package as "TntStdCtrls.pas", easier to compile and cleaner code)<br/>
+                - this component was made for the "Night Mode"<br/>
+                - better to create a new component and leave the original "TntEdit" unmodified
+            </h3>
+            <h3>Several edit boxes replaced by TTntEditEx component in the project to accept Unicode texts (Engligh / Non-Engligh mixed)</h3>
+            <h3>Changes, updates and fixes to Delphi components: TAdvOfficeCheckBoxEx / TAdvOfficeRadioButtonEx / TEasyListView<br/>
+                - added support for 23x23 HD CheckBox/RadioButton icons, used by the new 4K mode (it looks sooo pretty...)<br/>
+                - new component property "CustomEnableIconHD" to toggle "HD icons" on/off (NOT available as a frontend setting)<br/>
+                  &nbsp;&nbsp;(this only works with external icons, not with Windows themed ones)<br/>
+                - fixed CheckBox/RadioButton vertical alignment code in EasyListView component, so "HD icons" align correctly<br/>
+                - icons are now extracted from .ico files using "PrivateExtractIcons()" WinAPI<br/>
+                - new component properties "CustomIconsImages" and "CustomIconImagesHD" to assign external TImageLists, so the same CheckBox/RadioButton icons set
+                  can be shared by hundreds of CheckBox/RadioButton/EasyListView controls in the same TForm using a single TImageList (one for regular 13x13 icons
+                  and one for HD 23x23 icons)<br/>
+                  &nbsp;&nbsp;(this prevents every control from loading the same set of .ico files; imagine a TForm with 50 CheckBox components in it...
+                               loading the same 12 icons!)<br/>
+                - added a small tutorial text in "TAdvOfficeCheckBox" source code, with instructions on how to use custom icons and the new external TImageList properties<br/>
+                - all .ico files from "resources\checkbox_radiobutton\" folder tree updated with the new 23x23 icons<br/>
+            </h3>
+            <h3>Tons of source code optimizations and removal of duplicate functions</h3>
+            <h3>Custom CheckBox / RadioButton default profile changed to "Night Mode 1 Black" (as it should have been from day 1)</h3>
+            <h3>Custom CheckBox icons set in "Customize Night Mode" and "Customize SplashScreen" changed from "Night Mode 1" to "Night Mode 1 Black"; it looks better
+                (cannot be customized)</h3>
+            <h3>Custom CheckBox/RadioButton "Night Mode 1" icons profile is gone (folder \resources\checkbox_radiobutton\)</h3>
+            <h3>Updates/changes to "Night Mode Settings"<br/>
+                - setting "Use Windows 10 Dark Scroll Bar in Games List" removed<br/>
+                - removed "Floating Panel" / "Caption Font" setting from "Search Games Panel Colors"<br/>
+                - source code optimizations, some internal fixes and improved stability
+            </h3>
+            <h3>Splash screen optimizations<br/>
+                - Form is now created directly in the project's DPR file before anything else, including the main Form<br/>
+                - it should show up faster<br/>
+                - some functions moved from main unit file to splash screen's unit file<br/>
+                - moved splash settings from "ini_files\lightmode.ini" into a new "ini_files\splash.ini" file (done once at startup if "splash.ini" is not found)<br/>
+                - settings are the same for normal mode, 4K mode and "4K extra" mode, except "Version Info" label position and "Shadow Distance" settings<br/>
+                - you can drag and drop the version info text with mouse instead of using the Left/Top position bars (experimental)<br/>
+                - you can drag the splash screen around with the mouse now<br/>
+                - logo image updated with new sprites and some minor tweaking<br/>
+                - simplified the initialization code
+            </h3>
+            <h3>Updates and fixes to "View Missing ROMs/CHDs" feature (previously known as "Arcade Scan Results")<br/>
+                - some ROM types were not detected correctly, fixed ROM/CHD types validation list and included "vgmplay" software list detection<br/>
+                  &nbsp;&nbsp;(games scan/validation rountine was not affected by this when creating a games list)<br/>
+                - fixed flicker on systems tool bar buttons<br/>
+                - added new checkboxes filtering options<br/>
+                  &nbsp;&nbsp;"CHDs Only": show/hide sets with CHDs, with or without ROMs (HDD, CD, Flash Card, VHS)<br/>
+                  &nbsp;&nbsp;"Device ROMs": show/hide sets that have device ROMs<br/>
+                  &nbsp;&nbsp;"Bios ROMs": show/hide sets that have bios ROMs<br/>
+                  &nbsp;&nbsp;NOTE: unchecking "ROMs" filter will hide sets that only have game ROMs (no CHDs, devices, bios)<br/>
+                - renamed options in "MAME set type drop-down" filter to "Arcade Games" and "Software List Games"
+             </h3>
+             <h3>The following tool bar filter settings were moved from "EmuLoader.ini" to "ini_files\games_filters.ini"<br/>
+                 - thumbnail view settings; "Machines/Systems Filter"; "Systems Quick Filter"; "MAME/Arcade Games Filter";
+                   "Misc Filters"<br/>
+                 - so you don't lose them in a clean install or if "EmuLoader.ini" gets deleted<br/>
+                 - filters moved into proper sections so they are not all mixed up into a single section<br/>
+                 - this process is done once at startup, if "games_filters.ini" is not found<br/>
+                 - improved: tool bar settings are saved into the .ini file right after you change them (safe mode ON)
+             </h3>
+             <h3>Udpdates to "Arcade Controller Layout" images ("Browse Games With..." sub-menu in main menu "Games List") </br>
+                 - files moved to a new "\images\browse_controls\" folder<br/>
+                 - file format changed from JPG to PNG, because they just look better<br/>
+                   &nbsp;&nbsp;"X-Arcade.png"; "HotRodSE.png"; "SlikStik.png"; "Devastator2.png"<br/>
+                 - images updated, some buttons captions were wrong and/or no longer assigned to anything
+             </h3>
+             <h3>Main menu "View" removed to prevent clutter, its items moved to proper sub-menus</h3>
          <h2>Added</h2>
-            <h3>Support for "PNG compression" tag in .ico files; the <code>PrivateExtractIcons()</code> WinAPI supports this:<br/>
-                - 256x256 / 128x128 / 68x68 icons in .ico files now have the "PNG compression" tag enabled.<br/>
-                - .ico file sizes reduced quite a bit; some file sizes are now half of what they used to be.<br/>
-                - No loss of quality since the PNG format is lossless.<br/>
-                - Icons loading speed remains the same (from my tests).</h3>
-            <h3>Added "Network Board" options to "Supermodel 3 Emulator Settings" screen:<br/>
-                - You need to create the Supermodel3 games list again.<br/>
-                - No support in custom game settings yet since this is an emulator WIP feature.</h3>
-            <h3>Added "merge" ROM tag detection for Demul; you don't need to have parent ROMs in the clone set anymore (just like MAME):<br/>
-                - It requires the latest WIP Demul build 180428 (date: April 28, 2018).<br/>
-                - You need to create the Demul games list again.<br/>
-                - This feature was quietly implemented in the frontend a while ago, but now it's official.</h3>
-            <h3>New TEasyItem property "ReportFirstColumnIndent":<br/>
-                - For the TEasyListView component, it will add a blank space in the first column when in report view mode.<br/>
-                - Huge improvement for grouped view mode; no more blank icon trickery to indent clone games.<br/>
-                - Favorite icons can finally be displayed in grouped view mode.<br/>
-                - This property only works in "report view".</h3>
-            <h3>New "Mega Large" (68x68) game icons size for details and grouped view modes:<br/>
-                - For the 4K mode and "multi-line captions" in the games list when the game font size is 16 or bigger.<br/>
-                - Internal indexes for "Game Icon Size" have changed; you must change this setting again (View Mode toolbar button).<br/>
-                - This also makes it a lot easier (and faster) to display arcade/console/computer/handheld 68x68 system icons in TImage components, used everywhere.</h3>
-            <h3>New "Ultra Large" (128x128) game icons size for tiles view mode:<br/>
-                - Useful for 4K mode and "multi-line captions" in the games list when the game font size is 16 or bigger.<br/>
-                - Internal indexes for "Tile View Cell Size" have changed; you must change this setting again (View Mode toolbar button).<br/>
-                - This also makes it a lot easier (and faster) to display arcade/console/computer/handheld 128x128 system icons in TImage components, used everywhere.</h3>
-            <h3>Implemented 4K layouts in all screens:<br/>
-                - Setting "Enable 4K Mode" is no more; 4K layouts are now integrated into the project and used by default.<br/>
-                - Minimum screen resolution required is 3840x2160 (anything lower will disable the 4K feature completely).<br/>
-                - If your Windows DPI screen scale is higher than 100%, either disable DPI scale for "EmuLoader.exe" properties in Windows (recommended) or disable 4K mode in the frontend (main menu)... or set DPI scale to 100% in Windows.<br/>
-                - Image hint panel settings, image category type, and image resolution were adapted to show larger texts and icons (Night Mode settings and Preferences "Light Mode"). (When in 4K mode, hint always uses large font sizes and a large icon, even if the setting "Large Font Size" in "Image Hint Box" is disabled).<br/>
-                - 4K screen layouts might look different than standard layouts.<br/>
-                - There's a "Disable 4K Mode" setting in the main menu if you insist on not using the awesome 4K layouts... WHY!?<br/>
-                - Some screens require you to restart the frontend after disabling 4K mode ("Preferences" screen, "Customize Night Mode").</h3>
+            <h3>Support for "PNG compression" tag in .ico files, "PrivateExtractIcons() WinAPI supports this<br/>
+                - 256x256 / 128x128 / 68x68 icons in .ico files now have the "PNG compression" tag enabled<br/>
+                - .ico file sizes reduced quite a bit; some file sizes are now half of the what they used to be<br/>
+                - no loss of quality since PNG format is lossless<br/>
+                - icons loading speed remains the same (from my tests)
+            </h3>
+            <h3>Added "Network Board" options to "Supermodel 3 Emulator Settings" screen<br/>
+                - you need to create Supermodel3 games list again<br/>
+                - no support in custom game settings yet since this is an emulator WIP feature
+            </h3>
+            <h3>Added "merge" ROM tag detection for Demul; you don't need to have parent ROMs in the clone set anymore, I think (just like MAME)<br/>
+                - it requires latest WIP Demul build 180428, date: April 28, 2018<br/>
+                - you need to create Demul games list again<br/>
+                - this feature was quietly implemented in the frontend a while ago, but now it's official
+            </h3>
+            <h3>New TEasyItem property "ReportFirstColumnIndent"<br/>
+                - for TEasyListView component, it will add a blank space in the first column, when in report view mode<br/>
+                - huge improvement for grouped view mode; no more blank icon trickery to indent clone games<br/>
+                - favorite icons can finally be displayed in grouped view mode<br/>
+                - this property only works in "report view"
+            </h3>
+            <h3>New "Mega Large" (68x68) game icons size for details and grouped view modes<br/>
+                - for the 4K mode and "multi-line captions" in games list, when game font size is 16 or bigger<br/>
+                - internal indexes for "Game Icon Size" have changed, you must change this setting again (View Mode tool bar button)<br/>
+                - this also makes it a lot easier (and faster) to display arcade/console/computer/handheld 68x68 system icons in TImage components, used everywhere
+            </h3>
+            <h3>New "Ultra Large" (128x128) game icons size for tiles view mode</br>
+                - useful for 4K mode and "multi-line captions" in games list, when game font size is 16 or bigger<br/>
+                - internal indexes for "Tile View Cell Size" have changed, you must change this setting again (View Mode tool bar button)<br/>
+                - this also makes it a lot easier (and faster) to display arcade/console/computer/handheld 128x128 system icons in TImage components, used everywhere
+            </h3>
+            <h3>Implemented 4K layouts in all screens<br/>
+                - setting "Enable 4K Mode" is no more, 4K layouts are now integrated into the project and used by default<br/>
+                - minimum screen resolution required is 3840x2160 (anything lower will disable 4K feature completely)<br/>
+                - if your Windows DPI screen scale is higher than 100%, either disable DPI scale for "EmuLoader.exe" properties in Windows (recommended)
+                  or disable 4K mode in the frontend (main menu)... or set DPI scale to 100% in Windows<br/>
+                - image hint panel settings, image category type and image resolution, were adapted to show larger texts and icon (night mode settings and preferences "light mode") <br/>
+                  &nbsp;&nbsp;(when in 4K mode, hint always use large font sizes and large icon, even if setting "Large Font Size" in "Image Hint Box", is disabled)
+                - 4K screen layouts might look different than standard layouts<br/>
+                - there's a "Disable 4K Mode" setting in main menu if you insist in not using the awesome 4K layouts........ WHY!?<br/>
+                  &nbsp;&nbsp;- some screens require you to restart the frontend after disabling 4K mode ("Preferences" screen, "Customize Night Mode")
+            </h3>
             <h3>4K splash screen!<br/>
-                - Big logo image 1960x1200 with adjustments and tweaks to sprites and background scenario.<br/>
-                - New "4K Ultra Size x2" setting; HUGE splash screen with a 2940x1800 logo image (insane mode).<br/>
-                - A few sprites were remade from high-resolution sources and are a lot more detailed. :)<br/>
-                - Most small sprites were resampled to high resolution without distortion or loss of quality (no image filters were used).<br/>
-                - 4K logo file: <code>resources\images\logo-4K.png</code>.<br/>
-                - 4K "insane" logo file: <code>resources\images\logo-4K_extra.png</code>.<br/>
-                - Alternate image files are also supported: <code>logo2-4K.png</code> or <code>logo2-4K_extra.png</code>.<br/>
-                - If you're not going to use 4K mode, files <code>logo-4K.png</code> and <code>logo-4K_extra.png</code> can be safely renamed/moved/deleted.</h3>
-            <h3>New "Mega Large (68x68) System Icon" for thumbnails view ("System" icon size selector in "Customize Thumbnails").</h3>
-            <h3>New "Available + Missing ROMs/CHDs" games filter option ("Have/Miss Filter" toolbar button):<br/>
-                - So you can view available games and games with missing ROMs/CHDs at the same time.<br/>
-                - New file <code>filter3_05_have_and_missroms.ico</code> (folder <code>resources\main_icons\toolbar_filters\</code>).<br/>
-                - File <code>filter3_05_miss_and_missroms.ico</code> renamed to <code>filter3_06_miss_and_missroms.ico</code> (folder <code>resources\main_icons\toolbar_filters\</code>).</h3>
-            <h3>Support for "Ryujinx: Nintendo Switch Emulator":<br/>
-                - There is no command line or emulator setting to auto-exit after clicking the ESC key (I think).<br/>
-                - Emulator must be configured before using it with the frontend.<br/>
-                - Website: <a href="https://ryujinx.org">https://ryujinx.org</a><br/>
-                - GitHub: <a href="https://github.com/Ryujinx">https://github.com/Ryujinx</a></h3>
-            <h3>Added a new "VersionHelpers.pas" unit to the project to detect the Windows version properly:<br/>
-                - Old code used the deprecated <code>GetVersionEx()</code> WinAPI.<br/>
-                - Minimum supported Windows version is now Windows Vista (frontend will NOT run on WinXP, no matter what you do).</h3>
-            <h3><b>Validation code runs BEFORE the application initialization commands.</b></h3>
+                - big logo image 1960x1200 with adjustments and tweaks to sprites and background scenario<br/>
+                - new "4K Ultra Size x2" setting; HUGE splash screen with a 2940x1800 logo image (insane mode)<br/>
+                - a few sprites were remade from high resolution sources, and are a lot more detailed :)<br/>
+                - most small sprites were resampled to high resolution without disortion of loss of quality (no image filters were used) <br/>
+                - 4K logo file: "resources\images\logo-4K.png"<br/>
+                - 4K "insane" logo file: "resources\images\logo-4K_extra.png"<br/>
+                - alternate image files are also supported: "logo2-4K.png" or "logo2-4K_extra.png"<br/>
+                - if you're not going to use the 4K mode, files "logo-4K.png" and "logo-4K_extra.png" can be safely renamed/moved/deleted
+            </h3>
+            <h3>New "Mega Large (68x68) System Icon" for thumbnails view ("System" icon size selector in "Customize Thumbnails")</h3>
+            <h3>New "Available + Missing ROMs/CHDs" games filter option ("Have/Miss Filter" tool bar button)<br/>
+                - so you can view available games and games with missing ROMs/CHDs at the same time<br/>
+                - new file "filter3_05_have_and_missroms.ico" (folder "resources\main_icons\toolbar_filters\")<br/>
+                - file "filter3_05_miss_and_missroms.ico" renamed to "filter3_06_miss_and_missroms.ico" (folder "resources\main_icons\toolbar_filters\")<br/>
+            </h3>
+            <h3>Support for "Ryujinx: Nintendo Switch Emulator"<br/>
+                - there is no command line or emulator setting  to auto-exit after clicking ESC key (I think)<br/>
+                - emulator must be configured before using it with the frontend<br/>
+                - website: https://ryujinx.org<br/>
+                - github: https://github.com/Ryujinx
+            </h3>
+            <h3>Added a new "VersionHelpers.pas" unit to the project, to detect the Windows version properly<br/>
+                - old code used the deprecated "GetVersionEx()" WinAPI<br/>
+                - minimum supported Windows version is now Windows Vista (frontend will NOT run on WinXP, no matter what you do)<br/>
+                - validation code runs BEFORE the application initialization commands
+            </h3>
       </div>
+      <div class="TRON2"></div>
+      </div>
+      <br/>
 
-      <br/><br/>
-      <div id="changelog">
-         <h1>version 8.8.8 change log - March 09, 2021</h1>
+      <div id="inner_box">
+      <div id="contents_title">Version 8.8.8 Change Log - March 09, 2021</div>
+      <div id="contents_text">
          <h2>Fixed</h2>
             <h3>RichEdit controls had garbage RTF text in some screens</h3>
             <h3>Natural sorting of "Version Info" column was not working as it should</h3>
          <h2>Changed</h2>
             <h3>RichEditURL component replaced by the Unicode ready "TntRichEdit" (from "Tnt Delphi Unicode Controls" library)<br/>
-                - show Unicode texts (English and non-English mixed together)... as long as you have a proper richedit20.dll file "richedit20.dll" v5.50.99.2010 file is supplied with the frontend, from the freeware "Microsoft Word Viewer" (if you have Microsoft Office 2010 or newer installed, this file might not be needed)<br/>
+                - show Unicode texts (English and non-English mixed together)... as long as you have a proper richedit20.dll file<br/>
+                  &nbsp;&nbsp;"richedit20.dll" v5.50.99.2010 file is supplied with the frontend, from the freeware "Microsoft Word Viewer"<br/>
+                  &nbsp;&nbsp;(if you have Microsoft Office 2010 or newer installed, this file might not be needed)<br/>
                 - MAME game docs can display non-English texts correctly now (mameinfo; history)<br/>
                 - message boxes can display non-English filenames in "command line" texts; mostly for console/computer games (not from MAME softlists)<br/>
-                - component class "TTntCustomRichEdit" modified by me to support "URL click" event, and other minor updates (TntComCtrls.pas)</h3>
-            <h3>Command line texts in "Run Game Confirmation Dialog" now show a "run&gt;" tag prefix<br/>
+                - component class "TTntCustomRichEdit" modified by me to support "URL click" event, and other minor updates (TntComCtrls.pas)<br/>
+            </h3>
+            <h3>Command line texts in "Run Game Confirmation Dialog" now show a "run>" tag prefix<br/>
                 - it's a cosmetic feature and to look cute<br/>
-                - but it also fixes a weird "auto-font" bug from "RichEdit20W" class, depending on the .dll you're using (blaim our dear Microsoft for that!)</h3>
+                - but it also fixes a weird "auto-font" bug from "RichEdit20W" class, depending on the .dll you're using (blaim our dear Microsoft for that!)
+            </h3>
             <h3>function uCommon.CallShellExecute() updated to support UTF-16 WideString URLs; using ShellExecuteW() WinAPI</h3>
             <h3>Rewrite/optimization of functions to parse game docs dat files (mameinfo, history)<br/>
                 - game entry detection from "history.xml" is now blazing fast... no more 2 seconds lag when selecting games with "Game Docs" feature enabled<br/>
-                &nbsp;&nbsp;- ("history.xml" is now the preferred file and should be used instead of "history.dat")</h3>
+                  &nbsp;&nbsp;("history.xml" is now the preferred file and should be used instead of "history.dat")
+            </h3>
             <h3>Text and text color tweaks to "Run Game Configuration Dialog" feature (on/off in main menu)</h3>
          <h2>Removed</h2>
             <h3>RichEditURL component is no longer needed, removed from the entire project, replaced by TntRichEdit</h3>
          <h2>Added</h2>
-            <h3>Updated Atari800 cartridge mappers list to include new entries; for .rom raw cart files without "cart header" (for Altirra, Atari800 only)</h3>
+            <h3>Updated Atari800 cartridge mappers list to include new entries; for .rom raw cart files without "cart header" (for Altirra, Atari800 only) </h3>
             <h3>New setting: "Enable 4K Mode (2160p)"<br/>
                 - Larger fonts, buttons, icons and other controls<br/>
                 - only message boxes are supported for now<br/>
                 - feature intended for monitors with 4K resolution (3840x2160) and screen DPI scale of 100%<br/>
-                - in the future, some screens/dialogs will be so much bigger than current implementation and will only fit in a 4K screen resolution (crazy mode on)   (this is my personal "dream come true" feature) :) :)</h3>
+                - in the future, some screens/dialogs will be so much bigger than current implementation and will only fit in a 4K screen resolution (crazy mode on)
+                  &nbsp;&nbsp;(this is my personal "dream come true" feature) :) :)
+            </h3>
       </div>
+      <div class="TRON2"></div>
+      </div>
+      <br/>
 
-      <br/><br/>
-      <div id="changelog">
-         <h1>version 8.8.7 change log - February 25, 2021</h1>
+      <div id="inner_box">
+      <div id="contents_title">Version 8.8.7 Change Log - February 25, 2021</div>
+      <div id="contents_text">
          <h2>Fixed</h2>
             <h3>Nasty bug causing the frontend to not find .ico files and icon.zip if you have multiple icon folders set in MAME's "ui.ini" file</h3>
             <h3>White square bug between horizontal and vertical scroll bars (bottom/right) on night mode, when both scroll bars are visible (EasyListView bug)</h3>
          <h2>Changed</h2>
             <h3>Toggle Favorites ON/OFF with single click (tool bar button)<br/>
                 - easier to enable favorites<br/>
-                - use mouse right-click to call the popup menu with more options; this info shows up in button's hint on mouse hover<br/>
-                - fixed a bug not making button state "pressed" at startup if favorites is enabled</h3>
+                - use mouse right-click to call the popup menu with more options;
+                  this info shows up in button's hint on mouse hover<br/>
+                - fixed a bug not making button state "pressed" at startup if favorites is enabled
+            </h3>
             <h3>Toggle MAMu_ icons ON/OFF with single click (tool bar button)<br/>
                 - easier to enable game icons<br/>
-                - use mouse right-click to call the popup menu with more options; this info shows up in button's hint on mouse hover<br/>
-                - fixed a bug not making button state "pressed" at startup if MAMu_ icons is enabled</h3>
+                - use mouse right-click to call the popup menu with more options;
+                  this info shows up in button's hint on mouse hover<br/>
+                - fixed a bug not making button state "pressed" at startup if MAMu_ icons is enabled
+            </h3>
             <h3>Minor color tweaks in night mode:<br/>
                 - game title label colors; lighter green (good games) and lighter red (games with missing ROMs)<br/>
-                - scan mode labels color, from light blue to light gray</h3>
+                - scan mode labels color, from light blue to light gray
+            </h3>
             <h3>Optimizations in "Show Game Docs" feature<br/>
                 - function to add text in RichEdit rewritten for future expansion<br/>
                 - better handling of Unicode strings (no proper multi-language support yet)<br/>
                 - removal of duplicated code to speed things up<br/>
                 - URL links in history.xml / history.dat were outdated, incorrect and not working<br/>
                 - updated TCustomRichEdit base class to use richedit20.dll (v2 / v3) instead of the old richedit32.dll (v1)<br/>
-                - increased RichEdit's text length limit to 16MB; it was causing crashes for some games</h3>
+                - increased RichEdit's text length limit to 16MB; it was causing crashes for some games
+            </h3>
       </div>
+      <div class="TRON2"></div>
+      </div>
+      <br/>
 
-      <br/><br/>
-      <div id="changelog">
-         <h1>version 8.8.6 change log - January 28, 2021</h1>
+      <div id="inner_box">
+      <div id="contents_title">Version 8.8.6 Change Log - January 28, 2021</div>
+      <div id="contents_text">
          <h2>Fixed</h2>
             <h3>Splash screen's image was not loaded on a clean install</h3>
             <h3>I forgot to remove a beep sound when loading a game MAMu_ icon</h3>
          <h2>Changed</h2>
-            <h3>Night mode setting "Use Windows 10 Dark Scroll Bar in Games List" is now enabled by default; only works on Win10 build 1903 (May 2019 update) and newer (this setting might be removed in a future build)</h3>
+            <h3>Night mode setting "Use Windows 10 Dark Scroll Bar in Games List" is now enabled by default; only works on Win10 build 1903 (May 2019 update) and newer<br/>
+                &nbsp;&nbsp;(this setting might be removed in a future build)
+            </h3>
          <h2>Added</h2>
             <h3>Per image category "no image found" added back. You can have different PNG files once again instead of Emu Loader's "orb" image<br/>
                 - 17 category files, PNG format on a new "img_missing" folder ("resources\images\img_missing\")<br/>
                 - filenames are as follow:<br/>
-                &nbsp;&nbsp;- Title Snapshot: title.png<br/>
-                &nbsp;&nbsp;- Game Snapshot.: ingame.png<br/>
-                &nbsp;&nbsp;- Marquee.......: marquee.png<br/>
-                &nbsp;&nbsp;- Flyer.........: flyer.png<br/>
-                &nbsp;&nbsp;- Cabinet.......: cabinet.png<br/>
-                &nbsp;&nbsp;- Control Panel.: controlpanel.png<br/>
-                &nbsp;&nbsp;- Software Cover: softwarecover.png<br/>
-                &nbsp;&nbsp;- PCB...........: pcb.png<br/>
-                &nbsp;&nbsp;- Game Artwork..: ingameartwork.png<br/>
-                &nbsp;&nbsp;- End...........: end.png<br/>
-                &nbsp;&nbsp;- Boss..........: boss.png<br/>
-                &nbsp;&nbsp;- Logo..........: logo.png<br/>
-                &nbsp;&nbsp;- Score.........: score.png<br/>
-                &nbsp;&nbsp;- Versus........: versus.png<br/>
-                &nbsp;&nbsp;- Game Over.....: gameover.png<br/>
-                &nbsp;&nbsp;- How to Play...: howtoplay.png<br/>
-                &nbsp;&nbsp;- Select........: select.png<br/>
-                - if the new file is not found "resources\images\emuloader.png" will be used instead (as before)</h3>
+                  &nbsp;&nbsp;- Title Snapshot: title.png<br/>
+                  &nbsp;&nbsp;- Game Snapshot.: ingame.png<br/>
+                  &nbsp;&nbsp;- Marquee.......: marquee.png<br/>
+                  &nbsp;&nbsp;- Flyer.........: flyer.png<br/>
+                  &nbsp;&nbsp;- Cabinet.......: cabinet.png<br/>
+                  &nbsp;&nbsp;- Control Panel.: controlpanel.png<br/>
+                  &nbsp;&nbsp;- Software Cover: softwarecover.png<br/>
+                  &nbsp;&nbsp;- PCB...........: pcb.png<br/>
+                  &nbsp;&nbsp;- Game Artwork..: ingameartwork.png<br/>
+                  &nbsp;&nbsp;- End...........: end.png<br/>
+                  &nbsp;&nbsp;- Boss..........: boss.png<br/>
+                  &nbsp;&nbsp;- Logo..........: logo.png<br/>
+                  &nbsp;&nbsp;- Score.........: score.png<br/>
+                  &nbsp;&nbsp;- Versus........: versus.png<br/>
+                  &nbsp;&nbsp;- Game Over.....: gameover.png<br/>
+                  &nbsp;&nbsp;- How to Play...: howtoplay.png<br/>
+                  &nbsp;&nbsp;- Select........: select.png<br/>
+                - if the new file is not found "resources\images\emuloader.png" will be used instead (as before)
+            </h3>
             <h3>Support for MAME's new "history.xml" file format<br/>
                 - if both "history.dat" (old format) and "history.xml" are found, the frontend will use the .XML as default<br/>
-                - the first line cannot be empty as the "&lt; ?xml " string is used to validate the XML file (otherwise the frontend will handle that file as the one with old .dat format)<br/>
+                - the first line cannot be empty as the "< ?xml " string is used to validate the XML file<br/>
+                  &nbsp;&nbsp;(otherwise the frontend will handle that file as the one with old .dat format)<br/>
                 - only english text is supported (TRichEdit limitation)<br/>
-                - internet links might not work if they have "%20" char as spaces (and other coded chars)</h3>
+                - internet links might not work if they have "%20" char as spaces (and other coded chars)
+            </h3>
       </div>
 
       <br/><br/>
       <div id="changelog">
          <h1>version 8.8.5 change log - September 30, 2020</h1>
          <h2>Fixed</h2>
-            <h3>Changing between image categories / image layouts in a fast pace was causing the frontend to crash; "previous/next" buttons are now disabled until the process finishes</h3>
+            <h3>Changing between image categories / image layouts in a fast pace was causing the frontend to crash;
+                "previous/next" buttons are now disabled until the process finishes</h3>
             <h3>A StringList variable was initializing twice and the 2nd ".Create" call was using wrong HashedStringList format. "FATALITY!"<br/>
-                - feature affected: parse MAME multiple folders into a StringList, used by many functions ("mame.ini" and "ui.ini")</h3>
+                - feature affected: parse MAME multiple folders into a StringList, used by many functions ("mame.ini" and "ui.ini")<br/>
+            </h3>
             <h3>MAMu_ icons folder could be set to "empty" in Preferences screen; MAME requires a default folder named "icons"</h3>
             <h3>ShellTreeView Win10 dark theme fix on "Browse for Folder" dialog (selection bar, text color, scroll bar)</h3>
          <h2>Changed</h2>
@@ -523,7 +714,8 @@
          <h2>Removed</h2>
             <h3>Animated GIF in clean install dialog is kaput! It was just an experiment<br/>
                 - replaced by a static "clean_install.png", like in splash screen and about screen<br/>
-                - minor font color tweaks</h3>
+                - minor font color tweaks
+            </h3>
          <h2>Added</h2>
             <h3>Multiple paths scan support for zipped images, MAMu_ icons, video previews and thumbnails view mode (MAME/HBMAME only)<br/>
                 - I forgot about this completely... oopsie!<br/>
@@ -535,32 +727,23 @@
                 - updated "MAME Images Manager" to scan all paths and fixed a "dusty" bug on "Scan Invalid Images": valid images were added to the list (DUH!)<br/>
                 - updated "MAMu_ Icons Manager" to scan multiple paths<br/>
                 - updates to "Delete MAME and Arcade Clone Images":<br/>
-                &nbsp;&nbsp;- scan multiple paths<br/>
-                &nbsp;&nbsp;- resizeable window and image panel<br/>
-                &nbsp;&nbsp;- folders scan function was incomplete<br/>
-                &nbsp;&nbsp;- code optimizations</h3>
+                  &nbsp;&nbsp;- scan multiple paths<br/>
+                  &nbsp;&nbsp;- resizeable window and image panel<br/>
+                  &nbsp;&nbsp;- folders scan function was incomplete<br/>
+                  &nbsp;&nbsp;- code optimizations
+            </h3>
             <h3>Support MAME 0.225 new "mame.ini" settings<br/>
-                - "beam_dot_size" - "speaker_report" - "debugger_font" - "debugger_font_size"</h3>
-            <h3>Support MAME 0.225 new "ui.ini" settings (emulator default settings only)</h3>
+                - "beam_dot_size"
+                - "speaker_report"
+                - "debugger_font"
+                - "debugger_font_size"
+            </h3>
+            <h3>Support MAME 0.225 new "ui.ini" settings (emulator default settings only)<br/>
+                - "skip_warnings"
+            </h3>
       </div>
 
       <br/><br/>
-      <!-- END generated from CHANGELOG.md -->
-
-      <div id="changelog">
-         <h1>version 8.8.4 change log - May ??, 2020</h1>
-         <h2>Fixed</h2>
-            <h3>none</h3>
-         <h2>Changed</h2>
-            <h3>none</h3>
-         <h2>Removed</h2>
-            <h3>none</h3>
-         <h2>Added</h2>
-            <h3>none</h3>
-      </div>
-      
-      <br/><br/>
-      -->
       <div id="changelog">
          <h1>version 8.8.4 change log - May 21, 2020</h1>
          <h2>Fixed</h2>
@@ -578,10 +761,10 @@
             <h3>Proper word wrap on labels, specially very long and spaceless CHD filenames (Game Details screen, left panel)</h3>
          <h2>Changed</h2>
             <h3>Added a new "WordWrapSpaceless" property to my TShadowLabel component<br/>
-                 - word wrap works properly on long texts with no spaces<br/>
-                 - this is done by using "DT_EDITCONTROL" flag in the DrawTextW() WinAPI<br/>
-                 - it even works with Unicode texts<br/>
-                 - for this to work, "WordWrap" property must be enabled and "AutoSize" property must be disabled
+                - word wrap works properly on long texts with no spaces<br/>
+                - this is done by using "DT_EDITCONTROL" flag in the DrawTextW() WinAPI<br/>
+                - it even works with Unicode texts<br/>
+                - for this to work, "WordWrap" property must be enabled and "AutoSize" property must be disabled
             </h3>
             <h3>Updates to "MAMu_ Icons Manager"<br/>
                 - buttons bar use same colors as games filters tool bar<br/>
@@ -691,8 +874,7 @@
       </div>
 
       <br/><br/>
-      <div id="changelog">
-         <h1>version 8.8 change log - August 14, 2019</h1>
+      <h1>version 8.8 change log - August 14, 2019</h1>
          <h2>Fixed</h2>
             <h3>Fixed a bug in "TCustomColorBox" Delphi 7 class, "SetSelected()" procedure<br/>
                 - it was not repainting the control properly, and it was not caused by the frontend (damn you Delphi 7!)<br/>
@@ -702,7 +884,7 @@
             <h3>Event "OnSelect()" was not properly executed on TColorBoxEx components (color dropdown buttons)</h3>
             <h3>A few default settings in "EmuLoader.ini" and "nightmode.ini" were causing problems on a clean install</h3>
             <h3>Colors for "Game Docs Status Bar" not updated when switching between light mode and night mode</h3>
-            <h3>Fixes for the night mode<br/>
+            <h3>Fixes for the night mode</br>
                 - search bar background had gradient always enabled even if the gradient setting was not ticked<br/>
                 - floating panel gradient background colors were not properly set, specially at startup<br/>
                 - TColorBoxEx were resetting to default colors at frontend startup when viewing the "2 pages" in night mode screen
@@ -750,7 +932,7 @@
             </h3>
             <h3>Selection bar of menus/popup menus is a little darker, around 10%</h3>
             <h3>Moved settings panel to a popup menu ("Favorites Manager" settings button)</h3>
-            <h3>Game details screen changes<br/>
+            <h3>Game details screen changes</br>
                 - removed shadow of texts in the left panel (night mode)<br/>
                 - removed dual border from ROMs list<br/>
                 - minor improvements to make sure border spaces are pixel perfect
@@ -822,7 +1004,7 @@
                 - useful for high resolution screens (1080p or higher)
             </h3>
             <h3>Added a custom game fonts set for night mode, split from light mode<br/>
-                - have a set of game fonts for light mode and another for night mode<br/>
+                - have a set of game fonts for light mode and another for night mode</br>
                 - light mode filename: "\ini_files\sysgamecustomfont.ini"<br/>
                 - night mode filename: "\ini_files\sysgamecustomfont_nightmode.ini"<br/>
                 - updated "Customize Game Fonts" screen to load the night mode font settings if this mode is active (games popup menu, main menu "Games List")<br/>
