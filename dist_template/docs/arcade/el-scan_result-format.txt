@@ -1,0 +1,36 @@
+Format of Scan Results Output (Available MAME/Arcade Games with Missing ROMs/CHDs)
+----------------------------------------------------------------------------------
+
+[gamename]
+zip_game=file_status
+zip_parentgame=file_status
+zip_bios=file_status
+device#=device_name
+zip_device#=file_status
+crc32;sha1=rom/chd_status
+merged=1
+
+
+file_status Codes
+-----------------
+
+0 -> Not Found
+1 -> Found
+
+
+rom/chd_status Codes
+--------------------
+
+0 -> Missing ROM / CHD
+1 -> CHD with Bad SHA-1/MD5 Checksum
+
+
+Notes:
+  - Files are located in "el_path\arcade\games\" and "el_path\arcade\mame_softwarelist_games\" folders with a '.miss' extension
+  - In merged sets, "zip_parentgame" and "zip_bios" are ignored
+  - Game sets with all ROMs/CHDs missing are not added to this list
+  - This file is only used by games validated in full scan mode
+
+
+
+-- Master Control: "End of line." (quote from "TRON") --

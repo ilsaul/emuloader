@@ -23,14 +23,31 @@ var
 
 implementation
 
-uses uMain;
+uses uMain, uCommon;
 
 {$R *.DFM}
 
 procedure TFormAbout.FormCreate(Sender: TObject);
+{$IF CompilerVersion >= 20}
+var
+  VersionPanel: TPanel;
+{$IFEND}
 begin
   if FileExists(FormMain.GetFolderFull(35)+'about.png') then
      ImageAbout.Bitmap.LoadFromFile(FormMain.GetFolderFull(35)+'about.png');
+  {$IF CompilerVersion >= 20}
+  VersionPanel:= TPanel.Create(Self);
+  VersionPanel.Parent:= Self;
+  VersionPanel.Height:= MulDiv(32, PixelsPerInch, 96);
+  ClientHeight:= ClientHeight+VersionPanel.Height;
+  VersionPanel.Align:= alBottom;
+  VersionPanel.BevelOuter:= bvNone;
+  VersionPanel.Color:= clBlack;
+  VersionPanel.ParentBackground:= False;
+  VersionPanel.Font.Color:= clWhite;
+  VersionPanel.Caption:= 'Emu Loader '+FrontendVersionCaption;
+  VersionPanel.OnClick:= ImageAboutClick;
+  {$IFEND}
 end;
 
 procedure TFormAbout.FormKeyPress(Sender: TObject; var Key: Char);
@@ -45,5 +62,4 @@ begin
 end;
 
 end.
-
 

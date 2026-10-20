@@ -83,6 +83,9 @@ type
     FCustomIconsDirectory: String; // added by Ciro Alfredo Consentino (August 16, 2019)
     FCustomIconsEnabled: Boolean;  // added by Ciro Alfredo Consentino (August 16, 2019)
     FCustomEnableIconHD: Boolean;  // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
+    FCustomIconsImages: TImageList;   // readded by Moreno Cattaneo for missing source (Delphi 13 port)
+    FCustomIconsImagesHD: TImageList; // readded by Moreno Cattaneo for missing source (Delphi 13 port)
+    FCaptionVertIndent: Integer;      // readded by Moreno Cattaneo for missing source (Delphi 13 port)
     icoCheckBox_Checked,
     icoCheckBox_Checked_Down,
     icoCheckBox_Checked_Hot,
@@ -131,6 +134,9 @@ type
     property CustomIconsDirectory: String read FCustomIconsDirectory write SetCustomIconsDirectory; // added by Ciro Alfredo Consentino (August 16, 2019)
     property CustomIconsEnabled: Boolean read FCustomIconsEnabled write SetCustomIconsEnabled;      // added by Ciro Alfredo Consentino (August 16, 2019)
     property CustomEnableIconHD: Boolean read FCustomEnableIconHD write FCustomEnableIconHD default False; // added by Moreno Cattaneo for missing source
+    property CustomIconsImages: TImageList read FCustomIconsImages write FCustomIconsImages;       // readded for missing source (Delphi 13 port)
+    property CustomIconsImagesHD: TImageList read FCustomIconsImagesHD write FCustomIconsImagesHD; // readded for missing source (Delphi 13 port)
+    property CaptionVertIndent: Integer read FCaptionVertIndent write FCaptionVertIndent default 0; // readded for missing source (Delphi 13 port)
   end;
 
   TAdvCustomGroupBox = class(TCustomGroupBox)

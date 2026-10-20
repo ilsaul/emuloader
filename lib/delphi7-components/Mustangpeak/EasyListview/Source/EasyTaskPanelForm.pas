@@ -100,7 +100,9 @@ type
     property Height stored True;
     property HorzScrollBar;
     property KeyPreview;
+    {$IFNDEF MP_MODERN_DELPHI}
     property OldCreateOrder;
+    {$ENDIF}
     property PixelsPerInch;
     property PopupMenu;
     property PrintScale;

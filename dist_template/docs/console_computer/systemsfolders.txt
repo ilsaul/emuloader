@@ -1,0 +1,83 @@
+    When copying/moving games files, destination folder names are composed of "<user_custom_path>\<system name>\<media type name>\".
+Names of both systems and media types are defined internally by the frontend.
+
+System Name and Destination Folder
+----------------------------------
+
+Super Nintendo
+Game Boy Advance
+Nintendo 8-bit
+Genesis
+Atari 2600
+Intellivision
+Master System
+Odyssey2
+Game Gear
+ColecoVision
+GP32
+PC Engine
+Atari Lynx
+Atari 5200 SuperSystem
+Atari Jaguar
+Sega 32X
+Neo-Geo Pocket
+Nintendo 64
+Sega CD
+Game Boy
+PlayStation
+GameCube
+Atari 7800
+Dreamcast
+Watara Supervision
+WonderSwan
+PlayStation 2
+Nintendo Wii
+Nintendo DS
+PC Engine CD
+Game Boy Color
+Super Game Boy
+Sega Saturn
+3DO
+Amiga CD32
+Virtual Boy
+PC-FX
+Famicom Disk System
+Commodore 64
+MSX
+MSX 2
+MSX 2+
+MSX Turbo-R
+Amiga
+Atari ST
+ZX Spectrum
+Sega SC-3000
+Atari 400/800/XL
+Commodore VIC-20
+Arcadia 2001
+Tiger game.com
+Apple II
+Apple IIGS
+WonderSwan Color
+Neo-Geo Pocket Color
+Commodore 128
+Neo-Geo CD
+Atari Jaguar CD
+Amstrad CPC
+PSP
+Philips CD-i
+Sega SF-7000
+Nintendo Satellaview
+Nintendo Wii U
+Nintendo 3DS
+
+
+Media Type Titles and Folder Names
+----------------------------------
+
+Title             Folder Name
+
+Cartridge         cart
+Floppy Disk       flop
+Cassette Tape     cass
+Hard Disk Drive   hard
+Disc Image        disc

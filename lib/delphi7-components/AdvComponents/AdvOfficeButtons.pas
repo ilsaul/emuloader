@@ -196,6 +196,9 @@ type
     FCustomEnableIconHD: Boolean;          // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
     FCustomIconsImages: TImageList;        // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
     FCustomIconsImagesHD: TImageList;      // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
+    {$IF CompilerVersion >= 20}
+    FUpdatingCaptionLayout: Boolean;
+    {$IFEND}
 
     procedure WMEraseBkGnd(var Message:TMessage); message WM_ERASEBKGND;
     procedure CMEnabledChanged(var Message: TMessage); message CM_ENABLEDCHANGED;
@@ -215,9 +218,13 @@ type
     procedure SetCustomIconsEnabled(Value: Boolean);  // added by Ciro Alfredo Consentino (August 16, 2019)
     procedure LoadCustomIcons; // added by Ciro Alfredo Consentino (August 16, 2019)
     procedure DrawParentImage (Control: TControl; Dest: TCanvas);
+    {$IF CompilerVersion >= 20}
+    function GetCaptionTextInset: Integer;
+    {$IFEND}
   protected
     procedure Notification(AComponent: TComponent; AOperation: TOperation); override;
-    procedure DrawCheck(ACanvas: TCanvas);
+    procedure DrawCheck(ACanvas: TCanvas); overload;
+    procedure DrawCheck(ACanvas: TCanvas; var GlyphWidth: Integer); overload;
     procedure Paint; override;
     procedure SetChecked(Value: Boolean); virtual;
     function  GetChecked: Boolean; virtual;
@@ -240,6 +247,9 @@ type
     destructor  Destroy; override;
     procedure Toggle; virtual;
     procedure SetBounds(ALeft, ATop, AWidth, AHeight: Integer); override;
+    {$IF CompilerVersion >= 20}
+    property CaptionTextInset: Integer read GetCaptionTextInset;
+    {$IFEND}
     property TransparentChaching: Boolean read FTransparentCaching write FTransparentCaching;
     property DrawBkg: Boolean read FDrawBkg write FDrawBkg;
     property Alignment: TLeftRight read FAlignment write SetAlignment;
@@ -380,6 +390,9 @@ type
     FCustomEnableIconHD: Boolean;             // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
     FCustomIconsImages: TImageList;           // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
     FCustomIconsImagesHD: TImageList;         // added by Ciro Alfredo Consentino (XXX) readded by Moreno Cattaneo for missing source
+    {$IF CompilerVersion >= 20}
+    FUpdatingCaptionLayout: Boolean;
+    {$IFEND}
 
     procedure TurnSiblingsOff;
     procedure SetDown(Value:Boolean);
@@ -404,7 +417,11 @@ type
     procedure LoadCustomIcons; // added by Ciro Alfredo Consentino (August 16, 2019)
     procedure DrawParentImage (Control: TControl; Dest: TCanvas);
   protected
-    procedure DrawRadio(ACanvas: TCanvas);
+    procedure DrawRadio(ACanvas: TCanvas); overload;
+    procedure DrawRadio(ACanvas: TCanvas; var GlyphWidth: Integer); overload;
+    {$IF CompilerVersion >= 20}
+    function GetCaptionTextInset: Integer;
+    {$IFEND}
     procedure Paint; override;
     procedure Notification(AComponent: TComponent; AOperation: TOperation); override;
     procedure MouseDown(Button: TMouseButton; Shift: TShiftState; X, Y: Integer); override;
@@ -423,6 +440,9 @@ type
   public
     constructor Create(AOwner: TComponent); override;
     destructor  Destroy; override;
+    {$IF CompilerVersion >= 20}
+    property CaptionTextInset: Integer read GetCaptionTextInset;
+    {$IFEND}
     procedure SetBounds(ALeft, ATop, AWidth, AHeight: Integer); override;
     property TransparentChaching: boolean read FTransparentCaching write FTransparentCaching;
     property DrawBkg: Boolean read FDrawBkg write FDrawBkg;
@@ -794,6 +814,68 @@ uses
 const
   BW = 12;
 
+{$IF CompilerVersion >= 20}
+procedure UpdateOfficeButtonCaptionLayout(Button: TCustomControl;
+  const ACaption: String; ACanvas: TCanvas; TextInset: Integer);
+var
+  Description: TControl;
+  Component: TComponent;
+  Sibling: TControl;
+  I, RightLimit, NeededWidth, DescriptionLeft: Integer;
+  R: TRect;
+begin
+  if (Button.Parent = nil) or (Button.Owner = nil) or
+     (Button.Name = '') or (csDesigning in Button.ComponentState) or
+     (csLoading in Button.ComponentState) or
+     (csLoading in Button.Owner.ComponentState) then
+     Exit;
+
+  // EmuLoader's descriptions use either naming convention. Inline tips and
+  // labels in other parents are not subtitles and must retain their positions.
+  Description:= nil;
+  Component:= Button.Owner.FindComponent(Button.Name+'Label');
+  if Component = nil then
+     Component:= Button.Owner.FindComponent('Label'+Button.Name);
+  if Component is TCustomLabel then
+  begin
+    Sibling:= TControl(Component);
+    if (Sibling.Parent = Button.Parent) and
+       (Sibling.Top >= Button.Top+Button.Height-5) and
+       (Sibling.Top <= Button.Top+Button.Height+16) then
+       Description:= Sibling;
+  end;
+
+  // Grow only into free space in this row, never into another column, an
+  // inline description or beyond the parent's client area. Do not AutoSize.
+  RightLimit:= Button.Parent.ClientWidth-4;
+  for I:= 0 to Button.Parent.ControlCount-1 do
+  begin
+    Sibling:= Button.Parent.Controls[I];
+    if (Sibling <> Button) and (Sibling <> Description) and
+       Sibling.Visible and (Sibling.Left > Button.Left) and
+       (Min(Sibling.Top+Sibling.Height, Button.Top+Button.Height)-
+        Max(Sibling.Top, Button.Top) > 4) then
+       RightLimit:= Min(RightLimit, Sibling.Left-4);
+  end;
+  if (ACaption <> '') and (Pos(#13, ACaption) = 0) and
+     (Pos(#10, ACaption) = 0) then
+  begin
+    R:= Rect(0, 0, 0, 0);
+    DrawText(ACanvas.Handle, PChar(ACaption), Length(ACaption), R,
+             DT_CALCRECT or DT_SINGLELINE);
+    NeededWidth:= Min(TextInset+R.Right-R.Left+4, RightLimit-Button.Left);
+    if NeededWidth > Button.Width then
+       Button.Width:= NeededWidth;
+  end;
+  if Description <> nil then
+  begin
+    DescriptionLeft:= Button.Left+TextInset;
+    if Description.Left <> DescriptionLeft then
+       Description.Left:= DescriptionLeft;
+  end;
+end;
+{$IFEND}
+
 function IsVista: Boolean;
 var
 //  hKernel32: HMODULE;
@@ -982,10 +1064,22 @@ procedure TCustomAdvOfficeCheckBox.SetBounds(ALeft, ATop, AWidth, AHeight: Integ
 begin
   inherited;
   FBkgCache := False;
+  {$IF CompilerVersion >= 20}
+  if FUpdatingCaptionLayout then
+     Exit;
+  {$IFEND}
   Repaint;
 end;
 
 procedure TCustomAdvOfficeCheckBox.DrawCheck(ACanvas: TCanvas);
+var
+  GlyphWidth: Integer;
+begin
+  GlyphWidth:= BW;
+  DrawCheck(ACanvas, GlyphWidth);
+end;
+
+procedure TCustomAdvOfficeCheckBox.DrawCheck(ACanvas: TCanvas; var GlyphWidth: Integer);
 var
   bmp: TBitmap;
   BL,BT: Integer;
@@ -1084,6 +1178,12 @@ begin
       LoadedCustom := not ico.Empty;
       if LoadedCustom then
       begin
+        {$IF CompilerVersion >= 20}
+        icoHeight:= ico.Height;
+        GlyphWidth:= ico.Width;
+        if ACanvas = nil then
+           Exit;
+        {$IFEND}
         case FBtnVAlign of
           tlTop:    BT := 2 + (ACanvas.TextHeight('gh') - icoHeight) div 2;
           tlCenter: BT := (ClientRect.Bottom - ClientRect.Top) div 2 - (icoHeight div 2);
@@ -1091,7 +1191,11 @@ begin
         end;
 
         if (FAlignment = taRightJustify) or UseRightToLeftAlignment then
+          {$IF CompilerVersion >= 20}
+          BL := ClientRect.Right - GlyphWidth - 1
+          {$ELSE}
           BL := ClientRect.Right - icoHeight - 1
+          {$IFEND}
         else
           BL := 0;
 
@@ -1099,8 +1203,8 @@ begin
         ACanvas.Draw(BL, BT, ico);
       end;
     finally
+      ico.Free;
     end;
-    ico.Free;
     if LoadedCustom then
        Exit;
   end;
@@ -1108,8 +1212,34 @@ begin
   if DrawThemed then
   begin
     HTheme := OpenThemeData(Self.Handle,'button');
-    Err:= GetThemePartSize(HTheme, Self.Handle, BP_CHECKBOX, CBS_CHECKEDNORMAL, nil, TS_TRUE, iSize); // added by Ciro Alfredo Consentino (August 05, 2019)
+    {$IF CompilerVersion >= 20}
+    iSize.cx:= BW;
+    iSize.cy:= BW;
+    if HTheme <> 0 then
+       Err:= GetThemePartSize(HTheme, 0, BP_CHECKBOX, CBS_CHECKEDNORMAL, nil, TS_TRUE, iSize)
+    else
+       Err:= E_FAIL;
+    if Failed(Err) or (iSize.cy <= 0) then
+    begin
+      if HTheme <> 0 then
+         CloseThemeData(HTheme);
+      HTheme:= 0;
+    end
+    else
+       GlyphWidth:= iSize.cy;
+    if (ACanvas = nil) and (HTheme <> 0) then
+    begin
+      CloseThemeData(HTheme);
+      Exit;
+    end;
+    {$ELSE}
+    Err:= GetThemePartSize(HTheme, Self.Handle, BP_CHECKBOX, CBS_CHECKEDNORMAL, nil, TS_TRUE, iSize);
+    {$IFEND}
+    if HTheme = 0 then
+       DrawThemed:= False;
 
+    if DrawThemed then
+    begin
     // new code added by Ciro Alfredo Consentino (August 05, 2019)
     case FBtnVAlign of
     tlTop:    BT := 2 + (ACanvas.TextHeight('gh') - iSize.cy) div 2;
@@ -1173,6 +1303,7 @@ begin
     end
     else
       DrawThemed := false;
+    end;
   end;
 
   if not DrawThemed then
@@ -1223,6 +1354,11 @@ begin
       end;
 
       bmp.LoadFromResourceName(hInstance, resStr);
+      {$IF CompilerVersion >= 20}
+      GlyphWidth:= bmp.Width;
+      if ACanvas = nil then
+         Exit;
+      {$IFEND}
       bmp.TransparentColor:= clFuchsia; // added by Ciro Alfredo Consentino (July 30, 2019)
       bmp.Transparent := True;
       bmp.TransparentMode := tmFixed;//  tmAuto; // modified by Ciro Alfredo Consentino (July 30, 2019)
@@ -1246,14 +1382,37 @@ begin
   end;
 end;
 
+{$IF CompilerVersion >= 20}
+function TCustomAdvOfficeCheckBox.GetCaptionTextInset: Integer;
+begin
+  Result:= BW;
+  DrawCheck(nil, Result);
+  Result:= Max(Result+4, CaptionIndent);
+end;
+{$IFEND}
+
 procedure TCustomAdvOfficeCheckBox.Paint;
 var
   R: TRect;
   text: String;
   ExtraBW: Integer;
+  GlyphWidth: Integer;
   FontColor: TColor;
   CanvasBMP: TBitmap;
 begin
+  {$IF CompilerVersion >= 20}
+  if (Self is TAdvOfficeCheckBoxEx) and (FAlignment = taLeftJustify) and
+     not UseRightToLeftAlignment then
+  begin
+    FUpdatingCaptionLayout:= True;
+    try
+      Canvas.Font:= Font;
+      UpdateOfficeButtonCaptionLayout(Self, Caption, Canvas, CaptionTextInset);
+    finally
+      FUpdatingCaptionLayout:= False;
+    end;
+  end;
+  {$IFEND}
   Canvas.Brush.Style := bsClear;
   CanvasBMP := TBitmap.Create;
   CanvasBMP.Width := Self.Width;
@@ -1297,19 +1456,25 @@ begin
     CanvasBMP.Canvas.Brush.Style := bsClear;
     Text := Caption;
 
-    DrawCheck(CanvasBMP.Canvas);
+    GlyphWidth:= BW;
+    DrawCheck(CanvasBMP.Canvas, GlyphWidth);
 
     ExtraBW := 4;
+    {$IF CompilerVersion >= 20}
+    GlyphWidth:= Max(GlyphWidth+ExtraBW, CaptionIndent);
+    {$ELSE}
+    GlyphWidth:= BW+ExtraBW;
+    {$IFEND}
 
     R := GetClientRect;
 
     if (FAlignment = taRightJustify) or UseRightToLeftAlignment then
     begin
       r.Left := 0;
-      r.Right := r.Right - BW - ExtraBW;
+      r.Right := r.Right - GlyphWidth;
     end
     else
-      r.Left := r.Left + BW + ExtraBW;
+      r.Left := r.Left + GlyphWidth;
 
     r.top := r.top + 2;
 
@@ -1889,10 +2054,22 @@ procedure TCustomAdvOfficeRadioButton.SetBounds(ALeft, ATop, AWidth, AHeight: In
 begin
   inherited;
   FBkgCache := False;
+  {$IF CompilerVersion >= 20}
+  if FUpdatingCaptionLayout then
+     Exit;
+  {$IFEND}
   Repaint;
 end;
 
 procedure TCustomAdvOfficeRadioButton.DrawRadio(ACanvas: TCanvas);
+var
+  GlyphWidth: Integer;
+begin
+  GlyphWidth:= 13;
+  DrawRadio(ACanvas, GlyphWidth);
+end;
+
+procedure TCustomAdvOfficeRadioButton.DrawRadio(ACanvas: TCanvas; var GlyphWidth: Integer);
 var
   bmp: TBitmap;
   BT, BL: Integer;
@@ -1976,6 +2153,12 @@ begin
       LoadedCustom := not ico.Empty;
       if LoadedCustom then
       begin
+        {$IF CompilerVersion >= 20}
+        icoHeight:= ico.Height;
+        GlyphWidth:= ico.Width;
+        if ACanvas = nil then
+           Exit;
+        {$IFEND}
         case FBtnVAlign of
           //tlTop: BT := 4;
           tlTop: BT    := 2 + (ACanvas.TextHeight('gh') - icoHeight) div 2;
@@ -1984,7 +2167,11 @@ begin
         end;
 
         if (FAlignment = taRightJustify) or UseRightToLeftAlignment then
+          {$IF CompilerVersion >= 20}
+          BL := ClientRect.Right - GlyphWidth
+          {$ELSE}
           BL := ClientRect.Right - icoHeight
+          {$IFEND}
         else
           BL := 0;
 
@@ -1992,8 +2179,8 @@ begin
         ACanvas.Draw(BL, BT, ico);
       end;
     finally
+      ico.Free;
     end;
-    ico.Free;
     if LoadedCustom then
        Exit;
   end;
@@ -2001,8 +2188,34 @@ begin
   if DrawThemed then
   begin
     HTheme := OpenThemeData(Self.Handle, 'button');
-    Err:= GetThemePartSize(HTheme, Self.Handle, BP_RADIOBUTTON, RBS_CHECKEDNORMAL, nil, TS_TRUE, iSize); // added by Ciro Alfredo Consentino (August 05, 2019)
+    {$IF CompilerVersion >= 20}
+    iSize.cx:= 13;
+    iSize.cy:= 13;
+    if HTheme <> 0 then
+       Err:= GetThemePartSize(HTheme, 0, BP_RADIOBUTTON, RBS_CHECKEDNORMAL, nil, TS_TRUE, iSize)
+    else
+       Err:= E_FAIL;
+    if Failed(Err) or (iSize.cy <= 0) then
+    begin
+      if HTheme <> 0 then
+         CloseThemeData(HTheme);
+      HTheme:= 0;
+    end
+    else
+       GlyphWidth:= iSize.cy;
+    if (ACanvas = nil) and (HTheme <> 0) then
+    begin
+      CloseThemeData(HTheme);
+      Exit;
+    end;
+    {$ELSE}
+    Err:= GetThemePartSize(HTheme, Self.Handle, BP_RADIOBUTTON, RBS_CHECKEDNORMAL, nil, TS_TRUE, iSize);
+    {$IFEND}
+    if HTheme = 0 then
+       DrawThemed:= False;
 
+    if DrawThemed then
+    begin
     case FBtnVAlign of
     //tlTop: BT := 4;
     tlTop:    BT := 2 + (ACanvas.TextHeight('gh') - iSize.cy) div 2;
@@ -2052,6 +2265,7 @@ begin
     end
     else
       DrawThemed := False;
+    end;
   end;
 
   if not DrawThemed then
@@ -2085,6 +2299,14 @@ begin
     end;
 
     bmp.LoadFromResourceName(hInstance, resStr);
+    {$IF CompilerVersion >= 20}
+    GlyphWidth:= bmp.Width;
+    if ACanvas = nil then
+    begin
+      bmp.Free;
+      Exit;
+    end;
+    {$IFEND}
     bmp.Transparent:= True;
     bmp.TransparentMode:= tmAuto;
 
@@ -2106,6 +2328,15 @@ begin
   end;
 end;
 
+{$IF CompilerVersion >= 20}
+function TCustomAdvOfficeRadioButton.GetCaptionTextInset: Integer;
+begin
+  Result:= 13;
+  DrawRadio(nil, Result);
+  Result:= Max(Result+3, CaptionIndent);
+end;
+{$IFEND}
+
 procedure TCustomAdvOfficeRadioButton.Paint;
 var
   BR:Integer;
@@ -2115,6 +2346,19 @@ var
   FontColor: TColor;
   CanvasBMP: TBitmap;
 begin
+  {$IF CompilerVersion >= 20}
+  if (Self is TAdvOfficeRadioButtonEx) and (FAlignment = taLeftJustify) and
+     not UseRightToLeftAlignment then
+  begin
+    FUpdatingCaptionLayout:= True;
+    try
+      Canvas.Font:= Font;
+      UpdateOfficeButtonCaptionLayout(Self, Caption, Canvas, CaptionTextInset);
+    finally
+      FUpdatingCaptionLayout:= False;
+    end;
+  end;
+  {$IFEND}
   Canvas.Brush.Style:= bsClear;
   
   CanvasBMP := TBitmap.Create;
@@ -2160,16 +2404,21 @@ begin
   begin
     CanvasBMP.Canvas.Brush.Style := bsClear;
     BR := 13;
-    DrawRadio(CanvasBMP.Canvas);
+    DrawRadio(CanvasBMP.Canvas, BR);
+    {$IF CompilerVersion >= 20}
+    BR:= Max(BR+3, CaptionIndent);
+    {$ELSE}
+    Inc(BR, 3);
+    {$IFEND}
 
     r := GetClientRect;
     if (FAlignment = taRightJustify) or UseRightToLeftAlignment then
     begin
       r.Left := 0;
-      r.Right := r.Right - BR - 3; // fix to match Delphi's VCL theme RadioButton's text
+      r.Right := r.Right - BR;
     end
     else
-      r.Left := r.Left + BR + 3; // fix to match Delphi's VCL theme RadioButton's text
+      r.Left := r.Left + BR;
 
     r.Top := r.Top + 4;
 

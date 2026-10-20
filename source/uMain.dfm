@@ -2639,19 +2639,7 @@ object FormMain: TFormMain
     end
   end
   object ZipForge: TZipForge
-    ExtractCorruptedFiles = False
-    CompressionLevel = clMax
-    CompressionMode = 9
-    CurrentVersion = '2.73 '
-    SpanningMode = smNone
-    SpanningOptions.AdvancedNaming = True
-    SpanningOptions.VolumeSize = vsAutoDetect
-    Options.CreateDirs = False
-    Options.FlushBuffers = True
-    Options.OEMFileNames = True
-    InMemory = False
     OnProcessFileFailure = ZipForgeProcessFileFailure
-    Zip64Mode = zmDisabled
     Left = 240
     Top = 256
   end
@@ -3766,12 +3754,12 @@ object FormMain: TFormMain
         Caption = 'Visit Homepage'
         object MenuVisitEmuLoaderHomepage: TMenuItem
           Caption = 'Emu Loader'
-          Hint = 'http://emuloader.mameworld.info'
+          Hint = 'https://emuloader.com'
           OnClick = MenuVisitEmuLoaderHomepageClick
         end
-        object MenuVisitMAMEWorldHomepage: TMenuItem
-          Caption = 'MAMEWorld'
-          Hint = 'http://www.mameworld.info'
+        object MenuVisitEmuLoaderForum: TMenuItem
+          Caption = 'Forum'
+          Hint = 'https://forum.emuloader.com'
           OnClick = MenuVisitEmuLoaderHomepageClick
         end
         object N16: TMenuItem
@@ -3805,12 +3793,12 @@ object FormMain: TFormMain
         end
         object MenuVisitSupermodelHomepage: TMenuItem
           Caption = 'Supermodel'
-          Hint = 'http://www.supermodel3.com'
+          Hint = 'https://github.com/trzy/Supermodel'
           OnClick = MenuVisitEmuLoaderHomepageClick
         end
         object MenuVisitHBMAMEHomepage: TMenuItem
           Caption = 'HBMAME'
-          Hint = 'http://hbmame.the-chronicles.org'
+          Hint = 'https://hbmame.1emulation.com'
           OnClick = MenuVisitEmuLoaderHomepageClick
         end
         object MenuVisitDICEHomepage: TMenuItem
@@ -3856,7 +3844,7 @@ object FormMain: TFormMain
           end
           object MenuVisitXArcadeHomepage: TMenuItem
             Caption = 'X-Arcade'
-            Hint = 'http://www.x-arcade.com'
+            Hint = 'https://shop.xgaming.com'
             OnClick = MenuVisitEmuLoaderHomepageClick
           end
         end

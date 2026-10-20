@@ -2360,6 +2360,25 @@ object FormPreferences: TFormPreferences
           CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
         end
       end
+      object EnableDiagnosticLog: TAdvOfficeCheckBoxEx
+        Left = 4
+        Top = 190
+        Width = 280
+        Height = 20
+        Hint = 'Write diagnostic.log next to EmuLoader.exe. --debug-log keeps logging enabled regardless of this setting.'
+        ShowHint = True
+        Visible = False
+        TabOrder = 6
+        OnClick = EnableDiagnosticLogClick
+        Alignment = taLeftJustify
+        Caption = 'Enable Diagnostic Log (Troubleshooting)'
+        ReturnIsTab = False
+        Themed = True
+        CustomIconsEnabled = False
+        CustomEnableIconHD = False
+        CustomIconsImages = FormMain.IL_CheckBoxRadioButtonIcons
+        CustomIconsImagesHD = FormMain.IL_CheckBoxRadioButtonIconsHD
+      end
       object DisableDeleteSelectedGames: TAdvOfficeCheckBoxEx
         Left = 4
         Top = 140

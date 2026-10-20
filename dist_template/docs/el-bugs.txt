@@ -1,0 +1,39 @@
+Known bugs and Limitations
+--------------------------
+
+    IMPORTANT:
+    - Emu Loader has very limited support for MAME merged sets, so p.l.e.a.s.e. avoid using them
+    - The minimum recommended resolution is 1024x768 or 1280x720, avoid using lower resolutions unless you have no other choice!
+    - Several screens/dialogs self-adapt to 640x480 resolution
+    - Several screens/dialogs are not compatible with resolutions lower than 1024x768 or 1280x720
+
+01. Limitation: if no .zip/.7z files are found for a game, the CHD is always set as missing, even if the file
+    is found and is ok
+
+02. Zipped image files cannot have Unicode filenames. Unicode files must be unzipped
+
+03. When in full screen mode, the main window doesn't always stay on top of the taskbar
+
+04. Messed up MAMU_ icons in Windows 2000 (16x16 / 24x24).
+    This happens because MAMu_ .ico files are only 32x32, and Delphi 7 can't scale them down correctly on a
+    Win2k OS.
+
+05. Limitation: EL is not UAC friendly (User Account Control), making frontend crash when saving settings
+    Make sure to setup the frontend in a folder tree that have full read/write access in Windows
+
+06. Delphi 7 compilation bug "[Fatal Error] uMain.pas: Internal error: U752" (uMain uses uColumnsEditor.pas)
+    Can't find what this error is about on the internet or a way to fix it!! :_(((
+    Maybe I should re-create the columns editor form/pas from scratch ?
+
+07. Limitation: When deleting a merged game, the status of its parent game and other clones are
+    not updated. You have to do it manually
+
+08. Limitation: Feature "Category Prev/Next Auto Swtich" (main menu Images) might not work properly if you click the "Next/Previous Image"
+    buttons too quickly
+
+09. RichEdit controls do not show Unicode strings
+
+10. Last 25 played games lists cannot be cleared
+
+11. At startup, there's a 2 seconds freeze when the application is creating FormPrerences form (EmuLoader.dpr)
+    There's nothing to be done as this form has tons of controls in it... may too much for my taste!

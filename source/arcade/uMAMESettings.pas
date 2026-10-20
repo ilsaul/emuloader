@@ -1001,7 +1001,10 @@ type
     { Private declarations }
     ScreenDetails: packed array[-1..3] of TScreenInfo;
     IsSDLMAME: Boolean;
+    DecimalAudioLatency: Boolean;
     IniCustomList: packed array[1..11] of THashedStringList; // 1 -> debug.ini; 11 -> parent_game.ini
+    procedure ConfigureAudioLatency;
+    function ValidAudioLatency(const Value: String): Boolean;
     procedure Disable_MAMEui_Settings;
     function  RemoveQuotes(const DataString: String): String;
     procedure PopulateNumberProcessors;
@@ -1048,6 +1051,77 @@ implementation
 uses uMain;
 
 {$R *.dfm}
+
+procedure TFormMAMESettings.ConfigureAudioLatency;
+var
+  Version, Loop: Integer;
+begin
+  Version:= iVersion;
+  if Version = -1 then
+     Version:= FormMain.GetMAMENewFileVersion(emuFileExec);
+  // GetMAMEBuild uses -1 for latest builds when no version is available.
+  // MAME 0.278 changed audio_latency from integer levels to decimal frames.
+  DecimalAudioLatency:= (Version >= 278) or (Version = -1);
+  AudioLatency.Items.Clear;
+  if DecimalAudioLatency then
+     begin
+       // Custom colors force csOwnerDrawFixed, which has no editable text box.
+       AudioLatency.CustomColorsEnabled:= False;
+       AudioLatency.Style:= csDropDown;
+       if IsNightMode then
+          begin
+            AudioLatency.Color:= AudioLatency.CustomColorBk;
+            AudioLatency.Font.Color:= AudioLatency.CustomColorFont;
+          end;
+       AudioLatency.Items.Add('0.0');
+       AudioLatency.Items.Add('0.5');
+       AudioLatency.Items.Add('1.0');
+       AudioLatency.Items.Add('1.5');
+       AudioLatency.Items.Add('2.0');
+       AudioLatency.Items.Add('5.0');
+       AudioLatency.Items.Add('50.0');
+       AudioLatencyLabel.Caption:= 'Latency (frames)';
+       AudioLatency.Hint:= 'Audio latency: 0.0 to 50.0 frames (1 frame = 20 ms). '+
+                          '0 uses the sound module default. Use a decimal point; '+
+                          'increase to reduce glitches, decrease for responsiveness. '+
+                          'Unsupported by PipeWire, PulseAudio and SDL.';
+       AudioLatencyButtonReset.Hint:= 'Use the sound module default (0.0)';
+     end
+  else
+     begin
+       if AudioLatency.CustomColorsEnabled then
+          AudioLatency.Style:= csOwnerDrawFixed
+       else
+          AudioLatency.Style:= csDropDownList;
+       for Loop:= 1 to 5 do
+          AudioLatency.Items.Add(IntToStr(Loop)+'/5');
+       AudioLatencyLabel.Caption:= 'Audio Latency';
+       AudioLatency.Hint:= 'Set audio latency (increase to reduce glitches, decrease for responsiveness)';
+       AudioLatencyButtonReset.Hint:= 'Set default latency';
+     end;
+  AudioLatencyButtonResetClick(Self);
+end;
+
+function TFormMAMESettings.ValidAudioLatency(const Value: String): Boolean;
+var
+  Latency: Extended;
+  ErrorCode, Loop: Integer;
+  Number: String;
+begin
+  Result:= False;
+  Number:= Trim(Value);
+  if Number = '' then
+     Exit;
+  for Loop:= 1 to Length(Number) do
+     if not (Number[Loop] in ['0'..'9', '.', '+', '-', 'e', 'E']) then
+        Exit;
+  // Val always uses a dot, independent of Windows/Delphi locale settings.
+  // Keep the original text for saving rather than rounding it for the UI.
+  Val(Number, Latency, ErrorCode);
+  if ErrorCode <> 0 then
+     Exit;
+  Result:= (Latency >= 0.0) and (Latency <= 50.0);
+end;
 
 procedure TFormMAMESettings.Resize4K;
 var
@@ -2920,8 +2994,8 @@ var
   end;
 
 begin
-   ThousandSeparator:= Char(',');
-   DecimalSeparator:= Char('.');
+   {$IF CompilerVersion >= 22}FormatSettings.{$IFEND}ThousandSeparator:= Char(',');
+   {$IF CompilerVersion >= 22}FormatSettings.{$IFEND}DecimalSeparator:= Char('.');
 
    if SkipWarnings.Enabled then
    begin
@@ -2998,24 +3072,26 @@ begin
                begin
                  Value:= GetStringValue;
                  FolderControllerDefinitions.Text:= Value;
-                 FormMain.ExtractFolders2MAME(sysID, Value, FoldersList, True, emuFileExec); // add to HashedStringList in RAM with FULL path...
-                 if FoldersList.Count > 0 then
-                    begin
-                      for Loop2:= 0 to FoldersList.Count-1 do
+                 FoldersList:= nil;
+                 try
+                   FormMain.ExtractFolders2MAME(sysID, Value, FoldersList, True, emuFileExec);
+                   if Assigned(FoldersList) then
                       begin
                         ctrlrDefinitionsList:= THashedStringList.Create;
-                        GenerateControllerDefinitionsFilesList(FoldersList[Loop2], ctrlrDefinitionsList);
+                        try
+                          for Loop2:= 0 to FoldersList.Count-1 do
+                              GenerateControllerDefinitionsFilesList(FoldersList[Loop2], ctrlrDefinitionsList);
+                          Loop2:= ctrlrDefinitionsList.IndexOf('standard');
+                          if Loop2 <> -1 then
+                             ctrlrDefinitionsList.Delete(Loop2);
+                          ControllerDefinitions.Items.AddStrings(ctrlrDefinitionsList);
+                        finally
+                          ctrlrDefinitionsList.Free;
+                        end;
                       end;
-                      if ctrlrDefinitionsList.Count > 0 then
-                         begin
-                           Loop2:= ctrlrDefinitionsList.IndexOf('standard');
-                           if Loop2 <> -1 then
-                              ctrlrDefinitionsList.Delete(Loop2);
-                           ControllerDefinitions.Items.AddStrings(ctrlrDefinitionsList);
-                         end;
-                      FreeAndNil(ctrlrDefinitionsList);
-                    end;
-                 FreeAndNil(FoldersList);
+                 finally
+                   FoldersList.Free;
+                 end;
                end
             else
             if (EntryString = 'inipath ') and EmuDefaultSettings then
@@ -3902,14 +3978,15 @@ begin
                  Value:= GetStringValue;
                  if FormMain.CheckTotal(DisplayLanguageList) then
                  begin
-                   if SameText(Value, 'English') then
+                   if (Value = '') or SameText(Value, 'English') then
                       FormMain.ELV_SelectItem(DisplayLanguageList, 0)
                    else
                    begin
-                     if Value[1] = '"' then
+                     if Copy(Value, 1, 1) = '"' then
                         begin
                           Delete(Value, 1, 1);
-                          Delete(Value, Length(Value), 1);
+                          if Copy(Value, Length(Value), 1) = '"' then
+                             Delete(Value, Length(Value), 1);
                         end;
                      FormMain.ELV_SelectItem(DisplayLanguageList, 0, Value);
                      if not FormMain.CheckSelected(DisplayLanguageList) then
@@ -4490,8 +4567,20 @@ begin
                SDLAttachWindow.Text:= GetStringValue
             else
             // # WINDOWS SOUND OPTIONS
-            if EntryString = 'audio_latency ' then
-               AudioLatency.ItemIndex:= GetIntegerValue-1 // StrToInt(ExtractMAMEIniValue(TextLine))-1
+            if (EntryString = 'audio_latency ') or
+               (DecimalAudioLatency and (EntryString = 'alat ')) then
+               begin
+                 if DecimalAudioLatency then
+                    begin
+                      Value:= GetStringValue;
+                      if not ValidAudioLatency(Value) then
+                         raise EConvertError.CreateFmt('Invalid audio_latency "%s" in %s: '+
+                           'expected 0.0 to 50.0 frames using a decimal point.', [Value, IniFile]);
+                      AudioLatency.Text:= Trim(Value);
+                    end
+                 else
+                    AudioLatency.ItemIndex:= GetIntegerValue-1;
+               end
             else
             // # INPUT DEVICE OPTIONS
             //if EntryString = 'hide_cursor ' then // deprecated setting
@@ -6205,8 +6294,14 @@ begin
             UpdateMAMELine(EntryString, SDLAttachWindow.Text)
          else
          // # WINDOWS SOUND OPTIONS
-         if tmpEntryStr = 'audio_latency ' then
-            UpdateMAMELine(EntryString, IntToStr(AudioLatency.ItemIndex+1))
+         if (tmpEntryStr = 'audio_latency ') or
+            (DecimalAudioLatency and (tmpEntryStr = 'alat ')) then
+            begin
+              if DecimalAudioLatency then
+                 UpdateMAMELine(EntryString, Trim(AudioLatency.Text))
+              else
+                 UpdateMAMELine(EntryString, IntToStr(AudioLatency.ItemIndex+1));
+            end
          else
 
          // # BGFX POST-PROCESSING OPTIONS
@@ -6553,6 +6648,17 @@ begin
      begin
        if ModalResult = mrOk then
           begin
+            if DecimalAudioLatency and not ValidAudioLatency(AudioLatency.Text) then
+               begin
+                 CanClose:= False;
+                 FormMain.ShowMessageBox('Error', 'Invalid audio latency.',
+                   'Enter a number from 0.0 to 50.0 frames using a decimal point. '+
+                   '0 uses the sound module default; 1 frame is 20 ms.', 2, False, 1);
+                 ButtonPageLUAandAudio.Down:= True;
+                 ButtonPageLUAandAudio.Click;
+                 AudioLatency.SetFocus;
+                 Exit;
+               end;
             FormMain.PopupCustomMAME.Tag:= Ord(SaveValidateAllCustomFiles.Checked);
             WriteMAMEIniFile(GameIni, Boolean(Tag));// update all mame.ini options
             if FormMAMESettings.Tag = 0 then
@@ -7152,6 +7258,7 @@ begin
   JoystickGroupBox.DoubleBuffered:= True;
   AutobootGroupBox.DoubleBuffered:= True;
 
+  ConfigureAudioLatency;
   SaveValidateAllCustomFiles.Checked:= Boolean(FormMain.PopupCustomMAME.Tag);
 
   IsSDLMAME:= False;
@@ -7739,7 +7846,10 @@ end;
 
 procedure TFormMAMESettings.AudioLatencyButtonResetClick(Sender: TObject);
 begin
-  AudioLatency.ItemIndex:= 1;
+  if DecimalAudioLatency then
+     AudioLatency.Text:= '0.0'
+  else
+     AudioLatency.ItemIndex:= 1;
 end;
 
 procedure TFormMAMESettings.WatchdogKeyPress(Sender: TObject;

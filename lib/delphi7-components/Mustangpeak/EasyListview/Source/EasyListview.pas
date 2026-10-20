@@ -10450,17 +10450,23 @@ begin
 end;
 
 procedure TEasyColumn.LoadFromStream(S: TStream; var AVersion: Integer);
+var
+  B: Byte;
 begin
   inherited LoadFromStream(S, AVersion);
-  S.ReadBuffer(FAlignment, SizeOf(FAlignment));
+  // Enumerations are streamed as one byte (Delphi 7 layout), whatever the enum size of the compiler
+  S.ReadBuffer(B, SizeOf(B));
+  FAlignment := TAlignment(B);
   S.ReadBuffer(FAutoSizeOnDblClk, SizeOf(FAutoSizeOnDblClk));
   if AVersion > 1 then
     S.ReadBuffer(FAutoSortOnClick, SizeOf(FAutoSortOnClick));
   S.ReadBuffer(FAutoSpring, SizeOf(FAutoSpring));
   S.ReadBuffer(FAutoToggleSortGlyph, SizeOf(FAutoToggleSortGlyph));
   S.ReadBuffer(FPosition, SizeOf(FPosition));
-  S.ReadBuffer(FSortDirection, SizeOf(FSortDirection));
-  S.ReadBuffer(FStyle, SizeOf(FStyle));
+  S.ReadBuffer(B, SizeOf(B));
+  FSortDirection := TEasySortDirection(B);
+  S.ReadBuffer(B, SizeOf(B));
+  FStyle := TEasyHeaderButtonStyle(B);
   S.ReadBuffer(FClickable, SizeOf(FClickable));
   S.ReadBuffer(FWidth, SizeOf(FWidth));
 
@@ -10571,16 +10577,21 @@ begin
 end;
 
 procedure TEasyColumn.SaveToStream(S: TStream; AVersion: Integer = EASYLISTVIEW_STREAM_VERSION);
+var
+  B: Byte;
 begin
   inherited SaveToStream(S);
-  S.WriteBuffer(FAlignment, SizeOf(FAlignment));
+  B := Ord(FAlignment);
+  S.WriteBuffer(B, SizeOf(B));
   S.WriteBuffer(FAutoSizeOnDblClk, SizeOf(FAutoSizeOnDblClk));
   S.WriteBuffer(FAutoSortOnClick, SizeOf(FAutoSortOnClick));
   S.WriteBuffer(FAutoSpring, SizeOf(FAutoSpring));
   S.WriteBuffer(FAutoToggleSortGlyph, SizeOf(FAutoToggleSortGlyph));
   S.WriteBuffer(FPosition, SizeOf(FPosition));
-  S.WriteBuffer(FSortDirection, SizeOf(FSortDirection));
-  S.WriteBuffer(FStyle, SizeOf(FStyle));
+  B := Ord(FSortDirection);
+  S.WriteBuffer(B, SizeOf(B));
+  B := Ord(FStyle);
+  S.WriteBuffer(B, SizeOf(B));
   S.WriteBuffer(FClickable, SizeOf(FClickable));
   S.WriteBuffer(FWidth, SizeOf(FWidth));
   S.WriteBuffer(FBkGndColor, SizeOf(FBkGndColor));
@@ -10902,7 +10913,7 @@ begin
                    (Msg.message = WM_MBUTTONDOWN) or
                    (Msg.message = WM_RBUTTONDOWN) then
                 begin
-                  Pt := SmallPointToPoint(TSmallPoint(Msg.lParam));
+                  Pt := SmallPointToPoint(PSmallPoint(@Msg.lParam)^);
                   ClientToScreen(Msg.hwnd, Pt);
                   ScreenToClient(OwnerListview.Handle, Pt);
                   if not Editor.PtInEditControl(Pt) then
@@ -18872,7 +18883,7 @@ var
 begin
   Key := STREAM_ID_KEY;
   S.Write(Key, SizeOf(Key));
-  S.Write(AVersion, SizeOf(Version));
+  S.Write(AVersion, SizeOf(AVersion));
   Temp := State;
   // Only save certin states that should be persistent
   Temp := State * PERSISTENTOBJECTSTATES;
@@ -19612,6 +19623,10 @@ var
   i, ItemCount: Integer;
   StreamVersion: Integer;
   Cls: TClass;
+  {$IF CompilerVersion >= 22}
+  ClsName: string;
+  ItemStart: Int64;
+  {$IFEND}
 begin
   Clear;
   StreamVersion := StreamHelper.ReadInteger(Stream);
@@ -19624,6 +19639,23 @@ begin
     // object to make sure it creates the correct item type
     for i := 0 to ItemCount - 1 do
     begin
+      {$IF CompilerVersion >= 22}
+      // Temporary diagnostics for the Delphi 13 port: report where streaming fails
+      ItemStart := Stream.Position;
+      ClsName := string(StreamHelper.ReadString(Stream));
+      Cls := GetClass(ClsName);
+      if Cls = nil then
+        raise EReadError.CreateFmt('EasyListview: class "%s" not registered (item %d of %d, pos %d, size %d)',
+          [ClsName, i, ItemCount, ItemStart, Stream.Size]);
+      try
+        FItemClass := TEasyCollectionItemClass( Cls);
+        Add.LoadFromStream(Stream, StreamVersion);
+      except
+        on E: Exception do
+          raise EReadError.CreateFmt('EasyListview: %s: %s (item %d of %d, class %s, version %d, item pos %d, pos %d, size %d)',
+            [E.ClassName, E.Message, i, ItemCount, ClsName, StreamVersion, ItemStart, Stream.Position, Stream.Size]);
+      end;
+      {$ELSE}
       Cls := GetClass(StreamHelper.ReadString(Stream));
       Assert(Cls <> nil, 'If using custom item types for Item, Groups or Columns you must register them with the streaming system with RegisterClass(TMyEasyClassItemType)');
       if Assigned(Cls) then
@@ -19631,6 +19663,7 @@ begin
         FItemClass := TEasyCollectionItemClass( Cls);
         Add.LoadFromStream(Stream, StreamVersion);
       end
+      {$IFEND}
     end
   end else
   begin
@@ -22103,7 +22136,7 @@ end;
 function TEasyHeader.GetViewWidth: Integer;
 begin
   if Positions.Count > 0 then
-    Result := Positions[Positions.Count - 1].DisplayRect.Right
+    Result := LastColumnByPosition.DisplayRect.Right
   else
     Result := 0
 end;
@@ -29545,6 +29578,10 @@ end;
 destructor TEasyIncrementalSearchManager.Destroy;
 begin
   EndTimer;
+  {$IFDEF CPUX64}
+  DisposeStub(FTimerStub);
+  FTimerStub := nil;
+  {$ENDIF}
   inherited
 end;
 
@@ -29575,9 +29612,15 @@ begin
     begin
       hTimer := 0;
       Exclude(FState, eissTimerRunning);
+      {$IFNDEF CPUX64}
       DisposeStub(FTimerStub);
+      {$ENDIF}
     end else
+      {$IFDEF CPUX64}
+      raise Exception.Create('Can not Destroy Incremental Search Timer');
+      {$ELSE}
       Exception.Create('Can not Destroy Incremental Search Timer');
+      {$ENDIF}
   end
 end;
 
@@ -29922,8 +29965,16 @@ procedure TEasyIncrementalSearchManager.StartTimer;
 begin
   if Enabled and not(eissTimerRunning in State) then
   begin
+    {$IFDEF CPUX64}
+    // EndTimer runs inside TimerProc; the Win64 thunk must survive its return.
+    if not Assigned(TimerStub) then
+    {$ENDIF}
     TimerStub := CreateStub(Self, @TEasyIncrementalSearchManager.TimerProc);
     hTimer := SetTimer(0, 0, ResetTime, TimerStub);
+    {$IFDEF CPUX64}
+    if hTimer = 0 then
+      raise Exception.Create('Can not Create Incremental Search Timer');
+    {$ENDIF}
     Include(FState, eissTimerRunning);
   end
 end;

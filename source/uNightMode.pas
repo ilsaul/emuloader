@@ -519,6 +519,7 @@ var
   ListViewBk: TPNGGraphic;
   FileFullPath: String;
 begin
+  ListViewBk:= nil;
   case ImageEnabledCheckBox.Checked of
     True:
       begin
@@ -2187,6 +2188,7 @@ var
   Loop: Integer;
   Item: TEasyItem;
 begin
+  Item:= nil;
   if NightModeProfiles.Items.Count = 1 then
      Exit; // there's only
 

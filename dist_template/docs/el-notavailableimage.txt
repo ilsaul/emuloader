@@ -1,0 +1,13 @@
+Not Available Image
+-------------------
+
+   When there is no game image to display, a "not available" image will be displayed instead.
+
+   The file must be in .png format, and can have transparency (alpha blend), and be at any color depth.
+Resolution and file size are not limited but to avoid slow games list browsing, keep the file small.
+
+There is a single file for all image categories, and the name is "emuloader.png", located in "<frontend_dir>\resources\images\" folder.
+
+
+
+-- Master Control: "End of line." (quote from "TRON") --

@@ -1,0 +1,26 @@
+// List of Neo-Geo MVS machines to run multi-slot arcade games.
+// "neogeo" is the default machine, 6-slot cartridges, and it requires MAME v0.154 minimum
+// All other machines require MAME v0.197 minimum
+//
+// Additional hardware info taken from "src\mame\drivers\neogeo.cpp"
+//
+// Other multi-slot systems might be added in the future
+//
+// [main_machine_name]
+// machine_name=???
+//
+// DO NOT RENAME [main_machine_name]
+//
+// The default machine must be listed first
+
+[neogeo]
+neogeo=<title>Neo-Geo MV-6F/><year>1990/><slots>6/><videochipset>PRO-B0/PRO-C0/LSPC-A0/><machinename>mv6f/><notes>2-board stack, 4 coins, mono/stereo/><mame>0.154/>
+ng_mv4f=<title>Neo-Geo MV-4F/><year>1990/><slots>4/><videochipset>NEO-B1/LSPC2-A2/><machinename>mv4f/><notes>2nd-gen, 4 coins, mono/stereo/><mame>0.197/>
+ng_mv2f=<title>Neo-Geo MV-2F/><year>1990/><slots>2/><videochipset>NEO-B1/LSPC2-A2/><machinename>mv2f/><notes>2nd-gen, 4 coins, mono/stereo, PCMCIA slot, 3.5mm jacks/><mame>0.197/>
+ng_mv1=<title>Neo-Geo MV-1/><year>1990/><slots>1/><videochipset>PRO-B0/PRO-C0/LSPC-A0/><machinename>mv1/><notes>Original full-featured 1-slot board, 2 coins, mono/stereo/><mame>0.197/>
+ng_mv1f=<title>Neo-Geo MV-1F/><year>1990/><slots>1/><videochipset>NEO-B1/LSPC2-A2/><machinename>mv1f/><notes>2nd-gen, 2 coins, mono/stereo, no memory card headers/><mame>0.197/>
+ng_mv1fz=<title>Neo-Geo MV-1FZ/><year>1990/><slots>1/><videochipset>NEO-B1/LSPC2-A2/><machinename>mv1fz/><notes>Cheaper MV-1F, 2 coins, mono, no LED display/mahjong inputs/><mame>0.197/>
+
+[lastused]
+neogeo=neogeo
+

@@ -250,8 +250,8 @@ begin
   if not FileExists(IniFile) then
      Exit;
 
-  ThousandSeparator:= Char(',');
-  DecimalSeparator:= Char('.');
+  {$IF CompilerVersion >= 22}FormatSettings.{$IFEND}ThousandSeparator:= Char(',');
+  {$IF CompilerVersion >= 22}FormatSettings.{$IFEND}DecimalSeparator:= Char('.');
   Model2Ini:= THashedStringList.Create;
   Model2Ini.LoadFromFile(IniFile);
 
@@ -472,8 +472,8 @@ var
   end;
 
 begin
-  ThousandSeparator:= Char(',');
-  DecimalSeparator:= Char('.');
+  {$IF CompilerVersion >= 22}FormatSettings.{$IFEND}ThousandSeparator:= Char(',');
+  {$IF CompilerVersion >= 22}FormatSettings.{$IFEND}DecimalSeparator:= Char('.');
   CheckAndCreateFolder(ExtractFilePath(customIni));
   Model2Ini:= TStringList.Create;
   Model2Ini.LoadFromFile(customIni);

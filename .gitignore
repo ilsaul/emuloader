@@ -27,6 +27,7 @@
 # Delphi compiler-generated binaries (safe to delete)
 #*.exe
 *.dll
+!/dist_template/7z.dll
 *.bpl
 *.bpi
 *.dcp
@@ -130,3 +131,13 @@ $RECYCLE.BIN/
 lib/delphi7-components/Graphics32/Examples/
 lib/ComponentAce/ZipForge/Demos/
 lib/madCollection/*/install.log
+lib/madCollection/*/Demos/
+!lib/madCollection/*/Delphi 7/*.dcu
+!lib/madCollection/*/Delphi 7/*.bpl
+!lib/madCollection/*/Delphi 7/*.dcp
+!/lib/delphi7-components/Delphi Unicode Controls/**/*.dcu
+!/lib/ComponentAce/ZipForge/Lib/**/*.dcu
+!/lib/delphi7-components/barmenus/**/*.dcu
+
+# Ignore intellij
+.idea/

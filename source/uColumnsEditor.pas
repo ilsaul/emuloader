@@ -143,6 +143,7 @@ procedure TFormColumnsEditor.MoveColumn(MoveUp: Boolean);
 var
   selItem, newPosItem: TEasyItem;
 begin
+  newPosItem:= nil;
   if not FormMain.CheckSelected(ColumnsListView) then
      Exit;
   selItem:= ColumnsListView.Selection.First;
@@ -252,6 +253,7 @@ var
   IsMachinesList: Boolean;
   Loop: Integer;
 begin
+  gColumn:= nil;
   IsMachinesList:= FormMain.PanelMachinesList.Visible;
   FormMain.GamesListView.BeginUpdate;
 

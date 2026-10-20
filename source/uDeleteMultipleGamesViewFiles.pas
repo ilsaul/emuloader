@@ -384,6 +384,7 @@ var
   HeaderVerCHD: Byte;
   GhostItem: Boolean;
 begin
+  Item:= nil;
   selIndex:= 1;
   case FormDeleteMultipleGamesViewFiles.Tag of
     0: Item:=  FormDeleteMultipleGamesFiles.GamesListDeleteMulti.Groups.FirstItem; // all games
@@ -558,6 +559,7 @@ var
   tGroup, tItem, hSize, MaxSize: Integer;
 
 begin
+  SearchGroup:= nil;
   case Is4KMode of //FormMain.Menu4KMode2160pEnable.Checked of
     True : FileTextMaxCount:= 124;
     False: FileTextMaxCount:= 90; // this is for TGameInfoDeleteMulti.GetCaptions

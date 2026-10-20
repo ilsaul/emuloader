@@ -249,7 +249,7 @@ type
   end;
 
   // Hue, luminance, saturation color with all three components in the range [0..1]
-  // (so hue's 0..360° is normalized to 0..1).
+  // (so hue's 0..360ï¿½ is normalized to 0..1).
   TCommonHLS = record
     H, L, S: Double;
   end;
@@ -1748,6 +1748,21 @@ end;
 function WideStrMove(Dest, Source: PWideChar; Count: Cardinal): PWideChar;
 // Copies the specified number of characters to the destination string and returns Dest
 // also as result. Dest must have enough room to store at least Count characters.
+{$IFDEF WIN64}
+var
+  I: Cardinal;
+begin
+  Result := Dest;
+  if (Count = 0) or (Dest = Source) then
+    Exit;
+  if NativeUInt(Dest) > NativeUInt(Source) then
+    for I := Count downto 1 do
+      Dest[I - 1] := Source[I - 1]
+  else
+    for I := 0 to Count - 1 do
+      Dest[I] := Source[I];
+end;
+{$ELSE}
 asm
        PUSH    ESI
        PUSH    EDI
@@ -1780,9 +1795,23 @@ asm
        POP EDI
        POP ESI
 end;
+{$ENDIF}
 
 function WideStrRScan(Str: PWideChar; Chr: WideChar): PWideChar;
 // returns a pointer to the last occurance of Chr in Str
+{$IFDEF WIN64}
+begin
+  Result := nil;
+  while Str^ <> #0 do
+  begin
+    if Str^ = Chr then
+      Result := Str;
+    Inc(Str);
+  end;
+  if Chr = #0 then
+    Result := Str;
+end;
+{$ELSE}
 asm
        PUSH    EDI
        MOV     EDI, Str
@@ -1802,9 +1831,23 @@ asm
        CLD
        POP     EDI
 end;
+{$ENDIF}
 
 function WideStrScan(Str: PWideChar; Chr: WideChar): PWideChar;
 // returns a pointer to first occurrence of a specified character in a string
+{$IFDEF WIN64}
+begin
+  Result := Str;
+  while Result^ <> #0 do
+  begin
+    if Result^ = Chr then
+      Exit;
+    Inc(Result);
+  end;
+  if Chr <> #0 then
+    Result := nil;
+end;
+{$ELSE}
 asm
         PUSH    EDI
         PUSH    EAX
@@ -1823,6 +1866,7 @@ asm
 @@1:
         POP     EDI
 end;
+{$ENDIF}
 
 function WideUpperCase(const S: WideString): WideString;
 begin
@@ -2137,6 +2181,11 @@ function HasMMX: Boolean;
 
 // Helper method to determine whether the current processor supports MMX.
 
+{$IFDEF WIN64}
+begin
+  Result := True;
+end;
+{$ELSE}
 asm
         PUSH    EBX
         XOR     EAX, EAX     // Result := False
@@ -2165,6 +2214,37 @@ asm
 @1:
         POP     EBX
 end;
+{$ENDIF}
+
+{$IFDEF WIN64}
+procedure BlendLine(Source, Destination: Pointer; Count, ConstantAlpha, Bias: Integer;
+  Mode: TCommonBlendMode);
+var
+  I, Channel, Alpha, Value: Integer;
+  Src, Dst: PByte;
+begin
+  Src := Source;
+  Dst := Destination;
+  for I := 0 to Count - 1 do
+  begin
+    case Mode of
+      cbmConstantAlpha: Alpha := ConstantAlpha;
+      cbmPerPixelAlpha: Alpha := Src[3];
+      cbmMasterAlpha: Alpha := (Src[3] * ConstantAlpha) shr 8;
+    else
+      Alpha := 0;
+    end;
+    for Channel := 0 to 3 do
+    begin
+      Value := ((Alpha * (Integer(Src[Channel]) - Dst[Channel]) +
+        256 * Dst[Channel]) shr 8) + Bias;
+      Dst[Channel] := Byte(EnsureRange(Value, 0, 255));
+    end;
+    Inc(Src, 4);
+    Inc(Dst, 4);
+  end;
+end;
+{$ENDIF}
 
 procedure AlphaBlendLineConstant(Source, Destination: Pointer; Count: Integer; ConstantAlpha, Bias: Integer);
 // Blends a line of Count pixels from Source to Destination using a constant alpha value.
@@ -2177,6 +2257,11 @@ procedure AlphaBlendLineConstant(Source, Destination: Pointer; Count: Integer; C
 // EDX contains Destination
 // ECX contains Count
 // ConstantAlpha and Bias are on the stack
+{$IFDEF WIN64}
+begin
+  BlendLine(Source, Destination, Count, ConstantAlpha, Bias, cbmConstantAlpha);
+end;
+{$ELSE}
 asm
         PUSH    ESI                    // save used registers
         PUSH    EDI
@@ -2235,6 +2320,7 @@ asm
         POP     EDI
         POP     ESI
 end;
+{$ENDIF}
 
 procedure AlphaBlendLinePerPixel(Source, Destination: Pointer; Count, Bias: Integer);
 // Blends a line of Count pixels from Source to Destination using the alpha value of the source pixels.
@@ -2245,6 +2331,11 @@ procedure AlphaBlendLinePerPixel(Source, Destination: Pointer; Count, Bias: Inte
 // EDX contains Destination
 // ECX contains Count
 // Bias is on the stack
+{$IFDEF WIN64}
+begin
+  BlendLine(Source, Destination, Count, 0, Bias, cbmPerPixelAlpha);
+end;
+{$ELSE}
 asm
         PUSH    ESI                    // save used registers
         PUSH    EDI
@@ -2302,6 +2393,7 @@ asm
         POP     EDI
         POP     ESI
 end;
+{$ENDIF}
 
 procedure AlphaBlendLineMaster(Source, Destination: Pointer; Count: Integer; ConstantAlpha, Bias: Integer);
 // Blends a line of Count pixels from Source to Destination using the source pixel and a constant alpha value.
@@ -2313,6 +2405,11 @@ procedure AlphaBlendLineMaster(Source, Destination: Pointer; Count: Integer; Con
 // EDX contains Destination
 // ECX contains Count
 // ConstantAlpha and Bias are on the stack
+{$IFDEF WIN64}
+begin
+  BlendLine(Source, Destination, Count, ConstantAlpha, Bias, cbmMasterAlpha);
+end;
+{$ELSE}
 asm
         PUSH    ESI                    // save used registers
         PUSH    EDI
@@ -2379,6 +2476,7 @@ asm
         POP     EDI
         POP     ESI
 end;
+{$ENDIF}
 
 procedure AlphaBlendLineMasterAndColor(Destination: Pointer; Count: Integer; ConstantAlpha, Color: Integer);
 // Blends a line of Count pixels in Destination against the given color using a constant alpha value.
@@ -2389,6 +2487,27 @@ procedure AlphaBlendLineMasterAndColor(Destination: Pointer; Count: Integer; Con
 // EDX contains Count
 // ECX contains ConstantAlpha
 // Color is passed on the stack
+{$IFDEF WIN64}
+var
+  I, Channel, Value: Integer;
+  Dst: PByte;
+begin
+  Dst := Destination;
+  for I := 0 to Count - 1 do
+  begin
+    for Channel := 0 to 3 do
+    begin
+      if Channel = 3 then
+        Value := 0
+      else
+        Value := (Cardinal(Color) shr ((2 - Channel) * 8)) and $FF;
+      Dst[Channel] := Byte((ConstantAlpha * Value +
+        (256 - ConstantAlpha) * Dst[Channel]) shr 8);
+    end;
+    Inc(Dst, 4);
+  end;
+end;
+{$ELSE}
 asm
         // The used formula is: target = (alpha * color + (256 - alpha) * target) / 256.
         // alpha * color (factor 1) and 256 - alpha (factor 2) are constant values which can be calculated in advance.
@@ -2431,12 +2550,18 @@ asm
         DEC     EDX
         JNZ     @1
 end;
+{$ENDIF}
 
 procedure EMMS;
 // Reset MMX state to use the FPU for other tasks again.
+{$IFDEF WIN64}
+begin
+end;
+{$ELSE}
 asm
         DB      $0F, $77               /// EMMS
 end;
+{$ENDIF}
 
 function GetBitmapBitsFromDeviceContext(DC: HDC; var Width, Height: Integer): Pointer;
 // Helper function used to retrieve the bitmap selected into the given device context. If there is a bitmap then
@@ -2466,11 +2591,15 @@ end;
 
 function CalculateScanline(Bits: Pointer; Width, Height, Row: Integer): Pointer;
 // Helper function to calculate the start address for the given row.
+var
+  Scanline: PByte;
 begin
   if Height > 0 then  // bottom-up DIB
     Row := Height - Row - 1;
   // Return DWORD aligned address of the requested scanline.
-  Integer(Result) := Integer(Bits) + Row * ((Width * 32 + 31) and not 31) div 8;
+  Scanline := Bits;
+  Inc(Scanline, Row * ((Width * 32 + 31) and not 31) div 8);
+  Result := Scanline;
 end;
 
 procedure ConvertBitmapEx(Image32: TBitmap; var OutImage: TBitmap; const BackGndColor: TColor);
@@ -2501,9 +2630,9 @@ begin
       Mask.Canvas.Brush.Color := BackGndColor;
       Mask.Canvas.FillRect(Mask.Canvas.ClipRect);
 
-      LineDeltaImage32 := DWORD( Image32.ScanLine[1]) - DWORD( Image32.ScanLine[0]);
-      LineDeltaTarget := DWORD( Target.ScanLine[1]) - DWORD( Target.ScanLine[0]);
-      LineDeltaMask := DWORD( Mask.ScanLine[1]) - DWORD( Mask.ScanLine[0]);
+      LineDeltaImage32 := NativeInt(Image32.ScanLine[1]) - NativeInt(Image32.ScanLine[0]);
+      LineDeltaTarget := NativeInt(Target.ScanLine[1]) - NativeInt(Target.ScanLine[0]);
+      LineDeltaMask := NativeInt(Mask.ScanLine[1]) - NativeInt(Mask.ScanLine[0]);
 
       PixelDeltaImage32 := SizeOf(TRGBQuad); 
       PixelDeltaTarget := SizeOf(TRGBQuad);
@@ -2534,7 +2663,7 @@ begin
           BkGndGreen := (LongColor and $0000FF00) shr 8;
           BkGndRed := (LongColor and $00FF0000) shr 16;
 
-          // displayColor = sourceColor×alpha / 256 + backgroundColor×(256 – alpha) / 256
+          // displayColor = sourceColorï¿½alpha / 256 + backgroundColorï¿½(256 ï¿½ alpha) / 256
           // Profiled = ~15-24% of time
           RedTarget := SourceRed*Alpha shr 8 + BkGndRed*(255-Alpha) shr 8;
           GreenTarget := SourceGreen*Alpha shr 8 + BkGndGreen*(255-Alpha) shr 8;
@@ -2884,6 +3013,113 @@ end;
 {  Now Stub can be passed as the callback pointer to any windows API          }
 {  Don't forget to call Dispose Stub when not needed        }
 { ----------------------------------------------------------------------------- }
+{$IFDEF CPUX64}
+// Win64 version. The original thunk below is 32 bit x86 code: on Win64 it
+// executes the high half of the Self pointer as instructions and jumps to a
+// truncated address. Win64 passes the first four arguments in RCX, RDX, R8, R9
+// and the rest on the stack, so the thunk opens a small frame, shifts every
+// argument one position to the right (up to 7 callback arguments), loads Self
+// in RCX and calls the method. Unwind info is registered so that exceptions
+// and stack walks can cross the thunk.
+const
+  StubFrameSize = $58;
+  StubCodeSize = 96;
+
+type
+  TStubRuntimeFunction = packed record
+    BeginAddress: DWORD;
+    EndAddress: DWORD;
+    UnwindData: DWORD;
+  end;
+
+  TStubUnwindInfo = packed record
+    VersionAndFlags: Byte;
+    SizeOfProlog: Byte;
+    CountOfCodes: Byte;
+    FrameRegisterAndOffset: Byte;
+    UnwindCode: array[0..1] of Word;
+  end;
+
+  TStub = packed record
+    Code: array[0..StubCodeSize - 1] of Byte;
+    RuntimeFunction: TStubRuntimeFunction;
+    Padding: DWORD;
+    UnwindInfo: TStubUnwindInfo;
+  end;
+  PStub = ^TStub;
+
+function RtlAddFunctionTable(FunctionTable: Pointer; EntryCount: DWORD;
+  BaseAddress: UInt64): ByteBool; stdcall; external 'kernel32.dll';
+function RtlDeleteFunctionTable(FunctionTable: Pointer): ByteBool; stdcall;
+  external 'kernel32.dll';
+
+{ ----------------------------------------------------------------------------- }
+function CreateStub(ObjectPtr: Pointer; MethodPtr: Pointer): Pointer;
+const
+  CodeHead: array[0..58] of Byte = (
+    $48, $83, $EC, StubFrameSize,                    // sub  rsp, $58
+    $4C, $89, $4C, $24, $20,                         // mov  [rsp+$20], r9
+    $48, $8B, $84, $24, $80, $00, $00, $00,          // mov  rax, [rsp+$80]
+    $48, $89, $44, $24, $28,                         // mov  [rsp+$28], rax
+    $48, $8B, $84, $24, $88, $00, $00, $00,          // mov  rax, [rsp+$88]
+    $48, $89, $44, $24, $30,                         // mov  [rsp+$30], rax
+    $48, $8B, $84, $24, $90, $00, $00, $00,          // mov  rax, [rsp+$90]
+    $48, $89, $44, $24, $38,                         // mov  [rsp+$38], rax
+    $4D, $89, $C1,                                   // mov  r9, r8
+    $49, $89, $D0,                                   // mov  r8, rdx
+    $48, $89, $CA,                                   // mov  rdx, rcx
+    $48, $B9);                                       // mov  rcx, imm64 (Self)
+  CodeTail: array[0..6] of Byte = (
+    $FF, $D0,                                        // call rax
+    $48, $83, $C4, StubFrameSize,                    // add  rsp, $58
+    $C3);                                            // ret
+var
+  Stub: PStub;
+  P: PByte;
+begin
+  Stub := VirtualAlloc(nil, SizeOf(TStub), MEM_COMMIT or MEM_RESERVE, PAGE_EXECUTE_READWRITE);
+  if Stub = nil then
+    RaiseLastOSError;
+  FillChar(Stub^, SizeOf(TStub), $CC);
+  P := @Stub^.Code[0];
+  Move(CodeHead, P^, SizeOf(CodeHead));
+  Inc(P, SizeOf(CodeHead));
+  PPointer(P)^ := ObjectPtr;
+  Inc(P, SizeOf(Pointer));
+  P^ := $48; Inc(P);                                 // mov  rax, imm64 (Method)
+  P^ := $B8; Inc(P);
+  PPointer(P)^ := MethodPtr;
+  Inc(P, SizeOf(Pointer));
+  Move(CodeTail, P^, SizeOf(CodeTail));
+  Inc(P, SizeOf(CodeTail));
+
+  // UNWIND_INFO v1: prolog = 4 bytes, one code: UWOP_ALLOC_SMALL (2) at
+  // offset 4 with OpInfo = (FrameSize - 8) div 8
+  Stub^.UnwindInfo.VersionAndFlags := 1;
+  Stub^.UnwindInfo.SizeOfProlog := 4;
+  Stub^.UnwindInfo.CountOfCodes := 1;
+  Stub^.UnwindInfo.FrameRegisterAndOffset := 0;
+  Stub^.UnwindInfo.UnwindCode[0] := 4 or ((2 or (((StubFrameSize - 8) div 8) shl 4)) shl 8);
+  Stub^.UnwindInfo.UnwindCode[1] := 0;
+  Stub^.RuntimeFunction.BeginAddress := 0;
+  Stub^.RuntimeFunction.EndAddress := DWORD(NativeUInt(P) - NativeUInt(Stub));
+  Stub^.RuntimeFunction.UnwindData := DWORD(NativeUInt(@Stub^.UnwindInfo) - NativeUInt(Stub));
+  RtlAddFunctionTable(@Stub^.RuntimeFunction, 1, UInt64(Stub));
+
+  FlushInstructionCache(GetCurrentProcess, Stub, SizeOf(TStub));
+  Result := Stub;
+end;
+{ ----------------------------------------------------------------------------- }
+
+{ ----------------------------------------------------------------------------- }
+procedure DisposeStub(Stub: Pointer);
+begin
+  if Stub = nil then
+    Exit;
+  RtlDeleteFunctionTable(@PStub(Stub)^.RuntimeFunction);
+  VirtualFree(Stub, 0, MEM_RELEASE);
+end;
+{$ELSE}
 const
   AsmPopEDX = $5A;
   AsmMovEAX = $B8;
@@ -2938,6 +3174,7 @@ begin
   // 1/10/04 Support for 64 bit, executable code must be in virtual space
   VirtualFree(Stub, SizeOf(TStub),MEM_DECOMMIT);
 end;
+{$ENDIF CPUX64}
 { ----------------------------------------------------------------------------- }
 
 {$IFNDEF COMPILER_5_UP}
@@ -4018,6 +4255,11 @@ end;
 
 function StrRScanW(Str: PWideChar; Chr: WideChar): PWideChar;
 // returns a pointer to the last occurance of Chr in Str
+{$IFDEF WIN64}
+begin
+  Result := WideStrRScan(Str, Chr);
+end;
+{$ELSE}
 asm
        PUSH    EDI
        MOV     EDI, Str
@@ -4037,6 +4279,7 @@ asm
        CLD
        POP     EDI
 end;
+{$ENDIF}
 
 function WideStrComp(Str1, Str2: PWideChar): Integer;
 // Sensitive case comparison
@@ -4335,7 +4578,7 @@ begin
   Result := False;
   if Assigned(Image32) and (Image32.PixelFormat = pf32Bit) and (Image32.Height > 1) then
   begin
-      LineDeltaImage32 := Integer( DWORD( Image32.ScanLine[1]) - DWORD( Image32.ScanLine[0]));
+      LineDeltaImage32 := NativeInt(Image32.ScanLine[1]) - NativeInt(Image32.ScanLine[0]);
       PixelDeltaImage32 := SizeOf(TRGBQuad);
       PLineImage32 := Image32.ScanLine[0];
 
@@ -4369,6 +4612,31 @@ end;
 
 function WideStrPos(Str, SubStr: PWideChar): PWideChar;
 // returns a pointer to the first occurance of SubStr in Str
+{$IFDEF WIN64}
+var
+  Candidate, Pattern: PWideChar;
+begin
+  Result := nil;
+  if (Str = nil) or (SubStr = nil) or (SubStr^ = #0) then
+    Exit;
+  while Str^ <> #0 do
+  begin
+    Candidate := Str;
+    Pattern := SubStr;
+    while (Candidate^ <> #0) and (Candidate^ = Pattern^) do
+    begin
+      Inc(Candidate);
+      Inc(Pattern);
+      if Pattern^ = #0 then
+      begin
+        Result := Str;
+        Exit;
+      end;
+    end;
+    Inc(Str);
+  end;
+end;
+{$ELSE}
 asm
        PUSH    EDI
        PUSH    ESI
@@ -4416,6 +4684,7 @@ asm
        POP     ESI
        POP     EDI
 end;
+{$ENDIF}
 
 function ProperRect(Rect: TRect): TRect;
 // Makes sure a rectangle's left is less than its right and its top is less than its bottom
@@ -5225,6 +5494,11 @@ end;
 
 function StrCopyW(Dest, Source: PWideChar): PWideChar;
 // copies Source to Dest and returns Dest
+{$IFDEF WIN64}
+begin
+  Result := WideStrMove(Dest, Source, Length(Source) + 1);
+end;
+{$ELSE}
 asm
        PUSH    EDI
        PUSH    ESI
@@ -5246,6 +5520,7 @@ asm
        POP     ESI
        POP     EDI
 end;
+{$ENDIF}
 
 //----------------------------------------------------------------------------------------------------------------------
 
@@ -5274,7 +5549,7 @@ function RGBToHLS(const RGB: TCommonRGB): TCommonHLS;
 
 // Converts from RGB to HLS.
 // Input parameters and result values are all in the range 0..1.
-// Note: Hue is normalized so 360° corresponds to 1.
+// Note: Hue is normalized so 360ï¿½ corresponds to 1.
 
 var
   Delta,
@@ -5324,7 +5599,7 @@ function HLSToRGB(const HLS: TCommonHLS): TCommonRGB;
 
 // Converts from HLS (hue, luminance, saturation) to RGB.
 // Input parameters and result values are all in the range 0..1.
-// Note: Hue is normalized so 360° corresponds to 1.
+// Note: Hue is normalized so 360ï¿½ corresponds to 1.
 
   //--------------- local function --------------------------------------------
 
@@ -5684,4 +5959,3 @@ finalization
   CommonUnloadAllLibraries;
 
 end.
-

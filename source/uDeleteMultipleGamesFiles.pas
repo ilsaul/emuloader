@@ -1570,6 +1570,7 @@ procedure TFormDeleteMultipleGamesFiles.GamesListDeleteMultiColumnClick(
 var
   Item: TEasyItem;
 begin
+  Item:= nil;
   GamesListDeleteMulti.BeginUpdate;
   GamesListDeleteMulti.Sort.SortAll;
   GamesListDeleteMulti.EndUpdate;
@@ -1990,6 +1991,7 @@ var
   end;
 
 begin
+  sItem:= nil;
   if FormMain.CheckSelected(GamesListDeleteMulti) then
      begin
        sItem:= GamesListDeleteMulti.Selection.First;

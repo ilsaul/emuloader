@@ -1103,11 +1103,8 @@ begin
   end;
     
   // fixup the result variables
-  with GlyphPos do
-  begin
-    Inc(X, Client.Left + Offset.X);
-    Inc(Y, Client.Top + Offset.Y);
-  end;
+  Inc(GlyphPos.X, Client.Left + Offset.X);
+  Inc(GlyphPos.Y, Client.Top + Offset.Y);
 
   // Themed text is not shifted, but gets a different color
   if ThemeServices.ThemesEnabled then
@@ -1662,7 +1659,7 @@ begin
   begin
     Msg.Msg := CM_BUTTONPRESSED;
     Msg.WParam := FGroupIndex;
-    Msg.LParam := Longint(Self);
+    Msg.LParam := LPARAM(Self);
     Msg.Result := 0;
     Parent.Broadcast(Msg);
   end;

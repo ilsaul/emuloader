@@ -75,9 +75,15 @@ type
   // TMessage definition for how the data is passed to the target window via PostMessage
   TWMThreadRequest = packed record
     Msg: Cardinal;
+    {$IFDEF WIN64}
+    // Match TMessage: WParam and LParam start at offsets 8 and 16 on Win64.
+    MsgPadding: Cardinal;
+    RequestID: WPARAM;
+    {$ELSE}
     RequestID: Longint;
+    {$ENDIF}
     Request: TCommonThreadRequest;
-    Result: Longint;
+    Result: LRESULT;
   end;
 
   TCommonThreadDirection = (
@@ -206,7 +212,7 @@ type
     FHandle: THandle;
     FOLEInitialized: Boolean;
     FTargetWnd: HWnd; // Window that the message is posted to.  It will get a WM_COMMONTHREADNOTIFIER message with the TCommonThreadRequest in LParam
-    FThreadID: THandle;
+    FThreadID: DWORD;
     FStub: pointer;
     FTerminated: Boolean;
     FSuspended: Boolean;
@@ -264,7 +270,7 @@ type
     property Running: Boolean read FRunning;
     property Suspended: Boolean read FSuspended write SetSuspended;
     property TargetWnd: HWnd read FTargetWnd write FTargetWnd;
-    property ThreadID: THandle read FThreadID;
+    property ThreadID: DWORD read FThreadID;
   end;
   TCommonBaseThreadClass = class of TCommonThread;
 

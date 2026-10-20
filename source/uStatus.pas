@@ -145,6 +145,7 @@ type
     procedure StatusChangeLayout;
     procedure ToggleProgressBarColorBox;
     procedure SetProgressBarColorBox;
+    function  CanApplyCustomProgressBarColor(Color: TColor): Boolean;
     procedure ChangeTextShadowColor;
     procedure ResizeLowResolution;
     procedure Resize4K(UpdateForm, UpdateControls: Boolean);
@@ -154,6 +155,9 @@ type
     procedure UpdateVersionPos;
   protected
     procedure CreateParams(var Params: TCreateParams); override;
+    {$IF CompilerVersion >= 20}
+    procedure WMStatusClockTick(var Msg: TMessage); message WM_APP+101;
+    {$IFEND}
   public
     { Public declarations }
     //TaskBarHandle: HWND;
@@ -171,10 +175,21 @@ type
 var
   FormStatus: TFormStatus;
   mmResult, TimerCount: Integer; // for the thread clock
+  {$IF CompilerVersion >= 20}
+  StatusClockWnd: HWND; // the timer callback runs in a worker thread: it only posts a message here
+  {$IFEND}
+
+procedure AbortStartup(const ErrorMsg: String);
+{$IF CompilerVersion >= 20}
+procedure StartupTrace(const Msg: String);
+{$IFEND}
 
 implementation
 
-uses uMain;
+uses uMain
+  {$IF CompilerVersion >= 20}
+  , uDiagnosticLog
+  {$IFEND};
 
 {$R *.DFM}
 
@@ -495,10 +510,53 @@ end;
 procedure TimeCallBack(TimerID, Msg: Uint; dwUser, dw1, dw2: DWORD); pascal;
 begin
   // Do something here. This procedure will be executed each 1000 ms
+  {$IF CompilerVersion < 20}
   FormStatus.LabelTimer.Canvas.Lock;
+  {$IFEND}
   Inc(TimerCount, 1000);
+  {$IF CompilerVersion >= 20}
+  if StatusClockWnd <> 0 then
+     PostMessage(StatusClockWnd, WM_APP+101, 0, 0);
+  {$ELSE}
   FormStatus.LabelTimer.Caption:= GetPlayTime(TimerCount, True);
   FormStatus.LabelTimer.Canvas.UnLock;
+  {$IFEND}
+end;
+
+{$IF CompilerVersion >= 20}
+procedure TFormStatus.WMStatusClockTick(var Msg: TMessage);
+begin
+  if mmResult <> 0 then
+     LabelTimer.Caption:= GetPlayTime(TimerCount, True);
+end;
+{$IFEND}
+
+{$IF CompilerVersion >= 20}
+// Delphi 13 port: splash screen titles and messages go to the optional diagnostic log
+procedure StartupTrace(const Msg: String);
+begin
+  DiagnosticLog('status', Msg);
+end;
+{$IFEND}
+
+// Startup failed: the splash screen is topmost and would hide the error dialog, leaving the app hung
+procedure AbortStartup(const ErrorMsg: String);
+begin
+  {$IF CompilerVersion >= 20}
+  DiagnosticLog('fatal', 'Startup aborted: '+ErrorMsg);
+  {$IFEND}
+  if mmResult <> 0 then
+     begin
+       TimeKillEvent(mmResult);
+       mmResult:= 0;
+     end;
+  if Assigned(FormStatus) and FormStatus.HandleAllocated then
+     begin
+       SetWindowPos(FormStatus.Handle, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOACTIVATE+SWP_NOMOVE+SWP_NOSIZE);
+       ShowWindow(FormStatus.Handle, SW_HIDE);
+     end;
+  MessageBox(0, PChar('Emu Loader could not start.'+#13#10#13#10+ErrorMsg), 'Emu Loader', MB_OK or MB_ICONERROR or MB_TOPMOST or MB_SETFOREGROUND);
+  ExitProcess(1);
 end;
 
 procedure TFormStatus.StartThreadClock;
@@ -506,6 +564,9 @@ begin
   if mmResult <> 0 then
      Exit; // do nothing, timer is already running
   TimerCount:= 0;
+  {$IF CompilerVersion >= 20}
+  StatusClockWnd:= Handle;
+  {$IFEND}
   mmResult:= TimeSetEvent(1000, 0, @TimeCallBack, 0, TIME_PERIODIC);
 end;
 
@@ -521,6 +582,9 @@ end;
 
 procedure TFormStatus.TitleStr(const TitleText: String; MergeCurrentText: Boolean = False);
 begin
+  {$IF CompilerVersion >= 20}
+  StartupTrace('[title] '+TitleText);
+  {$IFEND}
   LabelStatusType.Canvas.Lock;
   case MergeCurrentText of
     True : LabelStatusType.Caption:= LabelStatusType.Caption+' '+TitleText;
@@ -531,6 +595,9 @@ end;
 
 procedure TFormStatus.MessageStr(const MessageText: String; Refresh: Boolean = True);
 begin
+  {$IF CompilerVersion >= 20}
+  StartupTrace(MessageText);
+  {$IFEND}
   LabelMessage.Canvas.Lock; // help to reduce flickering if text changes too fast (parse MESS software lists)
   LabelMessage.Caption:= MessageText;
   LabelMessage.Canvas.UnLock;
@@ -632,6 +699,16 @@ begin
 
   VersionPos.Left4Kx2:= IniFile.ReadInteger('Splash', 'VersionInfoPositionX_4Kx2', VersionPos.Left4Kx2);// 70);
   VersionPos.Top4Kx2:=  IniFile.ReadInteger('Splash', 'VersionInfoPositionY_4Kx2', VersionPos.Top4Kx2); //698);
+
+  {$IF CompilerVersion >= 20}
+  // Move only the original defaults; preserve user-positioned captions.
+  if (VersionPos.Left = 6) and (VersionPos.Top = 228) then
+     VersionPos.Top:= 260;
+  if (VersionPos.Left4K = 32) and (VersionPos.Top4K = 456) then
+     VersionPos.Top4K:= 520;
+  if (VersionPos.Left4Kx2 = 70) and (VersionPos.Top4Kx2 = 698) then
+     VersionPos.Top4Kx2:= 780;
+  {$IFEND}
 
   FormStatus.SplashScreenShowTextShadows.Checked:= Boolean(IniFile.ReadInteger('Splash', 'ShowTextShadows', 1));
   FormStatus.SplashScreenEnableTextsAlternateLayout.Checked:= Boolean(IniFile.ReadInteger('Splash', 'EnableTextsAlternateLayout', 0));
@@ -961,18 +1038,30 @@ begin
        if SplashScreen4KUltraSize.Checked then
           begin
             iLeft:= 70;
+            {$IF CompilerVersion >= 20}
+            iTop:= 780;
+            {$ELSE}
             iTop:= 698;
+            {$IFEND}
           end
        else
           begin
             iLeft:= 32;
+            {$IF CompilerVersion >= 20}
+            iTop:= 520;
+            {$ELSE}
             iTop:= 456;
+            {$IFEND}
           end;
      end
   else
      begin
        iLeft:=  6;
+       {$IF CompilerVersion >= 20}
+       iTop:= 260;
+       {$ELSE}
        iTop:= 228;
+       {$IFEND}
      end;
   SplashScreenVersionInfoPositionX.Position:= iLeft;
   SplashScreenVersionInfoPositionY.Position:= iTop;
@@ -989,13 +1078,25 @@ begin
 
   // set default values of "Version Info" label
   VersionPos.Left:=   6;
+  {$IF CompilerVersion >= 20}
+  VersionPos.Top:= 260;
+  {$ELSE}
   VersionPos.Top:=  228;
+  {$IFEND}
 
   VersionPos.Left4K:= 32;
+  {$IF CompilerVersion >= 20}
+  VersionPos.Top4K:= 520;
+  {$ELSE}
   VersionPos.Top4K:= 456;
+  {$IFEND}
 
   VersionPos.Left4Kx2:= 70;
+  {$IF CompilerVersion >= 20}
+  VersionPos.Top4Kx2:= 780;
+  {$ELSE}
   VersionPos.Top4Kx2:= 698;
+  {$IFEND}
 
   VersionPos.ShadowOffset:=   1; // all labels
   VersionPos.ShadowOffset4K:= 3; // all labels
@@ -1074,6 +1175,10 @@ begin
 
   if FormStatus.Tag = 0 then
      begin
+       {$IF CompilerVersion >= 20}
+       // Not topmost under the debugger: a stopped process would cover the IDE with the splash screen
+       if not IsDebuggerPresent then
+       {$IFEND}
        SetWindowPos(FormStatus.Handle, hWnd_TopMost, 0, 0, 0, 0, SWP_NOACTIVATE+SWP_NOMOVE+SWP_NOSIZE); // this prevent form flicker (using Form.StayOnTop causes flicker)
        CallCenterWindow(FormStatus, Is4KMode and SplashScreen4KUltraSize.Checked);
        FormStatus.Tag:= 1;
@@ -1316,7 +1421,8 @@ end;
 procedure TFormStatus.SplashScreenProgressBarColorSchemeSelect(
   Sender: TObject);
 begin
-  if (SplashScreenProgressBarColorScheme.ItemIndex = 0) and (not CustomProgressBar) then
+  // custom colors start from Desert, so colors that are not set or cannot be edited (low resolution) keep a visible bar
+  if SplashScreenProgressBarColorScheme.ItemIndex = 0 then
      ProgressBar.ColorScheme:= csDesert
   else
      ProgressBar.ColorScheme:= TColorScheme(SplashScreenProgressBarColorScheme.ItemIndex);
@@ -1336,7 +1442,8 @@ begin
   if SplashScreenProgressBarColorScheme.ItemIndex = 0 then
      begin
        SplashScreenProgressBarColorBackTop.NoneColorColor:= SplashScreenProgressBarColorBackTop.Selected;
-       ProgressBar.BackColorFace:= SplashScreenProgressBarColorBackTop.Selected;
+       if CanApplyCustomProgressBarColor(SplashScreenProgressBarColorBackTop.Selected) then
+          ProgressBar.BackColorFace:= SplashScreenProgressBarColorBackTop.Selected;
      end;
 end;
 
@@ -1346,7 +1453,8 @@ begin
   if SplashScreenProgressBarColorScheme.ItemIndex = 0 then
      begin
        SplashScreenProgressBarColorBackDown.NoneColorColor:= SplashScreenProgressBarColorBackDown.Selected;
-       ProgressBar.BackColorGrad:= SplashScreenProgressBarColorBackDown.Selected;
+       if CanApplyCustomProgressBarColor(SplashScreenProgressBarColorBackDown.Selected) then
+          ProgressBar.BackColorGrad:= SplashScreenProgressBarColorBackDown.Selected;
      end;
 end;
 
@@ -1356,7 +1464,8 @@ begin
   if SplashScreenProgressBarColorScheme.ItemIndex = 0 then
      begin
        SplashScreenProgressBarColorBackBorder.NoneColorColor:= SplashScreenProgressBarColorBackBorder.Selected;
-       ProgressBar.ColorBorder:= SplashScreenProgressBarColorBackBorder.Selected;
+       if CanApplyCustomProgressBarColor(SplashScreenProgressBarColorBackBorder.Selected) then
+          ProgressBar.ColorBorder:= SplashScreenProgressBarColorBackBorder.Selected;
      end;
 end;
 
@@ -1366,7 +1475,8 @@ begin
   if SplashScreenProgressBarColorScheme.ItemIndex = 0 then
      begin
        SplashScreenProgressBarColorBarTop.NoneColorColor:= SplashScreenProgressBarColorBarTop.Selected;
-       ProgressBar.ForeColorFace:= SplashScreenProgressBarColorBarTop.Selected;
+       if CanApplyCustomProgressBarColor(SplashScreenProgressBarColorBarTop.Selected) then
+          ProgressBar.ForeColorFace:= SplashScreenProgressBarColorBarTop.Selected;
      end;
 end;
 
@@ -1376,8 +1486,14 @@ begin
   if SplashScreenProgressBarColorScheme.ItemIndex = 0 then
      begin
        SplashScreenProgressBarColorBarDown.NoneColorColor:= SplashScreenProgressBarColorBarDown.Selected;
-       ProgressBar.ForeColorGrad:= SplashScreenProgressBarColorBarDown.Selected;
+       if CanApplyCustomProgressBarColor(SplashScreenProgressBarColorBarDown.Selected) then
+          ProgressBar.ForeColorGrad:= SplashScreenProgressBarColorBarDown.Selected;
      end;
+end;
+
+function TFormStatus.CanApplyCustomProgressBarColor(Color: TColor): Boolean;
+begin
+  Result:= CustomProgressBar and (Color <> clNone) and (Color <> clDefault);
 end;
 
 procedure TFormStatus.ProgressBarCopyCurrentColorsToCustomButtonClick(

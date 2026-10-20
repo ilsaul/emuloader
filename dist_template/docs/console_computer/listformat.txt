@@ -1,0 +1,110 @@
+﻿Console/Computer/Handheld Games List Format
+-------------------------------------------
+
+SystemID MediaType IsUnicode <file>Game Filename (no path)/> <size>file size (bytes)/>
+--------------------------------------------------------------------------------------
+
+00110<file>Super Castlevania IV.zip/><size>1049088/>
+
+00111<file>コントラIII - エイリアンウォーズ.sfc/><size>1048576/>
+00311<file>ザ・キング・オブ・ファイターズ '96 ネオジオコレクション.7z/><size>49184/>
+
+00510<file>Hero.bin/><size>8192/>
+
+03930<file>Ghouls and Ghosts.d64/><size>174848/>
+
+05720<file>Metal Slug 2.iso/><size>41830400/>
+
+
+Notes:
+ - Files are opened and read as ANSI (Delphi 7 limitation), but Unicode string conversions are done "on the fly" by the frontend
+ - System IDs must have leading zeros
+ - There must be no spaces between System ID, Media Type and IsUnicode data
+ - Unicode strings are encoded/decoded in UTF-8 format; encode: Utf8Encode(WideString); decode: Utf8Decode(AnsiString)
+ - <file> tag is for games filenames; Unicode strings supported
+ - <size> tag is for the size of games files; frontend show Bits for cartridges and Bytes for the others
+
+
+
+System ID
+ 001: Super Nintendo
+ 002: Gameboy Advance
+ 003: Nintendo 8-bit
+ 004: Sega Genesis
+ 005: Atari 2600
+ 006: Intellivision
+ 007: Sega Master System
+ 008: Odyssey2
+ 009: Sega Game Gear
+ 010: ColecoVision
+ 011: GP32
+ 012: PC-Engine (cards only)
+ 013: Atari Lynx
+ 014: Atari 5200 SuperSystem
+ 015: Atari Jaguar
+ 016: Sega 32X
+ 017: Neo-Geo Pocket
+ 018: Nintendo 64
+ 019: Sega CD
+ 020: Game Boy
+ 021: PlayStation
+ 022: Nintendo GameCube
+ 023: Atari 7800
+ 024: Sega Dreamcast
+ 025: Watara Supervision
+ 026: WonderSwan
+ 027: PlayStation 2
+ 028: Nintendo Wii
+ 029: Nintendo DS
+ 030: PC Engine CD
+ 031: Game Boy Color
+ 032: Super Game Boy
+ 033: Sega Saturn
+ 034: 3DO
+ 035: Amiga CD32
+ 036: Virtual Boy
+ 037: PC-FX
+ 038: Famicom Disk System
+ 039: Commodore 64
+ 040: MSX
+ 041: MSX 2
+ 042: MSX 2+
+ 043: MSX Turbo-R
+ 044: Amiga
+ 045: Atari ST
+ 046: ZX Spectrum
+ 047: Sega SC-3000
+ 048: Atari 400/800/XL
+ 049: Commodore VIC-20
+ 050: Arcadia 2001
+ 051: Tiger game.com
+ 052: Apple II
+ 053: Apple IIgs
+ 054: WonderSwan Color
+ 055: Neo-Geo Pocket Color
+ 056: Commodore 128
+ 057: Neo-Geo CD
+ 058: Atari Jaguar CD
+ 059: Amstrad CPC
+ 060: Sony PSP
+ 061: Philips CD-i
+ 062: Sega SF-7000
+ 063: Nintendo Satellaview
+ 064: Nintendo Wii U
+ 065: Nintendo 3DS
+
+
+Media Type
+ 01: Cartridge
+ 02: Disc Image
+ 03: Floppy Disk
+ 04: Cassette Tape
+ 05: Hard Disk Drive
+
+
+Is Unicode
+ 0: game filename use ANSI string
+ 1: game filename use Unicode string (WideString)
+
+
+-- Master Control: "End of line." (quote from "TRON") --

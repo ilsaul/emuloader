@@ -1,10 +1,16 @@
 program EmuLoader;
 
 uses
+  {$IF CompilerVersion < 20}
   FastMM4,
   SynFastWideString,
   madExcept,
+  {$IFEND}
   Forms,
+  {$IF CompilerVersion >= 20}
+  SysUtils,
+  uDiagnosticLog in 'uDiagnosticLog.pas',
+  {$IFEND}
   VersionHelpers,
   uCommon in 'uCommon.pas',
   uStatus in 'uStatus.pas' {FormStatus},
@@ -77,7 +83,7 @@ uses
   uFavoritesManagerCleanseProfile in 'uFavoritesManagerCleanseProfile.pas' {FormFavoritesManagerCleanseProfile},
   uNightMode in 'uNightMode.pas' {FormNightMode},
   uMessageBox_4K in '4K\uMessageBox_4K.pas' {FormMessageBox4K},
-  uZTestWorkbench in 'uZTestWorkbench.pas' {FormZTestWorkbench},
+  //uZTestWorkbench in 'uZTestWorkbench.pas' {FormZTestWorkbench},
   uCustomParameters in 'arcade\uCustomParameters.pas' {FormCustomParameters},
   uColorPickerEx in 'uColorPickerEx.pas' {FormColorPickerEx};
 
@@ -99,10 +105,16 @@ begin
   IsNightMode:= True;
   Is4KMode:= Read4KSetting; // validates 4K resolution and read setting from "EmuLoader.ini", if found; also sets "FrontendPath:= ExtractFilePath(Application.ExeName);"
   FrontendVersion:= 'v'+GetFileInfo2(Application.ExeName, VersionInfo[3]);
+  {$IF CompilerVersion >= 20}
+  // Hide only the zero build component, retaining major.minor.release.
+  if Copy(FrontendVersion, Length(FrontendVersion)-1, 2) = '.0' then
+     Delete(FrontendVersion, Length(FrontendVersion)-1, 2);
+  {$ELSE}
   if PosEx('.0.0', FrontendVersion) = 0 then
      Delete(FrontendVersion, Length(FrontendVersion)-1, 2)
   else
      Delete(FrontendVersion, Length(FrontendVersion)-3, 4);
+  {$IFEND}
 
   //CreateSplashIniFile;       // remove splash settings from "ini_files\lightmode.ini" [Splash] section and create "ini_files\splash.ini"
   //CreateGamesFiltersIniFile; // remove tool bar filters settings from "emuloader.ini" and create "ini_files\games_filters.ini"
@@ -110,9 +122,21 @@ begin
 
   //HideAppFormTaskBarButton2; // this is to show a secondary task bar button for forms
 
+  {$IF CompilerVersion >= 20}
+  FrontendPreRelease:= IsFilePreRelease(Application.ExeName);
+  InitializeDiagnosticLog(FrontendVersion);
+  try
+  // Keep VCL's icon state consistent with the embedded resource before showing any forms.
+  Application.Icon.LoadFromResourceName(HInstance, 'MAINICON');
+  StartupTrace('EmuLoader '+FrontendVersion+' starting');
+  {$IFEND}
   FormStatus:= TFormStatus.Create(nil); // create splash screen here to show as soon as possible: "this is not the app's main Form you're looking for!" (May 01, 2021)
   //FormStatus.Caption:= FormStatus.Caption+' '+FrontendVersion;
   FormStatus.LabelVersion.Caption:= FrontendVersion;
+  {$IF CompilerVersion >= 20}
+  FormStatus.LabelVersion.Caption:= FrontendVersionCaption;
+  FormStatus.LabelVersion.AutoSize:= True;
+  {$IFEND}
   FormStatus.TitleStr('Initializing');
   FormStatus.MessageStr('Loading primary settings.', False);
 
@@ -124,17 +148,48 @@ begin
   Application.Initialize;
 
   Application.Title := 'Emu Loader: Multiple Systems Frontend';
+  {$IF CompilerVersion >= 20}
+  Application.MainFormOnTaskbar:= True; // single taskbar button owned by the main form
+  {$IFEND}
   Application.HintPause:= 200; // fix for the hint pause timer
   Application.HintColor:= $00f8f4f3; //$00eeebe6;
 
+  {$IF CompilerVersion >= 20}
+  try
+  {$IFEND}
   FormStatus.MessageStr('Initializing main screen.');
   Application.CreateForm(TFormMain, FormMain); // application's main form
+  {$IF CompilerVersion >= 20}
+  FormMain.Icon.Assign(Application.Icon);
+  DiagnosticLog('icons', 'Application and main form icons assigned from MAINICON; applicationEmpty='+
+    BoolToStr(Application.Icon.Empty, True)+'; formEmpty='+BoolToStr(FormMain.Icon.Empty, True));
+  FormMain.Caption:= FormMain.Caption+' '+FrontendVersionCaption;
+  {$ELSE}
   FormMain.Caption:= FormMain.Caption+' '+FrontendVersion;
+  {$IFEND}
 
   FormStatus.MessageStr('Initializing night mode screen.');
   Application.CreateForm(TFormNightMode, FormNightMode);
   FormStatus.MessageStr('Initializing preferences screen.');
   Application.CreateForm(TFormPreferences, FormPreferences);
+  {$IF CompilerVersion >= 20}
+  except
+    on E: Exception do
+       begin
+         DiagnosticLogException('Creating application forms', E, ExceptAddr);
+         AbortStartup(E.ClassName+': '+E.Message);
+       end;
+  end;
+  {$IFEND}
   Application.Run;
+  {$IF CompilerVersion >= 20}
+  DiagnosticLog('lifecycle', 'Application.Run returned; normal shutdown completed');
+  except
+    on E: Exception do
+       begin
+         DiagnosticLogException('Unhandled application failure', E, ExceptAddr);
+         raise;
+       end;
+  end;
+  {$IFEND}
 end.
-

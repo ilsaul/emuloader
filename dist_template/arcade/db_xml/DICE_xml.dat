@@ -1,0 +1,257 @@
+<?xml version="1.0"?>
+<!DOCTYPE datafile PUBLIC "-//Logiqx//DTD ROM Management Datafile//EN" "http://www.logiqx.com/Dats/datafile.dtd">
+<datafile>
+	<header>
+		<name>DICE</name>
+		<description>DICE: Discrete Integrated Circuit Emulator v0.9 (Apr 23 2014)</description>
+		<version>0.9</version>
+		<author>Ciro Alfredo Consentino</author>
+		<comment>revised to reflect detected rom sizes on November 01, 2013</comment>
+		<comment>updated on November 09, 2013 by Ciro Alfredo Consentino</comment>
+		<comment>added new games for v0.8 on February 16, 2014 by Ciro Alfredo Consentino</comment>
+		<comment>added "Attack (set 2)" game to support both "attack" sets on February 18, 2014 by Ciro Alfredo Consentino</comment>
+		<comment>added new games for v0.9 on April 24, 2014 by Ciro Alfredo Consentino</comment>
+	</header>
+	<game name="antiaircraft" sourcefile="antiaircraft.cpp" versionadded="0.6">
+		<description>Anti-Aircraft</description>
+		<year>1975</year>
+		<manufacturer>Atari</manufacturer>
+		<rom name="aa.k1" size="32" crc="9de772d5"/>
+		<display type="raster" orientation="horizontal"/>
+		<input players="2" buttons="3">
+		</input>
+	</game>
+	<game name="attack" sourcefile="attack.cpp" versionadded="0.6">
+		<description>Attack</description>
+		<year>1977</year>
+		<manufacturer>Exidy</manufacturer>
+		<rom name="attack.a1" size="256" crc="d9b116b8"/>
+		<rom name="attack.b1" size="256" crc="2317197f"/>
+		<rom name="attack.c1" size="256" crc="7391e44c"/>
+		<rom name="attack.d1" size="256" crc="d4a06439"/>
+		<rom name="attack.j6" size="256" crc="1ce2921c"/>
+		<rom name="attack.k6" size="256" crc="e120839f"/>
+		<display type="raster" orientation="horizontal"/>
+		<input players="2" buttons="1">
+			<control type="joy4way"/>
+		</input>
+	</game>
+	<game name="attack2" sourcefile="attack.cpp" versionadded="0.6">
+		<description>Attack (set 2)</description>
+		<year>1977</year>
+		<manufacturer>Exidy</manufacturer>
+		<rom name="attack.a1" size="512" crc="5afd5aff"/>
+		<rom name="attack.b1" size="512" crc="92d0fbf4"/>
+		<rom name="attack.c1" size="512" crc="25625d6e"/>
+		<rom name="attack.d1" size="512" crc="2ff8dd6b"/>
+		<rom name="attack.j6" size="512" crc="21f87c1a"/>
+		<rom name="attack.k6" size="512" crc="ba5115b3"/>
+		<display type="raster" orientation="horizontal"/>
+		<input players="2" buttons="1">
+			<control type="joy4way"/>
+		</input>
+	</game>
+	<game name="breakout" sourcefile="breakout.cpp" versionadded="0.5">
+		<description>Breakout</description>
+		<year>1976</year>
+		<manufacturer>Atari</manufacturer>
+		<display type="raster" orientation="vertical"/>
+		<input players="2" buttons="1">
+			<control type="paddle"/>
+		</input>
+	</game>
+	<game name="cleansweep" sourcefile="cleansweep.cpp" versionadded="0.8">
+		<description>Clean Sweep</description>
+		<year>1974</year>
+		<manufacturer>Ramtek</manufacturer>
+		<rom name="clean.6c" size="32" crc="be02b5f5"/>
+		<rom name="clean.d7" size="32" crc="be40b153"/>
+		<rom name="clean.k3" size="32" crc="515a34ba"/>
+		<display type="raster" orientation="horizontal"/>
+		<input players="1" buttons="1">
+			<control type="paddle"/>
+		</input>
+	</game>
+	
+	<game name="crashnscore" sourcefile="crashnscore.cpp" versionadded="0.7">
+		<description>Crash 'N Score</description>
+		<year>1975</year>
+		<manufacturer>Atari</manufacturer>
+		<rom name="cns.d2" size="512" crc="683b203b"/>
+		<rom name="cns.e2" size="512" crc="478afac2"/>
+		<rom name="cns.f6" size="512" crc="b3443354"/>
+		<rom name="cns.f7" size="32" crc="01dca5b9"/>
+		<rom name="cns.p6" size="512" crc="b3443354"/>
+		<rom name="cns.p7" size="32" crc="01dca5b9"/>
+		<display type="raster" orientation="horizontal"/>
+		<input players="2" buttons="2">
+			<control type="dial"/>
+		</input>
+	</game>
+	<game name="crossfire" sourcefile="crossfire.cpp" versionadded="0.8">
+		<description>Crossfire</description>
+		<year>1975</year>
+		<manufacturer>Atari</manufacturer>
+		<display type="raster" orientation="horizontal"/>
+		<input players="2" buttons="1">
+            <control type="joy2way"/>
+		</input>
+	</game>
+	<game name="gotcha" sourcefile="gotcha.cpp" versionadded="0.2">
+		<description>Gotcha</description>
+		<year>1973</year>
+		<manufacturer>Atari</manufacturer>
+		<display type="raster" orientation="horizontal"/>
+		<input players="2">
+			<control type="trackball"/>
+		</input>
+	</game>
+	<game name="highway" sourcefile="highway.cpp" versionadded="0.9">
+		<description>Hi-Way</description>
+		<year>1975</year>
+		<manufacturer>Atari</manufacturer>
+		<display type="raster" orientation="horizontal"/>
+		<input players="1" buttons="1">
+			<control type="dial"/>
+		</input>
+	</game>
+	<game name="indy4" sourcefile="indy4.cpp" versionadded="0.9">
+		<description>Indy 4</description>
+		<year>1976</year>
+		<manufacturer>Atari</manufacturer>
+		<rom name="indy.s1" size="512" crc="1aafbe72"/>
+		<rom name="indy.s2" size="32" crc="e30ea877"/>
+		<rom name="indy.c1" size="512" crc="b3443354"/>
+		<rom name="indy.c2" size="32" crc="01dca5b9"/>
+		<display type="raster" orientation="horizontal"/>
+		<input players="4" buttons="1">
+			<control type="dial"/>
+			<control type="pedal"/>
+			<control type="pedal"/>
+		</input>
+	</game>
+	<game name="jetfighter" sourcefile="jetfighter.cpp" versionadded="0.7">
+		<description>Jet Fighter</description>
+		<year>1975</year>
+		<manufacturer>Atari</manufacturer>
+		<rom name="jet1.a4" size="256" crc="08a0b011"/>
+		<rom name="jet1.j1" size="32" crc="bee62d20"/>
+		<rom name="jet1.j5" size="512" crc="c58ee65d"/>
+		<rom name="jet1.k5" size="512" crc="0d5648a9"/>
+		<rom name="jet1.m1" size="32" crc="bee62d20"/>
+		<rom name="jet1.r5" size="32" crc="bd95f87e"/>
+		<display type="raster" orientation="vertical"/>
+		<input players="1" buttons="2">
+		</input>
+	</game>
+	<game name="pinpong" sourcefile="pinpong.cpp" versionadded="0.8">
+		<description>Pin Pong</description>
+		<year>1975</year>
+		<manufacturer>Atari</manufacturer>
+		<display type="raster" orientation="horizontal"/>
+		<input players="2">
+			<control type="trackball"/>
+		</input>
+	</game>
+	<game name="pong" sourcefile="pong.cpp" versionadded="0.1">
+		<description>Pong</description>
+		<year>1972</year>
+		<manufacturer>Atari</manufacturer>
+		<display type="raster" orientation="horizontal"/>
+		<input players="2">
+			<control type="paddle"/>
+		</input>
+	</game>
+	<game name="pongdoubles" sourcefile="pongdoubles.cpp" versionadded="0.4">
+		<description>Pong Doubles</description>
+		<year>1973</year>
+		<manufacturer>Atari</manufacturer>
+		<display type="raster" orientation="horizontal"/>
+		<input players="4">
+			<control type="paddle"/>
+		</input>
+	</game>
+	<game name="quadrapong" sourcefile="quadrapong.cpp" versionadded="0.7">
+		<description>Quadrapong</description>
+		<year>1974</year>
+		<manufacturer>Atari</manufacturer>
+		<display type="raster" orientation="horizontal"/>
+		<input players="4">
+			<control type="paddle"/>
+		</input>
+	</game>
+	<game name="rebound" sourcefile="rebound.cpp" versionadded="0.2">
+		<description>Rebound</description>
+		<year>1974</year>
+		<manufacturer>Atari</manufacturer>
+		<display type="raster" orientation="horizontal"/>
+		<input players="2" buttons="1">
+			<control type="paddle"/>
+		</input>
+	</game>
+	<game name="sharkjaws" sourcefile="sharkjaws.cpp" versionadded="0.7">
+		<description>Shark Jaws</description>
+		<year>1975</year>
+		<manufacturer>Atari</manufacturer>
+		<rom name="004182.1da" size="512" crc="05242912"/>
+		<rom name="004183.1db" size="512" crc="b161b889"/>
+		<display type="raster" orientation="horizontal"/>
+		<input players="1" buttons="1">
+			<control type="joy4way"/>
+		</input>
+	</game>
+	<game name="spacerace" sourcefile="spacerace.cpp" versionadded="0.3">
+		<description>Space Race</description>
+		<year>1973</year>
+		<manufacturer>Atari</manufacturer>
+		<display type="raster" orientation="horizontal"/>
+		<input players="2">
+			<control type="joy2way"/>
+		</input>
+	</game>
+	<game name="steeplechase" sourcefile="steeplechase.cpp" versionadded="0.9">
+		<description>Steeplechase</description>
+		<year>1975</year>
+		<manufacturer>Atari</manufacturer>
+		<rom name="003773-a.c4" size="256" crc="5ddc49b6"/>
+		<rom name="003773-b.d4" size="256" crc="e6994cde"/>
+		<rom name="003774.c8" size="" crc=""/>
+		<display type="raster" orientation="horizontal"/>
+		<input players="6" buttons="1">
+		</input>
+	</game>
+	<game name="stuntcycle" sourcefile="stuntcycle.cpp" versionadded="0.4">
+		<description>Stunt Cycle</description>
+		<year>1976</year>
+		<manufacturer>Atari</manufacturer>
+		<rom name="82s115.1fh" size="512" crc="4ed5a99d"/>
+		<rom name="82s123.4d" size="32" crc="31a09efb"/>
+		<display type="raster" orientation="horizontal"/>
+		<input players="2">
+			<control type="stick"/>
+			<control type="stick"/>
+		</input>
+	</game>
+	<game name="tvbasketball" sourcefile="tvbasketball.cpp" versionadded="0.5">
+		<description>TV Basketball</description>
+		<year>1974</year>
+		<manufacturer>Midway</manufacturer>
+		<display type="raster" orientation="horizontal"/>
+		<input players="2">
+			<control type="paddle"/>
+			<control type="paddle"/>
+		</input>
+	</game>
+	<game name="wipeout" sourcefile="wipeout.cpp" versionadded="0.8">
+		<description>Wipe Out</description>
+		<year>1974</year>
+		<manufacturer>Ramtek</manufacturer>
+		<rom name="wipeout.d4" size="32" crc="205bf9a1"/>
+		<rom name="wipeout.g7" size="32" crc="215437e1"/>
+		<display type="raster" orientation="horizontal"/>
+		<input players="4">
+			<control type="paddle"/>
+			<control type="paddle"/>
+		</input>
+	</game>
+</datafile>

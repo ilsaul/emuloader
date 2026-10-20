@@ -8,7 +8,11 @@ uses
   FileCtrl, GraphicEx, GR32_Image, GR32, GR32_RangeBars, uGR32Extra, // RichEdit, //for AppendTextW()
   TntComCtrls, GR32_Resamplers {$IFDEF Ex},GR32_ResamplersEx {$ENDIF},
   ShellAPI, CommCtrl, JPEG, Themes, BarMenus, XPMan, UxTheme,
-  URLMon, OleCtrls, SHDocVw, madExceptVcl, unitExIcon, BcDrawModule,
+  URLMon, OleCtrls, SHDocVw,
+  {$IF CompilerVersion < 20}
+  madExceptVcl,
+  {$IFEND}
+  unitExIcon, BcDrawModule,
   BcCustomDrawModule, BcRectUtilities, ImgList, AdvGroupBox, AdvOfficeButtons,
   EditEx, ButtonsEx, ColorBoxEx, XiProgressBar, XiTrackBar,
   EasyListview, MPCommonObjects, MPCommonUtilities, MPThreadManager, Math, uCommon, uCommonCustom,
@@ -258,6 +262,13 @@ type
     property eSoftwareName: String read fSoftwareName write fSoftwareName;
   end;
 
+  {$IF CompilerVersion >= 20}
+  // Qualify System: SevenZip declares UnicodeString as an alias for WideString.
+  TGameInfoText = System.UnicodeString;
+  {$ELSE}
+  TGameInfoText = WideString;
+  {$IFEND}
+
   TEasyGameInfo = class(TEasyItemStored)
   private
     //fSortIndex: Integer;
@@ -279,16 +290,16 @@ type
     fThumbnailLoading: Boolean;
     FThumbnailLeftMargin,
     fThumbnailTopMargin: Byte;
-    fThumbnailFileName: WideString;
+    fThumbnailFileName: TGameInfoText;
     fThumbnailIsZipped: Boolean;
 
     fThumbTempVars: TThumbnailTempVars;
 
-    fTitle: WideString;
-    fTitleAlternate: WideString;
-    fTitleShort: WideString;
+    fTitle: TGameInfoText;
+    fTitleAlternate: TGameInfoText;
+    fTitleShort: TGameInfoText;
     fYear: String;
-    fManufacturer: WideString;
+    fManufacturer: TGameInfoText;
     fControls: String;
     fButtonsCount: Byte;
     fAudioType: ShortInt;
@@ -309,10 +320,10 @@ type
     fNetwork: ShortInt;
     fRequiresArtwork: Boolean; 
 
-    fCategory: WideString;
+    fCategory: TGameInfoText;
     fVersionAdded: String;
-    fLanguage: WideString;
-    fName:     WideString;
+    fLanguage: TGameInfoText;
+    fName:     TGameInfoText;
     fClone:      String;
     fDriverName: String;
     fBiosName:   String;
@@ -337,9 +348,9 @@ type
     fSoftwareList: TSoftwareListMESS; // dynamic SetLength if '<softwarelist' tag found in mame -listxml output
     fSoftwareName: String;            // softwarelist name msx1_cart (for all the games from MSX1 cartridge software list); a800; vectrex; empty: is arcade game or MESS machine
     fSoftwareExecParameter: String;   // list MESS parameter for each media type -cart; -flop1; -cass1; etc; for each softlist based game, not a MESS machine
-    fSoftwareCompatible: WideString;  // compatibility tag for MESS games from hash\softwarelist.xml files...
-    fSoftwareUsageTip:   WideString;    // usage info for MESS software list games
-    fNotes: WideString;
+    fSoftwareCompatible: TGameInfoText;  // compatibility tag for MESS games from hash\softwarelist.xml files...
+    fSoftwareUsageTip:   TGameInfoText;    // usage info for MESS software list games
+    fNotes: TGameInfoText;
 
     fScanMode: Byte;
     fIsMerged: Boolean;
@@ -377,15 +388,15 @@ type
     property eThumbnailLoading: Boolean read fThumbnailLoading write fThumbnailLoading;
     property eThumbnailLeftMargin: Byte read FThumbnailLeftMargin write FThumbnailLeftMargin;
     property eThumbnailTopMargin: Byte read fThumbnailTopMargin write fThumbnailTopMargin;
-    property eThumbnailFileName: WideString read fThumbnailFileName write fThumbnailFileName;
+    property eThumbnailFileName: TGameInfoText read fThumbnailFileName write fThumbnailFileName;
     property eThumbnailIsZipped: Boolean read fThumbnailIsZipped write fThumbnailIsZipped;
     //property eThumbTempVars: TThumbnailTempVars read fThumbTempVars write fThumbTempVars; // temp vars for thumbnails view
 
-    property eTitle: WideString read fTitle write fTitle;
-    property eTitleAlternate: WideString read  fTitleAlternate write fTitleAlternate;
-    property eTitleShort: WideString read fTitleShort write fTitleShort;
+    property eTitle: TGameInfoText read fTitle write fTitle;
+    property eTitleAlternate: TGameInfoText read  fTitleAlternate write fTitleAlternate;
+    property eTitleShort: TGameInfoText read fTitleShort write fTitleShort;
     property eYear: String read fYear write fYear;
-    property eManufacturer: WideString read fManufacturer write fManufacturer;
+    property eManufacturer: TGameInfoText read fManufacturer write fManufacturer;
     property eControls: String read fControls write fControls;
     property eButtonsCount: Byte read fButtonsCount write fButtonsCount;
     property eAudioType: ShortInt read fAudioType write fAudioType;
@@ -405,10 +416,10 @@ type
     property eNetwork: ShortInt read fNetwork write fNetwork; // MAME/HBMAME -1 -> none; 0 -> Good; 1 -> imperfect; unnemulated --- Supermodel3 -1 -> no; 0-> yes
     property eRequiresArtwork: Boolean read fRequiresArtwork write fRequiresArtwork;
 
-    property eCategory: WideString read fCategory write fCategory;
-    property eLanguage: WideString read fLanguage write fLanguage;
+    property eCategory: TGameInfoText read fCategory write fCategory;
+    property eLanguage: TGameInfoText read fLanguage write fLanguage;
     property eVersionAdded: String read fVersionAdded write fVersionAdded;
-    property eName:  WideString read fName write fName;
+    property eName:  TGameInfoText read fName write fName;
     property eClone: String read fClone write fClone;
     property eDriverName: String read fDriverName write fDriverName;
     property eBiosName:   String read fBiosName write fBiosName;
@@ -435,9 +446,9 @@ type
     property eSoftwareList: TSoftwareListMESS read fSoftwareList write fSoftwareList; // for all '<softwarelist' entries (mame -listxml)
     property eSoftwareName: String read fSoftwareName write fSoftwareName; // softwarelist name msx1_cart; a800; vectrex; empty: is arcade game or MESS machine
     property eSoftwareExecParameter: String read fSoftwareExecParameter write fSoftwareExecParameter; // list MESS parameter for each media type -cart1; -flop1; -cass1; etc
-    property eSoftwareCompatible: WideString read fSoftwareCompatible write fSoftwareCompatible; // compatibility tag for MESS games from hash\softwarelist.xml files
-    property eSoftwareUsageTip: WideString read fSoftwareUsageTip write fSoftwareUsageTip;   // usage info for MESS software list games
-    property eNotes: WideString read fNotes write fNotes;
+    property eSoftwareCompatible: TGameInfoText read fSoftwareCompatible write fSoftwareCompatible; // compatibility tag for MESS games from hash\softwarelist.xml files
+    property eSoftwareUsageTip: TGameInfoText read fSoftwareUsageTip write fSoftwareUsageTip;   // usage info for MESS software list games
+    property eNotes: TGameInfoText read fNotes write fNotes;
 
     property eScanMode: Byte read fScanMode write fScanMode;    // 0 -> full scan; 1 -> quick scan (file search only); 2 -> force available
     property eIsMerged: Boolean read fIsMerged write fIsMerged; // for MAME and software list games / HBMAME
@@ -626,6 +637,7 @@ type
     PopupDeleteFromFavorites: TMenuItem;
     N15: TMenuItem;
     MenuVisitEmuLoaderHomepage: TMenuItem;
+    MenuVisitEmuLoaderForum: TMenuItem;
     N35: TMenuItem;
     PopupShowFirstImage: TMenuItem;
     MenuRestoreMainScreenDefaultScreenSizePosition: TMenuItem;
@@ -833,7 +845,6 @@ type
     MenuHelpMAMEDocsWiki: TMenuItem;
     MenuVisitMrDoArcadeHomepage: TMenuItem;
     MenuVisitProgettoEMMAHomepage: TMenuItem;
-    MenuVisitMAMEWorldHomepage: TMenuItem;
     MenuVisitClrMAMEProHomepage: TMenuItem;
     ArcadeControllers1: TMenuItem;
     MenuVisitZiNcHomepage: TMenuItem;
@@ -1330,7 +1341,11 @@ type
     procedure PopupStartupGameSelectionGameSelectedClick(Sender: TObject);
     procedure ImagesToolBarButtonsCustomDraw(Sender: TToolBar; const ARect: TRect; var DefaultDraw: Boolean);
     procedure WebBrowserBeforeNavigate2(Sender: TObject;
+      {$IF CompilerVersion >= 20}
+      const pDisp: IDispatch; const URL, Flags, TargetFrameName, PostData,
+      {$ELSE}
       const pDisp: IDispatch; var URL, Flags, TargetFrameName, PostData,
+      {$IFEND}
       Headers: OleVariant; var Cancel: WordBool);
     procedure PanelWebBrowserResize(Sender: TObject);
     procedure PopupSelectScanGamesModeClick(Sender: TObject);
@@ -1488,6 +1503,13 @@ type
     procedure PopupDeleteGameCustomParametersClick(Sender: TObject);
   { Private declarations }
   private
+    {$IF CompilerVersion >= 20}
+    FNormalToolBarImages: TImageList;
+    FDisabledToolBarImages: TImageList;
+    FToolBarWindowProc: TWndMethod;
+    FToolBarDrawDC: HDC;
+    FToolBarDrawRect: TRect;
+    {$IFEND}
     //FileIcon: TIcon;
     //iMAMu_Icon: TIcon;
     LastColumnSorted: Integer;
@@ -1544,6 +1566,16 @@ type
 
     MAMEFolderManualPDF: String;
     FDrawBuffer, FDrawBufferBottom: TBitmap;
+    {$IF CompilerVersion >= 20}
+    procedure UpdateToolBarStateIcons(IconIndex: Integer = -1);
+    function ToolBarIconTextTop(IconHeight: Integer): Integer;
+    function ToolBarLabelHeight(IconHeight: Integer): Integer;
+    function ToolBarButtonLabel(Button: TToolButton): String;
+    procedure ToolBarButtonsWindowProc(var Message: TMessage);
+    procedure ToolBarButtonsDrawLabel(Sender: TToolBar; Button: TToolButton;
+      State: TCustomDrawState; Stage: TCustomDrawStage;
+      var Flags: TTBCustomDrawFlags; var DefaultDraw: Boolean);
+    {$IFEND}
     function  GetDrawBuffer: TBitmap;
     function  GetDrawBufferBottom: TBitmap;
 
@@ -1616,6 +1648,7 @@ type
     procedure ResetMAMu_Icons;
     function  GetMAMu_ZipContents(var IconsListSource: THashedStringList; const SoftwareName: String = ''): Boolean;
     procedure InitMAMu_Zip;
+    procedure PrepareMAMu_7zCache(ExtractIfNeeded: Boolean);
     procedure FreeMAMu_ZipVars;
     procedure MAMu_CloseZipArchives;
     procedure ResetMAMu_ImageList(ReloadDefaultIcons: Boolean; ResetThumbnails: Boolean = False);
@@ -2029,6 +2062,9 @@ type
     // thumbnail view mode settings
     ThumbnailSettings: TThumbnailSettings;
 
+    {$IF CompilerVersion >= 20}
+    destructor Destroy; override;
+    {$IFEND}
     procedure SetWindowStayOnTop(FormSource: TForm; SetParentWindow: Boolean = False); // do not set TForm.FormStyle = fsStayOnTop, it causes flicker; use this function
 
     // custom parameters (2021)
@@ -2747,6 +2783,9 @@ implementation
 
 uses
   uPreferences, uStatus,
+  {$IF CompilerVersion >= 20}
+  uDiagnosticLog,
+  {$IFEND}
   uAbout, uMessageBox, uMessageBox_4K,
   uGameDetails, uArcadeEmulatorsSetup,
   uZiNcSettings, uToolBarEditor,
@@ -2778,6 +2817,67 @@ uses
   uCustomParameters, uColorPickerEx;
 
 {$R *.dfm}
+
+{$IF CompilerVersion >= 22}
+// Delphi 7 build used patched VCL units (source\vcl-d7) that exposed these
+// helpers; the stock modern VCL does not, so they are provided here.
+const
+  IDCOLORCMB = $473;
+  ColorToPrettyName: array[0..46] of TIdentMapEntry = (
+    (Value: clBlack; Name: 'Black'),
+    (Value: clMaroon; Name: 'Maroon'),
+    (Value: clGreen; Name: 'Green'),
+    (Value: clOlive; Name: 'Olive'),
+    (Value: clNavy; Name: 'Navy'),
+    (Value: clPurple; Name: 'Purple'),
+    (Value: clTeal; Name: 'Teal'),
+    (Value: clGray; Name: 'Gray'),
+    (Value: clSilver; Name: 'Silver'),
+    (Value: clRed; Name: 'Red'),
+    (Value: clLime; Name: 'Lime'),
+    (Value: clYellow; Name: 'Yellow'),
+    (Value: clBlue; Name: 'Blue'),
+    (Value: clFuchsia; Name: 'Fuchsia'),
+    (Value: clAqua; Name: 'Aqua'),
+    (Value: clWhite; Name: 'White'),
+    (Value: clMoneyGreen; Name: 'Money Green'),
+    (Value: clSkyBlue; Name: 'Sky Blue'),
+    (Value: clCream; Name: 'Cream'),
+    (Value: clMedGray; Name: 'Medium Gray'),
+    (Value: clActiveBorder; Name: 'Active Border'),
+    (Value: clActiveCaption; Name: 'Active Caption'),
+    (Value: clAppWorkSpace; Name: 'Application Workspace'),
+    (Value: clBackground; Name: 'Background'),
+    (Value: clBtnFace; Name: 'Button Face'),
+    (Value: clBtnHighlight; Name: 'Button Highlight'),
+    (Value: clBtnShadow; Name: 'Button Shadow'),
+    (Value: clBtnText; Name: 'Button Text'),
+    (Value: clCaptionText; Name: 'Caption Text'),
+    (Value: clDefault; Name: 'Default'),
+    (Value: clGrayText; Name: 'Gray Text'),
+    (Value: clHighlight; Name: 'Highlight Background'),
+    (Value: clHighlightText; Name: 'Highlight Text'),
+    (Value: clInactiveBorder; Name: 'Inactive Border'),
+    (Value: clInactiveCaption; Name: 'Inactive Caption'),
+    (Value: clInactiveCaptionText; Name: 'Inactive Caption Text'),
+    (Value: clInfoBk; Name: 'Info Background'),
+    (Value: clInfoText; Name: 'Info Text'),
+    (Value: clMenu; Name: 'Menu Background'),
+    (Value: clMenuText; Name: 'Menu Text'),
+    (Value: clNone; Name: 'None'),
+    (Value: clScrollBar; Name: 'Scroll Bar'),
+    (Value: cl3DDkShadow; Name: '3D Dark Shadow'),
+    (Value: cl3DLight; Name: '3D Light'),
+    (Value: clWindow; Name: 'Window Background'),
+    (Value: clWindowFrame; Name: 'Window Frame'),
+    (Value: clWindowText; Name: 'Window Text'));
+
+function GetColorPrettyName(iColor: TColor): String;
+begin
+  if not IntToIdent(iColor, Result, ColorToPrettyName) then
+     Result:= '';
+end;
+{$IFEND}
 
 constructor THintWindowDark.Create(AOwner: TComponent);
 begin
@@ -2875,7 +2975,7 @@ procedure TFontDialog.DoShow;
 const
   SMyColorName: PChar = 'Custom...';
 begin
-  SendDlgItemMessage(Handle, IDCOLORCMB, CB_INSERTSTRING, 0, Integer(SMyColorName));
+  SendDlgItemMessage(Handle, IDCOLORCMB, CB_INSERTSTRING, 0, LPARAM(SMyColorName));
   SendDlgItemMessage(Handle, IDCOLORCMB, CB_SETITEMDATA,  0, ColorToRGB(Font.Color));
   inherited;
 end;
@@ -3138,6 +3238,9 @@ end;
 
 procedure TFormMain.HideAppFormTaskBarButton;
 begin
+  {$IF CompilerVersion >= 20}
+  Exit; // MainFormOnTaskbar is set in the .dpr: re-showing Application.Handle would add a second taskbar button
+  {$IFEND}
   // all Windows versions need this
   ShowWindow(Application.Handle, SW_HIDE);
   SetWindowLong(Application.Handle, GWL_EXSTYLE, GetWindowLong(Application.Handle, GWL_EXSTYLE) and not WS_EX_APPWINDOW or WS_EX_TOOLWINDOW);
@@ -3162,6 +3265,7 @@ var
   Item:  TEasyItem;
   iStr: String;
 begin
+  Item:= nil;
   Result:= IsGroupedView and (not FormPreferences.DisableCloneIndent.Checked);
   if not Result then
      Exit;
@@ -3444,6 +3548,7 @@ var
   Item: TEasyItem;
   StrResult: String;
 begin
+  Item:= nil;
   Result:= -1; // "cancel" is the default result
   // 0 -> all systems
   // 1..MaxArcadeSystems -> valid EL systems
@@ -3699,8 +3804,15 @@ var
   // pointers for scanline access
   liPByte, loPByte, p: PByte;
   // offset increment
-  liSize, loSize: integer;
+  {$IF CompilerVersion >= 20}
+  liSize, loSize: NativeInt;
+  {$ELSE}
+  liSize, loSize: Integer;
+  {$IFEND}
 begin
+  // Bilinear sampling needs at least two source rows and columns
+  if (abmp.Width < 2) or (abmp.Height < 2) or (NuWidth < 1) or (NuHeight < 1) then
+     Exit;
   abmp.PixelFormat:= pf24bit;
   bTmp:= TPNGGraphic.Create;
   bTmp.PixelFormat:= pf24bit;
@@ -3710,9 +3822,20 @@ begin
   xscale:= bTmp.Width / (abmp.Width - 1);
   yscale:= bTmp.Height / (abmp.Height - 1);
   liPByte:= abmp.Scanline[0];
-  liSize:= Integer(abmp.Scanline[1]) - Integer(liPByte);
   loPByte:= bTmp.Scanline[0];
-  loSize:= Integer(bTmp.Scanline[1]) - Integer(loPByte);
+  {$IF CompilerVersion >= 20}
+  liSize:= NativeInt(abmp.Scanline[1]) - NativeInt(liPByte);
+  if bTmp.Height > 1 then
+     loSize:= NativeInt(bTmp.Scanline[1]) - NativeInt(loPByte)
+  else
+     loSize:= 0;
+  {$ELSE}
+  liSize:= Integer(abmp.Scanline[1]) - Integer(liPByte);
+  if bTmp.Height > 1 then
+     loSize:= Integer(bTmp.Scanline[1]) - Integer(loPByte)
+  else
+     loSize:= 0;
+  {$IFEND}
   for to_y:= 0 to bTmp.Height - 1 do
   begin
     sfrom_y:= to_y / yscale;
@@ -3942,6 +4065,7 @@ var
   gifPic: TGIFGraphic;
   bmpPic: TBitmap;
 begin
+  jpgPic:= nil; gifPic:= nil; bmpPic:= nil;
   // Do the extraction here.... NOTICE this IS in the context of the thread so
   // think thread safety. If you have to access the form you will get into trouble.
   // Pass all the information you need here in the ThreadRequest object and you will
@@ -4047,6 +4171,12 @@ begin
   if Image.PixelFormat <> pf32bit then
      Image.PixelFormat:=  pf32bit;
 
+  {$IF CompilerVersion >= 20}
+  if (Image.Width < 2) or (Image.Height < 2) then
+     DiagnosticLog('thumbnail', 'Image too small to resample; file='+FileName+
+       '; zip='+ZipFile+'; width='+IntToStr(Image.Width)+'; height='+IntToStr(Image.Height));
+  try
+  {$IFEND}
   if MaintainAspectRatio then
      begin
         if (Image.Width/Image.Height) <= (Width/Height) then
@@ -4065,6 +4195,18 @@ begin
   else
      MakeThumbNail(Image, Width, Height);
      //BiReSample(Image, Width, Height, True); // doesn't work... accces violation!!!
+  {$IF CompilerVersion >= 20}
+  except
+    on E: Exception do
+      begin
+        // An escaped exception would silently stop the thumbnail thread
+        DiagnosticLog('thumbnail', 'Thumbnail creation failed; file='+FileName+
+          '; zip='+ZipFile+'; width='+IntToStr(Image.Width)+'; height='+IntToStr(Image.Height)+
+          '; pixelformat='+IntToStr(Ord(Image.PixelFormat))+'; '+E.ClassName+': '+E.Message);
+        Image.Assign(nil);
+      end;
+  end;
+  {$IFEND}
 
 // this code is no longer used (draws the icons inside the image file, not as overlay icons)
 {
@@ -4531,7 +4673,7 @@ function TFormMain.GetFontHeightSize(iFont: TFont): Integer;
 var
   FontSize: TSize;
 begin
-  FontSize:= TextExtentW('ÁAq|[', iFont);
+  FontSize:= TextExtentW(#$C1 + 'Aq|[', iFont);
   Result:= FontSize.cy;
 end;
 
@@ -4642,6 +4784,7 @@ procedure TFormMain.GetLastSelectedItem(out EasyItemVar: TEasyItem);
 var
   NewEasyItem, selEasyItem: TEasyItem;
 begin
+  NewEasyItem:= nil;
   EasyItemVar:= nil;
   if GamesListView.Selection.Count in [0, 1] then
      Exit;
@@ -4904,6 +5047,7 @@ var
   Loop, iPos: Integer;
   tmpString: String;
 begin
+  TempFile:= nil; TempFileStatus:= nil;
   FileName:= GetSystemFileName(sysID, 0, SoftwareList);
   FileNameStatus:= GetSystemFileName(sysID, 2, SoftwareList);
   HolderStrings.BeginUpdate;
@@ -4962,6 +5106,7 @@ var
   Loop: Integer;
   tmpString: String;
 begin
+  TempFile:= nil;
   FileName:= SystemsListCustom[sysID, 2];
 
   HolderStrings.BeginUpdate;
@@ -5241,6 +5386,7 @@ var
   tIniFile: THashedStringList;
   UpdateFile: Boolean;
 begin
+  tIniFile:= nil;
   for sysLoop:=1 to MaxConsoleComputerSystems do
   begin
     PlayedFileName:= GetCustomGamePlayedFile(sysLoop);
@@ -5285,6 +5431,7 @@ var
   GamesFile: THashedStringList;
   UpdateFile: Boolean;
 begin
+  GamesFile:= nil;
   for sysLoop:= 1 to MaxConsoleComputerSystems do
   begin
     GameFileName:= GetCustomGamesFile(sysLoop);
@@ -5324,6 +5471,7 @@ var
   GamesFile: THashedStringList;
   UpdateFile: Boolean;
 begin
+  GamesFile:= nil;
   for sysLoop:= 1 to MaxConsoleComputerSystems do
   begin
     GameFileName:= FormMain.GetGamesFolderEL(3)+SystemsListCustom[sysLoop, 2];
@@ -5560,6 +5708,7 @@ var
   end;
   
 begin
+  SubFoldersList:= nil;
   Result:= False;
   ListHolder.SetFocus;
   if ELV_IsEditing(ListHolder) then
@@ -6150,7 +6299,7 @@ begin
   case StopCurrentPlayback of
     True:
       begin
-        if Pos('%1', iParams) <> 0 then
+        if Pos(string('%1'), string(iParams)) <> 0 then
            iParams:= StringReplaceW(iParams, '%1', '"'+iFileName+'"', [rfIgnoreCase]);
       end;
     False: iParams:= StringReplaceW(iParams, '%1', '"'+iFileName+'"', [rfIgnoreCase]);
@@ -6194,8 +6343,8 @@ var
 
   procedure ResetToFrontend;
   begin
-    ThousandSeparator:= Char(',');
-    DecimalSeparator:= Char('.');
+    {$IF CompilerVersion >= 22}FormatSettings.{$IFEND}ThousandSeparator:= Char(',');
+    {$IF CompilerVersion >= 22}FormatSettings.{$IFEND}DecimalSeparator:= Char('.');
     SetCurrentDir(FrontendPath);
     FocusGamesList;
   end;
@@ -6600,6 +6749,9 @@ var
   AnsiStr: String;
   UnicodeStr, pExecFile: Boolean;
 begin
+  {$IF CompilerVersion >= 20}
+  DiagnosticLog('process', 'Launching: '+String(AppPath)+'; wait='+BoolToStr(MustWait, True));
+  {$IFEND}
   AnsiStr:= AppPath;
   UnicodeStr:= True; //UnicodeStr:= AnsiStr <> AppPath;
   if UnicodeStr then
@@ -6640,6 +6792,9 @@ begin
   if not pExecFile then
      begin
        ErrorMsg:= GetLastError;
+       {$IF CompilerVersion >= 20}
+       DiagnosticLog('error', 'CreateProcess failed: '+IntToStr(ErrorMsg)+': '+SysErrorMessage(ErrorMsg));
+       {$IFEND}
        InitMessageBox;
        AddMsgText('    Failed to create the process.'+#13#10);
        AddMsgText(AppPath, MsgTxtColors.colorFileName, [fsBold]);
@@ -6670,6 +6825,10 @@ begin
      end;
 
   CloseHandle(Proc);
+  {$IF CompilerVersion >= 20}
+  if MustWait and pExecFile then
+     DiagnosticLog('process', 'Process finished; exit code='+IntToStr(Result));
+  {$IFEND}
   Sleep(10); // give some milliseconds to update the screen after exiting the emulator
   if IsRunningGame then
      begin
@@ -6732,11 +6891,14 @@ var
   hRead, hWrite: THandle;
   suiStartup: TStartupInfo;
   piProcess:  TProcessInformation;
-  pBuffer: array[0..CReadBuffer] of Char;
+  pBuffer: array[0..CReadBuffer] of AnsiChar;
   dRead, ErrorMsg: DWORD;
 
   pExecFile, pPipeCreated: Boolean;
 begin
+  {$IF CompilerVersion >= 20}
+  DiagnosticLog('process', 'Launching with console capture: '+AppPath);
+  {$IFEND}
   saSecurity.nLength := SizeOf(TSecurityAttributes);
   saSecurity.bInheritHandle := True;
   saSecurity.lpSecurityDescriptor := nil;
@@ -6745,6 +6907,9 @@ begin
   if not pPipeCreated then
      begin
        ErrorMsg:= GetLastError;
+       {$IF CompilerVersion >= 20}
+       DiagnosticLog('error', 'CreatePipe failed: '+IntToStr(ErrorMsg)+': '+SysErrorMessage(ErrorMsg));
+       {$IFEND}
        InitMessageBox;
        AddMsgText('    Failed to create the pipe to capture the console output.'+#13#10);
        AddMsgText(AppPath, MsgTxtColors.colorFileName, [fsBold]);
@@ -6768,6 +6933,9 @@ begin
   if not pExecFile then
      begin
        ErrorMsg:= GetLastError;
+       {$IF CompilerVersion >= 20}
+       DiagnosticLog('error', 'CreateProcess with console capture failed: '+IntToStr(ErrorMsg)+': '+SysErrorMessage(ErrorMsg));
+       {$IFEND}
        InitMessageBox;
        AddMsgText('    Failed to create the process.'+#13#10);
        AddMsgText(AppPath, MsgTxtColors.colorFileName, [fsBold]);
@@ -6821,6 +6989,9 @@ begin
        //until (dRunning <> STILL_ACTIVE);//WAIT_TIMEOUT); // WAIT_TIMEOUT does not work, freezes into an endless loop
        CloseHandle(piProcess.hProcess);
        CloseHandle(piProcess.hThread);
+       {$IF CompilerVersion >= 20}
+       DiagnosticLog('process', 'Console process finished; exit code='+IntToStr(Result));
+       {$IFEND}
      end;
 
   CloseHandle(hRead);
@@ -6928,6 +7099,7 @@ var
   fDate: Integer;
   ExecIndex: Integer;
 begin
+  iInfo:= nil;
   isStatusOpened:= FormStatus.Visible;
   SetCurrentDir(FrontendPath);
   Continue:= True;
@@ -7107,6 +7279,7 @@ var
   Loop: Byte;
   tmpString: String;
 begin
+  INIFile:= nil;
   try
     INIFile:= TMemIniFile.Create(GetFrontendExtraIniFile);
     with FormPreferences do
@@ -7168,6 +7341,7 @@ var
   INIFile: TMemIniFile;
   docItem: TEasyItem;
 begin
+  INIFile:= nil; docItem:= nil;
   if CheckReadOnly(GetFrontendExtraIniFile) then
      Exit;
 
@@ -7600,6 +7774,7 @@ var
   videoFile, iParameters: String;
   //SectionFound: Boolean;
 begin
+  INIFile:= nil;
   // this function is called only once at startup; "Video Preview Settings" dialog does NOT use this!!! (October 05, 2017)
   if not ValidateFile(GetVideoPreviewIniFile) then
      Exit;
@@ -7663,6 +7838,7 @@ var
   Loop: Byte;
   VideoFile, iParameters: String;
 begin
+  INIFile:= nil;
   if CheckReadOnly(GetVideoPreviewIniFile) then
      Exit;
   try
@@ -7726,6 +7902,7 @@ var
   ShowErrorMsg: Boolean;
   SectionString: String;
 begin
+  INIFile:= nil;
   // this function only executes at startup, when it's not a clean install...
   ShowErrorMsg:= False;
 
@@ -7883,6 +8060,7 @@ var
   end;
 
 begin
+  INIFile:= nil;
   // this function only executes at startup... it should not save the emulator filename back...
   try
     INIFile:= TMemIniFile.Create(GetArcadeEmulatorsFile);
@@ -8013,6 +8191,7 @@ var
     UpdateSetting: Boolean;
     FileMAME_ui: TStringList;
   begin
+    FileMAME_ui:= nil;
     // will save icons folder and image folders in "mamedir\ui.ini" file... August 01, 2016
     // if file "mamedir\ui.ini" is not found, settings will be saved in "eldir\arcade\image_categories.ini" but the settings names will be replaced by MAME names... for consistency (August 01, 2016)
     // move MAMu_ icons folder save to "eldir\arcade\image_categories.ini" file, into the "[MAME]" section since icons a for MAME anyway (August 01, 2016)
@@ -8219,6 +8398,7 @@ var
   end;
 
 begin
+  INIFile:= nil;
   ShowErrorMsg:= False;
   if FormStatus.Visible then
      FormStatus.MessageStr('Reading image categories settings.');
@@ -8290,6 +8470,7 @@ var
     UpdateSetting: Boolean;
     FileMAME_ui: TStringList;
   begin
+    FileMAME_ui:= nil;
     // will save icons folder and image folders in "mamedir\ui.ini" file... August 01, 2016
     // if file "mamedir\ui.ini" is not found, settings will be saved in "eldir\arcade\image_categories.ini" but the settings names will be replaced by MAME names... for consistency (August 01, 2016)
     // move MAMu_ icons folder save to "eldir\arcade\image_categories.ini" file, into the "[MAME]" section since icons a for MAME anyway (August 01, 2016)
@@ -8536,11 +8717,11 @@ var
   end;
 
 begin
+  FontIniFile:= nil; tmpFont:= nil;
   iFile:= GetCustomFontIniFile(ReadNightModeFile);
-  if not ValidateFile(iFile) then
-     Exit;
-
-  if FormStatus.Visible then
+  // A missing file must still apply the default colors of the selected mode,
+  // otherwise the previous mode's fonts remain (e.g. white text in day mode)
+  if FormStatus.Visible and ValidateFile(iFile) then
      FormStatus.MessageStr('Loading systems custom fonts file "'+ExtractFileName(iFile)+'".');
 
   if not IsStartup then
@@ -8610,6 +8791,7 @@ var
   end;
 
 begin
+  FontIniFile:= nil;
   iFile:= GetCustomFontIniFile(ReadNightModeFile);
   if CheckReadOnly(iFile) then
      Exit;
@@ -8646,6 +8828,7 @@ var
   INIFile: TMemIniFile;
   iCategory: Integer;
 begin
+  INIFile:= nil;
   iCategory:= -1;
   if ValidateFile(GetImageLayoutsFile) then
      begin
@@ -8713,6 +8896,7 @@ var
   Loop: Integer;
   iSection: String;
 begin
+  ImgIniFile:= nil;
   // called only from uMain.ReadIniFile
   if ValidateFile(GetImageCategorySettingsFile) then
      begin
@@ -8759,6 +8943,7 @@ procedure TFormMain.ReadLightModeSettings; // this is for light mode only
 var
   IniFile: TMemIniFile;
 begin
+  IniFile:= nil;
   if ValidateFile(GetLightModeFile) then
   begin
     IniFile:= TMemIniFile.Create(GetLightModeFile);
@@ -8998,6 +9183,7 @@ var
   end;
 
 begin
+  IniFile:= nil;
   if not ValidateFile(GetGamesFiltersFile) then
      Exit;
 
@@ -9189,6 +9375,7 @@ var
   iSectionStr: String;
   Loop, Index: Integer;
 begin
+  IniFile:= nil;
   if not ValidateFile(GetGamesFiltersFile) then
      Exit;
 
@@ -9259,6 +9446,7 @@ var
   IniFile: TMemIniFile;
   Loop, Index: Integer;
 begin
+  IniFile:= nil;
   if not ValidateFile(GetGamesFiltersFile) then
      Exit;
 
@@ -9350,6 +9538,7 @@ var
   iSectionStr: String;
   iSizeX, iSizeY: Integer;
 begin
+  IniFile:= nil;
   if not ValidateFile(GetGamesFiltersFile) then
      Exit;
 
@@ -9455,6 +9644,7 @@ var
   iUnicodeStr: WideString;
   Continue: Boolean;
 begin
+  INIFile:= nil;
   if FormStatus.Visible then
      FormStatus.MessageStr(ReadIniFileMsg);
 
@@ -9878,6 +10068,7 @@ var
   tmpString: String;
   gColumn: TEasyColumn;
 begin
+  INIFile:= nil; gColumn:= nil;
   WriteImageSingleBackground;
   if not CheckReadOnly(GetFrontendIniFile) then
   begin
@@ -10042,6 +10233,9 @@ begin
 
         INIFile.WriteInteger('Preferences', 'DisableMinimize',  Ord(DisableMinimize.Checked));
         INIFile.WriteInteger('Preferences', 'AllowOneInstance', Ord(AllowOnlyOneInstance.Checked));
+        {$IF CompilerVersion >= 20}
+        INIFile.WriteInteger('Preferences', 'DiagnosticLog', Ord(EnableDiagnosticLog.Checked));
+        {$IFEND}
 
         INIFile.WriteInteger('Preferences', 'IgnoreExitCode1InvalidFunction',      Ord(IgnoreExitCode1InvalidFunction.Checked));
         INIFile.WriteInteger('Preferences', 'LeftAlignEmulatorGameTextMessageBox', Ord(LeftAlignEmulatorGameTextMessageBox.Checked));
@@ -10323,6 +10517,7 @@ var
   iFile: TStringList;
   iPos, iPos2: Integer;
 begin
+  iFile:= nil;
   Result:= '';
   if not FileExists(EmulatorFileName) then
      Exit;
@@ -10886,6 +11081,7 @@ var
   end;
 
 begin
+  ROMsList:= nil; tmpParentROMs:= nil; tmpCloneROMs:= nil; ParentROMsList:= nil; GameStatusList:= nil;
   EmuTitle:= GetArcadeEmulatorDescription(idSupermodel, True);
   TitleErrorMsg:= 'Error: Create Games List ['+EmuTitle+']';
 
@@ -11381,6 +11577,7 @@ var
   end;
 
 begin
+  MachinesIni:= nil;
   Result:= sysID in [idMAME, idHBMAME];
   if not Result then
      Exit;
@@ -11643,6 +11840,7 @@ var
   Item: TEasyItem;
   GameFound: Boolean;
 begin
+  Group:= nil; Item:= nil;
 
   Result:= '';
   GameFound:= False;
@@ -11844,8 +12042,8 @@ var
     if MemGameInfo.eIsCustomGame then
        MemGameInfo.eSystemID:= -1;
     FreeAndNil(ScreenResolutions);
-    ThousandSeparator:= Char(',');
-    DecimalSeparator:= Char('.');
+    {$IF CompilerVersion >= 22}FormatSettings.{$IFEND}ThousandSeparator:= Char(',');
+    {$IF CompilerVersion >= 22}FormatSettings.{$IFEND}DecimalSeparator:= Char('.');
     SetCurrentDir(FrontendPath);
     TempGameVars.eName:= '';
     FocusGamesList;
@@ -12164,6 +12362,7 @@ var
     end;
 
   begin
+    SupermodelIni:= nil;
     Result:= '';
     if not FileExists(GetFolderArcadeEmulatorIni(idSupermodel)+FileStr) then
        Exit;
@@ -12223,6 +12422,7 @@ var
     StrValue: String;
     IntValue: Integer;
   begin
+    DaphneIni:= nil;
     Result:= '';
     StrValue:= GetArcadeEmuIniFileName(idDaphne);
     if not FileExists(StrValue) then
@@ -12358,6 +12558,7 @@ var
   var
     tmpFile: TMemIniFile;
   begin
+    tmpFile:= nil;
     Result:= '-';
     if not FileExists(FormMain.GetGamesFolderEL+GetSystemFileName(sysID)) then
        Exit;
@@ -12389,6 +12590,7 @@ var
     iFile: TStrings;
     iPosM: Integer;
   begin
+    iFile:= nil;
     Result:= False;
     // MachineNameStr
     // SoftwareNameFolder
@@ -12468,6 +12670,7 @@ var
   end;
 
 begin
+  SupermodelSettings:= nil; msItem:= nil;
   // AlterMAME extra setting value is "1"
   Result:= 0; // all is well
   if not ValidateSelectedGame then
@@ -13164,8 +13367,8 @@ begin
          end;
       IsRunningGame:= False;
 
-      ThousandSeparator:= Char(',');
-      DecimalSeparator:=  Char('.');
+      {$IF CompilerVersion >= 22}FormatSettings.{$IFEND}ThousandSeparator:= Char(',');
+      {$IF CompilerVersion >= 22}FormatSettings.{$IFEND}DecimalSeparator:=  Char('.');
 
       case FormMain.MemGameInfo.eIsCustomGame of
         True:
@@ -13454,6 +13657,9 @@ function TFormMain.ShowMessageBox(const WindowMessage, TitleMessage: WideString;
                                   MessageType: Integer = 2; DefaultButtonNo: Boolean = False;
                                   IconIndex: Integer = 0; GameSetStatus: Integer = -1): Integer;
 begin
+  {$IF CompilerVersion >= 20}
+  DiagnosticLog('dialog', String(WindowMessage)+'; '+String(TitleMessage)+'; '+String(DescriptionMessage));
+  {$IFEND}
   // icon index:
   // -1 -> Game Icon
   // 00 -> Info (default icon)
@@ -13473,6 +13679,9 @@ begin
           FormMessageBox.NightMode.Visible:= False;
        Result:=   GenerateMessage(WindowMessage, TitleMessage, DescriptionMessage, MessageType, DefaultButtonNo, IconIndex, GameSetStatus);
      end;
+  {$IF CompilerVersion >= 20}
+  DiagnosticLog('dialog', 'Dialog result='+IntToStr(Result));
+  {$IFEND}
 end;
 
 procedure TFormMain.ChangeMsgBoxButtonCaptions;
@@ -13700,6 +13909,7 @@ var
   var
     tmpFile: TMemIniFile;
   begin
+    tmpFile:= nil;
     // for MAME software lists
     Result:= '-';
     if not FileExists(GetGamesFolderEL+GetSystemFileName(sysID)) then
@@ -13714,14 +13924,15 @@ var
     ClearMemGameInfo(TempGameVars);
     FreeAndNil(ExtraParameters);
     FreeAndNil(ExtraDefaultParameters);
-    ThousandSeparator:= Char(',');
-    DecimalSeparator:= Char('.');
+    {$IF CompilerVersion >= 22}FormatSettings.{$IFEND}ThousandSeparator:= Char(',');
+    {$IF CompilerVersion >= 22}FormatSettings.{$IFEND}DecimalSeparator:= Char('.');
     SetCurrentDir(FrontendPath);
     FocusGamesList;
     Application.ProcessMessages;
   end;
 
 begin
+  ExtraParameters:= nil; ExtraDefaultParameters:= nil;
   if not ValidateSelectedGame then
      Exit;
 
@@ -14271,8 +14482,8 @@ var
   procedure ResetToFrontend;
   begin
     ClearMemGameInfo(TempGameVars);
-    ThousandSeparator:= Char(',');
-    DecimalSeparator:= Char('.');
+    {$IF CompilerVersion >= 22}FormatSettings.{$IFEND}ThousandSeparator:= Char(',');
+    {$IF CompilerVersion >= 22}FormatSettings.{$IFEND}DecimalSeparator:= Char('.');
     SetCurrentDir(FrontendPath);
     FocusGamesList;
   end;
@@ -14913,6 +15124,7 @@ var
   end;
 
 begin
+  GamesFiles:= nil;
   CmdLineVar:= '';
   sysID:= MemGameInfo.eCustomSystemID; // use the system of the last selected game by the user
 
@@ -15533,6 +15745,7 @@ var
   end;
 
 begin
+  Item:= nil; Group:= nil;
   if LoadingGames then
      begin
        if NewTitleFormat.Checked then
@@ -16375,6 +16588,7 @@ procedure TFormMain.ELV_MoveItem(ELV_Holder: TEasyListView; MoveUp: Boolean);
 var
   selItem, newPosItem: TEasyItem;
 begin
+  newPosItem:= nil;
   if not FormMain.CheckSelected(ELV_Holder) then
      Exit;
   selItem:= ELV_Holder.Selection.First;
@@ -17125,6 +17339,7 @@ var
   Item: TEasyItem;
   iFound: Boolean;
 begin
+  Item:= nil;
   Result:= nil;
   iFound:= False;
   // Item.StateImageIndex = -1; // -1 -> Arcade; 1..MaxConsoleComputerSystems -> Console/Computer (EmuCon)
@@ -17760,6 +17975,7 @@ var
   MachinesIni: TMemIniFile;
   iSystemStr, iMediaStr: String;
 begin
+  MachinesIni:= nil;
   Result:= '';
   iSystemStr:= SystemsListCustom[CustomSystemID, 0];
   iMediaStr:=  MediaTypeCustom[CustomMediaTypeID, 2];
@@ -18077,6 +18293,7 @@ var
   end;
 
 begin
+  FavList:= nil;
   Result:= False;
   AddGame:= False;
   IsNewFile:= True;
@@ -18540,6 +18757,7 @@ var
   sFoldersList: TStringList;
   Loop, fCount: Integer;
 begin
+  emuCFG:= nil; sFoldersList:= nil;
   if EmuFileNameStr <> '' then
   begin
      ExeFileStr:= EmuFileNameStr;
@@ -18717,6 +18935,7 @@ var
   Loop: Integer;
   emuCFG: TMemIniFile;
 begin
+  MAMEIniFile:= nil; emuCFG:= nil;
   dirCFG:= '';
   dirNVRAM:= '';
   if not ValidateArcadeEmulatorFile(sysID) then
@@ -19152,73 +19371,101 @@ begin
 end;
 
 function TFormMain.DecodeHTML(const s: String): String;
-const
-  ChrMapStr = '&quot;&lt;&gt;&apos;&amp;&nbsp;';
-type
-  TCharSet = set of Char;
-var
-  j: Integer;
-  pp,pe: PChar;
-  tmp: String;
 
-  function TrimSpaces(const str: String; ChrSpace: TCharSet = [#9, #10, #13, #32]): String;
+  function IsSpaceChr(c: Char): Boolean;
+  begin
+    Result:= (c = #9) or (c = #10) or (c = #13) or (c = #32);
+  end;
+
+  function TrimSpaces(const str: String): String;
   var
     i, l: Integer;
   begin
     l:= Length(str);
     i:= 1;
-    while (i <= l) and (str[i] in ChrSpace) do Inc(i);
-    if i > l then
-       Result:= ''
-    else
-      begin
-        while (str[l] in ChrSpace) do Dec(l);
-        Result:= Copy(str, i, l-i+1);
-      end;
+    while (i <= l) and IsSpaceChr(str[i]) do Inc(i);
+    while (l >= i) and IsSpaceChr(str[l]) do Dec(l);
+    Result:= Copy(str, i, l-i+1);
   end;
 
-begin
-  if Pos('&#10;', s) <> 0 then
-     begin
-       Result:= StringReplace(s, '&#10;', ' ', [rfIgnoreCase, rfReplaceAll]); // for game "colasm" from "cgenie_cass.xml" software list (May 20, 2020)
-       Result:= TrimSpaces(Result);
-     end
-  else
-     Result:= TrimSpaces(s);
-  if Result = '' then Exit;
-
-  pp:= PChar(Result);
-  repeat
-    pp:= StrScan(pp, '&');
-    if pp = nil then Exit;
-    Inc(pp);
-    j:= pp-PChar(Result);
-    pe:= pp;
-    while ((pe^ <> #0) and not (pe^ in [' ', ';'])) do Inc(pe);
-    if (pp^='#') then
+  function CodePointToStr(CodePoint: Integer): String;
+  begin
+    if (CodePoint <= 0) or (CodePoint > $10FFFF) or ((CodePoint >= $D800) and (CodePoint <= $DFFF)) then
+       CodePoint:= 32;
+    {$IF CompilerVersion >= 20}
+    if CodePoint > $FFFF then
        begin
-         if UpCase((pp+1)^) = 'X' then
-            (pp+1)^:= '$';
-         SetString(tmp, pp+1, pe-pp-1);
-         Result[j]:= chr(StrToIntDef(tmp, 32));
-         Delete(Result, j+1, pe-pp+1);
+         Dec(CodePoint, $10000);
+         Result:= Char($D800 + (CodePoint shr 10)) + Char($DC00 + (CodePoint and $3FF));
        end
     else
+       Result:= Char(CodePoint);
+    {$ELSE}
+    if CodePoint > 255 then
+       CodePoint:= 32;
+    Result:= Chr(CodePoint);
+    {$IFEND}
+  end;
+
+  function DecodeEntity(const Entity: String; out Decoded: String): Boolean;
+  var
+    Code: Integer;
+  begin
+    Result:= True;
+    if (Length(Entity) > 1) and (Entity[1] = '#') then
        begin
-         SetString(tmp, pp-1, pe-pp+1);
-         case PosEx(tmp, ChrMapStr) of
-            1: Result[j]:= '"';
-            7: Result[j]:= '<';
-           11: Result[j]:= '>';
-           15: Result[j]:= '''';
-           21: Result[j]:= '&';
-           26: Result[j]:= ' ';
+         if (Entity[2] = 'x') or (Entity[2] = 'X') then
+            Code:= StrToIntDef('$'+Copy(Entity, 3, MaxInt), -1)
          else
-           Continue;
-         end;
-         Delete(Result, j+1, pe-pp+1);
-       end;
-  until False;
+            Code:= StrToIntDef(Copy(Entity, 2, MaxInt), -1);
+         Result:= Code <> -1;
+         if Result then
+            Decoded:= CodePointToStr(Code);
+       end
+    else if Entity = 'quot' then Decoded:= '"'
+    else if Entity = 'lt'   then Decoded:= '<'
+    else if Entity = 'gt'   then Decoded:= '>'
+    else if Entity = 'apos' then Decoded:= ''''
+    else if Entity = 'amp'  then Decoded:= '&'
+    else if Entity = 'nbsp' then Decoded:= ' '
+    else Result:= False;
+  end;
+
+var
+  src, decoded: String;
+  i, e, len, runStart: Integer;
+begin
+  // index-based decoding; the old PChar version kept stale pointers after Delete() and could crash (history.xml)
+  if Pos('&#10;', s) <> 0 then
+     Result:= TrimSpaces(StringReplace(s, '&#10;', ' ', [rfIgnoreCase, rfReplaceAll])) // for game "colasm" from "cgenie_cass.xml" software list (May 20, 2020)
+  else
+     Result:= TrimSpaces(s);
+  if Pos('&', Result) = 0 then
+     Exit;
+
+  src:= Result;
+  Result:= '';
+  len:= Length(src);
+  runStart:= 1;
+  i:= 1;
+  while i <= len do
+  begin
+    if src[i] = '&' then
+    begin
+      e:= i+1;
+      while (e <= len) and (e-i <= 10) and (src[e] <> ';') and (src[e] <> '&') and not IsSpaceChr(src[e]) do
+        Inc(e);
+      if (e <= len) and (src[e] = ';') and (e > i+1) and DecodeEntity(Copy(src, i+1, e-i-1), decoded) then
+      begin
+        Result:= Result + Copy(src, runStart, i-runStart) + decoded;
+        i:= e+1;
+        runStart:= i;
+        Continue;
+      end;
+    end;
+    Inc(i);
+  end;
+  Result:= Result + Copy(src, runStart, len-runStart+1);
 end;
 
 function TFormMain.FixDriverSourceName(const DriverStr: String): String;
@@ -19313,6 +19560,7 @@ var
   iLoop: Integer;
   iFile: TStrings;
 begin
+  iFile:= nil;
    iVersion:= GetMAMEBuild(sysID);
    if iVersion < 162 then
       Exit; // MAME+MESS merged, starting MAME v0.162 (no software lists in MAME before that)
@@ -20574,6 +20822,7 @@ var
   end;
 
 begin
+  ROMsList:= nil; games_bios:= nil; ListCPU:= nil; SoftNameMachinesList:= nil; tmpList:= nil; SoftList:= nil; GameStatusList:= nil; MemCardMachineList:= nil; CRC32CollisionList:= nil; SHA1CollisionList:= nil; CRC32CollisionFile:= nil;
   EmuTitle:= GetArcadeEmulatorDescription(sysID, True);
   TitleErrorMsg:= 'Error: Create Games List ['+EmuTitle+']';
 
@@ -21646,6 +21895,7 @@ var
   end;
 
 begin
+  ROMsList:= nil; games_bios:= nil; tmpList:= nil; GameStatusList:= nil;
   EmuTitle:= GetArcadeEmulatorDescription(sysID, True);
   TitleErrorMsg:= 'Error: Create Games List ['+EmuTitle+']';
 
@@ -22156,6 +22406,7 @@ var
   iVersion: String;
   GameStatusList: TStringList;
 begin
+  GameStatusList:= nil;
   Result:= FileExists(EmulatorFile[idDaphne]);
   if not Result then
      Exit;
@@ -22589,6 +22840,7 @@ var
   end;
 
 begin
+  ListXML:= nil; ROMsList:= nil; games_bios:= nil; DemulDriverName:= nil; ListDuplicateROMs:= nil; GameStatusList:= nil; CRC32CollisionList:= nil; SHA1CollisionList:= nil; CRC32CollisionFile:= nil;
   TitleErrorMsg:= 'Error: Create Games List ['+GetArcadeEmulatorDescription(sysID)+']';
   if not FileExists(EmulatorFile[sysID]) then
      begin
@@ -23517,6 +23769,7 @@ var
   end;
 
 begin
+  ROMsList:= nil; tmpList:= nil; GameStatusList:= nil; RequirementList:= nil;
   EmuTitle:= GetArcadeEmulatorDescription(sysID, True);
   TitleErrorMsg:= 'Error: Create Software List ['+EmuTitle+']';
   if not FileExists(EmulatorFile[sysID]) then
@@ -23889,6 +24142,7 @@ var
   filters_file: THashedStringList;
   strFilter: String;
 begin
+  filters_file:= nil;
   if SelectedFilterName = 'favorites' then
      Exit;
   if not FileExists(GetFolderFull(43)+'mame_filters.ini') then
@@ -25174,6 +25428,7 @@ var
   LanguagesList: TMemIniFile;
   listSections, listValues: THashedStringList;
 begin
+  listValues:= nil;
   if not FileExists(GetFolderFull(43)+'languages.ini') then
      begin
        FreeAndNil(ListHolder);
@@ -25220,6 +25475,7 @@ var
     listSections, listValues: THashedStringList;
     IsMatureCat: Boolean;
   begin
+    MESSList:= nil; listSections:= nil; listValues:= nil;
 
     MESSList:= TMemIniFile.Create(GetFolderFull(43)+iFileName);
     listSections:= THashedStringList.Create;
@@ -25270,6 +25526,7 @@ var
   end;
 
 begin
+  AntoPISA_matureIni:= nil;
   // load category from category.ini into a HashedStringList "gamename=category" (from MAME 0.171, file contains categories for arcade/non-arcade (ALL sets)
   // load version from version.ini into a HashedStringList "gamename=version" (from MAME 0.171, file contains versions for arcade/non-arcade (ALL sets)
 
@@ -25776,6 +26033,7 @@ var
   Group: TEasyGroup;
   UpdateGamesList: Boolean;
 begin
+  Item:= nil; Group:= nil;
   if IsStartup then
      Exit;
   if not CheckTotal(GamesListView) then
@@ -25876,6 +26134,7 @@ var
   IsParentSetROMsNoDump: Boolean;
 
   MAMESoftListCustomSystems: array[1..MaxConsoleComputerSystems] of THashedStringList;
+  addGroup: TEasyGroup; // kept between AddGameListView calls: clones are added to their parent's group
 
   function GetSoftListCustomSystemID(const SoftwareName: String): Integer;
   var
@@ -25979,7 +26238,6 @@ var
   function AddGameListView: Boolean;
   var
     addItem: TEasyItem;
-    addGroup: TEasyGroup;
     LoopSoft: Integer;
   begin
     Result:= True;
@@ -26151,6 +26409,7 @@ var
   end;
 
 begin
+  iniNumPlayers:= nil; LanguagesList:= nil; CategoryAntoPISA:= nil; VersionAntoPISA:= nil; tempSoftList:= nil; NonArcadeMESSIni:= nil; PlayedListArcadeGames:= nil; PlayedListCustomGames:= nil; CRC32CollisionGames:= nil; CustomGamesExtraInfo:= nil; VersionInfoHBMAME:= nil; CategoryHBMAME:= nil; CategoriesList:= nil; SoftwareListMESS:= nil; DeviceSets:= nil; GameCPU_MAME:= nil; GameCPU_HBMAME:= nil; FavList:= nil; SpecialList:= nil;
   if ValidateFile(GetFavoritesFile) then
      begin
        FavList:= THashedStringList.Create;
@@ -26235,6 +26494,9 @@ begin
   CustomGamesMsgActive:= False;
 
   PlayedArcadeSysID:= -1; // for played games arcade
+  CRC32CollisionSysID:= -1;
+  addGroup:= nil;
+  FirstGroupIndex:= -1;
   PlayedCustomSysID:= -1; // for played games EmuCon
   CustomGameExtraInfoSysID:= -1; // for extra info games EmuCon
 
@@ -26610,6 +26872,7 @@ var
   end;
   
 begin
+  iCatFile:= nil; Group:= nil; Item:= nil;
   if not CheckTotal(GamesListView) then
      Exit;
 
@@ -27341,6 +27604,7 @@ var
   gifImg: TGIFGraphic;
   bmpImg: TBitmap;
 begin
+  pngImg:= nil; jpgImg:= nil; gifImg:= nil; bmpImg:= nil;
   Result:= ifUnknown;
   if not FileExistsW(iFile) then
      Exit;
@@ -28267,6 +28531,7 @@ var
   end;
 
 begin
+  MAMESoftwareListsToProcess:= nil; HBMAMESoftwareListsToProcess:= nil;
   // this function is only called at main menu 'Create Games List'
   if sysID = -1 then
      Exit;
@@ -28471,18 +28736,95 @@ begin
      UseSevenZip:= ValidateSevenZipDLL;
 end;
 
+var
+  SevenZipDLLHandle: HMODULE = 0;
+  SevenZipDLLPath: String = '';
+
+function PEMachineName(const FileName: String): String;
+var
+  F: TFileStream;
+  PEOffset: LongInt;
+  Sig: DWORD;
+  Machine: Word;
+begin
+  Result:= 'unknown';
+  try
+    F:= TFileStream.Create(FileName, fmOpenRead or fmShareDenyNone);
+    try
+      F.Position:= $3C;
+      F.ReadBuffer(PEOffset, SizeOf(PEOffset));
+      F.Position:= PEOffset;
+      F.ReadBuffer(Sig, SizeOf(Sig));
+      F.ReadBuffer(Machine, SizeOf(Machine));
+      case Machine of
+        $014C: Result:= 'x86 (32-bit)';
+        $8664: Result:= 'x64';
+        $AA64: Result:= 'ARM64';
+        $A641: Result:= 'ARM64EC';
+      else
+        Result:= '$'+IntToHex(Machine, 4);
+      end;
+    finally
+      F.Free;
+    end;
+  except
+  end;
+end;
+
 function TFormMain.ValidateSevenZipDLL: Boolean;
 var
-  fHandle: THandle;
-  libFile: String;
+  fHandle: HMODULE;
+  libFile, PFDir: String;
+  Candidates: TStringList;
+  Loop: Integer;
+  LastErr: DWORD;
 begin
-  libFile:= FrontendPath+'7z.dll';
-  Result:= FileExists(libFile);
-  if not Result then
+  Result:= SevenZipDLLHandle <> 0;
+  if Result then
      Exit;
-  fHandle:= LoadLibrary(PChar(libFile));
-  Result:= FHandle <> 0;
-  FreeLibrary(fHandle);
+  Candidates:= TStringList.Create;
+  try
+    Candidates.Add(FrontendPath+'7z.dll');
+    PFDir:= GetEnvironmentVariable('ProgramW6432');
+    if PFDir <> '' then
+       Candidates.Add(IncludeTrailingPathDelimiter(PFDir)+'7-Zip\7z.dll');
+    PFDir:= GetEnvironmentVariable('ProgramFiles');
+    if PFDir <> '' then
+       Candidates.Add(IncludeTrailingPathDelimiter(PFDir)+'7-Zip\7z.dll');
+    for Loop:=0 to Candidates.Count-1 do
+    begin
+      libFile:= Candidates[Loop];
+      if not FileExists(libFile) then
+         begin
+           {$IF CompilerVersion >= 20}
+           DiagnosticLog('7zip', 'not found ['+libFile+']');
+           {$IFEND}
+           Continue;
+         end;
+      fHandle:= LoadLibrary(PChar(libFile));
+      if fHandle = 0 then
+         begin
+           LastErr:= GetLastError;
+           {$IF CompilerVersion >= 20}
+           if LastErr = ERROR_BAD_EXE_FORMAT then
+              DiagnosticLog('7zip', 'cannot load ['+libFile+']: wrong architecture; DLL='+PEMachineName(libFile)+', EmuLoader='+{$IFDEF WIN64}'x64'{$ELSE}'x86 (32-bit)'{$ENDIF})
+           else
+              DiagnosticLog('7zip', 'cannot load ['+libFile+']: error '+IntToStr(LastErr)+' '+SysErrorMessage(LastErr));
+           {$IFEND}
+           Continue;
+         end;
+      // kept loaded: later LoadLibrary('7z.dll') calls resolve to this module by name
+      SevenZipDLLHandle:= fHandle;
+      SevenZipDLLPath:= libFile;
+      Result:= True;
+      {$IF CompilerVersion >= 20}
+      DiagnosticLog('7zip', 'loaded ['+libFile+']');
+      {$IFEND}
+      Break;
+    end;
+  finally
+    Candidates.Free;
+  end;
 end;
 
 //var
@@ -28650,6 +28992,8 @@ var
     ROMFileMemoryStream: TWideMemoryStream;
     CRC32CollisionList: THashedStringList;
   begin
+    CRC32CollisionList:= nil;
+    ROMFileMemoryStream:= nil;
     // this function will get CRC32 / SHA-1 from .zip files and store in lists (device and bios)
     Result:= TempSetsList.Count > 0;
     if not Result then
@@ -28763,6 +29107,7 @@ var
   end;
 
 begin
+  MissingROMs:= nil; checkItem:= nil; checkGroup:= nil; TempDevsList:= nil; TempBiosList:= nil; MAMEList:= nil;
   Result:= 0;
   if sysID = -1 then
      Exit;
@@ -30111,6 +30456,7 @@ var
   end;
 
 begin
+  DeviceSetsList:= nil;
   CurrentGameStatus:= TempGameVars.eGameSetStatus;
   //iUpdateGamesText:= '';
   CurrentScanMode:= TEasyGameInfo(ItemAudit).eScanMode;
@@ -30643,6 +30989,7 @@ const
   end;
 
 begin
+  TestFile:= nil; CartMemoryStream:= nil;
   // this will read the first 4 bytes to check for "CART" tag. The format is first 4 bytes containing 'C' 'A' 'R' 'T'.
   Result:= FileExistsW(iFileName);
   if not Result then
@@ -30856,6 +31203,7 @@ const
   end;
 
 begin
+  TestFile:= nil;
   HeaderVersion:= 0;
   Result:= ValidateFile(DiskFileName);
   if not Result then
@@ -31463,6 +31811,7 @@ var
   columnFile: TMemIniFile;
   iSortDirection: Integer;
 begin
+  columnFile:= nil;
   if not FileExists(GetColumnProfile) then
      Exit;
   try
@@ -31587,6 +31936,7 @@ var
   FileIcon: TIcon;
   iImageList: TImageList;
 begin
+  FileIcon:= nil;
   // it seems to be used only in "uMain.PopulateMenuItemCustomEmuParameter" function
   iImageList:= SourceHolder;
   if Source2Holder <> nil then
@@ -31819,6 +32169,586 @@ begin
       AddDefaultIcons(ImageCategoryArray[Loop, 0]+'.ico', tempFolder, IL_Holder, 3);
 end;
 
+{$IF CompilerVersion >= 20}
+destructor TFormMain.Destroy;
+begin
+  if (ToolBarButtons <> nil) and Assigned(FToolBarWindowProc) then
+     begin
+       ToolBarButtons.OnAdvancedCustomDrawButton:= nil;
+       ToolBarButtons.WindowProc:= FToolBarWindowProc;
+     end;
+  inherited Destroy;
+end;
+
+function TFormMain.ToolBarIconTextTop(IconHeight: Integer): Integer;
+begin
+  Result:= IconHeight;
+  // Strip the whole caption panel, not just the glyph rows recolored by
+  // IconChangeFontColor (the shipped 48/68 ICO panels start at rows 41/59).
+  case IconHeight of
+    128: Result:= 100;
+     68: Result:= 59;
+     48: Result:= 41;
+     40: Result:= 34;
+     32: Result:= 27;
+  else
+    if IconHeight > 32 then
+       Result:= MulDiv(IconHeight, 41, 48);
+  end;
+end;
+
+function TFormMain.ToolBarLabelHeight(IconHeight: Integer): Integer;
+begin
+  if ToolBarIconTextTop(IconHeight) = IconHeight then
+     Result:= 0 // the original small toolbar is icon-only
+  else
+     Result:= Max(IconHeight-ToolBarIconTextTop(IconHeight),
+                  MulDiv(IconHeight, 11, 48));
+end;
+
+function TFormMain.ToolBarButtonLabel(Button: TToolButton): String;
+const
+  ViewLabels: array[0..5] of String =
+    ('DETAILS', 'GROUPED', 'SMALL', 'LARGE', 'TILES', 'THUMBNAIL');
+  ParentLabels: array[0..2] of String = ('LIST BOTH', 'PARENT', 'CLONE');
+  HaveLabels: array[0..5] of String =
+    ('LIST ALL', 'HAVE', 'MISSING', 'MISS ROMS', 'MISSROMS?', 'MISSROMS?');
+  DriverLabels: array[0..4] of String =
+    ('LIST ALL', 'WORKING', 'WORKING', 'IMPERFECT', 'WORKING');
+  // These are the short captions in the shipped ICOs, not menu descriptions.
+  ArcadeLabels: array[0..82, 0..1] of String = (
+    ('allgames', 'LIST ALL'), ('arcadia', 'ARCADIA'), ('atari', 'ATARI'),
+    ('atari_90s', 'ATARI 90s'), ('atari_mix1', 'ATARI MIX'),
+    ('atarisy1', 'ATARI SYS 1'), ('atarisy2', 'ATARI SYS 2'),
+    ('awbios', 'ATOMISWAVE'), ('biossets', 'BIOS SETS'), ('capcom', 'CAPCOM'),
+    ('capcom_80s', 'CAPCOM 80s'), ('chd', 'CHD'), ('chihiro', 'CHIHIRO'),
+    ('cps1', 'CPS-1'), ('cps2', 'CPS-2'), ('cps3', 'CPS-3'),
+    ('cpzn1', 'CPZN-1'), ('cpzn2', 'CPZN-2'), ('decocass', 'DECO TAPE'),
+    ('devicesets', 'DEVICES'), ('globalvr', 'GLOBAL VR'),
+    ('hornet_gticlub', 'HORNET/GTI'), ('irem', 'IREM MISC'), ('konami', 'KONAMI'),
+    ('konami_80s', 'KONAMI 80s'), ('konami_90s', 'KONAMI 90s'),
+    ('konamigq', 'KONAMI GQ'), ('konamigv', 'KONAMI GV'),
+    ('konamigx', 'KONAMI GX'), ('ksys573', 'KONAMI 573'),
+    ('megaplay', 'MEGA PLAY'), ('megatech', 'MEGA TECH'), ('midway', 'MIDWAY'),
+    ('model1', 'MODEL 1'), ('model2', 'MODEL 2'), ('model3', 'MODEL 3'),
+    ('namco', 'NAMCO'), ('namco_90s', 'NAMCO 90s'), ('namco_mix1', 'NAMCO MIX'),
+    ('namcops2', 'SYS246/256'), ('namcos1', 'SYSTEM 1'),
+    ('namcos2', 'SYSTEM 2'), ('namcos11', 'SYS 10/11'), ('namcos12', 'SYSTEM 12'),
+    ('namcos21', 'SYSTEM 21'), ('namcos22', 'SYS 22/23'),
+    ('naomi', 'NAOMI'), ('naomi2', 'NAOMI 2'), ('naomi2gd', 'NAOMI 2 GD'),
+    ('naomigd', 'NAOMI GD'), ('neogeo', 'NEO-GEO'), ('nintendo', 'NINTENDO'),
+    ('nintendo_nostalgia', 'NOSTALGIA'), ('no_icon', 'NO ICON'), ('nss', 'SUPER SYS'),
+    ('pgm', 'PGM'), ('playch10', 'PLAYCH-10'), ('seattle', 'SEATTLE'),
+    ('sega', 'SEGA'), ('segac2', 'SEGA C/C2'), ('segaxybd', 'SEGA X/Y'),
+    ('simpl156', 'SIMPLE 156'), ('ssv', 'SSV'), ('stv', 'ST-V'),
+    ('system1', 'SEGA 1/2'), ('system16', 'SEGA 16'), ('system18', 'SEGA 18'),
+    ('system24', 'SEGA 24'), ('system32', 'SEGA 32'), ('taito', 'TAITO'),
+    ('taito_f2', 'TAITO F2'), ('taito_f3', 'TAITO F3'), ('taito_fx1', 'TAITO FX-1'),
+    ('taito_misc', 'TAITO MISC'), ('taito_mix1', 'TAITO MIX 1'),
+    ('taito_mix2', 'TAITO MIX 2'), ('taitogn', 'G-NET'), ('taitotx', 'TYPE X'),
+    ('triforce', 'TRIFORCE'), ('vector', 'VECTOR'), ('vegas', 'VEGAS'),
+    ('viper', 'VIPER'), ('vsnes', 'VS SYSTEM'));
+var
+  FilterName: String;
+  I: Integer;
+begin
+  Result:= '';
+  case Button.ImageIndex of
+    1: if (ButtonViewMode.Tag >= Low(ViewLabels)) and
+          (ButtonViewMode.Tag <= High(ViewLabels)) then
+          Result:= ViewLabels[ButtonViewMode.Tag];
+    2: Result:= 'MACHINES';
+    3: Result:= 'SYS QUICK';
+    4: Result:= 'FAVORITES';
+    5: begin
+         if ButtonArcadeGamesFilters.Enabled then
+            FilterName:= SelectedFilterName
+         else
+            FilterName:= LastFilterName;
+         FilterName:= ChangeFileExt(ExtractFileName(FilterName), '');
+         if FilterName = '' then
+            FilterName:= 'allgames';
+         Result:= 'NO ICON';
+         for I:= Low(ArcadeLabels) to High(ArcadeLabels) do
+             if SameText(FilterName, ArcadeLabels[I, 0]) then
+                begin
+                  Result:= ArcadeLabels[I, 1];
+                  Break;
+                end;
+       end;
+    6: if (ButtonGameFilterParentClone.Tag >= Low(ParentLabels)) and
+          (ButtonGameFilterParentClone.Tag <= High(ParentLabels)) then
+          Result:= ParentLabels[ButtonGameFilterParentClone.Tag];
+    7: if (ButtonGameFilterHaveMiss.Tag >= Low(HaveLabels)) and
+          (ButtonGameFilterHaveMiss.Tag <= High(HaveLabels)) then
+          Result:= HaveLabels[ButtonGameFilterHaveMiss.Tag];
+    8: if (ButtonGameFilterDriverStatus.Tag >= Low(DriverLabels)) and
+          (ButtonGameFilterDriverStatus.Tag <= High(DriverLabels)) then
+          Result:= DriverLabels[ButtonGameFilterDriverStatus.Tag];
+    9: Result:= 'MAMU';
+   10: Result:= 'MISC';
+   11: Result:= 'USE .CUE';
+   12: Result:= 'USE PARAM';
+   13: Result:= 'PLAYED';
+   14: Result:= 'EMULATORS';
+   15: Result:= 'SEARCH';
+  end;
+end;
+
+procedure TFormMain.ToolBarButtonsWindowProc(var Message: TMessage);
+var
+  SavedDC: HDC;
+  SavedRect: TRect;
+begin
+  SavedDC:= FToolBarDrawDC;
+  SavedRect:= FToolBarDrawRect;
+  try
+    if (Message.Msg = CN_NOTIFY) and (Message.LParam <> 0) then
+       if PNMHdr(Message.LParam)^.code = NM_CUSTOMDRAW then
+          begin
+            FToolBarDrawDC:= PNMCustomDraw(Message.LParam)^.hdc;
+            FToolBarDrawRect:= PNMCustomDraw(Message.LParam)^.rc;
+          end;
+    FToolBarWindowProc(Message);
+  finally
+    FToolBarDrawDC:= SavedDC;
+    FToolBarDrawRect:= SavedRect;
+  end;
+end;
+
+procedure TFormMain.ToolBarButtonsDrawLabel(Sender: TToolBar; Button: TToolButton;
+  State: TCustomDrawState; Stage: TCustomDrawStage;
+  var Flags: TTBCustomDrawFlags; var DefaultDraw: Boolean);
+var
+  Text: String;
+  ButtonRect, TextRect: TRect;
+  DC: HDC;
+  SavedDC, LabelHeight, FontHeight, ImageLeft, ImageTop: Integer;
+  ImageWidth, ImageHeight, Shade: Integer;
+  Luminance: Double;
+  FontHandle: HFONT;
+  TextSize: TSize;
+  TextColor: COLORREF;
+  StrikeOut: DWORD;
+
+  function LinearChannel(Value: Byte): Double;
+  begin
+    if Value <= 10 then
+       Result:= Value/(255*12.92)
+    else
+       Result:= Power((Value/255+0.055)/1.055, 2.4);
+  end;
+
+  function RelativeLuminance(Color: COLORREF): Double;
+  begin
+    Result:= 0.2126*LinearChannel(GetRValue(Color))+
+             0.7152*LinearChannel(GetGValue(Color))+
+             0.0722*LinearChannel(GetBValue(Color));
+  end;
+
+  function LabelBackgroundLuminance: Double;
+  var
+    Samples: array[0..5] of Double;
+    Count, Row, Side, X, Y, I, J: Integer;
+    Pixel: COLORREF;
+    Value: Double;
+  begin
+    Count:= 0;
+    // The label band contains no icon artwork. Sample both margins outside
+    // the text rectangle, not glyphs, old text or the native button border.
+    for Row:= 1 to 3 do
+    begin
+      Y:= TextRect.Top+MulDiv(TextRect.Bottom-TextRect.Top-1, Row, 4);
+      for Side:= 0 to 1 do
+      begin
+        if Side = 0 then
+           X:= TextRect.Left-1
+        else
+           X:= TextRect.Right;
+        if (X <= ButtonRect.Left) or (X >= ButtonRect.Right-1) or
+           (Y <= ButtonRect.Top) or (Y >= ButtonRect.Bottom-1) then
+           Continue;
+        Pixel:= GetPixel(DC, X, Y);
+        if Pixel = CLR_INVALID then
+           Continue;
+        Value:= RelativeLuminance(Pixel);
+        J:= Count;
+        for I:= Count-1 downto 0 do
+        begin
+          if Samples[I] <= Value then
+             Break;
+          Samples[I+1]:= Samples[I];
+          J:= I;
+        end;
+        Samples[J]:= Value;
+        Inc(Count);
+      end;
+    end;
+    if Count = 0 then
+       Result:= RelativeLuminance(ColorToRGB(Sender.Color))
+    else
+    if Odd(Count) then
+       Result:= Samples[Count div 2]
+    else
+       Result:= (Samples[Count div 2-1]+Samples[Count div 2])/2;
+  end;
+
+begin
+  // Let the native toolbar paint backgrounds, icons, borders and hot tracking.
+  if (Stage <> cdPostPaint) or (Sender <> ToolBarButtons) or
+     (FNormalToolBarImages = nil) or
+     (Button.Style in [tbsSeparator, tbsDivider]) then
+     Exit;
+  LabelHeight:= ToolBarLabelHeight(FNormalToolBarImages.Height);
+  Text:= ToolBarButtonLabel(Button);
+  if (LabelHeight = 0) or (Text = '') then
+     Exit;
+  if not ImageList_GetIconSize(HIMAGELIST(Sender.Perform(TB_GETIMAGELIST, 0, 0)),
+                              ImageWidth, ImageHeight) then
+     Exit;
+  // Use native pixel dimensions when VCL supplies a DPI-scaled image list.
+  LabelHeight:= MulDiv(LabelHeight, ImageHeight, FNormalToolBarImages.Height);
+  DC:= FToolBarDrawDC;
+  if DC = 0 then
+     Exit;
+  ButtonRect:= FToolBarDrawRect;
+  ImageLeft:= ButtonRect.Left+(ButtonRect.Right-ButtonRect.Left-ImageWidth) div 2;
+  if Button.Style = tbsDropDown then
+     Dec(ImageLeft, GetSystemMetrics(SM_CXMENUCHECK) div 2);
+  ImageTop:= ButtonRect.Top+(ButtonRect.Bottom-ButtonRect.Top-ImageHeight) div 2;
+  TextRect:= Rect(ImageLeft+1, ImageTop+ImageHeight-LabelHeight,
+                 ImageLeft+ImageWidth-1, ImageTop+ImageHeight);
+  if (not ThemeServices.ThemesEnabled) and
+     ((cdsSelected in State) or (cdsChecked in State)) then
+     OffsetRect(TextRect, 1, 1);
+  // VCL versions differ in whether Canvas is attached during item post-paint.
+  // Paint into the actual notification DC, even if native painting is buffered.
+  SavedDC:= SaveDC(DC);
+  if SavedDC = 0 then
+     Exit;
+  try
+      IntersectClipRect(DC, ButtonRect.Left, ButtonRect.Top, ButtonRect.Right, ButtonRect.Bottom);
+      SetBkMode(DC, TRANSPARENT);
+      Luminance:= LabelBackgroundLuminance;
+      if Luminance < 0.179 then
+         begin
+           TextColor:= RGB(255, 255, 255);
+           if not Button.Enabled then
+              begin
+                Shade:= 190;
+                while (Shade < 255) and
+                      ((RelativeLuminance(RGB(Shade, Shade, Shade))+0.05)/(Luminance+0.05) < 3) do
+                      Inc(Shade, 5);
+                TextColor:= RGB(Shade, Shade, Shade);
+              end;
+         end
+      else
+         begin
+           TextColor:= RGB(0, 0, 0);
+           if not Button.Enabled then
+              begin
+                Shade:= 90;
+                while (Shade > 0) and
+                      ((Luminance+0.05)/(RelativeLuminance(RGB(Shade, Shade, Shade))+0.05) < 3) do
+                      Dec(Shade, 5);
+                TextColor:= RGB(Shade, Shade, Shade);
+              end;
+         end;
+      SetTextColor(DC, TextColor);
+      FontHeight:= Max(6, LabelHeight-2);
+      StrikeOut:= Ord((Button.ImageIndex = 8) and (ButtonGameFilterDriverStatus.Tag = 4));
+      repeat
+        FontHandle:= CreateFont(-FontHeight, 0, 0, 0, FW_NORMAL, 0, 0, StrikeOut,
+                               DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
+                               ANTIALIASED_QUALITY, DEFAULT_PITCH or FF_SWISS, 'Tahoma');
+        if FontHandle = 0 then
+           RaiseLastOSError;
+        SelectObject(DC, FontHandle);
+        try
+          if not GetTextExtentPoint32(DC, PChar(Text), Length(Text), TextSize) then
+             RaiseLastOSError;
+          if (TextSize.cx <= TextRect.Right-TextRect.Left) or (FontHeight <= 6) then
+             begin
+               DrawText(DC, PChar(Text), Length(Text), TextRect,
+                        DT_CENTER or DT_VCENTER or DT_SINGLELINE or DT_NOPREFIX);
+               Break;
+             end;
+        finally
+          SelectObject(DC, GetStockObject(SYSTEM_FONT));
+          DeleteObject(FontHandle);
+        end;
+        Dec(FontHeight);
+      until False;
+  finally
+    RestoreDC(DC, SavedDC);
+  end;
+end;
+
+procedure TFormMain.UpdateToolBarStateIcons(IconIndex: Integer = -1);
+var
+  SourceIcon, StateIcon: TIcon;
+  Bitmap, Artwork: TBitmap;
+  I, FirstIndex, LastIndex: Integer;
+
+  procedure UpdateStateIcon(Images: TImageList; Disabled: Boolean);
+  var
+    Info: TIconInfo;
+    IconHandle: HICON;
+    Pixel, SourceRow, NextRow: PRGBQuad;
+    X, Y, Gray, TextTop, ArtHeight, ArtWidth, ArtLeft: Integer;
+    SourceX, SourceY, NextX, NextY, WeightX, WeightY, Channel: Integer;
+    Samples: array[0..3] of PRGBQuad;
+    Values: array[0..3] of PByte;
+    MaskDC: HDC;
+    OldMask: HGDIOBJ;
+    HasAlpha: Boolean;
+    MaskInfo: packed record
+      Header: TBitmapInfoHeader;
+      Colors: array[0..1] of TRGBQuad;
+    end;
+    MaskBits: Pointer;
+    NewMask: HBITMAP;
+    MaskStride: Integer;
+    MaskByte: PByte;
+  begin
+    if not GetIconInfo(SourceIcon.Handle, Info) then
+       RaiseLastOSError;
+    try
+      Bitmap.Handle:= Info.hbmColor;
+      Info.hbmColor:= 0; // the bitmap now owns this handle
+      Bitmap.PixelFormat:= pf32bit;
+      HasAlpha:= False;
+      for Y:= 0 to Bitmap.Height-1 do
+      begin
+        Pixel:= Bitmap.ScanLine[Y];
+        for X:= 0 to Bitmap.Width-1 do
+        begin
+          HasAlpha:= HasAlpha or (Pixel^.rgbReserved <> 0);
+          Inc(Pixel);
+        end;
+      end;
+      if not HasAlpha then
+      begin
+        // Custom/legacy ICOs can supply transparency only through their mask.
+        MaskDC:= CreateCompatibleDC(0);
+        if MaskDC = 0 then
+           RaiseLastOSError;
+        try
+          OldMask:= SelectObject(MaskDC, Info.hbmMask);
+          for Y:= 0 to Bitmap.Height-1 do
+          begin
+            Pixel:= Bitmap.ScanLine[Y];
+            for X:= 0 to Bitmap.Width-1 do
+            begin
+              if GetPixel(MaskDC, X, Y) = RGB(0, 0, 0) then
+                 Pixel^.rgbReserved:= 255
+              else
+                 FillChar(Pixel^, SizeOf(TRGBQuad), 0);
+              Inc(Pixel);
+            end;
+          end;
+          SelectObject(MaskDC, OldMask);
+        finally
+          DeleteDC(MaskDC);
+        end;
+      end;
+      TextTop:= ToolBarIconTextTop(Bitmap.Height);
+      ArtHeight:= Bitmap.Height-ToolBarLabelHeight(Bitmap.Height);
+      if I = 0 then
+      begin
+        TextTop:= Bitmap.Height; // the application orb has no caption
+        ArtHeight:= Bitmap.Height;
+      end;
+      ArtWidth:= MulDiv(Bitmap.Width, ArtHeight, TextTop);
+      ArtLeft:= (Bitmap.Width-ArtWidth) div 2;
+      if TextTop < Bitmap.Height then
+      begin
+        Artwork.PixelFormat:= pf32bit;
+        Artwork.SetSize(Bitmap.Width, Bitmap.Height);
+        for Y:= 0 to Bitmap.Height-1 do
+           Move(Bitmap.ScanLine[Y]^, Artwork.ScanLine[Y]^, Bitmap.Width*SizeOf(TRGBQuad));
+        // Keep the artwork's aspect ratio, reserving readable text space inside
+        // the existing image/button dimensions. Interpolate all four channels.
+        for Y:= 0 to Bitmap.Height-1 do
+        begin
+          Pixel:= Bitmap.ScanLine[Y];
+          if Y < ArtHeight then
+          begin
+            SourceY:= (Y*256*TextTop) div ArtHeight;
+            WeightY:= SourceY mod 256;
+            SourceY:= SourceY div 256;
+            NextY:= Min(SourceY+1, TextTop-1);
+            SourceRow:= Artwork.ScanLine[SourceY];
+            NextRow:= Artwork.ScanLine[NextY];
+          end;
+          for X:= 0 to Bitmap.Width-1 do
+          begin
+            if (Y < ArtHeight) and (X >= ArtLeft) and (X < ArtLeft+ArtWidth) then
+            begin
+              SourceX:= ((X-ArtLeft)*256*Artwork.Width) div ArtWidth;
+              WeightX:= SourceX mod 256;
+              SourceX:= SourceX div 256;
+              NextX:= Min(SourceX+1, Artwork.Width-1);
+              Samples[0]:= PRGBQuad(NativeUInt(SourceRow)+NativeUInt(SourceX*SizeOf(TRGBQuad)));
+              Samples[1]:= PRGBQuad(NativeUInt(SourceRow)+NativeUInt(NextX*SizeOf(TRGBQuad)));
+              Samples[2]:= PRGBQuad(NativeUInt(NextRow)+NativeUInt(SourceX*SizeOf(TRGBQuad)));
+              Samples[3]:= PRGBQuad(NativeUInt(NextRow)+NativeUInt(NextX*SizeOf(TRGBQuad)));
+              for Channel:= 0 to 3 do
+              begin
+                Values[0]:= PByte(NativeUInt(Samples[0])+NativeUInt(Channel));
+                Values[1]:= PByte(NativeUInt(Samples[1])+NativeUInt(Channel));
+                Values[2]:= PByte(NativeUInt(Samples[2])+NativeUInt(Channel));
+                Values[3]:= PByte(NativeUInt(Samples[3])+NativeUInt(Channel));
+                PByte(NativeUInt(Pixel)+NativeUInt(Channel))^:=
+                  (Integer(Values[0]^)*(256-WeightX)*(256-WeightY)+
+                   Integer(Values[1]^)*WeightX*(256-WeightY)+
+                   Integer(Values[2]^)*(256-WeightX)*WeightY+
+                   Integer(Values[3]^)*WeightX*WeightY+32768) div 65536;
+              end;
+            end
+            else
+               FillChar(Pixel^, SizeOf(TRGBQuad), 0);
+            Inc(Pixel);
+          end;
+        end;
+      end;
+      for Y:= 0 to Bitmap.Height-1 do
+      begin
+        Pixel:= Bitmap.ScanLine[Y];
+        for X:= 0 to Bitmap.Width-1 do
+        begin
+          if Disabled then
+             begin
+               Gray:= (Integer(Pixel^.rgbRed)*30+Integer(Pixel^.rgbGreen)*59+
+                       Integer(Pixel^.rgbBlue)*11) div 100;
+               Pixel^.rgbRed:= Gray;
+               Pixel^.rgbGreen:= Gray;
+               Pixel^.rgbBlue:= Gray;
+             end;
+          Inc(Pixel);
+        end;
+      end;
+      // Rebuild the AND mask as well: transparent text pixels must never be
+      // resurrected by masked drawing, including an entirely transparent ICO.
+      FillChar(MaskInfo, SizeOf(MaskInfo), 0);
+      MaskInfo.Header.biSize:= SizeOf(TBitmapInfoHeader);
+      MaskInfo.Header.biWidth:= Bitmap.Width;
+      MaskInfo.Header.biHeight:= -Bitmap.Height;
+      MaskInfo.Header.biPlanes:= 1;
+      MaskInfo.Header.biBitCount:= 1;
+      MaskInfo.Colors[1].rgbRed:= 255;
+      MaskInfo.Colors[1].rgbGreen:= 255;
+      MaskInfo.Colors[1].rgbBlue:= 255;
+      NewMask:= CreateDIBSection(0, PBitmapInfo(@MaskInfo)^, DIB_RGB_COLORS, MaskBits, 0, 0);
+      if NewMask = 0 then
+         RaiseLastOSError;
+      DeleteObject(Info.hbmMask);
+      Info.hbmMask:= NewMask;
+      MaskStride:= ((Bitmap.Width+31) div 32)*4;
+      FillChar(MaskBits^, MaskStride*Bitmap.Height, 0);
+      for Y:= 0 to Bitmap.Height-1 do
+      begin
+        Pixel:= Bitmap.ScanLine[Y];
+        for X:= 0 to Bitmap.Width-1 do
+        begin
+          if Pixel^.rgbReserved = 0 then
+             begin
+               MaskByte:= PByte(NativeUInt(MaskBits)+NativeUInt(Y*MaskStride+X div 8));
+               MaskByte^:= MaskByte^ or ($80 shr (X mod 8));
+             end;
+          Inc(Pixel);
+        end;
+      end;
+      Info.hbmColor:= Bitmap.Handle;
+      try
+        IconHandle:= CreateIconIndirect(Info);
+        if IconHandle = 0 then
+           RaiseLastOSError;
+        StateIcon.Handle:= IconHandle;
+      finally
+        Info.hbmColor:= 0;
+      end;
+      if I < Images.Count then
+         Images.ReplaceIcon(I, StateIcon)
+      else
+         if Images.AddIcon(StateIcon) <> I then
+            raise Exception.Create('Could not add toolbar state icon '+IntToStr(I));
+    finally
+      if Info.hbmColor <> 0 then
+         DeleteObject(Info.hbmColor);
+      if Info.hbmMask <> 0 then
+         DeleteObject(Info.hbmMask);
+    end;
+  end;
+
+begin
+  if FNormalToolBarImages = nil then
+     begin
+       FNormalToolBarImages:= TImageList.Create(Self);
+       FNormalToolBarImages.ColorDepth:= cd32Bit;
+       FToolBarWindowProc:= ToolBarButtons.WindowProc;
+       ToolBarButtons.WindowProc:= ToolBarButtonsWindowProc;
+       ToolBarButtons.Images:= FNormalToolBarImages;
+       ToolBarButtons.HotImages:= FNormalToolBarImages;
+       ToolBarButtons.OnAdvancedCustomDrawButton:= ToolBarButtonsDrawLabel;
+     end;
+  if FDisabledToolBarImages = nil then
+     begin
+       FDisabledToolBarImages:= TImageList.Create(Self);
+       FDisabledToolBarImages.ColorDepth:= cd32Bit;
+       ToolBarButtons.DisabledImages:= FDisabledToolBarImages;
+     end;
+  if (IconIndex = -1) or
+     (FDisabledToolBarImages.Width <> IL_ToolBarButtons.Width) or
+     (FDisabledToolBarImages.Height <> IL_ToolBarButtons.Height) or
+     (FDisabledToolBarImages.Count <> IL_ToolBarButtons.Count) or
+     (FNormalToolBarImages.Width <> IL_ToolBarButtons.Width) or
+     (FNormalToolBarImages.Height <> IL_ToolBarButtons.Height) or
+     (FNormalToolBarImages.Count <> IL_ToolBarButtons.Count) then
+     begin
+       FDisabledToolBarImages.Clear;
+       Set4KImageListSpecs(FDisabledToolBarImages, IL_ToolBarButtons.Width, IL_ToolBarButtons.Height);
+       FNormalToolBarImages.Clear;
+       Set4KImageListSpecs(FNormalToolBarImages, IL_ToolBarButtons.Width, IL_ToolBarButtons.Height);
+       FirstIndex:= 0;
+       LastIndex:= IL_ToolBarButtons.Count-1;
+     end
+  else
+     begin
+       FirstIndex:= IconIndex;
+       LastIndex:= IconIndex;
+     end;
+
+  SourceIcon:= TIcon.Create;
+  try
+    StateIcon:= TIcon.Create;
+    try
+      Bitmap:= TBitmap.Create;
+      try
+        Artwork:= TBitmap.Create;
+        try
+          for I:= FirstIndex to LastIndex do
+          begin
+            IL_ToolBarButtons.GetIcon(I, SourceIcon);
+            UpdateStateIcon(FNormalToolBarImages, False);
+            UpdateStateIcon(FDisabledToolBarImages, True);
+          end;
+        finally
+          Artwork.Free;
+        end;
+      finally
+        Bitmap.Free;
+      end;
+    finally
+      StateIcon.Free;
+    end;
+  finally
+    SourceIcon.Free;
+  end;
+  ToolBarButtons.Invalidate;
+end;
+{$IFEND}
+
 procedure TFormMain.LoadToolBarButtons(ImageList_Holder: TImageList);
 var
   tempFolder, tempFolderFilters: String;
@@ -31827,6 +32757,10 @@ begin
   tempFolder:= GetFolderFull(32);
   tempFolderFilters:= GetFolderFull(40);
 
+  {$IF CompilerVersion >= 20}
+  if ImageList_Holder = IL_ToolBarButtons then
+     ImageList_Holder.ColorDepth:= cd32Bit;
+  {$IFEND}
   ClearImageList(ImageList_Holder);
   AddDefaultIcons('EmuLoader_Orb.ico',                 tempFolder,        ImageList_Holder);    // 00
   AddDefaultIcons('viewmode_01_details.ico',           tempFolderFilters, ImageList_Holder, 1); // 01
@@ -31845,6 +32779,10 @@ begin
   AddDefaultIcons('games_mru.ico',                     tempFolderFilters, ImageList_Holder, 1); // 13
   AddDefaultIcons('emulators.ico',                     tempFolderFilters, ImageList_Holder, 1); // 14
   AddDefaultIcons('filter_search_text.ico',            tempFolderFilters, ImageList_Holder, 1); // 15
+  {$IF CompilerVersion >= 20}
+  if ImageList_Holder = IL_ToolBarButtons then
+     UpdateToolBarStateIcons;
+  {$IFEND}
 end;
 
 procedure TFormMain.LoadCustomEmulatorsIconsPopupMenu;
@@ -32331,6 +33269,7 @@ var
     iRect: TRect;
     oldColor, newColor: uCommon.TRGB;
   begin
+    iBitmap:= nil; iBitmapMask:= nil;
     // get the front bitmap part to edit
     iBitmap:= TBitmap.Create;
     iRect:= bmpIcon.Canvas.ClipRect;
@@ -32404,6 +33343,7 @@ var
   end;
 
 begin
+  bmpIcon:= nil; bmpMask:= nil;
   // for debugging
   //Image1.Picture.Icon:= nil; Image2.Picture.Icon:= nil; Image3.Picture.Icon:= nil; // clear it first
 
@@ -32443,9 +33383,12 @@ var
   tmpIcon, tmpIconOverlay, MergedIcon: TIcon;
   IconLoaded: Boolean;
   FileExt: String;
-  OverlayFolder, OverlayCustomFolder, OverlayFileName: String;
+  OverlayFolder, OverlayCustomFolder, OverlayFileName, ActualIconFolder: String;
   HaveOverlay, HaveOverlayText: Boolean;
 begin
+  tmpIcon:= nil; tmpIconOverlay:= nil; MergedIcon:= nil;
+  hIcon:= 0;
+  hIconOverlay:= 0;
   // OverlayIndex
   // -1 -> no overlay to load
   //  0 -> games filters tool bar multi icons - "main_icons\overlay\toolbar_overlay_multi_dark.ico" (replace by "_light.ico" in light mode)
@@ -32457,13 +33400,30 @@ begin
   // load the overlay icon
 
   FileExt:= '.ico';
+  ActualIconFolder:= IconFolder;
   if PosEx('.ico', LowerCase(IconFileName)) <> 0 then
      FileExt:= '';
 
+  {$IF CompilerVersion >= 20}
+  if (IconList = IL_ToolBarButtons) and (IconIndex = 5) and
+     (IconFileName = '') then
+     IconFileName:= 'allgames';
+  {$IFEND}
   if not FileExists(IconFolder+IconFileName+FileExt) then
-     IconFileName:= 'arcade_filters\no_icon';
+     begin
+       {$IF CompilerVersion >= 20}
+       if IconList = IL_ToolBarButtons then
+          begin
+            ActualIconFolder:= GetFolderFull(32)+'arcade_filters\';
+            IconFileName:= 'no_icon.ico';
+            FileExt:= '';
+          end
+       else
+       {$IFEND}
+       IconFileName:= 'arcade_filters\no_icon';
+     end;
 
-  if not FileExists(IconFolder+IconFileName+FileExt) then
+  if not FileExists(ActualIconFolder+IconFileName+FileExt) then
      Exit;
 
   HaveOverlay:= False;
@@ -32502,6 +33462,10 @@ begin
        end;
   end;
 
+  {$IF CompilerVersion >= 20}
+  if IconList = IL_ToolBarButtons then
+     HaveOverlayText:= False; // main-toolbar captions are drawn at runtime
+  {$IFEND}
   if HaveOverlay then
   begin
     HaveOverlay:= ExtractIcon(OverlayFolder+OverlayCustomFolder+OverlayFileName, hIconOverlay, nIconIdOverlay, IconList.Width, IconList.Height);
@@ -32515,7 +33479,7 @@ begin
   end;
 
   IconLoaded:= False;
-  if ExtractIcon(IconFolder+IconFileName+FileExt, hIcon, nIconId, IconList.Width, IconList.Height) then
+  if ExtractIcon(ActualIconFolder+IconFileName+FileExt, hIcon, nIconId, IconList.Width, IconList.Height) then
      begin
        tmpIcon:= TIcon.Create;
        tmpIcon.Handle:= hIcon;
@@ -32549,6 +33513,10 @@ begin
        tmpIcon.ReleaseHandle;
        FreeAndNil(tmpIcon);
        IconLoaded:= True;
+       {$IF CompilerVersion >= 20}
+       if (IconList = IL_ToolBarButtons) and (IconIndex >= 0) and (IconIndex < IconList.Count) then
+          UpdateToolBarStateIcons(IconIndex);
+       {$IFEND}
      end;
   DestroyIcon(hIcon);
 
@@ -32579,6 +33547,10 @@ var
   HaveOverlay, HaveOverlayText: Boolean;
   iIconWidth, iIconHeight: Integer;
 begin
+  tmpIcon:= nil; tmpIconOverlay:= nil; MergedIcon:= nil;
+  hIcon:= 0;
+  hIconOverlay:= 0;
+  IconAdded:= False;
   // image category is the same OverlayIndex as image layout (June 22, 2021)
   // must make image category icons with round corners (update Select icon!!!!)
   // OverlayIndex
@@ -32678,6 +33650,10 @@ begin
        end;
   end;
 
+  {$IF CompilerVersion >= 20}
+  if IconList = IL_ToolBarButtons then
+     HaveOverlayText:= False;
+  {$IFEND}
   if HaveOverlay then
   begin
     HaveOverlay:= ExtractIcon(OverlayFolder+OverlayCustomFolder+OverlayFileName, hIconOverlay, nIconIdOverlay, iIconWidth, iIconHeight);
@@ -33097,6 +34073,7 @@ var
   var
     tmpIcon: TIcon;
   begin
+    tmpIcon:= nil;
     Icon32.CurrentImage:= icoLoop;
     tmpIcon:= TIcon.Create;
     tmpIcon.Width:= DestImgList.Width;
@@ -33221,6 +34198,7 @@ var
   nIconId: DWORD;
   tmpIcon: TIcon;
 begin
+  tmpIcon:= nil;
   //Result:= PrivateExtractIcons(PChar(IconFileName), 0,
   //                             DestImageList.Width, DestImageList.Height, @hIcon, @nIconId, 1, LR_LOADFROMFILE) <> 0;
 
@@ -33564,6 +34542,7 @@ var
 
   function LoadZippedIcon(var ZipForgeSource: TZipForge): Boolean;
   begin
+    Result:= True; // was never set on success; Delphi 7 only worked because of a leftover register value
     with ZipForgeSource do // ZipForgeIcons do
     begin
       try
@@ -33717,6 +34696,7 @@ var
   var
     nIcon: TIcon;
   begin
+    nIcon:= nil;
     nIcon:= TIcon.Create;
     nIcon.Width:= IconSize;
     nIcon.Height:= IconSize;
@@ -33741,6 +34721,7 @@ var
     icoBMP: TBitmap;
     fIcon: TExIcon;
   begin
+    icoBMP:= nil; fIcon:= nil;
     Icon32.CurrentImage:= icoLoop;
     if IconList.Width <> 48 then
        Result:= AddNormalIcon(IconList.Width)
@@ -33783,7 +34764,10 @@ var
   end;
 
 begin
+  Icon32:= nil;
   Result:= -1;
+  SearchZip:= False; // a loose .ico must not be loaded as a zipped one
+  ZipIndex:= -1;
   FileToLoad:= GetMAMu_IconFileName(sysID, romID, GameName, CloneName, DriverName, BiosName, SoftwareName, False); // unzipped icon
   if FileToLoad = '' then
      begin
@@ -33822,8 +34806,18 @@ begin
 
   if FileToLoad <> '' then
      begin
-       if LoadMAMu_Icon(FileToLoad, Icon32, icoLoop, SearchZip, iZipPath, SoftwareName, IconList.Width, ZipIndex) then
-          Result:= AddIcon(IconList);
+       try
+         if LoadMAMu_Icon(FileToLoad, Icon32, icoLoop, SearchZip, iZipPath, SoftwareName, IconList.Width, ZipIndex) then
+            Result:= AddIcon(IconList);
+       except
+         on E: Exception do
+         begin
+           {$IF CompilerVersion >= 20}
+           DiagnosticLog('icons', 'Failed to load icon '+FileToLoad+' for '+GameName+': '+E.ClassName+': '+E.Message);
+           {$IFEND}
+           Result:= -1;
+         end;
+       end;
        FreeAndNil(Icon32);
      end;
 end;
@@ -34260,6 +35254,7 @@ var
   CurrentLeadingZeroVerInfo, CurrentDisableCloneIndentGroupedMode: Boolean;
   elIni: TMemIniFile;
 begin
+  elIni:= nil;
   CurrentFolder:= FormPreferences.MAMu_IconsFolder.Text;
   CurrentLastPlayedHideSeconds:= FormPreferences.LastPlayedHideSeconds.Checked;
   CurrentTotalPlayTimeHideSeconds:= FormPreferences.TotalPlayTimeHideSeconds.Checked;
@@ -34271,6 +35266,9 @@ begin
 
   FormPreferences.ShowModal;
 
+  {$IF CompilerVersion >= 20}
+  DiagnosticLog('preferences', 'Preferences dialog closed');
+  {$IFEND}
   if FormStatus.LabelSoftwareScanCount.Visible then
      SetLabelSoftwareScanCountVisible(False);
      
@@ -34301,6 +35299,9 @@ begin
   begin
     elIni:= TMemIniFile.Create(GetFrontendIniFile);
     elIni.WriteInteger('Preferences', 'AllowOneInstance', Ord(FormPreferences.AllowOnlyOneInstance.Checked));
+    {$IF CompilerVersion >= 20}
+    elIni.WriteInteger('Preferences', 'DiagnosticLog', Ord(FormPreferences.EnableDiagnosticLog.Checked));
+    {$IFEND}
     elIni.WriteInteger('Preferences', 'DisableCloneIndent', Ord(FormPreferences.DisableCloneIndent.Checked));
     elIni.WriteInteger('Images', 'DisableThreadedLoading', Ord(FormPreferences.ImageDisableThreadedLoading.Checked));
     elIni.UpdateFile;
@@ -34472,6 +35473,7 @@ var
   iStr: WideString;
   iIndex: Integer;
 begin
+  INIFile:= nil;
   // Override Delphi's ugly hand cursor with the nice Windows hand cursor
   Screen.Cursors[crHandPoint]:= LoadCursor(0, IDC_HAND);
   
@@ -34481,8 +35483,8 @@ begin
   TerminateEmuLoader:= False;
   IsRunningGame:= False;
 
-  ThousandSeparator:= Char(',');
-  DecimalSeparator:=  Char('.');
+  {$IF CompilerVersion >= 22}FormatSettings.{$IFEND}ThousandSeparator:= Char(',');
+  {$IF CompilerVersion >= 22}FormatSettings.{$IFEND}DecimalSeparator:=  Char('.');
 
   if Is4KMode then
      iIndex:= 2300
@@ -34719,7 +35721,12 @@ begin
   end;
   
   // fix flicker when resizing the tool bars (2018)
+  {$IF CompilerVersion >= 20}
+  // Native toolbar hot tracking paints directly to its window DC.
+  ToolBarButtons.DoubleBuffered:= False;
+  {$ELSE}
   ToolBarButtons.DoubleBuffered:= True;
+  {$IFEND}
   ImagesToolBarButtons.DoubleBuffered:= True;
 end;
 
@@ -34758,6 +35765,7 @@ procedure TFormMain.CheckDefaultFavProfile;
 var
   favFile: TStringList;
 begin
+  favFile:= nil;
   if not FileExists(GetFavoritesFolder+'favorites.txt') then
      begin
        favFile:= TStringList.Create;
@@ -34890,6 +35898,7 @@ var
     vIniFile: TMemIniFile;
     vLoop: Integer;
   begin
+    vIniFile:= nil;
     Result:= True;
     if CheckReadOnly(GetArcadeEmulatorsFile) then
        Exit;
@@ -34980,6 +35989,7 @@ var
     cLoop: Integer;
     IgnoreFileExtension: THashedStringList;
   begin
+    IgnoreFileExtension:= nil;
     Result:= True;
     IgnoreFileExtension:= THashedStringList.Create;
     PopulateIgnoreFileExt_ConsoleComputer(IgnoreFileExtension);
@@ -35005,6 +36015,7 @@ var
   var
     extraIni: TMemIniFile;
   begin
+    extraIni:= nil;
     if not FileExists(GetFrontendExtraIniFile) then
        Exit;
     extraIni:= TMemIniFile.Create(GetFrontendExtraIniFile);
@@ -35022,6 +36033,7 @@ var
   var
     extraIni: TMemIniFile;
   begin
+    extraIni:= nil;
     if (not FormCleanInstallGuide.Option_SelectArcadeEmulators.Checked) and
        (not FormCleanInstallGuide.Option_CreateArcadeGamesList.Checked) and
        (not FormCleanInstallGuide.Option_SelectConsoleComputerEmulators.Checked) and
@@ -35047,6 +36059,7 @@ var
   end;
 
 begin
+  MAMESoftwareListsToProcess:= nil; HBMAMESoftwareListsToProcess:= nil;
   if TerminateEmuLoader then
      begin
        ForceApplicationTerminate;
@@ -35762,6 +36775,7 @@ var
   Loop: Integer;
   ExcludedList: THashedStringList;
 begin
+  ExcludedList:= nil;
   case FreeLists of
     True:
       begin
@@ -36387,6 +37401,7 @@ var
   EasyItemIndex: TEasyItem;
   StartTimer, EndTimer: Integer;
 begin
+  EasyItemIndex:= nil;
   if not CheckTotalVisible(ELV_Holder) then
      Exit;
   StartTimer:= GetTickCount;
@@ -36428,6 +37443,7 @@ var
   Item: TEasyItem;
   Group: TEasyGroup;
 begin
+  Item:= nil; Group:= nil;
   Result:= nil;
   if (GameName = '') or (not CheckTotalVisible(GamesListView)) then
      Exit;
@@ -37494,7 +38510,7 @@ begin
                 begin
                   if CategoryStr <> '' then
                      begin
-                       KeepGame:= Pos('mechanic', CategoryStr) = 0;
+                       KeepGame:= Pos(string('mechanic'), string(CategoryStr)) = 0;
                      end;
                 end;
            end;
@@ -37749,8 +38765,18 @@ var
   end;
 
 begin
+  elvGroup:= nil;
+  {$IF CompilerVersion >= 20}
+  DiagnosticLog('filters', 'ApplyFilters started; filter='+SelectedFilterName+
+                '; items='+IntToStr(GamesListView.Groups.ItemCount));
+  {$IFEND}
   if not CheckTotal(GamesListView) then
-     Exit;
+     begin
+       {$IF CompilerVersion >= 20}
+       DiagnosticLog('filters', 'ApplyFilters skipped: empty games list');
+       {$IFEND}
+       Exit;
+     end;
 
   if FormStatus.Visible then
      FormStatus.MessageStr('Applying filters.');
@@ -37823,6 +38849,9 @@ begin
        UpdateStatusBarGame;
      end;
   RestoreHorizontalBarPos(sbPos);
+  {$IF CompilerVersion >= 20}
+  DiagnosticLog('filters', 'ApplyFilters completed; visible='+IntToStr(GamesListView.Groups.VisibleItemCount));
+  {$IFEND}
 end;
 
 function TFormMain.MachinesListIndexOf(const MachineName: String; const MachinesList: TSoftwareListMESS): Integer;
@@ -37918,10 +38947,15 @@ var
   end;
 
 begin
+  elvGroup:= nil;
   if not CheckTotal(GamesListView) then
      Exit;
 
   // this filter show/hide games in main games list, not in machines list filter panel
+  {$IF CompilerVersion >= 20}
+  DiagnosticLog('filters', 'ApplyFiltersMachinesList started; filter='+SelectedFilterName+
+                '; machine='+SelectedMachineListName);
+  {$IFEND}
   if FormStatus.Visible then
      FormStatus.MessageStr('Applying filters.');
 
@@ -37985,6 +39019,9 @@ begin
        UpdateStatusBarGame;
      end;
   RestoreHorizontalBarPos(sbPos);
+  {$IF CompilerVersion >= 20}
+  DiagnosticLog('filters', 'ApplyFiltersMachinesList completed; visible='+IntToStr(GamesListView.Groups.VisibleItemCount));
+  {$IFEND}
 end;
 
 procedure TFormMain.HideGroupsFilter(ELV_Holder: TEasyListView);
@@ -38152,6 +39189,13 @@ var
   Loop: Integer;
   SoftwareGames: THashedStringList;
 begin
+  {$IF CompilerVersion >= 20}
+  DiagnosticLog('games', 'LoadGames started; arcade='+BoolToStr(LoadArcade, True)+
+                '; software lists='+BoolToStr(LoadSoftwareListMESS, True)+
+                '; custom='+BoolToStr(LoadCustomGames, True)+
+                '; clear='+BoolToStr(ClearGamesList, True));
+  {$IFEND}
+  SoftwareGames:= nil;
   if FormStatus.Visible then
      begin
        FormStatus.TitleStr('Load Games List');
@@ -38240,6 +39284,9 @@ begin
 
   if FormStatus.Visible then
      FormStatus.SetFocus;
+  {$IF CompilerVersion >= 20}
+  DiagnosticLog('games', 'LoadGames completed; items='+IntToStr(GamesListView.Groups.ItemCount));
+  {$IFEND}
 end;
 
 procedure TFormMain.SetMainToolBarIcon(const ButtonName: TToolButton);
@@ -38340,6 +39387,12 @@ begin
          4: tempString:= 'filter3_05_have_and_missroms.ico';
          5: tempString:= 'filter3_06_miss_and_missroms.ico';
        end;
+       {$IF CompilerVersion >= 20}
+       if (ButtonGameFilterHaveMiss.Tag = 5) and
+          (not FileExists(GetFolderFull(40)+tempString)) and
+          FileExists(GetFolderFull(40)+'filter3_05_miss_and_missroms.ico') then
+          tempString:= 'filter3_05_miss_and_missroms.ico';
+       {$IFEND}
        SetToolBarIcon(tempString, GetFolderFull(40), IL_ToolBarButtons, 7, Ord(ButtonGameFilterHaveMiss.Tag <> 0));
      end
   else
@@ -38671,14 +39724,38 @@ begin
 
   SetFormStatusParentWindow;
   SetWindowStayOnTop(FormApplyFilterMsgBox, True);
+  {$IF CompilerVersion >= 20}
+  ApplyMainWindowIcons(Handle);
+  {$IFEND}
 end;
 
 procedure TFormMain.FormCloseQuery(Sender: TObject; var CanClose: Boolean);
 var
   Loop, Loop2: Integer;
+  {$IF CompilerVersion >= 20}
+  ShutdownStarted, PhaseStarted: UInt64;
+
+  procedure TraceShutdownPhase(const Phase: String);
+  var
+    NowTick: UInt64;
+  begin
+    NowTick:= GetTickCount64;
+    DiagnosticLog('shutdown', Phase+'; phase_ms='+UIntToStr(NowTick-PhaseStarted)+
+      '; total_ms='+UIntToStr(NowTick-ShutdownStarted));
+    PhaseStarted:= GetTickCount64;
+  end;
+  {$IFEND}
 begin
+  {$IF CompilerVersion >= 20}
+  ShutdownStarted:= GetTickCount64;
+  PhaseStarted:= ShutdownStarted;
+  DiagnosticLog('lifecycle', 'Main form close requested; saving settings and freeing resources');
+  {$IFEND}
   ShowFilterMsgBox('Exit Frontend', 'Updating config files and freeing resources.', True);
   VideoPreviewPlayDummy(True);
+  {$IF CompilerVersion >= 20}
+  TraceShutdownPhase('Exit dialog and video preview stopped');
+  {$IFEND}
   // free any created vars, arrays, etc
   FreeAndNil(FDrawBuffer);
   FreeAndNil(FDrawBufferBottom);
@@ -38690,12 +39767,21 @@ begin
   ClearImageList(FormNightMode.IL_NightModeCheckBoxRadioButtonIcons);
   ClearImageList(FormNightMode.IL_NightModeCheckBoxRadioButtonIconsHD);
 
+  {$IF CompilerVersion >= 20}
+  TraceShutdownPhase('Draw buffers and UI image lists freed');
+  {$IFEND}
   GlobalThreadManager.FlushMessageCache(GamesListView, TID_START); // flush images threads cache (opened/pending threads)
+  {$IF CompilerVersion >= 20}
+  TraceShutdownPhase('Image thread message cache flushed');
+  {$IFEND}
 
   ZipForge.CloseArchive; // make sure there are no .zip files opened
   ZipForge.FileName:= '';
 
   ClearScreenshots;
+  {$IF CompilerVersion >= 20}
+  TraceShutdownPhase('ZIP archive closed and screenshots cleared');
+  {$IFEND}
 
   if not TerminateEmuLoader then
      begin
@@ -38703,9 +39789,15 @@ begin
        //WriteSplashSettings;
        UpdateExtraIni;
        UpdateIniFile(False);
+       {$IF CompilerVersion >= 20}
+       TraceShutdownPhase('Light mode and main configuration saved');
+       {$IFEND}
 
        if FileExists(GetSysEmulators) then
           UpdateCustomEmulatorsInfo(False); // update emulator to use, param index, never update emulators filenames here
+       {$IF CompilerVersion >= 20}
+       TraceShutdownPhase('Custom emulator settings saved');
+       {$IFEND}
 
        if not PanelMachinesList.Visible then
           UpdateColumnProfile
@@ -38719,8 +39811,14 @@ begin
        if IsNightMode then
           WriteNightModeSettings;
      end;
+  {$IF CompilerVersion >= 20}
+  TraceShutdownPhase('Column profile and night mode settings completed');
+  {$IFEND}
 
   DeInitEmulatorVariables;
+  {$IF CompilerVersion >= 20}
+  TraceShutdownPhase('Emulator variables freed');
+  {$IFEND}
 
   for Loop:=1 to MaxConsoleComputerSystems do
   begin
@@ -38728,6 +39826,9 @@ begin
         FreeAndNil(sysCustomFolders[Loop, Loop2]);
     FreeAndNil(Font_ConsoleComputer[Loop]);
   end;
+  {$IF CompilerVersion >= 20}
+  TraceShutdownPhase('Console folders and fonts freed');
+  {$IFEND}
 
   if not TerminateEmuLoader then
      begin
@@ -38740,23 +39841,51 @@ begin
                UpdateScreenshotLayout(ButtonScreenshotLayouts.Tag); // save current multiple layout, if images is enabled
           end;
      end;
+  {$IF CompilerVersion >= 20}
+  TraceShutdownPhase('Screenshot layout settings completed');
+  {$IFEND}
 
   // games list must be cleared here, not above or below, or frontend crashes in thumbnails view (November 20, 2016)
   FormMain.ClearMemGameInfo(MemGameInfo);
   FormMain.ClearMemGameInfo(TempGameVars);
+  {$IF CompilerVersion >= 20}
+  TraceShutdownPhase('Game information memory cleared');
+  {$IFEND}
 
+  {$IF CompilerVersion >= 20}
+  DiagnosticLog('shutdown', 'Games list contains '+IntToStr(GamesListView.Items.Count)+
+    ' items in '+IntToStr(GamesListView.Groups.Count)+' groups');
+  {$IFEND}
   ClearListView(GamesListView);
+  {$IF CompilerVersion >= 20}
+  TraceShutdownPhase('Games list view cleared');
+  {$IFEND}
   ClearListView(MachinesListSidePanel);
+  {$IF CompilerVersion >= 20}
+  TraceShutdownPhase('Machines side list cleared');
+  {$IFEND}
 
   InitImgZipLists(True);
   InitImgSoftwareNameZipLists(True);
   InitImgSoftwareNameZipLists_SL(True);
+  {$IF CompilerVersion >= 20}
+  TraceShutdownPhase('Image ZIP lists cleared');
+  {$IFEND}
 
   FreeImageZipVars;
+  {$IF CompilerVersion >= 20}
+  TraceShutdownPhase('Image ZIP variables freed');
+  {$IFEND}
   FreeMAMu_ZipVars;
   FreeAndNil(MAMu_FoldersList); // multiple paths support StringList
+  {$IF CompilerVersion >= 20}
+  TraceShutdownPhase('MAMu ZIP variables and folder list freed');
+  {$IFEND}
 
   DestroyImageLayoutControls;
+  {$IF CompilerVersion >= 20}
+  TraceShutdownPhase('Image layout controls destroyed');
+  {$IFEND}
 
   if PopupAutomaticGameInformation.Checked then
      PopupAutomaticGameInformation.Click;
@@ -38774,12 +39903,23 @@ begin
 
   FreeAndNil(FormArcadeFiltersExtra);
   FreeAndNil(FormArcadeFiltersDriverStatus);
+  {$IF CompilerVersion >= 20}
+  TraceShutdownPhase('Automatic info, profile, fonts and filter forms cleaned up');
+  {$IFEND}
 
+  FormStatus.StopThreadClock(True); // the clock callback must not run on a freed form
   FreeAndNil(FormStatus);
+  {$IF CompilerVersion >= 20}
+  TraceShutdownPhase('Splash clock stopped and splash form freed');
+  {$IFEND}
 
   HideFilterMsgBox;
   FreeAndNil(FormApplyFilterMsgBox);
   FreeAndNil(FormNightMode);
+  {$IF CompilerVersion >= 20}
+  TraceShutdownPhase('Exit dialog and night mode form freed');
+  DiagnosticLog('lifecycle', 'Main form shutdown cleanup completed');
+  {$IFEND}
 end;
 
 procedure TFormMain.MenuVisitEmuLoaderHomepageClick(Sender: TObject);
@@ -39470,6 +40610,121 @@ begin
      FreeAndNil(IconsListSource); // no valid .ico files inside "icons.zip" or "softwarename.zip"
 end;
 
+procedure TFormMain.PrepareMAMu_7zCache(ExtractIfNeeded: Boolean);
+var
+  Loop: Integer;
+  ArchiveFile, CacheFolder, StampFile, StampStr: String;
+  SR: TSearchRec;
+  Stamp: TStringList;
+  Archive7z: I7zInArchive;
+
+  procedure Log7z(const Msg: String);
+  begin
+    {$IF CompilerVersion >= 20}
+    DiagnosticLog('icons', Msg);
+    {$IFEND}
+  end;
+
+begin
+  // MAMu_ icons distributed as "icons.7z": extracted once to a local cache folder, then used as loose .ico files
+  if not Assigned(MAMu_FoldersList) then
+     begin
+       Log7z('icons.7z check skipped: no MAMu_ folders');
+       Exit;
+     end;
+  CacheFolder:= FrontendPath+'cache\mamu_icons\';
+  StampFile:= CacheFolder+'emuloader_source.txt';
+
+  ArchiveFile:= '';
+  for Loop:=0 to MAMu_FoldersList.Count-1 do
+  begin
+    if Trim(MAMu_FoldersList[Loop]) = '' then
+       Continue;
+    if FileExists(IncludeTrailingPathDelimiter(Trim(MAMu_FoldersList[Loop]))+'icons.7z') then
+       begin
+         ArchiveFile:= IncludeTrailingPathDelimiter(Trim(MAMu_FoldersList[Loop]))+'icons.7z';
+         Break;
+       end;
+  end;
+  if ArchiveFile = '' then
+     begin
+       for Loop:=0 to MAMu_FoldersList.Count-1 do
+       begin
+         if Trim(MAMu_FoldersList[Loop]) = '' then
+            Continue;
+         StampStr:= IncludeTrailingPathDelimiter(Trim(MAMu_FoldersList[Loop]));
+         if FindFirst(StampStr+'*.7z', faAnyFile, SR) = 0 then
+            begin
+              repeat
+                Log7z('icons.7z not found; other .7z in folder: ['+StampStr+SR.Name+']');
+              until FindNext(SR) <> 0;
+              FindClose(SR);
+            end
+         else
+            Log7z('icons.7z not found in ['+StampStr+'] (exists='+BoolToStr(DirectoryExists(StampStr), True)+')');
+       end;
+       Exit;
+     end;
+
+  if FindFirst(ArchiveFile, faAnyFile, SR) <> 0 then
+     begin
+       Log7z('icons.7z FindFirst failed ['+ArchiveFile+']');
+       Exit;
+     end;
+  StampStr:= ArchiveFile+'|'+IntToStr(SR.Size)+'|'+IntToStr(SR.Time);
+  FindClose(SR);
+
+  Stamp:= TStringList.Create;
+  try
+    if FileExists(StampFile) then
+       Stamp.LoadFromFile(StampFile);
+    if (Stamp.Count = 0) or (Stamp[0] <> StampStr) then
+       begin
+         if not ExtractIfNeeded then
+            begin
+              Log7z('icons.7z found ['+ArchiveFile+']; extraction deferred until MAMu_ icons are enabled');
+              Exit;
+            end;
+         if not ValidateSevenZipDLL then
+            begin
+              Log7z('icons.7z found ['+ArchiveFile+'] but 7z.dll is missing or not valid for this build (see [7zip] lines; Win64 needs the 64-bit 7z.dll)');
+              Exit;
+            end;
+         Log7z('extracting ['+ArchiveFile+'] to ['+CacheFolder+']');
+         ShowFilterMsgBox('MAMu_ Icons', 'Extracting icons.7z, please wait...', True);
+         try
+           try
+             ForceDirectories(CacheFolder);
+             Archive7z:= CreateInArchive(CLSID_CFormat7z, SevenZipDLLPath);
+             Archive7z.OpenFile(ArchiveFile);
+             Archive7z.ExtractTo(CacheFolder);
+             Archive7z.Close;
+             Archive7z:= nil;
+             Stamp.Clear;
+             Stamp.Add(StampStr);
+             Stamp.SaveToFile(StampFile);
+             Log7z('icons.7z extracted');
+           except
+             on E: Exception do
+               begin
+                 Log7z('icons.7z extraction failed: '+E.Message);
+                 Exit;
+               end;
+           end;
+         finally
+           Archive7z:= nil;
+           HideFilterMsgBox;
+         end;
+       end;
+  finally
+    Stamp.Free;
+  end;
+
+  if MAMu_FoldersList.IndexOf(CacheFolder) = -1 then
+     MAMu_FoldersList.Add(CacheFolder);
+  Log7z('icons.7z cache folder in use ['+CacheFolder+']');
+end;
+
 procedure TFormMain.InitMAMu_Zip;
 var
   Loop: Integer;
@@ -39481,7 +40736,18 @@ begin
         if not Assigned(ZipForgeIcons) then
            ZipForgeIcons:= TZipForge.Create(nil);
 
+        PrepareMAMu_7zCache(True);
         GetMAMu_ZipContents(MAMu_IconsList); // load arcade "icons.zip" contents to RAM (THashedStringList)
+        {$IF CompilerVersion >= 20}
+        if Assigned(MAMu_FoldersList) then
+           DiagnosticLog('icons', 'MAMu_ folder setting=['+MAMu_Folder+']; folders='+StringReplace(MAMu_FoldersList.Text, #13#10, ' | ', [rfReplaceAll]))
+        else
+           DiagnosticLog('icons', 'MAMu_ folder setting=['+MAMu_Folder+']; no folders');
+        if Assigned(MAMu_IconsList) then
+           DiagnosticLog('icons', 'icons.zip='+MAMu_IconsList[0]+'; icons='+IntToStr(MAMu_IconsList.Count-1))
+        else
+           DiagnosticLog('icons', 'icons.zip not found or empty');
+        {$IFEND}
         MAMu_SoftwareNameZipList:= THashedStringList.Create;
         GetValidMAMESoftLists(MAMu_SoftwareNameZipList, False);
         if MAMu_SoftwareNameZipList.Count > 0 then
@@ -39573,6 +40839,7 @@ var
   Item: TEasyItem;
   Group: TEasyGroup;
 begin
+  Item:= nil; Group:= nil;
   if IsStartup then
      Exit;
   if ReloadDefaultIcons then
@@ -39657,6 +40924,7 @@ var
   Group: TEasyGroup;
   ReinitItem: Boolean;
 begin
+  Item:= nil; Group:= nil;
   if IsStartup then
      Exit;
 
@@ -40481,6 +41749,7 @@ var
   tmpIcon: TIcon;
   iFolder: String;
 begin
+  tmpIcon:= nil;
   iFolder:= GetFolderFull(32);
   if not IsMainIconFolder then
      iFolder:= iFolder+'msgbox_icons\';
@@ -40761,6 +42030,9 @@ procedure TFormMain.AddMsgText(const iTextToAdd: WideString; iFontColor: TColor 
                                iFontSize: Integer = -1; const iFontName: String = 'default'; iTextBackgroundColor: TColor = -1;
                                const iFontCharSet: TFontCharSet = DEFAULT_CHARSET);
 begin
+  {$IF CompilerVersion >= 20}
+  DiagnosticLog('dialog-text', String(iTextToAdd));
+  {$IFEND}
   //AppendText(FormMessageBox.LabelMessage, iTextToAdd, iFontColor, iFontStyle, iTextAlign, iFontName, iFontSize, iFontCharSet);
   if Assigned(FormMessageBox) then
      AppendTextW(FormMessageBox.LabelMessageW, iTextToAdd, iFontColor, iFontStyle, iTextAlign, iTextBackgroundColor, iFontName, iFontSize, iFontCharSet)
@@ -40889,6 +42161,13 @@ begin
   end;
 end;
 
+procedure GameDocsLog(const Msg: String);
+begin
+  {$IF CompilerVersion >= 20}
+  DiagnosticLog('gamedocs', Msg);
+  {$IFEND}
+end;
+
 procedure TFormMain.ToggleGameDocuments(Enabled: Boolean);
 var
   pathFile, emuPath, ValueStr: String;
@@ -40920,6 +42199,7 @@ var
   var
     tmpFile: THashedStringList;
   begin
+    tmpFile:= nil;
     Result:= pathFile <> '';
     if Result then
        Result:= FileExists(pathFile);
@@ -40928,6 +42208,7 @@ var
        begin
          if not Assigned(StringListHolder) then
             StringListHolder:= THashedStringList.Create;
+         GameDocsLog('Loading '+pathFile);
          case MergeFileContents of
            True:
              begin
@@ -40943,7 +42224,32 @@ var
              end;
            False: StringListHolder.LoadFromFile(pathFile);
          end;
-       end;
+         GameDocsLog('Loaded '+pathFile+'; lines='+IntToStr(StringListHolder.Count));
+       end
+    else
+       GameDocsLog('DAT not found: '+pathFile);
+  end;
+
+  function NormalizeHistoryNameTag(const Line: String): String;
+  var
+    p: Integer;
+  begin
+    // newer history.xml files add extra attributes (e.g. '<system name="x" game="yes" />');
+    // keep only the identifying ones so IndexOf() matches '<system name="x" />' and '<item list="l" name="x" />'
+    Result:= TrimLeft(Line);
+    if Copy(Result, 1, 14) = '<system name="' then
+       p:= PosEx('"', Result, 15)
+    else
+    if Copy(Result, 1, 12) = '<item list="' then
+       begin
+         p:= PosEx(' name="', Result, 13);
+         if p <> 0 then
+            p:= PosEx('"', Result, p+7);
+       end
+    else
+       p:= 0;
+    if p <> 0 then
+       Result:= Copy(Result, 1, p)+' />';
   end;
 
   function FixHistoryXML_NameEntries: Boolean;
@@ -40962,17 +42268,16 @@ var
     for xLoop:=0 to AutoHistoryDATFile.Count-1 do
     begin
       xStr:= AutoHistoryDATFile[xLoop];
-      if PosEx('<system name="', Xstr) <> 0 then
-         AutoHistoryDATFile[xLoop]:= TrimLeft(xStr)
-      else
-      if PosEx('<item list="', Xstr) <> 0 then
-         AutoHistoryDATFile[xLoop]:= TrimLeft(xStr);
+      if (PosEx('<system name="', xStr) <> 0) or (PosEx('<item list="', xStr) <> 0) then
+         AutoHistoryDATFile[xLoop]:= NormalizeHistoryNameTag(xStr);
     end;
     AutoHistoryDATFile.EndUpdate;
   end;
 
 begin
+  mameIni:= nil; emuDATPaths:= nil;
   ResetGameDocsQuickMenus;
+  GameDocsLog('ToggleGameDocuments Enabled='+BoolToStr(Enabled, True));
 
   case Enabled of
     True:
@@ -41005,6 +42310,7 @@ begin
              emuDATPaths:= THashedStringList.Create;
              emuDATPaths.Insert(0, emuPath);
            end;
+        GameDocsLog('emuPath='+emuPath+'; historypath='+ValueStr+'; DAT folders='+StringReplace(emuDATPaths.Text, #13#10, ' | ', [rfReplaceAll]));
 
         pathFile:= LocateDATFile('mameinfo.dat');
         LoadDAT(AutoMAMEInfoDATFile[0]);
@@ -41037,6 +42343,8 @@ begin
         FreeAndNil(emuDATPaths);
         PanelGameDocuments.Visible:= True;
         UpdateScreenshotsPanel;
+        GameDocsLog('PanelGameDocuments visible='+BoolToStr(PanelGameDocuments.Visible, True)+
+                    '; align='+IntToStr(Ord(PanelGameDocuments.Align))+'; size='+IntToStr(PanelGameDocuments.Width)+'x'+IntToStr(PanelGameDocuments.Height));
       end;
     False:
       begin
@@ -41089,6 +42397,9 @@ begin
        if not IsGameDocsSinglePanelDisplay then
           Result:= ButtonDocsPanelToggle.Down;
      end;
+  GameDocsLog('ShowGameInfoValidate='+BoolToStr(Result, True)+'; processing='+BoolToStr(ProcessingGameDocuments, True)+
+              '; auto='+BoolToStr(PopupAutomaticGameInformation.Checked, True)+'; singlePanel='+BoolToStr(IsGameDocsSinglePanelDisplay, True)+
+              '; docsToggle='+BoolToStr(ButtonDocsPanelToggle.Down, True));
 end;
 
 procedure TFormMain.ShowGameInfoAll;
@@ -41147,14 +42458,21 @@ var
     Result:= iFileTxt = '$end';
   end;
 
+  function DocIndexOf(List: TStrings; const S: String): Integer;
+  begin
+    Result:= List.IndexOf(S);
+    if Result = -1 then
+       GameDocsLog('DocIndexOf: ['+S+'] not found; lines='+IntToStr(List.Count));
+  end;
+
   function SearchInfoData(IsFileMESS: Integer): Integer;
   begin
     //Result = -1; // not found, IndexOf() = failed
-    Result:= AutoMAMEInfoDATFile[IsFileMESS].IndexOf('$info='+MemGameInfo.eName);
+    Result:= DocIndexOf(AutoMAMEInfoDATFile[IsFileMESS], '$info='+MemGameInfo.eName);
     if Result = -1 then
        begin
          if GameIsClone(MemGameInfo.eClone) then
-            Result:= AutoMAMEInfoDATFile[IsFileMESS].IndexOf('$info='+MemGameInfo.eClone);
+            Result:= DocIndexOf(AutoMAMEInfoDATFile[IsFileMESS], '$info='+MemGameInfo.eClone);
        end;
   end;
 
@@ -41307,7 +42625,7 @@ var
                   end;
                 end;
                 Inc(Loop);
-              until iText = TagEndInfo;
+              until (iText = TagEndInfo) or (Loop >= AutoHistoryDATFile.Count);
               iText:= Trim(AutoHistoryDATFile[Loop-2]);
               IsLastDocLineEmpty:= iText = '';
             end;
@@ -41317,9 +42635,9 @@ var
 
   function HistoryXML: Boolean;
   var
-    Loop, webIndex: Integer;
+    Loop, webIndex, TextPos, EndPos: Integer;
     TagString, TagStringEndChar, TagEndInfo: String;
-    FoundData, FoundTagEnd: Boolean;
+    FoundData, FoundTagEnd, IsFirstTextLine, LastLineEmpty: Boolean;
     TagStartInfo: WideString;
   begin
     Result:= Assigned(AutoHistoryDATFile);
@@ -41343,61 +42661,64 @@ var
             TagString:= '<item list="'+MemGameInfo.eSoftwareName+'" name="'+MemGameInfo.eName+'"';
 
          TagStringEndChar:= ' />';
-         Loop:= AutoHistoryDATFile.IndexOf(TagString+TagStringEndChar);
+         Loop:= DocIndexOf(AutoHistoryDATFile, TagString+TagStringEndChar);
          if Loop = -1 then
             begin
               TagStringEndChar:= '/>'; // remove the space for the "end" entry tag... just in case
-              Loop:= AutoHistoryDATFile.IndexOf(TagString+TagStringEndChar);
+              Loop:= DocIndexOf(AutoHistoryDATFile, TagString+TagStringEndChar);
             end;
+         GameDocsLog('HistoryXML search ['+TagString+TagStringEndChar+'] index='+IntToStr(Loop));
 
          if Loop <> -1 then
             begin
               TagEndInfo:= '</text>';
-              repeat
+              while (Loop < AutoHistoryDATFile.Count) and not FoundData do
+              begin
                 TagStartInfo:= Trim(AutoHistoryDATFile[Loop]);
-                if not FoundData then
-                   FoundData:= PosEx('<text>', TagStartInfo) <> 0; // "TagStartInfo" replace "AutoHistoryDATFile[Loop]"
-
+                if PosEx('</entry>', TagStartInfo) <> 0 then
+                   Break;
+                TextPos:= PosEx('<text>', TagStartInfo);
+                FoundData:= TextPos <> 0;
                 if FoundData then
-                    begin
-                    Delete(TagStartInfo, 1, Length('<text>'));
-                     if TagStartInfo <> '' then
-                        webIndex:= Loop    // some entries are in the same line as the '<text>' tag :(
-                     else
-                        webIndex:= Loop+1; // info stars on next line
-                     //Break; // get out of the loop; this is commented... huh ? (May 31, 2021)
-                   end;
-                Inc(Loop);
-              until FoundData;
+                   Delete(TagStartInfo, 1, TextPos+Length('<text>')-1) // some entries start in the same line as the '<text>' tag
+                else
+                   Inc(Loop);
+              end;
             end;
 
          if FoundData then
             begin
-              Loop:= webIndex;
               GameDocsGoToHistory.Tag:= AddTitleTextLine(' ---------- History Data ---------- ');
+              IsFirstTextLine:= True;
+              LastLineEmpty:= False;
               repeat
-                if TagStartInfo = '' then
+                if not IsFirstTextLine then
                    TagStartInfo:= Trim(AutoHistoryDATFile[Loop]);
-                TagStartInfo:= DecodeHTML(TagStartInfo);
-                TagStartInfo:= DecodeUnicodeStr(TagStartInfo);
+                EndPos:= PosEx(TagEndInfo, TagStartInfo);
+                FoundTagEnd:= EndPos <> 0;
+                if FoundTagEnd then
+                   TagStartInfo:= TrimRight(Copy(TagStartInfo, 1, EndPos-1));
 
-                webIndex:= PosEx('<a href=', TagStartInfo);
-                if webIndex <> 0 then
-                   AddHistoryURL(TagStartInfo, webIndex)
-                else
-                   AddTextLine(TagStartInfo);
-
+                if not ((IsFirstTextLine or FoundTagEnd) and (TagStartInfo = '')) then
+                begin
+                  TagStartInfo:= DecodeHTML(TagStartInfo);
+                  TagStartInfo:= DecodeUnicodeStr(TagStartInfo);
+                  webIndex:= PosEx('<a href=', TagStartInfo);
+                  if webIndex <> 0 then
+                     AddHistoryURL(TagStartInfo, webIndex)
+                  else
+                     AddTextLine(TagStartInfo);
+                  LastLineEmpty:= TagStartInfo = '';
+                end;
+                IsFirstTextLine:= False;
                 Inc(Loop);
-                TagStartInfo:= '';
-
-                if PosEx(TagEndInfo, AutoHistoryDATFile[Loop]) <> 0 then
-                   FoundTagEnd:= True;
-              until FoundTagEnd;
-
-              TagEndInfo:= Trim(AutoHistoryDATFile[Loop-1]);
-              IsLastDocLineEmpty:= TagEndInfo = '';
+              until FoundTagEnd or (Loop >= AutoHistoryDATFile.Count);
+              IsLastDocLineEmpty:= LastLineEmpty;
             end;
-       end;
+         GameDocsLog('HistoryXML FoundData='+BoolToStr(FoundData, True)+'; FoundTagEnd='+BoolToStr(FoundTagEnd, True));
+       end
+    else
+       GameDocsLog('HistoryXML: history file not loaded');
     GameDocsGoToHistory.Visible:= GameDocsGoToHistory.Tag <> -1;
   end;
 
@@ -41415,7 +42736,7 @@ var
          begin
            NoFilesMsg:= False;
            AddLine:= False;
-           LineIndex:= AutoMAMEInfoDATFile[IsFileMESS].IndexOf('$info='+MemGameInfo.eDriverName);
+           LineIndex:= DocIndexOf(AutoMAMEInfoDATFile[IsFileMESS], '$info='+MemGameInfo.eDriverName);
            Result:= LineIndex <> -1;
          end;
 
@@ -41427,7 +42748,7 @@ var
            begin
              NoFilesMsg:= False;
              AddLine:= False;
-             LineIndex:= AutoMAMEInfoDATFile[IsFileMESS].IndexOf('$info='+MemGameInfo.eDriverName);
+             LineIndex:= DocIndexOf(AutoMAMEInfoDATFile[IsFileMESS], '$info='+MemGameInfo.eDriverName);
              Result:= LineIndex <> -1;
            end;
       end;
@@ -41478,7 +42799,7 @@ var
          begin
            NoFilesMsg:= False;
            AddLine:= False;
-           LineIndex:= AutoStoryDATFile.IndexOf('$info='+MemGameInfo.eName);
+           LineIndex:= DocIndexOf(AutoStoryDATFile, '$info='+MemGameInfo.eName);
            Result:= LineIndex <> -1;
            if Result then
               begin
@@ -41544,7 +42865,7 @@ var
                     if iPos2H <> 0 then
                        iPos2H:= iPos2H+13; // where score column finishes
                   end;
-               if Pos(MemGameInfo.eName+' ', TrimLeft(AutoMarpDATFile[iLoopH])) <> 0 then
+               if Pos(string(MemGameInfo.eName+' '), string(TrimLeft(AutoMarpDATFile[iLoopH]))) <> 0 then
                begin
                  LineIndex:= iLoopH;
                  Break;
@@ -41576,7 +42897,7 @@ var
            else
            begin
              // marp.dat
-             LineIndex:= AutoMarpDATFile.IndexOf('$info='+MemGameInfo.eName);
+             LineIndex:= DocIndexOf(AutoMarpDATFile, '$info='+MemGameInfo.eName);
              Result:= LineIndex <> -1;
              if Result then
                 begin
@@ -41625,14 +42946,14 @@ var
       if Result then
          begin
            NoFilesMsg:= False;
-           LineIndex:= AutoGameInitDATFile.IndexOf('$info='+MemGameInfo.eName);
+           LineIndex:= DocIndexOf(AutoGameInitDATFile, '$info='+MemGameInfo.eName);
            Result:= LineIndex <> -1;
 
            if not Result then
               begin
                 if GameIsClone(MemGameInfo.eClone) then
                    begin
-                     LineIndex:= AutoGameInitDATFile.IndexOf('$info='+MemGameInfo.eClone);
+                     LineIndex:= DocIndexOf(AutoGameInitDATFile, '$info='+MemGameInfo.eClone);
                      Result:= LineIndex <> -1;
                    end;
               end;
@@ -41671,6 +42992,7 @@ var
 
   procedure LoadText(Index: Integer);
   begin
+    GameDocsLog('LoadText doc='+IntToStr(Index));
     case Index of
       1: InformationData;
       2: HistoryXML;
@@ -41688,13 +43010,18 @@ begin
   GameDocsGoToStory.Tag:= -1;
   GameDocsGoToMarp.Tag:= -1;
   GameDocsGoToGameInit.Tag:= -1;
+  GameDocsLog('ShowGameInfoAll game='+MemGameInfo.eName+'; software='+MemGameInfo.eSoftwareName+'; startup='+BoolToStr(IsStartup, True));
   if IsStartup then
      Exit;
   if not ValidateSelectedGame(False) then
-     Exit;
+     begin
+       GameDocsLog('ShowGameInfoAll: ValidateSelectedGame failed');
+       Exit;
+     end;
 
   if not IsMAMEBasedSys(MemGameInfo.eSystemID) then
      begin
+       GameDocsLog('ShowGameInfoAll: not a MAME based system');
        ClearGameInfoRichEdit;
        Exit;
      end;
@@ -41702,26 +43029,40 @@ begin
   IsLastDocLineEmpty:= True; // do not add an empty line before the DOC title
   ProcessingGameDocuments:= True;
 
+  IsFirstLine:= True;
   MAMEDocsText.ReadOnly:= False; // using suplied richedit20.dll, empty lines are not added if control is ReadOnly = True... HUH!? :_((
   MAMEDocsText.Lines.Clear;
   MAMEDocsText.Lines.BeginUpdate;
-
-  NoFilesMsg:= True;
-  docItem:= FormPreferences.GameDocs.Groups.FirstItem;
-  repeat
-    if docItem.Checked then
-       LoadText(docItem.Tag);
-    docItem:= FormPreferences.GameDocs.Groups.NextItem(docItem);
-  until docItem = nil;
-  if NoFilesMsg then
-     AddTextLine('    No .dat files were found!'+#13#10+'Place files in "mamedir\dats\" folder or change the "historypath" entry in MAME''s "ui.ini" file.')
-  else
-     MAMEDocsText.SelStart:= 0; // move caret to the beginning of the text; fixes "Go To doc x" popup menus; no need to move scrol blar to the top anymore
-
-  MAMEDocsText.Lines.EndUpdate;
-  MAMEDocsText.ReadOnly:= True;
-
-  ProcessingGameDocuments:= False;
+  try
+  try
+    NoFilesMsg:= True;
+    docItem:= FormPreferences.GameDocs.Groups.FirstItem;
+    repeat
+      if docItem.Checked then
+         LoadText(docItem.Tag);
+      docItem:= FormPreferences.GameDocs.Groups.NextItem(docItem);
+    until docItem = nil;
+    GameDocsLog('ShowGameInfoAll NoFilesMsg='+BoolToStr(NoFilesMsg, True));
+    if NoFilesMsg then
+       AddTextLine('    No .dat files were found!'+#13#10+'Place files in "mamedir\dats\" folder or change the "historypath" entry in MAME''s "ui.ini" file.')
+    else
+       MAMEDocsText.SelStart:= 0; // move caret to the beginning of the text; fixes "Go To doc x" popup menus; no need to move scrol blar to the top anymore
+  except
+    on E: Exception do
+    begin
+      GameDocsLog('ShowGameInfoAll exception: '+E.ClassName+': '+E.Message);
+      raise;
+    end;
+  end;
+  finally
+    MAMEDocsText.Lines.EndUpdate;
+    MAMEDocsText.ReadOnly:= True;
+    ProcessingGameDocuments:= False;
+    GameDocsLog('ShowGameInfoAll done; lines='+IntToStr(MAMEDocsText.Lines.Count)+'; textLen='+IntToStr(MAMEDocsText.GetTextLen)+
+                '; visible='+BoolToStr(MAMEDocsText.Visible, True)+'; size='+IntToStr(MAMEDocsText.Width)+'x'+IntToStr(MAMEDocsText.Height)+
+                '; color=$'+IntToHex(MAMEDocsText.Color, 8)+'; fontColor=$'+IntToHex(MAMEDocsText.Font.Color, 8)+
+                '; panelVisible='+BoolToStr(PanelGameDocuments.Visible, True)+'; panelSize='+IntToStr(PanelGameDocuments.Width)+'x'+IntToStr(PanelGameDocuments.Height));
+  end;
 end;
 
 procedure TFormMain.PopupAutomaticGameInformationClick(Sender: TObject);
@@ -41912,6 +43253,7 @@ var
     P: TPoint;
     OldBrushColor: TColor;
   begin
+    Glyph:= nil;
     Glyph := TBitmap.Create;
     try
       Glyph.Transparent := True;
@@ -41938,6 +43280,7 @@ var
   end;
 
 begin
+  ImageList:= nil;
   DefaultDraw:= False;
   Use4K:= Is4KMode and (ACanvas.Font.Size = 16);
   ACanvas.Lock;
@@ -42443,6 +43786,8 @@ var
   Loop: Integer;
   iDir: String;
 begin
+  tempList:= nil;
+  ListFolders:= nil;
   // FeatureIndex (all MAME related)
   // 20: Playback Input
   // 21: Record Input
@@ -42710,6 +44055,7 @@ procedure TFormMain.ViewModeToggle;
   var
     Column: TEasyColumn;
   begin
+    Column:= nil;
     Column:= GamesListView.Header.FirstColumn;
     Result:= Column.Clickable = Enabled;
     if Result then
@@ -43034,6 +44380,7 @@ begin
     False: MAMu_FoldersList:= TStringList.Create;
   end;
   ExtractFolders2MAME(idMAME, FolderString, MAMu_FoldersList, True); // emulator full path already generated in TStringList
+  PrepareMAMu_7zCache(False);
 end;
 
 function TFormMain.UpdateMAMu_ScanFolder: Boolean;
@@ -43163,6 +44510,7 @@ var
   end;
 
 begin
+  Item:= nil;
   ChangedGames:= False;
   if TMenuItem(Sender).Tag in [3, 5] then
      begin
@@ -43410,6 +44758,7 @@ var
   missFile: TMemIniFile;
   sFile: String;
 begin
+  missFile:= nil;
   if GamesListView.Selection.Count <> 1 then
      Exit;
   if not ValidateSelectedGame then
@@ -46436,6 +47785,7 @@ var
     sysID: Integer;
     MediaType: ShortInt;
   begin
+    lvItem:= nil;
     if not ValidateSelectedGame then
        Exit;
     if not GameIsClone(MemGameInfo.eClone) then
@@ -46560,6 +47910,7 @@ var
   end;
 
 begin
+  Item:= nil;
   // 0: Keyboard+Mouse
   // 1: Devastator II
   // 2: HotRod SE
@@ -46792,6 +48143,7 @@ var
     INIFile: TMemIniFile;
     SectionStr: String;
   begin
+    INIFile:= nil;
     Result:= FileExists(GetFrontendExtraIniFile);
     if not Result then
        Exit;
@@ -47362,6 +48714,7 @@ var
   end;
 
 begin
+  Item:= nil; Group:= nil;
   if not PanelFilterCPU.Visible then
      Exit;
 
@@ -47610,6 +48963,7 @@ var
   end;
 
 begin
+  elvGroup:= nil;
   if PanelSearchGames_ToolBar.Visible then
      begin
        if FilterGameTitle_ToolBar.Text = '' then
@@ -48217,6 +49571,9 @@ begin
          FormMain.Set4KButtonSpecs(ButtonCancel, 130, 8, 89, 25, 9, 0);
        end;
      end;
+  {$IF CompilerVersion >= 20}
+  FormArcadeFiltersDriverStatus.AdjustStatusLayout;
+  {$IFEND}
 end;
 
 procedure TFormMain.SetExtraFilter(LabelHolder: TShadowLabel; ComboBoxHolder: TComboBox2Ex);
@@ -48335,6 +49692,7 @@ var
   ListXML, NewControlTypes, ctype, waysList: THashedStringList;
   CheckControl: Boolean;
 begin
+  ListXML:= nil; NewControlTypes:= nil;
   if ShowMessageBox('INFO', 'Search new control types.',
                     '   MAME''s -listxml output will scan the control type entries.'+
                     ' If there are new control types, '+
@@ -48896,7 +50254,11 @@ begin
 end;
 
 procedure TFormMain.WebBrowserBeforeNavigate2(Sender: TObject;
+  {$IF CompilerVersion >= 20}
+  const pDisp: IDispatch; const URL, Flags, TargetFrameName, PostData,
+  {$ELSE}
   const pDisp: IDispatch; var URL, Flags, TargetFrameName, PostData,
+  {$IFEND}
   Headers: OleVariant; var Cancel: WordBool);
 begin
   WebBrowserStatusPanel.Visible:= True;
@@ -49265,6 +50627,9 @@ begin
   FormArcadeFiltersDriverStatus.Left:= LeftPos;
   FormArcadeFiltersDriverStatus.Top:= FormMain.Top+28+10+ToolBarButtons.ButtonHeight+1;
 
+  {$IF CompilerVersion >= 20}
+  FormArcadeFiltersDriverStatus.AdjustStatusLayout;
+  {$IFEND}
   if FormArcadeFiltersDriverStatus.ShowModal = mrOk then
      begin
        UpdateFilters:= False;
@@ -49325,6 +50690,7 @@ var
   MediaType: ShortInt;
   iStr: String;
 begin
+  lvItem:= nil;
   if not ValidateSelectedGame then
      Exit;
 
@@ -49655,7 +51021,7 @@ begin
   end;
   if IsNightMode then
      iTitle:= PChar(iTitle+' (Night Mode)');
-  SendMessage(TFontDialog(Sender).Handle, WM_SETTEXT, 0, Integer('Select a Font'+iTitle));
+  SendMessage(TFontDialog(Sender).Handle, WM_SETTEXT, 0, LPARAM(PChar('Select a Font'+iTitle)));
   TFontDialog(Sender).Tag:= -1;
 end;
 
@@ -49799,6 +51165,7 @@ var
   SoftListReqFile: TMemIniFile;
   FoundReqFile: Boolean;
 begin
+  SoftListReqFile:= nil;
   // CreateListMode
   // 0 -> disabled, delete all software list files
   // 1 -> create, update mode, delete software list files only from "SourceList" list var
@@ -50093,6 +51460,7 @@ var
   end;
 
 begin
+  LastUsedMachine:= nil;
   ShowFilterMsgBox('Select MAME Machine to Run '+GetSystemTypeTitle(CustomSystemID, False)+' Game', 'Building compatible machines list, please wait...', IsGroupedView);
 
   iCurrentMachineName:= '';
@@ -50359,6 +51727,7 @@ var
   sFileName, TempStr: String;
   SoftGamesList: THashedStringList;
 begin
+  SoftGamesList:= nil;
   GotMediaType:= False;
   ExecParam:= '';
   Result:= '';
@@ -50456,6 +51825,7 @@ var
   columnFile: TMemIniFile;
   ColumnsArray: Boolean;
 begin
+  columnFile:= nil;
   GamesListView.BeginUpdate;
 
   for Loop:= 1 to GamesListView.Header.Columns.Count-1 do
@@ -50592,6 +51962,7 @@ var
   Item: TEasyItem;
   Group: TEasyGroup;
 begin
+  Item:= nil;
   Result:= nil;
   if (MachineName = '') or (not CheckTotalVisible(MachinesListSidePanel)) then
      Exit;
@@ -50640,6 +52011,8 @@ var
   addItem: TEasyItem;
   ExcludedList: THashedStringList;
 begin
+  ExcludedList:= nil;
+  addGroup:= nil;
   if not ValidateFile(GetGamesFolderEL+GetSystemFileName(idMAME, 5)) then
      Exit;
   if not FileExists(GetGamesFolderEL+GetsystemFileName(idMAME)) then
@@ -50782,6 +52155,7 @@ var
   elvGroup: TEasyGroup;
   elvItem, FirstItem: TEasyItem;
 begin
+  elvItem:= nil;
   if not CheckTotal(MachinesListSidePanel) then
      Exit;
 
@@ -51097,6 +52471,7 @@ var
   Item: TEasyItem;
   Group: TEasyGroup;
 begin
+  Item:= nil; Group:= nil;
   if TMenuItem(Sender).Tag = MenuGameTitleExtraInfo.Tag then
      begin
        TMenuItem(Sender).Checked:= True;
@@ -51626,6 +53001,7 @@ function TFormMain.CallSelectConsCompSystem(FeatureType: ShortInt = -1; SelectSy
 var
   Item: TEasyItem;
 begin
+  Item:= nil;
   Result:= -1;
   if not Assigned(FormConsCompSystemSelector) then
      FormConsCompSystemSelector:= TFormConsCompSystemSelector.Create(nil);
@@ -51825,6 +53201,7 @@ var
   end;
 
 begin
+  ExistingGames:= nil;
   Result:= False;
   SystemFileName:= GetGamesFolderEL(2)+SystemsListCustom[SystemID, 2];
   MsgTitle:= SystemsListCustom[SystemID, 0]+#13#10+'Create Games List';
@@ -52509,6 +53886,7 @@ var
   Loop, tIndex, ArcadeFilesCopied, ConsCompFilesCopied, ConsCompProfilesMerged: Integer;
   DestinationFavProfile, ConsCompFavProfile: THashedStringList;
 begin
+  DestinationFavProfile:= nil; ConsCompFavProfile:= nil;
   OldArcadeFavFolder:= FrontendPath+'ini_files\favorites\';
   ConsCompFavFolder:= GetConsoleComputerFolder+'favorites\';
   InitMessageBox;
@@ -55179,6 +56557,14 @@ begin
 end;
 
 procedure TFormMain.Resize4KPreferences(SetDarkScrollBars: Boolean);
+const
+  {$IF CompilerVersion >= 20}
+  StatusColumnLeft = 625;
+  StatusColumnWidth = 384;
+  {$ELSE}
+  StatusColumnLeft = 665;
+  StatusColumnWidth = 350;
+  {$IFEND}
 var
   Loop: Integer;
 
@@ -55246,6 +56632,9 @@ begin
 
     SetBoxCheckBox(DisableMinimize, 46, 480);
     SetBoxCheckBox(AllowOnlyOneInstance, 92, 265);
+    {$IF CompilerVersion >= 20}
+    SetBoxCheckBox(EnableDiagnosticLog, 378, 475);
+    {$IFEND}
     SetBoxCheckBox(IgnoreExitCode1InvalidFunction, 138, 380);
     Set4KLabelSpecs(IgnoreExitCode1InvalidFunctionLabel, 37, IgnoreExitCode1InvalidFunction.Top+35, -1, -1, 16);
 
@@ -55291,13 +56680,13 @@ begin
     SetBoxCheckBox(ShowGrayscaleIconGamesMissROMsCHDs, 268, 560);
     Set4KLabelSpecs(ShowGrayscaleIconGamesMissROMsCHDsLabel, 37, ShowGrayscaleIconGamesMissROMsCHDs.Top+35, -1, -1, 16);
 
-    SetBoxCheckBox(DisableCloneIndent,               46, 350, 665);
-    SetBoxCheckBox(DisableDriverStatusIcons,         92, 350, 665);
-    SetBoxCheckBox(HideDriverStatusTexts,           138, 350, 665);
-    SetBoxCheckBox(DriverStatusShowFirstLetterOnly, 184, 350, 665);
-    SetBoxCheckBox(ShortDriverColumnTitles,         230, 350, 665);
-    SetBoxCheckBox(LastPlayedHideSeconds,           276, 350, 665);
-    SetBoxCheckBox(TotalPlayTimeHideSeconds,        322, 350, 665);
+    SetBoxCheckBox(DisableCloneIndent,               46, StatusColumnWidth, StatusColumnLeft);
+    SetBoxCheckBox(DisableDriverStatusIcons,         92, StatusColumnWidth, StatusColumnLeft);
+    SetBoxCheckBox(HideDriverStatusTexts,           138, StatusColumnWidth, StatusColumnLeft);
+    SetBoxCheckBox(DriverStatusShowFirstLetterOnly, 184, StatusColumnWidth, StatusColumnLeft);
+    SetBoxCheckBox(ShortDriverColumnTitles,         230, StatusColumnWidth, StatusColumnLeft);
+    SetBoxCheckBox(LastPlayedHideSeconds,           276, StatusColumnWidth, StatusColumnLeft);
+    SetBoxCheckBox(TotalPlayTimeHideSeconds,        322, StatusColumnWidth, StatusColumnLeft);
 
     // MAME Game Docs
     Set4KBoxLabel(Setting_MAMEGameDocsBox,
@@ -55946,6 +57335,10 @@ begin
   FreeAndNil(FormStatus);
   FormStatus:= TFormStatus.Create(nil); // recreate the form
   FormStatus.LabelVersion.Caption:= FrontendVersion;
+  {$IF CompilerVersion >= 20}
+  FormStatus.LabelVersion.Caption:= FrontendVersionCaption;
+  FormStatus.LabelVersion.AutoSize:= True;
+  {$IFEND}
   InitSplashScreen;
 
   Resize4KNightMode(True);
@@ -56022,6 +57415,7 @@ procedure TFormMain.PopupCustomParametersClick(Sender: TObject);
     iIndex: Integer;
     IsClone: Byte;
   begin
+    iIcon:= nil;
     Result:= True;
     iSoftwareName:= MemGameInfo.eSoftwareName;
     iFolder:= GetCustomParamsFolder;
@@ -56175,6 +57569,7 @@ var
     Group: TEasyGroup;
     ItemSearch: TEasyItem;
   begin
+    Group:= nil;
     Result:= False;
     //ShowFilterMsgBox('Game Info', 'Scanning games list for "'+SetName+'", please wait...', IsGroupedView);
     TempGameVars.eName:= SetName;
@@ -56360,6 +57755,3 @@ begin
 }
 
 end.
-
-
-

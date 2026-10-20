@@ -4,7 +4,7 @@
 
 EmuLoader is a *front-end* application for game emulators, mainly specialized in platforms like **M.A.M.E.** (Multiple Arcade Machine Emulator) and **Demul** (a Sega Dreamcast and arcade emulator).
 
-The main website is <https://emuloader.mameworld.info>
+The main website is <https://emuloader.com>
 
 ### 🎮 What is an Emulator Front-End?
 
@@ -24,6 +24,38 @@ EmuLoader is valued for its clean interface and a set of specific functionalitie
 4. **Database Management:** It scans and validates your ROMs against the emulator databases (like M.A.M.E.'s listxml) to ensure your files are correct and up-to-date.
 
 In summary, EmuLoader is the ideal tool if you want a powerful and dedicated interface to organize and launch your M.A.M.E. and Demul game collections efficiently and attractively.
+
+## Diagnostic logging (Delphi 13)
+
+The Delphi 13 port is version **10.0.0**, with file/product version `10.0.0.0`
+and the Windows **Pre-release** flag enabled until the stable release. The flag
+does not add a beta suffix to the version displayed in the application or logs.
+
+Logging is disabled by default. Enable **Enable Diagnostic Log (Troubleshooting)**
+in **Preferences > General**, or launch the application with:
+
+```bat
+EmuLoader.exe --debug-log
+```
+
+The command-line option forces logging for that session, even if the preference
+is off. The preference takes effect immediately and is saved when the preferences
+dialog closes. It is also read before the splash screen on subsequent starts.
+
+`diagnostic.log` is written beside `EmuLoader.exe`, in UTF-8. It records session
+information, startup/status messages, clicked window controls, list loading and
+filtering, emulator launches and exit codes, application message dialogs, VCL
+event exceptions (including their addresses), and normal shutdown milestones.
+Logging is serialized across threads. At 5 MiB, the log rolls over to
+`diagnostic.log.1`, retaining only one previous file. A write failure disables
+logging and displays a warning; normal error dialogs are still shown.
+
+For a bug report, enable logging, reproduce the problem, and include both log
+files if present. **Review them before sharing:** they can contain local paths,
+game names and emulator command lines. No keyboard text is captured. A hard
+process termination or an unhandled worker-thread crash may leave only the last
+operation, not an exception or shutdown record; this is not a crash dump or a
+full stack-trace reporter.
 
 ## History
 

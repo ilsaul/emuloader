@@ -407,6 +407,9 @@ var
   IsNightMode, Is4KMode:  Boolean;
   MsgTxtColors: TMsgBoxColors;
   FrontendPath, FrontendVersion: String;
+  {$IF CompilerVersion >= 20}
+  FrontendPreRelease: Boolean;
+  {$IFEND}
 
 procedure HideAppFormTaskBarButton2;
 
@@ -427,23 +430,31 @@ procedure WinGradient(ACanvas: TCanvas; ARect: TRect; FColor1, FColor2: TColor);
 
 function  GetFileVersion(const sFile: String; MinorVersionOnly: Boolean = False): String;
 function  GetFileInfo2(FName, InfoType: String): String;
+{$IF CompilerVersion >= 20}
+function IsFilePreRelease(const FileName: String): Boolean;
+function FrontendVersionCaption: String;
+{$IFEND}
 function  GetFileSize(const AFileName: String): Int64;
 
-{$IFDEF WIN32}
+{$IFDEF MSWINDOWS}
 function  ShortToLongFileName(const ShortName: String): String;
 function  ShortToLongPath(const ShortName: String): String;
 function  LongToShortFileName(const LongName: String): String;
 //function  LongToShortPath(const LongName: String): String; // this function doesn't work, use ExtractShortPathName() instead (October 10, 2016)
-{$ENDIF WIN32}
+{$ENDIF MSWINDOWS}
 
 function  ExtractShortPathName(const FileName: String): String; // function from Delphi XE 10 Seattle source code
 
+{$IF CompilerVersion < 20}
 function  Pos(const substr, str: WideString): Integer; overload;
 function  PosEx(const SubStr, S: String; Offset: Integer = 1): Integer;
 
 function  LowerCase(const S: String): String; overload;
 function  UpperCase(const S: String): String; overload;
 procedure Move(const Source; var Dest; count: Integer); overload;
+{$ELSE}
+function  PosEx(const SubStr, S: String; Offset: Integer = 1): Integer;
+{$IFEND}
 
 procedure CallShellExecute(Sender: TObject; const FileToOpen: WideString = ''; Visibility: Word = SW_SHOWNORMAL);
 
@@ -576,7 +587,12 @@ function  ShortDirStringW(const FileFullPath: WideString; MaxLength: Integer): W
 function  OpenSaveFileDialog(Parent: TWinControl; const DefExt, Filter, InitialDir, Title: String; var FileName: String;
                              MustExist, OverwritePrompt, NoChangeDir, DoOpen: Boolean): Boolean;
 
+{$IF CompilerVersion >= 20}
+// PChar is PWideChar since Delphi 2009: bind to the Unicode export
+function  PrivateExtractIcons (lpszFile: PChar;     nIconIndex, cxIcon, cyIcon: integer; phicon: PHANDLE; pIconId: PDWORD; nIcon, flags: DWORD): DWORD; stdcall ; external 'user32.dll' name 'PrivateExtractIconsW';
+{$ELSE}
 function  PrivateExtractIcons (lpszFile: PChar;     nIconIndex, cxIcon, cyIcon: integer; phicon: PHANDLE; pIconId: PDWORD; nIcon, flags: DWORD): DWORD; stdcall ; external 'user32.dll' name 'PrivateExtractIconsA';
+{$IFEND}
 function  PrivateExtractIconsW(lpszFile: PWideChar; nIconIndex, cxIcon, cyIcon: integer; phicon: PHANDLE; pIconId: PDWORD; nIcon, flags: DWORD): DWORD; stdcall ; external 'user32.dll' name 'PrivateExtractIconsW';
 
 procedure GetIconToImage(IconSource: HIcon; IconImageSource: TImage; iWidth, iHeight: Integer);
@@ -1570,6 +1586,36 @@ begin
   GradientFill(ACanvas.Handle, @Vertexs, 2, @GRect, 1, GRADIENT_FILL_RECT_V);
 end;
 
+{$IF CompilerVersion >= 20}
+function IsFilePreRelease(const FileName: String): Boolean;
+var
+  Info: TBytes;
+  InfoSize, ValueSize, Dummy: DWORD;
+  Value: PVSFixedFileInfo;
+begin
+  InfoSize:= GetFileVersionInfoSize(PChar(FileName), Dummy);
+  if InfoSize = 0 then
+     RaiseLastOSError;
+  SetLength(Info, InfoSize);
+  if not GetFileVersionInfo(PChar(FileName), 0, InfoSize, @Info[0]) then
+     RaiseLastOSError;
+  if not VerQueryValue(@Info[0], '\', Pointer(Value), ValueSize) then
+     raise Exception.Create('Cannot read executable version flags: '+FileName);
+  if ValueSize < SizeOf(Value^) then
+     raise Exception.Create('Invalid executable version information: '+FileName);
+  if Value^.dwSignature <> $FEEF04BD then
+     raise Exception.Create('Invalid executable version information: '+FileName);
+  Result:= (Value^.dwFileFlags and Value^.dwFileFlagsMask and VS_FF_PRERELEASE) <> 0;
+end;
+
+function FrontendVersionCaption: String;
+begin
+  Result:= FrontendVersion;
+  if FrontendPreRelease then
+     Result:= Result+' (Pre-release)';
+end;
+{$IFEND}
+
 function GetFileVersion(const sFile: String; MinorVersionOnly: Boolean = False): String;
 var
   VerInfoSize: DWORD;
@@ -1615,8 +1661,8 @@ var
   Info    : Pointer;
   InfoData: Pointer;
   InfoSize: LongInt;
-  InfoLen : {$IFDEF WIN32} DWORD;{$ELSE} LongInt; {$ENDIF}
-  DataLen : {$IFDEF WIN32} UInt; {$ELSE} word; {$ENDIF}
+  InfoLen : {$IFDEF MSWINDOWS} DWORD;{$ELSE} LongInt; {$ENDIF}
+  DataLen : {$IFDEF MSWINDOWS} UInt; {$ELSE} word; {$ENDIF}
   LangPtr : Pointer;
 begin
   Result:= '';
@@ -1637,7 +1683,7 @@ begin
          if VerQueryValue(Info, '\VarFileInfo\Translation', LangPtr, DataLen) then
             InfoType:= Format('\StringFileInfo\%0.4x%0.4x\%s'#0, [LoWord(LongInt(LangPtr^)), HiWord(LongInt(LangPtr^)), InfoType]);
          if VerQueryValue(Info, @InfoType[1], InfoData, Datalen) then
-           Result:= strPas(InfoData);
+           Result:= PChar(InfoData);
        end;
   finally
     FreeMem(Info, InfoSize);
@@ -1664,7 +1710,7 @@ begin
   FindClose(SearchRec);
 end;
 
-{$IFDEF WIN32}
+{$IFDEF MSWINDOWS}
 
 function ShortToLongFileName(const ShortName: String): String;
 var
@@ -1740,7 +1786,7 @@ end;
 //  end;
 //  Result:= TempPathPtr+Result;
 //end;
-{$ENDIF WIN32}
+{$ENDIF MSWINDOWS}
 
 function ExtractShortPathName(const FileName: String): String; // function from Delphi XE 10 Seattle source code
 var
@@ -1761,6 +1807,7 @@ begin
     end;
 end;
 
+{$IF CompilerVersion < 20}
 // delphi 2006 assembly functions!
 function Pos(const substr, str: WideString): Integer; overload;
 asm
@@ -2202,6 +2249,13 @@ asm
   fild    qword ptr [eax]
   fistp   qword ptr [edx]
 end;
+{$ELSE}
+// Modern Delphi: Unicode RTL routines replace the Delphi 7 IA-32 assembly versions.
+function PosEx(const SubStr, S: String; Offset: Integer = 1): Integer;
+begin
+  Result:= System.Pos(SubStr, S, Offset);
+end;
+{$IFEND}
 // end of file functions
 
 procedure CallShellExecute(Sender: TObject; const FileToOpen: WideString = ''; Visibility: Word = SW_SHOWNORMAL);
@@ -2780,6 +2834,7 @@ var
   Checksum: TMessageDigest;
   Stream: TMemoryStream;
 begin
+  Checksum:= nil; Stream:= nil;
   // "No Authentication" mode
   Result:= '';
 
@@ -2807,6 +2862,7 @@ var
   Checksum: TMessageDigest;
   Stream: TWideFileStream;
 begin
+  Checksum:= nil; Stream:= nil;
   // "No Authentication" mode
   Result:= '';
   if ((Mode < Low(ChecksumMode)) or (Mode > High(ChecksumMode))) or
@@ -3451,7 +3507,7 @@ begin
   if OverwriteExistingFile then
      rFlags:= rFlags+MOVEFILE_REPLACE_EXISTING;
 
-  Result:= MoveFileEx(PAnsiChar(OldName), PAnsiChar(NewName), rFlags);
+  Result:= MoveFileEx(PChar(OldName), PChar(NewName), rFlags);
 end;
 // note: RenameFileW() function for Unicode alredy exists! MoveFileW() does not (March 07, 2017)
 
@@ -3462,7 +3518,7 @@ begin
   flags:= MOVEFILE_COPY_ALLOWED+MOVEFILE_WRITE_THROUGH;
   if OverwriteExisting then
      flags:= flags+MOVEFILE_REPLACE_EXISTING;
-  Result:= MoveFileEx(PAnsiChar(OldName), PAnsiChar(NewName),
+  Result:= MoveFileEx(PChar(OldName), PChar(NewName),
                       flags);//MOVEFILE_COPY_ALLOWED
                       //+MOVEFILE_REPLACE_EXISTING
                       //+MOVEFILE_WRITE_THROUGH);
@@ -3947,6 +4003,7 @@ var
   IsAltSize: Boolean;
   iSize: Integer;
 begin
+  appIcon:= nil;
   Result:= -1;
   if not FileExistsW(appEmuFile) then
      Exit;
@@ -4140,11 +4197,11 @@ begin
 end;
 
 function GetWinTempDir: String;
-{$IFDEF WIN32}
+{$IFDEF MSWINDOWS}
 var
   Buffer: array[0..1023] of Char;
 begin
-  SetString(Result, Buffer, GetTempPath(SizeOf(Buffer), Buffer));
+  SetString(Result, Buffer, GetTempPath(Length(Buffer), Buffer));
 {$ELSE}
 var
   Buffer: array[0..255] of Char;
@@ -4156,11 +4213,11 @@ begin
 end;
 
 function GetWindowsDir: String;
-{$IFDEF WIN32}
+{$IFDEF MSWINDOWS}
 var
   Buffer: array[0..1023] of Char;
 begin
-  SetString(Result, Buffer, GetWindowsDirectory(Buffer, SizeOf(Buffer)));
+  SetString(Result, Buffer, GetWindowsDirectory(Buffer, Length(Buffer)));
 {$ELSE}
 begin
   Result[0]:= Char(GetWindowsDirectory(@Result[1], 254));
@@ -4168,11 +4225,11 @@ begin
 end;
 
 function GetSystemDir: String;
-{$IFDEF WIN32}
+{$IFDEF MSWINDOWS}
 var
   Buffer: array[0..1023] of Char;
 begin
-  SetString(Result, Buffer, GetSystemDirectory(Buffer, SizeOf(Buffer)));
+  SetString(Result, Buffer, GetSystemDirectory(Buffer, Length(Buffer)));
 {$ELSE}
 begin
   Result[0]:= Char(GetSystemDirectory(@Result[1], 254));
@@ -4276,8 +4333,8 @@ var
   Info     : Pointer;
   InfoData : Pointer;
   InfoSize : LongInt;
-  InfoLen  : {$IFDEF WIN32} DWORD;{$ELSE} LongInt; {$ENDIF}
-  DataLen  : {$IFDEF WIN32} UInt; {$ELSE} word; {$ENDIF}
+  InfoLen  : {$IFDEF MSWINDOWS} DWORD;{$ELSE} LongInt; {$ENDIF}
+  DataLen  : {$IFDEF MSWINDOWS} UInt; {$ELSE} word; {$ENDIF}
   LangPtr  : Pointer;
 begin
   Result:= '';
@@ -4930,6 +4987,7 @@ function Read4KSetting: Boolean;
 var
   iniFile: TMemIniFile;
 begin
+  iniFile:= nil;
   FrontendPath:= ExtractFilePath(Application.ExeName);
   Result:= Validate4KResolution;
   if Result then
