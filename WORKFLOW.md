@@ -5,6 +5,15 @@
 - Delphi 13 (Win64) builds and runtime tests happen only on the Windows VM.
 - The VM is reachable via SSH: `ssh -i ~/.ssh/emuloader_vm moreno@10.211.55.16` (Windows, cmd shell).
 
+## Branching: git flow
+- The developer uses git flow (config in `.git/config`; there is no `git-flow` CLI on the Mac, so Copilot runs the equivalent git commands).
+- `master`: released versions only; each release is a `--no-ff` merge plus a tag `vX.Y.Z` (no prefix).
+- `develop`: integration branch; feature branches (e.g. the former `delphi13-port`) are merged or fast-forwarded into it.
+- `release/vX.Y.Z`: branched from `develop` (also set `gitflow.branch.release/vX.Y.Z.base develop`). Only release preparation goes here: `VerInfo_PreRelease` set to `false` in `source/EmuLoader.dproj`, final changelog, release fixes. The release package is built from this branch.
+- Finishing a release: merge `release/vX.Y.Z` into `master` (`--no-ff`), tag `vX.Y.Z`, merge the tag back into `develop`, delete the release branch. Then set `VerInfo_PreRelease` back to `true` on `develop` for the next cycle.
+- `hotfix/vX.Y.Z`: branched from `master`, finished like a release.
+- The VM follows the branch currently under test (`release/vX.Y.Z` during a release).
+
 ## Copilot can
 - Read, search and edit source files (`source/`, `lib/`, changelogs, docs).
 - Run git locally: diff, status, log, commit (with the `Co-authored-by` trailer).
@@ -26,7 +35,7 @@
 ## Typical loop
 1. Copilot edits and commits on the Mac (never compiled locally).
 2. Developer runs `git push` and says so.
-3. Copilot over SSH: `git restore .`, `git fetch`, `git merge --ff-only origin/delphi13-port`.
+3. Copilot over SSH: `git restore .`, `git fetch`, `git merge --ff-only origin/<branch under test>`.
 4. Developer closes EmuLoader, builds from the IDE (Debug, Win64) and launches it; compiler errors are pasted to Copilot.
    Copilot must always say which build is needed: the application (`source/EmuLoader.dproj`) or the component package (`lib/delphi13/EmuLoaderComponents.dproj`, the palette components). Rule of thumb: changes under `lib/` need the package build first, then the application; changes only under `source/` need just the application.
 5. Copilot reads `C:\Games\EmuLoader13\diagnostic.log` over SSH; developer reports what is visible on the VM desktop.
@@ -49,7 +58,7 @@
 - Confirmed on the VM with the final build: the button becomes correct a few seconds after startup. Issue resolved.
 
 ## VM rules (standing permissions from the developer)
-- SSH to the VM is allowed: `ssh -i ~/.ssh/emuloader_vm moreno@10.211.55.16` (repo in `C:\Develop\Emuloader`, branch `delphi13-port`, output in `C:\Games\EmuLoader13`).
-- No development happens on the VM: local modifications to tracked files can be discarded before every pull (`git restore .`, then `git merge --ff-only origin/delphi13-port`).
+- SSH to the VM is allowed: `ssh -i ~/.ssh/emuloader_vm moreno@10.211.55.16` (repo in `C:\Develop\Emuloader`, branch under test, see git flow above, output in `C:\Games\EmuLoader13`).
+- No development happens on the VM: local modifications to tracked files can be discarded before every pull (`git restore .`, then `git merge --ff-only origin/<branch under test>`).
 - Do not run `git clean`: untracked files (e.g. `build_d13.cmd`) are left alone.
 - Delphi compiles only from the IDE (command-line compiling is not supported by the VM license): the developer builds and launches.
