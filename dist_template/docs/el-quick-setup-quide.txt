@@ -19,7 +19,8 @@ Installing
 04. Get category.ini and version.ini for HBMAME (AntoPISA website), rename them to "category_hb.ini" and "version_hb.ini" and copy them to
     "frontend_dir\arcade\filters\" folder (HBMAME only, optional)
 
-05. Copy docs files: mameinfo.dat, messinfo.dat, history.dat, story.dat (MAMEscore v2), scores3.htm, marp.dat to "mame_dir\dats\" folder or MAME's root folder (MAME only, optional)
+05. Copy docs files: mameinfo.dat, messinfo.dat, history.xml / history.dat, story.dat (MAMEscore v2), scores3.htm, marp.dat
+    to "mame_dir\dats\" folder or MAME's root folder (MAME only, optional)
 
 06. Run "EmuLoader.exe" to start the frontend
     After the initialization screen, if there are no games list files in "frontend_dir\arcade\games\" or "frontend_dir\arcade\mame_softwarelist_games\" or
@@ -31,9 +32,8 @@ Installing
 
 08. On "Arcade Emulators Setup" screen, select the arcade system you want to setup
 
-09. Select an emulator file (.exe; .bat; .cmd)
-    "version info" will be filled automatically, except for batch files. You can edit emulator file and version info manually
-    NOTE: make sure to click "Update System" button if changing emulator file manually!
+09. Select an emulator file, "version info" will be filled automatically
+    You can edit emulator file and version info manually (click "Update System" button afterwards)
 
 10. If you need to configure emulator's default options, click "Default Settings" button (optional)
 
@@ -46,7 +46,7 @@ Installing
 12. Optionally, you can select what type of MAME sets will be scanned in 'Scan MAME Sets' (MAME 0.162 or newer required)
 
 13. If you want to create a list of non-arcade MAME games (MAME software lists), enable 'Create Software List Games' checkbox (optional)
-    You can customize what software lists will be used by clicking in the 'custom' blue text; disabled software lists will not be created
+    You can customize what software lists will be used by clicking in the 'custom' text link; disabled software lists will not be created
     or added to the games list (MAME 0.162 or newer required)
 
 14. If you want MAME/HBMAME device sets with no ROMs listed in your games list, enable 'Device Sets With No ROMs' checkbox (optional)
@@ -61,7 +61,7 @@ Installing
 18. Select the emulator tab you want (you can use 4 emulator executables per system!)
     Always use "Emulator 1" tab for the first emulator
 
-19. Select an emulator file (.exe; .bat; .cmd)
+19. Select an emulator file
     The media type parameters for cartridge, floppy disk, cassette tape, disc, hard disk drive will be filled automatically
 
 20. You may edit these parameters, if needed. They are saved in "console_computer\emulator_parameters.ini" file
@@ -73,24 +73,26 @@ Installing
 23. If you checked options to create gamess lists, EL will start the process for all available systems, one by one, including MAME software list games
     This process should not take too long. Keep an eye on the timer next to the progress bar. You don't need to do anything... just wait until it finishes
 
-24. After games lists are created, EL will validate the arcade games based on the scan mode you chose.
-    MAME sets might take some time to be validated, depending on how many games you have. Please be patient
+24. After games lists are created, the frontend will validate games sets based on the scan mode you chose.
+    MAME sets might take some time to be validated, depending on how many games you have. Be patient
 
 25. After everything is done, frontend's main screen will show up. If you created games lists, they will be loaded
-    Available games have colored icons. Missing games have gray icons. Games with missing ROMs/CHDs have a red color text and gray icons (MAME and arcade systems only)
+    Available games have colored icons. Missing games have gray icons. Games with missing ROMs/CHDs have a red color text (MAME and arcade systems only)
 
 26. Why are you still reading this ? Start playing!!! ^-^
 
 
-NOTES:
+Notes:
   -> To select what MAME machine you want to run a software list game with, use "Machine to Run Game" option in games popup menu (mouse right-click)
-     If no machine is selected, the dialog will show up on the game's first run. Software list games are non-arcade games (console/computer/handheld). MAME v0.162 or newer is required
+     If no machine is selected, the dialog will show up on the game's first run. Software list games are non-arcade games (console/computer/handheld)
+     MAME v0.162 or newer is required
 
   -> You can run MAME software list games using console/computer/handheld emulators (BlueMSX, WinUAE, WinVICE, Stella, ZSNES and many others)
 
-  -> You can run console/computer/handheld games ported from EmuCon frontend using the selected MAME in "Arcade Emulators Setup"; you can even select what MAME machine you want to play with
+  -> You can run console/computer/handheld games ported from EmuCon frontend using the selected MAME in "Arcade Emulators Setup";
+     you can even select what MAME machine you want to play with
 
-  -> WARNING: MAME software list games are NOT recognized as console/computer/handheld games by the frontend!!!
+  -> WARNING: MAME software list games are not recognized by console/computer/handheld systems in the frontend
 
 
 
@@ -116,6 +118,7 @@ Setup Image Categories
 05. Repeat the process for other systems (steps #02 thru #04)
 
 06. When you're done, click "Apply" button to confirm changes or click "Abort" button to cancel changes
+
 
 
 Change Image Layouts Settings
@@ -160,17 +163,15 @@ How to enable MAMu_ Icons (custom game icons)
 
    Can't find out how to display MAMu_ icons into the games list ? Follow the steps below.
 
-01. Make sure the icons path is correct. Click on main tool bar button "MAMu_ Icons" and select "Select Folder". The preferences screen will open
+01. Make sure the icons path is correct. Mouse right-click on main tool bar button "MAMu_ Icons" and select "Select Folder". The preferences screen will open
     ... or open the preferences screen in main menu and go to "Games List / Columns" tab
 
 02. Click on "Select" button. Only a single folder can be selected and it will be used for all systems
     If you are using MAME v0.172 or newer, this settings is automatically read from MAME's "ui.ini" file...
 
-03. After selecting folder, click on MAMu_ Icons tool bar buttons again (main screen)
+03. There are other settings to customize how icons are loaded, use them as you like (mouse right-click). If unsure, leave them alone...
 
-04. There are other settings to customize how icons are loaded, use them as you like. If unsure, leave them alone...
-
-05. Select "Enable MAMu_ Icons" to enable or disable this feature (or use "Ctrl+M" hotkey)
+04. Click on "MAMu_ Icons" tool bar button to enable or disable this feature (or use "Ctrl+M" hotkey)
 
 NOTES:
   -> You can have multiple size icons on each gamename.ico file (48x48, 32x32, 24x24, 16x16)

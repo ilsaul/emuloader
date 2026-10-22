@@ -2,8 +2,9 @@
 """Regenerate dist_template/docs/changelog.htm from CHANGELOG.md.
 
 Versions newer than LAST_MANUAL_VERSION are written between the BEGIN/END
-markers in changelog.htm; the hand-written entries below them (8.8.4 and
-older) are left untouched. The script is idempotent:
+markers in changelog.htm; the hand-written entries below them (8.9.4 and
+older, from Ciro's 8.9.4 package) are left untouched. The page uses CRLF line
+endings and the page_styles.css layout (inner_box/contents_title/contents_text). The script is idempotent:
 
     python3 tools/changelog_to_htm.py
 """
@@ -16,7 +17,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 CHANGELOG = ROOT / "CHANGELOG.md"
 HTM = ROOT / "dist_template" / "docs" / "changelog.htm"
-LAST_MANUAL_VERSION = "8.8.4"
+LAST_MANUAL_VERSION = "8.9.4"
 BEGIN = "<!-- BEGIN generated from CHANGELOG.md by tools/changelog_to_htm.py: do not edit -->"
 END = "<!-- END generated from CHANGELOG.md -->"
 
@@ -77,35 +78,40 @@ def parse(markdown):
 def render(versions):
     out = [BEGIN]
     for v in versions:
-        out.append('      <div id="changelog">')
-        out.append(f'         <h1>version {v["version"]} change log - {v["date"]}</h1>')
+        out.append('      <div id="inner_box">')
+        out.append(f'      <div id="contents_title">Version {v["version"]} Change Log - {v["date"]}</div>')
+        out.append('      <div id="contents_text">')
         if v["intro"]:
             out.append(f'         <p>{" ".join(v["intro"])}</p>')
         for title, items in v["sections"]:
             out.append(f"         <h2>{html.escape(title)}</h2>")
             for item in items:
-                out.append("            <h3>" + "<br/>\n                ".join(item) + "</h3>")
+                out.append("            <h3>" + "<br/>\r\n                ".join(item) + "</h3>")
         out.append("      </div>")
-        out.append("")
-        out.append("      <br/><br/>")
+        out.append('      <div class="TRON2"></div>')
+        out.append("      </div>")
+        out.append("      <br/>")
     out.append("      " + END)
-    return "\n".join(out) + "\n"
+    return "\r\n".join(out) + "\r\n"
 
 
 def main():
     versions = parse(CHANGELOG.read_text(encoding="utf-8"))
     block = render(versions)
-    page = HTM.read_text(encoding="latin-1")
+    page = HTM.read_bytes().decode("latin-1")
     if BEGIN in page:
         start = page.index(BEGIN)
-        end = page.index(END) + len(END) + 1
+        end = page.index(END) + len(END) + 2
         page = page[:start] + block + page[end:]
     else:
-        anchor = f'      <div id="changelog">\n         <h1>version {LAST_MANUAL_VERSION} '
-        if anchor not in page:
+        # Skip Ciro's commented template block ("October ??") at the top.
+        anchor = re.compile(r'^[ \t]*<div id="inner_box">\r\n[ \t]*<div id="contents_title">Version '
+                            + re.escape(LAST_MANUAL_VERSION) + r' Change Log - [A-Z][a-z]+ \d', re.M)
+        m = anchor.search(page)
+        if not m:
             sys.exit("Insertion point not found in changelog.htm")
-        start = page.index(anchor)
-        page = page[:start] + "      " + block + "\n" + page[start:]
+        start = m.start()
+        page = page[:start] + "      " + block + page[start:]
     HTM.write_bytes(page.encode("latin-1", "xmlcharrefreplace"))
     print(f"{HTM.relative_to(ROOT)}: {len(versions)} versions generated "
           f"({versions[0]['version']} .. {versions[-1]['version']})")

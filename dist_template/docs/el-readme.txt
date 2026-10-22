@@ -6,7 +6,7 @@ Emu Loader: MAME and Arcade Frontend
 Windows, starting with Windows 7. WinXP is not officially supported anymore. Windows 10 compatibility is somewhat precarious.
 This frontend started as a hobby and a learning project. I first discovered MAME in 1997.
 
-   WARNING: DOS MAME and MAME32 are not supported by the frontend!
+   WARNING: DOS MAME, MAME32 and MAMEUI are not supported by the frontend!
 
 
 Disclaimer
@@ -27,25 +27,31 @@ Requirements
 
 Minimum Hardware:
 
-OS: Windows 7 with themes enabled
+OS: Windows 7 with Aero user interface enabled
 CPU: Pentium 4 2.0GHz
-RAM: 1 GB MB
-Video: any capable of at least 32-bits bpp and 1024x768 or 1280x720 pixels resolution
+RAM: 2 GB MB
+Video: 1024x768 or 1280x720 resolution, capable of 32-bit color depth
 Sound: none
 Other: mouse, keyboard
 
 Recommended Hardware:
 
-OS: Windows 7 with Aero user interface
+OS: Windows 7 with Aero user interface enabled
+    Windows 10 to fully experience the frontend's night mode
 CPU: any dual-core or quad-core 3.0GHz processor
-RAM: 4 GB
-Video: any capable of showing 32-bits bpp and a high resolution
-Sound: sound card/onboard audio chip to listen to game sounds
-Other: mouse, keyboard. (optional) arcade controller for the GUI: Devastator II, HotRod SE, SlikStik, X-Arcade
+RAM: 8 GB
+Video: 1920x1080 resolution or higher, capable of 32-bit color depth and a high resolution
+       UltraHD 4K 3840x2160 resolution for the best interface experience
+Sound: none
+Other: mouse, keyboard
 
 
 Features
 --------
+
+- Support for 4K screen resolution 3840x2160. Forms and controls resize automatically, screen layouts might look different
+  - 100% DPI screen scale required (or disable DPI scale for EmuLoader.exe in Windows)
+  - requires night mode enabled since high-def CheckBox/RadioButton are not supported in light mode
 
 - Arcade emulators supported (latest versions of all emulators only, except MAME/HBMAME)
   - MAME v0.37 beta 15 and newer (variants: UME; SDLMAME; SDLUME; WolfMAME)
@@ -69,7 +75,13 @@ Features
 
 - Detection of CRC32 collisions and SHA-1 validation when needed
 
-- 99.99% games audit accuracy (scan games feature)
+- 99.92% games audit accuracy, acceptable margin for error (scan games feature)
+
+- MAME: Create custom parameters for software list games and MAME machines
+        - attach devices, cartridges and other stuff
+        - clone sets will inherit custom parameters of their parent sets
+        - create a custom parameter for software list, all its games will use it
+        - create a custom parameter for the MAME machine, all software lists assigned to that machine will use it
 
 - Create multiple favorites profiles (no limit)
   
@@ -144,7 +156,7 @@ Features
 
 - MAME/Arcade: Custom game/driver options (driver settings for MAME/HBMAME only)
 
-- MAME only: support several .dat files: mameinfo.dat, messinfo.dat, history.dat, story.dat (MAMEscore v2), marp.dat, scores3.htm
+- MAME only: support several .dat files: mameinfo.dat, messinfo.dat, history.xml, history.dat, story.dat (MAMEscore v2), marp.dat, scores3.htm
 
 - View PDF manuals of MAME games with an external PDF viewer
 
@@ -283,8 +295,8 @@ Place these files in MAME's main folder or in "dats" folder (configurable path o
  - MESSInfo (messinfo.dat) by ANtoPISA
      http://www.progettosnaps.net/messinfo/
 
- - History (history.dat) by Alexis Bousiges
-     http://fandemame.emu-france.com
+ - History (history.xml / history.dat) by Alexis Bousiges
+     https://www.arcade-history.com/index.php?page=download
 
  - MAMEscore v2 (story.dat)
      http://www.arcadehits.net/mamescore/home.php?show=files
@@ -352,7 +364,7 @@ How to Contact Me
 
 My name is Ciro, and I'm from Brazil.
 Homepage: https://emuloader.com
-E-Mail..: emuloader@gmail.com
+E-Mail..: ciroconsentino@gmail.com
 Forum...: http://www.mameworld.info/ubbthreads/postlist.php?Cat=&Board=emuloader
 
    You will always find the latest version of the frontend at the homepage. Send comments

@@ -6,6 +6,8 @@ Delphi 7 component changes, fixes and important notes
 
 - you cannot change a control's ".Parent" property in Form.OnCreate() event
 
+- always call "procedure Resize4K" before changing controls to night mode, specially CheckBox / Radiogroup with custom icons enabled
+
 - Graphics.pas must be declared AFTER ZipForge.pas in the "uses" section... for font color definitions
 
 - uCommon.PosEx() function doesn't work with WideString, only String!
@@ -16,6 +18,8 @@ Delphi 7 component changes, fixes and important notes
 - function uMain.LoadFolderSpecial_MAME() is used to load paths for Artwork, Input, Samples (March 17, 2016)
   ... is this function deprecated ???? (August 31, 2016)
 
+- function FormMain.MountFoldersListToString() is not used anywhere (May 2020)
+
 - longest game name is 16 chars (hard-coded in MAME's source... for now). Device set "Keytronic PC3270" (keytronic_pc3270)
 
 - ImgList.pas must be defined AFTER the BarMenu(s).pas files (uses section)
@@ -23,7 +27,7 @@ Delphi 7 component changes, fixes and important notes
 - my new components TComboBox2Ex and TColorBoxEx outer frame blink when hover mouse and click dropdown button
   components are redrawn twice by Windows/Delphi 7 on enter/exit events and sadly there's nothing that can be done about it
 
-- SHA-1 checksum support was added in v0.68 (v0.67 and older only have CRC32 checksum)
+- SHA-1 checksum support was added in MAME v0.68 (v0.67 and older only have CRC32 checksum)
 
 - SHA-1 for CHD files started at MAME v0.78 (-listxml)
   -> for old MAME builds (v0.67 and older, there is no SHA-1 for ROMs, only CRC)
@@ -52,6 +56,11 @@ end;
 
 ...........................................................
 
+procedure TCommonCanvasControl.WMNCPaint(var Msg: TWMNCPaint);
+begin
+  // added this to fix white square when both hor/vert scroll bars are visible (Win10 dark mode mode)
+  NCCanvas.Brush.Color:= GetPixel(NCCanvas.Handle, ClientR.Right-2, Filler.Top-2); // NCCanvas.Brush.Color := clBtnFace; // original code
+end;
 
 .................... IMPORTANT!!!!!........................ 
 
@@ -184,6 +193,9 @@ end;
 - cosmetic fix for EasyListview... focus rect is now a solid frame see Listview.pas
   procedure TEasyViewItem.PaintFocusRect(Item: TEasyItem; Column: TEasyColumn; const Caption: WideString; RectArray: TEasyRectArrayObject; ACanvas: TCanvas);
 
+  
+- May 02, 2021: new "BorderHeaderFix" property in TCustomEasyListView to add a 1 pixel border at the top; for report view mode and "Header.Themes = OFF"
+
 - EasyListView.pas ................................................
   TEasyViewItem.PaintAlphaBlendedRoundRect(ACanvas: TCanvas;
                  AlphaColor: TColor; GradientBottom: TColor; GradientTop: TColor;
@@ -196,6 +208,40 @@ end;
 
   procedure TEasyViewTileItem.ItemRectArray(Item: TEasyItem; Column: TEasyColumn; ACanvas: TCanvas; const Caption: WideString;
                                             var RectArray: TEasyRectArrayObject);
+
+- March 16, 2021 (EasyListView.pas): fixed CheckBox/RadioButton vertical alignment for 23x23 icons; procedure TEasyViewTileItem.ItemRectArray()
+
+- April 27, 2021 (EasyListView.pas): fixed CheckBox/RadioButton vertical alignment for 23x23 icons;
+                                     -> procedure TEasyViewSmallIconItem.ItemRectArray()
+                                     -> procedure TEasyOwnedPersistentView.PaintCheckboxCore()
+
+- March 20, 2021 (EasyListView): 
+
+  > added in TEasyPaintInfoBasic = class(TEasyOwnedPersistent)
+
+  FTileDetailTextTopBorderIndent: Integer; // added by Ciro Alfredo Consentino (March 20, 2021)
+  FTileDetailTextIndent: Integer; // added by Ciro Alfredo Consentino (March 20, 2021)
+
+  procedure SetTileDetailTextTopBorderIndent(Value: Integer); // added by Ciro Alfredo Consentino (March 20, 2021)
+  procedure SetTileDetailTextIndent(Value: Integer); // added by Ciro Alfredo Consentino (March 20, 2021)
+
+  property TileDetailTextTopBorderIndent: Integer read FTileDetailTextTopBorderIndent write SetTileDetailTextTopBorderIndent default 0; // added by Ciro Alfredo Consentino (March 20, 2021)
+  property TileDetailTextIndent: Integer read FTileDetailTextIndent write SetTileDetailTextIndent default 0; // added by Ciro Alfredo Consentino (March 20, 2021)
+
+  > added in TEasyPaintInfoItem = class(TEasyPaintInfoBaseItem)
+
+  property TileDetailTextTopBorderIndent; // added by Ciro Alfredo Consentino (March 20, 2021)
+  property TileDetailTextIndent; // added by Ciro Alfredo Consentino (March 20, 2021)
+
+  > added new code in procedure TEasyViewTileItem.ItemRectArray()
+
+  > added in TEasyItem = class(TEasyCollectionItem)
+
+  FTileDetailItemTextIndent: Integer;
+
+  procedure SetTileDetailItemTextIndent(Value: Integer);
+
+  property TileDetailItemTextIndent: Integer read FTileDetailItemTextIndent write SetTileDetailItemTextIndent default 0;
 
 
 - Delphi 2010 new routines!! "source\Win32\rtl\common\IOUtils.pas"...

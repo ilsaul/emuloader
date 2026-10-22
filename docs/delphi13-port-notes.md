@@ -77,6 +77,28 @@ release time.
 
 ## Fixed
 
+- Message boxes (`GenerateMessage`, `GenerateMessage4K`) temporarily remove
+  the topmost style from visible topmost forms (the splash screen) while they
+  are shown, and restore it afterwards. The missing-icons error at startup
+  stayed hidden behind the splash, so startup looked stuck. Same code in
+  Delphi 7. Found in the release package test.
+  Every other modal form (for example the first-run "Scan Games Mode" screen)
+  is covered too: `uCommon` handles `Application.OnModalBegin`/`OnModalEnd`
+  (Delphi 2006 and newer) with the same suspend/restore of topmost forms.
+
+- `dist_template` was rebuilt from Ciro's complete 8.9.4 package
+  (`el894-bin`, without `EmuLoader.exe` and the old 32-bit `7z.dll`). The
+  previous template came from the 8.8.2 package: it missed icons added later
+  (`terminal.ico`, `warning.ico`, 4K layout images, browse controls, ...) and
+  had older versions of many files. Kept from 8.8.2 because 8.9.4 does not
+  ship them: `console_computer/emulator_parameters[default].ini` (copied to
+  `emulator_parameters.ini` at startup), `docs/changelog.css`, `entry.gif`,
+  `text.gif` (used by `history.htm`) and three old docs. Dropped the 8.8.2
+  files removed by Ciro (for example `overlay/img_dark`, which 8.9 no longer
+  needs and would be drawn over the new overlay text). `docs/changelog.htm`
+  is Ciro's 8.9.4 page (new `page_styles.css` layout, some malformed tags
+  fixed); the generator now inserts the newer versions above 8.9.4.
+
 - Show the splash screen progress bar when the "Custom Colors" scheme has no
   colors set, or on screens narrower than 1280 pixels (where the custom
   colors cannot be edited). Unset colors were applied as `clNone` and the bar

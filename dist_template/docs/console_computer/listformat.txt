@@ -1,19 +1,19 @@
 ﻿Console/Computer/Handheld Games List Format
 -------------------------------------------
 
-SystemID MediaType IsUnicode <file>Game Filename (no path)/> <size>file size (bytes)/>
+SystemID MediaType <file>Game Filename (no path)/> <size>file size (bytes)/>
 --------------------------------------------------------------------------------------
 
-00110<file>Super Castlevania IV.zip/><size>1049088/>
+0011<file>Super Castlevania IV.zip/><size>1049088/>
 
-00111<file>コントラIII - エイリアンウォーズ.sfc/><size>1048576/>
-00311<file>ザ・キング・オブ・ファイターズ '96 ネオジオコレクション.7z/><size>49184/>
+0011<file>コントラIII - エイリアンウォーズ.sfc/><size>1048576/>
+0031<file>ザ・キング・オブ・ファイターズ '96 ネオジオコレクション.7z/><size>49184/>
 
-00510<file>Hero.bin/><size>8192/>
+0051<file>Hero.bin/><size>8192/>
 
-03930<file>Ghouls and Ghosts.d64/><size>174848/>
+0393<file>Ghouls and Ghosts.d64/><size>174848/>
 
-05720<file>Metal Slug 2.iso/><size>41830400/>
+0572<file>Metal Slug 2.iso/><size>41830400/>
 
 
 Notes:
@@ -101,10 +101,6 @@ Media Type
  04: Cassette Tape
  05: Hard Disk Drive
 
-
-Is Unicode
- 0: game filename use ANSI string
- 1: game filename use Unicode string (WideString)
 
 
 -- Master Control: "End of line." (quote from "TRON") --

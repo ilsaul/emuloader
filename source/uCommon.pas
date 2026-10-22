@@ -675,6 +675,101 @@ procedure CreateGamesFiltersIniFile;
 
 implementation
 
+// Topmost forms (the splash screen) would cover a modal message box shown from the main form
+function SuspendTopmostForms(ExcludedForm: TForm): TList;
+var
+  i: Integer;
+begin
+  Result:= TList.Create;
+  for i:= 0 to Screen.FormCount-1 do
+    if (Screen.Forms[i] <> ExcludedForm) and Screen.Forms[i].HandleAllocated and
+       IsWindowVisible(Screen.Forms[i].Handle) and
+       ((GetWindowLong(Screen.Forms[i].Handle, GWL_EXSTYLE) and WS_EX_TOPMOST) <> 0) then
+       begin
+         SetWindowPos(Screen.Forms[i].Handle, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOACTIVATE+SWP_NOMOVE+SWP_NOSIZE);
+         Result.Add(Screen.Forms[i]);
+       end;
+end;
+
+function IsScreenForm(Form: Pointer): Boolean;
+var
+  i: Integer;
+begin
+  Result:= False;
+  for i:= 0 to Screen.FormCount-1 do
+    if Screen.Forms[i] = Form then
+       begin
+         Result:= True;
+         Exit;
+       end;
+end;
+
+procedure RestoreTopmostForms(var Forms: TList);
+var
+  i: Integer;
+begin
+  for i:= 0 to Forms.Count-1 do
+    if IsScreenForm(Forms[i]) then
+       if TForm(Forms[i]).HandleAllocated and IsWindowVisible(TForm(Forms[i]).Handle) then
+          SetWindowPos(TForm(Forms[i]).Handle, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOACTIVATE+SWP_NOMOVE+SWP_NOSIZE);
+  FreeAndNil(Forms);
+end;
+
+{$IF CompilerVersion >= 20}
+type
+  // Any modal form (not only message boxes) must not be covered by the topmost splash screen
+  TModalTopmostGuard = class
+  private
+    FSuspended: TList;
+    FDepth: Integer;
+  public
+    constructor Create;
+    procedure ModalBegin(Sender: TObject);
+    procedure ModalEnd(Sender: TObject);
+  end;
+
+var
+  ModalTopmostGuard: TModalTopmostGuard;
+
+constructor TModalTopmostGuard.Create;
+begin
+  inherited Create;
+  FSuspended:= TList.Create;
+end;
+
+procedure TModalTopmostGuard.ModalBegin(Sender: TObject);
+var
+  NewForms: TList;
+  i: Integer;
+begin
+  Inc(FDepth);
+  NewForms:= SuspendTopmostForms(nil);
+  try
+    for i:= 0 to NewForms.Count-1 do
+      FSuspended.Add(NewForms[i]);
+  finally
+    NewForms.Free;
+  end;
+end;
+
+procedure TModalTopmostGuard.ModalEnd(Sender: TObject);
+var
+  Forms: TList;
+  i: Integer;
+begin
+  if FDepth > 0 then
+     Dec(FDepth);
+  if (FDepth = 0) and (FSuspended.Count > 0) then
+     begin
+       Forms:= TList.Create;
+       for i:= 0 to FSuspended.Count-1 do
+         Forms.Add(FSuspended[i]);
+       FSuspended.Clear;
+       RestoreTopmostForms(Forms);
+     end;
+end;
+{$IFEND}
+
 procedure HideAppFormTaskBarButton2;
 begin
   // all Windows versions need this
@@ -2325,6 +2420,8 @@ end;
 
 function GenerateMessage(const WindowMessage, TitleMessage: WideString; const DescriptionMessage: WideString = ''; MessageType: Integer = 2; DefaultButtonNo: Boolean = False;
                          IconIndex: Integer = 0; GameSetStatus: Integer = -1): Integer;
+var
+  TopmostForms: TList;
 begin
   // icon index:
   // -1 -> Game Icon
@@ -2372,7 +2469,12 @@ begin
       end;
     False: FormMessageBox.ActiveControl:= FormMessageBox.ButtonYes;
   end;
-  Result:= FormMessageBox.ShowModal;
+  TopmostForms:= SuspendTopmostForms(FormMessageBox);
+  try
+    Result:= FormMessageBox.ShowModal;
+  finally
+    RestoreTopmostForms(TopmostForms);
+  end;
   FreeMessageBox;
 end;
 
@@ -2401,6 +2503,8 @@ end;
 
 function GenerateMessage4K(const WindowMessage, TitleMessage: WideString; const DescriptionMessage: WideString = ''; MessageType: Integer = 2; DefaultButtonNo: Boolean = False;
                            IconIndex: Integer = 0; GameSetStatus: Integer = -1): Integer;
+var
+  TopmostForms: TList;
 begin
   // icon index:
   // -1 -> Game Icon
@@ -2439,7 +2543,12 @@ begin
     False: FormMessageBox4K.ActiveControl:= FormMessageBox4K.ButtonYes;
   end;
   FormMessageBox4K.LabelMessageW.ReadOnly:= True;
-  Result:= FormMessageBox4K.ShowModal;
+  TopmostForms:= SuspendTopmostForms(FormMessageBox4K);
+  try
+    Result:= FormMessageBox4K.ShowModal;
+  finally
+    RestoreTopmostForms(TopmostForms);
+  end;
   FreeMessageBox4K;
 end;
 
@@ -5234,5 +5343,12 @@ begin
   FreeAndNil(newFile);
 end;
 
+
+{$IF CompilerVersion >= 20}
+initialization
+  ModalTopmostGuard:= TModalTopmostGuard.Create;
+  Application.OnModalBegin:= ModalTopmostGuard.ModalBegin;
+  Application.OnModalEnd:= ModalTopmostGuard.ModalEnd;
+{$IFEND}
 
 end.

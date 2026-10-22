@@ -3,10 +3,32 @@ Not Available Image
 
    When there is no game image to display, a "not available" image will be displayed instead.
 
-   The file must be in .png format, and can have transparency (alpha blend), and be at any color depth.
+   The files must be in .png format, and can have transparency (alpha blend), and any color depth.
 Resolution and file size are not limited but to avoid slow games list browsing, keep the file small.
 
-There is a single file for all image categories, and the name is "emuloader.png", located in "<frontend_dir>\resources\images\" folder.
+   You can have a different file for each image category, located in "<frontend_dir>\resources\images\img_missing\" folder.
+Filenames are as follow:
+
+  Title Snapshot: title.png
+  Game Snapshot.: ingame.png
+  Marquee.......: marquee.png
+  Flyer.........: flyer.png
+  Cabinet.......: cabinet.png
+  Control Panel.: controlpanel.png
+  Software Cover: softwarecover.png
+  PCB...........: pcb.png
+  Game Artwork..: ingameartwork.png
+  End...........: end.png
+  Boss..........: boss.png
+  Logo..........: logo.png
+  Score.........: score.png
+  Versus........: versus.png
+  Game Over.....: gameover.png
+  How to Play...: howtoplay.png
+  Select........: select.png
+
+   If the category file is not found, "emuloader.png" image will be displayed instead.
+File is located in "<frontend_dir>\resources\images\" folder.
 
 
 
