@@ -715,6 +715,61 @@ begin
   FreeAndNil(Forms);
 end;
 
+{$IF CompilerVersion >= 20}
+type
+  // Any modal form (not only message boxes) must not be covered by the topmost splash screen
+  TModalTopmostGuard = class
+  private
+    FSuspended: TList;
+    FDepth: Integer;
+  public
+    constructor Create;
+    procedure ModalBegin(Sender: TObject);
+    procedure ModalEnd(Sender: TObject);
+  end;
+
+var
+  ModalTopmostGuard: TModalTopmostGuard;
+
+constructor TModalTopmostGuard.Create;
+begin
+  inherited Create;
+  FSuspended:= TList.Create;
+end;
+
+procedure TModalTopmostGuard.ModalBegin(Sender: TObject);
+var
+  NewForms: TList;
+  i: Integer;
+begin
+  Inc(FDepth);
+  NewForms:= SuspendTopmostForms(nil);
+  try
+    for i:= 0 to NewForms.Count-1 do
+      FSuspended.Add(NewForms[i]);
+  finally
+    NewForms.Free;
+  end;
+end;
+
+procedure TModalTopmostGuard.ModalEnd(Sender: TObject);
+var
+  Forms: TList;
+  i: Integer;
+begin
+  if FDepth > 0 then
+     Dec(FDepth);
+  if (FDepth = 0) and (FSuspended.Count > 0) then
+     begin
+       Forms:= TList.Create;
+       for i:= 0 to FSuspended.Count-1 do
+         Forms.Add(FSuspended[i]);
+       FSuspended.Clear;
+       RestoreTopmostForms(Forms);
+     end;
+end;
+{$IFEND}
+
 procedure HideAppFormTaskBarButton2;
 begin
   // all Windows versions need this
@@ -5288,5 +5343,12 @@ begin
   FreeAndNil(newFile);
 end;
 
+
+{$IF CompilerVersion >= 20}
+initialization
+  ModalTopmostGuard:= TModalTopmostGuard.Create;
+  Application.OnModalBegin:= ModalTopmostGuard.ModalBegin;
+  Application.OnModalEnd:= ModalTopmostGuard.ModalEnd;
+{$IFEND}
 
 end.

@@ -82,6 +82,9 @@ release time.
   are shown, and restore it afterwards. The missing-icons error at startup
   stayed hidden behind the splash, so startup looked stuck. Same code in
   Delphi 7. Found in the release package test.
+  Every other modal form (for example the first-run "Scan Games Mode" screen)
+  is covered too: `uCommon` handles `Application.OnModalBegin`/`OnModalEnd`
+  (Delphi 2006 and newer) with the same suspend/restore of topmost forms.
 
 - `dist_template` was rebuilt from Ciro's complete 8.9.4 package
   (`el894-bin`, without `EmuLoader.exe` and the old 32-bit `7z.dll`). The
